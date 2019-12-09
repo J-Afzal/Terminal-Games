@@ -7,6 +7,8 @@
 //
 
 #include "TicTacToe.hpp"
+#include <cstdlib>
+#include <ctime>
 
 //Constructors and destructor
 TicTacToe::TicTacToe()
@@ -21,7 +23,8 @@ TicTacToe::TicTacToe()
     GameData.push_back('7');
     GameData.push_back('8');
         
-    if (rand() % 2 == 0)
+    std::srand(std::time(0));
+    if (std::rand() % 2 == 0)
         CurrentPlayer = 'X';
     
     else
@@ -65,24 +68,35 @@ TicTacToe& TicTacToe::operator = (const TicTacToe& aTicTacToe)
 //TicTacToe specific functions
 void TicTacToe::Play_Game(void)
 {
+    std::cout << "--------------------TicTacToe V1.0 by Junaid Afzal--------------------" << std::endl;
+    
+    std::cout << "Enter the size of the grid ";
+    
+    std::cout << "Two player? (y or n) ";
+    
    while (!Game_Over())
    {
-        std::cout << "TicTacToe V1.0 by Junaid Afzal\n" << std::endl;
-                
-        std::cout << *this << std::endl;
+       std::cout << *this << std::endl;
        
-        Toggle_Player();
-       
-        Input();
+       Toggle_Player();
         
-        std::cout << "\n\n" << std::endl;
+       Input();
+        
+       std::cout << "\n\n" << std::endl;
     }
     
     if (Game_Winner())
-        std::cout << "Congratulations on Player " << CurrentPlayer << " for winning!\nOnly took you " << NumberOfTurns << " turns" << std::endl;
-    
+    {
+        std::cout << *this << std::endl;
+        std::cout << "Congratulations on Player " << CurrentPlayer << " for winning!\nOnly took you " << NumberOfTurns << " turns\n\n" << std::endl;
+        std::cout << "--------------------TicTacToe V1.0 by Junaid Afzal--------------------" << std::endl;
+    }
+        
     else
-        std::cout << "Game is a draw\nOnly took you " << NumberOfTurns << " turns" << std::endl;
+    {
+        std::cout << "Game is a draw\nOnly took you " << NumberOfTurns << " turns\n\n" << std::endl;
+        std::cout << "--------------------TicTacToe V1.0 by Junaid Afzal--------------------" << std::endl;
+    }
 }
     
 
@@ -101,6 +115,7 @@ bool TicTacToe::Game_Over(void)
 
 bool TicTacToe::Game_Winner(void)
 {
+    //Row, columns and diagnols 
     if(GameData[0] == 'X' && GameData[1] == 'X' && GameData[2] == 'X')
         return true;
     
