@@ -6,10 +6,13 @@
 //  Copyright © 2019 Junaid Afzal. All rights reserved.
 //
 
-#include <iostream>
+#include "TicTacToe.hpp"
 
 int main(void) {
-    // insert code here...
-    std::cout << "Hello, World!\n";
+
+    TicTacToe Game;
+
+    Game.Play_Game();
+
     return 0;
 }
