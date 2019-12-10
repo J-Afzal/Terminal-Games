@@ -5,26 +5,39 @@
 //  Created by Main on 09/12/2019.
 //  Copyright © 2019 Junaid Afzal. All rights reserved.
 //
+//  The file contains the implementation of the TicTacToe game
+//
 
 #include "TicTacToe.hpp"
 #include <iostream>
 #include <vector>
 #include <iomanip>
 
+
+
 void Play_TicTacToe(void)
 {
-    unsigned int NumberOfTurns = 0, CurrentPlayer = 0, NumberOfPlayers = 0, UserXO = 0;
+    // Variables for the TicTacToe game
+    //  - UserXOChoice is used when there is only one player and contains the 'X' or 'O' that the user has chosen to be
+    //  - GameData contains the game info of the TicTacToe grid
+    unsigned int NumberOfTurns = 0, CurrentPlayer = 0, NumberOfPlayers = 0, UserXOChoice = 0;
     std::vector< std::vector<int> > GameData;
 
-    Setup_Game(NumberOfTurns, CurrentPlayer, NumberOfPlayers, UserXO, GameData);
+    // The current player (and thus the player that starts) is assigned pseudo randomly; user is asked for the size of the
+    // TicTacToe grid and is created; user is asked for the number of players; if players is 1 then human user asked if they
+    // want to be X or O
+    Setup_Game(NumberOfTurns, CurrentPlayer, NumberOfPlayers, UserXOChoice, GameData);
     
+    // Loop until a winning condition is met or no more moves are possible and game is over
     while (!Winning_Conditions_Met(GameData) && !Game_Over(GameData))
     {
+        // Displays the current TicTacToe grid
         Display_Current_Game(GameData);
-
+        
         CurrentPlayer = Toggle_Player(CurrentPlayer);
         
-        if(NumberOfPlayers == 2 || CurrentPlayer == UserXO)
+        // Check if user input is required
+        if(NumberOfPlayers == 2 || CurrentPlayer == UserXOChoice)
             GameData = Ask_User_For_Next_Input(GameData, CurrentPlayer);
         
         else
@@ -35,6 +48,7 @@ void Play_TicTacToe(void)
         std::cout << "\n\n" << std::endl;
      }
 
+    // Determine the winner, if there is one, and display winning message
     Display_Winner(NumberOfTurns, GameData, CurrentPlayer);
 }
 
@@ -43,6 +57,7 @@ void Setup_Game(unsigned int& NumberOfTurns, unsigned int& CurrentPlayer, unsign
     std::cout << "--------------------TicTacToe V1.0 by Junaid Afzal--------------------" << std::endl;
     
     std::srand(std::time(0));
+    
     if (std::rand() % 2 == 0)
         CurrentPlayer = 'X'; //88
     else
@@ -53,7 +68,7 @@ void Setup_Game(unsigned int& NumberOfTurns, unsigned int& CurrentPlayer, unsign
     NumberOfPlayers = Get_Number_Of_Players();
         
     if(NumberOfPlayers == 1)
-        UserXO = Get_User_X_O();
+        UserXO = Get_User_X_O_Choice();
 }
 
 std::vector< std::vector<int> > Get_Size_Of_Grid(void)
@@ -137,16 +152,16 @@ int Get_Number_Of_Players(void)
     return NumberOfPlayers;
 }
 
-int Get_User_X_O(void)
+int Get_User_X_O_Choice(void)
 {
     bool IsValueCorrect = false;
-    char UserXO = 0;
+    char UserXOChoice = 0;
     
     while(!IsValueCorrect)
     {
         std::cout << "Enter user counter (X or O) ";
         
-        std::cin >> UserXO;
+        std::cin >> UserXOChoice;
         
         if (std::cin.fail())
         {
@@ -155,7 +170,7 @@ int Get_User_X_O(void)
             continue;
         }
         
-        else if(UserXO != 'X' && UserXO != 'O')
+        else if(UserXOChoice != 'X' && UserXOChoice != 'O')
         {
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -169,7 +184,7 @@ int Get_User_X_O(void)
     std::cin.clear();
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     
-    return UserXO;
+    return UserXOChoice;
 }
 
 
@@ -283,7 +298,7 @@ char Toggle_Player(const int& CurrentPlayer)
 std::vector< std::vector<int> > Ask_User_For_Next_Input(std::vector< std::vector<int> >& GameData, const unsigned int& CurrentPlayer)
 {
     bool IsValueCorrect = false;
-    int PlayerCommand = 0;
+    int UserCommand = 0;
     
     while(!IsValueCorrect)
     {
@@ -291,7 +306,7 @@ std::vector< std::vector<int> > Ask_User_For_Next_Input(std::vector< std::vector
         
         std::cout << "Player " << (char)CurrentPlayer << " enter command ";
         
-        std::cin >> PlayerCommand;
+        std::cin >> UserCommand;
         
         if (std::cin.fail())
         {
@@ -301,11 +316,11 @@ std::vector< std::vector<int> > Ask_User_For_Next_Input(std::vector< std::vector
             continue;
         }
         
-        else if(PlayerCommand < 0 || PlayerCommand > (GameData.size() * GameData.size() - 1))
+        else if(UserCommand < 0 || UserCommand > (GameData.size() * GameData.size() - 1))
         {
-            IsValueCorrect = false;
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            IsValueCorrect = false;
             continue;
         }
         
@@ -313,7 +328,7 @@ std::vector< std::vector<int> > Ask_User_For_Next_Input(std::vector< std::vector
         {
             for (unsigned int  j = 0; j < GameData.size(); j++, GridPosition++)
             {
-                if (GridPosition == PlayerCommand)
+                if (GridPosition == UserCommand)
                 {
                     if (GameData[i][j] == 'X' || GameData[i][j]== 'O')
                         IsValueCorrect = false;
@@ -329,7 +344,7 @@ std::vector< std::vector<int> > Ask_User_For_Next_Input(std::vector< std::vector
     {
         for (unsigned int  j = 0; j < GameData.size(); j++, GridPosition++)
         {
-            if (GridPosition == PlayerCommand)
+            if (GridPosition == UserCommand)
             {
                 GameData[i][j] = CurrentPlayer;
                 i = GameData.size();
@@ -371,7 +386,7 @@ std::vector< std::vector<int> > Ask_AI_For_Next_Input(std::vector< std::vector<i
         }
     }
     
-    std::cout << "AI " << (char)CurrentPlayer << " entering command " << AICommand;
+    std::cout << "AI " << (char)CurrentPlayer << " entering command " << AICommand << std::endl;
     
     for(unsigned long i = 0, GridPosition = 0; i < GameData.size(); i++)
     {

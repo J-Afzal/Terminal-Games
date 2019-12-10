@@ -16,10 +16,6 @@ int main(void) {
 }
 
 /*
- - test x for all rows, columns and diagonals for winning (3x3)
- - test o for all rows, columns and diagonals for winning (3x3)
- 
- formatting { } and spacing
  comments (lots of comments)
  update readme.md
 */
