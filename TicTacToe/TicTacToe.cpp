@@ -11,6 +11,51 @@
 #include <vector>
 #include <iomanip>
 
+void Play_TicTacToe(void)
+{
+    unsigned int NumberOfTurns = 0, CurrentPlayer = 0, NumberOfPlayers = 0, UserXO = 0;
+    std::vector< std::vector<int> > GameData;
+
+    Setup_Game(NumberOfTurns, CurrentPlayer, NumberOfPlayers, UserXO, GameData);
+    
+    while (!Winning_Conditions_Met(GameData) && !Game_Over(GameData))
+    {
+        Display_Current_Game(GameData);
+
+        CurrentPlayer = Toggle_Player(CurrentPlayer);
+        
+        if(NumberOfPlayers == 2 || CurrentPlayer == UserXO)
+            GameData = Ask_User_For_Next_Input(GameData, CurrentPlayer);
+        
+        else
+            GameData = Ask_AI_For_Next_Input(GameData, CurrentPlayer);
+
+        NumberOfTurns++;
+
+        std::cout << "\n\n" << std::endl;
+     }
+
+    Display_Winner(NumberOfTurns, GameData, CurrentPlayer);
+}
+
+void Setup_Game(unsigned int& NumberOfTurns, unsigned int& CurrentPlayer, unsigned int& NumberOfPlayers, unsigned int& UserXO, std::vector< std::vector<int> >& GameData)
+{
+    std::cout << "--------------------TicTacToe V1.0 by Junaid Afzal--------------------" << std::endl;
+    
+    std::srand(std::time(0));
+    if (std::rand() % 2 == 0)
+        CurrentPlayer = 'X'; //88
+    else
+        CurrentPlayer = 'O'; //79
+        
+    GameData = Get_Size_Of_Grid();
+    
+    NumberOfPlayers = Get_Number_Of_Players();
+        
+    if(NumberOfPlayers == 1)
+        UserXO = Get_User_X_O();
+}
+
 std::vector< std::vector<int> > Get_Size_Of_Grid(void)
 {
     std::vector< std::vector<int> > GameData;
@@ -57,7 +102,7 @@ std::vector< std::vector<int> > Get_Size_Of_Grid(void)
     return GameData;
 }
 
-int Get_Number_Of_players(void)
+int Get_Number_Of_Players(void)
 {
     bool IsValueCorrect = false;
     int NumberOfPlayers = 0;
@@ -235,7 +280,7 @@ char Toggle_Player(const int& CurrentPlayer)
         return 'X';
 }
 
-std::vector< std::vector<int> > Ask_User_For_Next_Input(std::vector< std::vector<int> >& GameData, const int& CurrentPlayer)
+std::vector< std::vector<int> > Ask_User_For_Next_Input(std::vector< std::vector<int> >& GameData, const unsigned int& CurrentPlayer)
 {
     bool IsValueCorrect = false;
     int PlayerCommand = 0;
@@ -299,7 +344,7 @@ std::vector< std::vector<int> > Ask_User_For_Next_Input(std::vector< std::vector
     return GameData;
 }
 
-std::vector< std::vector<int> > Ask_AI_For_Next_Input(std::vector< std::vector<int> >& GameData, const int& CurrentPlayer)
+std::vector< std::vector<int> > Ask_AI_For_Next_Input(std::vector< std::vector<int> >& GameData, const unsigned int& CurrentPlayer)
 {
     bool IsValueCorrect = false;
     unsigned int AICommand = 0;
@@ -342,4 +387,21 @@ std::vector< std::vector<int> > Ask_AI_For_Next_Input(std::vector< std::vector<i
     }
     
     return GameData;
+}
+
+void Display_Winner(const unsigned int& NumberOfTurns, const std::vector< std::vector<int> >& GameData, const unsigned int& CurrentPlayer)
+{
+    if (Winning_Conditions_Met(GameData))
+    {
+       Display_Current_Game(GameData);
+       std::cout << "Congratulations on Player " << (char)CurrentPlayer << " for winning!\nOnly took you " << NumberOfTurns << " turns" << std::endl;
+       std::cout << "--------------------TicTacToe V2.0 by Junaid Afzal--------------------\n\n" << std::endl;
+    }
+
+    else
+    {
+       Display_Current_Game(GameData);
+       std::cout << "Game is a draw\nOnly took you " << NumberOfTurns << " turns" << std::endl;
+       std::cout << "--------------------TicTacToe V2.0 by Junaid Afzal--------------------\n\n" << std::endl;
+    }
 }
