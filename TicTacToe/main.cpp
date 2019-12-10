@@ -20,17 +20,18 @@ int main(void) {
         CurrentPlayer = 'X'; //88
     else
         CurrentPlayer = 'O'; //79
-    
+        
     unsigned int NumberOfTurns = 0;
 
     std::vector< std::vector<int> > GameData = Get_Size_Of_Grid();
     
     unsigned int NumberOfPlayers = Get_Number_Of_players();
     
-    unsigned int UserXO;
+    unsigned int UserXO = 0;
     
     if(NumberOfPlayers == 1)
         UserXO = Get_User_X_O();
+    
     
     
     while (!Game_Over(GameData) && !Winning_Conditions_Met(GameData))
@@ -38,8 +39,12 @@ int main(void) {
         Display_Current_Game(GameData);
 
         CurrentPlayer = Toggle_Player(CurrentPlayer);
-
-        GameData = Ask_User_For_Next_Input(GameData, CurrentPlayer);
+        
+        if(NumberOfPlayers == 2 || CurrentPlayer == UserXO)
+            GameData = Ask_User_For_Next_Input(GameData, CurrentPlayer);
+        
+        else
+            GameData = Ask_AI_For_Next_Input(GameData, CurrentPlayer);
 
         NumberOfTurns++;
 
@@ -70,6 +75,10 @@ int main(void) {
 
 
 /*
- - std::cout << "Two player? (y or n) ";
- - formatting {} and spacing and functions
- */
+ - test x for all rows, columns and diagonals for winning (3x3)
+ - test o for all rows, columns and diagonals for winning (3x3)
+ 
+ formatting { } and spacing and functions as in put all in one function called Play_TicTacToe();
+ comments (lots of comments)
+ update readme.md
+*/

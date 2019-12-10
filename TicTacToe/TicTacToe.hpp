@@ -27,4 +27,6 @@ char Toggle_Player(const int& CurrentPlayer);
 
 std::vector< std::vector<int> > Ask_User_For_Next_Input(std::vector< std::vector<int> >& GameData, const int& CurrentPlayer);
 
+std::vector< std::vector<int> > Ask_AI_For_Next_Input(std::vector< std::vector<int> >& GameData, const int& CurrentPlayer);
+
 #endif /* TicTacToe_hpp */

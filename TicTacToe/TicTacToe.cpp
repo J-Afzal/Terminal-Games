@@ -131,7 +131,7 @@ int Get_User_X_O(void)
 bool Game_Over(const std::vector< std::vector<int> >& GameData)
 {
     for(unsigned int i = 0; i < GameData.size(); i++)
-        for(unsigned int j = 0; j < GameData[i].size(); j++)
+        for(unsigned int j = 0; j < GameData.size(); j++)
             if(GameData[i][j] != 'X' && GameData[i][j] != 'O')
                 return false;
 
@@ -142,7 +142,7 @@ bool Winning_Conditions_Met(const std::vector< std::vector<int> >& GameData)
 {
     for(unsigned int i = 0; i < GameData.size(); i++)
     {
-        for(unsigned int j = 0, HowManyX = 0, HowManyO = 0; j < GameData[i].size(); j++)
+        for(unsigned int j = 0, HowManyX = 0, HowManyO = 0; j < GameData.size(); j++)
         {
             if(GameData[i][j] == 'X')
                  HowManyX++;
@@ -150,10 +150,10 @@ bool Winning_Conditions_Met(const std::vector< std::vector<int> >& GameData)
             if(GameData[i][j] == 'O')
                 HowManyO++;
             
-            if(HowManyX == GameData[i].size())
+            if(HowManyX == GameData.size())
                 return true;
             
-            if(HowManyO == GameData[i].size())
+            if(HowManyO == GameData.size())
                 return true;
         }
     }
@@ -168,10 +168,10 @@ bool Winning_Conditions_Met(const std::vector< std::vector<int> >& GameData)
             if(GameData[j][i] == 'O')
                 HowManyO++;
             
-            if(HowManyX == GameData[i].size())
+            if(HowManyX == GameData.size())
                 return true;
             
-            if(HowManyO == GameData[i].size())
+            if(HowManyO == GameData.size())
                 return true;
         }
     }
@@ -184,25 +184,25 @@ bool Winning_Conditions_Met(const std::vector< std::vector<int> >& GameData)
         if(GameData[i][i] == 'O')
             HowManyO++;
         
-        if(HowManyX == GameData[i].size())
+        if(HowManyX == GameData.size())
             return true;
         
-        if(HowManyO == GameData[i].size())
+        if(HowManyO == GameData.size())
             return true;
     }
     
     for(unsigned long i = GameData.size() - 1, j = 0, HowManyX = 0, HowManyO = 0; j < GameData.size(); i--, j++)
     {
-        if(GameData[i][i] == 'X')
+        if(GameData[i][j] == 'X')
              HowManyX++;
         
-        if(GameData[i][i] == 'O')
+        if(GameData[i][j] == 'O')
             HowManyO++;
         
-        if(HowManyX == GameData[i].size())
+        if(HowManyX == GameData.size())
             return true;
         
-        if(HowManyO == GameData[i].size())
+        if(HowManyO == GameData.size())
             return true;
     }
     
@@ -213,7 +213,7 @@ void Display_Current_Game(const std::vector< std::vector<int> >& GameData)
 {
     for(unsigned int i = 0, GridPosition = 0; i < GameData.size(); i++, GridPosition++)
     {
-        for (unsigned int  j = 0; j < GameData[i].size(); j++, GridPosition++)
+        for (unsigned int  j = 0; j < GameData.size(); j++, GridPosition++)
         {
             if (GameData[i][j] == 88 || GameData[i][j] == 79)
                 std::cout << std::setw(4) << std::left << (char)GameData[i][j] << " ";
@@ -266,7 +266,7 @@ std::vector< std::vector<int> > Ask_User_For_Next_Input(std::vector< std::vector
         
         for(unsigned long i = 0, GridPosition = 0; i < GameData.size(); i++)
         {
-            for (unsigned int  j = 0; j < GameData[i].size(); j++, GridPosition++)
+            for (unsigned int  j = 0; j < GameData.size(); j++, GridPosition++)
             {
                 if (GridPosition == PlayerCommand)
                 {
@@ -282,7 +282,7 @@ std::vector< std::vector<int> > Ask_User_For_Next_Input(std::vector< std::vector
     
     for(unsigned long i = 0, GridPosition = 0; i < GameData.size(); i++)
     {
-        for (unsigned int  j = 0; j < GameData[i].size(); j++, GridPosition++)
+        for (unsigned int  j = 0; j < GameData.size(); j++, GridPosition++)
         {
             if (GridPosition == PlayerCommand)
             {
@@ -295,6 +295,51 @@ std::vector< std::vector<int> > Ask_User_For_Next_Input(std::vector< std::vector
     
     std::cin.clear();
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    
+    return GameData;
+}
+
+std::vector< std::vector<int> > Ask_AI_For_Next_Input(std::vector< std::vector<int> >& GameData, const int& CurrentPlayer)
+{
+    bool IsValueCorrect = false;
+    unsigned int AICommand = 0;
+    
+    while(!IsValueCorrect)
+    {
+        IsValueCorrect = true;
+        
+        AICommand = std::rand() % (GameData.size() * GameData.size());
+                
+        for(unsigned long i = 0, GridPosition = 0; i < GameData.size(); i++)
+        {
+            for (unsigned int  j = 0; j < GameData.size(); j++, GridPosition++)
+            {
+                if (GridPosition == AICommand)
+                {
+                    if (GameData[i][j] == 'X' || GameData[i][j]== 'O')
+                        IsValueCorrect = false;
+                    
+                    i = GameData.size();
+                    break;
+                }
+            }
+        }
+    }
+    
+    std::cout << "AI " << (char)CurrentPlayer << " entering command " << AICommand;
+    
+    for(unsigned long i = 0, GridPosition = 0; i < GameData.size(); i++)
+    {
+        for (unsigned int  j = 0; j < GameData.size(); j++, GridPosition++)
+        {
+            if (GridPosition == AICommand)
+            {
+                GameData[i][j] = CurrentPlayer;
+                i = GameData.size();
+                break;
+            }
+        }
+    }
     
     return GameData;
 }
