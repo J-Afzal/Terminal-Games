@@ -354,36 +354,19 @@ std::vector< std::vector<int> > Ask_User_For_Next_Input(std::vector< std::vector
             continue;
         }
         
+        int Column = UserCommand % GameData.size();
+        int Row = UserCommand / GameData.size();
+        
         // Check if command has already been called by a player previously as it will contain and X or O
-        for(unsigned long i = 0, GridPosition = 0; i < GameData.size(); i++)
-        {
-            for (unsigned int  j = 0; j < GameData.size(); j++, GridPosition++)
-            {
-                if (GridPosition == UserCommand)
-                {
-                    if (GameData[i][j] == 'X' || GameData[i][j]== 'O')
-                        IsValueCorrect = false;
-                    
-                    i = GameData.size(); // Set i so that loop is exited immediately
-                    break; // Break to the first for loop
-                }
-            }
-        }
+        if (GameData[Row][Column] == 'X' || GameData[Row][Column]== 'O')
+            IsValueCorrect = false;
     }
     
+    int Column = UserCommand % GameData.size();
+    int Row = UserCommand / GameData.size();
+    
     // Go to the command position in the grid and overwrite with the current player
-    for(unsigned long i = 0, GridPosition = 0; i < GameData.size(); i++)
-    {
-        for (unsigned int  j = 0; j < GameData.size(); j++, GridPosition++)
-        {
-            if (GridPosition == UserCommand)
-            {
-                GameData[i][j] = CurrentPlayer;
-                i = GameData.size(); // Set i so that loop is exited immediately
-                break; // Break to the first for loop
-            }
-        }
-    }
+    GameData[Row][Column] = CurrentPlayer;
     
     // This is to clear .22222 in a value 5.22222 as value would assume to be 5
     std::cin.clear();
@@ -405,40 +388,23 @@ std::vector< std::vector<int> > Ask_AI_For_Next_Input(std::vector< std::vector<i
         
         // AI is dumb and picks a pseudo random number as command
         AICommand = std::rand() % (GameData.size() * GameData.size());
-                
+        
+        int Column = AICommand % GameData.size();
+        int Row = AICommand / GameData.size();
+        
         // Check if command has already been called by a player previously as it will contain and X or O
-        for(unsigned long i = 0, GridPosition = 0; i < GameData.size(); i++)
-        {
-            for (unsigned int  j = 0; j < GameData.size(); j++, GridPosition++)
-            {
-                if (GridPosition == AICommand)
-                {
-                    if (GameData[i][j] == 'X' || GameData[i][j]== 'O')
-                        IsValueCorrect = false;
-                    
-                    i = GameData.size(); // Set i so that loop is exited immediately
-                    break; // Break to the first for loop
-                }
-            }
-        }
+        if (GameData[Row][Column] == 'X' || GameData[Row][Column]== 'O')
+            IsValueCorrect = false;
     }
     
     // Output message which is similar to human player command message
     std::cout << "AI " << (char)CurrentPlayer << " entering command " << AICommand << std::endl;
     
+    int Column = AICommand % GameData.size();
+    int Row = AICommand / GameData.size();
+    
     // Go to the command position in the grid and overwrite with the current player
-    for(unsigned long i = 0, GridPosition = 0; i < GameData.size(); i++)
-    {
-        for (unsigned int  j = 0; j < GameData.size(); j++, GridPosition++)
-        {
-            if (GridPosition == AICommand)
-            {
-                GameData[i][j] = CurrentPlayer;
-                i = GameData.size(); // Set i so that loop is exited immediately
-                break; // Break to the first for loop
-            }
-        }
-    }
+    GameData[Row][Column] = CurrentPlayer;
     
     return GameData;
 }
