@@ -56,26 +56,31 @@ void Setup_Game(unsigned int& NumberOfTurns, unsigned int& CurrentPlayer, unsign
 {
     std::cout << "--------------------TicTacToe V1.0 by Junaid Afzal--------------------" << std::endl;
     
+    // Set seed to system time at 0 to create pseudo random numbers
     std::srand(std::time(0));
     
+    // Assign currentplayer, and thus player to play first, randomly
     if (std::rand() % 2 == 0)
-        CurrentPlayer = 'X'; //88
+        CurrentPlayer = 'X'; // It will be converted to 88
     else
-        CurrentPlayer = 'O'; //79
-        
+        CurrentPlayer = 'O'; // It will be converted to 79
+    
+    // Ask user for the size of the TicTacToe grid they want
     GameData = Get_Size_Of_Grid();
     
+    // Ask user for number of players
     NumberOfPlayers = Get_Number_Of_Players();
-        
+    
+    // If only one human user then ask them for which player they want to be (X or O)
     if(NumberOfPlayers == 1)
         UserXO = Get_User_X_O_Choice();
 }
 
 std::vector< std::vector<int> > Get_Size_Of_Grid(void)
 {
-    std::vector< std::vector<int> > GameData;
+    std::vector< std::vector<int> > GameData; // 2D array which contains TicTacToe grid
     
-    bool IsValueCorrect = false;
+    bool IsValueCorrect = false; // Flag for if input value in invalid
     int SizeOfGrid = 0;
     
     while(!IsValueCorrect)
@@ -84,24 +89,28 @@ std::vector< std::vector<int> > Get_Size_Of_Grid(void)
         
         std::cin >> SizeOfGrid;
         
-        if (std::cin.fail())
+        if (std::cin.fail()) // Check if cin failed
         {
+            // Clear buffer and retry
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             continue;
         }
         
-        else if(SizeOfGrid <= 2)
+        else if(SizeOfGrid <= 2) // Only 3x3 grids and bigger allowed
         {
+            // Clear buffer and retry
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             continue;
         }
         
-        else
+        else // If passed all tests then input is valid
             IsValueCorrect = true;
     }
     
+    // The for loops add the appropriate ammount of rows and columns to the grid and the
+    // the appropriate grid value
     for (unsigned int i = 0, GridNumber = 0; i < SizeOfGrid; i++)
     {
         std::vector<int> Rows;
@@ -111,6 +120,7 @@ std::vector< std::vector<int> > Get_Size_Of_Grid(void)
             GameData[i].push_back(GridNumber);
     }
     
+    // This is to clear .22222 in a value 5.22222 as value would assume to be 5
     std::cin.clear();
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     
@@ -119,7 +129,7 @@ std::vector< std::vector<int> > Get_Size_Of_Grid(void)
 
 int Get_Number_Of_Players(void)
 {
-    bool IsValueCorrect = false;
+    bool IsValueCorrect = false; // Flag for if input value in invalid
     int NumberOfPlayers = 0;
     
     while(!IsValueCorrect)
@@ -128,24 +138,27 @@ int Get_Number_Of_Players(void)
         
         std::cin >> NumberOfPlayers;
         
-        if (std::cin.fail())
+        if (std::cin.fail()) // Check if cin failed
         {
+            // Clear buffer and retry
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             continue;
         }
         
-        else if(NumberOfPlayers < 0 || NumberOfPlayers > 2)
+        else if(NumberOfPlayers < 0 || NumberOfPlayers > 2) // Only 0, 1 and 2 players allowed
         {
+            // Clear buffer and retry
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             continue;
         }
     
-        else
+        else // If passed all tests then input is valid
             IsValueCorrect = true;
     }
     
+    // This is to clear .22222 in a value 5.22222 as value would assume to be 5
     std::cin.clear();
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     
@@ -154,7 +167,7 @@ int Get_Number_Of_Players(void)
 
 int Get_User_X_O_Choice(void)
 {
-    bool IsValueCorrect = false;
+    bool IsValueCorrect = false; // Flag for if input value in invalid
     char UserXOChoice = 0;
     
     while(!IsValueCorrect)
@@ -163,24 +176,27 @@ int Get_User_X_O_Choice(void)
         
         std::cin >> UserXOChoice;
         
-        if (std::cin.fail())
+        if (std::cin.fail()) // Check if cin failed
         {
+            // Clear buffer and retry
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             continue;
         }
         
-        else if(UserXOChoice != 'X' && UserXOChoice != 'O')
+        else if(UserXOChoice != 'X' && UserXOChoice != 'O') // Only X and O inputs allowed
         {
+            // Clear buffer and retry
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             continue;
         }
     
-        else
+        else // If passed all tests then input is valid
             IsValueCorrect = true;
     }
     
+    // This is to clear .22222 in a value 5.22222 as value would assume to be 5
     std::cin.clear();
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     
@@ -190,6 +206,8 @@ int Get_User_X_O_Choice(void)
 
 bool Game_Over(const std::vector< std::vector<int> >& GameData)
 {
+    // Go through all positions on the grid and if it is not occupied by an X or O
+    // then game is not over. Otherwise if all positions are occupied then game is over
     for(unsigned int i = 0; i < GameData.size(); i++)
         for(unsigned int j = 0; j < GameData.size(); j++)
             if(GameData[i][j] != 'X' && GameData[i][j] != 'O')
@@ -200,6 +218,7 @@ bool Game_Over(const std::vector< std::vector<int> >& GameData)
 
 bool Winning_Conditions_Met(const std::vector< std::vector<int> >& GameData)
 {
+    // Check for rows of X or O
     for(unsigned int i = 0; i < GameData.size(); i++)
     {
         for(unsigned int j = 0, HowManyX = 0, HowManyO = 0; j < GameData.size(); j++)
@@ -218,6 +237,7 @@ bool Winning_Conditions_Met(const std::vector< std::vector<int> >& GameData)
         }
     }
     
+    // Check for columns of X or O
     for(unsigned int i = 0; i < GameData.size(); i++)
     {
         for(unsigned int j = 0, HowManyX = 0, HowManyO = 0; j < GameData.size(); j++)
@@ -236,6 +256,7 @@ bool Winning_Conditions_Met(const std::vector< std::vector<int> >& GameData)
         }
     }
     
+    // Check for diagonals, from top left to bottom right, of X or O
     for(unsigned int i = 0, HowManyX = 0, HowManyO = 0; i < GameData.size(); i++)
     {
         if(GameData[i][i] == 'X')
@@ -251,6 +272,7 @@ bool Winning_Conditions_Met(const std::vector< std::vector<int> >& GameData)
             return true;
     }
     
+    // Check for diagonals, from bottom left to top right, of X or O
     for(unsigned long i = GameData.size() - 1, j = 0, HowManyX = 0, HowManyO = 0; j < GameData.size(); i--, j++)
     {
         if(GameData[i][j] == 'X')
@@ -271,10 +293,12 @@ bool Winning_Conditions_Met(const std::vector< std::vector<int> >& GameData)
 
 void Display_Current_Game(const std::vector< std::vector<int> >& GameData)
 {
-    for(unsigned int i = 0, GridPosition = 0; i < GameData.size(); i++, GridPosition++)
+    // Iterate across whole grid and output its value
+    for(unsigned int i = 0; i < GameData.size(); i++)
     {
-        for (unsigned int  j = 0; j < GameData.size(); j++, GridPosition++)
+        for (unsigned int  j = 0; j < GameData.size(); j++)
         {
+            // X and O are stored as 88 and 79 respectively and so display them as char
             if (GameData[i][j] == 88 || GameData[i][j] == 79)
                 std::cout << std::setw(4) << std::left << (char)GameData[i][j] << " ";
                 
@@ -297,33 +321,38 @@ char Toggle_Player(const int& CurrentPlayer)
 
 std::vector< std::vector<int> > Ask_User_For_Next_Input(std::vector< std::vector<int> >& GameData, const unsigned int& CurrentPlayer)
 {
-    bool IsValueCorrect = false;
+    bool IsValueCorrect = false; // Flag for if input value in invalid
     int UserCommand = 0;
     
     while(!IsValueCorrect)
     {
+        // Set flag to true by default as difficult to continue to to next iteration of while loop
+        // within a nested if statements within nested for loops
         IsValueCorrect = true;
         
         std::cout << "Player " << (char)CurrentPlayer << " enter command ";
         
         std::cin >> UserCommand;
         
-        if (std::cin.fail())
+        if (std::cin.fail()) // Check if cin failed
         {
+            // Clear buffer, set flag to false and retry
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             IsValueCorrect = false;
             continue;
         }
         
-        else if(UserCommand < 0 || UserCommand > (GameData.size() * GameData.size() - 1))
+        else if(UserCommand < 0 || UserCommand > (GameData.size() * GameData.size() - 1)) // Check if command is within range of grid
         {
+            // Clear buffer, set flag to false and retry
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             IsValueCorrect = false;
             continue;
         }
         
+        // Check if command has already been called by a player previously as it will contain and X or O
         for(unsigned long i = 0, GridPosition = 0; i < GameData.size(); i++)
         {
             for (unsigned int  j = 0; j < GameData.size(); j++, GridPosition++)
@@ -333,13 +362,14 @@ std::vector< std::vector<int> > Ask_User_For_Next_Input(std::vector< std::vector
                     if (GameData[i][j] == 'X' || GameData[i][j]== 'O')
                         IsValueCorrect = false;
                     
-                    i = GameData.size();
-                    break;
+                    i = GameData.size(); // Set i so that loop is exited immediately
+                    break; // Break to the first for loop
                 }
             }
         }
     }
     
+    // Go to the command position in the grid and overwrite with the current player
     for(unsigned long i = 0, GridPosition = 0; i < GameData.size(); i++)
     {
         for (unsigned int  j = 0; j < GameData.size(); j++, GridPosition++)
@@ -347,12 +377,13 @@ std::vector< std::vector<int> > Ask_User_For_Next_Input(std::vector< std::vector
             if (GridPosition == UserCommand)
             {
                 GameData[i][j] = CurrentPlayer;
-                i = GameData.size();
-                break;
+                i = GameData.size(); // Set i so that loop is exited immediately
+                break; // Break to the first for loop
             }
         }
     }
     
+    // This is to clear .22222 in a value 5.22222 as value would assume to be 5
     std::cin.clear();
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     
@@ -361,15 +392,19 @@ std::vector< std::vector<int> > Ask_User_For_Next_Input(std::vector< std::vector
 
 std::vector< std::vector<int> > Ask_AI_For_Next_Input(std::vector< std::vector<int> >& GameData, const unsigned int& CurrentPlayer)
 {
-    bool IsValueCorrect = false;
+    bool IsValueCorrect = false; // Flag for if input value in invalid
     unsigned int AICommand = 0;
     
     while(!IsValueCorrect)
     {
+        // Set flag to true by default as difficult to continue to to next iteration of while loop
+        // within a nested if statements within nested for loops
         IsValueCorrect = true;
         
+        // AI is dumb and picks a pseudo random number as command
         AICommand = std::rand() % (GameData.size() * GameData.size());
                 
+        // Check if command has already been called by a player previously as it will contain and X or O
         for(unsigned long i = 0, GridPosition = 0; i < GameData.size(); i++)
         {
             for (unsigned int  j = 0; j < GameData.size(); j++, GridPosition++)
@@ -379,15 +414,17 @@ std::vector< std::vector<int> > Ask_AI_For_Next_Input(std::vector< std::vector<i
                     if (GameData[i][j] == 'X' || GameData[i][j]== 'O')
                         IsValueCorrect = false;
                     
-                    i = GameData.size();
-                    break;
+                    i = GameData.size(); // Set i so that loop is exited immediately
+                    break; // Break to the first for loop
                 }
             }
         }
     }
     
+    // Output message which is similar to human player command message
     std::cout << "AI " << (char)CurrentPlayer << " entering command " << AICommand << std::endl;
     
+    // Go to the command position in the grid and overwrite with the current player
     for(unsigned long i = 0, GridPosition = 0; i < GameData.size(); i++)
     {
         for (unsigned int  j = 0; j < GameData.size(); j++, GridPosition++)
@@ -395,8 +432,8 @@ std::vector< std::vector<int> > Ask_AI_For_Next_Input(std::vector< std::vector<i
             if (GridPosition == AICommand)
             {
                 GameData[i][j] = CurrentPlayer;
-                i = GameData.size();
-                break;
+                i = GameData.size(); // Set i so that loop is exited immediately
+                break; // Break to the first for loop
             }
         }
     }
@@ -406,6 +443,7 @@ std::vector< std::vector<int> > Ask_AI_For_Next_Input(std::vector< std::vector<i
 
 void Display_Winner(const unsigned int& NumberOfTurns, const std::vector< std::vector<int> >& GameData, const unsigned int& CurrentPlayer)
 {
+    // Winner will be current player as Toggle_Player() function has not been called from receiving input and determining winner
     if (Winning_Conditions_Met(GameData))
     {
        Display_Current_Game(GameData);
@@ -413,6 +451,7 @@ void Display_Winner(const unsigned int& NumberOfTurns, const std::vector< std::v
        std::cout << "--------------------TicTacToe V2.0 by Junaid Afzal--------------------\n\n" << std::endl;
     }
 
+    // No winner so a draw
     else
     {
        Display_Current_Game(GameData);

@@ -14,8 +14,3 @@ int main(void) {
     
     return 0;
 }
-
-/*
- comments (lots of comments)
- update readme.md
-*/
