@@ -54,7 +54,7 @@ void Play_TicTacToe(void)
 
 void Setup_Game(unsigned int& NumberOfTurns, unsigned int& CurrentPlayer, unsigned int& NumberOfPlayers, unsigned int& UserXO, std::vector< std::vector<int> >& GameData)
 {
-    std::cout << "--------------------TicTacToe V1.0 by Junaid Afzal--------------------" << std::endl;
+    std::cout << "--------------------TicTacToe V2.0 by Junaid Afzal--------------------" << std::endl;
     
     // Set seed to system time at 0 to create pseudo random numbers
     std::srand(std::time(0));
@@ -293,6 +293,8 @@ bool Winning_Conditions_Met(const std::vector< std::vector<int> >& GameData)
 
 void Display_Current_Game(const std::vector< std::vector<int> >& GameData)
 {
+    std::system("clear");
+    std::cout << "--------------------TicTacToe V2.0 by Junaid Afzal--------------------" << std::endl;
     // Iterate across whole grid and output its value
     for(unsigned int i = 0; i < GameData.size(); i++)
     {
@@ -448,7 +450,6 @@ void Display_Winner(const unsigned int& NumberOfTurns, const std::vector< std::v
     {
        Display_Current_Game(GameData);
        std::cout << "Congratulations on Player " << (char)CurrentPlayer << " for winning!\nOnly took you " << NumberOfTurns << " turns" << std::endl;
-       std::cout << "--------------------TicTacToe V2.0 by Junaid Afzal--------------------\n\n" << std::endl;
     }
 
     // No winner so a draw
@@ -456,6 +457,5 @@ void Display_Winner(const unsigned int& NumberOfTurns, const std::vector< std::v
     {
        Display_Current_Game(GameData);
        std::cout << "Game is a draw\nOnly took you " << NumberOfTurns << " turns" << std::endl;
-       std::cout << "--------------------TicTacToe V2.0 by Junaid Afzal--------------------\n\n" << std::endl;
     }
 }
