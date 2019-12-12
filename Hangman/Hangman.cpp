@@ -7,6 +7,7 @@
 //
 
 #include "Hangman.hpp"
+#include <iostream>
 #include <vector>
 
 
