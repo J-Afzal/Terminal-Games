@@ -8,7 +8,8 @@
 
 #include "TicTacToe.hpp"
 
-int main(void) {
+int main(void)
+{
     
     Play_TicTacToe();
     
