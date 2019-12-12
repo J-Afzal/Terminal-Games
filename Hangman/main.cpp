@@ -14,3 +14,14 @@ int main(void)
     
     return 0;
 }
+
+/*
+ Test all functions
+ 
+ formatting all code
+ 
+ Comments on hpp for code and how it wokrs and rules
+ 
+ update readme
+ 
+ */
