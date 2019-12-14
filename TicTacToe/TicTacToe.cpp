@@ -293,7 +293,10 @@ bool Winning_Conditions_Met(const std::vector< std::vector<int> >& GameData)
 
 void Display_Current_Game(const std::vector< std::vector<int> >& GameData)
 {
+    // ***Better alternative needed***
+    // Clears terminal window
     std::system("clear");
+    
     std::cout << "--------------------TicTacToe V2.0 by Junaid Afzal--------------------" << std::endl;
     // Iterate across whole grid and output its value
     for(unsigned int i = 0; i < GameData.size(); i++)
@@ -397,7 +400,7 @@ std::vector< std::vector<int> > Ask_AI_For_Next_Input(std::vector< std::vector<i
             IsValueCorrect = false;
     }
     
-    // Output message which is similar to human player command message
+    // Output a message which is similar to human player command message
     std::cout << "AI " << (char)CurrentPlayer << " entering command " << AICommand << std::endl;
     
     int Column = AICommand % GameData.size();
