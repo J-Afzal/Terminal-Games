@@ -357,7 +357,7 @@ void Display_Game(std::vector<std::string>& HangmanStates, unsigned int& NumberO
     // Clears terminal window
     system("clear");
     
-    std::cout << "Hangman V1.0 by Junaid Afzal\n" << std::endl;
+    std::cout << "--------------------Hangman V1.0 by Junaid Afzal--------------------\n" << std::endl;
     
     // Draw the hangman drawing
     std::cout << HangmanStates[NumberOfErrors] << "\n" << std::endl;
