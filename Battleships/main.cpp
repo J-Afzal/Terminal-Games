@@ -9,12 +9,15 @@
 #include "Battleships.hpp"
 #include <iostream>
 #include <vector>
+#include <iomanip>
 
-
+//************************************************* ENTER 7 8 9 10 11 *************************************************
 
 int main(void) {
-    std::vector< std::vector<int> > AIBoard, UserBoardAsSeenFromAI, UserBoard, AIBoardAsSeenFromUser;
+    std::vector< std::vector<char> > AIBoard, UserBoard;
+    std::vector< std::vector<int> > UserBoardAsSeenFromAI, AIBoardAsSeenFromUser;
     std::string CurrentPlayer;
+    //int NumberOfTurns = 0;
     
     Setup_Game(AIBoard, UserBoardAsSeenFromAI, UserBoard, AIBoardAsSeenFromUser, CurrentPlayer);
     
@@ -53,18 +56,16 @@ int main(void) {
 //    std::cout << ". . . . . . . X . ." << std::endl;
 //    std::cout << ". . . . . . . X . ." << std::endl;
 //
-//
 //    //Your board
+//    std::cout << ". B . . . . . . . ." << std::endl;
+//    std::cout << ". B . . . . . . . ." << std::endl;
+//    std::cout << ". B . . . . . . . ." << std::endl;
+//    std::cout << ". B . . . . . . . ." << std::endl;
 //    std::cout << ". . . . . . . . . ." << std::endl;
 //    std::cout << ". . . . . . . . . ." << std::endl;
 //    std::cout << ". . . . . . . . . ." << std::endl;
 //    std::cout << ". . . . . . . . . ." << std::endl;
 //    std::cout << ". . . . . . . . . ." << std::endl;
 //    std::cout << ". . . . . . . . . ." << std::endl;
-//    std::cout << ". . . . . . . . . ." << std::endl;
-//    std::cout << ". . . . . . . . . ." << std::endl;
-//    std::cout << ". . . . . . . . . ." << std::endl;
-//    std::cout << ". . . . . . . . . ." << std::endl;
-//
 //
 //    std::cout << "\n\n\n\n";
