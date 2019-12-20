@@ -7,11 +7,10 @@ TicTacToe game with options to define the size of the grid - which will be assum
 Hangman game where no hyphens or spaces allowed in the word to be guessed. The programs first asks the user for a word, then for the number of players, with one meaning an AI user will guess the word and 2 meaning a human user will guess the word. The user guessing the word is prompted for a guess and can handle a word or a letter guess. Note a word guess will not replace any letters but just compare the guess with the word to be guessed and the AI is dumb and randomly chooses a letter. With each incorrect guess the hangman is drawn more until it is complete (after 10 incorrect guesses) or the word has been guessed. The game can be played through one function `Play_Hangman()`.
 
 ### Battleships
-way too complex
+done
 
 
 ### To Do
-* Battleships
 * Pong
 * Snake
 * Minesweeper
