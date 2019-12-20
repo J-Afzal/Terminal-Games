@@ -11,61 +11,39 @@
 #include <vector>
 #include <iomanip>
 
-//************************************************* ENTER 7 8 9 10 11 *************************************************
+
 
 int main(void) {
-    std::vector< std::vector<char> > AIBoard, UserBoard;
-    std::vector< std::vector<int> > UserBoardAsSeenFromAI, AIBoardAsSeenFromUser;
+    std::vector< std::vector<char> > AIBoard, AIOpponentBoard, UserBoard, UserOpponentBoard;
     std::string CurrentPlayer;
-    //int NumberOfTurns = 0;
+    unsigned int NumberOfTurns = 0;
     
-    Setup_Game(AIBoard, UserBoardAsSeenFromAI, UserBoard, AIBoardAsSeenFromUser, CurrentPlayer);
+    Setup_Game(AIBoard, AIOpponentBoard, UserBoard, UserOpponentBoard, CurrentPlayer);
     
-//    Display_Game();
-//
-//    while (!Winning_Conditions_Met())
-//    {
-//        Toggle_Player();
-//
-//        if (CurrentPlyaer == 'AI')
-//            Ask_AI_For_Next_Turn();
-//
-//        else
-//        {
-//            Display_Game();
-//            Ask_User_For_Next_Move();
-//        }
-//
-//
-//    }
-//
-//    Display_Winning_Message();
+    Display_Game(UserOpponentBoard, UserBoard);
+
+    while (!Winning_Conditions_Met_For_AIBoard(AIBoard) && !Winning_Conditions_Met_For_UserBoard(UserBoard))
+    {
+        Toggle_Player(CurrentPlayer);
+        
+        if (CurrentPlayer == "AI")
+        {
+            int Command = Ask_AI_For_Next_Command(AIOpponentBoard);
+            Execute_Next_Turn(AIBoard, AIOpponentBoard, UserBoard, UserOpponentBoard, CurrentPlayer, Command);
+        }
+        
+        else
+        {
+            Display_Game(UserOpponentBoard, UserBoard);
+            int Command = Ask_User_For_Next_Command(UserOpponentBoard);
+            Execute_Next_Turn(AIBoard, AIOpponentBoard, UserBoard, UserOpponentBoard, CurrentPlayer, Command);
+            Display_Game(UserOpponentBoard, UserBoard);
+        }
+
+        NumberOfTurns++;
+    }
+
+    Display_Winning_Message(CurrentPlayer, NumberOfTurns);
 
     return 0;
 }
-
-//The opponents board
-//    std::cout << ". O . . . . . . . ." << std::endl;
-//    std::cout << ". O . . . . O . . ." << std::endl;
-//    std::cout << ". O . . . . O . . ." << std::endl;
-//    std::cout << ". O . . . . . . . ." << std::endl;
-//    std::cout << ". . . . . . . . . ." << std::endl;
-//    std::cout << ". . O O O . . . . ." << std::endl;
-//    std::cout << ". . . . . . . . . ." << std::endl;
-//    std::cout << ". . . . . . . X . ." << std::endl;
-//    std::cout << ". . . . . . . X . ." << std::endl;
-//    std::cout << ". . . . . . . X . ." << std::endl;
-//
-//    //Your board
-//    std::cout << ". B . . . . . . . ." << std::endl;
-//    std::cout << ". B . . . . . . . ." << std::endl;
-//    std::cout << ". B . . . . . . . ." << std::endl;
-//    std::cout << ". B . . . . . . . ." << std::endl;
-//    std::cout << ". . . . . . . . . ." << std::endl;
-//    std::cout << ". . . . . . . . . ." << std::endl;
-//    std::cout << ". . . . . . . . . ." << std::endl;
-//    std::cout << ". . . . . . . . . ." << std::endl;
-//    std::cout << ". . . . . . . . . ." << std::endl;
-//    std::cout << ". . . . . . . . . ." << std::endl;
-//
-//    std::cout << "\n\n\n\n";
