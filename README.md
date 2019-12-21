@@ -14,5 +14,6 @@ done
 * Pong
 * Snake
 * Minesweeper
-* Then watch vid of previous ones and list improvements for all games
+* Then watch vid of previous ones and list improvements for all games (https://www.rapidtables.com/code/text/unicode-characters.html)
+* Check all games on windows
 * Computing project (update folder names, and cmakelists new, OpenGL, and/or worksheet 6)
