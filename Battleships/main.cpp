@@ -47,3 +47,12 @@ int main(void) {
 
     return 0;
 }
+
+/*
+ https://www.rapidtables.com/code/text/unicode-characters.html
+
+ page 36 and 37 ᚙ
+ 
+ comments
+ fromate code, unsigend {} const
+ */
