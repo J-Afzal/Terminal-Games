@@ -49,10 +49,6 @@ int main(void) {
 }
 
 /*
- https://www.rapidtables.com/code/text/unicode-characters.html
-
- page 36 and 37 ᚙ
- 
+ fromate code, unsigend {} const header fles and spaces.
  comments
- fromate code, unsigend {} const
  */
