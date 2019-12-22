@@ -13,7 +13,8 @@
 //  a word guess will not replace any letters but just compare the guess with
 //  the word to be guessed and the AI is dumb and randomly chooses a letter.
 //  With each incorrect guess the hangman is drawn more until it is complete
-//  (after 10 incorrect guesses) or the word has been guessed.
+//  (after 10 incorrect guesses) or the word has been guessed. The game can be
+//  played through one function Play_Hangman()
 //
 
 #ifndef Hangman_hpp
