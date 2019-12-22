@@ -5,7 +5,8 @@
 //  Created by Main on 11/12/2019.
 //  Copyright © 2019 Junaid Afzal. All rights reserved.
 //
-// Implementation of the game Hangman
+// The file contains the implementation of the Hangman game
+//
 
 #include "Hangman.hpp"
 #include <iostream>
