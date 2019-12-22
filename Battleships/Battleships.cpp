@@ -114,6 +114,49 @@ void Setup_Game(std::vector< std::vector<char> >& AIBoard, std::vector< std::vec
 
 
 
+void Display_Game(const std::vector< std::vector<char> >& UserOpponentBoard, const std::vector< std::vector<char> >& UserBoard)
+{
+    // ***Better alternative needed***
+    // Clears terminal window
+    system("clear");
+    
+    std::cout << "--------------------Battleships V1.0 By Junaid Afzal--------------------\n" << std::endl;
+    
+    // First display the opponent's board with hits = X, misses = . and empty spots = grid position
+    // See Execute_Next_Turn() for why 'x' and 'o' are used instead of 'X' and '.'
+    std::cout << "---Opponent's Board---" << std::endl;
+    for (unsigned int i = 0; i < UserOpponentBoard.size(); i++)
+    {
+        for (unsigned int j = 0; j < UserOpponentBoard.size(); j++)
+        {
+            if (UserOpponentBoard[i][j] == 'x')
+                std::cout << std::setw(2) << 'X' << " ";
+            
+            else if (UserOpponentBoard[i][j] == 'o')
+                std::cout << std::setw(2) << '.' << " ";
+                
+            else
+                std::cout << std::setw(2) << (int)UserOpponentBoard[i][j] << " ";
+        }
+            
+        std::cout << "\n";
+    }
+    
+    // Display the user's board with hits = 'X', misses = '.' and empty spots = ' '
+    std::cout << "\n---Your Board---" << std::endl;
+    for (unsigned int i = 0; i < UserBoard.size(); i++)
+    {
+        for (unsigned int j = 0; j < UserBoard.size(); j++)
+            std::cout << std::setw(2) << UserBoard[i][j] << " ";
+
+        std::cout << "\n";
+    }
+    
+    std::cout << "\n";
+}
+
+
+
 void Ask_AI_For_Ship_Positions(std::vector< std::vector<char> >& AIBoard)
 {
     // Will count how many ships have been assigned
@@ -134,10 +177,10 @@ void Ask_AI_For_Ship_Positions(std::vector< std::vector<char> >& AIBoard)
                 unsigned int ShipSize = 5;
                 
                 // Ask computer for ship position
-                Get_AI_Ship_Coordinates(AIBoard, CurrentShipPositionsOrientation, CurrentShipPositions_ints, ShipSize);
+                Get_AI_Ship_Positions(AIBoard, CurrentShipPositionsOrientation, CurrentShipPositions_ints, ShipSize);
                 
                 // If error checking returns false then continue to next iteration
-                if (!Error_Checking_On_AI_Ship_Coordinates(AIBoard, CurrentShipPositions_ints))
+                if (!Error_Checking_On_AI_Ship_Positions(AIBoard, CurrentShipPositions_ints))
                     continue;
                 
                 // Place ship on AIBoard using the CurrentShipPositions_ints positions and marking with 'C' for carrier
@@ -155,10 +198,10 @@ void Ask_AI_For_Ship_Positions(std::vector< std::vector<char> >& AIBoard)
                 unsigned int ShipSize = 4;
 
                 // Ask computer for ship position
-                Get_AI_Ship_Coordinates(AIBoard, CurrentShipPositionsOrientation, CurrentShipPositions_ints, ShipSize);
+                Get_AI_Ship_Positions(AIBoard, CurrentShipPositionsOrientation, CurrentShipPositions_ints, ShipSize);
                 
                 // If error checking returns false then continue to next iteration
-                if (!Error_Checking_On_AI_Ship_Coordinates(AIBoard, CurrentShipPositions_ints))
+                if (!Error_Checking_On_AI_Ship_Positions(AIBoard, CurrentShipPositions_ints))
                     continue;
 
                 // Place ship on AIBoard using the CurrentShipPositions_ints positions and marking with 'B' for battleship
@@ -176,10 +219,10 @@ void Ask_AI_For_Ship_Positions(std::vector< std::vector<char> >& AIBoard)
                 unsigned int ShipSize = 3;
 
                 // Ask computer for ship position
-                Get_AI_Ship_Coordinates(AIBoard, CurrentShipPositionsOrientation, CurrentShipPositions_ints, ShipSize);
+                Get_AI_Ship_Positions(AIBoard, CurrentShipPositionsOrientation, CurrentShipPositions_ints, ShipSize);
                 
                 // If error checking returns false then continue to next iteration
-                if (!Error_Checking_On_AI_Ship_Coordinates(AIBoard, CurrentShipPositions_ints))
+                if (!Error_Checking_On_AI_Ship_Positions(AIBoard, CurrentShipPositions_ints))
                     continue;
 
                 // Place ship on AIBoard using the CurrentShipPositions_ints positions and marking with 'D' for destroyer
@@ -197,10 +240,10 @@ void Ask_AI_For_Ship_Positions(std::vector< std::vector<char> >& AIBoard)
                 unsigned int ShipSize = 3;
 
                 // Ask computer for ship position
-                Get_AI_Ship_Coordinates(AIBoard, CurrentShipPositionsOrientation, CurrentShipPositions_ints, ShipSize);
+                Get_AI_Ship_Positions(AIBoard, CurrentShipPositionsOrientation, CurrentShipPositions_ints, ShipSize);
                 
                 // If error checking returns false then continue to next iteration
-                if (!Error_Checking_On_AI_Ship_Coordinates(AIBoard, CurrentShipPositions_ints))
+                if (!Error_Checking_On_AI_Ship_Positions(AIBoard, CurrentShipPositions_ints))
                     continue;
 
                 // Place ship on AIBoard using the CurrentShipPositions_ints positions and marking with 'S' for submarine
@@ -218,10 +261,10 @@ void Ask_AI_For_Ship_Positions(std::vector< std::vector<char> >& AIBoard)
                 unsigned int ShipSize = 2;
 
                 // Ask computer for ship position
-                Get_AI_Ship_Coordinates(AIBoard, CurrentShipPositionsOrientation, CurrentShipPositions_ints, ShipSize);
+                Get_AI_Ship_Positions(AIBoard, CurrentShipPositionsOrientation, CurrentShipPositions_ints, ShipSize);
                 
                 // If error checking returns false then continue to next iteration
-                if (!Error_Checking_On_AI_Ship_Coordinates(AIBoard, CurrentShipPositions_ints))
+                if (!Error_Checking_On_AI_Ship_Positions(AIBoard, CurrentShipPositions_ints))
                     continue;
 
                 // Place ship on AIBoard using the CurrentShipPositions_ints positions and marking with 'P' for patrol boat
@@ -243,7 +286,7 @@ void Ask_AI_For_Ship_Positions(std::vector< std::vector<char> >& AIBoard)
 
 
 
-void Get_AI_Ship_Coordinates(const std::vector< std::vector<char> >& AIBoard, std::string& CurrentShipPositionsOrientation, std::vector<int>& CurrentShipPositions_ints, const unsigned int& ShipSize)
+void Get_AI_Ship_Positions(const std::vector< std::vector<char> >& AIBoard, std::string& CurrentShipPositionsOrientation, std::vector<int>& CurrentShipPositions_ints, const unsigned int& ShipSize)
 {
     // Singles represents the column number; Tens the row number; and the FirstValue is the first value of the gird positions when ordered in ascending order
     unsigned int Singles, Tens, FirstValue;
@@ -292,7 +335,7 @@ void Get_AI_Ship_Coordinates(const std::vector< std::vector<char> >& AIBoard, st
 
 
 
-bool Error_Checking_On_AI_Ship_Coordinates(const std::vector< std::vector<char> >& AIBoard, const std::vector<int>& CurrentShipPositions_ints)
+bool Error_Checking_On_AI_Ship_Positions(const std::vector< std::vector<char> >& AIBoard, const std::vector<int>& CurrentShipPositions_ints)
 {
     // Only check required is if any of the ship positions are already occupied by another ship
     // Cylce through all ship positions
@@ -338,7 +381,7 @@ void Ask_User_For_Ship_Positions(const std::vector< std::vector<char> >& UserOpp
                 std::getline(std::cin, CurrentShipPositions_string);
 
                 // If error checking returns false then continue to next iteration
-                if(!Error_Checking_Ordering_Orientation_On_User_Input(UserBoard, CurrentShipPositions_string, CurrentShipPositions_ints, ShipSize, CurrentShipPositionsOrientation))
+                if(!Error_Checking_Ordering_Orientation_On_User_Ship_Positions(UserBoard, CurrentShipPositions_string, CurrentShipPositions_ints, ShipSize, CurrentShipPositionsOrientation))
                     continue;
 
                 // If ship can't be placed then continue to next iteration
@@ -368,7 +411,7 @@ void Ask_User_For_Ship_Positions(const std::vector< std::vector<char> >& UserOpp
                 std::getline(std::cin, CurrentShipPositions_string);
 
                 // If error checking returns false then continue to next iteration
-                if(!Error_Checking_Ordering_Orientation_On_User_Input(UserBoard, CurrentShipPositions_string, CurrentShipPositions_ints, ShipSize, CurrentShipPositionsOrientation))
+                if(!Error_Checking_Ordering_Orientation_On_User_Ship_Positions(UserBoard, CurrentShipPositions_string, CurrentShipPositions_ints, ShipSize, CurrentShipPositionsOrientation))
                     continue;
 
                 // If ship can't be placed then continue to next iteration
@@ -398,7 +441,7 @@ void Ask_User_For_Ship_Positions(const std::vector< std::vector<char> >& UserOpp
                 std::getline(std::cin, CurrentShipPositions_string);
 
                 // If error checking returns false then continue to next iteration
-                if(!Error_Checking_Ordering_Orientation_On_User_Input(UserBoard, CurrentShipPositions_string, CurrentShipPositions_ints, ShipSize, CurrentShipPositionsOrientation))
+                if(!Error_Checking_Ordering_Orientation_On_User_Ship_Positions(UserBoard, CurrentShipPositions_string, CurrentShipPositions_ints, ShipSize, CurrentShipPositionsOrientation))
                     continue;
 
                 // If ship can't be placed then continue to next iteration
@@ -428,7 +471,7 @@ void Ask_User_For_Ship_Positions(const std::vector< std::vector<char> >& UserOpp
                 std::getline(std::cin, CurrentShipPositions_string);
 
                 // If error checking returns false then continue to next iteration
-                if(!Error_Checking_Ordering_Orientation_On_User_Input(UserBoard, CurrentShipPositions_string, CurrentShipPositions_ints, ShipSize, CurrentShipPositionsOrientation))
+                if(!Error_Checking_Ordering_Orientation_On_User_Ship_Positions(UserBoard, CurrentShipPositions_string, CurrentShipPositions_ints, ShipSize, CurrentShipPositionsOrientation))
                     continue;
 
                 // If ship can't be placed then continue to next iteration
@@ -458,7 +501,7 @@ void Ask_User_For_Ship_Positions(const std::vector< std::vector<char> >& UserOpp
                 std::getline(std::cin, CurrentShipPositions_string);
 
                 // If error checking returns false then continue to next iteration
-                if(!Error_Checking_Ordering_Orientation_On_User_Input(UserBoard, CurrentShipPositions_string, CurrentShipPositions_ints, ShipSize, CurrentShipPositionsOrientation))
+                if(!Error_Checking_Ordering_Orientation_On_User_Ship_Positions(UserBoard, CurrentShipPositions_string, CurrentShipPositions_ints, ShipSize, CurrentShipPositionsOrientation))
                     continue;
 
                 // If ship can't be placed then continue to next iteration
@@ -486,50 +529,7 @@ void Ask_User_For_Ship_Positions(const std::vector< std::vector<char> >& UserOpp
 
 
 
-void Display_Game(const std::vector< std::vector<char> >& UserOpponentBoard, const std::vector< std::vector<char> >& UserBoard)
-{
-    // ***Better alternative needed***
-    // Clears terminal window
-    system("clear");
-    
-    std::cout << "--------------------Battleships V1.0 By Junaid Afzal--------------------\n" << std::endl;
-    
-    // First display the opponent's board with hits = X, misses = . and empty spots = grid position
-    // See Execute_Next_Turn() for why 'x' and 'o' are used instead of 'X' and '.'
-    std::cout << "---Opponent's Board---" << std::endl;
-    for (unsigned int i = 0; i < UserOpponentBoard.size(); i++)
-    {
-        for (unsigned int j = 0; j < UserOpponentBoard.size(); j++)
-        {
-            if (UserOpponentBoard[i][j] == 'x')
-                std::cout << std::setw(2) << 'X' << " ";
-            
-            else if (UserOpponentBoard[i][j] == 'o')
-                std::cout << std::setw(2) << '.' << " ";
-                
-            else
-                std::cout << std::setw(2) << (int)UserOpponentBoard[i][j] << " ";
-        }
-            
-        std::cout << "\n";
-    }
-    
-    // Display the user's board with hits = 'X', misses = '.' and empty spots = ' '
-    std::cout << "\n---Your Board---" << std::endl;
-    for (unsigned int i = 0; i < UserBoard.size(); i++)
-    {
-        for (unsigned int j = 0; j < UserBoard.size(); j++)
-            std::cout << std::setw(2) << UserBoard[i][j] << " ";
-
-        std::cout << "\n";
-    }
-    
-    std::cout << "\n";
-}
-
-
-
-bool Error_Checking_Ordering_Orientation_On_User_Input(const std::vector< std::vector<char> >& UserBoard, std::string& CurrentShipPositions_string, std::vector<int>& CurrentShipPositions_ints, const unsigned int& ShipSize, std::string& CurrentShipPositionsOrientation)
+bool Error_Checking_Ordering_Orientation_On_User_Ship_Positions(const std::vector< std::vector<char> >& UserBoard, std::string& CurrentShipPositions_string, std::vector<int>& CurrentShipPositions_ints, const unsigned int& ShipSize, std::string& CurrentShipPositionsOrientation)
 {
     // Check if cin failed
     if (std::cin.fail())
@@ -694,16 +694,16 @@ bool Can_Ship_Be_Placed(const std::string& CurrentShipPositionsOrientation, cons
 
 
 
-void Place_Ship(std::vector< std::vector<char> >& UserBoard, const std::vector<int>& CurrentShipPositions_ints, const unsigned char& ShipName)
+void Place_Ship(std::vector< std::vector<char> >& SomeBoard, const std::vector<int>& CurrentShipPositions_ints, const unsigned char& ShipName)
 {
     for (unsigned int i = 0; i < CurrentShipPositions_ints.size(); i++)
     {
         // The next two for loops and if statement go to the current grid position
-        for (unsigned int j = 0, CurrentPosition = 0; j < UserBoard.size(); j++)
-            for (unsigned int k = 0; k < UserBoard.size(); k++, CurrentPosition++)
+        for (unsigned int j = 0, CurrentPosition = 0; j < SomeBoard.size(); j++)
+            for (unsigned int k = 0; k < SomeBoard.size(); k++, CurrentPosition++)
                 if (CurrentPosition == CurrentShipPositions_ints[i])
-                    // Overwrite the UserBoard with the ship name
-                    UserBoard[j][k] = ShipName;
+                    // Overwrite SomeBoard with the ship name
+                    SomeBoard[j][k] = ShipName;
     }
 }
 
