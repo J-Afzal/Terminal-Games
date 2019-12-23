@@ -15,6 +15,7 @@ TicTacToe game with options to define the size of the grid - which will be assum
 * Better comments above
 * size of grid to three and thus simplify code 
 * Smarter AI
+* ability to quit game
 * remove V2.0
 
 
@@ -27,6 +28,7 @@ Hangman game where no hyphens or spaces allowed in the word to be guessed. The p
 * Better comments above
 * Dictionary file which will allow for 0 players and for AI to be the one not guessing
 * maybe allow spaces and hyphens
+* ability to quit game
 * remove V2.0
 
 
@@ -40,16 +42,5 @@ Battleship game where a human user can play agaisnt the computer. The human user
 * int Column = UserCommand % GameData.size(); int Row = UserCommand / GameData.size(); 
 * userBoard.size replaced with 10
 * Smarter AI
+* ability to quit game
 * remove V2.0
-
-
-
-### Pong
-
-##### Improvements
-
-
-
-### Snake
-
-##### Improvements
