@@ -52,12 +52,14 @@ void Play_TicTacToe(void)
     Display_Winner(NumberOfTurns, GameData, CurrentPlayer);
 }
 
+
+
 void Setup_Game(unsigned int& NumberOfTurns, unsigned int& CurrentPlayer, unsigned int& NumberOfPlayers, unsigned int& UserXO, std::vector< std::vector<int> >& GameData)
 {
-    std::cout << "--------------------TicTacToe V2.0 by Junaid Afzal--------------------" << std::endl;
+    std::cout << "--------------------TicTacToe by Junaid Afzal--------------------" << std::endl;
     
     // Set seed to system time at 0 to create pseudo random numbers
-    std::srand(std::time(0));
+    std::srand((unsigned int)std::time(0));
     
     // Assign currentplayer, and thus player to play first, randomly
     if (std::rand() % 2 == 0)
@@ -65,8 +67,15 @@ void Setup_Game(unsigned int& NumberOfTurns, unsigned int& CurrentPlayer, unsign
     else
         CurrentPlayer = 'O'; // It will be converted to 79
     
-    // Ask user for the size of the TicTacToe grid they want
-    GameData = Get_Size_Of_Grid();
+    // The for loops add the 3 rows and columns to the grid and the the appropriate grid values
+    for (unsigned int i = 0, GridNumber = 0; i < 3; i++)
+    {
+        std::vector<int> Rows;
+        GameData.push_back(Rows);
+        
+        for (int j = 0; j < 3; j++, GridNumber++)
+            GameData[i].push_back(GridNumber);
+    }
     
     // Ask user for number of players
     NumberOfPlayers = Get_Number_Of_Players();
@@ -76,56 +85,7 @@ void Setup_Game(unsigned int& NumberOfTurns, unsigned int& CurrentPlayer, unsign
         UserXO = Get_User_X_O_Choice();
 }
 
-std::vector< std::vector<int> > Get_Size_Of_Grid(void)
-{
-    std::vector< std::vector<int> > GameData; // 2D array which contains TicTacToe grid
-    
-    bool IsValueCorrect = false; // Flag for if input value in invalid
-    int SizeOfGrid = 0;
-    
-    while(!IsValueCorrect)
-    {
-        std::cout << "Enter the size of the grid ";
-        
-        std::cin >> SizeOfGrid;
-        
-        if (std::cin.fail()) // Check if cin failed
-        {
-            // Clear buffer and retry
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            continue;
-        }
-        
-        else if(SizeOfGrid <= 2) // Only 3x3 grids and bigger allowed
-        {
-            // Clear buffer and retry
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            continue;
-        }
-        
-        else // If passed all tests then input is valid
-            IsValueCorrect = true;
-    }
-    
-    // The for loops add the appropriate ammount of rows and columns to the grid and the
-    // the appropriate grid value
-    for (unsigned int i = 0, GridNumber = 0; i < SizeOfGrid; i++)
-    {
-        std::vector<int> Rows;
-        GameData.push_back(Rows);
-        
-        for (int j = 0; j < SizeOfGrid; j++, GridNumber++)
-            GameData[i].push_back(GridNumber);
-    }
-    
-    // This is to clear .22222 in a value 5.22222 as value would assume to be 5
-    std::cin.clear();
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    
-    return GameData;
-}
+
 
 int Get_Number_Of_Players(void)
 {
@@ -134,7 +94,7 @@ int Get_Number_Of_Players(void)
     
     while(!IsValueCorrect)
     {
-        std::cout << "Enter the number of players ";
+        std::cout << "Enter the number of human players ";
         
         std::cin >> NumberOfPlayers;
         
@@ -165,6 +125,8 @@ int Get_Number_Of_Players(void)
     return NumberOfPlayers;
 }
 
+
+
 int Get_User_X_O_Choice(void)
 {
     bool IsValueCorrect = false; // Flag for if input value in invalid
@@ -172,7 +134,7 @@ int Get_User_X_O_Choice(void)
     
     while(!IsValueCorrect)
     {
-        std::cout << "Enter user counter (X or O) ";
+        std::cout << "Enter you player counter (X or O) ";
         
         std::cin >> UserXOChoice;
         
@@ -204,92 +166,84 @@ int Get_User_X_O_Choice(void)
 }
 
 
+
 bool Game_Over(const std::vector< std::vector<int> >& GameData)
 {
     // Go through all positions on the grid and if it is not occupied by an X or O
     // then game is not over. Otherwise if all positions are occupied then game is over
-    for(unsigned int i = 0; i < GameData.size(); i++)
-        for(unsigned int j = 0; j < GameData.size(); j++)
+    for(unsigned int i = 0; i < 3; i++)
+        for(unsigned int j = 0; j < 3; j++)
             if(GameData[i][j] != 'X' && GameData[i][j] != 'O')
                 return false;
 
     return true;
 }
 
+
+
 bool Winning_Conditions_Met(const std::vector< std::vector<int> >& GameData)
 {
-    // Check for rows of X or O
-    for(unsigned int i = 0; i < GameData.size(); i++)
-    {
-        for(unsigned int j = 0, HowManyX = 0, HowManyO = 0; j < GameData.size(); j++)
-        {
-            if(GameData[i][j] == 'X')
-                 HowManyX++;
-            
-            if(GameData[i][j] == 'O')
-                HowManyO++;
-            
-            if(HowManyX == GameData.size())
-                return true;
-            
-            if(HowManyO == GameData.size())
-                return true;
-        }
-    }
+    if (GameData[0][0] == 'X' && GameData[0][1] == 'X' && GameData[0][2] == 'X')
+        return true;
     
-    // Check for columns of X or O
-    for(unsigned int i = 0; i < GameData.size(); i++)
-    {
-        for(unsigned int j = 0, HowManyX = 0, HowManyO = 0; j < GameData.size(); j++)
-        {
-            if(GameData[j][i] == 'X')
-                 HowManyX++;
-            
-            if(GameData[j][i] == 'O')
-                HowManyO++;
-            
-            if(HowManyX == GameData.size())
-                return true;
-            
-            if(HowManyO == GameData.size())
-                return true;
-        }
-    }
+    else if (GameData[1][0] == 'X' && GameData[1][1] == 'X' && GameData[1][2] == 'X')
+        return true;
     
-    // Check for diagonals, from top left to bottom right, of X or O
-    for(unsigned int i = 0, HowManyX = 0, HowManyO = 0; i < GameData.size(); i++)
-    {
-        if(GameData[i][i] == 'X')
-             HowManyX++;
-        
-        if(GameData[i][i] == 'O')
-            HowManyO++;
-        
-        if(HowManyX == GameData.size())
-            return true;
-        
-        if(HowManyO == GameData.size())
-            return true;
-    }
+    else if (GameData[2][0] == 'X' && GameData[2][1] == 'X' && GameData[2][2] == 'X')
+        return true;
     
-    // Check for diagonals, from bottom left to top right, of X or O
-    for(unsigned long i = GameData.size() - 1, j = 0, HowManyX = 0, HowManyO = 0; j < GameData.size(); i--, j++)
-    {
-        if(GameData[i][j] == 'X')
-             HowManyX++;
-        
-        if(GameData[i][j] == 'O')
-            HowManyO++;
-        
-        if(HowManyX == GameData.size())
-            return true;
-        
-        if(HowManyO == GameData.size())
-            return true;
-    }
+
+    else if (GameData[0][0] == 'X' && GameData[1][0] == 'X' && GameData[2][0] == 'X')
+        return true;
     
-    return false;
+    else if (GameData[0][1] == 'X' && GameData[1][1] == 'X' && GameData[2][1] == 'X')
+        return true;
+    
+    else if (GameData[0][2] == 'X' && GameData[1][2] == 'X' && GameData[2][2] == 'X')
+        return true;
+    
+    
+    else if (GameData[0][0] == 'X' && GameData[1][1] == 'X' && GameData[2][2] == 'X')
+        return true;
+    
+    else if (GameData[2][0] == 'X' && GameData[1][1] == 'X' && GameData[0][2] == 'X')
+        return true;
+    
+    
+    
+    else if (GameData[0][0] =='O' && GameData[0][1] == 'O' && GameData[0][2] == 'O')
+        return true;
+    
+    else if (GameData[1][0] == 'O' && GameData[1][1] == 'O' && GameData[1][2] == 'O')
+        return true;
+    
+    else if (GameData[2][0] == 'O' && GameData[2][1] == 'O' && GameData[2][2] == 'O')
+        return true;
+    
+
+    else if (GameData[0][0] == 'O' && GameData[1][0] == 'O' && GameData[2][0] == 'O')
+        return true;
+    
+    else if (GameData[0][1] == 'O' && GameData[1][1] == 'O' && GameData[2][1] == 'O')
+        return true;
+    
+    else if (GameData[0][2] == 'O' && GameData[1][2] == 'O' && GameData[2][2] == 'O')
+        return true;
+    
+    
+    else if (GameData[0][0] == 'O' && GameData[1][1] == 'O' && GameData[2][2] == 'O')
+        return true;
+    
+    else if (GameData[2][0] == 'O' && GameData[1][1] == 'O' && GameData[0][2] == 'O')
+        return true;
+    
+    
+    
+    else
+        return false;
 }
+
+
 
 void Display_Current_Game(const std::vector< std::vector<int> >& GameData)
 {
@@ -297,23 +251,38 @@ void Display_Current_Game(const std::vector< std::vector<int> >& GameData)
     // Clears terminal window
     std::system("clear");
     
-    std::cout << "--------------------TicTacToe V2.0 by Junaid Afzal--------------------" << std::endl;
+    std::cout << "--------------------TicTacToe by Junaid Afzal--------------------" << std::endl;
     // Iterate across whole grid and output its value
-    for(unsigned int i = 0; i < GameData.size(); i++)
+    for(unsigned int i = 0; i < 3; i++)
     {
-        for (unsigned int  j = 0; j < GameData.size(); j++)
+        for (unsigned int  j = 0; j < 3; j++)
         {
             // X and O are stored as 88 and 79 respectively and so display them as char
             if (GameData[i][j] == 88 || GameData[i][j] == 79)
-                std::cout << std::setw(4) << std::left << (char)GameData[i][j] << " ";
+                std::cout  << std::left << (char)GameData[i][j] << " ";
                 
             else
-                std::cout << std::setw(4) << std::left << GameData[i][j] << " ";
+                std::cout << std::left << GameData[i][j] << " ";
+            
+            if (j == 0 || j == 1)
+                std::cout << "\u2502 ";
         }
         
-        std::cout << "\n\n";
+        if (i == 0 || i == 1)
+        {
+            std::cout << std::endl;
+            
+            for (int i = 0; i < 10; i++)
+                std::cout << "\u2501";
+            
+            std::cout << std::endl;
+        }
     }
+    
+    std::cout << std::endl << std::endl;
 }
+
+
 
 char Toggle_Player(const int& CurrentPlayer)
 {
@@ -323,6 +292,8 @@ char Toggle_Player(const int& CurrentPlayer)
     else
         return 'X';
 }
+
+
 
 std::vector< std::vector<int> > Ask_User_For_Next_Input(std::vector< std::vector<int> >& GameData, const unsigned int& CurrentPlayer)
 {
@@ -348,7 +319,7 @@ std::vector< std::vector<int> > Ask_User_For_Next_Input(std::vector< std::vector
             continue;
         }
         
-        else if(UserCommand < 0 || UserCommand > (GameData.size() * GameData.size() - 1)) // Check if command is within range of grid
+        else if(UserCommand < 0 || UserCommand > 8) // Check if command is within range of grid
         {
             // Clear buffer, set flag to false and retry
             std::cin.clear();
@@ -357,16 +328,16 @@ std::vector< std::vector<int> > Ask_User_For_Next_Input(std::vector< std::vector
             continue;
         }
         
-        int Column = UserCommand % GameData.size();
-        int Row = UserCommand / GameData.size();
+        int Column = UserCommand % 3;
+        int Row = UserCommand / 3;
         
         // Check if command has already been called by a player previously as it will contain and X or O
-        if (GameData[Row][Column] == 'X' || GameData[Row][Column]== 'O')
+        if (GameData[Row][Column] == 'X' || GameData[Row][Column] == 'O')
             IsValueCorrect = false;
     }
     
-    int Column = UserCommand % GameData.size();
-    int Row = UserCommand / GameData.size();
+    int Column = UserCommand % 3;
+    int Row = UserCommand / 3;
     
     // Go to the command position in the grid and overwrite with the current player
     GameData[Row][Column] = CurrentPlayer;
@@ -377,6 +348,8 @@ std::vector< std::vector<int> > Ask_User_For_Next_Input(std::vector< std::vector
     
     return GameData;
 }
+
+
 
 std::vector< std::vector<int> > Ask_AI_For_Next_Input(std::vector< std::vector<int> >& GameData, const unsigned int& CurrentPlayer)
 {
@@ -390,10 +363,10 @@ std::vector< std::vector<int> > Ask_AI_For_Next_Input(std::vector< std::vector<i
         IsValueCorrect = true;
         
         // AI is dumb and picks a pseudo random number as command
-        AICommand = std::rand() % (GameData.size() * GameData.size());
+        AICommand = std::rand() % 9;
         
-        int Column = AICommand % GameData.size();
-        int Row = AICommand / GameData.size();
+        int Column = AICommand % 3;
+        int Row = AICommand / 3;
         
         // Check if command has already been called by a player previously as it will contain and X or O
         if (GameData[Row][Column] == 'X' || GameData[Row][Column]== 'O')
@@ -403,8 +376,8 @@ std::vector< std::vector<int> > Ask_AI_For_Next_Input(std::vector< std::vector<i
     // Output a message which is similar to human player command message
     std::cout << "AI " << (char)CurrentPlayer << " entering command " << AICommand << std::endl;
     
-    int Column = AICommand % GameData.size();
-    int Row = AICommand / GameData.size();
+    int Column = AICommand % 3;
+    int Row = AICommand / 3;
     
     // Go to the command position in the grid and overwrite with the current player
     GameData[Row][Column] = CurrentPlayer;
@@ -412,19 +385,21 @@ std::vector< std::vector<int> > Ask_AI_For_Next_Input(std::vector< std::vector<i
     return GameData;
 }
 
+
+
 void Display_Winner(const unsigned int& NumberOfTurns, const std::vector< std::vector<int> >& GameData, const unsigned int& CurrentPlayer)
 {
     // Winner will be current player as Toggle_Player() function has not been called from receiving input and determining winner
     if (Winning_Conditions_Met(GameData))
     {
        Display_Current_Game(GameData);
-       std::cout << "Congratulations on Player " << (char)CurrentPlayer << " for winning!\nOnly took you " << NumberOfTurns << " turns" << std::endl;
+       std::cout << "Congratulations on Player " << (char)CurrentPlayer << " for winning!\nOnly took you " << NumberOfTurns << " turns\n\n\n" << std::endl;
     }
 
     // No winner so a draw
     else
     {
        Display_Current_Game(GameData);
-       std::cout << "Game is a draw\nOnly took you " << NumberOfTurns << " turns" << std::endl;
+       std::cout << "Game is a draw\nOnly took you " << NumberOfTurns << " turns\n\n\n" << std::endl;
     }
 }

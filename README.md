@@ -1,22 +1,14 @@
 # My Games
 
-### GameName
-
-###### Assumptions
--
--
--
-
 ### TicTacToe
-TicTacToe game with options to define the size of the grid - which will be assumed to be square. Also options for 0, 1 and 2 player modes - where 2 player = 2 human players; 1 player = 1 human player and one AI player; and 0 player = no human players and 2 AIs. The AI are dumb and make pseudo random moves. The game can be played through one function `Play_TicTacToe()`.
+The classic TicTacToe game with options to pick the number of users and which player the human user would like to be (X or O)
 
-##### Improvements
-* (https://www.rapidtables.com/code/text/unicode-characters.html) better visuals
-* Better comments above
-* size of grid to three and thus simplify code 
-* Smarter AI
-* ability to quit game
-* remove V2.0
+###### Important Points
+- 2 users represents two human players and thus no need to ask user which player they would like to be
+- 1 user represents a human player vs the computer and so the human player is asked which player they would like to be (X or O)
+- 0 users represents no human players and thus computer vs computer
+- The AI is 'dumb' as it picks random positions
+- The The game is played through the function `Play_TicTacToe()`
 
 
 
@@ -28,7 +20,6 @@ Hangman game where no hyphens or spaces allowed in the word to be guessed. The p
 * Better comments above
 * Dictionary file which will allow for 0 players and for AI to be the one not guessing
 * maybe allow spaces and hyphens
-* ability to quit game
 * remove V2.0
 
 
@@ -42,5 +33,4 @@ Battleship game where a human user can play agaisnt the computer. The human user
 * int Column = UserCommand % GameData.size(); int Row = UserCommand / GameData.size(); 
 * userBoard.size replaced with 10
 * Smarter AI
-* ability to quit game
 * remove V2.0
