@@ -9,8 +9,6 @@
 //
 
 #include "TicTacToe.hpp"
-#include <iostream>
-#include <vector>
 #include <iomanip>
 
 

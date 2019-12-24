@@ -19,6 +19,7 @@
 #ifndef Battleships_hpp
 #define Battleships_hpp
 
+#include <iostream>
 #include <vector>
 
 

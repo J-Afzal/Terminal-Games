@@ -24,6 +24,7 @@
 #define Hangman_hpp
 
 #include <iostream>
+#include <vector>
 
 // Single function to run whole game
 void Play_Hangman(void);

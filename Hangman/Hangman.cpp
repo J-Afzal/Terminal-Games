@@ -9,9 +9,9 @@
 //
 
 #include "Hangman.hpp"
-#include <iostream>
-#include <vector>
+#include <ctime>
 #include <fstream>
+#include <string>
 
 
 
@@ -111,7 +111,7 @@ void Setup_Game(std::vector<std::string>& HangmanStates, std::string& WordToBeGu
     }
     
     // Create the current guess to be the same size as the word to be guessed but only containing underscores
-    for (int i = 0; i < WordToBeGuessed.size(); i++)
+    for (unsigned int i = 0; i < WordToBeGuessed.size(); i++)
         CurrentGuessOfWord.push_back('_');
 }
 
@@ -200,7 +200,7 @@ std::string Ask_User_For_Word_To_Be_Guessed(void) //spaces or -
         }
     
         // Only accept chars that are either captial or lowercase letters
-        for (int i = 0; i < WordToBeGuessed.size(); i++)
+        for (unsigned int i = 0; i < WordToBeGuessed.size(); i++)
         {
             if(WordToBeGuessed[i] < 'A')
             {
@@ -244,7 +244,7 @@ void Capitalise_Word(std::string& aWord)
 {
     // Takes a string and replaces every lowercase occurrence of a letter
     // and replaces it with its corresponding uppercase letter
-    for (int i = 0; i < aWord.size(); i++)
+    for (unsigned int i = 0; i < aWord.size(); i++)
     {
         switch (aWord[i]) {
             case 'a':
@@ -384,7 +384,7 @@ std::string Ask_User_For_Who_Is_Guessing(void)
         }
        
         // Only accept chars that are either captial or lowercase letters
-        for (int i = 0; i < PlayerThatWillBeGuessing.size(); i++)
+        for (unsigned int i = 0; i < PlayerThatWillBeGuessing.size(); i++)
         {
             if(PlayerThatWillBeGuessing[i] < 'A')
             {
@@ -455,7 +455,7 @@ std::string Ask_AI_For_Word_To_Be_Guessed(void)
             }
             
             // Only accept chars that are either captial or lowercase letters
-            for (int i = 0; i < WordToBeGuessed.size(); i++)
+            for (unsigned int i = 0; i < WordToBeGuessed.size(); i++)
             {
                 if(WordToBeGuessed[i] < 'A')
                 {
@@ -505,7 +505,7 @@ std::string Ask_AI_For_Word_To_Be_Guessed(void)
 bool Winning_Conditions_Met(const std::string& WordToBeGuessed, const std::string& CurrentGuessOfWord)
 {
     // If there is any difference then winning condition not met
-    for (int i = 0; i < WordToBeGuessed.size(); i++)
+    for (unsigned int i = 0; i < WordToBeGuessed.size(); i++)
         if (WordToBeGuessed[i] != CurrentGuessOfWord[i])
             return false;
     
@@ -539,12 +539,12 @@ void Display_Game(const std::vector<std::string>& HangmanStates, const unsigned 
     std::cout << HangmanStates[NumberOfErrors] << "\n" << std::endl;
     
     // Current guess of word
-    for (int i = 0; i < CurrentGuessOfWord.size(); i++)
+    for (unsigned int i = 0; i < CurrentGuessOfWord.size(); i++)
         std::cout << CurrentGuessOfWord[i] << " ";
     
     //Incorrect guesses
     std::cout << "\n\nIncorrect Guesses" << std::endl;
-    for (int i = 0; i < IncorrectGuesses.size(); i++)
+    for (unsigned int i = 0; i < IncorrectGuesses.size(); i++)
         std::cout << IncorrectGuesses[i] << "   ";
     
     std::cout << "\n" << std::endl;
@@ -577,7 +577,7 @@ std::string Ask_User_For_Next_Guess(const std::vector<std::string>& IncorrectGue
         }
     
         // Only accept chars that are either captial or lowercase letters
-        for (int i = 0; i < Guess.size(); i++)
+        for (unsigned int i = 0; i < Guess.size(); i++)
         {
             if(Guess[i] < 'A')
             {
@@ -613,14 +613,14 @@ std::string Ask_User_For_Next_Guess(const std::vector<std::string>& IncorrectGue
         Capitalise_Word(Guess);
         
         //Check if this string has already been guessed both correctly or incorrectly
-        for (int i = 0; i < IncorrectGuesses.size(); i++)
+        for (unsigned int i = 0; i < IncorrectGuesses.size(); i++)
             if(Guess == IncorrectGuesses[i])
             {
                 IsValueCorrect = false;
                 break;
             }
         
-        for (int i = 0; i < CorrectGuesses.size(); i++)
+        for (unsigned int i = 0; i < CorrectGuesses.size(); i++)
             if(Guess == CorrectGuesses[i])
             {
                 IsValueCorrect = false;
@@ -648,14 +648,14 @@ std::string Ask_AI_For_Next_Guess(const std::vector<std::string>& IncorrectGuess
         Guess[0] = (std::rand() % 26) + 65;
         
         //Check if this string has already been guessed both correctly or incorrectly
-        for (int i = 0; i < IncorrectGuesses.size(); i++)
+        for (unsigned int i = 0; i < IncorrectGuesses.size(); i++)
             if(Guess == IncorrectGuesses[i])
             {
                 IsValueCorrect = false;
                 break;
             }
         
-        for (int i = 0; i < CorrectGuesses.size(); i++)
+        for (unsigned int i = 0; i < CorrectGuesses.size(); i++)
             if(Guess == CorrectGuesses[i])
             {
                 IsValueCorrect = false;
@@ -679,7 +679,7 @@ bool Check_Guess_Against_Word(const std::string& Guess, const std::string& WordT
     // needs to be deposited is the current guess of word
     if (Guess.size() == 1)
     {
-        for (int i = 0; i < WordToBeGuessed.size(); i++) {
+        for (unsigned int i = 0; i < WordToBeGuessed.size(); i++) {
             if (WordToBeGuessed[i] == Guess[0])
             {
                 IsGuessCorrect = true;

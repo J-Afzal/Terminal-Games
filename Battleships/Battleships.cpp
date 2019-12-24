@@ -9,9 +9,9 @@
 //
 
 #include "Battleships.hpp"
-#include <iostream>
-#include <vector>
 #include <iomanip>
+#include <string>
+#include <algorithm>
 
 
 
@@ -221,7 +221,7 @@ void Ask_User_For_Ship_Positions(std::vector< std::vector<char> >& PlayerOneBoar
                 std::cout << "Enter the " << ShipSize << " grid locations for the Carrier of size " << ShipSize << ": ";
 
                 // Using std::getline so string with spaces is read in
-                std::getline(std::cin, CurrentShipPositions_string);
+                getline(std::cin, CurrentShipPositions_string);
 
                 // If error checking returns false then continue to next iteration
                 if(!Error_Checking_Ordering_Orientation_On_User_Ship_Positions(PlayerOneBoard, CurrentShipPositions_string, CurrentShipPositions_ints, ShipSize, CurrentShipPositionsOrientation))
@@ -251,7 +251,7 @@ void Ask_User_For_Ship_Positions(std::vector< std::vector<char> >& PlayerOneBoar
                 std::cout << "Enter the " << ShipSize << " grid locations for the Battleship of size " << ShipSize << ": ";
 
                 // Using std::getline so string with spaces is read in
-                std::getline(std::cin, CurrentShipPositions_string);
+                getline(std::cin, CurrentShipPositions_string);
 
                 // If error checking returns false then continue to next iteration
                 if(!Error_Checking_Ordering_Orientation_On_User_Ship_Positions(PlayerOneBoard, CurrentShipPositions_string, CurrentShipPositions_ints, ShipSize, CurrentShipPositionsOrientation))
@@ -281,7 +281,7 @@ void Ask_User_For_Ship_Positions(std::vector< std::vector<char> >& PlayerOneBoar
                 std::cout << "Enter the " << ShipSize << " grid locations for the Destroyer of size " << ShipSize << ": ";
 
                 // Using std::getline so string with spaces is read in
-                std::getline(std::cin, CurrentShipPositions_string);
+                getline(std::cin, CurrentShipPositions_string);
 
                 // If error checking returns false then continue to next iteration
                 if(!Error_Checking_Ordering_Orientation_On_User_Ship_Positions(PlayerOneBoard, CurrentShipPositions_string, CurrentShipPositions_ints, ShipSize, CurrentShipPositionsOrientation))
@@ -311,7 +311,7 @@ void Ask_User_For_Ship_Positions(std::vector< std::vector<char> >& PlayerOneBoar
                 std::cout << "Enter the " << ShipSize << " grid locations for the Submarine of size " << ShipSize << ": ";
 
                 // Using std::getline so string with spaces is read in
-                std::getline(std::cin, CurrentShipPositions_string);
+                getline(std::cin, CurrentShipPositions_string);
 
                 // If error checking returns false then continue to next iteration
                 if(!Error_Checking_Ordering_Orientation_On_User_Ship_Positions(PlayerOneBoard, CurrentShipPositions_string, CurrentShipPositions_ints, ShipSize, CurrentShipPositionsOrientation))
@@ -341,7 +341,7 @@ void Ask_User_For_Ship_Positions(std::vector< std::vector<char> >& PlayerOneBoar
                 std::cout << "Enter the " << ShipSize << " grid locations for the Patrol Boat of size " << ShipSize << ": ";
 
                 // Using std::getline so string with spaces is read in
-                std::getline(std::cin, CurrentShipPositions_string);
+                getline(std::cin, CurrentShipPositions_string);
 
                 // If error checking returns false then continue to next iteration
                 if(!Error_Checking_Ordering_Orientation_On_User_Ship_Positions(PlayerOneBoard, CurrentShipPositions_string, CurrentShipPositions_ints, ShipSize, CurrentShipPositionsOrientation))
@@ -576,7 +576,7 @@ bool Error_Checking_Ordering_Orientation_On_User_Ship_Positions(const std::vecto
     // Check is ship has an orientation, using the assumption that the ship positions have been ordered in ascending order
     // Ship is vertical if there is a difference of 10 between all values
     bool IsVertical = true;
-    for (int i = 0; i < CurrentShipPositions_ints.size() - 1; i++)
+    for (unsigned int i = 0; i < CurrentShipPositions_ints.size() - 1; i++)
         if(CurrentShipPositions_ints[i] != (CurrentShipPositions_ints[i+1] - 10))
         {
             IsVertical = false;

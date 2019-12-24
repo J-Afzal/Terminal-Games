@@ -20,6 +20,7 @@
 #define TicTacToe_hpp
 
 #include <iostream>
+#include <vector>
 
 // Simple function to run whole game
 void Play_TicTacToe(void);
