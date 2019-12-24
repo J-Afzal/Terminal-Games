@@ -11,6 +11,7 @@
 #include "Hangman.hpp"
 #include <iostream>
 #include <vector>
+#include <fstream>
 
 
 
@@ -19,11 +20,11 @@ void Play_Hangman(void)
     //Variables for the Hangman game
     // - Hangman states representing the different states the hangman drawing can be in
     std::vector<std::string> HangmanStates, IncorrectGuesses, CorrectGuesses;
-    std::string WordToBeGuessed, CurrentGuessOfWord;
+    std::string WordToBeGuessed, CurrentGuessOfWord, PlayerThatIsGuessing;
     unsigned int NumberOfPlayers, NumberOfErrors = 0, NumberOfTurns = 0;
 
     // Sets up the variables required by game
-    Setup_Game(HangmanStates, WordToBeGuessed, CurrentGuessOfWord, NumberOfPlayers);
+    Setup_Game(HangmanStates, WordToBeGuessed, CurrentGuessOfWord, NumberOfPlayers, PlayerThatIsGuessing);
 
     // while the current guess of word and word to be guessed are not the same and the hangman drawing
     // has not reached its final stage continue playing game
@@ -35,10 +36,10 @@ void Play_Hangman(void)
         std::string Guess;
 
         // Prompt the human or AI user for a guess depending upon how many human players there are
-        if (NumberOfPlayers == 2)
+        if (PlayerThatIsGuessing == "HUMAN")
             Guess = Ask_User_For_Next_Guess(IncorrectGuesses, CorrectGuesses);
 
-        else if(NumberOfPlayers == 1)
+        else
             Guess = Ask_AI_For_Next_Guess(IncorrectGuesses, CorrectGuesses);
             
         // If the guess is incorrect then add to incorrect list and increment errors
@@ -62,24 +63,56 @@ void Play_Hangman(void)
 
 
 
-void Setup_Game(std::vector<std::string>& HangmanStates, std::string& WordToBeGuessed, std::string& CurrentGuessOfWord, unsigned int& NumberOfPlayers)
+void Setup_Game(std::vector<std::string>& HangmanStates, std::string& WordToBeGuessed, std::string& CurrentGuessOfWord, unsigned int& NumberOfPlayers, std::string& PlayerThatIsGuessing)
 {
     // Creates the hangman states of the drawing
     HangmanStates = Create_Hangman_States();
     
-    // Prompt the user for the word to be guessed
-    WordToBeGuessed = Ask_User_For_Word_To_Be_Guessed();
-    
-    // Create the current guess to be the same size as the word to be guessed but only containing underscores
-    for (int i = 0; i < WordToBeGuessed.size(); i++)
-        CurrentGuessOfWord.push_back('_');
+    std::cout << "--------------------Hangman by Junaid Afzal--------------------" << std::endl;
     
     // Prompt the user for the number of players if one the AI will guess and if two then human user will guess
     NumberOfPlayers = Ask_User_For_Number_Of_Players();
     
-    // If one the AI will guess so set seed of srand to time(0) so pseudo random
-    if (NumberOfPlayers == 1)
-        std::srand(std::time(0));
+    if (NumberOfPlayers == 2)
+    {
+        // Prompt the user for the word to be guessed
+        WordToBeGuessed = Ask_User_For_Word_To_Be_Guessed();
+        
+        // All players are humans so no need to ask
+        PlayerThatIsGuessing = "HUMAN";
+    }
+        
+    else if (NumberOfPlayers == 1)
+    {
+        // Set seed of srand to time(0) so pseudo random
+        std::srand((unsigned int)std::time(0));
+        
+        // Prompts the user for who is guessing the word (human or computer)
+        PlayerThatIsGuessing = Ask_User_For_Who_Is_Guessing();
+        
+        if (PlayerThatIsGuessing == "HUMAN")
+            // Prompt the AI for the word to be guessed
+            WordToBeGuessed = Ask_AI_For_Word_To_Be_Guessed();
+            
+        else
+            WordToBeGuessed = Ask_User_For_Word_To_Be_Guessed();
+    }
+    
+    else if (NumberOfPlayers == 0)
+    {
+        // Set seed of srand to time(0) so pseudo random
+        std::srand((unsigned int)std::time(0));
+        
+        // Prompt the AI for the word to be guessed
+        WordToBeGuessed = Ask_AI_For_Word_To_Be_Guessed();
+        
+        // All players are computers so no need to ask
+        PlayerThatIsGuessing = "COMPUTER";
+    }
+    
+    // Create the current guess to be the same size as the word to be guessed but only containing underscores
+    for (int i = 0; i < WordToBeGuessed.size(); i++)
+        CurrentGuessOfWord.push_back('_');
 }
 
 
@@ -89,18 +122,55 @@ std::vector<std::string> Create_Hangman_States(void)
     // Hard coded strings that represent the different hangman state drawings
     std::vector<std::string> HangmanStates;
     HangmanStates.push_back("\n\n\n\n\n\n \n\n");
-    HangmanStates.push_back("\n\n\n\n\n\n+---+---+ \n\n");
-    HangmanStates.push_back("\n    |\n    |\n    |\n    |\n    |\n+---+---+ \n\n");
-    HangmanStates.push_back("    +-------+\n    |\n    |\n    |\n    |\n    |\n+---+---+ \n\n");
-    HangmanStates.push_back("    +-------+\n    |       |\n    |\n    |\n    |\n    |\n+---+---+ \n\n");
-    HangmanStates.push_back("    +-------+\n    |       |\n    |       O\n    |\n    |\n    |\n+---+---+ \n\n");
-    HangmanStates.push_back("    +-------+\n    |       |\n    |       O\n    |       |\n    |\n    |\n+---+---+ \n\n");
-    HangmanStates.push_back("    +-------+\n    |       |\n    |       O\n    |       |\n    |      /\n    |\n+---+---+ \n\n");
-    HangmanStates.push_back("    +-------+\n    |       |\n    |       O\n    |       |\n    |      / \\\n    |\n+---+---+ \n\n");
-    HangmanStates.push_back("    +-------+\n    |       |\n    |       O\n    |      /|\n    |      / \\\n    |\n+---+---+ \n\n");
-    HangmanStates.push_back("    +-------+\n    |       |\n    |       O\n    |      /|\\\n    |      / \\\n    |\n+---+---+ \n\n");
+    HangmanStates.push_back("\n\n\n\n\n\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 \n\n");
+    HangmanStates.push_back("\n    \u2502\n    \u2502\n    \u2502\n    \u2502\n    \u2502\n\u2501\u2501\u2501\u2501\u2538\u2501\u2501\u2501\u2501 \n\n");
+    HangmanStates.push_back("    \u250F\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n    \u2502\n    \u2502\n    \u2502\n    \u2502\n    \u2502\n\u2501\u2501\u2501\u2501\u2538\u2501\u2501\u2501\u2501 \n\n");
+    HangmanStates.push_back("    \u250F\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2513\n    \u2502       \u2502\n    \u2502\n    \u2502\n    \u2502\n    \u2502\n\u2501\u2501\u2501\u2501\u2538\u2501\u2501\u2501\u2501 \n\n");
+    HangmanStates.push_back("    \u250F\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2513\n    \u2502       \u2502\n    \u2502       O\n    \u2502\n    \u2502\n    \u2502\n\u2501\u2501\u2501\u2501\u2538\u2501\u2501\u2501\u2501 \n\n");
+    HangmanStates.push_back("    \u250F\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2513\n    \u2502       \u2502\n    \u2502       O\n    \u2502       |\n    \u2502\n    \u2502\n\u2501\u2501\u2501\u2501\u2538\u2501\u2501\u2501\u2501 \n\n");
+    HangmanStates.push_back("    \u250F\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2513\n    \u2502       \u2502\n    \u2502       O\n    \u2502       |\n    \u2502      /\n    \u2502\n\u2501\u2501\u2501\u2501\u2538\u2501\u2501\u2501\u2501 \n\n");
+    HangmanStates.push_back("    \u250F\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2513\n    \u2502       \u2502\n    \u2502       O\n    \u2502       |\n    \u2502      / \\\n    \u2502\n\u2501\u2501\u2501\u2501\u2538\u2501\u2501\u2501\u2501 \n\n");
+    HangmanStates.push_back("    \u250F\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2513\n    \u2502       \u2502\n    \u2502       O\n    \u2502      /|\n    \u2502      / \\\n    \u2502\n\u2501\u2501\u2501\u2501\u2538\u2501\u2501\u2501\u2501 \n\n");
+    HangmanStates.push_back("    \u250F\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2513\n    \u2502       \u2502\n    \u2502       O\n    \u2502      /|\\\n    \u2502      / \\\n    \u2502\n\u2501\u2501\u2501\u2501\u2538\u2501\u2501\u2501\u2501 \n\n");
     
     return HangmanStates;
+}
+
+
+
+unsigned int Ask_User_For_Number_Of_Players(void)
+{
+    bool IsValueCorrect = false; // Flag for if input value in invalid
+    unsigned int NumberOfPlayers = 0;
+
+    while(!IsValueCorrect)
+    {
+        std::cout << "Enter the number of players: ";
+        
+        std::cin >> NumberOfPlayers;
+        
+        if (std::cin.fail()) // Check if cin failed
+        {
+            // Clear buffer and retry
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            continue;
+        }
+        
+        // Only 0 1 and 2 amount of players allowed
+        else if (NumberOfPlayers != 0 && NumberOfPlayers != 1 && NumberOfPlayers != 2)
+        {
+            // Clear buffer and retry
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            continue;
+        }
+        
+        else
+            IsValueCorrect = true;
+    }
+    
+    return NumberOfPlayers;
 }
 
 
@@ -116,7 +186,7 @@ std::string Ask_User_For_Word_To_Be_Guessed(void) //spaces or -
         // within a nested if statements within nested for loops
         IsValueCorrect = true;
         
-        std::cout << "Enter the word to be guessed ";
+        std::cout << "Enter the word to be guessed: ";
         
         std::cin >> WordToBeGuessed;
         
@@ -289,45 +359,150 @@ void Capitalise_Word(std::string& aWord)
 
 
 
-unsigned int Ask_User_For_Number_Of_Players(void)
+std::string Ask_User_For_Who_Is_Guessing(void)
 {
     bool IsValueCorrect = false; // Flag for if input value in invalid
-    unsigned int NumberOfPlayers = 0;
-
+    std::string PlayerThatWillBeGuessing;
+       
     while(!IsValueCorrect)
     {
-        std::cout << "Enter the number of players ";
+        // Set flag to true by default as difficult to continue to to next iteration of while loop
+        // within a nested if statements within nested for loops
+        IsValueCorrect = true;
         
-        std::cin >> NumberOfPlayers;
+        std::cout << "Enter player that will be guessing (HUMAN or COMPUTER): ";
+        
+        std::cin >> PlayerThatWillBeGuessing;
         
         if (std::cin.fail()) // Check if cin failed
         {
             // Clear buffer and retry
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            IsValueCorrect = false;
             continue;
         }
-        
-        // Only one or two players allowed, as one player represents the human user choosing
-        // the word to be gueesed and the AI guessing, and two players representing two human players
-        else if (NumberOfPlayers != 1 && NumberOfPlayers != 2)
+       
+        // Only accept chars that are either captial or lowercase letters
+        for (int i = 0; i < PlayerThatWillBeGuessing.size(); i++)
         {
-            // Clear buffer and retry
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            continue;
+            if(PlayerThatWillBeGuessing[i] < 'A')
+            {
+                // Clear buffer and retry
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                IsValueCorrect = false;
+                break;
+            }
+               
+            else if(PlayerThatWillBeGuessing[i] > 'z')
+            {
+                // Clear buffer and retry
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                IsValueCorrect = false;
+                break;
+            }
+               
+            // Check for [ \ ] ^ _ ` as they occur inbetween the uppercase and lowercase letters blocks
+            else if(PlayerThatWillBeGuessing[i] >= 91 && PlayerThatWillBeGuessing[i] <= 96)
+            {
+                // Clear buffer and retry
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                IsValueCorrect = false;
+                break;
+            }
         }
         
-        else
-            IsValueCorrect = true;
+        // Capitalise all letters so that only capital letter need to be dealt with
+        Capitalise_Word(PlayerThatWillBeGuessing);
+        
+        if (PlayerThatWillBeGuessing != "HUMAN" && PlayerThatWillBeGuessing != "COMPUTER")
+        {
+            IsValueCorrect = false;
+            continue;
+        }
     }
     
-    return NumberOfPlayers;
+    return PlayerThatWillBeGuessing;
 }
 
 
 
-bool Winning_Conditions_Met(std::string& WordToBeGuessed, std::string& CurrentGuessOfWord)
+std::string Ask_AI_For_Word_To_Be_Guessed(void)
+{
+    bool IsValueCorrect = false; // Flag for if input value in invalid
+    std::string WordToBeGuessed;
+    
+    while(!IsValueCorrect)
+    {
+        // Set flag to true by default as difficult to continue to to next iteration of while loop
+        // within a nested if statements within nested for loops
+        IsValueCorrect = true;
+        
+        std::ifstream WordList("/Users/main/GitHub/My_Games/Hangman/Words.txt");
+        
+        if (WordList.is_open())
+        {
+            unsigned long int LineNumber = (std::rand() % 65189) + 1;
+            unsigned long int CurrentLineNumber = 0;
+            
+            while (CurrentLineNumber != LineNumber)
+            {
+                getline(WordList, WordToBeGuessed);
+                CurrentLineNumber++;
+            }
+            
+            // Only accept chars that are either captial or lowercase letters
+            for (int i = 0; i < WordToBeGuessed.size(); i++)
+            {
+                if(WordToBeGuessed[i] < 'A')
+                {
+                    // Clear buffer and retry
+                    std::cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    IsValueCorrect = false;
+                    break;
+                }
+                
+                else if(WordToBeGuessed[i] > 'z')
+                {
+                    // Clear buffer and retry
+                    std::cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    IsValueCorrect = false;
+                    break;
+                }
+                
+                // Check for [ \ ] ^ _ ` as they occur inbetween the uppercase and lowercase letters blocks
+                else if(WordToBeGuessed[i] >= 91 && WordToBeGuessed[i] <= 96)
+                {
+                    // Clear buffer and retry
+                    std::cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    IsValueCorrect = false;
+                    break;
+                }
+            }
+        }
+        
+        else
+        {
+            std::cout << "Unable to open Words.txt, make sure it is in the same directory as main.cpp" << std::endl;
+            exit(1);
+        }
+    }
+    
+    // Capitalise all letters so that only capital letter need to be dealt with
+    Capitalise_Word(WordToBeGuessed);
+    
+    return WordToBeGuessed;
+}
+
+
+
+bool Winning_Conditions_Met(const std::string& WordToBeGuessed, const std::string& CurrentGuessOfWord)
 {
     // If there is any difference then winning condition not met
     for (int i = 0; i < WordToBeGuessed.size(); i++)
@@ -339,7 +514,7 @@ bool Winning_Conditions_Met(std::string& WordToBeGuessed, std::string& CurrentGu
 
 
 
-bool Game_Over(unsigned int& NumberOfErrors)
+bool Game_Over(const unsigned int& NumberOfErrors)
 {
     // 10 or more errors mean that the final state of the
     // hangman drawing has been reached
@@ -352,13 +527,13 @@ bool Game_Over(unsigned int& NumberOfErrors)
 
 
 
-void Display_Game(std::vector<std::string>& HangmanStates, unsigned int& NumberOfErrors, std::string& CurrentGuessOfWord, std::vector<std::string>& IncorrectGuesses)
+void Display_Game(const std::vector<std::string>& HangmanStates, const unsigned int& NumberOfErrors, const std::string& CurrentGuessOfWord, const std::vector<std::string>& IncorrectGuesses)
 {
     // ***Better alternative needed***
     // Clears terminal window
     system("clear");
     
-    std::cout << "--------------------Hangman V1.0 by Junaid Afzal--------------------\n" << std::endl;
+    std::cout << "--------------------Hangman by Junaid Afzal--------------------\n" << std::endl;
     
     // Draw the hangman drawing
     std::cout << HangmanStates[NumberOfErrors] << "\n" << std::endl;
@@ -377,7 +552,7 @@ void Display_Game(std::vector<std::string>& HangmanStates, unsigned int& NumberO
 
 
 
-std::string Ask_User_For_Next_Guess(std::vector<std::string>& IncorrectGuesses, std::vector<std::string>& CorrectGuesses)
+std::string Ask_User_For_Next_Guess(const std::vector<std::string>& IncorrectGuesses, const std::vector<std::string>& CorrectGuesses)
 {
     bool IsValueCorrect = false; // Flag for if input value in invalid
     std::string Guess;
@@ -388,7 +563,7 @@ std::string Ask_User_For_Next_Guess(std::vector<std::string>& IncorrectGuesses, 
         // within a nested if statements within nested for loops
         IsValueCorrect = true;
         
-        std::cout << "Enter your guess ";
+        std::cout << "Enter your guess: ";
         
         std::cin >> Guess;
         
@@ -458,7 +633,7 @@ std::string Ask_User_For_Next_Guess(std::vector<std::string>& IncorrectGuesses, 
 
 
 
-std::string Ask_AI_For_Next_Guess(std::vector<std::string>& IncorrectGuesses, std::vector<std::string>& CorrectGuesses)
+std::string Ask_AI_For_Next_Guess(const std::vector<std::string>& IncorrectGuesses, const std::vector<std::string>& CorrectGuesses)
 {
     bool IsValueCorrect = false; // Flag for if input value in invalid
     std::string Guess = " ";
@@ -489,14 +664,14 @@ std::string Ask_AI_For_Next_Guess(std::vector<std::string>& IncorrectGuesses, st
     }
     
     // Output a message which is similar to human player guess
-    std::cout << "AI guessed " << Guess << "\n\n\n" << std::endl;
+    std::cout << "AI guessed: " << Guess << "\n\n\n" << std::endl;
     
     return Guess;
 }
 
 
 
-bool Check_Guess_Against_Word(std::string& Guess, std::string& WordToBeGuessed, std::string& CurrentGuessOfWord)
+bool Check_Guess_Against_Word(const std::string& Guess, const std::string& WordToBeGuessed, std::string& CurrentGuessOfWord)
 {
     bool IsGuessCorrect = false;
     
@@ -526,18 +701,18 @@ bool Check_Guess_Against_Word(std::string& Guess, std::string& WordToBeGuessed, 
 
 
 
-void Display_Winner(std::vector<std::string>& HangmanStates, unsigned int& NumberOfErrors, std::string& CurrentGuessOfWord, std::vector<std::string>& IncorrectGuesses, unsigned int& NumberOfTurns, std::string& WordToBeGuessed)
+void Display_Winner(const std::vector<std::string>& HangmanStates, const unsigned int& NumberOfErrors, const std::string& CurrentGuessOfWord, const std::vector<std::string>& IncorrectGuesses, const unsigned int& NumberOfTurns, const std::string& WordToBeGuessed)
 {
     // If the below is true then hangman has reached its final state and thus user has lost
-    if(NumberOfErrors >= 10)
+    if(NumberOfErrors == 10)
     {
         Display_Game(HangmanStates, NumberOfErrors, CurrentGuessOfWord, IncorrectGuesses);
-        std::cout << "You lost!\nOnly took " << NumberOfTurns << " turns\nThe word was " << WordToBeGuessed << std::endl;
+        std::cout << "Commisarations to the guesser, You lost!\nOnly took " << NumberOfTurns << " turns\nThe word was " << WordToBeGuessed << std::endl;
     }
     
     else
     {
         Display_Game(HangmanStates, NumberOfErrors, CurrentGuessOfWord, IncorrectGuesses);
-        std::cout << "Congratulations you won!\nOnly took " << NumberOfTurns << " turns" << std::endl;
+        std::cout << "Congratulations to the guesser, you won!\nOnly took " << NumberOfTurns << " turns" << std::endl;
     }
 }
