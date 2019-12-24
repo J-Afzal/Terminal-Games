@@ -2,8 +2,6 @@
 
 ### TicTacToe
 The classic TicTacToe game with options to pick the number of users and which player the human user would like to be (X or O)
-
-###### Important Points
 -   2 users represents two human players and thus no need to ask user which player they would like to be
 -   1 user represents a human player vs the computer and so the human player is asked which player they would like to be (X or O)
 -   0 users represents no human players and thus computer vs computer
