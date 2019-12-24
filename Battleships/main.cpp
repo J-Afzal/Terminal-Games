@@ -7,10 +7,12 @@
 //
 
 #include "Battleships.hpp"
+#include <iostream>
+#include <iomanip>
 
 int main(void) {
     
     Play_Battleships();
-
+    
     return 0;
 }

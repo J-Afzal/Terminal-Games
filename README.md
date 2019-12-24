@@ -8,7 +8,7 @@ The classic TicTacToe game with options to pick the number of users and which pl
 -   1 user represents a human player vs the computer and so the human player is asked which player they would like to be (X or O)
 -   0 users represents no human players and thus computer vs computer
 -   The AI is 'dumb' as it picks random positions
--   The The game is played through the function `Play_TicTacToe()`
+-   The game is played through the function `Play_TicTacToe()`
 
 
 
@@ -19,17 +19,17 @@ The classic Hangman game where no hyphens or spaces are allowed in the word to b
 -   2 users represents two human players, with one creating the word and the other guessing the word
 -   1 user represents one human player and one computer player, the human player is then asked who is guessing the word, and so all combinations of human and computer variants are possible
 -   0 users represents zero human players and two computer players
--   The AI is dumb and both randomly picks a word from Words.txt and a random letter when guessing
--   The The game is played through the function `Play_Hangman()`
+-   The AI is 'dumb' and both randomly picks a word from Words.txt and a random letter when guessing
+-   The game is played through the function `Play_Hangman()`
 
 
 
 ### Battleships
-Battleship game where a human user can play agaisnt the computer. The human user is asked for grid positions for each ship and then for the grid position the user next wants to attack. The AI is dumb and picks random location to place and attack ships. The game can be played through one function `Play_Battleships()`.
+The classic Battleship game where human vs human is not coded for as difficult to keep the board information for each user separate.
 
-##### Improvements
-* (https://www.rapidtables.com/code/text/unicode-characters.html) better visuals
-* Better comments above
-* int Column = UserCommand % GameData.size(); int Row = UserCommand / GameData.size(); 
-* userBoard.size replaced with 10
-* remove V2.0
+###### Important Points
+-   2 users represents two human players which is not coded for
+-   1 users represents one human player and one computer player
+-   0 users represents zero human players and two computer players
+-   The AI is 'dumb' and picks random locations to place ships and random locations to attack ships
+-   The game is played through the function `Play_Battleships()` 
