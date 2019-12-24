@@ -12,8 +12,6 @@ The classic TicTacToe game with options to pick the number of users and which pl
 
 ### Hangman
 The classic Hangman game where no hyphens or spaces are allowed in the word to be guessed. Also guessing a word will not replace any letters but just compare it with the word to be guessed. With each incorrect guess the hangman is drawn more until it is complete (after 10 incorrect guesses) or when the word has been guessed.
-
-###### Important Points
 -   2 users represents two human players, with one creating the word and the other guessing the word
 -   1 user represents one human player and one computer player, the human player is then asked who is guessing the word, and so all combinations of human and computer variants are possible
 -   0 users represents zero human players and two computer players
@@ -24,8 +22,6 @@ The classic Hangman game where no hyphens or spaces are allowed in the word to b
 
 ### Battleships
 The classic Battleship game where human vs human is not coded for as difficult to keep the board information for each user separate.
-
-###### Important Points
 -   2 users represents two human players which is not coded for
 -   1 users represents one human player and one computer player
 -   0 users represents zero human players and two computer players
