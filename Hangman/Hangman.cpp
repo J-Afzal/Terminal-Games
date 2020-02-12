@@ -441,7 +441,7 @@ std::string Ask_AI_For_Word_To_Be_Guessed(void)
         // within a nested if statements within nested for loops
         IsValueCorrect = true;
         
-        std::ifstream WordList("/Users/main/GitHub/My_Games/Hangman/Words.txt");
+        std::ifstream WordList("../../Hangman/Words.txt");
         
         if (WordList.is_open())
         {
