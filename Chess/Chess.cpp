@@ -7,6 +7,7 @@
 //
 
 #include "Chess.hpp"
+#include <time.h>
 
 void Setup_Game(std::vector< std::vector<std::string> >& Board, unsigned int& NumberOfPlayers, std::string& HumanPlayer, std::string& CurrentPlayer)
 {
@@ -184,7 +185,7 @@ void Setup_Game(std::vector< std::vector<std::string> >& Board, unsigned int& Nu
     
     NumberOfPlayers = Ask_User_For_Number_Of_Players();
     
-    std::srand((unsigned int)std::time(0));
+    std::srand((unsigned int)time(0));
     
     if (NumberOfPlayers == 1)
     {
