@@ -22,9 +22,11 @@ void Toggle_Player(std::string& CurrentPlayer);
 
 void Display_Game(const std::vector< std::vector<std::string> >& Board);
 
-std::string Ask_AI_For_Next_Move();
+std::string Ask_AI_For_Next_Move(void);
 
-std::string Ask_User_For_Next_Move();
+std::string Ask_User_For_Next_Move(void);
+
+void Capitalise_Word(std::string& aWord);
 
 void Execute_Next_Move();
 
