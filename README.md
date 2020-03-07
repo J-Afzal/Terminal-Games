@@ -27,3 +27,9 @@ The classic Battleship game where human vs human is not coded for as difficult t
 -   0 users represents zero human players and two computer players
 -   The AI is 'dumb' and picks random locations to place ships and random locations to attack ships
 -   The game is played through the function `Play_Battleships()` 
+
+### To Do
+-   CMake and CTest
+-   Doxygen
+-   TravisCI
+-   Installer
