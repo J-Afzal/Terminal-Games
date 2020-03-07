@@ -8,6 +8,7 @@
 
 #include "Chess.hpp"
 #include <time.h>
+#include <string>
 
 void Setup_Game(std::vector< std::vector<std::string> >& Board, unsigned int& NumberOfPlayers, std::string& HumanPlayer, std::string& CurrentPlayer)
 {
@@ -263,6 +264,8 @@ void Toggle_Player(std::string& CurrentPlayer)
 
 void Display_Game(const std::vector< std::vector<std::string> >& Board)
 {
+    // Solution to print errors = https://www.rapidtables.com/code/text/ascii-table.html
+
     for (unsigned int i = 0; i < 8; i++)
     {
         if (i == 0)

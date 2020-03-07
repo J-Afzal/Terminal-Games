@@ -379,6 +379,8 @@ void Display_Game_For_User(std::vector< std::vector<char> >& PlayerOneBoard, con
     // ***Better alternative needed***
     // Clears terminal window
     system("clear");
+
+    // Solutions to print errors = https://www.rapidtables.com/code/text/ascii-table.html
     
     std::cout << "--------------------Battleships By Junaid Afzal--------------------\n" << std::endl;
     

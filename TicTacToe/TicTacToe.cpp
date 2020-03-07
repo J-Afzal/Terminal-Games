@@ -248,6 +248,8 @@ void Display_Current_Game(const std::vector< std::vector<int> >& GameData)
     // ***Better alternative needed***
     // Clears terminal window
     std::system("clear");
+
+    // Solution to print errors = https://www.rapidtables.com/code/text/ascii-table.html
     
     std::cout << "--------------------TicTacToe by Junaid Afzal--------------------" << std::endl;
     // Iterate across whole grid and output its value

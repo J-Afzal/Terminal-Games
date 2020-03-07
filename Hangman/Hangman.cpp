@@ -120,6 +120,7 @@ void Setup_Game(std::vector<std::string>& HangmanStates, std::string& WordToBeGu
 std::vector<std::string> Create_Hangman_States(void)
 {
     // Hard coded strings that represent the different hangman state drawings
+    //Solution to errors = https://www.rapidtables.com/code/text/ascii-table.html
     std::vector<std::string> HangmanStates;
     HangmanStates.push_back("\n\n\n\n\n\n \n\n");
     HangmanStates.push_back("\n\n\n\n\n\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 \n\n");
