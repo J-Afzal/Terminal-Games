@@ -33,3 +33,4 @@ The classic Battleship game where human vs human is not coded for as difficult t
 -   Doxygen
 -   TravisCI
 -   Installer
+-   Make a template repo with all stuffs
