@@ -35,7 +35,7 @@ void Play_TicTacToe(void)
         CurrentPlayer = Toggle_Player(CurrentPlayer);
         
         // Check if user input is required
-        if(NumberOfPlayers == 2 || CurrentPlayer == UserXOChoice)
+        if (NumberOfPlayers == 2 || CurrentPlayer == UserXOChoice)
             GameData = Ask_User_For_Next_Input(GameData, CurrentPlayer);
         
         else
@@ -43,7 +43,7 @@ void Play_TicTacToe(void)
 
         NumberOfTurns++;
 
-        std::cout << "\n\n" << std::endl;
+        std::cout << "\n\n" << '\n';
      }
 
     // Determine the winner, if there is one, and display winning message
@@ -54,7 +54,7 @@ void Play_TicTacToe(void)
 
 void Setup_Game(unsigned int& NumberOfTurns, unsigned int& CurrentPlayer, unsigned int& NumberOfPlayers, unsigned int& UserXO, std::vector< std::vector<int> >& GameData)
 {
-    std::cout << "--------------------TicTacToe by Junaid Afzal--------------------" << std::endl;
+    std::cout << "--------------------TicTacToe by Junaid Afzal--------------------" << '\n';
     
     // Set seed to system time at 0 to create pseudo random numbers
     std::srand((unsigned int)std::time(0));
@@ -90,7 +90,7 @@ int Get_Number_Of_Players(void)
     bool IsValueCorrect = false; // Flag for if input value in invalid
     int NumberOfPlayers = 0;
     
-    while(!IsValueCorrect)
+    while (!IsValueCorrect)
     {
         std::cout << "Enter the number of human players ";
         
@@ -104,7 +104,7 @@ int Get_Number_Of_Players(void)
             continue;
         }
         
-        else if(NumberOfPlayers < 0 || NumberOfPlayers > 2) // Only 0, 1 and 2 players allowed
+        else if (NumberOfPlayers < 0 || NumberOfPlayers > 2) // Only 0, 1 and 2 players allowed
         {
             // Clear buffer and retry
             std::cin.clear();
@@ -144,7 +144,7 @@ int Get_User_X_O_Choice(void)
             continue;
         }
         
-        else if(UserXOChoice != 'X' && UserXOChoice != 'O') // Only X and O inputs allowed
+        else if (UserXOChoice != 'X' && UserXOChoice != 'x' && UserXOChoice != 'O' && UserXOChoice != 'o') // Only X and O inputs allowed
         {
             // Clear buffer and retry
             std::cin.clear();
@@ -159,6 +159,12 @@ int Get_User_X_O_Choice(void)
     // This is to clear .22222 in a value 5.22222 as value would assume to be 5
     std::cin.clear();
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+    if (UserXOChoice == 'o')
+        UserXOChoice = 'O';
+
+    if (UserXOChoice == 'x')
+        UserXOChoice = 'X';
     
     return UserXOChoice;
 }
@@ -247,11 +253,9 @@ void Display_Current_Game(const std::vector< std::vector<int> >& GameData)
 {
     // ***Better alternative needed***
     // Clears terminal window
-    std::system("clear");
-
-    // Solution to print errors = https://www.rapidtables.com/code/text/ascii-table.html
+   system("cls");
     
-    std::cout << "--------------------TicTacToe by Junaid Afzal--------------------" << std::endl;
+    std::cout << "--------------------TicTacToe--------------------" << '\n';
     // Iterate across whole grid and output its value
     for(unsigned int i = 0; i < 3; i++)
     {
@@ -259,27 +263,29 @@ void Display_Current_Game(const std::vector< std::vector<int> >& GameData)
         {
             // X and O are stored as 88 and 79 respectively and so display them as char
             if (GameData[i][j] == 88 || GameData[i][j] == 79)
-                std::cout  << std::left << (char)GameData[i][j] << " ";
+                std::cout  << std::left << " " << (char)GameData[i][j] << " ";
                 
             else
-                std::cout << std::left << GameData[i][j] << " ";
+                std::cout << std::left << " " << GameData[i][j] << " ";
             
+            // Vertical bars
             if (j == 0 || j == 1)
-                std::cout << "\u2502 ";
+                std::cout << (char)179;
         }
         
+        // Horizontal bars
         if (i == 0 || i == 1)
         {
-            std::cout << std::endl;
+            std::cout << '\n';
             
             for (int i = 0; i < 10; i++)
-                std::cout << "\u2501";
+                std::cout << (char)196;
             
-            std::cout << std::endl;
+            std::cout << '\n';
         }
     }
     
-    std::cout << std::endl << std::endl;
+    std::cout << '\n' << '\n';
 }
 
 
@@ -374,7 +380,7 @@ std::vector< std::vector<int> > Ask_AI_For_Next_Input(std::vector< std::vector<i
     }
     
     // Output a message which is similar to human player command message
-    std::cout << "AI " << (char)CurrentPlayer << " entering command " << AICommand << std::endl;
+    std::cout << "AI " << (char)CurrentPlayer << " entering command " << AICommand << '\n';
     
     int Column = AICommand % 3;
     int Row = AICommand / 3;
@@ -393,13 +399,13 @@ void Display_Winner(const unsigned int& NumberOfTurns, const std::vector< std::v
     if (Winning_Conditions_Met(GameData))
     {
        Display_Current_Game(GameData);
-       std::cout << "Congratulations on Player " << (char)CurrentPlayer << " for winning!\nOnly took you " << NumberOfTurns << " turns\n\n\n" << std::endl;
+       std::cout << "Congratulations on Player " << (char)CurrentPlayer << " for winning!\nOnly took you " << NumberOfTurns << " turns\n\n\n" << '\n';
     }
 
     // No winner so a draw
     else
     {
        Display_Current_Game(GameData);
-       std::cout << "Game is a draw\nOnly took you " << NumberOfTurns << " turns\n\n\n" << std::endl;
+       std::cout << "Game is a draw\nOnly took you " << NumberOfTurns << " turns\n\n\n" << '\n';
     }
 }
