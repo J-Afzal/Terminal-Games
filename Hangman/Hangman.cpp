@@ -19,19 +19,19 @@ void Play_Hangman(void)
 {
     //Variables for the Hangman game
     // - Hangman states representing the different states the hangman drawing can be in
-    std::vector<std::string> HangmanStates, IncorrectGuesses, CorrectGuesses;
+    std::vector<std::string> IncorrectGuesses, CorrectGuesses;
     std::string WordToBeGuessed, CurrentGuessOfWord, PlayerThatIsGuessing;
     unsigned int NumberOfPlayers, NumberOfErrors = 0, NumberOfTurns = 0;
 
     // Sets up the variables required by game
-    Setup_Game(HangmanStates, WordToBeGuessed, CurrentGuessOfWord, NumberOfPlayers, PlayerThatIsGuessing);
+    Setup_Game(WordToBeGuessed, CurrentGuessOfWord, NumberOfPlayers, PlayerThatIsGuessing);
 
     // while the current guess of word and word to be guessed are not the same and the hangman drawing
     // has not reached its final stage continue playing game
     while (!Winning_Conditions_Met(WordToBeGuessed, CurrentGuessOfWord) && !Game_Over(NumberOfErrors))
     {
         // Displays the current hangman state, the current guess of word and all incorrect guesses
-        Display_Game(HangmanStates, NumberOfErrors, CurrentGuessOfWord, IncorrectGuesses);
+        Display_Game(NumberOfErrors, CurrentGuessOfWord, IncorrectGuesses);
         
         std::string Guess;
 
@@ -58,17 +58,14 @@ void Play_Hangman(void)
     }
     
     // Displays the winning or losing message
-    Display_Winner(HangmanStates, NumberOfErrors, CurrentGuessOfWord, IncorrectGuesses, NumberOfTurns, WordToBeGuessed);
+    Display_Winner(NumberOfErrors, CurrentGuessOfWord, IncorrectGuesses, NumberOfTurns, WordToBeGuessed);
 }
 
 
 
-void Setup_Game(std::vector<std::string>& HangmanStates, std::string& WordToBeGuessed, std::string& CurrentGuessOfWord, unsigned int& NumberOfPlayers, std::string& PlayerThatIsGuessing)
+void Setup_Game(std::string& WordToBeGuessed, std::string& CurrentGuessOfWord, unsigned int& NumberOfPlayers, std::string& PlayerThatIsGuessing)
 {
-    // Creates the hangman states of the drawing
-    HangmanStates = Create_Hangman_States();
-    
-    std::cout << "--------------------Hangman by Junaid Afzal--------------------" << std::endl;
+    std::cout << "--------------------Hangman--------------------" << std::endl;
     
     // Prompt the user for the number of players if one the AI will guess and if two then human user will guess
     NumberOfPlayers = Ask_User_For_Number_Of_Players();
@@ -113,28 +110,6 @@ void Setup_Game(std::vector<std::string>& HangmanStates, std::string& WordToBeGu
     // Create the current guess to be the same size as the word to be guessed but only containing underscores
     for (unsigned int i = 0; i < WordToBeGuessed.size(); i++)
         CurrentGuessOfWord.push_back('_');
-}
-
-
-
-std::vector<std::string> Create_Hangman_States(void)
-{
-    // Hard coded strings that represent the different hangman state drawings
-    //Solution to errors = https://www.rapidtables.com/code/text/ascii-table.html
-    std::vector<std::string> HangmanStates;
-    HangmanStates.push_back("\n\n\n\n\n\n \n\n");
-    HangmanStates.push_back("\n\n\n\n\n\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 \n\n");
-    HangmanStates.push_back("\n    \u2502\n    \u2502\n    \u2502\n    \u2502\n    \u2502\n\u2501\u2501\u2501\u2501\u2538\u2501\u2501\u2501\u2501 \n\n");
-    HangmanStates.push_back("    \u250F\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n    \u2502\n    \u2502\n    \u2502\n    \u2502\n    \u2502\n\u2501\u2501\u2501\u2501\u2538\u2501\u2501\u2501\u2501 \n\n");
-    HangmanStates.push_back("    \u250F\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2513\n    \u2502       \u2502\n    \u2502\n    \u2502\n    \u2502\n    \u2502\n\u2501\u2501\u2501\u2501\u2538\u2501\u2501\u2501\u2501 \n\n");
-    HangmanStates.push_back("    \u250F\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2513\n    \u2502       \u2502\n    \u2502       O\n    \u2502\n    \u2502\n    \u2502\n\u2501\u2501\u2501\u2501\u2538\u2501\u2501\u2501\u2501 \n\n");
-    HangmanStates.push_back("    \u250F\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2513\n    \u2502       \u2502\n    \u2502       O\n    \u2502       |\n    \u2502\n    \u2502\n\u2501\u2501\u2501\u2501\u2538\u2501\u2501\u2501\u2501 \n\n");
-    HangmanStates.push_back("    \u250F\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2513\n    \u2502       \u2502\n    \u2502       O\n    \u2502       |\n    \u2502      /\n    \u2502\n\u2501\u2501\u2501\u2501\u2538\u2501\u2501\u2501\u2501 \n\n");
-    HangmanStates.push_back("    \u250F\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2513\n    \u2502       \u2502\n    \u2502       O\n    \u2502       |\n    \u2502      / \\\n    \u2502\n\u2501\u2501\u2501\u2501\u2538\u2501\u2501\u2501\u2501 \n\n");
-    HangmanStates.push_back("    \u250F\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2513\n    \u2502       \u2502\n    \u2502       O\n    \u2502      /|\n    \u2502      / \\\n    \u2502\n\u2501\u2501\u2501\u2501\u2538\u2501\u2501\u2501\u2501 \n\n");
-    HangmanStates.push_back("    \u250F\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2513\n    \u2502       \u2502\n    \u2502       O\n    \u2502      /|\\\n    \u2502      / \\\n    \u2502\n\u2501\u2501\u2501\u2501\u2538\u2501\u2501\u2501\u2501 \n\n");
-    
-    return HangmanStates;
 }
 
 
@@ -528,16 +503,65 @@ bool Game_Over(const unsigned int& NumberOfErrors)
 
 
 
-void Display_Game(const std::vector<std::string>& HangmanStates, const unsigned int& NumberOfErrors, const std::string& CurrentGuessOfWord, const std::vector<std::string>& IncorrectGuesses)
+void Display_Game(const unsigned int& NumberOfErrors, const std::string& CurrentGuessOfWord, const std::vector<std::string>& IncorrectGuesses)
 {
     // ***Better alternative needed***
     // Clears terminal window
-    system("clear");
+    system("cls");
     
-    std::cout << "--------------------Hangman by Junaid Afzal--------------------\n" << std::endl;
+    std::cout << "--------------------Hangman--------------------\n" << std::endl;
     
     // Draw the hangman drawing
-    std::cout << HangmanStates[NumberOfErrors] << "\n" << std::endl;
+    switch (NumberOfErrors)
+    {
+    case 0:
+        std::cout << "\n\n\n\n\n\n \n\n";
+        break;
+    
+    case 1:
+        std::cout << "\n\n\n\n\n\n" << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << "\n\n";
+        break;
+    
+    case 2:
+        std::cout << "\n    " << (char)179 << "\n    " << (char)179 << "\n    " << (char)179 << "\n    " << (char)179 << "\n    " << (char)179 << '\n' << (char)196 << (char)196 << (char)196 << (char)196 << (char)193 << (char)196 << (char)196 << (char)196 << (char)196 << "\n\n";
+        break;
+    
+    case 3:
+        std::cout << "    " << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << "\n    " << (char)179 << "\n    " << (char)179 << "\n    " << (char)179 << "\n    " << (char)179 << "\n    " << (char)179 << '\n' << (char)196 << (char)196 << (char)196 << (char)196 << (char)193 << (char)196 << (char)196 << (char)196 << (char)196 << "\n\n";
+        break;
+
+    case 4:
+        std::cout << "    " << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)191 << "\n    " << (char)179 << "       " << (char)179 << "\n    " << (char)179 << "\n    " << (char)179 << "\n    " << (char)179 << "\n    " << (char)179 << '\n' << (char)196 << (char)196 << (char)196 << (char)196 << (char)193 << (char)196 << (char)196 << (char)196 << (char)196 << "\n\n";
+        break;
+
+    case 5:
+        std::cout << "    " << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)191 << "\n    " << (char)179 << "       " << (char)179 << "\n    " << (char)179 << "       O\n    " << (char)179 << "\n    " << (char)179 << "\n    " << (char)179 << '\n' << (char)196 << (char)196 << (char)196 << (char)196 << (char)193 << (char)196 << (char)196 << (char)196 << (char)196 << "\n\n";
+        break;
+
+    case 6:
+        std::cout << "    " << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)191 << "\n    " << (char)179 << "       " << (char)179 << "\n    " << (char)179 << "       O\n    " << (char)179 << "       |\n    " << (char)179 << "\n    " << (char)179 << '\n' << (char)196 << (char)196 << (char)196 << (char)196 << (char)193 << (char)196 << (char)196 << (char)196 << (char)196 << "\n\n";
+        break;
+
+    case 7:
+        std::cout << "    " << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)191 << "\n    " << (char)179 << "       " << (char)179 << "\n    " << (char)179 << "       O\n    " << (char)179 << "       |\n    " << (char)179 << "      /\n    " << (char)179 << '\n' << (char)196 << (char)196 << (char)196 << (char)196 << (char)193 << (char)196 << (char)196 << (char)196 << (char)196 << "\n\n";
+        break;
+
+    case 8:
+        std::cout << "    " << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)191 << "\n    " << (char)179 << "       " << (char)179 << "\n    " << (char)179 << "       O\n    " << (char)179 << "       |\n    " << (char)179 << "      / \\\n    " << (char)179 << '\n' << (char)196 << (char)196 << (char)196 << (char)196 << (char)193 << (char)196 << (char)196 << (char)196 << (char)196 << "\n\n";
+        break;
+
+    case 9:
+        std::cout << "    " << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)191 << "\n    " << (char)179 << "       " << (char)179 << "\n    " << (char)179 << "       O\n    " << (char)179 << "      /|\n    " << (char)179 << "      / \\\n    " << (char)179 << '\n' << (char)196 << (char)196 << (char)196 << (char)196 << (char)193 << (char)196 << (char)196 << (char)196 << (char)196 << "\n\n";
+        break;
+
+    case 10:
+        std::cout << "    " << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)191 << "\n    " << (char)179 << "       " << (char)179 << "\n    " << (char)179 << "       O\n    " << (char)179 << "      /|\\\n    " << (char)179 << "      / \\\n    " << (char)179 << '\n' << (char)196 << (char)196 << (char)196 << (char)196 << (char)193 << (char)196 << (char)196 << (char)196 << (char)196 << "\n\n";
+        break;
+
+    default:
+        std::cout << "Error in Display_Game() switch statment" << '\n';
+        break;
+    }
     
     // Current guess of word
     for (unsigned int i = 0; i < CurrentGuessOfWord.size(); i++)
@@ -702,18 +726,18 @@ bool Check_Guess_Against_Word(const std::string& Guess, const std::string& WordT
 
 
 
-void Display_Winner(const std::vector<std::string>& HangmanStates, const unsigned int& NumberOfErrors, const std::string& CurrentGuessOfWord, const std::vector<std::string>& IncorrectGuesses, const unsigned int& NumberOfTurns, const std::string& WordToBeGuessed)
+void Display_Winner(const unsigned int& NumberOfErrors, const std::string& CurrentGuessOfWord, const std::vector<std::string>& IncorrectGuesses, const unsigned int& NumberOfTurns, const std::string& WordToBeGuessed)
 {
     // If the below is true then hangman has reached its final state and thus user has lost
     if(NumberOfErrors == 10)
     {
-        Display_Game(HangmanStates, NumberOfErrors, CurrentGuessOfWord, IncorrectGuesses);
+        Display_Game(NumberOfErrors, CurrentGuessOfWord, IncorrectGuesses);
         std::cout << "Commisarations to the guesser, You lost!\nOnly took " << NumberOfTurns << " turns\nThe word was " << WordToBeGuessed << std::endl;
     }
     
     else
     {
-        Display_Game(HangmanStates, NumberOfErrors, CurrentGuessOfWord, IncorrectGuesses);
+        Display_Game(NumberOfErrors, CurrentGuessOfWord, IncorrectGuesses);
         std::cout << "Congratulations to the guesser, you won!\nOnly took " << NumberOfTurns << " turns" << std::endl;
     }
 }

@@ -30,10 +30,7 @@
 void Play_Hangman(void);
 
 // Sets up the variables required by prompting user for the word to be guessed and the number of players
-void Setup_Game(std::vector<std::string>& HangmanStates, std::string& WordToBeGuessed, std::string& CurrentGuessOfWord, unsigned int& NumberOfPlayers, std::string& PlayerThatIsGuessing);
-
-// Creates all the states the hangman drawing can be in
-std::vector<std::string> Create_Hangman_States(void);
+void Setup_Game(std::string& WordToBeGuessed, std::string& CurrentGuessOfWord, unsigned int& NumberOfPlayers, std::string& PlayerThatIsGuessing);
 
 // Prompts the user for the number of human players in the game
 unsigned int Ask_User_For_Number_Of_Players(void);
@@ -57,7 +54,7 @@ bool Winning_Conditions_Met(const std::string& WordToBeGuessed, const std::strin
 bool Game_Over(const unsigned int& NumberOfErrors);
 
 // Displays the current hangman state, the current guess of word and all incorrect guesses
-void Display_Game(const std::vector<std::string>& HangmanStates, const unsigned int& NumberOfErrors, const std::string& CurrentGuessOfWord, const std::vector<std::string>& IncorrectGuesses);
+void Display_Game(const unsigned int& NumberOfErrors, const std::string& CurrentGuessOfWord, const std::vector<std::string>& IncorrectGuesses);
 
 // Prompts the user for a guess of the word
 std::string Ask_User_For_Next_Guess(const std::vector<std::string>& IncorrectGuesses, const std::vector<std::string>& CorrectGuesses);
@@ -69,6 +66,6 @@ std::string Ask_AI_For_Next_Guess(const std::vector<std::string>& IncorrectGuess
 bool Check_Guess_Against_Word(const std::string& Guess, const std::string& WordToBeGuessed, std::string& CurrentGuessOfWord);
 
 // Displays the winning or losing message
-void Display_Winner(const std::vector<std::string>& HangmanStates, const unsigned int& NumberOfErrors, const std::string& CurrentGuessOfWord, const std::vector<std::string>& IncorrectGuesses, const unsigned int& NumberOfTurns, const std::string& WordToBeGuessed);
+void Display_Winner(const unsigned int& NumberOfErrors, const std::string& CurrentGuessOfWord, const std::vector<std::string>& IncorrectGuesses, const unsigned int& NumberOfTurns, const std::string& WordToBeGuessed);
 
 #endif /* Hangman_hpp */
