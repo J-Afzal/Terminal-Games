@@ -9,8 +9,8 @@
 //
 
 #include "Battleships.hpp"
+#include <iostream>
 #include <iomanip>
-#include <string>
 #include <algorithm>
 
 
@@ -125,7 +125,7 @@ void Setup_Game(std::vector< std::vector<char> >& PlayerOneBoard, std::vector< s
     // Set seed for std::rand() to system time at 0
     std::srand((unsigned int)std::time(0));
     
-    std::cout << "--------------------Battleships By Junaid Afzal--------------------" << std::endl;
+    std::cout << "--------------------Battleships--------------------" << std::endl;
     
     // Get number of players
     NumberOfPlayers = Ask_User_For_Number_Of_Players();
@@ -378,11 +378,9 @@ void Display_Game_For_User(std::vector< std::vector<char> >& PlayerOneBoard, con
 {
     // ***Better alternative needed***
     // Clears terminal window
-    system("clear");
-
-    // Solutions to print errors = https://www.rapidtables.com/code/text/ascii-table.html
+    system("cls");
     
-    std::cout << "--------------------Battleships By Junaid Afzal--------------------\n" << std::endl;
+    std::cout << "--------------------Battleships--------------------\n" << std::endl;
     
     // First display the opponent's board with hits = '✶', misses = ' ' and empty spots = grid position
     // See Execute_Next_Turn() for why 'x' and 'o' are used instead of 'X' and 'O'
@@ -392,7 +390,7 @@ void Display_Game_For_User(std::vector< std::vector<char> >& PlayerOneBoard, con
         for (unsigned int j = 0; j < 10; j++)
         {
             if (PlayerOneOpponentBoard[i][j] == 'x')
-                std::cout << std::left << std::setw(3) << "\u2736  ";
+                std::cout << std::left << std::setw(3) << (char)254;
             
             else if (PlayerOneOpponentBoard[i][j] == 'o')
                 std::cout << std::left << std::setw(3) << " ";
@@ -411,7 +409,7 @@ void Display_Game_For_User(std::vector< std::vector<char> >& PlayerOneBoard, con
         for (unsigned int j = 0; j < 10; j++)
         {
             if (PlayerOneBoard[i][j] == 'X')
-                std::cout << std::left << std::setw(3) << "\u2736  ";
+                std::cout << std::left << std::setw(3) << (char)254;
             
             else if (PlayerOneBoard[i][j] == 'O')
                 std::cout << std::left << std::setw(3) << " ";
@@ -431,9 +429,9 @@ void Display_Game_For_AIs(std::vector< std::vector<char> >& PlayerOneBoard, std:
 {
     // ***Better alternative needed***
     // Clears terminal window
-    system("clear");
+    system("cls");
     
-    std::cout << "--------------------Battleships By Junaid Afzal--------------------\n" << std::endl;
+    std::cout << "--------------------Battleships--------------------\n" << std::endl;
     
     // Display the user's board with hits = '✶', misses = ' ' and empty spots = '.'
     std::cout << "---Player One Board---" << std::endl;
@@ -442,7 +440,7 @@ void Display_Game_For_AIs(std::vector< std::vector<char> >& PlayerOneBoard, std:
         for (unsigned int j = 0; j < 10; j++)
         {
             if (PlayerOneBoard[i][j] == 'X')
-                std::cout << std::left << std::setw(3) << "\u2736  ";
+                std::cout << std::left << std::setw(3) << (char)254;
             
             else if (PlayerOneBoard[i][j] == 'O')
                 std::cout << std::left << std::setw(3) << " ";
@@ -460,7 +458,7 @@ void Display_Game_For_AIs(std::vector< std::vector<char> >& PlayerOneBoard, std:
         for (unsigned int j = 0; j < 10; j++)
         {
             if (PlayerTwoBoard[i][j] == 'X')
-                std::cout << std::left << std::setw(3) << "\u2736  ";
+                std::cout << std::left << std::setw(3) << (char)254;
             
             else if (PlayerTwoBoard[i][j] == 'O')
                 std::cout << std::left << std::setw(3) << " ";
