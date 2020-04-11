@@ -417,7 +417,7 @@ std::string Ask_AI_For_Word_To_Be_Guessed(void)
         // within a nested if statements within nested for loops
         IsValueCorrect = true;
         
-        std::ifstream WordList("../../Hangman/Words.txt");
+        std::ifstream WordList("Words.txt");
         
         if (WordList.is_open())
         {
@@ -465,7 +465,7 @@ std::string Ask_AI_For_Word_To_Be_Guessed(void)
         
         else
         {
-            std::cout << "Unable to open Words.txt, make sure it is in the same directory as main.cpp" << std::endl;
+            std::cout << "Unable to open Words.txt, make sure it is in the same directory as PlayHangman.exe" << std::endl;
             exit(1);
         }
     }

@@ -1,3 +1,2 @@
 # Contents of .gitignore
-_build/
-_projects/
+build/
