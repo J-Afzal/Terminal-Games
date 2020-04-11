@@ -26,11 +26,21 @@ The classic Battleship game where human vs human is not coded for as difficult t
 -   1 users represents one human player and one computer player
 -   0 users represents zero human players and two computer players
 -   The AI is 'dumb' and picks random locations to place ships and random locations to attack ships
--   The game is played through the function `Play_Battleships()` 
+-   The game is played through the function `Play_Battleships()`
 
-### To Do
--   CMake and CTest
--   Doxygen
--   TravisCI
--   Installer
--   Make a template repo with all stuffs
+
+# My_Games [![Build Status](sdsd)
+
+#### Design Team:
+  * Junaid Afzal
+
+# What is My_Games?
+Observer is a three dimensional model viewer, where a model is a shape that is made up of many smaller shapes and materials, and can read in .stl files - and .txt/.mod files but in a proprietary format. Observer can only view models - no editing of the model properties - as well as edit, load and save any lights being applied to the model. The colour of the model and its background can be changed, but note these changes are not saved. A clipper filter can be applied to the model to view a cross section of the model and a shrink filter can be applied to see all the smaller shapes that make up the model.
+
+# Links
+  * [My_Games Documentation](https://RefreshedMoose.github.io/My_Games/html)
+  * [My_Games License](https://github.com/RefreshedMoose/My_Games/blob/master/LICENSE.txt)
+  * [Download](https://github.com/RefreshedMoose/My_Games/releases)
+  * [Wiki](https://github.com/RefreshedMoose/My_Games/wiki)
+
+# Screenshots

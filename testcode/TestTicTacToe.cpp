@@ -10,7 +10,7 @@
 
 int main(void)
 {
-    Play_TicTacToe();
+    Test_TicTacToe();
 
     return 0;
 }

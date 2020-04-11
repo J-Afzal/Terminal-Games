@@ -1,16 +1,16 @@
 //
 //  main.cpp
-//  TicTacToe
+//  Hangman
 //
-//  Created by Main on 09/12/2019.
+//  Created by Main on 11/12/2019.
 //  Copyright © 2019 Junaid Afzal. All rights reserved.
 //
 
-#include "TicTacToe.hpp"
+#include "Hangman.hpp"
 
 int main(void)
 {
-    Play_TicTacToe();
+    Test_Hangman();
 
     return 0;
 }

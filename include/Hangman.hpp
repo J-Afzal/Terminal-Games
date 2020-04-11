@@ -29,6 +29,9 @@
 // Single function to run whole game
 void Play_Hangman(void);
 
+// Test code for Hangman where there are zero players
+void Test_Hangman(void);
+
 // Sets up the variables required by prompting user for the word to be guessed and the number of players
 void Setup_Game(std::string& WordToBeGuessed, std::string& CurrentGuessOfWord, unsigned int& NumberOfPlayers, std::string& PlayerThatIsGuessing);
 

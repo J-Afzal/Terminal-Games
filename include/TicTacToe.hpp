@@ -15,6 +15,8 @@
 //  - The AI is 'dumb' as it picks random positions
 //  - The The game is played through the function `Play_TicTacToe()`
 
+/** @file Testing Testing
+*/
 
 #ifndef TicTacToe_hpp
 #define TicTacToe_hpp
@@ -24,6 +26,9 @@
 
 // Simple function to run whole game
 void Play_TicTacToe(void);
+
+// Test code for TicTacToe where there are zero players
+void Test_TicTacToe(void);
 
 // Sets up the variables required by prompting user for the size of the grid and the number of human players
 void Setup_Game(unsigned int& NumberOfTurns, unsigned int& CurrentPlayer, unsigned int& NumberOfPlayers, unsigned int& UserXO, std::vector< std::vector<int> >& GameData);

@@ -27,6 +27,9 @@
 // Simple function to run whole game
 void Play_Battleships(void);
 
+// Test code for Hangman where there are zero players
+void Test_Battleships(void);
+
 // Setups all the varibales so that game can be played
 void Setup_Game(std::vector< std::vector<char> >& PlayerOneBoard, std::vector< std::vector<char> >& PlayerOneOpponentBoard, std::vector< std::vector<char> >& PlayerTwoBoard, std::vector< std::vector<char> >& PlayerTwoOpponentBoard, unsigned int& NumberOfPlayers, std::string& CurrentPlayer);
 
