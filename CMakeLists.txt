@@ -21,10 +21,10 @@ add_library( Chess        include/Chess.hpp         source/Chess.cpp )
 
 
 # This creates the .exe file for the play code
-add_executable( PlayTicTacToe     main/PlayTicTacToe.cpp )
-add_executable( PlayHangman       main/PlayHangman.cpp )
-add_executable( PlayBattleships   main/PlayBattleships.cpp )
-add_executable( PlayChess         main/PlayChess.cpp )
+add_executable( PlayTicTacToe     source/TicTacToePlay.cpp )
+add_executable( PlayHangman       source/HangmanPlay.cpp )
+add_executable( PlayBattleships   source/BattleshipsPlay.cpp )
+add_executable( PlayChess         source/ChessPlay.cpp )
 
 # This links the libraries to the .exe files
 target_link_libraries( PlayTicTacToe     TicTacToe )
@@ -40,9 +40,9 @@ ADD_CUSTOM_COMMAND(TARGET PlayHangman POST_BUILD COMMAND ${CMAKE_COMMAND} -E cop
 
 
 # This creates the .exe file for the test code
-add_executable( TestTicTacToe     testcode/TestTicTacToe.cpp )
-add_executable( TestHangman     	testcode/TestHangman.cpp )
-add_executable( TestBattleships 	testcode/TestBattleships.cpp )
+add_executable( TestTicTacToe     source/TicTacToeTest.cpp )
+add_executable( TestHangman     	source/HangmanTest.cpp )
+add_executable( TestBattleships 	source/BattleshipsTest.cpp )
 
 # This links the libraries to the .exe file
 target_link_libraries( TestTicTacToe    TicTacToe )
