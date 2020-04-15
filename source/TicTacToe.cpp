@@ -1,10 +1,4 @@
 //
-//  TicTacToe.cpp
-//  TicTacToe
-//
-//  Created by Main on 09/12/2019.
-//  Copyright © 2019 Junaid Afzal. All rights reserved.
-//
 //  The file contains the implementation of the TicTacToe game
 //
 
@@ -15,39 +9,38 @@
 
 void Play_TicTacToe(void)
 {
-    // Variables for the TicTacToe game
-    //  - UserXOChoice is used when there is only one player and contains the 'X' or 'O' that the user has chosen to be
-    //  - GameData contains the game info of the TicTacToe grid
+    // UserXOChoice is used when there is only one player and contains the 'X' or 'O' that the user has chosen to be
+    // GameData contains the Tic Tac Toe grid
     unsigned int NumberOfTurns = 0, CurrentPlayer = 0, NumberOfPlayers = 0, UserXOChoice = 0;
     std::vector< std::vector<int> > GameData;
 
     // The current player (and thus the player that starts) is assigned pseudo randomly; user is asked for the size of the
     // TicTacToe grid and is created; user is asked for the number of players; if players is 1 then human user asked if they
-    // want to be X or O
+    // want to be player X or player O
     Setup_Game(NumberOfTurns, CurrentPlayer, NumberOfPlayers, UserXOChoice, GameData);
 
     // Loop until a winning condition is met or no more moves are possible and game is over
-    while (!Winning_Conditions_Met(GameData) && !Game_Over(GameData))
+    while (!Game_Over(GameData) && !Winning_Conditions_Met(GameData))
     {
         // Displays the current TicTacToe grid
-        Display_Current_Game(GameData);
+        Display_Game(GameData);
 
         CurrentPlayer = Toggle_Player(CurrentPlayer);
 
         // Check if user input is required
         if (NumberOfPlayers == 2 || CurrentPlayer == UserXOChoice)
-            GameData = Ask_User_For_Next_Input(GameData, CurrentPlayer);
+            Ask_User_For_Next_Input(GameData, CurrentPlayer);
 
         else
-            GameData = Ask_AI_For_Next_Input(GameData, CurrentPlayer);
+            Ask_Computer_For_Next_Input(GameData, CurrentPlayer);
 
         NumberOfTurns++;
 
-        std::cout << "\n\n" << '\n';
+        std::cout << "\n\n\n";
      }
 
     // Determine the winner, if there is one, and display winning message
-    Display_Winner(NumberOfTurns, GameData, CurrentPlayer);
+    Display_Game_Over_Message(NumberOfTurns, GameData, CurrentPlayer);
 }
 
 
@@ -82,27 +75,25 @@ void Test_TicTacToe(void)
     // Loop until a winning condition is met or no more moves are possible and game is over
     while (!Winning_Conditions_Met(GameData) && !Game_Over(GameData))
     {
-        // Displays the current TicTacToe grid
-        // Display_Current_Game(GameData);
-
         CurrentPlayer = Toggle_Player(CurrentPlayer);
 
-        GameData = Ask_AI_For_Next_Input(GameData, CurrentPlayer);
+        Ask_Computer_For_Next_Input(GameData, CurrentPlayer);
 
         NumberOfTurns++;
 
-        std::cout << "\n\n" << '\n';
+        std::cout << "\n\n\n";
    }
-
-   // Determine the winner, if there is one, and display winning message
-   // Display_Winner(NumberOfTurns, GameData, CurrentPlayer);
 }
 
 
 
-void Setup_Game(unsigned int& NumberOfTurns, unsigned int& CurrentPlayer, unsigned int& NumberOfPlayers, unsigned int& UserXO, std::vector< std::vector<int> >& GameData)
+void Setup_Game(unsigned int& NumberOfTurns,
+                unsigned int& CurrentPlayer,
+                unsigned int& NumberOfPlayers,
+                unsigned int& UserXO,
+                std::vector< std::vector<int> >& GameData)
 {
-    std::cout << "--------------------TicTacToe by Junaid Afzal--------------------" << '\n';
+    std::cout << "--------------------TicTacToe--------------------" << '\n';
 
     // Set seed to system time at 0 to create pseudo random numbers
     std::srand((unsigned int)std::time(0));
@@ -135,7 +126,7 @@ void Setup_Game(unsigned int& NumberOfTurns, unsigned int& CurrentPlayer, unsign
 
 int Get_Number_Of_Players(void)
 {
-    bool IsValueCorrect = false; // Flag for if input value in invalid
+    bool IsValueCorrect = false; // Flag for if input value is valid
     int NumberOfPlayers = 0;
 
     while (!IsValueCorrect)
@@ -175,7 +166,7 @@ int Get_Number_Of_Players(void)
 
 int Get_User_X_O_Choice(void)
 {
-    bool IsValueCorrect = false; // Flag for if input value in invalid
+    bool IsValueCorrect = false; // Flag for if input value is valid
     char UserXOChoice = 0;
 
     while(!IsValueCorrect)
@@ -208,6 +199,7 @@ int Get_User_X_O_Choice(void)
     std::cin.clear();
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
+    // Capitalise to simplify proceeding code
     if (UserXOChoice == 'o')
         UserXOChoice = 'O';
 
@@ -297,7 +289,7 @@ bool Winning_Conditions_Met(const std::vector< std::vector<int> >& GameData)
 
 
 
-void Display_Current_Game(const std::vector< std::vector<int> >& GameData)
+void Display_Game(const std::vector< std::vector<int> >& GameData)
 {
     // ***Better alternative needed***
     // Clears terminal window
@@ -326,14 +318,14 @@ void Display_Current_Game(const std::vector< std::vector<int> >& GameData)
         {
             std::cout << '\n';
 
-            for (int i = 0; i < 10; i++)
+            for (unsigned int k = 0; k < 10; k++)
                 std::cout << (char)196;
 
             std::cout << '\n';
         }
     }
 
-    std::cout << '\n' << '\n';
+    std::cout << "\n\n";
 }
 
 
@@ -349,17 +341,14 @@ char Toggle_Player(const int& CurrentPlayer)
 
 
 
-std::vector< std::vector<int> > Ask_User_For_Next_Input(std::vector< std::vector<int> >& GameData, const unsigned int& CurrentPlayer)
+void Ask_User_For_Next_Input(std::vector< std::vector<int> >& GameData,
+                             const unsigned int& CurrentPlayer)
 {
-    bool IsValueCorrect = false; // Flag for if input value in invalid
-    int UserCommand = 0;
+    bool IsValueCorrect = false; // Flag for if input value is valid
+    int UserCommand, Row, Column;
 
     while(!IsValueCorrect)
     {
-        // Set flag to true by default as difficult to continue to to next iteration of while loop
-        // within a nested if statements within nested for loops
-        IsValueCorrect = true;
-
         std::cout << "Player " << (char)CurrentPlayer << " enter command ";
 
         std::cin >> UserCommand;
@@ -369,7 +358,6 @@ std::vector< std::vector<int> > Ask_User_For_Next_Input(std::vector< std::vector
             // Clear buffer, set flag to false and retry
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            IsValueCorrect = false;
             continue;
         }
 
@@ -378,20 +366,16 @@ std::vector< std::vector<int> > Ask_User_For_Next_Input(std::vector< std::vector
             // Clear buffer, set flag to false and retry
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            IsValueCorrect = false;
             continue;
         }
 
-        int Column = UserCommand % 3;
-        int Row = UserCommand / 3;
+        Column = UserCommand % 3;
+        Row = UserCommand / 3;
 
         // Check if command has already been called by a player previously as it will contain and X or O
-        if (GameData[Row][Column] == 'X' || GameData[Row][Column] == 'O')
-            IsValueCorrect = false;
+        if (GameData[Row][Column] != 'X' && GameData[Row][Column] != 'O')
+            IsValueCorrect = true;
     }
-
-    int Column = UserCommand % 3;
-    int Row = UserCommand / 3;
 
     // Go to the command position in the grid and overwrite with the current player
     GameData[Row][Column] = CurrentPlayer;
@@ -399,61 +383,53 @@ std::vector< std::vector<int> > Ask_User_For_Next_Input(std::vector< std::vector
     // This is to clear .22222 in a value 5.22222 as value would assume to be 5
     std::cin.clear();
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-    return GameData;
 }
 
 
 
-std::vector< std::vector<int> > Ask_AI_For_Next_Input(std::vector< std::vector<int> >& GameData, const unsigned int& CurrentPlayer)
+void Ask_Computer_For_Next_Input(std::vector< std::vector<int> >& GameData,
+                                 const unsigned int& CurrentPlayer)
 {
-    bool IsValueCorrect = false; // Flag for if input value in invalid
-    unsigned int AICommand = 0;
+    bool IsValueCorrect = false; // Flag for if input value is valid
+    unsigned int ComputerCommand, Row, Column;
 
     while(!IsValueCorrect)
     {
-        // Set flag to true by default as difficult to continue to to next iteration of while loop
-        // within a nested if statements within nested for loops
-        IsValueCorrect = true;
+        // Computer is dumb and picks a pseudo random number as command
+        ComputerCommand = std::rand() % 9;
 
-        // AI is dumb and picks a pseudo random number as command
-        AICommand = std::rand() % 9;
-
-        int Column = AICommand % 3;
-        int Row = AICommand / 3;
+        Column = ComputerCommand % 3;
+        Row = ComputerCommand / 3;
 
         // Check if command has already been called by a player previously as it will contain and X or O
-        if (GameData[Row][Column] == 'X' || GameData[Row][Column]== 'O')
-            IsValueCorrect = false;
+        if (GameData[Row][Column] != 'X' && GameData[Row][Column]!= 'O')
+            IsValueCorrect = true;
     }
 
-    // Output a message which is similar to human player command message
-    std::cout << "AI " << (char)CurrentPlayer << " entering command " << AICommand << '\n';
-
-    int Column = AICommand % 3;
-    int Row = AICommand / 3;
+    // Output a message which is similar to a human player command message
+    std::cout << "Computer " << (char)CurrentPlayer << " entering command " << ComputerCommand << '\n';
 
     // Go to the command position in the grid and overwrite with the current player
     GameData[Row][Column] = CurrentPlayer;
-
-    return GameData;
 }
 
 
 
-void Display_Winner(const unsigned int& NumberOfTurns, const std::vector< std::vector<int> >& GameData, const unsigned int& CurrentPlayer)
+void Display_Game_Over_Message(const unsigned int& NumberOfTurns,
+                               const std::vector< std::vector<int> >& GameData,
+                               const unsigned int& CurrentPlayer)
 {
     // Winner will be current player as Toggle_Player() function has not been called from receiving input and determining winner
     if (Winning_Conditions_Met(GameData))
     {
-       Display_Current_Game(GameData);
-       std::cout << "Congratulations on Player " << (char)CurrentPlayer << " for winning!\nOnly took you " << NumberOfTurns << " turns\n\n\n" << '\n';
+       Display_Game(GameData);
+       std::cout << "Congratulations on Player " << (char)CurrentPlayer << " for winning!\nOnly took you " << NumberOfTurns << " turns\n\n\n\n";
     }
 
     // No winner so a draw
     else
     {
-       Display_Current_Game(GameData);
-       std::cout << "Game is a draw\nOnly took you " << NumberOfTurns << " turns\n\n\n" << '\n';
+       Display_Game(GameData);
+       std::cout << "Game is a draw\nOnly took you " << NumberOfTurns << " turns\n\n\n\n";
     }
 }

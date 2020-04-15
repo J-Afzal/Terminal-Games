@@ -2,7 +2,7 @@
 
 int main(void) {
 
-    Play_Chess();
+    Test_Chess();
 
     return 0;
 }

@@ -21,41 +21,44 @@ add_library( Chess        include/Chess.hpp         source/Chess.cpp )
 
 
 # This creates the .exe file for the play code
-add_executable( PlayTicTacToe     source/TicTacToePlay.cpp )
-add_executable( PlayHangman       source/HangmanPlay.cpp )
-add_executable( PlayBattleships   source/BattleshipsPlay.cpp )
-add_executable( PlayChess         source/ChessPlay.cpp )
+add_executable( TicTacToePlay     source/TicTacToePlay.cpp )
+add_executable( HangmanPlay       source/HangmanPlay.cpp )
+add_executable( BattleshipsPlay  source/BattleshipsPlay.cpp )
+add_executable( ChessPlay         source/ChessPlay.cpp )
 
 # This links the libraries to the .exe files
-target_link_libraries( PlayTicTacToe     TicTacToe )
-target_link_libraries( PlayHangman       Hangman )
-target_link_libraries( PlayBattleships   Battleships )
-target_link_libraries( PlayChess         Chess )
+target_link_libraries( TicTacToePlay     TicTacToe )
+target_link_libraries( HangmanPlay       Hangman )
+target_link_libraries( BattleshipsPlay   Battleships )
+target_link_libraries( ChessPlay         Chess )
 
 # Copy the resource files for My_Games play files in to the build directory
-ADD_CUSTOM_COMMAND(TARGET PlayHangman POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy
+ADD_CUSTOM_COMMAND(TARGET HangmanPlay POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy
 		               ${CMAKE_CURRENT_SOURCE_DIR}/resources/Words.txt
                    ${CMAKE_CURRENT_SOURCE_DIR}/build/Debug/Words.txt )
 
 
 
 # This creates the .exe file for the test code
-add_executable( TestTicTacToe     source/TicTacToeTest.cpp )
-add_executable( TestHangman     	source/HangmanTest.cpp )
-add_executable( TestBattleships 	source/BattleshipsTest.cpp )
+add_executable( TicTacToeTest     source/TicTacToeTest.cpp )
+add_executable( HangmanTest     	source/HangmanTest.cpp )
+add_executable( BattleshipsTest 	source/BattleshipsTest.cpp )
+add_executable( ChessTest 				source/ChessTest.cpp )
 
 # This links the libraries to the .exe file
-target_link_libraries( TestTicTacToe    TicTacToe )
-target_link_libraries( TestHangman     	Hangman )
-target_link_libraries( TestBattleships 	Battleships)
+target_link_libraries( TicTacToeTest    TicTacToe )
+target_link_libraries( HangmanTest     	Hangman )
+target_link_libraries( BattleshipsTest 	Battleships)
+target_link_libraries( ChessTest				Chess)
 
 # This creates the CTests
-add_test( TestTicTacToe			TestTicTacToe )
-add_test( TestHangman  			TestHangman )
-add_test( TestBattleships		TestBattleships )
+add_test( TicTacToeTest			TicTacToeTest )
+add_test( HangmanTest  			HangmanTest )
+add_test( BattleshipsTest		BattleshipsTest )
+add_test( ChessTest					ChessTest )
 
 # Copy the resource files for My_Games test code files in to the build directory
-ADD_CUSTOM_COMMAND(TARGET PlayHangman POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy
+ADD_CUSTOM_COMMAND(TARGET HangmanTest POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy
 									 ${CMAKE_CURRENT_SOURCE_DIR}/resources/Words.txt
 									 ${CMAKE_CURRENT_SOURCE_DIR}/build/Words.txt )
 

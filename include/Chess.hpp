@@ -12,6 +12,10 @@
 #include <iostream>
 #include <vector>
 
+void Play_Chess(void);
+
+void Test_Chess(void);
+
 void Setup_Game(std::vector< std::vector<std::string> >& Board, unsigned int& NumberOfPlayers, std::string& HumanPlayer, std::string& CurrentPlayer);
 
 int Ask_User_For_Number_Of_Players(void);
