@@ -1,5 +1,5 @@
 # My_Games
-[My_Games License](https://github.com/RefreshedMoose/My_Games/blob/master/LICENSE.txt)
+[License](https://github.com/RefreshedMoose/My_Games/blob/master/LICENSE.txt)
 
 ### TicTacToe
   - 2 players represents two human players
