@@ -61,10 +61,3 @@ add_test( ChessTest					ChessTest )
 ADD_CUSTOM_COMMAND(TARGET HangmanTest POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy
 									 ${CMAKE_CURRENT_SOURCE_DIR}/resources/Words.txt
 									 ${CMAKE_CURRENT_SOURCE_DIR}/build/Words.txt )
-
-
-
-
-
-
-# "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" x86_amd64
