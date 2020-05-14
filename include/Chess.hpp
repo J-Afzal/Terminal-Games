@@ -20,15 +20,19 @@ void Setup_Game(std::vector< std::vector<std::string> >& Board, unsigned int& Nu
 
 int Ask_User_For_Number_Of_Players(void);
 
-bool Game_Over();
+bool Game_Over(void);
+
+bool Is_King_In_Check(void);
 
 void Toggle_Player(std::string& CurrentPlayer);
 
 void Display_Game(const std::vector< std::vector<std::string> >& Board);
 
-std::string Ask_AI_For_Next_Move(void);
+std::string Ask_AI_For_Next_Move(const std::vector< std::vector<std::string> >& Board, const std::string& CurrentPlayer);
 
-std::string Ask_User_For_Next_Move(void);
+bool Is_Next_Move_Valid(const std::vector< std::vector<std::string> >& Board, const std::string& CurrentPlayer, const std::string& ChessPiece, const std::string& ChessPieceNewPosition;
+
+std::string Ask_User_For_Next_Move(const std::vector< std::vector<std::string> >& Board, const std::string& CurrentPlayer);
 
 void Capitalise_Word(std::string& aWord);
 

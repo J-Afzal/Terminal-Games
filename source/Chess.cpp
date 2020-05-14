@@ -48,7 +48,7 @@ void Play_Chess(void)
               break;
 
           default:
-              std::cout << "Error in number of players switch statement" << std::endl;
+              std::cout << "Error in number of players switch statement" << '\n';
               break;
       }
 
@@ -80,39 +80,39 @@ void Setup_Game(std::vector< std::vector<std::string> >& Board, unsigned int& Nu
                 switch (j)
                 {
                     case 0:
-                        Board[i][j] = "BR";
+                        Board[i][j] = "BLACKROOK1";
                         break;
 
                     case 1:
-                        Board[i][j] = "BN";
+                        Board[i][j] = "BLACKKNIGHT1";
                         break;
 
                     case 2:
-                        Board[i][j] = "BB";
+                        Board[i][j] = "BLACKBISHOP1";
                         break;
 
                     case 3:
-                        Board[i][j] = "BQ";
+                        Board[i][j] = "BLACKQUEEN";
                         break;
 
                     case 4:
-                        Board[i][j] = "BK";
+                        Board[i][j] = "BLACKKING";
                         break;
 
                     case 5:
-                        Board[i][j] = "BB";
+                        Board[i][j] = "BLACKBISHOP2";
                         break;
 
                     case 6:
-                        Board[i][j] = "BN";
+                        Board[i][j] = "BLACKKNIGHT2";
                         break;
 
                     case 7:
-                        Board[i][j] = "BR";
+                        Board[i][j] = "BLACKROOK2";
                         break;
 
                     default:
-                        std::cout << "Error in black pieces setup in Setup_Game()" << std::endl;
+                        std::cout << "Error in black pieces setup in Setup_Game()" << '\n';
                         break;
                 }
 
@@ -120,39 +120,39 @@ void Setup_Game(std::vector< std::vector<std::string> >& Board, unsigned int& Nu
                 switch (j)
                 {
                     case 0:
-                        Board[i][j] = "BP1";
+                        Board[i][j] = "BLACKPAWN1";
                         break;
 
                     case 1:
-                        Board[i][j] = "BP2";
+                        Board[i][j] = "BLACKPAWN2";
                         break;
 
                     case 2:
-                        Board[i][j] = "BP3";
+                        Board[i][j] = "BLACKPAWN3";
                         break;
 
                     case 3:
-                        Board[i][j] = "BP4";
+                        Board[i][j] = "BLACKPAWN4";
                         break;
 
                     case 4:
-                        Board[i][j] = "BP5";
+                        Board[i][j] = "BLACKPAWN5";
                         break;
 
                     case 5:
-                        Board[i][j] = "BP6";
+                        Board[i][j] = "BLACKPAWN6";
                         break;
 
                     case 6:
-                        Board[i][j] = "BP7";
+                        Board[i][j] = "BLACKPAWN7";
                         break;
 
                     case 7:
-                        Board[i][j] = "BP8";
+                        Board[i][j] = "BLACKPAWN8";
                         break;
 
                     default:
-                        std::cout << "Error in black pawn setup in Setup_Game()" << std::endl;
+                        std::cout << "Error in black pawn setup in Setup_Game()" << '\n';
                         break;
                 }
 
@@ -160,39 +160,39 @@ void Setup_Game(std::vector< std::vector<std::string> >& Board, unsigned int& Nu
                 switch (j)
                 {
                     case 0:
-                        Board[i][j] = "WP1";
+                        Board[i][j] = "WHITEPAWN1";
                         break;
 
                     case 1:
-                        Board[i][j] = "WP2";
+                        Board[i][j] = "WHITEPAWN2";
                         break;
 
                     case 2:
-                        Board[i][j] = "WP3";
+                        Board[i][j] = "WHITEPAWN3";
                         break;
 
                     case 3:
-                        Board[i][j] = "WP4";
+                        Board[i][j] = "WHITEPAWN4";
                         break;
 
                     case 4:
-                        Board[i][j] = "WP5";
+                        Board[i][j] = "WHITEPAWN5";
                         break;
 
                     case 5:
-                        Board[i][j] = "WP6";
+                        Board[i][j] = "WHITEPAWN6";
                         break;
 
                     case 6:
-                        Board[i][j] = "WP7";
+                        Board[i][j] = "WHITEPAWN7";
                         break;
 
                     case 7:
-                        Board[i][j] = "WP8";
+                        Board[i][j] = "WHITEPAWN8";
                         break;
 
                     default:
-                        std::cout << "Error in white pawn setup in Setup_Game()" << std::endl;
+                        std::cout << "Error in white pawn setup in Setup_Game()" << '\n';
                         break;
                 }
 
@@ -200,39 +200,39 @@ void Setup_Game(std::vector< std::vector<std::string> >& Board, unsigned int& Nu
                 switch (j)
                 {
                     case 0:
-                        Board[i][j] = "WR";
+                        Board[i][j] = "WHITEROOK1";
                         break;
 
                     case 1:
-                        Board[i][j] = "WN";
+                        Board[i][j] = "WHITEKNIGHT1";
                         break;
 
                     case 2:
-                        Board[i][j] = "WB";
+                        Board[i][j] = "WHITEBISHOP1";
                         break;
 
                     case 3:
-                        Board[i][j] = "WQ";
+                        Board[i][j] = "WHITEQUEEN";
                         break;
 
                     case 4:
-                        Board[i][j] = "WK";
+                        Board[i][j] = "WHITEKING";
                         break;
 
                     case 5:
-                        Board[i][j] = "WB";
+                        Board[i][j] = "WHITEBISHOP2";
                         break;
 
                     case 6:
-                        Board[i][j] = "WN";
+                        Board[i][j] = "WHITEKNIGHT2";
                         break;
 
                     case 7:
-                        Board[i][j] = "WR";
+                        Board[i][j] = "WHITEROOK2";
                         break;
 
                     default:
-                        std::cout << "Error in white pieces setup in Setup_Game()" << std::endl;
+                        std::cout << "Error in white pieces setup in Setup_Game()" << '\n';
                         break;
                 }
         }
@@ -244,12 +244,7 @@ void Setup_Game(std::vector< std::vector<std::string> >& Board, unsigned int& Nu
     std::srand((unsigned int)time(0));
 
     if (NumberOfPlayers == 1)
-    {
-        if ((std::rand() % 2) == 0)
-            HumanPlayer = "WHITE";
-        else
-            HumanPlayer = "BLACK";
-    }
+        HumanPlayer = "WHITE";
 
     if ((std::rand() % 2) == 0)
         CurrentPlayer = "WHITE";
@@ -295,18 +290,19 @@ int Ask_User_For_Number_Of_Players(void)
     return NumberOfPlayers;
 }
 
-bool Game_Over()
+bool Game_Over(void)
 {
-
-
     //*******************************************************
     // Check if WK/BK are in check
     // and all possible moves result in check
     //*******************************************************
 
-
-
     return false;
+}
+
+bool Is_King_In_Check(void)
+{
+  return false;
 }
 
 void Toggle_Player(std::string& CurrentPlayer)
@@ -324,7 +320,7 @@ void Display_Game(const std::vector< std::vector<std::string> >& Board)
     for (unsigned int i = 0; i < 8; i++)
     {
         if (i == 0)
-            std::cout << "    A B C D E F G H" << std::endl << std::endl;
+            std::cout << "    A B C D E F G H" << "\n\n";
 
         for (unsigned int j = 0; j < 8; j++)
         {
@@ -332,83 +328,103 @@ void Display_Game(const std::vector< std::vector<std::string> >& Board)
                 std::cout << 8 - i << "   ";
 
 
-            if (Board[i][j] == "BR")
+            if (Board[i][j] == "BLACKROOK1")
                 std::cout << "\u2656 ";
 
-            else if (Board[i][j] == "BN")
+            else if (Board[i][j] == "BLACKKNIGHT1")
                 std::cout << "\u2658 ";
 
-            else if (Board[i][j] == "BB")
+            else if (Board[i][j] == "BLACKBISHOP1")
                 std::cout << "\u2657 ";
 
-            else if (Board[i][j] == "BQ")
+            else if (Board[i][j] == "BLACKQUEEN")
                 std::cout << "\u2655 ";
 
-            else if (Board[i][j] == "BK")
+            else if (Board[i][j] == "BLACKKING")
                 std::cout << "\u2654 ";
 
-            else if (Board[i][j] == "BP1")
+            else if (Board[i][j] == "BLACKBISHOP2")
+                std::cout << "\u2657 ";
+
+            else if (Board[i][j] == "BLACKKNIGHT2")
+                std::cout << "\u2658 ";
+
+            else if (Board[i][j] == "BLACKROOK2")
+                std::cout << "\u2656 ";
+
+            else if (Board[i][j] == "BLACKPAWN1")
                 std::cout << "\u2659 ";
 
-            else if (Board[i][j] == "BP2")
+            else if (Board[i][j] == "BLACKPAWN2")
                 std::cout << "\u2659 ";
 
-            else if (Board[i][j] == "BP3")
+            else if (Board[i][j] == "BLACKPAWN3")
                 std::cout << "\u2659 ";
 
-            else if (Board[i][j] == "BP4")
+            else if (Board[i][j] == "BLACKPAWN4")
                 std::cout << "\u2659 ";
 
-            else if (Board[i][j] == "BP5")
+            else if (Board[i][j] == "BLACKPAWN5")
                 std::cout << "\u2659 ";
 
-            else if (Board[i][j] == "BP6")
+            else if (Board[i][j] == "BLACKPAWN6")
                 std::cout << "\u2659 ";
 
-            else if (Board[i][j] == "BP7")
+            else if (Board[i][j] == "BLACKPAWN7")
                 std::cout << "\u2659 ";
 
-            else if (Board[i][j] == "BP8")
+            else if (Board[i][j] == "BLACKPAWN8")
                 std::cout << "\u2659 ";
 
-            else if (Board[i][j] == "WR")
+
+            else if (Board[i][j] == "WHITEROOK1")
                 std::cout << "\u265C ";
 
-            else if (Board[i][j] == "WN")
+            else if (Board[i][j] == "WHITEKNIGHT1")
                 std::cout << "\u265E ";
 
-            else if (Board[i][j] == "WB")
+            else if (Board[i][j] == "WHITEBISHOP1")
                 std::cout << "\u265D ";
 
-            else if (Board[i][j] == "WQ")
+            else if (Board[i][j] == "WHITEQUEEN")
                 std::cout << "\u265B ";
 
-            else if (Board[i][j] == "WK")
+            else if (Board[i][j] == "WHITEKING")
                 std::cout << "\u265A ";
 
-            else if (Board[i][j] == "WP1")
+            else if (Board[i][j] == "WHITEBISHOP2")
+                std::cout << "\u265D ";
+
+            else if (Board[i][j] == "WHITEKNIGHT2")
+                std::cout << "\u265E ";
+
+            else if (Board[i][j] == "WHITEROOK2")
+                std::cout << "\u265C ";
+
+            else if (Board[i][j] == "WHITEPAWN1")
                 std::cout << "\u265F ";
 
-            else if (Board[i][j] == "WP2")
+            else if (Board[i][j] == "WHITEPAWN2")
                 std::cout << "\u265F ";
 
-            else if (Board[i][j] == "WP3")
+            else if (Board[i][j] == "WHITEPAWN3")
                 std::cout << "\u265F ";
 
-            else if (Board[i][j] == "WP4")
+            else if (Board[i][j] == "WHITEPAWN4")
                 std::cout << "\u265F ";
 
-            else if (Board[i][j] == "WP5")
+            else if (Board[i][j] == "WHITEPAWN5")
                 std::cout << "\u265F ";
 
-            else if (Board[i][j] == "WP6")
+            else if (Board[i][j] == "WHITEPAWN6")
                 std::cout << "\u265F ";
 
-            else if (Board[i][j] == "WP7")
+            else if (Board[i][j] == "WHITEPAWN7")
                 std::cout << "\u265F ";
 
-            else if (Board[i][j] == "WP8")
+            else if (Board[i][j] == "WHITEPAWN8")
                 std::cout << "\u265F ";
+
 
             else
                 std::cout << ". ";
@@ -418,31 +434,182 @@ void Display_Game(const std::vector< std::vector<std::string> >& Board)
                 std::cout << "   " << 8 - i;
         }
 
-        std::cout << std::endl;
+        std::cout << '\n';
 
         if (i == 7)
-            std::cout << std::endl << "    A B C D E F G H" << std::endl << std::endl;
+            std::cout << '\n' << "    A B C D E F G H" << "\n\n";
     }
 }
 
-std::string Ask_AI_For_Next_Move(void)
-{
-    std::string temp;
-
-    return temp;
-}
-
-std::string Ask_User_For_Next_Move(void)
+std::string Ask_AI_For_Next_Move(const std::vector< std::vector<std::string> >& Board, const std::string& CurrentPlayer)
 {
     bool isValueCorrect = false; // Flag for if input value in invalid
     std::string NextMove;
 
     while (!isValueCorrect)
     {
-        isValueCorrect = true;
+        std::string FirstWord, SecondWord;
 
+        ChessPieceInt = std::rand() % 15;
+        switch (ChessPieceInt)
+        {
+          case 0:
+            FirstWord = ROOK1;
+          break;
+
+          case 0:
+            FirstWord = KNIGHT1;
+          break;
+
+          case 0:
+            FirstWord = BISHOP1;
+          break;
+
+          case 0:
+            FirstWord = QUEEN;
+          break;
+
+          case 0:
+            FirstWord = KING;
+          break;
+
+          case 0:
+            FirstWord = BISHOP2;
+          break;
+
+          case 0:
+            FirstWord = KNIGHT2;
+          break;
+
+          case 0:
+            FirstWord = ROOK2;
+          break;
+
+          case 0:
+            FirstWord = PAWN1;
+          break;
+
+          case 0:
+            FirstWord = PAWN2;
+          break;
+
+          case 0:
+            FirstWord = PAWN3;
+          break;
+
+          case 0:
+            FirstWord = PAWN4;
+          break;
+
+          case 0:
+            FirstWord = PAWN5;
+          break;
+
+          case 0:
+            FirstWord = PAWN6;
+          break;
+
+          case 0:
+            FirstWord = PAWN7;
+          break;
+
+          case 0:
+            FirstWord = PAWN8;
+          break;
+        }
+
+        SecondWord[0] = (std::rand() % 8) + 97;
+        SecondWord[1] = (std::rand() % 8) + 49;
+
+        if (!Is_Next_Move_Valid(Board, CurrentPlayer, FirstWord, SecondWord))
+          continue;
+    }
+
+    return NextMove;
+}
+
+bool Is_Next_Move_Valid(const std::vector< std::vector<std::string> >& Board, const std::string& CurrentPlayer, const std::string& ChessPiece, const std::string& ChessPieceNewPosition)
+{
+  if (ChessPiece == ROOK1 || ChessPiece == ROOK2)
+  {
+    //*******************************************************
+    // code to check if command is legal, using playername for colour so BLACKBISHOP1
+    //*******************************************************
+
+    std::string ChessPieceCurrentPosition;
+
+    if (Is_King_In_Check())
+      return false;
+  }
+
+  else if (ChessPiece == KNIGHT1 || ChessPiece == KNIGHT2)
+  {
+    //*******************************************************
+    // code to check if command is legal, using playername for colour so BLACKBISHOP1
+    //*******************************************************
+
+
+    if (Is_King_In_Check())
+      return false;
+  }
+
+  else if (ChessPiece == BISHOP1 || ChessPiece == BISHOP2)
+  {
+    //*******************************************************
+    // code to check if command is legal, using playername for colour so BLACKBISHOP1
+    //*******************************************************
+
+
+    if (Is_King_In_Check())
+      return false;
+
+  }
+
+  else if (ChessPiece == QUEEN)
+  {
+    //*******************************************************
+    // code to check if command is legal, using playername for colour so BLACKBISHOP1
+    //*******************************************************
+
+
+    if (Is_King_In_Check())
+      return false;
+  }
+
+  else if (ChessPiece == KING)
+  {
+    //*******************************************************
+    // code to check if command is legal, using playername for colour so BLACKBISHOP1
+    //*******************************************************
+
+
+    if (Is_King_In_Check())
+      return false;
+  }
+
+  else if (ChessPiece == PAWN1 || ChessPiece == PAWN2 || ChessPiece == PAWN3 || ChessPiece == PAWN4 || ChessPiece == PAWN5 || ChessPiece == PAWN6 || ChessPiece == PAWN7 || ChessPiece == PAWN8)
+  {
+    //*******************************************************
+    // code to check if command is legal, using playername for colour so BLACKBISHOP1
+    //*******************************************************
+
+
+    if (Is_King_In_Check())
+      return false;
+  }
+
+  return true;
+}
+
+std::string Ask_User_For_Next_Move(const std::vector< std::vector<std::string> >& Board, const std::string& CurrentPlayer)
+{
+    bool isValueCorrect = false; // Flag for if input value in invalid
+    std::string NextMove;
+
+    while (!isValueCorrect)
+    {
         // Prompt user for next command that will be the next grid position to attack
-        std::cout << "Enter your next move: ";
+        std::cout << "Enter your next move (e.g. BISHOP1 A6): ";
 
         getline(std::cin, NextMove);
 
@@ -452,7 +619,6 @@ std::string Ask_User_For_Next_Move(void)
             // Clear buffer and retry
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            isValueCorrect = false;
             continue;
         }
 
@@ -472,36 +638,21 @@ std::string Ask_User_For_Next_Move(void)
                 SecondWord.push_back(NextMove[currentPosition]);
         }
 
-        if (FirstWord != "KING" && FirstWord != "QUEEN" && FirstWord != "BISHOP" && FirstWord != "KNIGHT" && FirstWord != "ROOK" && FirstWord != "PAWN")
-        {
-            isValueCorrect = false;
+        if (FirstWord != "KING" && FirstWord != "QUEEN" && FirstWord != "BISHOP1" && FirstWord != "BISHOP2" && FirstWord != "KNIGHT1" && FirstWord != "KNIGHT2" && FirstWord != "ROOK1" && FirstWord != "ROOK2"
+         && FirstWord != "PAWN1" && FirstWord != "PAWN2" && FirstWord != "PAWN3" && FirstWord != "PAWN4" && FirstWord != "PAWN5" && FirstWord != "PAWN6" && FirstWord != "PAWN7" && FirstWord != "PAWN8")
             continue;
-        }
 
         if (SecondWord.size() != 2)
-        {
-            isValueCorrect = false;
             continue;
-        }
 
         if (SecondWord[0] >= 97 && SecondWord[0] <= 104)
-        {
-            isValueCorrect = false;
             continue;
-        }
-
 
         if (SecondWord[1] >= 49 && SecondWord[1] <= 56)
-        {
-            isValueCorrect = false;
             continue;
-        }
 
-        //*******************************************************
-        // code to check if command is legal
-        //*******************************************************
-
-
+        if (!Is_Next_Move_Valid(Board, CurrentPlayer, FirstWord, SecondWord))
+          continue;
     }
 
     return NextMove;
@@ -626,10 +777,10 @@ void Capitalise_Word(std::string& aWord)
 
 void Execute_Next_Move()
 {
-
+  // update board and pawn rule if it reaches other end, maybe have captured pieces on other side
 }
 
 void Display_Winning_Message()
 {
-
+  // maybe while loop with option to quit and restart and add to other games
 }
