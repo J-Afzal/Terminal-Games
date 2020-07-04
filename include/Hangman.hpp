@@ -68,6 +68,7 @@ void Display_Game_Over_Message(const unsigned int& NumberOfErrors,
                                const std::string& CurrentGuessOfWord,
                                const std::vector<std::string>& IncorrectGuesses,
                                const unsigned int& NumberOfTurns,
-                               const std::string& WordToBeGuessed);
+                               const std::string& WordToBeGuessed,
+                               bool& GameIsRunning);
 
 #endif

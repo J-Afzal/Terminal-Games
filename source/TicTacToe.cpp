@@ -4,43 +4,49 @@
 
 #include "TicTacToe.hpp"
 #include <iomanip>
+#include <conio.h>
 
 
 
 void Play_TicTacToe(void)
 {
-    // UserXOChoice is used when there is only one player and contains the 'X' or 'O' that the user has chosen to be
-    // GameData contains the Tic Tac Toe grid
-    unsigned int NumberOfTurns = 0, CurrentPlayer = 0, NumberOfPlayers = 0, UserXOChoice = 0;
-    std::vector< std::vector<int> > GameData;
+    bool GameIsRunning = true;
 
-    // The current player (and thus the player that starts) is assigned pseudo randomly; user is asked for the size of the
-    // TicTacToe grid and is created; user is asked for the number of players; if players is 1 then human user asked if they
-    // want to be player X or player O
-    Setup_Game(NumberOfTurns, CurrentPlayer, NumberOfPlayers, UserXOChoice, GameData);
-
-    // Loop until a winning condition is met or no more moves are possible and game is over
-    while (!Game_Over(GameData) && !Winning_Conditions_Met(GameData))
+    while (GameIsRunning)
     {
-        // Displays the current TicTacToe grid
-        Display_Game(GameData);
+        // UserXOChoice is used when there is only one player and contains the 'X' or 'O' that the user has chosen to be
+        // GameData contains the Tic Tac Toe grid
+        unsigned int NumberOfTurns = 0, CurrentPlayer = 0, NumberOfPlayers = 0, UserXOChoice = 0;
+        std::vector< std::vector<int> > GameData;
 
-        CurrentPlayer = Toggle_Player(CurrentPlayer);
+        // The current player (and thus the player that starts) is assigned pseudo randomly; user is asked for the size of the
+        // TicTacToe grid and is created; user is asked for the number of players; if players is 1 then human user asked if they
+        // want to be player X or player O
+        Setup_Game(NumberOfTurns, CurrentPlayer, NumberOfPlayers, UserXOChoice, GameData);
 
-        // Check if user input is required
-        if (NumberOfPlayers == 2 || CurrentPlayer == UserXOChoice)
-            Ask_User_For_Next_Input(GameData, CurrentPlayer);
+        // Loop until a winning condition is met or no more moves are possible and game is over
+        while (!Game_Over(GameData) && !Winning_Conditions_Met(GameData))
+        {
+            // Displays the current TicTacToe grid
+            Display_Game(GameData);
 
-        else
-            Ask_Computer_For_Next_Input(GameData, CurrentPlayer);
+            CurrentPlayer = Toggle_Player(CurrentPlayer);
 
-        NumberOfTurns++;
+            // Check if user input is required
+            if (NumberOfPlayers == 2 || CurrentPlayer == UserXOChoice)
+                Ask_User_For_Next_Input(GameData, CurrentPlayer);
 
-        std::cout << "\n\n\n";
-     }
+            else
+                Ask_Computer_For_Next_Input(GameData, CurrentPlayer);
 
-    // Determine the winner, if there is one, and display winning message
-    Display_Game_Over_Message(NumberOfTurns, GameData, CurrentPlayer);
+            NumberOfTurns++;
+
+            std::cout << "\n\n\n";
+        }
+
+        // Determine the winner, if there is one, and display winning message
+        Display_Game_Over_Message(NumberOfTurns, GameData, CurrentPlayer, GameIsRunning);
+    }
 }
 
 
@@ -93,7 +99,7 @@ void Setup_Game(unsigned int& NumberOfTurns,
                 unsigned int& UserXO,
                 std::vector< std::vector<int> >& GameData)
 {
-    std::cout << "--------------------TicTacToe--------------------" << '\n';
+    std::cout << "--------------------TicTacToe--------------------\n\n";
 
     // Set seed to system time at 0 to create pseudo random numbers
     std::srand((unsigned int)std::time(0));
@@ -295,7 +301,7 @@ void Display_Game(const std::vector< std::vector<int> >& GameData)
     // Clears terminal window
    system("cls");
 
-    std::cout << "--------------------TicTacToe--------------------" << '\n';
+    std::cout << "--------------------TicTacToe--------------------\n\n";
     // Iterate across whole grid and output its value
     for(unsigned int i = 0; i < 3; i++)
     {
@@ -417,19 +423,30 @@ void Ask_Computer_For_Next_Input(std::vector< std::vector<int> >& GameData,
 
 void Display_Game_Over_Message(const unsigned int& NumberOfTurns,
                                const std::vector< std::vector<int> >& GameData,
-                               const unsigned int& CurrentPlayer)
+                               const unsigned int& CurrentPlayer,
+                               bool& GameIsRunning)
 {
     // Winner will be current player as Toggle_Player() function has not been called from receiving input and determining winner
     if (Winning_Conditions_Met(GameData))
     {
        Display_Game(GameData);
-       std::cout << "Congratulations on Player " << (char)CurrentPlayer << " for winning!\nOnly took you " << NumberOfTurns << " turns\n\n\n\n";
+       std::cout << "Congratulations on " << (char)CurrentPlayer << " for winning! The game lasted " << NumberOfTurns << " turns.\n\n";
     }
 
     // No winner so a draw
     else
     {
        Display_Game(GameData);
-       std::cout << "Game is a draw\nOnly took you " << NumberOfTurns << " turns\n\n\n\n";
+       std::cout << "It is a draw! The game lasted " << NumberOfTurns << " turns.\n\n";
     }
+
+    std::cout << "Press 'Q' to quit the game OR press any key to play again.\n";
+
+    // ***Better alternative needed***
+    // Gets key pressed and then clears terminal window
+    char Decision = _getch();
+    system("cls");
+
+    if (Decision == 'q')
+        GameIsRunning = false;
 }

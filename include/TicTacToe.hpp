@@ -57,6 +57,7 @@ void Ask_Computer_For_Next_Input(std::vector< std::vector<int> >& GameData,
 // Displays the player that is the winner, or not if the game is a draw and how many turns it took
 void Display_Game_Over_Message(const unsigned int& NumberOfTurns,
                                const std::vector< std::vector<int> >& GameData,
-                               const unsigned int& CurrentPlayer);
+                               const unsigned int& CurrentPlayer,
+                               bool& GameIsRunning);
 
 #endif

@@ -99,6 +99,7 @@ void Execute_Next_Turn(std::vector< std::vector<char> >& PlayerOneBoard,
 
 // Displays the winning player and how many turns it took
 void Display_Game_Over_Message(const std::string& CurrentPlayer,
-                               const unsigned int& NumberOfTurns);
+                               const unsigned int& NumberOfTurns,
+                               bool& GameIsRunning);
 
 #endif

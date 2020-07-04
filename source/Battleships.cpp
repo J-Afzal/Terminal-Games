@@ -2,91 +2,97 @@
 //  The file contains the implementation of the Battleships game
 //
 
-#include "Battleships.hpp"
+#include "../include/Battleships.hpp"
 #include <iostream>
 #include <iomanip>
 #include <algorithm>
+#include <conio.h>
 
 
 
 void Play_Battleships(void)
 {
-    // Variables needed for the game
-    std::vector< std::vector<char> > PlayerOneBoard, PlayerOneOpponentBoard, PlayerTwoBoard, PlayerTwoOpponentBoard;
-    std::string CurrentPlayer;
-    unsigned int NumberOfPlayers, NumberOfTurns = 0;
+    bool GameIsRunning = true;
 
-    // Setups all the varibales so that game can be played
-    Setup_Game(PlayerOneBoard, PlayerOneOpponentBoard, PlayerTwoBoard, PlayerTwoOpponentBoard, NumberOfPlayers, CurrentPlayer);
-
-    //Loop until a winning condition on either board exists
-    while (!Winning_Conditions_Met(PlayerOneBoard, PlayerTwoBoard))
+    while (GameIsRunning)
     {
-        // Change to the other player
-        Toggle_Player(CurrentPlayer);
+        // Variables needed for the game
+        std::vector< std::vector<char> > PlayerOneBoard, PlayerOneOpponentBoard, PlayerTwoBoard, PlayerTwoOpponentBoard;
+        std::string CurrentPlayer;
+        unsigned int NumberOfPlayers, NumberOfTurns = 0;
 
-        // One human player and one computer player
-        if (NumberOfPlayers == 1)
+        // Setups all the varibales so that game can be played
+        Setup_Game(PlayerOneBoard, PlayerOneOpponentBoard, PlayerTwoBoard, PlayerTwoOpponentBoard, NumberOfPlayers, CurrentPlayer);
+
+        //Loop until a winning condition on either board exists
+        while (!Winning_Conditions_Met(PlayerOneBoard, PlayerTwoBoard))
         {
-            // Human player is PLAYER_ONE by default
-            if (CurrentPlayer == "PLAYER_ONE")
+            // Change to the other player
+            Toggle_Player(CurrentPlayer);
+
+            // One human player and one computer player
+            if (NumberOfPlayers == 1)
             {
-                //Display the current state of the game so human user can determine their next move
-                Display_Game_For_User(PlayerOneBoard, PlayerOneOpponentBoard);
+                // Human player is PLAYER_ONE by default
+                if (CurrentPlayer == "PLAYER_ONE")
+                {
+                    //Display the current state of the game so human user can determine their next move
+                    Display_Game_For_User(PlayerOneBoard, PlayerOneOpponentBoard);
 
-                // Ask human user for a grid position that they want to attack
-                unsigned int Command = Ask_User_For_Next_Command(PlayerOneOpponentBoard);
+                    // Ask human user for a grid position that they want to attack
+                    unsigned int Command = Ask_User_For_Next_Command(PlayerOneOpponentBoard);
 
-                // Carry out the attack and update the corresponding boards
-                Execute_Next_Turn(PlayerOneBoard, PlayerOneOpponentBoard, PlayerTwoBoard, PlayerTwoOpponentBoard, CurrentPlayer, Command);
+                    // Carry out the attack and update the corresponding boards
+                    Execute_Next_Turn(PlayerOneBoard, PlayerOneOpponentBoard, PlayerTwoBoard, PlayerTwoOpponentBoard, CurrentPlayer, Command);
 
-                // Immediately display the result of the attack
-                Display_Game_For_User(PlayerOneBoard, PlayerOneOpponentBoard);
+                    // Immediately display the result of the attack
+                    Display_Game_For_User(PlayerOneBoard, PlayerOneOpponentBoard);
+                }
+
+                // Player is the computer
+                else
+                {
+                    //Ask computer for a grid position that they want to attack
+                    unsigned int Command = Ask_Computer_For_Next_Command(PlayerTwoOpponentBoard);
+
+                    // Carry out the attack and update the corresponding boards
+                    Execute_Next_Turn(PlayerOneBoard, PlayerOneOpponentBoard, PlayerTwoBoard, PlayerTwoOpponentBoard, CurrentPlayer, Command);
+                }
             }
 
-            // Player is the computer
+            // computer vs computer
             else
             {
-                //Ask computer for a grid position that they want to attack
-                unsigned int Command = Ask_Computer_For_Next_Command(PlayerTwoOpponentBoard);
+                // Player is the computer
+                if (CurrentPlayer == "PLAYER_ONE")
+                {
+                    //Ask computer for a grid position that they want to attack
+                    unsigned int Command = Ask_Computer_For_Next_Command(PlayerOneOpponentBoard);
 
-                // Carry out the attack and update the corresponding boards
-                Execute_Next_Turn(PlayerOneBoard, PlayerOneOpponentBoard, PlayerTwoBoard, PlayerTwoOpponentBoard, CurrentPlayer, Command);
+                    // Carry out the attack and update the corresponding boards
+                    Execute_Next_Turn(PlayerOneBoard, PlayerOneOpponentBoard, PlayerTwoBoard, PlayerTwoOpponentBoard, CurrentPlayer, Command);
+                }
+
+                // Player is the computer
+                else
+                {
+                    //Ask computer for a grid position that they want to attack
+                    unsigned int Command = Ask_Computer_For_Next_Command(PlayerTwoOpponentBoard);
+
+                    // Carry out the attack and update the corresponding boards
+                    Execute_Next_Turn(PlayerOneBoard, PlayerOneOpponentBoard, PlayerTwoBoard, PlayerTwoOpponentBoard, CurrentPlayer, Command);
+                }
+
+                Display_Game_For_Computers(PlayerOneBoard, PlayerTwoBoard);
             }
+
+            // Increment the number of turns
+            NumberOfTurns++;
         }
 
-        // computer vs computer
-        else
-        {
-            // Player is the computer
-            if (CurrentPlayer == "PLAYER_ONE")
-            {
-                //Ask computer for a grid position that they want to attack
-                unsigned int Command = Ask_Computer_For_Next_Command(PlayerOneOpponentBoard);
-
-                // Carry out the attack and update the corresponding boards
-                Execute_Next_Turn(PlayerOneBoard, PlayerOneOpponentBoard, PlayerTwoBoard, PlayerTwoOpponentBoard, CurrentPlayer, Command);
-            }
-
-            // Player is the computer
-            else
-            {
-                //Ask computer for a grid position that they want to attack
-                unsigned int Command = Ask_Computer_For_Next_Command(PlayerTwoOpponentBoard);
-
-                // Carry out the attack and update the corresponding boards
-                Execute_Next_Turn(PlayerOneBoard, PlayerOneOpponentBoard, PlayerTwoBoard, PlayerTwoOpponentBoard, CurrentPlayer, Command);
-            }
-
-            Display_Game_For_Computers(PlayerOneBoard, PlayerTwoBoard);
-        }
-
-        // Increment the number of turns
-        NumberOfTurns++;
+        // Display the winning message as game is now over
+        Display_Game_Over_Message(CurrentPlayer, NumberOfTurns, GameIsRunning);
     }
-
-    // Display the winning message as game is now over
-    Display_Game_Over_Message(CurrentPlayer, NumberOfTurns);
 }
 
 
@@ -192,9 +198,9 @@ void Setup_Game(std::vector< std::vector<char> >& PlayerOneBoard,
 
         for (unsigned int j = 0; j < NumberOfColumns; j++, CurrentPosition++)
         {
-            PlayerOneBoard[i].push_back('.');
+            PlayerOneBoard[i].push_back(' ');
             PlayerOneOpponentBoard[i].push_back(CurrentPosition);
-            PlayerTwoBoard[i].push_back('.');
+            PlayerTwoBoard[i].push_back(' ');
             PlayerTwoOpponentBoard[i].push_back(CurrentPosition);
         }
     }
@@ -202,7 +208,7 @@ void Setup_Game(std::vector< std::vector<char> >& PlayerOneBoard,
     // Set seed for std::rand() to system time at 0
     std::srand((unsigned int)std::time(0));
 
-    std::cout << "--------------------Battleships--------------------" << '\n';
+    std::cout << "--------------------Battleships--------------------\n\n";
 
     // Get number of players
     NumberOfPlayers = Ask_User_For_Number_Of_Players();
@@ -442,7 +448,7 @@ void Ask_User_For_Ship_Positions(std::vector< std::vector<char> >& PlayerOneBoar
 
             default:
                 // Error message stating where it has occured
-                std::cout << "Ask_User_For_Ship_Positions() switch statement error" << '\n';
+                std::cout << "Ask_User_For_Ship_Positions() switch statement error\n";
                 break;
         }
     }
@@ -463,7 +469,7 @@ void Display_Game_For_User(std::vector< std::vector<char> >& PlayerOneBoard,
 
     // First display the opponent's board with hits = '✶', misses = ' ' and empty spots = grid position
     // See Execute_Next_Turn() for why 'x' and 'o' are used instead of 'X' and 'O'
-    std::cout << "---Opponent's Board---" << '\n';
+    std::cout << "---Opponent's Board---\n";
     for (unsigned int i = 0; i < 10; i++)
     {
         for (unsigned int j = 0; j < 10; j++)
@@ -472,7 +478,7 @@ void Display_Game_For_User(std::vector< std::vector<char> >& PlayerOneBoard,
                 std::cout << std::left << std::setw(3) << (char)254;
 
             else if (PlayerOneOpponentBoard[i][j] == 'o')
-                std::cout << std::left << std::setw(3) << " ";
+                std::cout << std::left << std::setw(3) << ".";
 
             else
                 std::cout << std::left << std::setw(3) << (int)PlayerOneOpponentBoard[i][j];
@@ -482,7 +488,7 @@ void Display_Game_For_User(std::vector< std::vector<char> >& PlayerOneBoard,
     }
 
     // Display the user's board with hits = '✶', misses = ' ' and empty spots = '.'
-    std::cout << "\n---Your Board---" << '\n';
+    std::cout << "\n---Your Board---\n";
     for (unsigned int i = 0; i < 10; i++)
     {
         for (unsigned int j = 0; j < 10; j++)
@@ -491,7 +497,7 @@ void Display_Game_For_User(std::vector< std::vector<char> >& PlayerOneBoard,
                 std::cout << std::left << std::setw(3) << (char)254;
 
             else if (PlayerOneBoard[i][j] == 'O')
-                std::cout << std::left << std::setw(3) << " ";
+                std::cout << std::left << std::setw(3) << ".";
 
             else
                 std::cout << std::left << std::setw(3) << PlayerOneBoard[i][j];
@@ -513,8 +519,8 @@ void Display_Game_For_Computers(std::vector< std::vector<char> >& PlayerOneBoard
 
     std::cout << "--------------------Battleships--------------------\n\n";
 
-    // Display the user's board with hits = '✶', misses = ' ' and empty spots = '.'
-    std::cout << "---Player One Board---" << '\n';
+    // Display the user's board with hits = '■', misses = '.' and empty spots = ' '
+    std::cout << "---Player One Board---\n";
     for (unsigned int i = 0; i < 10; i++)
     {
         for (unsigned int j = 0; j < 10; j++)
@@ -523,7 +529,7 @@ void Display_Game_For_Computers(std::vector< std::vector<char> >& PlayerOneBoard
                 std::cout << std::left << std::setw(3) << (char)254;
 
             else if (PlayerOneBoard[i][j] == 'O')
-                std::cout << std::left << std::setw(3) << " ";
+                std::cout << std::left << std::setw(3) << ".";
 
             else
                 std::cout << std::left << std::setw(3) << PlayerOneBoard[i][j];
@@ -531,8 +537,8 @@ void Display_Game_For_Computers(std::vector< std::vector<char> >& PlayerOneBoard
         std::cout << "\n";
     }
 
-    // Display the user's board with hits = '✶', misses = ' ' and empty spots = '.'
-    std::cout << "\n---Player Two Board---" << '\n';
+    // Display the user's board with hits = '■', misses = '.' and empty spots = ' '
+    std::cout << "\n---Player Two Board---\n";
     for (unsigned int i = 0; i < 10; i++)
     {
         for (unsigned int j = 0; j < 10; j++)
@@ -541,7 +547,7 @@ void Display_Game_For_Computers(std::vector< std::vector<char> >& PlayerOneBoard
                 std::cout << std::left << std::setw(3) << (char)254;
 
             else if (PlayerTwoBoard[i][j] == 'O')
-                std::cout << std::left << std::setw(3) << " ";
+                std::cout << std::left << std::setw(3) << ".";
 
             else
                 std::cout << std::left << std::setw(3) << PlayerTwoBoard[i][j];
@@ -860,7 +866,7 @@ void Ask_Computer_For_Ship_Positions(std::vector< std::vector<char> >& ComputerB
 
             default:
                 // Error message stating where it has occured
-                std::cout << "Ask_Computer_For_Ship_Positions() switch statement error" << '\n';
+                std::cout << "Ask_Computer_For_Ship_Positions() switch statement error\n";
                 break;
        }
    }
@@ -1115,12 +1121,23 @@ void Execute_Next_Turn(std::vector< std::vector<char> >& PlayerOneBoard,
 
 
 void Display_Game_Over_Message(const std::string& CurrentPlayer,
-                               const unsigned int& NumberOfTurns)
+                               const unsigned int& NumberOfTurns,
+                               bool& GameIsRunning)
 {
     // CurrentPlayer is the winner of the game as player toggle as not been triggered since last attack and gamer over check
     if (CurrentPlayer == "PLAYER_ONE")
-        std::cout << "Congratulations on Player One for winning!\nOnly took " << NumberOfTurns << " turns" << '\n';
+        std::cout << "Congratulations on Player One for winning! The game lasted " << NumberOfTurns << " turns\n\n";
 
     else
-        std::cout << "Congratulations on Player Two for winning!\nOnly took " << NumberOfTurns << " turns" << '\n';
+        std::cout << "Congratulations on Player Two for winning! The game lasted " << NumberOfTurns << " turns\n\n";
+
+    std::cout << "Press 'Q' to quit the game OR press any key to play again.\n";
+
+    // ***Better alternative needed***
+    // Gets key pressed and then clears terminal window
+    char Decision = _getch();
+    system("cls");
+
+    if (Decision == 'q')
+        GameIsRunning = false;
 }

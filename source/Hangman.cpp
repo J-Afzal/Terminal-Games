@@ -6,53 +6,59 @@
 #include <ctime>
 #include <fstream>
 #include <string>
+#include <conio.h>
 
 
 
 void Play_Hangman(void)
 {
-    //Variables for the Hangman game
-    // - Hangman states representing the different states the hangman drawing can be in
-    std::vector<std::string> IncorrectGuesses, CorrectGuesses;
-    std::string WordToBeGuessed, CurrentGuessOfWord, PlayerThatIsGuessing;
-    unsigned int NumberOfPlayers, NumberOfErrors = 0, NumberOfTurns = 0;
+    bool GameIsRunning = true;
 
-    // Sets up the variables required by game
-    Setup_Game(WordToBeGuessed, CurrentGuessOfWord, NumberOfPlayers, PlayerThatIsGuessing);
-
-    // while the current guess of word and word to be guessed are not the same and the hangman drawing
-    // has not reached its final stage continue playing game
-    while (!Game_Over(NumberOfErrors) && !Winning_Conditions_Met(WordToBeGuessed, CurrentGuessOfWord))
+    while (GameIsRunning)
     {
-        // Displays the current hangman state, the current guess of word and all incorrect guesses
-        Display_Game(NumberOfErrors, CurrentGuessOfWord, IncorrectGuesses);
+        //Variables for the Hangman game
+        //Hangman states representing the different states the hangman drawing can be in
+        std::vector<std::string> IncorrectGuesses, CorrectGuesses;
+        std::string WordToBeGuessed, CurrentGuessOfWord, PlayerThatIsGuessing;
+        unsigned int NumberOfPlayers, NumberOfErrors = 0, NumberOfTurns = 0;
 
-        std::string Guess;
+        // Sets up the variables required by game
+        Setup_Game(WordToBeGuessed, CurrentGuessOfWord, NumberOfPlayers, PlayerThatIsGuessing);
 
-        // Prompt the human or computer user for a guess depending upon how many human players there are
-        if (PlayerThatIsGuessing == "HUMAN")
-            Guess = Ask_User_For_Next_Guess(IncorrectGuesses, CorrectGuesses);
-
-        else
-            Guess = Ask_Computer_For_Next_Guess(IncorrectGuesses, CorrectGuesses);
-
-        // If the guess is incorrect then add to incorrect list and increment errors
-        if (!Check_Guess_Against_Word(Guess, WordToBeGuessed, CurrentGuessOfWord))
+        // while the current guess of word and word to be guessed are not the same and the hangman drawing
+        // has not reached its final stage continue playing game
+        while (!Game_Over(NumberOfErrors) && !Winning_Conditions_Met(WordToBeGuessed, CurrentGuessOfWord))
         {
-            IncorrectGuesses.push_back(Guess);
-            NumberOfErrors++;
+            // Displays the current hangman state, the current guess of word and all incorrect guesses
+            Display_Game(NumberOfErrors, CurrentGuessOfWord, IncorrectGuesses);
+
+            std::string Guess;
+
+            // Prompt the human or computer user for a guess depending upon how many human players there are
+            if (PlayerThatIsGuessing == "HUMAN")
+                Guess = Ask_User_For_Next_Guess(IncorrectGuesses, CorrectGuesses);
+
+            else
+                Guess = Ask_Computer_For_Next_Guess(IncorrectGuesses, CorrectGuesses);
+
+            // If the guess is incorrect then add to incorrect list and increment errors
+            if (!Check_Guess_Against_Word(Guess, WordToBeGuessed, CurrentGuessOfWord))
+            {
+                IncorrectGuesses.push_back(Guess);
+                NumberOfErrors++;
+            }
+
+            // Else add guess to correct list
+            else
+                CorrectGuesses.push_back(Guess);
+
+            // Increment
+            NumberOfTurns++;
         }
 
-        // Else add guess to correct list
-        else
-            CorrectGuesses.push_back(Guess);
-
-        // Increment
-        NumberOfTurns++;
+        // Displays the winning or losing message
+        Display_Game_Over_Message(NumberOfErrors, CurrentGuessOfWord, IncorrectGuesses, NumberOfTurns, WordToBeGuessed, GameIsRunning);
     }
-
-    // Displays the winning or losing message
-    Display_Game_Over_Message(NumberOfErrors, CurrentGuessOfWord, IncorrectGuesses, NumberOfTurns, WordToBeGuessed);
 }
 
 
@@ -110,7 +116,7 @@ void Setup_Game(std::string& WordToBeGuessed,
                 unsigned int& NumberOfPlayers,
                 std::string& PlayerThatIsGuessing)
 {
-    std::cout << "--------------------Hangman--------------------" << '\n';
+    std::cout << "--------------------Hangman--------------------\n\n";
 
     // Prompt the user for the number of players if one the computer will guess and if two then human user will guess
     NumberOfPlayers = Ask_User_For_Number_Of_Players();
@@ -510,7 +516,7 @@ std::string Ask_Computer_For_Word_To_Be_Guessed(void)
 
         else
         {
-            std::cout << "Unable to open Words.txt, make sure it is in the same directory as the .exe" << '\n';
+            std::cout << "Unable to open Words.txt, make sure it is in the same directory as the .exe or project file\n";
             exit(1);
         }
     }
@@ -607,7 +613,7 @@ void Display_Game(const unsigned int& NumberOfErrors,
         break;
 
     default:
-        std::cout << "Error in Display_Game() switch statment" << '\n';
+        std::cout << "Error in Display_Game() switch statment\n";
         break;
     }
 
@@ -616,7 +622,7 @@ void Display_Game(const unsigned int& NumberOfErrors,
         std::cout << CurrentGuessOfWord[i] << " ";
 
     //Incorrect guesses
-    std::cout << "\n\nIncorrect Guesses" << '\n';
+    std::cout << "\n\nIncorrect Guesses\n";
     for (unsigned int i = 0; i < IncorrectGuesses.size(); i++)
         std::cout << IncorrectGuesses[i] << "   ";
 
@@ -782,13 +788,24 @@ void Display_Game_Over_Message(const unsigned int& NumberOfErrors,
                                const std::string& CurrentGuessOfWord,
                                const std::vector<std::string>& IncorrectGuesses,
                                const unsigned int& NumberOfTurns,
-                               const std::string& WordToBeGuessed)
+                               const std::string& WordToBeGuessed,
+                               bool& GameIsRunning)
 {
     Display_Game(NumberOfErrors, CurrentGuessOfWord, IncorrectGuesses);
     // If the below is true then hangman has reached its final state and thus user has lost
-    if(NumberOfErrors == 10)
-        std::cout << "Commisarations to the guesser, You lost!\nOnly took " << NumberOfTurns << " turns\nThe word was " << WordToBeGuessed << '\n';
+    if (NumberOfErrors == 10)
+        std::cout << "The word was " << WordToBeGuessed << ". Commisarations to the guesser, You lost! The game lasted " << NumberOfTurns << " turns.\n\n";
 
     else
-        std::cout << "Congratulations to the guesser, you won!\nOnly took " << NumberOfTurns << " turns" << '\n';
+        std::cout << "Congratulations to the guesser, you won! the game lasted " << NumberOfTurns << " turns.\n\n";
+
+    std::cout << "Press 'Q' to quit the game OR press any key to play again.\n";
+
+    // ***Better alternative needed***
+    // Gets key pressed and then clears terminal window
+    char Decision = _getch();
+    system("cls");
+
+    if (Decision == 'q')
+        GameIsRunning = false;
 }
