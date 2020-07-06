@@ -1,4 +1,4 @@
-#include "Chess.hpp"
+#include "../include/Chess.hpp"
 
 int main(void) {
 
