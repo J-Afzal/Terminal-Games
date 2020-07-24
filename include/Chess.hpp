@@ -32,34 +32,40 @@ bool Is_King_In_Check(const std::vector< std::vector<std::string> >& Board,
 
 void Toggle_Player(std::string& CurrentPlayer);
 
-void Display_Game(const std::vector< std::vector<std::string> >& Board);
+void Display_Game(const std::vector< std::vector<std::string> >& Board,
+				  const std::vector<std::string>& WhiteCapturedPieces,
+				  const std::vector<std::string>& BlackCapturedPieces);
 
 std::string Ask_AI_For_Next_Move(const std::vector< std::vector<std::string> >& Board, 
 								 const std::string& CurrentPlayer,
-								 std::vector<std::string>& WhiteCapturedPieces,
-								 std::vector<std::string>& BlackCapturedPieces);
+								 const std::vector<std::string>& WhiteCapturedPieces,
+								 const std::vector<std::string>& BlackCapturedPieces);
 
 bool Is_Next_Move_Valid(const std::vector< std::vector<std::string> >& Board, 
 						const std::string& CurrentPlayer, 
 						const std::string& ChessPiece, 
-						const int& NewChessPieceNewPositionColumn,
-					    const int& NewChessPieceNewPositionRow, 
-						std::vector<std::string>& WhiteCapturedPieces,
-						std::vector<std::string>& BlackCapturedPieces);
+						const unsigned int& NewChessPieceNewPositionColumn,
+					    const unsigned int& NewChessPieceNewPositionRow,
+						const std::vector<std::string>& WhiteCapturedPieces,
+						const std::vector<std::string>& BlackCapturedPieces);
 
 std::string Ask_User_For_Next_Move(const std::vector< std::vector<std::string> >& Board, 
 								   const std::string& CurrentPlayer,
-								   std::vector<std::string>& WhiteCapturedPieces,
-								   std::vector<std::string>& BlackCapturedPieces);
+								   const std::vector<std::string>& WhiteCapturedPieces,
+								   const std::vector<std::string>& BlackCapturedPieces);
 
 void Capitalise_String(std::string& aString);
 
-void ConvertNewChessPiecePosition(std::string NewChessPiecePosition, int& NewChessPiecePositionColumn, int& NewChessPiecePositionRow);
+void ConvertNewChessPiecePosition(const std::string NewChessPiecePosition, 
+								  unsigned int& NewChessPiecePositionColumn, 
+								  unsigned int& NewChessPiecePositionRow);
 
 void Execute_Next_Move();
 
 void Display_Winning_Message(const std::vector< std::vector<std::string> >& Board,
-							 bool& Stalemate,
+							 const std::vector<std::string>& WhiteCapturedPieces,
+							 const std::vector<std::string>& BlackCapturedPieces,
+							 const bool& Stalemate,
 							 const std::string& CurrentPlayer,
 							 const unsigned int& NumberOfTurns,
 							 bool& GameIsRunning);
