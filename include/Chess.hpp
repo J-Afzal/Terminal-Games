@@ -23,9 +23,12 @@ void Setup_Game(std::vector< std::vector<std::string> >& Board,
 
 int Ask_User_For_Number_Of_Players(void);
 
-bool Game_Over();
+bool Game_Over(const std::vector< std::vector<std::string> >& Board, 
+			   const std::string& CurrentPlayer,
+			   bool& Stalemate);
 
-bool Is_King_In_Check();
+bool Is_King_In_Check(const std::vector< std::vector<std::string> >& Board,
+					  const std::string& CurrentPlayer);
 
 void Toggle_Player(std::string& CurrentPlayer);
 
@@ -39,8 +42,8 @@ std::string Ask_AI_For_Next_Move(const std::vector< std::vector<std::string> >& 
 bool Is_Next_Move_Valid(const std::vector< std::vector<std::string> >& Board, 
 						const std::string& CurrentPlayer, 
 						const std::string& ChessPiece, 
-					    const int& ChessPieceNewPositionRow, 
-						const int& ChessPieceNewPositionColumn,
+						const int& NewChessPieceNewPositionColumn,
+					    const int& NewChessPieceNewPositionRow, 
 						std::vector<std::string>& WhiteCapturedPieces,
 						std::vector<std::string>& BlackCapturedPieces);
 
@@ -51,10 +54,14 @@ std::string Ask_User_For_Next_Move(const std::vector< std::vector<std::string> >
 
 void Capitalise_String(std::string& aString);
 
-void ConvertChessPieceNewPosition(std::string ChessPieceNewPosition, int& ChessPieceNewPositionRow, int& ChessPieceNewPositionColumn);
+void ConvertNewChessPiecePosition(std::string NewChessPiecePosition, int& NewChessPiecePositionColumn, int& NewChessPiecePositionRow);
 
 void Execute_Next_Move();
 
-void Display_Winning_Message();
+void Display_Winning_Message(const std::vector< std::vector<std::string> >& Board,
+							 bool& Stalemate,
+							 const std::string& CurrentPlayer,
+							 const unsigned int& NumberOfTurns,
+							 bool& GameIsRunning);
 
 #endif /* Chess_hpp */

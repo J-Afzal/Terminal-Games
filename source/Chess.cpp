@@ -9,18 +9,28 @@
 #include "../include/Chess.hpp"
 #include <time.h>
 #include <string>
+#include <cmath>
+#include <conio.h>
 
 void Play_Chess(void)
 {
+	bool GameIsRunning = true;
+
+	while (GameIsRunning)
+	{
+
+	}
+
 	std::vector< std::vector<std::string> > Board;
 	std::vector<std::string> WhiteCapturedPieces;
 	std::vector<std::string> BlackCapturedPieces;
-	unsigned int NumberOfPlayers;
+	unsigned int NumberOfPlayers, NumberOfTurns = 0;
 	std::string HumanPlayer, CurrentPlayer;
+	bool Stalemate = false;
 
 	Setup_Game(Board, NumberOfPlayers, HumanPlayer, CurrentPlayer);
 
-	while (!Game_Over())
+	while (!Game_Over(Board, CurrentPlayer, Stalemate))
 	{
 		Toggle_Player(CurrentPlayer);
 
@@ -50,16 +60,16 @@ void Play_Chess(void)
 			break;
 
 		default:
-			std::cout << "Error in number of players switch statement" << '\n';
+			std::cout << "Error in number of players switch statement\n";
 			break;
 		}
 
 		Execute_Next_Move();
+
+		NumberOfTurns++;
 	}
 
-	Display_Game(Board);
-
-	Display_Winning_Message();
+	Display_Winning_Message(Board, Stalemate, CurrentPlayer, NumberOfTurns, GameIsRunning);
 }
 
 void Test_Chess(void)
@@ -69,10 +79,11 @@ void Test_Chess(void)
 	std::vector<std::string> BlackCapturedPieces;
 	unsigned int NumberOfPlayers;
 	std::string HumanPlayer, CurrentPlayer;
+	bool Stalemate = false;
 
 	Setup_Game(Board, NumberOfPlayers, HumanPlayer, CurrentPlayer);
 
-	while (!Game_Over())
+	while (!Game_Over(Board, CurrentPlayer, Stalemate))
 	{
 		Toggle_Player(CurrentPlayer);
 
@@ -84,10 +95,6 @@ void Test_Chess(void)
 
 		Execute_Next_Move();
 	}
-
-	Display_Game(Board);
-
-	Display_Winning_Message();
 }
 
 void Setup_Game(std::vector< std::vector<std::string> >& Board,
@@ -114,7 +121,7 @@ void Setup_Game(std::vector< std::vector<std::string> >& Board,
 					break;
 
 				case 1:
-					Board[i][j] = "BK1";
+					Board[i][j] = "BN1";
 					break;
 
 				case 2:
@@ -134,7 +141,7 @@ void Setup_Game(std::vector< std::vector<std::string> >& Board,
 					break;
 
 				case 6:
-					Board[i][j] = "BK2";
+					Board[i][j] = "BN2";
 					break;
 
 				case 7:
@@ -234,7 +241,7 @@ void Setup_Game(std::vector< std::vector<std::string> >& Board,
 					break;
 
 				case 1:
-					Board[i][j] = "WK1";
+					Board[i][j] = "WN1";
 					break;
 
 				case 2:
@@ -254,7 +261,7 @@ void Setup_Game(std::vector< std::vector<std::string> >& Board,
 					break;
 
 				case 6:
-					Board[i][j] = "WK2";
+					Board[i][j] = "WN2";
 					break;
 
 				case 7:
@@ -320,18 +327,25 @@ int Ask_User_For_Number_Of_Players(void)
 	return NumberOfPlayers;
 }
 
-bool Game_Over()
+bool Game_Over(const std::vector< std::vector<std::string> >& Board, 
+			   const std::string& CurrentPlayer,
+			   bool& Stalemate)
 {
-	//*******************************************************
-	// Check if WK/BK are in check
-	// and all possible moves result in check thus checkmate
-	// But if not in check and all possible moves that opponent can play result in check then stalemate
-	//*******************************************************
+	if (Is_King_In_Check(Board, CurrentPlayer))
+	{
+		// and all possible moves result in check thus checkmate
+	}
+
+	else
+	{
+		// But if not in check and all possible moves that opponent can play result in check then stalemate
+	}
 
 	return false;
 }
 
-bool Is_King_In_Check()
+bool Is_King_In_Check(const std::vector< std::vector<std::string> >& Board,
+					  const std::string& CurrentPlayer)
 {
 	return false;
 }
@@ -398,7 +412,7 @@ std::string Ask_AI_For_Next_Move(const std::vector< std::vector<std::string> >& 
 				break;
 
 			case 1:
-				ChessPiece = "WK1";
+				ChessPiece = "WN1";
 				break;
 
 			case 2:
@@ -418,7 +432,7 @@ std::string Ask_AI_For_Next_Move(const std::vector< std::vector<std::string> >& 
 				break;
 
 			case 6:
-				ChessPiece = "WK2";
+				ChessPiece = "WN2";
 				break;
 
 			case 7:
@@ -466,7 +480,7 @@ std::string Ask_AI_For_Next_Move(const std::vector< std::vector<std::string> >& 
 				break;
 
 			case 1:
-				ChessPiece = "BK1";
+				ChessPiece = "BN1";
 				break;
 
 			case 2:
@@ -486,7 +500,7 @@ std::string Ask_AI_For_Next_Move(const std::vector< std::vector<std::string> >& 
 				break;
 
 			case 6:
-				ChessPiece = "BK2";
+				ChessPiece = "BN2";
 				break;
 
 			case 7:
@@ -526,11 +540,11 @@ std::string Ask_AI_For_Next_Move(const std::vector< std::vector<std::string> >& 
 				break;
 			}
 
-		int NewChessPiecePositionRow, NewChessPiecePositionColumn;
-		NewChessPiecePositionRow = (std::rand() % 8) + 1;
+		int NewChessPiecePositionColumn, NewChessPiecePositionRow;
 		NewChessPiecePositionColumn = (std::rand() % 8) + 1;
+		NewChessPiecePositionRow = (std::rand() % 8) + 1;
 
-		if (Is_Next_Move_Valid(Board, CurrentPlayer, ChessPiece, NewChessPiecePositionRow, NewChessPiecePositionColumn, WhiteCapturedPieces, BlackCapturedPieces))
+		if (Is_Next_Move_Valid(Board, CurrentPlayer, ChessPiece, NewChessPiecePositionColumn, NewChessPiecePositionRow, WhiteCapturedPieces, BlackCapturedPieces))
 			isValueCorrect = true;
 	}
 
@@ -540,36 +554,36 @@ std::string Ask_AI_For_Next_Move(const std::vector< std::vector<std::string> >& 
 bool Is_Next_Move_Valid(const std::vector< std::vector<std::string> >& Board,
 						const std::string& CurrentPlayer,
 						const std::string& ChessPiece,
-						const int& NewChessPiecePositionRow,
 						const int& NewChessPiecePositionColumn,
+						const int& NewChessPiecePositionRow,
 						std::vector<std::string>& WhiteCapturedPieces,
 						std::vector<std::string>& BlackCapturedPieces) 
 {
-	if (ChessPiece == "WR1" || ChessPiece == "WR2" || ChessPiece == "BR1" || ChessPiece == "BR2")
-	{
-		// Check if piece has been captured
-		for (unsigned int i = 0; i < WhiteCapturedPieces.size(); i++)
-			if (WhiteCapturedPieces[i] == ChessPiece)
-				return false;
+	// Check if piece has been captured
+	for (unsigned int i = 0; i < WhiteCapturedPieces.size(); i++)
+		if (WhiteCapturedPieces[i] == ChessPiece)
+			return false;
 
-		for (unsigned int i = 0; i < BlackCapturedPieces.size(); i++)
-			if (BlackCapturedPieces[i] == ChessPiece)
-				return false;
+	for (unsigned int i = 0; i < BlackCapturedPieces.size(); i++)
+		if (BlackCapturedPieces[i] == ChessPiece)
+			return false;
 
-		// Find position of current piece
-		int CurrentChessPiecePositionRow = -1, CurrentChessPiecePositionColumn = -1;
+	// Find position of current piece
+	int CurrentChessPiecePositionColumn = -1, CurrentChessPiecePositionRow = -1;
 
-		for (unsigned int i = 0; i < Board.size(); i++)
-			for (unsigned int j = 0; j < Board.size(); j++)
-				if (Board[i][j] == ChessPiece)
-				{
-					CurrentChessPiecePositionRow = i;
-					CurrentChessPiecePositionColumn = j;
-						
-					i = j = Board.size();
-					continue;
-				}
-			
+	for (unsigned int i = 0; i < Board.size(); i++)
+		for (unsigned int j = 0; j < Board.size(); j++)
+			if (Board[i][j] == ChessPiece)
+			{
+				CurrentChessPiecePositionColumn = j;
+				CurrentChessPiecePositionRow = i;
+
+				i = j = Board.size();
+				continue;
+			}
+
+	if (ChessPiece[1] == 'R')
+	{	
 		// Check if move is allowed (rooks only can move up/down/left/right any amount of squares, so XOR on Row and Column)
 		if (NewChessPiecePositionRow == CurrentChessPiecePositionRow)
 		{
@@ -603,79 +617,201 @@ bool Is_Next_Move_Valid(const std::vector< std::vector<std::string> >& Board,
 			if (NewChessPiecePositionRow > CurrentChessPiecePositionRow)
 			{
 				for (unsigned int i = CurrentChessPiecePositionRow; i < NewChessPiecePositionRow; i++)
-					if (Board[CurrentChessPiecePositionColumn][i] != " . ")
+					if (Board[i][CurrentChessPiecePositionColumn] != " . ")
 						return false;
 			}
 
 			else
 			{
 				for (unsigned int i = CurrentChessPiecePositionRow; i < NewChessPiecePositionRow; i--)
-					if (Board[CurrentChessPiecePositionColumn][i] != " . ")
+					if (Board[i][CurrentChessPiecePositionColumn] != " . ")
 						return false;
 			}
 		}
+	}
+
+	else if (ChessPiece[1] == 'N')
+	{
+		// Check if move is allowed (knights can move in L shape, despite obstruction)
+		bool IsMoveLegal = false;
+
+		if ((NewChessPiecePositionColumn == (CurrentChessPiecePositionColumn + 3)) && ((NewChessPiecePositionRow == (CurrentChessPiecePositionRow + 1)) || (NewChessPiecePositionRow == (CurrentChessPiecePositionRow - 1))))
+			IsMoveLegal = true;
+		
+		else if ((NewChessPiecePositionColumn == (CurrentChessPiecePositionColumn - 3)) && ((NewChessPiecePositionRow == (CurrentChessPiecePositionRow + 1)) || (NewChessPiecePositionRow == (CurrentChessPiecePositionRow - 1))))
+			IsMoveLegal = true;
+		
+		else if ((NewChessPiecePositionRow == (CurrentChessPiecePositionRow + 3)) && ((NewChessPiecePositionColumn == (CurrentChessPiecePositionColumn + 1)) || (NewChessPiecePositionColumn == (CurrentChessPiecePositionColumn - 1))))
+			IsMoveLegal = true;
+
+		else if ((NewChessPiecePositionRow == (CurrentChessPiecePositionRow - 3)) && ((NewChessPiecePositionColumn == (CurrentChessPiecePositionColumn + 1)) || (NewChessPiecePositionColumn == (CurrentChessPiecePositionColumn - 1))))
+			IsMoveLegal = true;
+
+		if (!IsMoveLegal)
+			return false;
+	}
+
+	else if (ChessPiece[1] == 'B')
+	{
+		// Check if move is allowed (bishops can move in diagonals any amount of sqaures)
+		if (std::abs(NewChessPiecePositionColumn - CurrentChessPiecePositionColumn) != std::abs(NewChessPiecePositionRow - CurrentChessPiecePositionRow))
+			return false;
+
+		// Check if there is any obtruction between current piece postion to the new piece position
+		if (NewChessPiecePositionRow > CurrentChessPiecePositionRow)
+		{
+			if (NewChessPiecePositionColumn > CurrentChessPiecePositionColumn)
+			{
+				for (unsigned int i = CurrentChessPiecePositionRow, j = CurrentChessPiecePositionColumn; i < NewChessPiecePositionColumn; i++, j++)
+					if (Board[i][j] != " . ")
+						return false;
+			}
+
+			else
+			{
+				for (unsigned int i = CurrentChessPiecePositionRow, j = CurrentChessPiecePositionColumn; i < NewChessPiecePositionColumn; i--, j++)
+					if (Board[i][j] != " . ")
+						return false;
+			}
+		}
+
+		else
+		{
+			if (NewChessPiecePositionColumn > CurrentChessPiecePositionColumn)
+			{
+				for (unsigned int i = CurrentChessPiecePositionRow, j = CurrentChessPiecePositionColumn; i < NewChessPiecePositionRow; i++, j--)
+					if (Board[i][j] != " . ")
+						return false;
+			}
+
+			else
+			{
+				for (unsigned int i = CurrentChessPiecePositionRow, j = CurrentChessPiecePositionColumn; i < NewChessPiecePositionRow; i--, j--)
+					if (Board[i][j] != " . ")
+						return false;
+			}
+		}
+	}
+
+	else if (ChessPiece[1] == 'Q')
+	{
+		// Check if move is allowed (queen can move in diagonals and up/down/left/right any amount of sqaures, thus equal to rook + bishop)
+		// Diagonals
+		if (std::abs(NewChessPiecePositionColumn - CurrentChessPiecePositionColumn) != std::abs(NewChessPiecePositionRow - CurrentChessPiecePositionRow))
+			return false;
+
+		// Up/down/left/right
+		if (NewChessPiecePositionRow == CurrentChessPiecePositionRow)
+		{
+			if (NewChessPiecePositionColumn == CurrentChessPiecePositionColumn)
+				return false;
+		}
+
+		else if (NewChessPiecePositionColumn != CurrentChessPiecePositionColumn)
+			return false;
+
+		// Check if there is any obtruction between current piece postion to the new piece position
+		// Diagonals
+		if (NewChessPiecePositionRow > CurrentChessPiecePositionRow)
+		{
+			if (NewChessPiecePositionColumn > CurrentChessPiecePositionColumn)
+			{
+				for (unsigned int i = CurrentChessPiecePositionRow, j = CurrentChessPiecePositionColumn; i < NewChessPiecePositionColumn; i++, j++)
+					if (Board[i][j] != " . ")
+						return false;
+			}
+
+			else
+			{
+				for (unsigned int i = CurrentChessPiecePositionRow, j = CurrentChessPiecePositionColumn; i < NewChessPiecePositionColumn; i--, j++)
+					if (Board[i][j] != " . ")
+						return false;
+			}
+		}
+
+		else
+		{
+			if (NewChessPiecePositionColumn > CurrentChessPiecePositionColumn)
+			{
+				for (unsigned int i = CurrentChessPiecePositionRow, j = CurrentChessPiecePositionColumn; i < NewChessPiecePositionRow; i++, j--)
+					if (Board[i][j] != " . ")
+						return false;
+			}
+
+			else
+			{
+				for (unsigned int i = CurrentChessPiecePositionRow, j = CurrentChessPiecePositionColumn; i < NewChessPiecePositionRow; i--, j--)
+					if (Board[i][j] != " . ")
+						return false;
+			}
+		}
+
+		// Up/down/left/right
+		if (NewChessPiecePositionRow == CurrentChessPiecePositionRow)
+		{
+			if (NewChessPiecePositionColumn > CurrentChessPiecePositionColumn)
+			{
+				for (unsigned int i = CurrentChessPiecePositionColumn; i < NewChessPiecePositionColumn; i++)
+					if (Board[CurrentChessPiecePositionRow][i] != " . ")
+						return false;
+			}
+
+			else
+			{
+				for (unsigned int i = CurrentChessPiecePositionColumn; i < NewChessPiecePositionColumn; i--)
+					if (Board[CurrentChessPiecePositionRow][i] != " . ")
+						return false;
+			}
+		}
+
+		else
+		{
+			if (NewChessPiecePositionRow > CurrentChessPiecePositionRow)
+			{
+				for (unsigned int i = CurrentChessPiecePositionRow; i < NewChessPiecePositionRow; i++)
+					if (Board[i][CurrentChessPiecePositionColumn] != " . ")
+						return false;
+			}
+
+			else
+			{
+				for (unsigned int i = CurrentChessPiecePositionRow; i < NewChessPiecePositionRow; i--)
+					if (Board[i][CurrentChessPiecePositionColumn] != " . ")
+						return false;
+			}
+		}
+	}
+
+	else if (ChessPiece[1] == 'K')
+	{
+		// Check if move is allowed (king only can move diagonals and up/down/left/right one square)
+		if ((std::abs(NewChessPiecePositionColumn - CurrentChessPiecePositionColumn) > 1) || (std::abs(NewChessPiecePositionRow - CurrentChessPiecePositionRow) > 1))
+			return false;
 			
-		// Check if current player is still in check after move
-		if (Is_King_In_Check())
+		// Check if there is any obtruction between current piece postion to the new piece position
+		if ((CurrentPlayer == "WHITE") && (Board[NewChessPiecePositionRow][NewChessPiecePositionColumn][0] == 'W'))
+			return false;
+
+		else if ((CurrentPlayer == "BLACK") && (Board[NewChessPiecePositionRow][NewChessPiecePositionColumn][0] == 'B'))
 			return false;
 	}
 
-	else if (ChessPiece == "WK1" || ChessPiece == "WK2" || ChessPiece == "BK1" || ChessPiece == "BK2")
+	else if (ChessPiece[1] == 'P')
 	{
-		//*******************************************************
-		// code to check if command is legal, using playername for colour so BLACKBISHOP1
-		//*******************************************************
+		// Check if move is allowed (pawn only can move up one square, except two squares on first move, and diagonal if opponent piece is there)
+		
+		//*********************No boolean as if not on second rank then has moved then cannot move two squares**************************
 
-
-		if (Is_King_In_Check())
-			return false;
+		// Check if there is any obtruction between current piece postion to the new piece position
 	}
 
-	else if (ChessPiece == "WB1" || ChessPiece == "WB2" || ChessPiece == "BB1" || ChessPiece == "BB2")
-	{
-		//*******************************************************
-		// code to check if command is legal, using playername for colour so BLACKBISHOP1
-		//*******************************************************
+	// Check if current player is still in check after move
 
+	//*******************Update a copy of baord with the new move and check if king is still in check***************************
+	std::vector< std::vector<std::string> > CopyOfBoard = Board;
 
-		if (Is_King_In_Check())
-			return false;
-
-	}
-
-	else if (ChessPiece == "WQ" || ChessPiece == "BQ")
-	{
-		//*******************************************************
-		// code to check if command is legal, using playername for colour so BLACKBISHOP1
-		//*******************************************************
-
-
-		if (Is_King_In_Check())
-			return false;
-	}
-
-	else if (ChessPiece == "WK" || ChessPiece == "BK")
-	{
-		//*******************************************************
-		// code to check if command is legal, using playername for colour so BLACKBISHOP1
-		//*******************************************************
-
-
-		if (Is_King_In_Check())
-			return false;
-	}
-
-	else if (ChessPiece == "WP1" || ChessPiece == "WP2" || ChessPiece == "WP3" || ChessPiece == "WP4" || ChessPiece == "WP5" || ChessPiece == "WP6" || ChessPiece == "WP7" || ChessPiece == "WP8" ||
-			 ChessPiece == "BP1" || ChessPiece == "BP2" || ChessPiece == "BP3" || ChessPiece == "BP4" || ChessPiece == "BP5" || ChessPiece == "BP6" || ChessPiece == "BP7" || ChessPiece == "BP8")
-	{
-		//*******************************************************
-		// code to check if command is legal, using playername for colour so BLACKBISHOP1 also 2 spaces first move and diagonal capture and en passant
-		//*******************************************************
-
-
-		if (Is_King_In_Check())
-			return false;
-	}
+	if (Is_King_In_Check(CopyOfBoard, CurrentPlayer))
+		return false;
 
 	return true;
 }
@@ -721,12 +857,12 @@ std::string Ask_User_For_Next_Move(const std::vector< std::vector<std::string> >
 		}
 
 		if (CurrentPlayer == "WHITE")
-			if (ChessPiece != "WK" && ChessPiece != "WQ" && ChessPiece != "WB1" && ChessPiece != "WB2" && ChessPiece != "WK1" && ChessPiece != "WK2" && ChessPiece != "WR1" && ChessPiece != "WR2" &&
+			if (ChessPiece != "WK" && ChessPiece != "WQ" && ChessPiece != "WB1" && ChessPiece != "WB2" && ChessPiece != "WK1" && ChessPiece != "WN2" && ChessPiece != "WR1" && ChessPiece != "WR2" &&
 				ChessPiece != "WP1" && ChessPiece != "WP2" && ChessPiece != "WP3" && ChessPiece != "WP4" && ChessPiece != "WP5" && ChessPiece != "WP6" && ChessPiece != "WP7" && ChessPiece != "WP8")
 				continue;
 		
 		else if (CurrentPlayer == "BLACK")
-			if (ChessPiece != "BK" && ChessPiece != "BQ" && ChessPiece != "BB1" && ChessPiece != "BB2" && ChessPiece != "BK1" && ChessPiece != "BK2" && ChessPiece != "BR1" && ChessPiece != "BR2" &&
+			if (ChessPiece != "BK" && ChessPiece != "BQ" && ChessPiece != "BB1" && ChessPiece != "BB2" && ChessPiece != "BN1" && ChessPiece != "BN2" && ChessPiece != "BR1" && ChessPiece != "BR2" &&
 			    ChessPiece != "BP1" && ChessPiece != "BP2" && ChessPiece != "BP3" && ChessPiece != "BP4" && ChessPiece != "BP5" && ChessPiece != "BP6" && ChessPiece != "BP7" && ChessPiece != "BP8")
 				continue;
 
@@ -739,10 +875,10 @@ std::string Ask_User_For_Next_Move(const std::vector< std::vector<std::string> >
 		if (NewChessPiecePosition[1] >= 49 && NewChessPiecePosition[1] <= 56)
 			continue;
 
-		int NewChessPiecePositionRow, NewChessPiecePositionColumn;
-		ConvertChessPieceNewPosition(NewChessPiecePosition, NewChessPiecePositionRow, NewChessPiecePositionColumn);
+		int NewChessPiecePositionColumn, NewChessPiecePositionRow;
+		ConvertNewChessPiecePosition(NewChessPiecePosition, NewChessPiecePositionColumn, NewChessPiecePositionRow);
 
-		if (Is_Next_Move_Valid(Board, CurrentPlayer, ChessPiece, NewChessPiecePositionRow, NewChessPiecePositionColumn, WhiteCapturedPieces, BlackCapturedPieces))
+		if (Is_Next_Move_Valid(Board, CurrentPlayer, ChessPiece, NewChessPiecePositionColumn, NewChessPiecePositionRow, WhiteCapturedPieces, BlackCapturedPieces))
 			isValueCorrect = true;
 	}
 
@@ -866,42 +1002,69 @@ void Capitalise_String(std::string& aString)
 	}
 }
 
-void ConvertChessPieceNewPosition(std::string ChessPieceNewPosition, int& ChessPieceNewPositionRow, int& ChessPieceNewPositionColumn)
+void ConvertNewChessPiecePosition(std::string NewChessPiecePosition, int& NewChessPiecePositionColumn, int& NewChessPiecePositionRow)
 {
-	if (ChessPieceNewPosition[0] == 'A')
-		ChessPieceNewPositionRow = 1;
+	if (NewChessPiecePosition[0] == 'A')
+		NewChessPiecePositionColumn = 1;
 
-	else if (ChessPieceNewPosition[0] == 'B')
-		ChessPieceNewPositionRow = 2;
+	else if (NewChessPiecePosition[0] == 'B')
+		NewChessPiecePositionColumn = 2;
 
-	else if (ChessPieceNewPosition[0] == 'C')
-		ChessPieceNewPositionRow = 3;
+	else if (NewChessPiecePosition[0] == 'C')
+		NewChessPiecePositionColumn = 3;
 
-	else if (ChessPieceNewPosition[0] == 'D')
-		ChessPieceNewPositionRow = 4;
+	else if (NewChessPiecePosition[0] == 'D')
+		NewChessPiecePositionColumn = 4;
 
-	else if (ChessPieceNewPosition[0] == 'E')
-		ChessPieceNewPositionRow = 5;
+	else if (NewChessPiecePosition[0] == 'E')
+		NewChessPiecePositionColumn = 5;
 
-	else if (ChessPieceNewPosition[0] == 'F')
-		ChessPieceNewPositionRow = 6;
+	else if (NewChessPiecePosition[0] == 'F')
+		NewChessPiecePositionColumn = 6;
 
-	else if (ChessPieceNewPosition[0] == 'G')
-		ChessPieceNewPositionRow = 7;
+	else if (NewChessPiecePosition[0] == 'G')
+		NewChessPiecePositionColumn = 7;
 
-	else if (ChessPieceNewPosition[0] == 'H')
-		ChessPieceNewPositionRow = 8;
+	else if (NewChessPiecePosition[0] == 'H')
+		NewChessPiecePositionColumn = 8;
 
 
-	ChessPieceNewPositionColumn = ChessPieceNewPosition[1];
+	NewChessPiecePositionRow = NewChessPiecePosition[1];
 }
 
 void Execute_Next_Move()
 {
-	// update board and remove pieces if needed and pawn rule if it reaches other end, 
+	// update board and remove pieces 
 }
 
-void Display_Winning_Message()
+void Display_Winning_Message(const std::vector< std::vector<std::string> >& Board,
+							 bool& Stalemate,
+							 const std::string& CurrentPlayer,
+							 const unsigned int& NumberOfTurns,
+							 bool& GameIsRunning)
 {
-	// maybe while loop with option to quit and restart and add to other games
+	Display_Game(Board);
+
+	if(!Stalemate)
+		std::cout << "GAME OVER\n\n" << CurrentPlayer << " has won! The game lasted " << NumberOfTurns << " turns.\n\n";
+
+	else
+		std::cout << "GAME OVER\n\nIt is a draw! The game lasted " << NumberOfTurns << " turns.\n\n";
+
+	std::cout << "Press 'Q' to quit the game OR press any other key to play again.\n";
+
+	// ***Better alternative needed***
+	// Gets key pressed and then clears terminal window
+	char Decision = _getch();
+	system("cls");
+
+	if (Decision == 'q')
+		GameIsRunning = false;
 }
+
+// Pawn in is move valid 
+// pawn promotion (if white on 8th or black on 1st then after is_king_in_check ask user for what pice to promote to and name apropiatley) 
+
+// if (Is_King_In_Check()) in IsMoveValid function, captured pieces displayed on screen, , en passnt, Castling, 
+
+// usigned int/warnings and comments 
