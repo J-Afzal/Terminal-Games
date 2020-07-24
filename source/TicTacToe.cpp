@@ -426,21 +426,17 @@ void Display_Game_Over_Message(const unsigned int& NumberOfTurns,
                                const unsigned int& CurrentPlayer,
                                bool& GameIsRunning)
 {
+    Display_Game(GameData);
+
     // Winner will be current player as Toggle_Player() function has not been called from receiving input and determining winner
     if (Winning_Conditions_Met(GameData))
-    {
-       Display_Game(GameData);
-       std::cout << "Congratulations on " << (char)CurrentPlayer << " for winning! The game lasted " << NumberOfTurns << " turns.\n\n";
-    }
+       std::cout << "GAME OVER\n\n" << (char)CurrentPlayer << " has won! The game lasted " << NumberOfTurns << " turns.\n\n";
 
     // No winner so a draw
     else
-    {
-       Display_Game(GameData);
-       std::cout << "It is a draw! The game lasted " << NumberOfTurns << " turns.\n\n";
-    }
+       std::cout << "GAME OVER\n\nIt is a draw! The game lasted " << NumberOfTurns << " turns.\n\n";
 
-    std::cout << "Press 'Q' to quit the game OR press any key to play again.\n";
+    std::cout << "Press 'Q' to quit the game OR press any other key to play again.\n";
 
     // ***Better alternative needed***
     // Gets key pressed and then clears terminal window

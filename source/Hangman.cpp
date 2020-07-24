@@ -794,12 +794,12 @@ void Display_Game_Over_Message(const unsigned int& NumberOfErrors,
     Display_Game(NumberOfErrors, CurrentGuessOfWord, IncorrectGuesses);
     // If the below is true then hangman has reached its final state and thus user has lost
     if (NumberOfErrors == 10)
-        std::cout << "The word was " << WordToBeGuessed << ". Commisarations to the guesser, You lost! The game lasted " << NumberOfTurns << " turns.\n\n";
+        std::cout << "GAME OVER\n\nThe word was " << WordToBeGuessed << ".\n\nThe guessser has lost! The game lasted " << NumberOfTurns << " turns.\n\n";
 
     else
-        std::cout << "Congratulations to the guesser, you won! the game lasted " << NumberOfTurns << " turns.\n\n";
+        std::cout << "GAME OVER\n\nThe guesser has won! The game lasted " << NumberOfTurns << " turns.\n\n";
 
-    std::cout << "Press 'Q' to quit the game OR press any key to play again.\n";
+    std::cout << "Press 'Q' to quit the game OR press any other key to play again.\n";
 
     // ***Better alternative needed***
     // Gets key pressed and then clears terminal window

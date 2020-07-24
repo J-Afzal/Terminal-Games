@@ -1126,12 +1126,12 @@ void Display_Game_Over_Message(const std::string& CurrentPlayer,
 {
     // CurrentPlayer is the winner of the game as player toggle as not been triggered since last attack and gamer over check
     if (CurrentPlayer == "PLAYER_ONE")
-        std::cout << "Congratulations on Player One for winning! The game lasted " << NumberOfTurns << " turns\n\n";
+        std::cout << "GAME OVER\n\nPlayer One has won! The game lasted " << NumberOfTurns << " turns\n\n";
 
     else
-        std::cout << "Congratulations on Player Two for winning! The game lasted " << NumberOfTurns << " turns\n\n";
+        std::cout << "GAME OVER\n\nPlayer Two has won! The game lasted " << NumberOfTurns << " turns\n\n";
 
-    std::cout << "Press 'Q' to quit the game OR press any key to play again.\n";
+    std::cout << "Press 'Q' to quit the game OR press any other key to play again.\n";
 
     // ***Better alternative needed***
     // Gets key pressed and then clears terminal window
