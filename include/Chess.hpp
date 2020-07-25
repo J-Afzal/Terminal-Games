@@ -36,31 +36,56 @@ void Display_Game(const std::vector< std::vector<std::string> >& Board,
 				  const std::vector<std::string>& WhiteCapturedPieces,
 				  const std::vector<std::string>& BlackCapturedPieces);
 
-std::string Ask_AI_For_Next_Move(const std::vector< std::vector<std::string> >& Board, 
+std::string Ask_AI_For_Next_Move(const std::vector< std::vector<std::string> >& Board,
 								 const std::string& CurrentPlayer,
-								 const std::vector<std::string>& WhiteCapturedPieces,
-								 const std::vector<std::string>& BlackCapturedPieces);
+								 const std::string& HumanPlayer, 
+								 const unsigned int& NumberOfPlayers,
+								 const std::vector<std::string> & WhiteCapturedPieces,
+								 const std::vector<std::string> & BlackCapturedPieces,
+								 const std::vector<unsigned int>& PawnPromotionPieceCount);
 
-bool Is_Next_Move_Valid(const std::vector< std::vector<std::string> >& Board, 
-						const std::string& CurrentPlayer, 
-						const std::string& ChessPiece, 
-						const unsigned int& NewChessPieceNewPositionColumn,
-					    const unsigned int& NewChessPieceNewPositionRow,
+bool Is_Next_Move_Valid(const std::vector< std::vector<std::string> >& Board,
+						const std::string& NextMove,
+						const std::string& CurrentPlayer,
+						const std::string& HumanPlayer,
+						const unsigned int& NumberOfPlayers,
+						const std::string& ChessPiece,
+						const unsigned int& NewChessPiecePositionRow,
+						const unsigned int& NewChessPiecePositionColumn,
 						const std::vector<std::string>& WhiteCapturedPieces,
-						const std::vector<std::string>& BlackCapturedPieces);
+						const std::vector<std::string>& BlackCapturedPieces,
+						const std::vector<unsigned int>& PawnPromotionPieceCount);
 
 std::string Ask_User_For_Next_Move(const std::vector< std::vector<std::string> >& Board, 
-								   const std::string& CurrentPlayer,
+						           const std::string& CurrentPlayer, 
+								   const std::string& HumanPlayer,
+								   const unsigned int& NumberOfPlayers,
 								   const std::vector<std::string>& WhiteCapturedPieces,
-								   const std::vector<std::string>& BlackCapturedPieces);
+								   const std::vector<std::string>& BlackCapturedPieces,
+								   std::vector<unsigned int>& PawnPromotionPieceCount);
 
 void Capitalise_String(std::string& aString);
 
-void ConvertNewChessPiecePosition(const std::string NewChessPiecePosition, 
-								  unsigned int& NewChessPiecePositionColumn, 
-								  unsigned int& NewChessPiecePositionRow);
+void ConvertNewChessPiecePosition(const std::string NewChessPiecePosition,
+							      unsigned int& NewChessPiecePositionRow,
+								  unsigned int& NewChessPiecePositionColumn);
 
-void Execute_Next_Move();
+void Execute_Next_Move(std::vector< std::vector<std::string> >& Board,
+				   	   const std::string& NextMove,
+					   const std::string& CurrentPlayer,
+					   const std::string& HumanPlayer,
+					   const unsigned int& NumberOfPlayers,
+					   std::vector<std::string>& WhiteCapturedPieces,
+					   std::vector<std::string>& BlackCapturedPieces,
+					   std::vector<unsigned int>& PawnPromotionPieceCount);
+
+std::string Get_Pawn_Promotion_Choice(const unsigned int& NumberOfPlayers,
+									  const std::string& CurrentPlayer,
+									  const std::string& HumanPlayer);
+
+std::string Ask_AI_For_Pawn_Promotion_Choice(void);
+
+std::string Ask_User_For_Pawn_Promotion_Choice(void);
 
 void Display_Winning_Message(const std::vector< std::vector<std::string> >& Board,
 							 const std::vector<std::string>& WhiteCapturedPieces,
