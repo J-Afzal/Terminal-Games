@@ -24,6 +24,6 @@ int main(void) {
 
 		NumberOfTurns++;
 	}
-
-    return 0;
+	
+	return 0;
 }

@@ -190,7 +190,6 @@ void Setup_Game(std::vector< std::vector<std::string> >& Board,
 		}
 	}
 
-
 	NumberOfPlayers = Ask_User_For_Number_Of_Players();
 
 	std::srand((unsigned int)time(0));
@@ -248,7 +247,9 @@ bool Game_Over(const std::vector< std::vector<std::string> >& Board,
 {
 	if (Is_King_In_Check(Board, CurrentPlayer))
 	{
-		// and all possible moves result in check thus checkmate
+		// and all possible moves of king result in check 
+		// and all possible moves of players pieces results in check 
+		// thus checkmate
 	}
 
 	else
@@ -657,8 +658,6 @@ void Display_Game(const std::vector< std::vector<std::string> >& Board,
 			std::cout << "\n\n\n\n";
 		}
 	}
-
-	// Some sort of score tracker of pieces captured
 }
 
 std::string Ask_AI_For_Next_Move(const std::vector< std::vector<std::string> >& Board,
@@ -737,6 +736,18 @@ bool Is_Next_Move_Legal(const std::vector< std::vector<std::string> >& Board,
 
 	// Find position of current piece
 	unsigned int CurrentChessPiecePositionRow = 0, CurrentChessPiecePositionColumn = 0;
+
+	if (ChessPiece[0] == 'W')
+	{
+		if (ChessPiece[1] == 'K')
+			ChessPiece == "WK ";
+	}
+
+	if (ChessPiece[0] == 'B')
+	{
+		if (ChessPiece[1] == 'K')
+			ChessPiece == "BK ";
+	}
 
 	for (unsigned int i = 0; i < Board.size(); i++)
 		for (unsigned int j = 0; j < Board.size(); j++)
@@ -1240,23 +1251,23 @@ bool Is_Next_Move_Legal(const std::vector< std::vector<std::string> >& Board,
 		// Check if move is allowed (pawn only can move up one square, except two squares on first move, and diagonal if opponent piece is there or en passant)
 		if (CurrentPlayer == "White")
 		{
-			if ((NewChessPiecePositionRow == CurrentChessPiecePositionRow + 1) && (NewChessPiecePositionColumn == CurrentChessPiecePositionColumn))
+			if ((NewChessPiecePositionRow == CurrentChessPiecePositionRow - 1) && (NewChessPiecePositionColumn == CurrentChessPiecePositionColumn))
 			{
 				if (Board[NewChessPiecePositionRow][NewChessPiecePositionColumn] != " . ")
 					return false;
 			}
 
-			else if ((NewChessPiecePositionRow == CurrentChessPiecePositionRow + 2) && (NewChessPiecePositionColumn == CurrentChessPiecePositionColumn))
+			else if ((NewChessPiecePositionRow == CurrentChessPiecePositionRow - 2) && (NewChessPiecePositionColumn == CurrentChessPiecePositionColumn))
 			{
 				if (CurrentChessPiecePositionRow != 1)
 					return false;
 
-				if (Board[CurrentChessPiecePositionRow + 1][CurrentChessPiecePositionColumn] != " . " || Board[CurrentChessPiecePositionRow + 2][CurrentChessPiecePositionColumn] != " . ")
+				if (Board[CurrentChessPiecePositionRow - 1][CurrentChessPiecePositionColumn] != " . " || Board[CurrentChessPiecePositionRow - 2][CurrentChessPiecePositionColumn] != " . ")
 					return false;
 			}
 
-			else if (((NewChessPiecePositionRow == CurrentChessPiecePositionRow + 1) && (NewChessPiecePositionColumn == CurrentChessPiecePositionColumn + 1)) ||
-				     ((NewChessPiecePositionRow == CurrentChessPiecePositionRow + 1) && (NewChessPiecePositionColumn == CurrentChessPiecePositionColumn - 1)))
+			else if (((NewChessPiecePositionRow == CurrentChessPiecePositionRow - 1) && (NewChessPiecePositionColumn == CurrentChessPiecePositionColumn + 1)) ||
+				     ((NewChessPiecePositionRow == CurrentChessPiecePositionRow - 1) && (NewChessPiecePositionColumn == CurrentChessPiecePositionColumn - 1)))
 			{
 				if (Board[NewChessPiecePositionRow][NewChessPiecePositionColumn][0] != 'B')
 					return false;
@@ -1279,7 +1290,7 @@ bool Is_Next_Move_Legal(const std::vector< std::vector<std::string> >& Board,
 				if (CurrentChessPiecePositionRow != 6)
 					return false;
 
-				if (Board[CurrentChessPiecePositionRow - 1][CurrentChessPiecePositionColumn] != " . ")
+				if (Board[CurrentChessPiecePositionRow + 1][CurrentChessPiecePositionColumn] != " . ")
 					return false;
 			}
 
@@ -1365,6 +1376,18 @@ std::string Ask_User_For_Next_Move(const std::vector< std::vector<std::string> >
 			continue;
 
 		bool DoesPieceExist = false;
+
+		if (ChessPiece[0] == 'W')
+		{
+			if (ChessPiece[1] == 'K')
+				ChessPiece == "WK ";
+		}
+
+		if (ChessPiece[0] == 'B')
+		{
+			if (ChessPiece[1] == 'K')
+				ChessPiece == "BK ";
+		}
 
 		for (unsigned int i = 0; i < Board.size(); i++)
 			for (unsigned int j = 0; j < Board.size(); j++)
@@ -1599,6 +1622,18 @@ void Execute_Next_Move(std::vector< std::vector<std::string> >& Board,
 	// Find position of current piece
 	unsigned int CurrentChessPiecePositionRow = 0, CurrentChessPiecePositionColumn = 0;
 
+	if (ChessPiece[0] == 'W')
+	{
+		if (ChessPiece[1] == 'K')
+			ChessPiece == "WK ";
+	}
+
+	if (ChessPiece[0] == 'B')
+	{
+		if (ChessPiece[1] == 'K')
+			ChessPiece == "BK ";
+	}
+
 	for (unsigned int i = 0; i < Board.size(); i++)
 		for (unsigned int j = 0; j < Board.size(); j++)
 			if (Board[i][j] == ChessPiece)
@@ -1615,104 +1650,130 @@ void Execute_Next_Move(std::vector< std::vector<std::string> >& Board,
 
 	if (CurrentPlayer == "White")
 	{
+		// Castle to the right
+		if ((ChessPiece == "WK ") && (NewChessPiecePositionColumn == CurrentChessPiecePositionColumn + 2))
+		{
+			Board[7][7] = " . ";
+			Board[7][5] = "WR2";
+		}
+
+		// Castle to the left
+		else if ((ChessPiece == "WK ") && (NewChessPiecePositionColumn == CurrentChessPiecePositionColumn - 2))
+		{
+			Board[7][0] = " . ";
+			Board[7][3] = "WR1";
+		}
+
 		if (Board[NewChessPiecePositionRow][NewChessPiecePositionColumn] != " . ")
 			BlackCapturedPieces.push_back(Board[NewChessPiecePositionRow][NewChessPiecePositionColumn]);
 
 		Board[NewChessPiecePositionRow][NewChessPiecePositionColumn] = ChessPiece;
 
 		// Pawn Promotion Check
-		if (ChessPiece[1] == 'P')
-			if (NewChessPiecePositionRow == 7)
+		if ((ChessPiece[1] == 'P') && (NewChessPiecePositionRow == 0))
+		{
+			std::string Pawn_Promotion_Choice = Get_Pawn_Promotion_Choice(NumberOfPlayers, CurrentPlayer, HumanPlayer);
+
+			if (Pawn_Promotion_Choice == "ROOK")
 			{
-				std::string Pawn_Promotion_Choice = Get_Pawn_Promotion_Choice(NumberOfPlayers, CurrentPlayer, HumanPlayer);
+				std::string PawnPromotionChessPiece = "WR";
+				PawnPromotionPieceCount[0]++;
+				PawnPromotionChessPiece += std::to_string(PawnPromotionPieceCount[0]);
 
-				if (Pawn_Promotion_Choice == "ROOK")
-				{
-					std::string PawnPromotionChessPiece = "WR";
-					PawnPromotionPieceCount[0]++;
-					PawnPromotionChessPiece += std::to_string(PawnPromotionPieceCount[0]);
-
-					Board[NewChessPiecePositionRow][NewChessPiecePositionColumn] = PawnPromotionChessPiece;
-				}
-
-				if (Pawn_Promotion_Choice == "KNIGHT")
-				{
-					std::string PawnPromotionChessPiece = "WN";
-					PawnPromotionPieceCount[1]++;
-					PawnPromotionChessPiece += std::to_string(PawnPromotionPieceCount[1]);
-
-					Board[NewChessPiecePositionRow][NewChessPiecePositionColumn] = PawnPromotionChessPiece;
-				}
-
-				if (Pawn_Promotion_Choice == "BISHOP")
-				{
-					std::string PawnPromotionChessPiece = "WB";
-					PawnPromotionPieceCount[2]++;
-					PawnPromotionChessPiece += std::to_string(PawnPromotionPieceCount[2]);
-
-					Board[NewChessPiecePositionRow][NewChessPiecePositionColumn] = PawnPromotionChessPiece;
-				}
-
-				if (Pawn_Promotion_Choice == "QUEEN")
-				{
-					std::string PawnPromotionChessPiece = "WQ";
-					PawnPromotionPieceCount[3]++;
-					PawnPromotionChessPiece += std::to_string(PawnPromotionPieceCount[3]);
-
-					Board[NewChessPiecePositionRow][NewChessPiecePositionColumn] = PawnPromotionChessPiece;
-				}
+				Board[NewChessPiecePositionRow][NewChessPiecePositionColumn] = PawnPromotionChessPiece;
 			}
+
+			if (Pawn_Promotion_Choice == "KNIGHT")
+			{
+				std::string PawnPromotionChessPiece = "WN";
+				PawnPromotionPieceCount[1]++;
+				PawnPromotionChessPiece += std::to_string(PawnPromotionPieceCount[1]);
+
+				Board[NewChessPiecePositionRow][NewChessPiecePositionColumn] = PawnPromotionChessPiece;
+			}
+
+			if (Pawn_Promotion_Choice == "BISHOP")
+			{
+				std::string PawnPromotionChessPiece = "WB";
+				PawnPromotionPieceCount[2]++;
+				PawnPromotionChessPiece += std::to_string(PawnPromotionPieceCount[2]);
+
+				Board[NewChessPiecePositionRow][NewChessPiecePositionColumn] = PawnPromotionChessPiece;
+			}
+
+			if (Pawn_Promotion_Choice == "QUEEN")
+			{
+				std::string PawnPromotionChessPiece = "WQ";
+				PawnPromotionPieceCount[3]++;
+				PawnPromotionChessPiece += std::to_string(PawnPromotionPieceCount[3]);
+
+				Board[NewChessPiecePositionRow][NewChessPiecePositionColumn] = PawnPromotionChessPiece;
+			}
+		}
 	}
 
 	else
 	{
+		// Castle to the right
+		if ((ChessPiece == "BK ") && (NewChessPiecePositionColumn == CurrentChessPiecePositionColumn + 2))
+		{
+			Board[7][7] = " . ";
+			Board[7][5] = "BR2";
+		}
+
+		// Castle to the left
+		else if ((ChessPiece == "BK ") && (NewChessPiecePositionColumn == CurrentChessPiecePositionColumn - 2))
+		{
+			Board[7][0] = " . ";
+			Board[7][3] = "BR1";
+		}
+
 		if (Board[NewChessPiecePositionRow][NewChessPiecePositionColumn] != " . ")
 			WhiteCapturedPieces.push_back(Board[NewChessPiecePositionRow][NewChessPiecePositionColumn]);
 
 		Board[NewChessPiecePositionRow][NewChessPiecePositionColumn] = ChessPiece;
 
 		// Pawn Promotion Check
-		if (ChessPiece[1] == 'P')
-			if (NewChessPiecePositionRow == 7)
+		if ((ChessPiece[1] == 'P') && (NewChessPiecePositionRow == 7))
+		{
+			std::string Pawn_Promotion_Choice = Get_Pawn_Promotion_Choice(NumberOfPlayers, CurrentPlayer, HumanPlayer);
+
+			if (Pawn_Promotion_Choice == "ROOK")
 			{
-				std::string Pawn_Promotion_Choice = Get_Pawn_Promotion_Choice(NumberOfPlayers, CurrentPlayer, HumanPlayer);
+				std::string PawnPromotionChessPiece = "BR";
+				PawnPromotionPieceCount[4]++;
+				PawnPromotionChessPiece += std::to_string(PawnPromotionPieceCount[4]);
 
-				if (Pawn_Promotion_Choice == "ROOK")
-				{
-					std::string PawnPromotionChessPiece = "BR";
-					PawnPromotionPieceCount[4]++;
-					PawnPromotionChessPiece += std::to_string(PawnPromotionPieceCount[4]);
-
-					Board[NewChessPiecePositionRow][NewChessPiecePositionColumn] = PawnPromotionChessPiece;
-				}
-
-				if (Pawn_Promotion_Choice == "KNIGHT")
-				{
-					std::string PawnPromotionChessPiece = "BN";
-					PawnPromotionPieceCount[5]++;
-					PawnPromotionChessPiece += std::to_string(PawnPromotionPieceCount[5]);
-
-					Board[NewChessPiecePositionRow][NewChessPiecePositionColumn] = PawnPromotionChessPiece;
-				}
-
-				if (Pawn_Promotion_Choice == "BISHOP")
-				{
-					std::string PawnPromotionChessPiece = "BB";
-					PawnPromotionPieceCount[6]++;
-					PawnPromotionChessPiece += std::to_string(PawnPromotionPieceCount[6]);
-
-					Board[NewChessPiecePositionRow][NewChessPiecePositionColumn] = PawnPromotionChessPiece;
-				}
-
-				if (Pawn_Promotion_Choice == "QUEEN")
-				{
-					std::string PawnPromotionChessPiece = "BQ";
-					PawnPromotionPieceCount[7]++;
-					PawnPromotionChessPiece += std::to_string(PawnPromotionPieceCount[7]);
-
-					Board[NewChessPiecePositionRow][NewChessPiecePositionColumn] = PawnPromotionChessPiece;
-				}
+				Board[NewChessPiecePositionRow][NewChessPiecePositionColumn] = PawnPromotionChessPiece;
 			}
+
+			if (Pawn_Promotion_Choice == "KNIGHT")
+			{
+				std::string PawnPromotionChessPiece = "BN";
+				PawnPromotionPieceCount[5]++;
+				PawnPromotionChessPiece += std::to_string(PawnPromotionPieceCount[5]);
+
+				Board[NewChessPiecePositionRow][NewChessPiecePositionColumn] = PawnPromotionChessPiece;
+			}
+
+			if (Pawn_Promotion_Choice == "BISHOP")
+			{
+				std::string PawnPromotionChessPiece = "BB";
+				PawnPromotionPieceCount[6]++;
+				PawnPromotionChessPiece += std::to_string(PawnPromotionPieceCount[6]);
+
+				Board[NewChessPiecePositionRow][NewChessPiecePositionColumn] = PawnPromotionChessPiece;
+			}
+
+			if (Pawn_Promotion_Choice == "QUEEN")
+			{
+				std::string PawnPromotionChessPiece = "BQ";
+				PawnPromotionPieceCount[7]++;
+				PawnPromotionChessPiece += std::to_string(PawnPromotionPieceCount[7]);
+
+				Board[NewChessPiecePositionRow][NewChessPiecePositionColumn] = PawnPromotionChessPiece;
+			}
+		}
 	}
 }
 
@@ -1838,14 +1899,7 @@ void Display_Winning_Message(const std::vector< std::vector<std::string> >& Boar
 		GameIsRunning = false;
 }
 
-// Castling in Execute_Next_Move()
 // Ask user for colour for if one player chosen
-
+// Game_Over()
 // En passant (only pawns can do it and must be done straight away by oppennent)
-
 // Comments
-
-// move tictactoe play and test in to their mains and do this for all other games
-// Smaller tabs indents for other games
-// unisgend int
-// include name and then cmakelist and ctest

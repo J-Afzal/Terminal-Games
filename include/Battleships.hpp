@@ -16,8 +16,6 @@
 #include <vector>
 #include <string>
 
-
-
 void Play_Battleships(void);
 
 // Test code uses computer vs computer option

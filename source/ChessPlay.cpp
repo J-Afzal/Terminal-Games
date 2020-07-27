@@ -58,6 +58,6 @@ int main(void) {
 
 		Display_Winning_Message(Board, WhiteCapturedPieces, BlackCapturedPieces, Stalemate, CurrentPlayer, NumberOfTurns, GameIsRunning);
 	}
-
-    return 0;
+	
+	return 0;
 }
