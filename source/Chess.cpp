@@ -196,12 +196,12 @@ void Setup_Game(std::vector< std::vector<std::string> >& Board,
 	std::srand((unsigned int)time(0));
 
 	if (NumberOfPlayers == 1)
-		HumanPlayer = "WHITE";
+		HumanPlayer = "White";
 
 	if ((std::rand() % 2) == 0)
-		CurrentPlayer = "WHITE";
+		CurrentPlayer = "White";
 	else
-		CurrentPlayer = "BLACK";
+		CurrentPlayer = "Black";
 }
 
 int Ask_User_For_Number_Of_Players(void)
@@ -262,6 +262,346 @@ bool Game_Over(const std::vector< std::vector<std::string> >& Board,
 bool Is_King_In_Check(const std::vector< std::vector<std::string> >& Board,
 											const std::string& CurrentPlayer)
 {
+	std::string ChessPiece;
+
+	if (CurrentPlayer == "White")
+		ChessPiece = "WK ";
+	
+	if (CurrentPlayer == "Black")
+		ChessPiece = "BK ";
+
+	// Find position of King
+	int KingPositionRow, KingPositionColumn;
+
+	for (unsigned int i = 0; i < Board.size(); i++)
+		for (unsigned int j = 0; j < Board.size(); j++)
+			if (Board[i][j] == ChessPiece)
+			{
+				KingPositionRow = i;
+				KingPositionColumn = j;
+
+				i = j = Board.size();
+				continue;
+			}
+
+	if (CurrentPlayer == "White")
+	{
+		// Check King position horizontally to the right
+		for (unsigned int i = KingPositionColumn + 1; i < Board.size(); i++)
+			if (Board[KingPositionRow][i] != " . ")
+			{
+				if ((Board[KingPositionRow][i][0] == 'B') && (Board[KingPositionRow][i][1] == 'R' || Board[KingPositionRow][i][1] == 'Q'))
+					return true;
+
+				i = Board.size();
+				continue;
+			}
+
+		// Check King position horizontally to the left
+		for (int i = KingPositionColumn - 1; i >= 0; i--)
+			if (Board[KingPositionRow][i] != " . ")
+			{
+				if ((Board[KingPositionRow][i][0] == 'B') && (Board[KingPositionRow][i][1] == 'R' || Board[KingPositionRow][i][1] == 'Q'))
+					return true;
+
+				else
+				{
+					i = -1;
+					continue;
+				}
+			}
+
+		// Check King position vertcially upwards
+		for (int i = KingPositionRow - 1; i >= 0; i--)
+			if (Board[i][KingPositionColumn] != " . ")
+			{
+				if ((Board[i][KingPositionColumn][0] == 'B') && (Board[i][KingPositionColumn][1] == 'R' || Board[i][KingPositionColumn][1] == 'Q'))
+					return true;
+
+				else
+				{
+					i = -1;
+					continue;
+				}
+			}
+
+		// Check King position vertcially downwards
+		for (unsigned int i = KingPositionRow + 1; i < Board.size(); i++)
+			if (Board[i][KingPositionColumn] != " . ")
+			{
+				if ((Board[i][KingPositionColumn][0] == 'B') && (Board[i][KingPositionColumn][1] == 'R' || Board[i][KingPositionColumn][1] == 'Q'))
+					return true;
+
+				else
+				{
+					i = Board.size();
+					continue;
+				}
+			}
+
+		// Check King position diagonally upwards and right
+		for (int i = KingPositionRow - 1, j = KingPositionColumn + 1; i >= 0 && j < Board.size(); i--, j++)
+			if (Board[i][j] != " . ")
+			{
+				if ((Board[i][j][0] == 'B') && (Board[i][j][1] == 'B' || Board[i][j][1] == 'Q'))
+					return true;
+
+				else
+				{
+					i = -1;
+					j = Board.size();
+					continue;
+				}
+			}
+
+		// Check King position diagonally upwards and left
+		for (int i = KingPositionRow - 1, j = KingPositionColumn - 1; i >= 0 && j >= 0; i--, j--)
+			if (Board[i][j] != " . ")
+			{
+				if ((Board[i][j][0] == 'B') && (Board[i][j][1] == 'B' || Board[i][j][1] == 'Q'))
+					return true;
+
+				else
+				{
+					i = -1;
+					j = -1;
+					continue;
+				}
+			}
+
+		// Check King position diagonally downwards and right
+		for (unsigned int i = KingPositionRow + 1, j = KingPositionColumn + 1; i < Board.size() && j < Board.size(); i++, j++)
+			if (Board[i][j] != " . ")
+			{
+				if ((Board[i][j][0] == 'B') && (Board[i][j][1] == 'B' || Board[i][j][1] == 'Q'))
+					return true;
+
+				else
+				{
+					i = Board.size();
+					j = Board.size();
+					continue;
+				}
+			}
+
+		// Check King position diagonally downwards and left
+		for (int i = KingPositionRow + 1, j = KingPositionColumn - 1; i < Board.size() && j >= 0; i++, j--)
+			if (Board[i][j] != " . ")
+			{
+				if ((Board[i][j][0] == 'B') && (Board[i][j][1] == 'B' || Board[i][j][1] == 'Q'))
+					return true;
+
+				else
+				{
+					i = Board.size();
+					j = -1;
+				}
+			}
+
+		// Check King position for knight attacks
+		if (((KingPositionRow + 2) < 8) && ((KingPositionColumn + 1) < 8))
+			if (Board[KingPositionRow + 2][KingPositionColumn + 1][0] == 'B' && Board[KingPositionRow + 2][KingPositionColumn + 1][1] == 'N')
+				return true;
+		
+		if (((KingPositionRow + 2) < 8) && ((KingPositionColumn - 1) >= 0))
+			if (Board[KingPositionRow + 2][KingPositionColumn - 1][0] == 'B' && Board[KingPositionRow + 2][KingPositionColumn - 1][1] == 'N')
+				return true;
+		
+		if (((KingPositionRow - 2) >= 0) && ((KingPositionColumn + 1) < 8))
+			if (Board[KingPositionRow - 2][KingPositionColumn + 1][0] == 'B' && Board[KingPositionRow - 2][KingPositionColumn + 1][1] == 'N')
+				return true;
+		
+		if (((KingPositionRow - 2) >= 0) && ((KingPositionColumn - 1) >= 0))
+			if (Board[KingPositionRow - 2][KingPositionColumn - 1][0] == 'B' && Board[KingPositionRow - 2][KingPositionColumn - 1][1] == 'N')
+				return true;
+		
+		if (((KingPositionRow + 1) < 8) && ((KingPositionColumn + 2) < 8))
+			if (Board[KingPositionRow + 1][KingPositionColumn + 2][0] == 'B' && Board[KingPositionRow + 1][KingPositionColumn + 2][1] == 'N')
+				return true;
+		
+		if (((KingPositionRow - 1) >= 0) && ((KingPositionColumn + 2) < 8))
+			if (Board[KingPositionRow - 1][KingPositionColumn + 2][0] == 'B' && Board[KingPositionRow - 1][KingPositionColumn + 2][1] == 'N')
+				return true;
+		
+		if (((KingPositionRow + 1) < 8) && ((KingPositionColumn - 2) >= 0))
+			if (Board[KingPositionRow + 1][KingPositionColumn - 2][0] == 'B' && Board[KingPositionRow + 1][KingPositionColumn - 2][1] == 'N')
+				return true;
+		
+		if (((KingPositionRow - 1) >= 0) && ((KingPositionColumn - 2) >= 0))
+			if (Board[KingPositionRow - 1][KingPositionColumn - 2][0] == 'B' && Board[KingPositionRow - 1][KingPositionColumn - 2][1] == 'N')
+				return true;
+
+		// Check King position for Pawn attacks
+		if (((KingPositionRow - 1) >= 0) && ((KingPositionColumn - 1) >= 0))
+			if (Board[KingPositionRow - 1][KingPositionColumn - 1][0] == 'B' && Board[KingPositionRow - 1][KingPositionColumn - 1][1] == 'P')
+				return true;
+
+		if (((KingPositionRow - 1) >= 0) && ((KingPositionColumn + 1) < 8))
+			if (Board[KingPositionRow - 1][KingPositionColumn + 1][0] == 'B' && Board[KingPositionRow - 1][KingPositionColumn + 1][1] == 'P')
+				return true;
+	}
+
+	else
+	{
+		// Check King position horizontally to the right
+		for (int i = KingPositionColumn + 1; i < Board.size(); i++)
+			if (Board[KingPositionRow][i] != " . ")
+			{
+				if ((Board[KingPositionRow][i][0] == 'W') && (Board[KingPositionRow][i][1] == 'R' || Board[KingPositionRow][i][1] == 'Q'))
+					return true;
+
+				else
+				{
+					i = Board.size();
+					continue;
+				}
+			}
+
+		// Check King position horizontally to the left
+		for (int i = KingPositionColumn - 1; i >= 0; i--)
+			if (Board[KingPositionRow][i] != " . ")
+			{
+				if ((Board[KingPositionRow][i][0] == 'W') && (Board[KingPositionRow][i][1] == 'R' || Board[KingPositionRow][i][1] == 'Q'))
+					return true;
+
+				else
+				{
+					i = -1;
+					continue;
+				}
+			}
+
+		// Check King position vertcially upwards
+		for (int i = KingPositionRow - 1; i >= 0; i--)
+			if (Board[i][KingPositionColumn] != " . ")
+			{
+				if ((Board[i][KingPositionColumn][0] == 'W') && (Board[i][KingPositionColumn][1] == 'R' || Board[i][KingPositionColumn][1] == 'Q'))
+					return true;
+
+				else
+				{
+					i = -1;
+					continue;
+				}
+			}
+
+		// Check King position vertcially downwards
+		for (int i = KingPositionRow + 1; i < Board.size(); i++)
+			if (Board[i][KingPositionColumn] != " . ")
+			{
+				if ((Board[i][KingPositionColumn][0] == 'W') && (Board[i][KingPositionColumn][1] == 'R' || Board[i][KingPositionColumn][1] == 'Q'))
+					return true;
+
+				else
+				{
+					i = Board.size();
+					continue;
+				}
+			}
+
+		// Check King position diagonally upwards and right
+		for (int i = KingPositionRow - 1, j = KingPositionColumn + 1; i >= 0 && j < Board.size(); i--, j++)
+			if (Board[i][j] != " . ")
+			{
+				if ((Board[i][j][0] == 'B') && (Board[i][j][1] == 'W' || Board[i][j][1] == 'Q'))
+					return true;
+
+				else
+				{
+					i = -1;
+					j = Board.size();
+					continue;
+				}
+			}
+
+		// Check King position diagonally upwards and left
+		for (int i = KingPositionRow - 1, j = KingPositionColumn - 1; i >= 0 && j >= 0; i--, j--)
+			if (Board[i][j] != " . ")
+			{
+				if ((Board[i][j][0] == 'B') && (Board[i][j][1] == 'W' || Board[i][j][1] == 'Q'))
+					return true;
+
+				else
+				{
+					i = -1;
+					j = -1;
+					continue;
+				}
+			}
+
+		// Check King position diagonally downwards and right
+		for (int i = KingPositionRow + 1, j = KingPositionColumn + 1; i < Board.size() && j < Board.size(); i++, j++)
+			if (Board[i][j] != " . ")
+			{
+				if ((Board[i][j][0] == 'B') && (Board[i][j][1] == 'W' || Board[i][j][1] == 'Q'))
+					return true;
+
+				else
+				{
+					i = Board.size();
+					j = Board.size();
+					continue;
+				}
+			}
+
+		// Check King position diagonally downwards and left
+		for (int i = KingPositionRow + 1, j = KingPositionColumn - 1; i < Board.size() && j >= 0; i++, j--)
+			if (Board[i][j] != " . ")
+			{
+				if ((Board[i][j][0] == 'B') && (Board[i][j][1] == 'W' || Board[i][j][1] == 'Q'))
+					return true;
+
+				else
+				{
+					i = Board.size();
+					j = -1;
+					continue;
+				}
+			}
+
+		// Check King position for knight attacks
+		if (((KingPositionRow + 2) < 8) && ((KingPositionColumn + 1) < 8))
+			if (Board[KingPositionRow + 2][KingPositionColumn + 1][0] == 'W' && Board[KingPositionRow + 2][KingPositionColumn + 1][1] == 'N')
+				return true;
+
+		if (((KingPositionRow + 2) < 8) && ((KingPositionColumn - 1) >= 0))
+			if (Board[KingPositionRow + 2][KingPositionColumn - 1][0] == 'W' && Board[KingPositionRow + 2][KingPositionColumn - 1][1] == 'N')
+				return true;
+
+		if (((KingPositionRow - 2) >= 0) && ((KingPositionColumn + 1) < 8))
+			if (Board[KingPositionRow - 2][KingPositionColumn + 1][0] == 'W' && Board[KingPositionRow - 2][KingPositionColumn + 1][1] == 'N')
+				return true;
+
+		if (((KingPositionRow - 2) >= 0) && ((KingPositionColumn - 1) >= 0))
+			if (Board[KingPositionRow - 2][KingPositionColumn - 1][0] == 'W' && Board[KingPositionRow - 2][KingPositionColumn - 1][1] == 'N')
+				return true;
+
+		if (((KingPositionRow + 1) < 8) && ((KingPositionColumn + 2) < 8))
+			if (Board[KingPositionRow + 1][KingPositionColumn + 2][0] == 'W' && Board[KingPositionRow + 1][KingPositionColumn + 2][1] == 'N')
+				return true;
+
+		if (((KingPositionRow - 1) >= 0) && ((KingPositionColumn + 2) < 8))
+			if (Board[KingPositionRow - 1][KingPositionColumn + 2][0] == 'W' && Board[KingPositionRow - 1][KingPositionColumn + 2][1] == 'N')
+				return true;
+
+		if (((KingPositionRow + 1) < 8) && ((KingPositionColumn - 2) >= 0))
+			if (Board[KingPositionRow + 1][KingPositionColumn - 2][0] == 'W' && Board[KingPositionRow + 1][KingPositionColumn - 2][1] == 'N')
+				return true;
+
+		if (((KingPositionRow - 1) >= 0) && ((KingPositionColumn - 2) >= 0))
+			if (Board[KingPositionRow - 1][KingPositionColumn - 2][0] == 'W' && Board[KingPositionRow - 1][KingPositionColumn - 2][1] == 'N')
+				return true;
+
+		// Check King position for Pawn attacks
+		if (((KingPositionRow + 1) < 8) && ((KingPositionColumn - 1) >= 0))
+			if (Board[KingPositionRow + 1][KingPositionColumn - 1][0] == 'W' && Board[KingPositionRow + 1][KingPositionColumn - 1][1] == 'P')
+				return true;
+
+		if (((KingPositionRow + 1) < 8) && ((KingPositionColumn + 1) < 8))
+			if (Board[KingPositionRow + 1][KingPositionColumn + 1][0] == 'W' && Board[KingPositionRow + 1][KingPositionColumn + 1][1] == 'P')
+				return true;
+	}
+
 	return false;
 }
 
@@ -354,10 +694,17 @@ std::string Ask_AI_For_Next_Move(const std::vector< std::vector<std::string> >& 
 			}
 		
 		std::string ChessPiece = ListOfPieces[std::rand() % ListOfPieces.size()];
+		std::string NewChessPiecePosition;
+		
+		NewChessPiecePosition.push_back((std::rand() % 8) + 65);
+		NewChessPiecePosition.push_back((std::rand() % 8) + 49);
 
-		unsigned int NewChessPiecePositionColumn, NewChessPiecePositionRow;
-		NewChessPiecePositionColumn = (std::rand() % 8) + 1;
-		NewChessPiecePositionRow = (std::rand() % 8) + 1;
+		unsigned int NewChessPiecePositionRow, NewChessPiecePositionColumn;
+		ConvertNewChessPiecePosition(NewChessPiecePosition, NewChessPiecePositionRow, NewChessPiecePositionColumn);
+
+		NextMove = ChessPiece;
+		NextMove.push_back(' ');
+		NextMove += NewChessPiecePosition;
 
 		if (Is_Next_Move_Legal(Board, NextMove, CurrentPlayer, HumanPlayer, NumberOfPlayers, ChessPiece, NewChessPiecePositionRow, NewChessPiecePositionColumn, WhiteCapturedPieces, BlackCapturedPieces, PawnPromotionPieceCount, HasCastlingPiecesMoved))
 			isValueCorrect = true;
@@ -401,6 +748,9 @@ bool Is_Next_Move_Legal(const std::vector< std::vector<std::string> >& Board,
 				i = j = Board.size();
 				continue;
 			}
+
+	if ((NewChessPiecePositionRow == CurrentChessPiecePositionRow) && (NewChessPiecePositionColumn == CurrentChessPiecePositionColumn))
+		return false;
 
 	if (ChessPiece[1] == 'R')
 	{	
@@ -495,14 +845,14 @@ bool Is_Next_Move_Legal(const std::vector< std::vector<std::string> >& Board,
 		{
 			if (NewChessPiecePositionColumn > CurrentChessPiecePositionColumn)
 			{
-				for (unsigned int i = CurrentChessPiecePositionRow + 1, j = CurrentChessPiecePositionColumn + 1; i < NewChessPiecePositionColumn; i++, j++)
+				for (unsigned int i = CurrentChessPiecePositionRow + 1, j = CurrentChessPiecePositionColumn + 1; i < 8 && j < 8; i++, j++)
 					if (Board[i][j] != " . ")
 						return false;
 			}
 
 			else
 			{
-				for (unsigned int i = CurrentChessPiecePositionRow - 1, j = CurrentChessPiecePositionColumn + 1; i < NewChessPiecePositionColumn; i--, j++)
+				for (unsigned int i = CurrentChessPiecePositionRow + 1, j = CurrentChessPiecePositionColumn - 1; i > 0 && j < 8; i--, j++)
 					if (Board[i][j] != " . ")
 						return false;
 			}
@@ -512,14 +862,14 @@ bool Is_Next_Move_Legal(const std::vector< std::vector<std::string> >& Board,
 		{
 			if (NewChessPiecePositionColumn > CurrentChessPiecePositionColumn)
 			{
-				for (unsigned int i = CurrentChessPiecePositionRow + 1, j = CurrentChessPiecePositionColumn - 1; i < NewChessPiecePositionRow; i++, j--)
+				for (unsigned int i = CurrentChessPiecePositionRow - 1, j = CurrentChessPiecePositionColumn + 1; i < 8 && j > 0; i++, j--)
 					if (Board[i][j] != " . ")
 						return false;
 			}
 
 			else
 			{
-				for (unsigned int i = CurrentChessPiecePositionRow - 1, j = CurrentChessPiecePositionColumn - 1; i < NewChessPiecePositionRow; i--, j--)
+				for (unsigned int i = CurrentChessPiecePositionRow - 1, j = CurrentChessPiecePositionColumn - 1; i > 0 && j > 0; i--, j--)
 					if (Board[i][j] != " . ")
 						return false;
 			}
@@ -643,26 +993,26 @@ bool Is_Next_Move_Legal(const std::vector< std::vector<std::string> >& Board,
 						}
 
 					// Check D1 vertcially
-					for (unsigned int i = CurrentChessPiecePositionRow; i < 0; i--)
+					for (unsigned int i = CurrentChessPiecePositionRow; i > 0; i--)
 					if (Board[i][CurrentChessPiecePositionColumn - 1] != " . ")
 					{
-						if ((Board[CurrentChessPiecePositionRow][i][0] == 'B') && (Board[CurrentChessPiecePositionRow][i][1] == 'R' || Board[CurrentChessPiecePositionRow][i][1] == 'Q'))
+						if ((Board[i][CurrentChessPiecePositionColumn][0] == 'B') && (Board[i][CurrentChessPiecePositionColumn][1] == 'R' || Board[i][CurrentChessPiecePositionColumn][1] == 'Q'))
 							return false;
 					}
 
 					// Check D1 diagonally top right
-					for (unsigned int i = CurrentChessPiecePositionRow, j = CurrentChessPiecePositionColumn - 1; j < Board.size(); i--, j++)
+					for (unsigned int i = CurrentChessPiecePositionRow, j = CurrentChessPiecePositionColumn - 1; i > 0 && j < Board.size(); i--, j++)
 						if (Board[i][j] != " . ")
 						{
-							if ((Board[CurrentChessPiecePositionRow][i][0] == 'B') && (Board[CurrentChessPiecePositionRow][i][1] == 'B' || Board[CurrentChessPiecePositionRow][i][1] == 'Q'))
+							if ((Board[i][j][0] == 'B') && (Board[i][j][1] == 'B' || Board[i][j][1] == 'Q'))
 								return false;
 						}
 					
 					// Check D1 diagonally top left
-					for (unsigned int i = CurrentChessPiecePositionRow, j = CurrentChessPiecePositionColumn - 1; j < 0; i--, j--)
+					for (unsigned int i = CurrentChessPiecePositionRow, j = CurrentChessPiecePositionColumn - 1; i > 0 && j > 0; i--, j--)
 						if (Board[i][j] != " . ")
 						{
-							if ((Board[CurrentChessPiecePositionRow][i][0] == 'B') && (Board[CurrentChessPiecePositionRow][i][1] == 'B' || Board[CurrentChessPiecePositionRow][i][1] == 'Q'))
+							if ((Board[i][j][0] == 'B') && (Board[i][j][1] == 'B' || Board[i][j][1] == 'Q'))
 								return false;
 						}
 
@@ -693,7 +1043,7 @@ bool Is_Next_Move_Legal(const std::vector< std::vector<std::string> >& Board,
 
 					// Is the first square to the right under attack (second sqaure, aka where the king lands, will be checked at the end with Is_King_In_Check()) 
 					// Check F1 horizontally to the left as right is clear due to above if statement
-					for (unsigned int i = CurrentChessPiecePositionColumn - 1; i < 0; i--)
+					for (unsigned int i = CurrentChessPiecePositionColumn - 1; i > 0; i--)
 						if (Board[CurrentChessPiecePositionRow][i] != " . ")
 						{
 							if ((Board[CurrentChessPiecePositionRow][i][0] == 'B') && (Board[CurrentChessPiecePositionRow][i][1] == 'R' || Board[CurrentChessPiecePositionRow][i][1] == 'Q'))
@@ -701,26 +1051,26 @@ bool Is_Next_Move_Legal(const std::vector< std::vector<std::string> >& Board,
 						}
 
 					// Check F1 vertcially
-					for (unsigned int i = CurrentChessPiecePositionRow; i < 0; i--)
+					for (unsigned int i = CurrentChessPiecePositionRow; i > 0; i--)
 						if (Board[i][CurrentChessPiecePositionColumn + 1] != " . ")
 						{
-							if ((Board[CurrentChessPiecePositionRow][i][0] == 'B') && (Board[CurrentChessPiecePositionRow][i][1] == 'R' || Board[CurrentChessPiecePositionRow][i][1] == 'Q'))
+							if ((Board[i][CurrentChessPiecePositionColumn][0] == 'B') && (Board[i][CurrentChessPiecePositionColumn][1] == 'R' || Board[i][CurrentChessPiecePositionColumn][1] == 'Q'))
 								return false;
 						}
 
 					// Check F1 diagonally top right
-					for (unsigned int i = CurrentChessPiecePositionRow, j = CurrentChessPiecePositionColumn + 1; j < Board.size(); i--, j++)
+					for (unsigned int i = CurrentChessPiecePositionRow, j = CurrentChessPiecePositionColumn + 1; i > 0 && j < Board.size(); i--, j++)
 						if (Board[i][j] != " . ")
 						{
-							if ((Board[CurrentChessPiecePositionRow][i][0] == 'B') && (Board[CurrentChessPiecePositionRow][i][1] == 'B' || Board[CurrentChessPiecePositionRow][i][1] == 'Q'))
+							if ((Board[i][j][0] == 'B') && (Board[i][j][1] == 'B' || Board[i][j][1] == 'Q'))
 								return false;
 						}
 
 					// Check F1 diagonally top left
-					for (unsigned int i = CurrentChessPiecePositionRow, j = CurrentChessPiecePositionColumn + 1; j < 0; i--, j--)
+					for (unsigned int i = CurrentChessPiecePositionRow, j = CurrentChessPiecePositionColumn + 1; i > 0 && j > 0; i--, j--)
 						if (Board[i][j] != " . ")
 						{
-							if ((Board[CurrentChessPiecePositionRow][i][0] == 'B') && (Board[CurrentChessPiecePositionRow][i][1] == 'B' || Board[CurrentChessPiecePositionRow][i][1] == 'Q'))
+							if ((Board[i][j][0] == 'B') && (Board[i][j][1] == 'B' || Board[i][j][1] == 'Q'))
 								return false;
 						}
 
@@ -765,23 +1115,23 @@ bool Is_Next_Move_Legal(const std::vector< std::vector<std::string> >& Board,
 					for (unsigned int i = CurrentChessPiecePositionRow; i < Board.size(); i++)
 						if (Board[i][CurrentChessPiecePositionColumn - 1] != " . ")
 						{
-							if ((Board[CurrentChessPiecePositionRow][i][0] == 'W') && (Board[CurrentChessPiecePositionRow][i][1] == 'R' || Board[CurrentChessPiecePositionRow][i][1] == 'Q'))
+							if ((Board[i][CurrentChessPiecePositionColumn][0] == 'W') && (Board[i][CurrentChessPiecePositionColumn][1] == 'R' || Board[i][CurrentChessPiecePositionColumn][1] == 'Q'))
 								return false;
 						}
 
 					// Check D8 diagonally bottom right
-					for (unsigned int i = CurrentChessPiecePositionRow, j = CurrentChessPiecePositionColumn - 1; j < Board.size(); i++, j++)
+					for (unsigned int i = CurrentChessPiecePositionRow, j = CurrentChessPiecePositionColumn - 1; i < Board.size() && j < Board.size(); i++, j++)
 						if (Board[i][j] != " . ")
 						{
-							if ((Board[CurrentChessPiecePositionRow][i][0] == 'W') && (Board[CurrentChessPiecePositionRow][i][1] == 'B' || Board[CurrentChessPiecePositionRow][i][1] == 'Q'))
+							if ((Board[i][j][0] == 'W') && (Board[i][j][1] == 'B' || Board[i][j][1] == 'Q'))
 								return false;
 						}
 
 					// Check D8 diagonally bottom left
-					for (unsigned int i = CurrentChessPiecePositionRow, j = CurrentChessPiecePositionColumn - 1; j < 0; i++, j--)
+					for (unsigned int i = CurrentChessPiecePositionRow, j = CurrentChessPiecePositionColumn - 1; i < Board.size() && j > 0; i++, j--)
 						if (Board[i][j] != " . ")
 						{
-							if ((Board[CurrentChessPiecePositionRow][i][0] == 'W') && (Board[CurrentChessPiecePositionRow][i][1] == 'B' || Board[CurrentChessPiecePositionRow][i][1] == 'Q'))
+							if ((Board[i][j][0] == 'W') && (Board[i][j][1] == 'B' || Board[i][j][1] == 'Q'))
 								return false;
 						}
 
@@ -812,7 +1162,7 @@ bool Is_Next_Move_Legal(const std::vector< std::vector<std::string> >& Board,
 
 					// Is the first square to the right under attack (second sqaure, aka where the king lands, will be checked at the end with Is_King_In_Check()) 
 					// Check F8 horizontally to the left as right is clear due to above if statement
-					for (unsigned int i = CurrentChessPiecePositionColumn - 1; i < 0; i--)
+					for (unsigned int i = CurrentChessPiecePositionColumn - 1; i > 0; i--)
 						if (Board[CurrentChessPiecePositionRow][i] != " . ")
 						{
 							if ((Board[CurrentChessPiecePositionRow][i][0] == 'W') && (Board[CurrentChessPiecePositionRow][i][1] == 'R' || Board[CurrentChessPiecePositionRow][i][1] == 'Q'))
@@ -823,23 +1173,23 @@ bool Is_Next_Move_Legal(const std::vector< std::vector<std::string> >& Board,
 					for (unsigned int i = CurrentChessPiecePositionRow; i < Board.size(); i++)
 						if (Board[i][CurrentChessPiecePositionColumn + 1] != " . ")
 						{
-							if ((Board[CurrentChessPiecePositionRow][i][0] == 'W') && (Board[CurrentChessPiecePositionRow][i][1] == 'R' || Board[CurrentChessPiecePositionRow][i][1] == 'Q'))
+							if ((Board[i][CurrentChessPiecePositionColumn][0] == 'W') && (Board[i][CurrentChessPiecePositionColumn][1] == 'R' || Board[i][CurrentChessPiecePositionColumn][1] == 'Q'))
 								return false;
 						}
 
 					// Check F8 diagonally bottom right
-					for (unsigned int i = CurrentChessPiecePositionRow, j = CurrentChessPiecePositionColumn + 1; j < Board.size(); i++, j++)
+					for (unsigned int i = CurrentChessPiecePositionRow, j = CurrentChessPiecePositionColumn + 1; i < Board.size() && j < Board.size(); i++, j++)
 						if (Board[i][j] != " . ")
 						{
-							if ((Board[CurrentChessPiecePositionRow][i][0] == 'W') && (Board[CurrentChessPiecePositionRow][i][1] == 'B' || Board[CurrentChessPiecePositionRow][i][1] == 'Q'))
+							if ((Board[i][j][0] == 'W') && (Board[i][j][1] == 'B' || Board[i][j][1] == 'Q'))
 								return false;
 						}
 
 					// Check F8 diagonally bottom left
-					for (unsigned int i = CurrentChessPiecePositionRow, j = CurrentChessPiecePositionColumn + 1; j < 0; i++, j--)
+					for (unsigned int i = CurrentChessPiecePositionRow, j = CurrentChessPiecePositionColumn + 1; i < Board.size() && j > 0; i++, j--)
 						if (Board[i][j] != " . ")
 						{
-							if ((Board[CurrentChessPiecePositionRow][i][0] == 'W') && (Board[CurrentChessPiecePositionRow][i][1] == 'B' || Board[CurrentChessPiecePositionRow][i][1] == 'Q'))
+							if ((Board[i][j][0] == 'W') && (Board[i][j][1] == 'B' || Board[i][j][1] == 'Q'))
 								return false;
 						}
 
@@ -918,13 +1268,13 @@ bool Is_Next_Move_Legal(const std::vector< std::vector<std::string> >& Board,
 
 		else
 		{
-			if ((NewChessPiecePositionRow == CurrentChessPiecePositionRow - 1) && (NewChessPiecePositionColumn == CurrentChessPiecePositionColumn))
+			if ((NewChessPiecePositionRow == CurrentChessPiecePositionRow + 1) && (NewChessPiecePositionColumn == CurrentChessPiecePositionColumn))
 			{
 				if (Board[NewChessPiecePositionRow][NewChessPiecePositionColumn] != " . ")
 					return false;
 			}
 
-			else if ((NewChessPiecePositionRow == CurrentChessPiecePositionRow - 2) && (NewChessPiecePositionColumn == CurrentChessPiecePositionColumn))
+			else if ((NewChessPiecePositionRow == CurrentChessPiecePositionRow + 2) && (NewChessPiecePositionColumn == CurrentChessPiecePositionColumn))
 			{
 				if (CurrentChessPiecePositionRow != 6)
 					return false;
@@ -933,8 +1283,8 @@ bool Is_Next_Move_Legal(const std::vector< std::vector<std::string> >& Board,
 					return false;
 			}
 
-			else if (((NewChessPiecePositionRow == CurrentChessPiecePositionRow - 1) && (NewChessPiecePositionColumn == CurrentChessPiecePositionColumn + 1)) ||
-				     ((NewChessPiecePositionRow == CurrentChessPiecePositionRow - 1) && (NewChessPiecePositionColumn == CurrentChessPiecePositionColumn - 1)))
+			else if (((NewChessPiecePositionRow == CurrentChessPiecePositionRow + 1) && (NewChessPiecePositionColumn == CurrentChessPiecePositionColumn + 1)) ||
+				     ((NewChessPiecePositionRow == CurrentChessPiecePositionRow + 1) && (NewChessPiecePositionColumn == CurrentChessPiecePositionColumn - 1)))
 			{
 				if (Board[NewChessPiecePositionRow][NewChessPiecePositionColumn][0] != 'W')
 					return false;
@@ -979,7 +1329,7 @@ std::string Ask_User_For_Next_Move(const std::vector< std::vector<std::string> >
 	while (!isValueCorrect)
 	{
 		// Prompt user for next command that will be the next grid position to attack
-		std::cout << "Enter your next move (e.g. WP1 A4): ";
+		std::cout << CurrentPlayer << " enter your next move (e.g. WP1 A4): ";
 
 		getline(std::cin, NextMove);
 
@@ -1031,14 +1381,14 @@ std::string Ask_User_For_Next_Move(const std::vector< std::vector<std::string> >
 		if (NewChessPiecePosition.size() != 2)
 			continue;
 
-		if (NewChessPiecePosition[0] >= 65 && NewChessPiecePosition[0] <= 72)
+		if (NewChessPiecePosition[0] < 65 && NewChessPiecePosition[0] > 72)
 			continue;
 
-		if (NewChessPiecePosition[1] >= 49 && NewChessPiecePosition[1] <= 56)
+		if (NewChessPiecePosition[1] < 49 && NewChessPiecePosition[1] > 56)
 			continue;
 
-		unsigned int NewChessPiecePositionColumn, NewChessPiecePositionRow;
-		ConvertNewChessPiecePosition(NewChessPiecePosition, NewChessPiecePositionColumn, NewChessPiecePositionRow);
+		unsigned int NewChessPiecePositionRow, NewChessPiecePositionColumn;
+		ConvertNewChessPiecePosition(NewChessPiecePosition, NewChessPiecePositionRow, NewChessPiecePositionColumn);
 
 		if (Is_Next_Move_Legal(Board, NextMove, CurrentPlayer, HumanPlayer, NumberOfPlayers, ChessPiece, NewChessPiecePositionRow, NewChessPiecePositionColumn, WhiteCapturedPieces, BlackCapturedPieces, PawnPromotionPieceCount, HasCastlingPiecesMoved))
 			isValueCorrect = true;
@@ -1168,32 +1518,54 @@ void ConvertNewChessPiecePosition(const std::string NewChessPiecePosition,
 																	unsigned int& NewChessPiecePositionRow,
 																	unsigned int& NewChessPiecePositionColumn)
 {
+	if (NewChessPiecePosition[1] == '1')
+		NewChessPiecePositionRow = 7;
+
+	else if (NewChessPiecePosition[1] == '2')
+		NewChessPiecePositionRow = 6;
+
+	else if (NewChessPiecePosition[1] == '3')
+		NewChessPiecePositionRow = 5;
+
+	else if (NewChessPiecePosition[1] == '4')
+		NewChessPiecePositionRow = 4;
+
+	else if (NewChessPiecePosition[1] == '5')
+		NewChessPiecePositionRow = 3;
+
+	else if (NewChessPiecePosition[1] == '6')
+		NewChessPiecePositionRow = 2;
+
+	else if (NewChessPiecePosition[1] == '7')
+		NewChessPiecePositionRow = 1;
+
+	else if (NewChessPiecePosition[1] == '8')
+		NewChessPiecePositionRow = 0;
+
+
 	if (NewChessPiecePosition[0] == 'A')
-		NewChessPiecePositionColumn = 1;
+		NewChessPiecePositionColumn = 0;
 
 	else if (NewChessPiecePosition[0] == 'B')
-		NewChessPiecePositionColumn = 2;
+		NewChessPiecePositionColumn = 1;
 
 	else if (NewChessPiecePosition[0] == 'C')
-		NewChessPiecePositionColumn = 3;
+		NewChessPiecePositionColumn = 2;
 
 	else if (NewChessPiecePosition[0] == 'D')
-		NewChessPiecePositionColumn = 4;
+		NewChessPiecePositionColumn = 3;
 
 	else if (NewChessPiecePosition[0] == 'E')
-		NewChessPiecePositionColumn = 5;
+		NewChessPiecePositionColumn = 4;
 
 	else if (NewChessPiecePosition[0] == 'F')
-		NewChessPiecePositionColumn = 6;
+		NewChessPiecePositionColumn = 5;
 
 	else if (NewChessPiecePosition[0] == 'G')
-		NewChessPiecePositionColumn = 7;
+		NewChessPiecePositionColumn = 6;
 
 	else if (NewChessPiecePosition[0] == 'H')
-		NewChessPiecePositionColumn = 8;
-
-
-	NewChessPiecePositionRow = NewChessPiecePosition[1];
+		NewChessPiecePositionColumn = 7;
 }
 
 void Execute_Next_Move(std::vector< std::vector<std::string> >& Board,
@@ -1205,7 +1577,7 @@ void Execute_Next_Move(std::vector< std::vector<std::string> >& Board,
 											 std::vector<std::string>& BlackCapturedPieces,
 											 std::vector<unsigned int>& PawnPromotionPieceCount)
 { 
-	// Get chess piece
+	// Split up NextMove
 	std::string ChessPiece, NewChessPiecePosition;
 
 	for (unsigned int currentPosition = 0, spaceCount = 0; currentPosition < NextMove.size(); currentPosition++) //Iterate across the line
@@ -1222,7 +1594,7 @@ void Execute_Next_Move(std::vector< std::vector<std::string> >& Board,
 
 	// Get new position of the chess piece
 	unsigned int NewChessPiecePositionColumn, NewChessPiecePositionRow;
-	ConvertNewChessPiecePosition(NewChessPiecePosition, NewChessPiecePositionColumn, NewChessPiecePositionRow);
+	ConvertNewChessPiecePosition(NewChessPiecePosition, NewChessPiecePositionRow, NewChessPiecePositionColumn);
 
 	// Find position of current piece
 	unsigned int CurrentChessPiecePositionRow = 0, CurrentChessPiecePositionColumn = 0;
@@ -1301,7 +1673,7 @@ void Execute_Next_Move(std::vector< std::vector<std::string> >& Board,
 
 		// Pawn Promotion Check
 		if (ChessPiece[1] == 'P')
-			if (NewChessPiecePositionRow == 0)
+			if (NewChessPiecePositionRow == 7)
 			{
 				std::string Pawn_Promotion_Choice = Get_Pawn_Promotion_Choice(NumberOfPlayers, CurrentPlayer, HumanPlayer);
 
@@ -1467,7 +1839,6 @@ void Display_Winning_Message(const std::vector< std::vector<std::string> >& Boar
 }
 
 // Castling in Execute_Next_Move()
-// Is_King_In_Check()
 // Ask user for colour for if one player chosen
 
 // En passant (only pawns can do it and must be done straight away by oppennent)
