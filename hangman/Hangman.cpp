@@ -1,11 +1,13 @@
 //
-// The file contains the implementation of the Hangman game
+//  @File: Hangman.cpp
+//  @Author: Junaid Afzal
 //
 
 #include "Hangman.hpp"
+#include <iostream>
 #include <ctime>
+#include <limits>
 #include <fstream>
-#include <string>
 #include <conio.h>
 
 void Setup_Game(std::string& WordToBeGuessed,
@@ -13,15 +15,15 @@ void Setup_Game(std::string& WordToBeGuessed,
   unsigned int& NumberOfPlayers,
   std::string& PlayerThatIsGuessing)
 {
-  std::cout << "--------------------Hangman--------------------\n\n";
+  // Set seed of srand to time(0) so pseudo random
+  std::srand((unsigned int)std::time(0));
 
-  // Prompt the user for the number of players if one the computer will guess and if two then human user will guess
-  NumberOfPlayers = Ask_User_For_Number_Of_Players();
+  NumberOfPlayers = Get_Number_Of_Players();
 
   if (NumberOfPlayers == 2)
   {
     // Prompt the user for the word to be guessed
-    WordToBeGuessed = Ask_User_For_Word_To_Be_Guessed();
+    WordToBeGuessed = Ask_User_For_Word_To_Be_Guessed(NumberOfPlayers, PlayerThatIsGuessing);
 
     // All players are humans so no need to ask
     PlayerThatIsGuessing = "HUMAN";
@@ -29,25 +31,19 @@ void Setup_Game(std::string& WordToBeGuessed,
 
   else if (NumberOfPlayers == 1)
   {
-    // Set seed of srand to time(0) so pseudo random
-    std::srand((unsigned int)std::time(0));
-
     // Prompts the user for who is guessing the word (human or computer)
-    PlayerThatIsGuessing = Ask_User_For_Who_Is_Guessing();
+    PlayerThatIsGuessing = Ask_User_For_Who_Is_Guessing(NumberOfPlayers);
 
     if (PlayerThatIsGuessing == "HUMAN")
       // Prompt the computer for the word to be guessed
       WordToBeGuessed = Ask_Computer_For_Word_To_Be_Guessed();
 
     else
-      WordToBeGuessed = Ask_User_For_Word_To_Be_Guessed();
+      WordToBeGuessed = Ask_User_For_Word_To_Be_Guessed(NumberOfPlayers, PlayerThatIsGuessing);
   }
 
   else if (NumberOfPlayers == 0)
   {
-    // Set seed of srand to time(0) so pseudo random
-    std::srand((unsigned int)std::time(0));
-
     // Prompt the computer for the word to be guessed
     WordToBeGuessed = Ask_Computer_For_Word_To_Be_Guessed();
 
@@ -60,13 +56,15 @@ void Setup_Game(std::string& WordToBeGuessed,
     CurrentGuessOfWord.push_back('_');
 }
 
-unsigned int Ask_User_For_Number_Of_Players(void)
+unsigned int Get_Number_Of_Players(void)
 {
   bool IsValueCorrect = false; // Flag for if input value is valid
   unsigned int NumberOfPlayers = 0;
 
   while (!IsValueCorrect)
   {
+    Clear_Terminal();
+    std::cout << "--------------------Hangman--------------------\n\n";
     std::cout << "Enter the number of players: ";
 
     std::cin >> NumberOfPlayers;
@@ -79,8 +77,7 @@ unsigned int Ask_User_For_Number_Of_Players(void)
       continue;
     }
 
-    // Only 0 1 and 2 amount of players allowed
-    else if (NumberOfPlayers != 0 && NumberOfPlayers != 1 && NumberOfPlayers != 2)
+    else if (NumberOfPlayers < 0 || NumberOfPlayers > 2) // Only 0, 1 and 2 players allowed
     {
       // Clear buffer and retry
       std::cin.clear();
@@ -92,13 +89,18 @@ unsigned int Ask_User_For_Number_Of_Players(void)
       IsValueCorrect = true;
   }
 
+  // Clear buffer
+  std::cin.clear();
+  std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
   return NumberOfPlayers;
 }
 
-std::string Ask_User_For_Word_To_Be_Guessed(void) //spaces or -
+std::string Ask_User_For_Word_To_Be_Guessed(const unsigned int& NumberOfPlayers,
+                                            const std::string& PlayerThatIsGuessing)
 {
   bool IsValueCorrect = false; // Flag for if input value is valid
-  std::string WordToBeGuessed;
+  std::string WordToBeGuessed; // No spaces or - allowed
 
   while (!IsValueCorrect)
   {
@@ -106,7 +108,12 @@ std::string Ask_User_For_Word_To_Be_Guessed(void) //spaces or -
     // within a nested if statements within nested for loops
     IsValueCorrect = true;
 
-    std::cout << "Enter the word to be guessed: ";
+    Clear_Terminal();
+    std::cout << "--------------------Hangman--------------------";
+    std::cout << "\n\nEnter the number of players: " << NumberOfPlayers;
+    if (NumberOfPlayers == 1)
+      std::cout << "\n\nEnter player that will be guessing (HUMAN or COMPUTER): " << PlayerThatIsGuessing;
+    std::cout << "\n\nEnter the word to be guessed: ";
 
     std::cin >> WordToBeGuessed;
 
@@ -119,7 +126,7 @@ std::string Ask_User_For_Word_To_Be_Guessed(void) //spaces or -
       continue;
     }
 
-    // Only accept chars that are either captial or lowercase letters
+    // Only accept chars that are either capital or lowercase letters
     for (unsigned int i = 0; i < WordToBeGuessed.size(); i++)
     {
       if (WordToBeGuessed[i] < 'A')
@@ -140,7 +147,7 @@ std::string Ask_User_For_Word_To_Be_Guessed(void) //spaces or -
         break;
       }
 
-      // Check for [ \ ] ^ _ ` as they occur inbetween the uppercase and lowercase letters blocks
+      // Check for [ \ ] ^ _ ` as they occur in between the uppercase and lowercase letters blocks
       else if (WordToBeGuessed[i] >= 91 && WordToBeGuessed[i] <= 96)
       {
         // Clear buffer and retry
@@ -160,122 +167,16 @@ std::string Ask_User_For_Word_To_Be_Guessed(void) //spaces or -
 
 void Capitalise_Word(std::string& aWord)
 {
-  // Takes a string and replaces every lowercase occurrence of a letter
-  // and replaces it with its corresponding uppercase letter
+  // Assuming aWord contains only letters of unkown capitalisation, if 
+  // a letter is lower case (>=97) then minus 32 to capitalise it
   for (unsigned int i = 0; i < aWord.size(); i++)
   {
-    switch (aWord[i]) {
-    case 'a':
-      aWord[i] = 'A';
-      break;
-
-    case 'b':
-      aWord[i] = 'B';
-      break;
-
-    case 'c':
-      aWord[i] = 'C';
-      break;
-
-    case 'd':
-      aWord[i] = 'D';
-      break;
-
-    case 'e':
-      aWord[i] = 'E';
-      break;
-
-    case 'f':
-      aWord[i] = 'F';
-      break;
-
-    case 'g':
-      aWord[i] = 'G';
-      break;
-
-    case 'h':
-      aWord[i] = 'H';
-      break;
-
-    case 'i':
-      aWord[i] = 'I';
-      break;
-
-    case 'j':
-      aWord[i] = 'J';
-      break;
-
-    case 'k':
-      aWord[i] = 'K';
-      break;
-
-    case 'l':
-      aWord[i] = 'L';
-      break;
-
-    case 'm':
-      aWord[i] = 'M';
-      break;
-
-    case 'n':
-      aWord[i] = 'N';
-      break;
-
-    case 'o':
-      aWord[i] = 'O';
-      break;
-
-    case 'p':
-      aWord[i] = 'P';
-      break;
-
-    case 'q':
-      aWord[i] = 'Q';
-      break;
-
-    case 'r':
-      aWord[i] = 'R';
-      break;
-
-    case 's':
-      aWord[i] = 'S';
-      break;
-
-    case 't':
-      aWord[i] = 'T';
-      break;
-
-    case 'u':
-      aWord[i] = 'U';
-      break;
-
-    case 'v':
-      aWord[i] = 'V';
-      break;
-
-    case 'w':
-      aWord[i] = 'W';
-      break;
-
-    case 'x':
-      aWord[i] = 'X';
-      break;
-
-    case 'y':
-      aWord[i] = 'Y';
-      break;
-
-    case 'z':
-      aWord[i] = 'Z';
-      break;
-
-    default:
-      break;
-    }
+    if (aWord[i] >= 97)
+      aWord[i] -= 32;
   }
 }
 
-std::string Ask_User_For_Who_Is_Guessing(void)
+std::string Ask_User_For_Who_Is_Guessing(const unsigned int& NumberOfPlayers)
 {
   bool IsValueCorrect = false; // Flag for if input value is valid
   std::string PlayerThatWillBeGuessing;
@@ -286,7 +187,10 @@ std::string Ask_User_For_Who_Is_Guessing(void)
     // within a nested if statements within nested for loops
     IsValueCorrect = true;
 
-    std::cout << "Enter player that will be guessing (HUMAN or COMPUTER): ";
+    Clear_Terminal();
+    std::cout << "--------------------Hangman--------------------";
+    std::cout << "\n\nEnter the number of players: " << NumberOfPlayers;
+    std::cout << "\n\nEnter player that will be guessing (HUMAN or COMPUTER): ";
 
     std::cin >> PlayerThatWillBeGuessing;
 
@@ -299,7 +203,7 @@ std::string Ask_User_For_Who_Is_Guessing(void)
       continue;
     }
 
-    // Only accept chars that are either captial or lowercase letters
+    // Only accept chars that are either capital or lowercase letters
     for (unsigned int i = 0; i < PlayerThatWillBeGuessing.size(); i++)
     {
       if (PlayerThatWillBeGuessing[i] < 'A')
@@ -320,7 +224,7 @@ std::string Ask_User_For_Who_Is_Guessing(void)
         break;
       }
 
-      // Check for [ \ ] ^ _ ` as they occur inbetween the uppercase and lowercase letters blocks
+      // Check for [ \ ] ^ _ ` as they occur in between the uppercase and lowercase letters blocks
       else if (PlayerThatWillBeGuessing[i] >= 91 && PlayerThatWillBeGuessing[i] <= 96)
       {
         // Clear buffer and retry
@@ -364,11 +268,11 @@ std::string Ask_Computer_For_Word_To_Be_Guessed(void)
 
       while (CurrentLineNumber != LineNumber)
       {
-        getline(WordList, WordToBeGuessed);
+        std::getline(WordList, WordToBeGuessed);
         CurrentLineNumber++;
       }
 
-      // Only accept chars that are either captial or lowercase letters
+      // Only accept chars that are either capital or lowercase letters
       for (unsigned int i = 0; i < WordToBeGuessed.size(); i++)
       {
         if (WordToBeGuessed[i] < 'A')
@@ -389,7 +293,7 @@ std::string Ask_Computer_For_Word_To_Be_Guessed(void)
           break;
         }
 
-        // Check for [ \ ] ^ _ ` as they occur inbetween the uppercase and lowercase letters blocks
+        // Check for [ \ ] ^ _ ` as they occur in between the uppercase and lowercase letters blocks
         else if (WordToBeGuessed[i] >= 91 && WordToBeGuessed[i] <= 96)
         {
           // Clear buffer and retry
@@ -440,9 +344,7 @@ void Display_Game(const unsigned int& NumberOfErrors,
                   const std::string& CurrentGuessOfWord,
                   const std::vector<std::string>& IncorrectGuesses)
 {
-  // ***Better alternative needed***
-  // Clears terminal window
-  system("cls");
+  Clear_Terminal();
 
   std::cout << "--------------------Hangman--------------------\n\n";
 
@@ -454,47 +356,47 @@ void Display_Game(const unsigned int& NumberOfErrors,
     break;
 
   case 1:
-    std::cout << "\n\n\n\n\n\n" << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << "\n\n";
+    std::cout << "\n\n\n\n\n\n─────────\n\n";
     break;
 
   case 2:
-    std::cout << "\n    " << (char)179 << "\n    " << (char)179 << "\n    " << (char)179 << "\n    " << (char)179 << "\n    " << (char)179 << '\n' << (char)196 << (char)196 << (char)196 << (char)196 << (char)193 << (char)196 << (char)196 << (char)196 << (char)196 << "\n\n";
+    std::cout << "\n    │\n    │\n    │\n    │\n    │\n────┴────\n\n";
     break;
 
   case 3:
-    std::cout << "    " << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << "\n    " << (char)179 << "\n    " << (char)179 << "\n    " << (char)179 << "\n    " << (char)179 << "\n    " << (char)179 << '\n' << (char)196 << (char)196 << (char)196 << (char)196 << (char)193 << (char)196 << (char)196 << (char)196 << (char)196 << "\n\n";
+    std::cout << "    ┌────────\n    │\n    │\n    │\n    │\n    │\n────┴────\n\n";
     break;
 
   case 4:
-    std::cout << "    " << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)191 << "\n    " << (char)179 << "       " << (char)179 << "\n    " << (char)179 << "\n    " << (char)179 << "\n    " << (char)179 << "\n    " << (char)179 << '\n' << (char)196 << (char)196 << (char)196 << (char)196 << (char)193 << (char)196 << (char)196 << (char)196 << (char)196 << "\n\n";
+    std::cout << "    ┌───────┐\n    │       │\n    │\n    │\n    │\n    │\n────┴────\n\n";
     break;
 
   case 5:
-    std::cout << "    " << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)191 << "\n    " << (char)179 << "       " << (char)179 << "\n    " << (char)179 << "       O\n    " << (char)179 << "\n    " << (char)179 << "\n    " << (char)179 << '\n' << (char)196 << (char)196 << (char)196 << (char)196 << (char)193 << (char)196 << (char)196 << (char)196 << (char)196 << "\n\n";
+    std::cout << "    ┌───────┐\n    │       │\n    │       O\n    │\n    │\n    │\n────┴────\n\n";
     break;
 
   case 6:
-    std::cout << "    " << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)191 << "\n    " << (char)179 << "       " << (char)179 << "\n    " << (char)179 << "       O\n    " << (char)179 << "       |\n    " << (char)179 << "\n    " << (char)179 << '\n' << (char)196 << (char)196 << (char)196 << (char)196 << (char)193 << (char)196 << (char)196 << (char)196 << (char)196 << "\n\n";
+    std::cout << "    ┌───────┐\n    │       │\n    │       O\n    │       |\n    │\n    │\n────┴────\n\n";
     break;
 
   case 7:
-    std::cout << "    " << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)191 << "\n    " << (char)179 << "       " << (char)179 << "\n    " << (char)179 << "       O\n    " << (char)179 << "       |\n    " << (char)179 << "      /\n    " << (char)179 << '\n' << (char)196 << (char)196 << (char)196 << (char)196 << (char)193 << (char)196 << (char)196 << (char)196 << (char)196 << "\n\n";
+    std::cout << "    ┌───────┐\n    │       │\n    │       O\n    │       |\n    │      /\n    │\n────┴────\n\n";
     break;
 
   case 8:
-    std::cout << "    " << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)191 << "\n    " << (char)179 << "       " << (char)179 << "\n    " << (char)179 << "       O\n    " << (char)179 << "       |\n    " << (char)179 << "      / \\\n    " << (char)179 << '\n' << (char)196 << (char)196 << (char)196 << (char)196 << (char)193 << (char)196 << (char)196 << (char)196 << (char)196 << "\n\n";
+    std::cout << "    ┌───────┐\n    │       │\n    │       O\n    │       |\n    │      / \\\n    │\n────┴────\n\n";
     break;
 
   case 9:
-    std::cout << "    " << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)191 << "\n    " << (char)179 << "       " << (char)179 << "\n    " << (char)179 << "       O\n    " << (char)179 << "      /|\n    " << (char)179 << "      / \\\n    " << (char)179 << '\n' << (char)196 << (char)196 << (char)196 << (char)196 << (char)193 << (char)196 << (char)196 << (char)196 << (char)196 << "\n\n";
+    std::cout << "    ┌───────┐\n    │       │\n    │       O\n    │      /|\n    │      / \\\n    │\n────┴────\n\n";
     break;
 
   case 10:
-    std::cout << "    " << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)191 << "\n    " << (char)179 << "       " << (char)179 << "\n    " << (char)179 << "       O\n    " << (char)179 << "      /|\\\n    " << (char)179 << "      / \\\n    " << (char)179 << '\n' << (char)196 << (char)196 << (char)196 << (char)196 << (char)193 << (char)196 << (char)196 << (char)196 << (char)196 << "\n\n";
+    std::cout << "    ┌───────┐\n    │       │\n    │       O\n    │      /|\\\n    │      / \\\n    │\n────┴────\n\n";
     break;
 
   default:
-    std::cout << "Error in Display_Game() switch statment\n";
+    std::cout << "Error in Display_Game() switch statement\n";
     break;
   }
 
@@ -502,16 +404,23 @@ void Display_Game(const unsigned int& NumberOfErrors,
   for (unsigned int i = 0; i < CurrentGuessOfWord.size(); i++)
     std::cout << CurrentGuessOfWord[i] << " ";
 
-  //Incorrect guesses
-  std::cout << "\n\nIncorrect Guesses\n";
+  // Incorrect guesses
+  std::cout << "\n\nIncorrect Guesses:\n";
   for (unsigned int i = 0; i < IncorrectGuesses.size(); i++)
     std::cout << IncorrectGuesses[i] << "   ";
+}
 
-  std::cout << "\n\n";
+void Clear_Terminal(void)
+{
+  // ***Better alternative needed***
+  // 100 new lines to clear console
+  std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 }
 
 std::string Ask_User_For_Next_Guess(const std::vector<std::string>& IncorrectGuesses,
-                                    const std::vector<std::string>& CorrectGuesses)
+                                    const std::vector<std::string>& CorrectGuesses,
+                                    const unsigned int& NumberOfErrors,
+                                    const std::string& CurrentGuessOfWord)
 {
   bool IsValueCorrect = false; // Flag for if input value is valid
   std::string Guess;
@@ -522,7 +431,8 @@ std::string Ask_User_For_Next_Guess(const std::vector<std::string>& IncorrectGue
     // within a nested if statements within nested for loops
     IsValueCorrect = true;
 
-    std::cout << "Enter your guess: ";
+    Display_Game(NumberOfErrors, CurrentGuessOfWord, IncorrectGuesses);
+    std::cout << "\n\nEnter your guess: ";
 
     std::cin >> Guess;
 
@@ -535,7 +445,7 @@ std::string Ask_User_For_Next_Guess(const std::vector<std::string>& IncorrectGue
       continue;
     }
 
-    // Only accept chars that are either captial or lowercase letters
+    // Only accept chars that are either capital or lowercase letters
     for (unsigned int i = 0; i < Guess.size(); i++)
     {
       if (Guess[i] < 'A')
@@ -556,7 +466,7 @@ std::string Ask_User_For_Next_Guess(const std::vector<std::string>& IncorrectGue
         break;
       }
 
-      // Check for [ \ ] ^ _ ` as they occur inbetween the uppercase and lowercase letters blocks
+      // Check for [ \ ] ^ _ ` as they occur in between the uppercase and lowercase letters blocks
       else if (Guess[i] >= 91 && Guess[i] <= 96)
       {
         // Clear buffer and retry
@@ -591,7 +501,9 @@ std::string Ask_User_For_Next_Guess(const std::vector<std::string>& IncorrectGue
 }
 
 std::string Ask_Computer_For_Next_Guess(const std::vector<std::string>& IncorrectGuesses,
-                                        const std::vector<std::string>& CorrectGuesses)
+                                        const std::vector<std::string>& CorrectGuesses,
+                                        const unsigned int& NumberOfErrors,
+                                        const std::string& CurrentGuessOfWord)
 {
   bool IsValueCorrect = false; // Flag for if input value is valid
   std::string Guess = " ";
@@ -621,19 +533,20 @@ std::string Ask_Computer_For_Next_Guess(const std::vector<std::string>& Incorrec
       }
   }
 
+  Display_Game(NumberOfErrors, CurrentGuessOfWord, IncorrectGuesses);
   // Output a message which is similar to human player guess
-  std::cout << "Computer guessed: " << Guess << "\n\n\n\n";
+  std::cout << "\n\nComputer guessed: " << Guess << "\n\n\n\n";
 
   return Guess;
 }
 
 bool Check_Guess_Against_Word(const std::string& Guess,
                               const std::string& WordToBeGuessed,
-  std::string& CurrentGuessOfWord)
+                              std::string& CurrentGuessOfWord)
 {
   bool IsGuessCorrect = false;
 
-  // If below is true then guess is a letter and every occurence of this letter
+  // If below is true then guess is a letter and every occurrence of this letter
   // needs to be deposited is the current guess of word
   if (Guess.size() == 1)
   {
@@ -667,18 +580,20 @@ void Display_Game_Over_Message(const unsigned int& NumberOfErrors,
   Display_Game(NumberOfErrors, CurrentGuessOfWord, IncorrectGuesses);
   // If the below is true then hangman has reached its final state and thus user has lost
   if (NumberOfErrors == 10)
-    std::cout << "GAME OVER\n\nThe word was " << WordToBeGuessed << ".\n\nThe guessser has lost! The game lasted " << NumberOfTurns << " turns.\n\n";
+    std::cout << "\n\nGAME OVER\n\nThe guessser has lost but lasted for " <<  NumberOfTurns << " turns!\n\nThe word was " << WordToBeGuessed;
 
   else
-    std::cout << "GAME OVER\n\nThe guesser has won! The game lasted " << NumberOfTurns << " turns.\n\n";
+    std::cout << "\n\nGAME OVER\n\nThe guesser has won!\n\nThe game lasted " << NumberOfTurns << " turns";
 
-  std::cout << "Press 'Q' to quit the game OR press any other key to play again.\n";
+  std::cout << "\n\nPress 'Q' to quit the game OR press any other key to play again...";
 
-  // ***Better alternative needed***
-  // Gets key pressed and then clears terminal window
+  // Gets key pressed and then checks and clears terminal window if replaying
   char Decision = _getch();
-  system("cls");
 
   if (Decision == 'q')
     GameIsRunning = false;
+  
+  else
+    // Start from blank console
+    Clear_Terminal();
 }

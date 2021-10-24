@@ -1,3 +1,2 @@
 # Contents of .gitignore
-build/
-html/
+.exe
