@@ -6,10 +6,10 @@
 
 ## TicTacToe
 <p align="center">
- <img src="https://github.com/J-Afzal/Terminal_Games/blob/master/screenshots/TicTacToe%20Playing.png">
+ <img src="https://github.com/J-Afzal/Terminal-Games/blob/master/screenshots/TicTacToe%20Playing.png">
 </p>
 <p align="center">
- <img src="https://github.com/J-Afzal/Terminal_Games/blob/master/screenshots/TicTacToe%20Game%20Over.png">
+ <img src="https://github.com/J-Afzal/Terminal-Games/blob/master/screenshots/TicTacToe%20Game%20Over.png">
 </p>
 
 * Supports 0-2 players
@@ -21,10 +21,10 @@
 
 ## Hangman
 <p align="center">
- <img src="https://github.com/J-Afzal/Terminal_Games/blob/master/screenshots/Hangman%20Playing.png">
+ <img src="https://github.com/J-Afzal/Terminal-Games/blob/master/screenshots/Hangman%20Playing.png">
 </p>
 <p align="center">
- <img src="https://github.com/J-Afzal/Terminal_Games/blob/master/screenshots/Hangman%20Game%20Over.png">
+ <img src="https://github.com/J-Afzal/Terminal-Games/blob/master/screenshots/Hangman%20Game%20Over.png">
 </p>
 
 * Supports 0-2 players
@@ -38,10 +38,10 @@
 
 ## Battleships
 <p align="center">
- <img src="https://github.com/J-Afzal/Terminal_Games/blob/master/screenshots/Battleships%20Playing.png">
+ <img src="https://github.com/J-Afzal/Terminal-Games/blob/master/screenshots/Battleships%20Playing.png">
 </p>
 <p align="center">
- <img src="https://github.com/J-Afzal/Terminal_Games/blob/master/screenshots/Battleships%20Game%20Over.png">
+ <img src="https://github.com/J-Afzal/Terminal-Games/blob/master/screenshots/Battleships%20Game%20Over.png">
 </p>
 
 * Supports 0-1 players
