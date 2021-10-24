@@ -9,10 +9,10 @@ An individual project in making simple games that run in the terminal
 
 ### TiTacToe
 <p align="center">
- <img src="https://github.com/J-Afzal/Terminal_Games/blob/main/screenshots/TicTacToe%20Playing.png">
+ <img src="https://github.com/J-Afzal/Terminal_Games/blob/master/screenshots/TicTacToe%20Playing.png">
 </p>
 <p align="center">
- <img src="https://github.com/J-Afzal/Terminal_Games/blob/main/screenshots/TicTacToe%20Game%20Over.png">
+ <img src="https://github.com/J-Afzal/Terminal_Games/blob/master/screenshots/TicTacToe%20Game%20Over.png">
 </p>
 
 * Supports 0-2 players
@@ -24,10 +24,10 @@ An individual project in making simple games that run in the terminal
 
 ### Hangman
 <p align="center">
- <img src="https://github.com/J-Afzal/Terminal_Games/blob/main/screenshots/Hangman%20Playing.png">
+ <img src="https://github.com/J-Afzal/Terminal_Games/blob/master/screenshots/Hangman%20Playing.png">
 </p>
 <p align="center">
- <img src="https://github.com/J-Afzal/Terminal_Games/blob/main/screenshots/Hangman%20Game%20Over.png">
+ <img src="https://github.com/J-Afzal/Terminal_Games/blob/master/screenshots/Hangman%20Game%20Over.png">
 </p>
 
 * Supports 0-2 players
@@ -42,10 +42,10 @@ An individual project in making simple games that run in the terminal
 
 ### Battleships
 <p align="center">
- <img src="https://github.com/J-Afzal/Terminal_Games/blob/main/screenshots/Battleships%20Playing.png">
+ <img src="https://github.com/J-Afzal/Terminal_Games/blob/master/screenshots/Battleships%20Playing.png">
 </p>
 <p align="center">
- <img src="https://github.com/J-Afzal/Terminal_Games/blob/main/screenshots/Battleships%20Game%20Over.png">
+ <img src="https://github.com/J-Afzal/Terminal_Games/blob/master/screenshots/Battleships%20Game%20Over.png">
 </p>
 
 * Supports 0-1 players
