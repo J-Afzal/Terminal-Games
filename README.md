@@ -1,7 +1,6 @@
-# Terminal_Games
 An individual project in making simple games that run in the terminal
 
-### Game List:
+## Game List:
 * TicTacToe
 * Hangman
 * Battleships
