@@ -1,5 +1,3 @@
-An individual project in making simple games that run in the terminal
-
 ## Game List:
 * TicTacToe
 * Hangman
