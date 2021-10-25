@@ -7,8 +7,6 @@
 ## TicTacToe
 <p align="center">
  <img src="https://github.com/J-Afzal/Terminal-Games/blob/master/screenshots/TicTacToe%20Playing.png">
-</p>
-<p align="center">
  <img src="https://github.com/J-Afzal/Terminal-Games/blob/master/screenshots/TicTacToe%20Game%20Over.png">
 </p>
 
@@ -22,8 +20,6 @@
 ## Hangman
 <p align="center">
  <img src="https://github.com/J-Afzal/Terminal-Games/blob/master/screenshots/Hangman%20Playing.png">
-</p>
-<p align="center">
  <img src="https://github.com/J-Afzal/Terminal-Games/blob/master/screenshots/Hangman%20Game%20Over.png">
 </p>
 
@@ -39,8 +35,6 @@
 ## Battleships
 <p align="center">
  <img src="https://github.com/J-Afzal/Terminal-Games/blob/master/screenshots/Battleships%20Playing.png">
-</p>
-<p align="center">
  <img src="https://github.com/J-Afzal/Terminal-Games/blob/master/screenshots/Battleships%20Game%20Over.png">
 </p>
 
