@@ -49,6 +49,6 @@ int main(void)
     // Displays the winning or losing message
     Display_Game_Over_Message(NumberOfErrors, CurrentGuessOfWord, IncorrectGuesses, NumberOfTurns, WordToBeGuessed, GameIsRunning);
   }
-  
+
   return 0;
 }

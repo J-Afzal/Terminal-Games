@@ -1,19 +1,19 @@
-#include "../include/Chess.hpp"
+#include "Chess.hpp"
 
-int main(void) {
-
+int main(void)
+{
 	bool GameIsRunning = true;
 
 	while (GameIsRunning)
 	{
-		std::vector< std::vector<std::string> > Board;
+		std::vector<std::vector<std::string>> Board;
 		std::vector<std::string> WhiteCapturedPieces;
 		std::vector<std::string> BlackCapturedPieces;
 		unsigned int NumberOfPlayers, NumberOfTurns = 0;
-		std::vector<unsigned int> PawnPromotionPieceCount = { 2, 2, 2, 1, 2, 2, 2, 1 }; // WhiteRookCount = 2, WhiteKnightCount = 2, WhiteBishopCount = 2, WhiteQueenCount = 1, BlackRookCount = 2, BlackKnightCount = 2, BlackBishopCount = 2, BlackQueenCount = 1
+		std::vector<unsigned int> PawnPromotionPieceCount = {2, 2, 2, 1, 2, 2, 2, 1}; // WhiteRookCount = 2, WhiteKnightCount = 2, WhiteBishopCount = 2, WhiteQueenCount = 1, BlackRookCount = 2, BlackKnightCount = 2, BlackBishopCount = 2, BlackQueenCount = 1
 		std::string HumanPlayer, CurrentPlayer;
 		bool Stalemate = false;
-		std::vector<bool> HasCastlingPiecesMoved = { false, false, false, false, false, false }; // WK, WR1, WR2, BK, BR1, BR2
+		std::vector<bool> HasCastlingPiecesMoved = {false, false, false, false, false, false}; // WK, WR1, WR2, BK, BR1, BR2
 
 		Setup_Game(Board, NumberOfPlayers, HumanPlayer, CurrentPlayer);
 
@@ -58,6 +58,6 @@ int main(void) {
 
 		Display_Winning_Message(Board, WhiteCapturedPieces, BlackCapturedPieces, Stalemate, CurrentPlayer, NumberOfTurns, GameIsRunning);
 	}
-	
+
 	return 0;
 }

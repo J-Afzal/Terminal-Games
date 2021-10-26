@@ -13,7 +13,7 @@ int main(void)
   {
     // GameData contains the Tic Tac Toe grid
     unsigned int NumberOfTurns = 0, CurrentPlayer = 0, NumberOfPlayers = 0, UserXOChoice = 0;
-    std::vector< std::vector<std::string> > GameData;
+    std::vector<std::vector<std::string>> GameData;
 
     // The user is asked for the number of (human) players
     // If this is 1, the human player is asked if they want to be player X or player O
@@ -38,6 +38,6 @@ int main(void)
     // Determine the winner, if there is one, and display winning message
     Display_Game_Over_Message(NumberOfTurns, GameData, CurrentPlayer, GameIsRunning);
   }
-  
+
   return 0;
 }

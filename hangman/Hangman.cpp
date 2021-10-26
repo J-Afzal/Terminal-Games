@@ -10,10 +10,10 @@
 #include <fstream>
 #include <conio.h>
 
-void Setup_Game(std::string& WordToBeGuessed,
-  std::string& CurrentGuessOfWord,
-  unsigned int& NumberOfPlayers,
-  std::string& PlayerThatIsGuessing)
+void Setup_Game(std::string &WordToBeGuessed,
+                std::string &CurrentGuessOfWord,
+                unsigned int &NumberOfPlayers,
+                std::string &PlayerThatIsGuessing)
 {
   // Set seed of srand to time(0) so pseudo random
   std::srand((unsigned int)std::time(0));
@@ -96,8 +96,8 @@ unsigned int Get_Number_Of_Players(void)
   return NumberOfPlayers;
 }
 
-std::string Ask_User_For_Word_To_Be_Guessed(const unsigned int& NumberOfPlayers,
-                                            const std::string& PlayerThatIsGuessing)
+std::string Ask_User_For_Word_To_Be_Guessed(const unsigned int &NumberOfPlayers,
+                                            const std::string &PlayerThatIsGuessing)
 {
   bool IsValueCorrect = false; // Flag for if input value is valid
   std::string WordToBeGuessed; // No spaces or - allowed
@@ -165,9 +165,9 @@ std::string Ask_User_For_Word_To_Be_Guessed(const unsigned int& NumberOfPlayers,
   return WordToBeGuessed;
 }
 
-void Capitalise_Word(std::string& aWord)
+void Capitalise_Word(std::string &aWord)
 {
-  // Assuming aWord contains only letters of unkown capitalisation, if 
+  // Assuming aWord contains only letters of unkown capitalisation, if
   // a letter is lower case (>=97) then minus 32 to capitalise it
   for (unsigned int i = 0; i < aWord.size(); i++)
   {
@@ -176,7 +176,7 @@ void Capitalise_Word(std::string& aWord)
   }
 }
 
-std::string Ask_User_For_Who_Is_Guessing(const unsigned int& NumberOfPlayers)
+std::string Ask_User_For_Who_Is_Guessing(const unsigned int &NumberOfPlayers)
 {
   bool IsValueCorrect = false; // Flag for if input value is valid
   std::string PlayerThatWillBeGuessing;
@@ -318,7 +318,7 @@ std::string Ask_Computer_For_Word_To_Be_Guessed(void)
   return WordToBeGuessed;
 }
 
-bool Game_Over(const unsigned int& NumberOfErrors)
+bool Game_Over(const unsigned int &NumberOfErrors)
 {
   // 10 or more errors mean that the final state of the
   // hangman drawing has been reached
@@ -329,8 +329,8 @@ bool Game_Over(const unsigned int& NumberOfErrors)
     return false;
 }
 
-bool Winning_Conditions_Met(const std::string& WordToBeGuessed,
-                            const std::string& CurrentGuessOfWord)
+bool Winning_Conditions_Met(const std::string &WordToBeGuessed,
+                            const std::string &CurrentGuessOfWord)
 {
   // If there is any difference then winning condition not met
   for (unsigned int i = 0; i < WordToBeGuessed.size(); i++)
@@ -340,9 +340,9 @@ bool Winning_Conditions_Met(const std::string& WordToBeGuessed,
   return true;
 }
 
-void Display_Game(const unsigned int& NumberOfErrors,
-                  const std::string& CurrentGuessOfWord,
-                  const std::vector<std::string>& IncorrectGuesses)
+void Display_Game(const unsigned int &NumberOfErrors,
+                  const std::string &CurrentGuessOfWord,
+                  const std::vector<std::string> &IncorrectGuesses)
 {
   Clear_Terminal();
 
@@ -417,10 +417,10 @@ void Clear_Terminal(void)
   std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 }
 
-std::string Ask_User_For_Next_Guess(const std::vector<std::string>& IncorrectGuesses,
-                                    const std::vector<std::string>& CorrectGuesses,
-                                    const unsigned int& NumberOfErrors,
-                                    const std::string& CurrentGuessOfWord)
+std::string Ask_User_For_Next_Guess(const std::vector<std::string> &IncorrectGuesses,
+                                    const std::vector<std::string> &CorrectGuesses,
+                                    const unsigned int &NumberOfErrors,
+                                    const std::string &CurrentGuessOfWord)
 {
   bool IsValueCorrect = false; // Flag for if input value is valid
   std::string Guess;
@@ -500,10 +500,10 @@ std::string Ask_User_For_Next_Guess(const std::vector<std::string>& IncorrectGue
   return Guess;
 }
 
-std::string Ask_Computer_For_Next_Guess(const std::vector<std::string>& IncorrectGuesses,
-                                        const std::vector<std::string>& CorrectGuesses,
-                                        const unsigned int& NumberOfErrors,
-                                        const std::string& CurrentGuessOfWord)
+std::string Ask_Computer_For_Next_Guess(const std::vector<std::string> &IncorrectGuesses,
+                                        const std::vector<std::string> &CorrectGuesses,
+                                        const unsigned int &NumberOfErrors,
+                                        const std::string &CurrentGuessOfWord)
 {
   bool IsValueCorrect = false; // Flag for if input value is valid
   std::string Guess = " ";
@@ -540,9 +540,9 @@ std::string Ask_Computer_For_Next_Guess(const std::vector<std::string>& Incorrec
   return Guess;
 }
 
-bool Check_Guess_Against_Word(const std::string& Guess,
-                              const std::string& WordToBeGuessed,
-                              std::string& CurrentGuessOfWord)
+bool Check_Guess_Against_Word(const std::string &Guess,
+                              const std::string &WordToBeGuessed,
+                              std::string &CurrentGuessOfWord)
 {
   bool IsGuessCorrect = false;
 
@@ -550,7 +550,8 @@ bool Check_Guess_Against_Word(const std::string& Guess,
   // needs to be deposited is the current guess of word
   if (Guess.size() == 1)
   {
-    for (unsigned int i = 0; i < WordToBeGuessed.size(); i++) {
+    for (unsigned int i = 0; i < WordToBeGuessed.size(); i++)
+    {
       if (WordToBeGuessed[i] == Guess[0])
       {
         IsGuessCorrect = true;
@@ -570,17 +571,17 @@ bool Check_Guess_Against_Word(const std::string& Guess,
   return IsGuessCorrect;
 }
 
-void Display_Game_Over_Message(const unsigned int& NumberOfErrors,
-                               const std::string& CurrentGuessOfWord,
-                               const std::vector<std::string>& IncorrectGuesses,
-                               const unsigned int& NumberOfTurns,
-                               const std::string& WordToBeGuessed,
-                               bool& GameIsRunning)
+void Display_Game_Over_Message(const unsigned int &NumberOfErrors,
+                               const std::string &CurrentGuessOfWord,
+                               const std::vector<std::string> &IncorrectGuesses,
+                               const unsigned int &NumberOfTurns,
+                               const std::string &WordToBeGuessed,
+                               bool &GameIsRunning)
 {
   Display_Game(NumberOfErrors, CurrentGuessOfWord, IncorrectGuesses);
   // If the below is true then hangman has reached its final state and thus user has lost
   if (NumberOfErrors == 10)
-    std::cout << "\n\nGAME OVER\n\nThe guessser has lost but lasted for " <<  NumberOfTurns << " turns!\n\nThe word was " << WordToBeGuessed;
+    std::cout << "\n\nGAME OVER\n\nThe guessser has lost but lasted for " << NumberOfTurns << " turns!\n\nThe word was " << WordToBeGuessed;
 
   else
     std::cout << "\n\nGAME OVER\n\nThe guesser has won!\n\nThe game lasted " << NumberOfTurns << " turns";
@@ -592,7 +593,7 @@ void Display_Game_Over_Message(const unsigned int& NumberOfErrors,
 
   if (Decision == 'q')
     GameIsRunning = false;
-  
+
   else
     // Start from blank console
     Clear_Terminal();

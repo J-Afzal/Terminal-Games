@@ -9,12 +9,12 @@
 #include <algorithm>
 #include <conio.h>
 
-void Setup_Game(std::vector< std::vector<std::string> >& PlayerOneBoard,
-                std::vector< std::vector<std::string> >& PlayerOneOpponentBoard,
-                std::vector< std::vector<std::string> >& PlayerTwoBoard,
-                std::vector< std::vector<std::string> >& PlayerTwoOpponentBoard,
-                unsigned int& NumberOfPlayers,
-                std::string& CurrentPlayer)
+void Setup_Game(std::vector<std::vector<std::string>> &PlayerOneBoard,
+                std::vector<std::vector<std::string>> &PlayerOneOpponentBoard,
+                std::vector<std::vector<std::string>> &PlayerTwoBoard,
+                std::vector<std::vector<std::string>> &PlayerTwoOpponentBoard,
+                unsigned int &NumberOfPlayers,
+                std::string &CurrentPlayer)
 {
   // Board size is a standard 10 x 10
   unsigned int NumberOfRows = 10, NumberOfColumns = 10;
@@ -112,8 +112,8 @@ int Ask_User_For_Number_Of_Players(void)
   return NumberOfPlayers;
 }
 
-void Ask_User_For_Ship_Positions(std::vector< std::vector<std::string> >& PlayerOneBoard,
-                                 const std::vector< std::vector<std::string> >& PlayerOneOpponentBoard)
+void Ask_User_For_Ship_Positions(std::vector<std::vector<std::string>> &PlayerOneBoard,
+                                 const std::vector<std::vector<std::string>> &PlayerOneOpponentBoard)
 {
   unsigned int CurrentShip = 0;
 
@@ -153,7 +153,7 @@ void Ask_User_For_Ship_Positions(std::vector< std::vector<std::string> >& Player
 
       break;
     }
-          
+
     case 1:
     {
       // Battleship of size 4
@@ -276,8 +276,8 @@ void Ask_User_For_Ship_Positions(std::vector< std::vector<std::string> >& Player
   Display_Game_For_User(PlayerOneBoard, PlayerOneOpponentBoard);
 }
 
-void Display_Game_For_User(const std::vector< std::vector<std::string> >& PlayerOneBoard,
-                           const std::vector< std::vector<std::string> >& PlayerOneOpponentBoard)
+void Display_Game_For_User(const std::vector<std::vector<std::string>> &PlayerOneBoard,
+                           const std::vector<std::vector<std::string>> &PlayerOneOpponentBoard)
 {
   // ***Better alternative needed***
   // Clears terminal window
@@ -317,15 +317,15 @@ void Display_Game_For_User(const std::vector< std::vector<std::string> >& Player
   }
 }
 
-void Clear_Terminal(void) 
+void Clear_Terminal(void)
 {
   // ***Better alternative needed***
   // 100 new lines to clear console
   std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 }
 
-void Display_Game_For_Computers(const std::vector< std::vector<std::string> >& PlayerOneBoard,
-                                const std::vector< std::vector<std::string> >& PlayerTwoBoard)
+void Display_Game_For_Computers(const std::vector<std::vector<std::string>> &PlayerOneBoard,
+                                const std::vector<std::vector<std::string>> &PlayerTwoBoard)
 {
   // ***Better alternative needed***
   // Clears terminal window
@@ -346,7 +346,7 @@ void Display_Game_For_Computers(const std::vector< std::vector<std::string> >& P
         std::cout << std::left << std::setw(5) << PlayerOneBoard[i][j];
       else
         std::cout << std::left << std::setw(3) << PlayerOneBoard[i][j];
-    }    
+    }
   }
 
   // Display the user's board with hits = '■', misses = '.' and empty spots = ' '
@@ -365,11 +365,11 @@ void Display_Game_For_Computers(const std::vector< std::vector<std::string> >& P
   }
 }
 
-bool Error_Checking_Ordering_Orientation_On_User_Ship_Positions(std::vector< std::vector<std::string> >& PlayerOneBoard,
-                                                                std::string& CurrentShipPositions_string,
-                                                                std::vector<int>& CurrentShipPositions_ints,
-                                                                const unsigned int& ShipSize,
-                                                                std::string& CurrentShipPositionsOrientation)
+bool Error_Checking_Ordering_Orientation_On_User_Ship_Positions(std::vector<std::vector<std::string>> &PlayerOneBoard,
+                                                                std::string &CurrentShipPositions_string,
+                                                                std::vector<int> &CurrentShipPositions_ints,
+                                                                const unsigned int &ShipSize,
+                                                                std::string &CurrentShipPositionsOrientation)
 {
   // Check if cin failed
   if (std::cin.fail())
@@ -502,9 +502,9 @@ bool Error_Checking_Ordering_Orientation_On_User_Ship_Positions(std::vector< std
   return false;
 }
 
-bool Can_Ship_Be_Placed(const std::string& CurrentShipPositionsOrientation,
-                        const std::vector<int>& CurrentShipPositions_ints,
-                        const unsigned int& ShipSize)
+bool Can_Ship_Be_Placed(const std::string &CurrentShipPositionsOrientation,
+                        const std::vector<int> &CurrentShipPositions_ints,
+                        const unsigned int &ShipSize)
 {
   // Row and column number for CurrentShipPositions_ints on the board
   unsigned int Row = CurrentShipPositions_ints[0] / 10;
@@ -530,8 +530,8 @@ bool Can_Ship_Be_Placed(const std::string& CurrentShipPositionsOrientation,
   return true;
 }
 
-void Place_Ship(std::vector< std::vector<std::string> >& SomeBoard,
-                const std::vector<int>& CurrentShipPositions_ints,
+void Place_Ship(std::vector<std::vector<std::string>> &SomeBoard,
+                const std::vector<int> &CurrentShipPositions_ints,
                 const std::string ShipName)
 {
   // Go through all CurrentShipPositions_ints positions and overwrite its value with the ship name
@@ -545,7 +545,7 @@ void Place_Ship(std::vector< std::vector<std::string> >& SomeBoard,
   }
 }
 
-void Ask_Computer_For_Ship_Positions(std::vector< std::vector<std::string> >& ComputerBoard)
+void Ask_Computer_For_Ship_Positions(std::vector<std::vector<std::string>> &ComputerBoard)
 {
   // Will count how many ships have been assigned
   unsigned int CurrentShip = 0;
@@ -672,9 +672,9 @@ void Ask_Computer_For_Ship_Positions(std::vector< std::vector<std::string> >& Co
   }
 }
 
-void Get_Computer_Ship_Positions(std::string& CurrentShipPositionsOrientation,
-                                 std::vector<int>& CurrentShipPositions_ints,
-                                 const unsigned int& ShipSize)
+void Get_Computer_Ship_Positions(std::string &CurrentShipPositionsOrientation,
+                                 std::vector<int> &CurrentShipPositions_ints,
+                                 const unsigned int &ShipSize)
 {
   // Singles represents the column number; Tens the row number; and the FirstValue is the first value of the gird positions when ordered in ascending order
   unsigned int Singles, Tens, FirstValue;
@@ -721,8 +721,8 @@ void Get_Computer_Ship_Positions(std::string& CurrentShipPositionsOrientation,
   }
 }
 
-bool Error_Checking_On_Computer_Ship_Positions(const std::vector< std::vector<std::string> >& ComputerBoard,
-                                               const std::vector<int>& CurrentShipPositions_ints)
+bool Error_Checking_On_Computer_Ship_Positions(const std::vector<std::vector<std::string>> &ComputerBoard,
+                                               const std::vector<int> &CurrentShipPositions_ints)
 {
   // Only check required is if any of the ship positions are already occupied by another ship
   // Cycle through all ship positions
@@ -741,8 +741,8 @@ bool Error_Checking_On_Computer_Ship_Positions(const std::vector< std::vector<st
   return true;
 }
 
-bool Winning_Conditions_Met(const std::vector< std::vector<std::string> >& PlayerOneBoard,
-                            const std::vector< std::vector<std::string> >& PlayerTwoBoard)
+bool Winning_Conditions_Met(const std::vector<std::vector<std::string>> &PlayerOneBoard,
+                            const std::vector<std::vector<std::string>> &PlayerTwoBoard)
 {
   bool ArePlayerOneShipsPresent = false;
   // If there are any ship letter on the board then winning condition is not met
@@ -756,7 +756,7 @@ bool Winning_Conditions_Met(const std::vector< std::vector<std::string> >& Playe
     for (unsigned int j = 0; j < 10; j++)
       if (PlayerTwoBoard[i][j] == "C" || PlayerTwoBoard[i][j] == "B" || PlayerTwoBoard[i][j] == "D" || PlayerTwoBoard[i][j] == "S" || PlayerTwoBoard[i][j] == "P")
         ArePlayerTwoShipsPresent = true;
-  
+
   if (!ArePlayerOneShipsPresent || !ArePlayerTwoShipsPresent)
     // Then there are no ships left and winning condition as been met
     return true;
@@ -764,7 +764,7 @@ bool Winning_Conditions_Met(const std::vector< std::vector<std::string> >& Playe
     return false;
 }
 
-void Toggle_Player(std::string& CurrentPlayer)
+void Toggle_Player(std::string &CurrentPlayer)
 {
   if (CurrentPlayer == "PLAYER_ONE")
     CurrentPlayer = "PLAYER_TWO";
@@ -773,8 +773,8 @@ void Toggle_Player(std::string& CurrentPlayer)
     CurrentPlayer = "PLAYER_ONE";
 }
 
-int Ask_User_For_Next_Command(const std::vector< std::vector<std::string> >& PlayerOneBoard,
-                              const std::vector< std::vector<std::string> >& PlayerOneOpponentBoard)
+int Ask_User_For_Next_Command(const std::vector<std::vector<std::string>> &PlayerOneBoard,
+                              const std::vector<std::vector<std::string>> &PlayerOneOpponentBoard)
 {
   bool isValueCorrect = false; // Flag for if input value is valid
   unsigned int Command = 0;
@@ -821,7 +821,7 @@ int Ask_User_For_Next_Command(const std::vector< std::vector<std::string> >& Pla
   return Command;
 }
 
-int Ask_Computer_For_Next_Command(const std::vector< std::vector<std::string> >& ComputerOpponentBoard)
+int Ask_Computer_For_Next_Command(const std::vector<std::vector<std::string>> &ComputerOpponentBoard)
 {
   bool isValueCorrect = false; // Flag for if input value is valid
   unsigned int Command = 0;
@@ -847,12 +847,12 @@ int Ask_Computer_For_Next_Command(const std::vector< std::vector<std::string> >&
   return Command;
 }
 
-void Execute_Next_Turn(std::vector< std::vector<std::string> >& PlayerOneBoard,
-                       std::vector< std::vector<std::string> >& PlayerOneOpponentBoard,
-                       std::vector< std::vector<std::string> >& PlayerTwoBoard,
-                       std::vector< std::vector<std::string> >& PlayerTwoOpponentBoard,
-                       const std::string& CurrentPlayer,
-                       const unsigned int& Command)
+void Execute_Next_Turn(std::vector<std::vector<std::string>> &PlayerOneBoard,
+                       std::vector<std::vector<std::string>> &PlayerOneOpponentBoard,
+                       std::vector<std::vector<std::string>> &PlayerTwoBoard,
+                       std::vector<std::vector<std::string>> &PlayerTwoOpponentBoard,
+                       const std::string &CurrentPlayer,
+                       const unsigned int &Command)
 {
   // Row and column number for Command on the board
   unsigned int Row = Command / 10;
@@ -910,9 +910,9 @@ void Execute_Next_Turn(std::vector< std::vector<std::string> >& PlayerOneBoard,
   }
 }
 
-void Display_Game_Over_Message(const std::string& CurrentPlayer,
-                               const unsigned int& NumberOfTurns,
-                               bool& GameIsRunning)
+void Display_Game_Over_Message(const std::string &CurrentPlayer,
+                               const unsigned int &NumberOfTurns,
+                               bool &GameIsRunning)
 {
   // CurrentPlayer is the winner of the game as player toggle as not been triggered since last attack and gamer over check
   if (CurrentPlayer == "PLAYER_ONE")
@@ -928,7 +928,7 @@ void Display_Game_Over_Message(const std::string& CurrentPlayer,
 
   if (Decision == 'q')
     GameIsRunning = false;
-  
+
   else
     // Start from blank console
     Clear_Terminal();

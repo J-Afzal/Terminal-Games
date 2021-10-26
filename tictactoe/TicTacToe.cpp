@@ -9,11 +9,11 @@
 #include <limits>
 #include <conio.h>
 
-void Setup_Game(unsigned int& NumberOfTurns,
-                unsigned int& CurrentPlayer,
-                unsigned int& NumberOfPlayers,
-                unsigned int& UserXO,
-  std::vector< std::vector<std::string> >& GameData)
+void Setup_Game(unsigned int &NumberOfTurns,
+                unsigned int &CurrentPlayer,
+                unsigned int &NumberOfPlayers,
+                unsigned int &UserXO,
+                std::vector<std::vector<std::string>> &GameData)
 {
   // Set seed to system time at 0 to create pseudo random numbers
   std::srand((unsigned int)std::time(0));
@@ -82,7 +82,7 @@ int Get_Number_Of_Players(void)
   return NumberOfPlayers;
 }
 
-int Get_User_X_O_Choice(const unsigned int& NumberOfPlayers)
+int Get_User_X_O_Choice(const unsigned int &NumberOfPlayers)
 {
   bool IsValueCorrect = false; // Flag for if input value is valid
   char UserXOChoice = 0;
@@ -130,28 +130,28 @@ int Get_User_X_O_Choice(const unsigned int& NumberOfPlayers)
   return UserXOChoice;
 }
 
-bool Game_Over(const unsigned int& NumberOfTurns)
+bool Game_Over(const unsigned int &NumberOfTurns)
 {
   // End the game once 9 turns have taken place
   if (NumberOfTurns == 9)
     return true;
-  
+
   else
     return false;
 }
 
-bool Winning_Conditions_Met(const std::vector< std::vector<std::string> >& GameData)
+bool Winning_Conditions_Met(const std::vector<std::vector<std::string>> &GameData)
 {
   // Check Horizontals
   if (GameData[0][0] == GameData[0][1] && GameData[0][1] == GameData[0][2])
     return true;
-  
+
   else if (GameData[1][0] == GameData[1][1] && GameData[1][1] == GameData[1][2])
     return true;
-  
+
   else if (GameData[2][0] == GameData[2][1] && GameData[2][1] == GameData[2][2])
     return true;
-  
+
   // Check verticals
   else if (GameData[0][0] == GameData[1][0] && GameData[1][0] == GameData[2][0])
     return true;
@@ -173,7 +173,7 @@ bool Winning_Conditions_Met(const std::vector< std::vector<std::string> >& GameD
     return false;
 }
 
-void Display_Game(const std::vector< std::vector<std::string> >& GameData)
+void Display_Game(const std::vector<std::vector<std::string>> &GameData)
 {
   // Start from blank console
   Clear_Terminal();
@@ -200,24 +200,24 @@ void Display_Game(const std::vector< std::vector<std::string> >& GameData)
       {
         if (k == 3 || k == 7)
           std::cout << "┼";
-        
+
         else
           std::cout << "─";
-      }        
-    
+      }
+
       std::cout << '\n';
     }
   }
 }
 
-void Clear_Terminal(void) 
+void Clear_Terminal(void)
 {
   // ***Better alternative needed***
   // 100 new lines to clear console
   std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 }
 
-void Toggle_Player(unsigned int& CurrentPlayer)
+void Toggle_Player(unsigned int &CurrentPlayer)
 {
   if (CurrentPlayer == 'X')
     CurrentPlayer = 'O';
@@ -226,8 +226,8 @@ void Toggle_Player(unsigned int& CurrentPlayer)
     CurrentPlayer = 'X';
 }
 
-void Ask_User_For_Next_Input(std::vector< std::vector<std::string> >& GameData,
-                             const unsigned int& CurrentPlayer)
+void Ask_User_For_Next_Input(std::vector<std::vector<std::string>> &GameData,
+                             const unsigned int &CurrentPlayer)
 {
   bool IsValueCorrect = false; // Flag for if input value is valid
   int UserCommand, Row, Column;
@@ -271,8 +271,8 @@ void Ask_User_For_Next_Input(std::vector< std::vector<std::string> >& GameData,
   std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
-void Ask_Computer_For_Next_Input(std::vector< std::vector<std::string> >& GameData,
-                                 const unsigned int& CurrentPlayer)
+void Ask_Computer_For_Next_Input(std::vector<std::vector<std::string>> &GameData,
+                                 const unsigned int &CurrentPlayer)
 {
   bool IsValueCorrect = false; // Flag for if input value is valid
   unsigned int ComputerCommand, Row, Column;
@@ -298,16 +298,17 @@ void Ask_Computer_For_Next_Input(std::vector< std::vector<std::string> >& GameDa
   GameData[Row][Column] = CurrentPlayer;
 }
 
-void Display_Game_Over_Message(const unsigned int& NumberOfTurns,
-                               const std::vector< std::vector<std::string> >& GameData,
-                               const unsigned int& CurrentPlayer,
-                               bool& GameIsRunning)
+void Display_Game_Over_Message(const unsigned int &NumberOfTurns,
+                               const std::vector<std::vector<std::string>> &GameData,
+                               const unsigned int &CurrentPlayer,
+                               bool &GameIsRunning)
 {
   Display_Game(GameData);
 
   // Winner will be current player as Toggle_Player() function has not been called from receiving input and determining winner
   if (Winning_Conditions_Met(GameData))
-    std::cout << "\n\nGAME OVER\n\n" << (char)CurrentPlayer << " has won! The game lasted " << NumberOfTurns << " turns.";
+    std::cout << "\n\nGAME OVER\n\n"
+              << (char)CurrentPlayer << " has won! The game lasted " << NumberOfTurns << " turns.";
 
   // No winner so a draw
   else
@@ -320,7 +321,7 @@ void Display_Game_Over_Message(const unsigned int& NumberOfTurns,
 
   if (Decision == 'q')
     GameIsRunning = false;
-  
+
   else
     // Start from blank console
     Clear_Terminal();
