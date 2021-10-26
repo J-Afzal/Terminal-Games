@@ -44,3 +44,6 @@
   * 0 players represent computer vs computer
 * The computer is 'dumb' as it picks random positions to place its ships and random locations to attack ships
 * The terminal is 'refreshed' by printing 100 new lines
+
+## Warning
+Terminal refreshing only works on Windows Command Prompt and on Windows Powershell
