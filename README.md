@@ -46,4 +46,4 @@
 * The terminal is 'refreshed' by printing 100 new lines
 
 ## Warning
-Terminal refreshing only works on Windows Command Prompt and on Windows Powershell
+Terminal 'refreshing' is only supported on Windows Command Prompt and Windows Powershell
