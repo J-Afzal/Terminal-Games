@@ -320,9 +320,9 @@ std::string Ask_Computer_For_Word_To_Be_Guessed(void)
 
 bool Game_Over(const unsigned int &NumberOfErrors)
 {
-  // 10 or more errors mean that the final state of the
+  // 10 errors mean that the final state of the
   // hangman drawing has been reached
-  if (NumberOfErrors >= 10)
+  if (NumberOfErrors == 10)
     return true;
 
   else
