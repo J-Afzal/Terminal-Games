@@ -95,8 +95,16 @@ int Get_User_X_O_Choice(const unsigned int &NumberOfPlayers)
     std::cout << "\n\nEnter you player counter (X or O) ";
 
     std::cin >> UserXOChoice;
-
-    if (std::cin.fail()) // Check if cin failed
+    // Check if cin failed
+    if (std::cin.fail())
+    {
+      // Clear buffer and retry
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      continue;
+    }
+    // Only X and O inputs allowed
+    else if (UserXOChoice != 'X' && UserXOChoice != 'x' && UserXOChoice != 'O' && UserXOChoice != 'o')
     {
       // Clear buffer and retry
       std::cin.clear();
@@ -104,15 +112,7 @@ int Get_User_X_O_Choice(const unsigned int &NumberOfPlayers)
       continue;
     }
 
-    else if (UserXOChoice != 'X' && UserXOChoice != 'x' && UserXOChoice != 'O' && UserXOChoice != 'o') // Only X and O inputs allowed
-    {
-      // Clear buffer and retry
-      std::cin.clear();
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-      continue;
-    }
-
-    else // If passed all tests then input is valid
+    else // all tests passed then input so is valid
       IsValueCorrect = true;
   }
 
@@ -305,10 +305,10 @@ void Display_Game_Over_Message(const unsigned int &NumberOfTurns,
 {
   Display_Game(GameData);
 
-  // Winner will be current player as Toggle_Player() function has not been called from receiving input and determining winner
+  // Winner will be current player as Toggle_Player() function has not been called
+  // from receiving input and determining winner
   if (Winning_Conditions_Met(GameData))
-    std::cout << "\n\nGAME OVER\n\n"
-              << (char)CurrentPlayer << " has won! The game lasted " << NumberOfTurns << " turns.";
+    std::cout << "\n\nGAME OVER\n\n" << (char)CurrentPlayer << " has won! The game lasted " << NumberOfTurns << " turns.";
 
   // No winner so a draw
   else

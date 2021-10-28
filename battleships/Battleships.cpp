@@ -676,7 +676,8 @@ void Get_Computer_Ship_Positions(std::string &CurrentShipPositionsOrientation,
                                  std::vector<int> &CurrentShipPositions_ints,
                                  const unsigned int &ShipSize)
 {
-  // Singles represents the column number; Tens the row number; and the FirstValue is the first value of the gird positions when ordered in ascending order
+  // Singles represents the column number; Tens the row number; and the FirstValue 
+  // is the first value of the gird positions when ordered in ascending order
   unsigned int Singles, Tens, FirstValue;
 
   // Use std::rand() to randomly choose between a vertical or horizontal orientation
@@ -914,7 +915,8 @@ void Display_Game_Over_Message(const std::string &CurrentPlayer,
                                const unsigned int &NumberOfTurns,
                                bool &GameIsRunning)
 {
-  // CurrentPlayer is the winner of the game as player toggle as not been triggered since last attack and gamer over check
+  // CurrentPlayer is the winner of the game as player toggle as not been 
+  // triggered since last attack and gamer over check
   if (CurrentPlayer == "PLAYER_ONE")
     std::cout << "\n\nGAME OVER\n\nPlayer One has won! The game lasted " << NumberOfTurns << " turns";
 
