@@ -9,6 +9,7 @@
 #include <limits>
 #include <fstream>
 #include <conio.h>
+#include <windows.h>
 
 void Setup_Game(std::string &WordToBeGuessed,
                 std::string &CurrentGuessOfWord,
@@ -356,43 +357,98 @@ void Display_Game(const unsigned int &NumberOfErrors,
     break;
 
   case 1:
-    std::cout << "\n\n\n\n\n\n─────────\n\n";
+    std::cout << "\n\n\n\n\n\n"
+              << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196
+              << "\n\n";
     break;
 
   case 2:
-    std::cout << "\n    │\n    │\n    │\n    │\n    │\n────┴────\n\n";
+    std::cout << "\n    " << (char)179
+              << "\n    " << (char)179
+              << "\n    " << (char)179
+              << "\n    " << (char)179
+              << "\n    " << (char)179
+              << "\n" << (char)196 << (char)196 << (char)196 << (char)196 << (char)193 << (char)196 << (char)196 << (char)196 << (char)196 << "\n\n";
     break;
 
   case 3:
-    std::cout << "    ┌────────\n    │\n    │\n    │\n    │\n    │\n────┴────\n\n";
+    std::cout << "    " << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196
+              << "\n    " << (char)179
+              << "\n    " << (char)179
+              << "\n    " << (char)179
+              << "\n    " << (char)179
+              << "\n    " << (char)179
+              << "\n" << (char)196 << (char)196 << (char)196 << (char)196 << (char)193 << (char)196 << (char)196 << (char)196 << (char)196 << "\n\n";
     break;
 
   case 4:
-    std::cout << "    ┌───────┐\n    │       │\n    │\n    │\n    │\n    │\n────┴────\n\n";
+    std::cout << "    " << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)191
+              << "\n    " << (char)179 << "       " << (char)179
+              << "\n    " << (char)179
+              << "\n    " << (char)179
+              << "\n    " << (char)179
+              << "\n    " << (char)179
+              << "\n" << (char)196 << (char)196 << (char)196 << (char)196 << (char)193 << (char)196 << (char)196 << (char)196 << (char)196 << "\n\n";
     break;
 
   case 5:
-    std::cout << "    ┌───────┐\n    │       │\n    │       O\n    │\n    │\n    │\n────┴────\n\n";
+    std::cout << "    " << (char)218 << (char)196 << (char)196 << (char)196  << (char)196 << (char)196 << (char)196 << (char)196 << (char)191
+              << "\n    " << (char)179 << "       " << (char)179
+              << "\n    " << (char)179 << "       O"
+              << "\n    " << (char)179
+              << "\n    " << (char)179
+              << "\n    " << (char)179
+              << "\n" << (char)196 << (char)196 << (char)196 << (char)196 << (char)193 << (char)196 << (char)196 << (char)196 << (char)196 << "\n\n";
     break;
 
   case 6:
-    std::cout << "    ┌───────┐\n    │       │\n    │       O\n    │       |\n    │\n    │\n────┴────\n\n";
+    std::cout << "    " << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)191
+              << "\n    " << (char)179 << "       " << (char)179
+              << "\n    " << (char)179 << "       O"
+              << "\n    " << (char)179 << "       " << (char)179
+              << "\n    " << (char)179
+              << "\n    " << (char)179
+              << "\n" << (char)196 << (char)196 << (char)196 << (char)196 << (char)193 << (char)196 << (char)196 << (char)196 << (char)196 << "\n\n";
     break;
 
   case 7:
-    std::cout << "    ┌───────┐\n    │       │\n    │       O\n    │       |\n    │      /\n    │\n────┴────\n\n";
+    std::cout << "    " << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)191
+              << "\n    " << (char)179 << "       " << (char)179
+              << "\n    " << (char)179 << "       O"
+              << "\n    " << (char)179 << "       " << (char)179
+              << "\n    " << (char)179 << "      /"
+              << "\n    " << (char)179
+              << "\n" << (char)196 << (char)196 << (char)196 << (char)196 << (char)193 << (char)196 << (char)196 << (char)196 << (char)196 << "\n\n";
     break;
 
   case 8:
-    std::cout << "    ┌───────┐\n    │       │\n    │       O\n    │       |\n    │      / \\\n    │\n────┴────\n\n";
+    std::cout << "    " << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)191
+              << "\n    " << (char)179 << "       " << (char)179
+              << "\n    " << (char)179 << "       O"
+              << "\n    " << (char)179 << "       " << (char)179
+              << "\n    " << (char)179 << "      / \\"
+              << "\n    " << (char)179
+              << "\n" << (char)196 << (char)196 << (char)196 << (char)196 << (char)193 << (char)196 << (char)196 << (char)196 << (char)196 << "\n\n";
     break;
 
   case 9:
-    std::cout << "    ┌───────┐\n    │       │\n    │       O\n    │      /|\n    │      / \\\n    │\n────┴────\n\n";
+    std::cout << "    " << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)191
+              << "\n    " << (char)179 << "       " << (char)179
+              << "\n    " << (char)179 << "       O"
+              << "\n    " << (char)179 << "      /" << (char)179
+              << "\n    " << (char)179 << "      / \\"
+              << "\n    " << (char)179
+              << "\n" << (char)196 << (char)196 << (char)196 << (char)196 << (char)193 << (char)196 << (char)196 << (char)196 << (char)196 << "\n\n";
     break;
 
   case 10:
-    std::cout << "    ┌───────┐\n    │       │\n    │       O\n    │      /|\\\n    │      / \\\n    │\n────┴────\n\n";
+    std::cout << "    " << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)191
+              << "\n    " << (char)179 << "       " << (char)179
+              << "\n    " << (char)179 << "       O"
+              << "\n    " << (char)179 << "      /" << (char)179 << "\\"
+              << "\n    " << (char)179 << "      / \\"
+              << "\n    " << (char)179
+              << "\n" << (char)196 << (char)196 << (char)196 << (char)196 << (char)193 << (char)196 << (char)196 << (char)196 << (char)196 << "\n\n";
     break;
 
   default:
@@ -412,9 +468,41 @@ void Display_Game(const unsigned int &NumberOfErrors,
 
 void Clear_Terminal(void)
 {
-  // ***Better alternative needed***
-  // 100 new lines to clear console
-  std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+  // Windows API method taken from https://www.cplusplus.com/articles/4z18T05o
+
+  HANDLE                     hStdOut;
+  CONSOLE_SCREEN_BUFFER_INFO csbi;
+  DWORD                      count;
+  DWORD                      cellCount;
+  COORD                      homeCoords = { 0, 0 };
+
+  hStdOut = GetStdHandle( STD_OUTPUT_HANDLE );
+  if (hStdOut == INVALID_HANDLE_VALUE) return;
+
+  // Get the number of cells in the current buffer
+  if (!GetConsoleScreenBufferInfo( hStdOut, &csbi )) return;
+  cellCount = csbi.dwSize.X *csbi.dwSize.Y;
+
+  // Fill the entire buffer with spaces
+  if (!FillConsoleOutputCharacter(
+    hStdOut,
+    (TCHAR) ' ',
+    cellCount,
+    homeCoords,
+    &count
+    )) return;
+
+  // Fill the entire buffer with the current colors and attributes
+  if (!FillConsoleOutputAttribute(
+    hStdOut,
+    csbi.wAttributes,
+    cellCount,
+    homeCoords,
+    &count
+    )) return;
+
+  // Move the cursor home
+  SetConsoleCursorPosition( hStdOut, homeCoords );
 }
 
 std::string Ask_User_For_Next_Guess(const std::vector<std::string> &IncorrectGuesses,

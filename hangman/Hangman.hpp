@@ -38,6 +38,7 @@ void Display_Game(const unsigned int &NumberOfErrors,
                   const std::string &CurrentGuessOfWord,
                   const std::vector<std::string> &IncorrectGuesses);
 
+// Windows API method taken from https://www.cplusplus.com/articles/4z18T05o
 void Clear_Terminal(void);
 
 std::string Ask_User_For_Next_Guess(const std::vector<std::string> &IncorrectGuesses,
