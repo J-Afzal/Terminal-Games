@@ -27,6 +27,7 @@ void Ask_User_For_Ship_Positions(std::vector<std::vector<std::string>> &PlayerOn
 void Display_Game_For_User(const std::vector<std::vector<std::string>> &PlayerOneBoard,
                            const std::vector<std::vector<std::string>> &PlayerOneOpponentBoard);
 
+// Windows API method taken from https://www.cplusplus.com/articles/4z18T05o
 void Clear_Terminal(void);
 
 // Displays the two computer boards (used when in 0 player mode)

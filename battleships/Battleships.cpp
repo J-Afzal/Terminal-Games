@@ -8,6 +8,7 @@
 #include <iomanip>
 #include <algorithm>
 #include <conio.h>
+#include <windows.h>
 
 void Setup_Game(std::vector<std::vector<std::string>> &PlayerOneBoard,
                 std::vector<std::vector<std::string>> &PlayerOneOpponentBoard,
@@ -285,8 +286,7 @@ void Display_Game_For_User(const std::vector<std::vector<std::string>> &PlayerOn
 
   std::cout << "--------------------Battleships--------------------";
 
-  // First display the opponent's board with hits = '■', misses = '.' and empty spots = grid position
-  // See Execute_Next_Turn() for why 'x' and 'o' are used instead of 'X' and 'O'
+  // First display the opponent's board with hits, misses, and empty spots
   std::cout << "\n\n---Opponent's Board---";
   for (unsigned int i = 0; i < 10; i++)
   {
@@ -294,14 +294,16 @@ void Display_Game_For_User(const std::vector<std::vector<std::string>> &PlayerOn
 
     for (unsigned int j = 0; j < 10; j++)
     {
-      if (PlayerOneOpponentBoard[i][j] == "■")
-        std::cout << std::left << std::setw(5) << PlayerOneOpponentBoard[i][j];
+      if (PlayerOneOpponentBoard[i][j] == "Hit")
+        std::cout << std::left << std::setw(5) << (char)4;
+      else if (PlayerOneOpponentBoard[i][j] == "Miss")
+        std::cout << std::left << std::setw(3) << '.';
       else
         std::cout << std::left << std::setw(3) << PlayerOneOpponentBoard[i][j];
     }
   }
 
-  // Display the user's board with hits = '■', misses = '.' and empty spots = ' '
+  // Display the user's board with hits, misses, and empty spots
   std::cout << "\n\n---Your Board---";
   for (unsigned int i = 0; i < 10; i++)
   {
@@ -309,19 +311,56 @@ void Display_Game_For_User(const std::vector<std::vector<std::string>> &PlayerOn
 
     for (unsigned int j = 0; j < 10; j++)
     {
-      if (PlayerOneBoard[i][j] == "■")
-        std::cout << std::left << std::setw(5) << PlayerOneBoard[i][j];
-      else
+      if ((PlayerOneBoard[i][j] == "C") || (PlayerOneBoard[i][j] == "B") || (PlayerOneBoard[i][j] == "D") || (PlayerOneBoard[i][j] == "S") || (PlayerOneBoard[i][j] == "P"))
         std::cout << std::left << std::setw(3) << PlayerOneBoard[i][j];
+
+      else if (PlayerOneBoard[i][j] == "Hit")
+        std::cout << std::left << std::setw(5) << (char)4;
+      else if (PlayerOneBoard[i][j] == "Miss")
+        std::cout << std::left << std::setw(3) << '.';
+      else
+        std::cout << std::left << std::setw(3) << ' ';
     }
   }
 }
 
 void Clear_Terminal(void)
 {
-  // ***Better alternative needed***
-  // 100 new lines to clear console
-  std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+  // Windows API method taken from https://www.cplusplus.com/articles/4z18T05o
+
+  HANDLE                     hStdOut;
+  CONSOLE_SCREEN_BUFFER_INFO csbi;
+  DWORD                      count;
+  DWORD                      cellCount;
+  COORD                      homeCoords = { 0, 0 };
+
+  hStdOut = GetStdHandle( STD_OUTPUT_HANDLE );
+  if (hStdOut == INVALID_HANDLE_VALUE) return;
+
+  // Get the number of cells in the current buffer
+  if (!GetConsoleScreenBufferInfo( hStdOut, &csbi )) return;
+  cellCount = csbi.dwSize.X *csbi.dwSize.Y;
+
+  // Fill the entire buffer with spaces
+  if (!FillConsoleOutputCharacter(
+    hStdOut,
+    (TCHAR) ' ',
+    cellCount,
+    homeCoords,
+    &count
+    )) return;
+
+  // Fill the entire buffer with the current colors and attributes
+  if (!FillConsoleOutputAttribute(
+    hStdOut,
+    csbi.wAttributes,
+    cellCount,
+    homeCoords,
+    &count
+    )) return;
+
+  // Move the cursor home
+  SetConsoleCursorPosition( hStdOut, homeCoords );
 }
 
 void Display_Game_For_Computers(const std::vector<std::vector<std::string>> &PlayerOneBoard,
@@ -333,8 +372,7 @@ void Display_Game_For_Computers(const std::vector<std::vector<std::string>> &Pla
 
   std::cout << "--------------------Battleships--------------------";
 
-  // First display the opponent's board with hits = '■', misses = '.' and empty spots = ' '
-  // See Execute_Next_Turn() for why 'x' and 'o' are used instead of 'X' and 'O'
+  // First display the opponent's board with hits, misses, and empty spots
   std::cout << "\n\n---Player One Board---";
   for (unsigned int i = 0; i < 10; i++)
   {
@@ -342,14 +380,16 @@ void Display_Game_For_Computers(const std::vector<std::vector<std::string>> &Pla
 
     for (unsigned int j = 0; j < 10; j++)
     {
-      if (PlayerOneBoard[i][j] == "■")
-        std::cout << std::left << std::setw(5) << PlayerOneBoard[i][j];
+      if (PlayerOneBoard[i][j] == "Hit")
+        std::cout << std::left << std::setw(3) << (char)4;
+      else if (PlayerOneBoard[i][j] == "Miss")
+        std::cout << std::left << std::setw(3) << '.';
       else
-        std::cout << std::left << std::setw(3) << PlayerOneBoard[i][j];
+        std::cout << std::left << std::setw(3) << ' ';
     }
   }
 
-  // Display the user's board with hits = '■', misses = '.' and empty spots = ' '
+  // Display the user's board with hits, misses, and empty spots
   std::cout << "\n\n---Player Two Board---";
   for (unsigned int i = 0; i < 10; i++)
   {
@@ -357,10 +397,12 @@ void Display_Game_For_Computers(const std::vector<std::vector<std::string>> &Pla
 
     for (unsigned int j = 0; j < 10; j++)
     {
-      if (PlayerTwoBoard[i][j] == "■")
-        std::cout << std::left << std::setw(5) << PlayerTwoBoard[i][j];
+      if (PlayerTwoBoard[i][j] == "Hit")
+        std::cout << std::left << std::setw(3) << (char)4;
+      else if (PlayerTwoBoard[i][j] == "Miss")
+        std::cout << std::left << std::setw(3) << '.';
       else
-        std::cout << std::left << std::setw(3) << PlayerTwoBoard[i][j];
+        std::cout << std::left << std::setw(3) << ' ';
     }
   }
 }
@@ -676,7 +718,7 @@ void Get_Computer_Ship_Positions(std::string &CurrentShipPositionsOrientation,
                                  std::vector<int> &CurrentShipPositions_ints,
                                  const unsigned int &ShipSize)
 {
-  // Singles represents the column number; Tens the row number; and the FirstValue 
+  // Singles represents the column number; Tens the row number; and the FirstValue
   // is the first value of the gird positions when ordered in ascending order
   unsigned int Singles, Tens, FirstValue;
 
@@ -807,7 +849,7 @@ int Ask_User_For_Next_Command(const std::vector<std::vector<std::string>> &Playe
     unsigned int Column = Command % 10;
 
     // Check if the position has already been used
-    if (PlayerOneOpponentBoard[Row][Column] == "■" || PlayerOneOpponentBoard[Row][Column] == ".")
+    if (PlayerOneOpponentBoard[Row][Column] == "Hit" || PlayerOneOpponentBoard[Row][Column] == "Miss")
       continue;
 
     // If all checks passed then value is valid
@@ -837,7 +879,7 @@ int Ask_Computer_For_Next_Command(const std::vector<std::vector<std::string>> &C
     unsigned int Column = Command % 10;
 
     // Check if the position has already been used
-    if (ComputerOpponentBoard[Row][Column] == "■" || ComputerOpponentBoard[Row][Column] == ".")
+    if (ComputerOpponentBoard[Row][Column] == "Hit" || ComputerOpponentBoard[Row][Column] == "Miss")
       continue;
 
     // If all checks passed then value is valid
@@ -866,22 +908,22 @@ void Execute_Next_Turn(std::vector<std::vector<std::string>> &PlayerOneBoard,
     if (PlayerTwoBoard[Row][Column] == "C" || PlayerTwoBoard[Row][Column] == "B" || PlayerTwoBoard[Row][Column] == "D" || PlayerTwoBoard[Row][Column] == "S" || PlayerTwoBoard[Row][Column] == "P")
     {
       // Update the ComputerBoard
-      PlayerTwoBoard[Row][Column] = "■";
+      PlayerTwoBoard[Row][Column] = "Hit";
 
       // Lower case 'x' is used as it has a value of 120 while upper case 'X' has a value
       // inside the 0-99 range and so conflicts with the grid position labels
-      PlayerOneOpponentBoard[Row][Column] = "■";
+      PlayerOneOpponentBoard[Row][Column] = "Hit";
     }
 
     // Otherwise it is a miss
     else
     {
       // Update the ComputerBoard
-      PlayerTwoBoard[Row][Column] = ".";
+      PlayerTwoBoard[Row][Column] = "Miss";
 
       // A lower case 'o' is used as it has a value of 111 while the full stop '.' has a value
       // inside the 0-99 range and so conflicts with the grid position labels
-      PlayerOneOpponentBoard[Row][Column] = ".";
+      PlayerOneOpponentBoard[Row][Column] = "Miss";
     }
   }
 
@@ -891,22 +933,22 @@ void Execute_Next_Turn(std::vector<std::vector<std::string>> &PlayerOneBoard,
     if (PlayerOneBoard[Row][Column] == "C" || PlayerOneBoard[Row][Column] == "B" || PlayerOneBoard[Row][Column] == "D" || PlayerOneBoard[Row][Column] == "S" || PlayerOneBoard[Row][Column] == "P")
     {
       // Update the User board
-      PlayerOneBoard[Row][Column] = "■";
+      PlayerOneBoard[Row][Column] = "Hit";
 
       // Lower case 'x' is used as it has a value of 120 while upper case 'X' has a value
       // inside the 0-99 range and so conflicts with the grid position labels
-      PlayerTwoOpponentBoard[Row][Column] = "■";
+      PlayerTwoOpponentBoard[Row][Column] = "Hit";
     }
 
     // Otherwise it is a miss
     else
     {
       // Update the User board
-      PlayerOneBoard[Row][Column] = ".";
+      PlayerOneBoard[Row][Column] = "Miss";
 
       // A lower case 'o' is used as it has a value of 111 while the full stop '.' has a value
       // inside the 0-99 range and so conflicts with the grid position labels
-      PlayerTwoOpponentBoard[Row][Column] = ".";
+      PlayerTwoOpponentBoard[Row][Column] = "Miss";
     }
   }
 }
@@ -915,7 +957,7 @@ void Display_Game_Over_Message(const std::string &CurrentPlayer,
                                const unsigned int &NumberOfTurns,
                                bool &GameIsRunning)
 {
-  // CurrentPlayer is the winner of the game as player toggle as not been 
+  // CurrentPlayer is the winner of the game as player toggle as not been
   // triggered since last attack and gamer over check
   if (CurrentPlayer == "PLAYER_ONE")
     std::cout << "\n\nGAME OVER\n\nPlayer One has won! The game lasted " << NumberOfTurns << " turns";
