@@ -32,6 +32,7 @@ bool Winning_Conditions_Met(const std::vector<std::vector<std::string>> &GameDat
 
 void Display_Game(const std::vector<std::vector<std::string>> &GameData);
 
+// Windows API method taken from https://www.cplusplus.com/articles/4z18T05o
 void Clear_Terminal(void);
 
 void Toggle_Player(unsigned int &CurrentPlayer);

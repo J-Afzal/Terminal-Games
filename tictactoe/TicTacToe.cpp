@@ -8,6 +8,7 @@
 #include <ctime>
 #include <limits>
 #include <conio.h>
+#include <windows.h>
 
 void Setup_Game(unsigned int &NumberOfTurns,
                 unsigned int &CurrentPlayer,
@@ -188,7 +189,7 @@ void Display_Game(const std::vector<std::vector<std::string>> &GameData)
 
       // Vertical bars
       if (j == 0 || j == 1)
-        std::cout << "│";
+        std::cout << (char)179;
     }
 
     // Horizontal bars
@@ -199,10 +200,10 @@ void Display_Game(const std::vector<std::vector<std::string>> &GameData)
       for (unsigned int k = 0; k <= 10; k++)
       {
         if (k == 3 || k == 7)
-          std::cout << "┼";
+          std::cout << (char)197;
 
         else
-          std::cout << "─";
+          std::cout << (char)196;
       }
 
       std::cout << '\n';
@@ -212,9 +213,41 @@ void Display_Game(const std::vector<std::vector<std::string>> &GameData)
 
 void Clear_Terminal(void)
 {
-  // ***Better alternative needed***
-  // 100 new lines to clear console
-  std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+  // Windows API method taken from https://www.cplusplus.com/articles/4z18T05o
+
+  HANDLE                     hStdOut;
+  CONSOLE_SCREEN_BUFFER_INFO csbi;
+  DWORD                      count;
+  DWORD                      cellCount;
+  COORD                      homeCoords = { 0, 0 };
+
+  hStdOut = GetStdHandle( STD_OUTPUT_HANDLE );
+  if (hStdOut == INVALID_HANDLE_VALUE) return;
+
+  // Get the number of cells in the current buffer
+  if (!GetConsoleScreenBufferInfo( hStdOut, &csbi )) return;
+  cellCount = csbi.dwSize.X *csbi.dwSize.Y;
+
+  // Fill the entire buffer with spaces
+  if (!FillConsoleOutputCharacter(
+    hStdOut,
+    (TCHAR) ' ',
+    cellCount,
+    homeCoords,
+    &count
+    )) return;
+
+  // Fill the entire buffer with the current colors and attributes
+  if (!FillConsoleOutputAttribute(
+    hStdOut,
+    csbi.wAttributes,
+    cellCount,
+    homeCoords,
+    &count
+    )) return;
+
+  // Move the cursor home
+  SetConsoleCursorPosition( hStdOut, homeCoords );
 }
 
 void Toggle_Player(unsigned int &CurrentPlayer)
