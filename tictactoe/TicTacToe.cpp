@@ -4,18 +4,48 @@
 //
 
 #include "TicTacToe.hpp"
+
 #include <iostream>
 #include <ctime>
 #include <limits>
+#include <algorithm>
 #include <conio.h>
+// to prevent max error with windows.h redefining it
+// https://stackoverflow.com/questions/7035023/stdmax-expected-an-identifier/7035078
+#define NOMINMAX
 #include <windows.h>
 
 void Setup_Game(unsigned int &NumberOfTurns,
                 unsigned int &CurrentPlayer,
                 unsigned int &NumberOfPlayers,
                 unsigned int &UserXO,
-                std::vector<std::vector<std::string>> &GameData)
+                std::string &AIDifficulty,
+                std::vector<std::vector<std::string>> &GameData,
+                std::vector<int> &ValidMovesRemaining)
 {
+  // The for loops add the 3 rows and columns to the grid and the the appropriate grid values
+  for (unsigned int i = 0, GridNumber = 0; i < 3; i++)
+  {
+    std::vector<std::string> Rows;
+    GameData.push_back(Rows);
+
+    for (int j = 0; j < 3; j++, GridNumber++)
+    {
+      GameData[i].push_back(std::to_string(GridNumber));
+      ValidMovesRemaining.push_back(GridNumber);
+    }
+  }
+
+  // Ask user for number of players
+  NumberOfPlayers = Get_Number_Of_Players(GameData, NumberOfPlayers);
+
+  // If only one human user then ask them for which player they want to be (X or O)
+  if (NumberOfPlayers == 1)
+    UserXO = Get_User_X_O_Choice(GameData, NumberOfPlayers);
+
+  if (NumberOfPlayers < 2)
+    AIDifficulty = Get_AI_Difficulty(GameData, NumberOfPlayers);
+
   // Set seed to system time at 0 to create pseudo random numbers
   std::srand((unsigned int)std::time(0));
 
@@ -24,34 +54,16 @@ void Setup_Game(unsigned int &NumberOfTurns,
     CurrentPlayer = 'X';
   else
     CurrentPlayer = 'O';
-
-  // The for loops add the 3 rows and columns to the grid and the the appropriate grid values
-  for (unsigned int i = 0, GridNumber = 0; i < 3; i++)
-  {
-    std::vector<std::string> Rows;
-    GameData.push_back(Rows);
-
-    for (int j = 0; j < 3; j++, GridNumber++)
-      GameData[i].push_back(std::to_string(GridNumber));
-  }
-
-  // Ask user for number of players
-  NumberOfPlayers = Get_Number_Of_Players();
-
-  // If only one human user then ask them for which player they want to be (X or O)
-  if (NumberOfPlayers == 1)
-    UserXO = Get_User_X_O_Choice(NumberOfPlayers);
 }
 
-int Get_Number_Of_Players(void)
+int Get_Number_Of_Players(const std::vector<std::vector<std::string>> &GameData,
+                          unsigned int &NumberOfPlayers)
 {
   bool IsValueCorrect = false; // Flag for if input value is valid
-  int NumberOfPlayers = 0;
 
   while (!IsValueCorrect)
   {
-    Clear_Terminal();
-    std::cout << "--------------------TicTacToe--------------------";
+    Display_Game(GameData, -1, "N/A");
     std::cout << "\n\nEnter the number of human players ";
 
     std::cin >> NumberOfPlayers;
@@ -83,16 +95,15 @@ int Get_Number_Of_Players(void)
   return NumberOfPlayers;
 }
 
-int Get_User_X_O_Choice(const unsigned int &NumberOfPlayers)
+int Get_User_X_O_Choice(const std::vector<std::vector<std::string>> &GameData,
+                        const unsigned int &NumberOfPlayers)
 {
   bool IsValueCorrect = false; // Flag for if input value is valid
   char UserXOChoice = 0;
 
   while (!IsValueCorrect)
   {
-    Clear_Terminal();
-    std::cout << "--------------------TicTacToe--------------------";
-    std::cout << "\n\nEnter the number of human players " << NumberOfPlayers;
+    Display_Game(GameData, NumberOfPlayers, "N/A");
     std::cout << "\n\nEnter you player counter (X or O) ";
 
     std::cin >> UserXOChoice;
@@ -129,6 +140,92 @@ int Get_User_X_O_Choice(const unsigned int &NumberOfPlayers)
     UserXOChoice = 'X';
 
   return UserXOChoice;
+}
+
+std::string Get_AI_Difficulty(const std::vector<std::vector<std::string>> &GameData,
+                              const unsigned int &NumberOfPlayers)
+{
+  bool IsValueCorrect = false; // Flag for if input value is valid
+  std::string AIDifficulty;
+
+  while (!IsValueCorrect)
+  {
+    Display_Game(GameData, NumberOfPlayers, "N/A");
+    std::cout << "\n\nEnter the AI difficulty (EASY or HARD) ";
+
+    std::cin >> AIDifficulty;
+    // Check if cin failed
+    if (std::cin.fail())
+    {
+      // Clear buffer and retry
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      continue;
+    }
+
+        // Only accept chars that are either capital or lowercase letters
+    for (unsigned int i = 0; i < AIDifficulty.size(); i++)
+    {
+      if (AIDifficulty[i] < 'A')
+      {
+        // Clear buffer and retry
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        IsValueCorrect = false;
+        break;
+      }
+
+      else if (AIDifficulty[i] > 'z')
+      {
+        // Clear buffer and retry
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        IsValueCorrect = false;
+        break;
+      }
+
+      // Check for [ \ ] ^ _ ` as they occur in between the uppercase and lowercase letters blocks
+      else if (AIDifficulty[i] >= 91 && AIDifficulty[i] <= 96)
+      {
+        // Clear buffer and retry
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        IsValueCorrect = false;
+        break;
+      }
+    }
+
+    Capitalise_Word(AIDifficulty);
+
+    // Only X and O inputs allowed
+    if ((AIDifficulty != "EASY") && (AIDifficulty != "HARD"))
+    {
+      // Clear buffer and retry
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      continue;
+    }
+
+    else // all tests passed then input so is valid
+      IsValueCorrect = true;
+  }
+
+  // Clear buffer
+  std::cin.clear();
+  std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+  return AIDifficulty;
+}
+
+void Capitalise_Word(std::string &aWord)
+{
+  // Assuming aWord contains only letters of unkown capitalisation, if
+  // a letter is lower case (>=97) then minus 32 to capitalise it
+  for (unsigned int i = 0; i < aWord.size(); i++)
+  {
+    if (aWord[i] >= 97)
+      aWord[i] -= 32;
+  }
 }
 
 bool Game_Over(const unsigned int &NumberOfTurns)
@@ -174,18 +271,58 @@ bool Winning_Conditions_Met(const std::vector<std::vector<std::string>> &GameDat
     return false;
 }
 
-void Display_Game(const std::vector<std::vector<std::string>> &GameData)
+void Display_Game(const std::vector<std::vector<std::string>> &GameData,
+                  const unsigned int &NumberOfPlayers,
+                  const std::string &AIDifficulty)
 {
-  // Start from blank console
+  // Start from blank terminal
   Clear_Terminal();
 
-  std::cout << "--------------------TicTacToe--------------------\n\n";
   // Iterate across whole grid and output its value
   for (unsigned int i = 0; i < 3; i++)
   {
     for (unsigned int j = 0; j < 3; j++)
     {
-      std::cout << std::left << " " << GameData[i][j] << " ";
+      if ((GameData[i][j] == "X") || (GameData[i][j] == "O"))
+        std::cout << std::left << " " << GameData[i][j] << " ";
+      else
+        std::cout << std::left << "   ";
+
+      // Vertical bars
+      if (j == 0 || j == 1)
+        std::cout << (char)179;
+    }
+
+    std::cout << '\t';
+
+    switch (i)
+    {
+    case 0:
+      std::cout << "    Tic Tac Toe    ";
+    break;
+
+    case 1:
+      if (NumberOfPlayers == -1)
+        std::cout << "# of Players  = N/A";
+      else
+        std::cout << "# of Players  = " << NumberOfPlayers;
+      break;
+
+    case 2:
+      std::cout << "AI Difficulty = " << AIDifficulty;
+      break;
+
+    default:
+      std::cout << "\n\nError in Display_Game() switch statement\n\n";
+      exit(1);
+      break;
+    }
+
+    std::cout << '\t';
+
+    for (unsigned int j = 0; j < 3; j++)
+    {
+      std::cout << std::left << " " << j+i*3 << " ";
 
       // Vertical bars
       if (j == 0 || j == 1)
@@ -197,9 +334,20 @@ void Display_Game(const std::vector<std::vector<std::string>> &GameData)
     {
       std::cout << '\n';
 
-      for (unsigned int k = 0; k <= 10; k++)
+      for (unsigned int j = 0; j <= 10; j++)
       {
-        if (k == 3 || k == 7)
+        if (j == 3 || j == 7)
+          std::cout << (char)197;
+
+        else
+          std::cout << (char)196;
+      }
+
+      std::cout << "\t\t\t\t";
+
+      for (unsigned int j = 0; j <= 10; j++)
+      {
+        if (j == 3 || j == 7)
           std::cout << (char)197;
 
         else
@@ -260,15 +408,18 @@ void Toggle_Player(unsigned int &CurrentPlayer)
 }
 
 void Ask_User_For_Next_Input(std::vector<std::vector<std::string>> &GameData,
-                             const unsigned int &CurrentPlayer)
+                             const unsigned int &NumberOfPlayers,
+                             const std::string &AIDifficulty,
+                             const unsigned int &CurrentPlayer,
+                             std::vector<int> &ValidMovesRemaining)
 {
   bool IsValueCorrect = false; // Flag for if input value is valid
   int UserCommand, Row, Column;
 
   while (!IsValueCorrect)
   {
-    Display_Game(GameData);
-    std::cout << "\n\nPlayer " << (char)CurrentPlayer << " enter command ";
+    Display_Game(GameData, NumberOfPlayers, AIDifficulty);
+    std::cout << "\n\nPlayer " << (char)CurrentPlayer << ", please enter your command ";
 
     std::cin >> UserCommand;
 
@@ -280,63 +431,77 @@ void Ask_User_For_Next_Input(std::vector<std::vector<std::string>> &GameData,
       continue;
     }
 
-    else if (UserCommand < 0 || UserCommand > 8) // Check if command is within range of grid
+    auto CommandPosition = std::find(ValidMovesRemaining.begin(), ValidMovesRemaining.end(), UserCommand);
+
+    if (CommandPosition != ValidMovesRemaining.end())
+    {
+      IsValueCorrect = true;
+
+      Column = UserCommand % 3;
+      Row = UserCommand / 3;
+      GameData[Row][Column] = CurrentPlayer;
+
+      ValidMovesRemaining.erase(CommandPosition);
+
+      // Clear buffer
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    }
+
+    else
     {
       // Clear buffer, set flag to false and retry
       std::cin.clear();
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
       continue;
     }
-
-    Column = UserCommand % 3;
-    Row = UserCommand / 3;
-
-    // Check if command has already been called by a player previously as it will contain and X or O
-    if (GameData[Row][Column] != "X" && GameData[Row][Column] != "O")
-      IsValueCorrect = true;
   }
-
-  // Go to the command position in the grid and overwrite with the current player
-  GameData[Row][Column] = CurrentPlayer;
-
-  // Clear buffer
-  std::cin.clear();
-  std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
 void Ask_Computer_For_Next_Input(std::vector<std::vector<std::string>> &GameData,
-                                 const unsigned int &CurrentPlayer)
+                                 const unsigned int &NumberOfPlayers,
+                                 const std::string &AIDifficulty,
+                                 const unsigned int &CurrentPlayer,
+                                 std::vector<int> &ValidMovesRemaining)
 {
-  bool IsValueCorrect = false; // Flag for if input value is valid
-  unsigned int ComputerCommand, Row, Column;
 
-  while (!IsValueCorrect)
+  if (AIDifficulty == "EASY")
   {
+    bool IsValueCorrect = false; // Flag for if input value is valid
+    unsigned int ComputerCommand, Row, Column;
+
+    Display_Game(GameData, NumberOfPlayers, AIDifficulty);
+
     // Computer is dumb and picks a pseudo random number as command
-    ComputerCommand = std::rand() % 9;
+    ComputerCommand = ValidMovesRemaining[std::rand() % ValidMovesRemaining.size()];
 
     Column = ComputerCommand % 3;
     Row = ComputerCommand / 3;
 
-    // Check if command has already been called by a player previously as it will contain and X or O
-    if (GameData[Row][Column] != "X" && GameData[Row][Column] != "O")
-      IsValueCorrect = true;
+    // Go to the command position in the grid and overwrite with the current player
+    GameData[Row][Column] = CurrentPlayer;
+
+    auto CommandPosition = std::find(ValidMovesRemaining.begin(), ValidMovesRemaining.end(), ComputerCommand);
+    ValidMovesRemaining.erase(CommandPosition);
   }
 
-  Display_Game(GameData);
-  // Output a message which is similar to a human player command message
-  std::cout << "\n\nComputer " << (char)CurrentPlayer << " entered command " << ComputerCommand << '\n';
-
-  // Go to the command position in the grid and overwrite with the current player
-  GameData[Row][Column] = CurrentPlayer;
+  else
+    MiniMax_Algorithm();
 }
 
-void Display_Game_Over_Message(const unsigned int &NumberOfTurns,
-                               const std::vector<std::vector<std::string>> &GameData,
+void MiniMax_Algorithm(void)
+{
+
+}
+
+void Display_Game_Over_Message(const std::vector<std::vector<std::string>> &GameData,
+                               const unsigned int &NumberOfPlayers,
+                               const std::string &AIDifficulty,
                                const unsigned int &CurrentPlayer,
+                               const unsigned int &NumberOfTurns,
                                bool &GameIsRunning)
 {
-  Display_Game(GameData);
+  Display_Game(GameData, NumberOfPlayers, AIDifficulty);
 
   // Winner will be current player as Toggle_Player() function has not been called
   // from receiving input and determining winner
@@ -356,6 +521,6 @@ void Display_Game_Over_Message(const unsigned int &NumberOfTurns,
     GameIsRunning = false;
 
   else
-    // Start from blank console
+    // Start from blank terminal
     Clear_Terminal();
 }
