@@ -283,7 +283,7 @@ void Display_Game(const std::vector<std::vector<std::string>> &GameData,
   Clear_Terminal();
 
   // Line 1
-  std::cout << "\n " << GameData[0][0] << ' ' << (char)179 << ' ' << GameData[0][1] << ' ' << (char)179 << ' ' << GameData[0][2] << ' ';
+  std::cout << ' ' << GameData[0][0] << ' ' << (char)179 << ' ' << GameData[0][1] << ' ' << (char)179 << ' ' << GameData[0][2] << ' ';
   std::cout << "\t    Tic Tac Toe    \t";
   std::cout << " 1 " << (char)179 << " 2 " << (char)179 << " 3 \n";
 
