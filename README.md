@@ -14,7 +14,7 @@
   * 1 player represents a human vs computer
   * 0 players represent computer vs computer
 * The computer is 'dumb' as it picks random positions
-* The terminal is 'refreshed' by printing 100 new lines
+* The terminal is 'refreshed' using a method that is only supported on Windows
 
 ## Hangman
 <p align="center">
@@ -29,7 +29,7 @@
 * No hyphens/spaces/non-letters are allowed in the word to be guessed
 * Guessing with a word will count as one guess and will not replace any letters
 * The computer is 'dumb' by either randomly picking a word from `hangman/Words.txt` or a random letter when guessing
-* The terminal is 'refreshed' by printing 100 new lines
+* The terminal is 'refreshed' using a method that is only supported on Windows
 
 ## Battleships
 <p align="center">
@@ -42,7 +42,7 @@
   * 1 player represents a human vs computer
   * 0 players represent computer vs computer
 * The computer is 'dumb' as it picks random positions to place its ships and random locations to attack ships
-* The terminal is 'refreshed' by printing 100 new lines
+* The terminal is 'refreshed' using a method that is only supported on Windows
 
 ## Warning
 Terminal 'refreshing' is only supported on Windows Command Prompt and Windows Powershell

@@ -12,7 +12,7 @@ int main(void)
   while (GameIsRunning)
   {
     // GameData contains the Tic Tac Toe grid
-    unsigned int NumberOfTurns = 0, CurrentPlayer = -1, NumberOfPlayers = -1, UserXOChoice = 0;
+    unsigned int NumberOfTurns = 0, CurrentPlayer = 0, NumberOfPlayers = 0, UserXOChoice = 0;
     std::string AIDifficulty = "N/A";
     std::vector<std::vector<std::string>> GameData;
     std::vector<int> ValidMovesRemaining;

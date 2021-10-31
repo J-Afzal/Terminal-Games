@@ -41,7 +41,7 @@ bool Game_Over(const unsigned int &NumberOfTurns);
 bool Winning_Conditions_Met(const std::vector<std::vector<std::string>> &GameData);
 
 void Display_Game(const std::vector<std::vector<std::string>> &GameData,
-                  const unsigned int &NumberOfPlayers,
+                  const std::string &NumberOfPlayers,
                   const std::string &AIDifficulty);
 
 // Windows API method taken from https://www.cplusplus.com/articles/4z18T05o

@@ -3,17 +3,21 @@
 //  @Author: Junaid Afzal
 //
 
-#include "TicTacToe.hpp"
 
+
+// to prevent max error with windows.h redefining it
+// https://stackoverflow.com/questions/7035023/stdmax-expected-an-identifier/7035078
+#define NOMINMAX
+#include <windows.h>
+
+#include "TicTacToe.hpp"
 #include <iostream>
 #include <ctime>
 #include <limits>
 #include <algorithm>
 #include <conio.h>
-// to prevent max error with windows.h redefining it
-// https://stackoverflow.com/questions/7035023/stdmax-expected-an-identifier/7035078
-#define NOMINMAX
-#include <windows.h>
+
+
 
 void Setup_Game(unsigned int &NumberOfTurns,
                 unsigned int &CurrentPlayer,
@@ -31,7 +35,7 @@ void Setup_Game(unsigned int &NumberOfTurns,
 
     for (int j = 0; j < 3; j++, GridNumber++)
     {
-      GameData[i].push_back(std::to_string(GridNumber));
+      GameData[i].push_back(" ");
       ValidMovesRemaining.push_back(GridNumber);
     }
   }
@@ -63,7 +67,7 @@ int Get_Number_Of_Players(const std::vector<std::vector<std::string>> &GameData,
 
   while (!IsValueCorrect)
   {
-    Display_Game(GameData, -1, "N/A");
+    Display_Game(GameData, "N/A", "N/A");
     std::cout << "\n\nEnter the number of human players ";
 
     std::cin >> NumberOfPlayers;
@@ -103,7 +107,7 @@ int Get_User_X_O_Choice(const std::vector<std::vector<std::string>> &GameData,
 
   while (!IsValueCorrect)
   {
-    Display_Game(GameData, NumberOfPlayers, "N/A");
+    Display_Game(GameData, std::to_string(NumberOfPlayers), "N/A");
     std::cout << "\n\nEnter you player counter (X or O) ";
 
     std::cin >> UserXOChoice;
@@ -150,7 +154,7 @@ std::string Get_AI_Difficulty(const std::vector<std::vector<std::string>> &GameD
 
   while (!IsValueCorrect)
   {
-    Display_Game(GameData, NumberOfPlayers, "N/A");
+    Display_Game(GameData, std::to_string(NumberOfPlayers), "N/A");
     std::cout << "\n\nEnter the AI difficulty (EASY or HARD) ";
 
     std::cin >> AIDifficulty;
@@ -198,7 +202,7 @@ std::string Get_AI_Difficulty(const std::vector<std::vector<std::string>> &GameD
     Capitalise_Word(AIDifficulty);
 
     // Only X and O inputs allowed
-    if ((AIDifficulty != "EASY") && (AIDifficulty != "HARD"))
+    if (AIDifficulty != "EASY" && AIDifficulty != "HARD")
     {
       // Clear buffer and retry
       std::cin.clear();
@@ -241,30 +245,30 @@ bool Game_Over(const unsigned int &NumberOfTurns)
 bool Winning_Conditions_Met(const std::vector<std::vector<std::string>> &GameData)
 {
   // Check Horizontals
-  if (GameData[0][0] == GameData[0][1] && GameData[0][1] == GameData[0][2])
+  if (GameData[0][0]!= " " && GameData[0][0] == GameData[0][1] && GameData[0][1] == GameData[0][2])
     return true;
 
-  else if (GameData[1][0] == GameData[1][1] && GameData[1][1] == GameData[1][2])
+  else if (GameData[1][0]!= " " && GameData[1][0] == GameData[1][1] && GameData[1][1] == GameData[1][2])
     return true;
 
-  else if (GameData[2][0] == GameData[2][1] && GameData[2][1] == GameData[2][2])
+  else if (GameData[2][0]!= " " && GameData[2][0] == GameData[2][1] && GameData[2][1] == GameData[2][2])
     return true;
 
   // Check verticals
-  else if (GameData[0][0] == GameData[1][0] && GameData[1][0] == GameData[2][0])
+  else if (GameData[0][0]!= " " && GameData[0][0] == GameData[1][0] && GameData[1][0] == GameData[2][0])
     return true;
 
-  else if (GameData[0][1] == GameData[1][1] && GameData[1][1] == GameData[2][1])
+  else if (GameData[0][1]!= " " && GameData[0][1] == GameData[1][1] && GameData[1][1] == GameData[2][1])
     return true;
 
-  else if (GameData[0][2] == GameData[1][2] && GameData[1][2] == GameData[2][2])
+  else if (GameData[0][2]!= " " && GameData[0][2] == GameData[1][2] && GameData[1][2] == GameData[2][2])
     return true;
 
   // Check diagonals
-  else if (GameData[0][0] == GameData[1][1] && GameData[1][1] == GameData[2][2])
+  else if (GameData[0][0]!= " " && GameData[0][0] == GameData[1][1] && GameData[1][1] == GameData[2][2])
     return true;
 
-  else if (GameData[2][0] == GameData[1][1] && GameData[1][1] == GameData[0][2])
+  else if (GameData[2][0]!= " " && GameData[2][0] == GameData[1][1] && GameData[1][1] == GameData[0][2])
     return true;
 
   else
@@ -272,91 +276,36 @@ bool Winning_Conditions_Met(const std::vector<std::vector<std::string>> &GameDat
 }
 
 void Display_Game(const std::vector<std::vector<std::string>> &GameData,
-                  const unsigned int &NumberOfPlayers,
+                  const std::string &NumberOfPlayers,
                   const std::string &AIDifficulty)
 {
   // Start from blank terminal
   Clear_Terminal();
 
-  // Iterate across whole grid and output its value
-  for (unsigned int i = 0; i < 3; i++)
-  {
-    for (unsigned int j = 0; j < 3; j++)
-    {
-      if ((GameData[i][j] == "X") || (GameData[i][j] == "O"))
-        std::cout << std::left << " " << GameData[i][j] << " ";
-      else
-        std::cout << std::left << "   ";
+  // Line 1
+  std::cout << "\n " << GameData[0][0] << ' ' << (char)179 << ' ' << GameData[0][1] << ' ' << (char)179 << ' ' << GameData[0][2] << ' ';
+  std::cout << "\t    Tic Tac Toe    \t";
+  std::cout << " 1 " << (char)179 << " 2 " << (char)179 << " 3 \n";
 
-      // Vertical bars
-      if (j == 0 || j == 1)
-        std::cout << (char)179;
-    }
+  // Line 2
+  std::cout << (char)196 << (char)196 << (char)196 << (char)197 << (char)196 << (char)196 << (char)196 << (char)197 << (char)196 << (char)196 << (char)196;
+  std::cout << "\t\t\t\t";
+  std::cout << (char)196 << (char)196 << (char)196 << (char)197 << (char)196 << (char)196 << (char)196 << (char)197 << (char)196 << (char)196 << (char)196;
 
-    std::cout << '\t';
+  // Line 3
+  std::cout << "\n " << GameData[1][0] << ' ' << (char)179 << ' ' << GameData[1][1] << ' ' << (char)179 << ' ' << GameData[1][2] << ' ';
+  std::cout << "\t# of Players  = " << NumberOfPlayers << '\t';
+  std::cout << " 4 " << (char)179 << " 5 " << (char)179 << " 6 \n";
 
-    switch (i)
-    {
-    case 0:
-      std::cout << "    Tic Tac Toe    ";
-    break;
+  // Line 4
+  std::cout << (char)196 << (char)196 << (char)196 << (char)197 << (char)196 << (char)196 << (char)196 << (char)197 << (char)196 << (char)196 << (char)196;
+  std::cout << "\t\t\t\t";
+  std::cout << (char)196 << (char)196 << (char)196 << (char)197 << (char)196 << (char)196 << (char)196 << (char)197 << (char)196 << (char)196 << (char)196;
 
-    case 1:
-      if (NumberOfPlayers == -1)
-        std::cout << "# of Players  = N/A";
-      else
-        std::cout << "# of Players  = " << NumberOfPlayers;
-      break;
-
-    case 2:
-      std::cout << "AI Difficulty = " << AIDifficulty;
-      break;
-
-    default:
-      std::cout << "\n\nError in Display_Game() switch statement\n\n";
-      exit(1);
-      break;
-    }
-
-    std::cout << '\t';
-
-    for (unsigned int j = 0; j < 3; j++)
-    {
-      std::cout << std::left << " " << j+i*3 << " ";
-
-      // Vertical bars
-      if (j == 0 || j == 1)
-        std::cout << (char)179;
-    }
-
-    // Horizontal bars
-    if (i == 0 || i == 1)
-    {
-      std::cout << '\n';
-
-      for (unsigned int j = 0; j <= 10; j++)
-      {
-        if (j == 3 || j == 7)
-          std::cout << (char)197;
-
-        else
-          std::cout << (char)196;
-      }
-
-      std::cout << "\t\t\t\t";
-
-      for (unsigned int j = 0; j <= 10; j++)
-      {
-        if (j == 3 || j == 7)
-          std::cout << (char)197;
-
-        else
-          std::cout << (char)196;
-      }
-
-      std::cout << '\n';
-    }
-  }
+  // Line 5
+  std::cout << "\n " << GameData[2][0] << ' ' << (char)179 << ' ' << GameData[2][1] << ' ' << (char)179 << ' ' << GameData[2][2] << ' ';
+  std::cout << "\tAI Difficulty = " << AIDifficulty << '\t';
+  std::cout << " 7 " << (char)179 << " 8 " << (char)179 << " 9 \n";
 }
 
 void Clear_Terminal(void)
@@ -418,7 +367,7 @@ void Ask_User_For_Next_Input(std::vector<std::vector<std::string>> &GameData,
 
   while (!IsValueCorrect)
   {
-    Display_Game(GameData, NumberOfPlayers, AIDifficulty);
+    Display_Game(GameData, std::to_string(NumberOfPlayers), AIDifficulty);
     std::cout << "\n\nPlayer " << (char)CurrentPlayer << ", please enter your command ";
 
     std::cin >> UserCommand;
@@ -430,6 +379,9 @@ void Ask_User_For_Next_Input(std::vector<std::vector<std::string>> &GameData,
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
       continue;
     }
+
+    // To get it into range of 0-8
+    UserCommand--;
 
     auto CommandPosition = std::find(ValidMovesRemaining.begin(), ValidMovesRemaining.end(), UserCommand);
 
@@ -470,7 +422,7 @@ void Ask_Computer_For_Next_Input(std::vector<std::vector<std::string>> &GameData
     bool IsValueCorrect = false; // Flag for if input value is valid
     unsigned int ComputerCommand, Row, Column;
 
-    Display_Game(GameData, NumberOfPlayers, AIDifficulty);
+    Display_Game(GameData, std::to_string(NumberOfPlayers), AIDifficulty);
 
     // Computer is dumb and picks a pseudo random number as command
     ComputerCommand = ValidMovesRemaining[std::rand() % ValidMovesRemaining.size()];
@@ -501,7 +453,7 @@ void Display_Game_Over_Message(const std::vector<std::vector<std::string>> &Game
                                const unsigned int &NumberOfTurns,
                                bool &GameIsRunning)
 {
-  Display_Game(GameData, NumberOfPlayers, AIDifficulty);
+  Display_Game(GameData, std::to_string(NumberOfPlayers), AIDifficulty);
 
   // Winner will be current player as Toggle_Player() function has not been called
   // from receiving input and determining winner
