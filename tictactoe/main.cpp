@@ -16,7 +16,7 @@ int main(void)
     unsigned char CurrentPlayer = 0, UserXOChoice = 0;
     std::string AIDifficulty = "N/A";
     std::vector<std::vector<std::string>> GameData;
-    std::vector<int> ValidMovesRemaining;
+    std::vector<unsigned int> ValidMovesRemaining;
 
     // The user is asked for the number of (human) players
     // If this is 1, the human player is asked if they want to be player X or player O

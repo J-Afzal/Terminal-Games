@@ -19,7 +19,7 @@ void Setup_Game(unsigned int &NumberOfTurns,
                 unsigned char &UserXO,
                 std::string &AIDifficulty,
                 std::vector<std::vector<std::string>> &GameData,
-                std::vector<int> &ValidMovesRemaining);
+                std::vector<unsigned int> &ValidMovesRemaining);
 
 // Prompt user for the number of human players
 unsigned int Get_Number_Of_Players(const std::vector<std::vector<std::string>> &GameData);
@@ -53,7 +53,7 @@ void Ask_User_For_Next_Input(std::vector<std::vector<std::string>> &GameData,
                              const unsigned int &NumberOfPlayers,
                              const std::string &AIDifficulty,
                              const unsigned char &CurrentPlayer,
-                             std::vector<int> &ValidMovesRemaining);
+                             std::vector<unsigned int> &ValidMovesRemaining);
 
 // The computer randomly picks a number from one to nine until the number chosen
 // hasn't already been picked previously in the game. A better solution would be to
@@ -62,7 +62,7 @@ void Ask_Computer_For_Next_Input(std::vector<std::vector<std::string>> &GameData
                                  const unsigned int &NumberOfPlayers,
                                  const std::string &AIDifficulty,
                                  const unsigned char &CurrentPlayer,
-                                 std::vector<int> &ValidMovesRemaining);
+                                 std::vector<unsigned int> &ValidMovesRemaining);
 
 unsigned int MiniMax_Algorithm(void);
 

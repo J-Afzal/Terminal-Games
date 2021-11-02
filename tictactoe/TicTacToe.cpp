@@ -27,7 +27,7 @@ void Setup_Game(unsigned int &NumberOfTurns,
                 unsigned char &UserXO,
                 std::string &AIDifficulty,
                 std::vector<std::vector<std::string>> &GameData,
-                std::vector<int> &ValidMovesRemaining)
+                std::vector<unsigned int> &ValidMovesRemaining)
 {
   // The for loops add the 3 rows and columns to the grid and the the appropriate grid values
   for (unsigned int i = 0, GridNumber = 0; i < 3; i++)
@@ -269,7 +269,7 @@ void Ask_User_For_Next_Input(std::vector<std::vector<std::string>> &GameData,
                              const unsigned int &NumberOfPlayers,
                              const std::string &AIDifficulty,
                              const unsigned char &CurrentPlayer,
-                             std::vector<int> &ValidMovesRemaining)
+                             std::vector<unsigned int> &ValidMovesRemaining)
 {
   bool IsValueCorrect = false; // Flag for if input value is valid
   std::string Input;
@@ -312,7 +312,7 @@ void Ask_Computer_For_Next_Input(std::vector<std::vector<std::string>> &GameData
                                  const unsigned int &NumberOfPlayers,
                                  const std::string &AIDifficulty,
                                  const unsigned char &CurrentPlayer,
-                                 std::vector<int> &ValidMovesRemaining)
+                                 std::vector<unsigned int> &ValidMovesRemaining)
 {
   unsigned int ComputerCommand, Row, Column;
 
