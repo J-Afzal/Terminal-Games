@@ -15,7 +15,8 @@ void Setup_Game(std::string &WordToBeGuessed,
                 unsigned int &NumberOfPlayers,
                 std::string &PlayerThatIsGuessing,
                 std::vector<unsigned char> &IncorrectGuesses,
-                std::string &AIDifficulty);
+                std::string &AIDifficulty,
+                std::vector<unsigned char> &ValidMovesRemaining);
 
 unsigned int Get_Number_Of_Players(const std::vector<unsigned char> &IncorrectGuesses);
 
@@ -58,7 +59,8 @@ void Ask_User_For_Next_Guess(std::vector<unsigned char> &IncorrectGuesses,
                              std::string &CurrentGuessOfWord,
                              const std::string &AIDifficulty,
                              const unsigned int &NumberOfPlayers,
-                             std::string &WordToBeGuessed);
+                             std::string &WordToBeGuessed,
+                             std::vector<unsigned char> &ValidMovesRemaining);
 
 void Ask_Computer_For_Next_Guess(std::vector<unsigned char> &IncorrectGuesses,
                                  std::vector<unsigned char> &CorrectGuesses,
@@ -66,7 +68,8 @@ void Ask_Computer_For_Next_Guess(std::vector<unsigned char> &IncorrectGuesses,
                                  std::string &CurrentGuessOfWord,
                                  const std::string &AIDifficulty,
                                  const unsigned int &NumberOfPlayers,
-                                 std::string &WordToBeGuessed);
+                                 std::string &WordToBeGuessed,
+                                 std::vector<unsigned char> &ValidMovesRemaining);
 
 // Checks if guess is correct against the word to be guessed and updates current guess in correct
 bool Check_Guess_Against_Word(const unsigned char &Guess,

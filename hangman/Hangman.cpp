@@ -16,13 +16,15 @@
 #include <fstream>
 #include <conio.h>
 #include <iomanip>
+#include <algorithm>
 
 void Setup_Game(std::string &WordToBeGuessed,
                 std::string &CurrentGuessOfWord,
                 unsigned int &NumberOfPlayers,
                 std::string &PlayerThatIsGuessing,
                 std::vector<unsigned char> &IncorrectGuesses,
-                std::string &AIDifficulty)
+                std::string &AIDifficulty,
+                std::vector<unsigned char> &ValidMovesRemaining)
 {
   // Set seed of srand to time(0) so pseudo random
   std::srand((unsigned int)std::time(0));
@@ -58,6 +60,9 @@ void Setup_Game(std::string &WordToBeGuessed,
   // Create the current guess to be the same size as the word to be guessed but only containing underscores
   for (unsigned int i = 0; i < WordToBeGuessed.size(); i++)
     CurrentGuessOfWord.push_back('_');
+
+  for (unsigned int i = 0; i < 26; i++)
+    ValidMovesRemaining.push_back(65+i);
 }
 
 unsigned int Get_Number_Of_Players(const std::vector<unsigned char> &IncorrectGuesses)
@@ -373,50 +378,31 @@ void Ask_User_For_Next_Guess(std::vector<unsigned char> &IncorrectGuesses,
                              std::string &CurrentGuessOfWord,
                              const std::string &AIDifficulty,
                              const unsigned int &NumberOfPlayers,
-                             std::string &WordToBeGuessed)
+                             std::string &WordToBeGuessed,
+                             std::vector<unsigned char> &ValidMovesRemaining)
 {
   bool IsValueCorrect = false; // Flag for if input value is valid
   std::string Input;
 
   while (!IsValueCorrect)
   {
-    // Set flag to true by default as difficult to continue to to next iteration of while loop
-    // within a nested if statements within nested for loops
-    IsValueCorrect = true;
-
     Display_Game(NumberOfErrors, CurrentGuessOfWord, IncorrectGuesses, std::to_string(NumberOfPlayers), AIDifficulty);
     std::cout << "\n\nEnter your guess: ";
 
     std::getline(std::cin, Input);
 
     if (Input.size() != 1)
-    {
-      IsValueCorrect = false;
       continue;
-    }
 
     Capitalise_Word(Input);
 
-    if (Input[0] < 'A' || Input[0] > 'Z')
+    auto CommandPosition = std::find(ValidMovesRemaining.begin(), ValidMovesRemaining.end(), Input[0]);
+
+    if (CommandPosition != ValidMovesRemaining.end())
     {
-      IsValueCorrect = false;
-      continue;
+      IsValueCorrect = true;
+      ValidMovesRemaining.erase(CommandPosition);
     }
-
-    //Check if this string has already been guessed both correctly or incorrectly
-    for (unsigned int i = 0; i < IncorrectGuesses.size(); i++)
-      if (Input[0] == IncorrectGuesses[i])
-      {
-        IsValueCorrect = false;
-        break;
-      }
-
-    for (unsigned int i = 0; i < CorrectGuesses.size(); i++)
-      if (Input[0] == CorrectGuesses[i])
-      {
-        IsValueCorrect = false;
-        break;
-      }
   }
 
   if (!Check_Guess_Against_Word(Input[0], WordToBeGuessed, CurrentGuessOfWord))
@@ -435,37 +421,14 @@ void Ask_Computer_For_Next_Guess(std::vector<unsigned char> &IncorrectGuesses,
                                  std::string &CurrentGuessOfWord,
                                  const std::string &AIDifficulty,
                                  const unsigned int &NumberOfPlayers,
-                                 std::string &WordToBeGuessed)
+                                 std::string &WordToBeGuessed,
+                                 std::vector<unsigned char> &ValidMovesRemaining)
 {
-  bool IsValueCorrect = false; // Flag for if input value is valid
-  unsigned char Guess;
-
   Display_Game(NumberOfErrors, CurrentGuessOfWord, IncorrectGuesses, std::to_string(NumberOfPlayers), AIDifficulty);
 
-  while (!IsValueCorrect)
-  {
-    // Set flag to true by default as difficult to continue to to next iteration of while loop
-    // within a nested if statements within nested for loops
-    IsValueCorrect = true;
-
-    // Computer will guess a random letter from A to Z
-    Guess = (std::rand() % 26) + 65;
-
-    //Check if this string has already been guessed both correctly or incorrectly
-    for (unsigned int i = 0; i < IncorrectGuesses.size(); i++)
-      if (Guess == IncorrectGuesses[i])
-      {
-        IsValueCorrect = false;
-        break;
-      }
-
-    for (unsigned int i = 0; i < CorrectGuesses.size(); i++)
-      if (Guess == CorrectGuesses[i])
-      {
-        IsValueCorrect = false;
-        break;
-      }
-  }
+  unsigned char Guess = ValidMovesRemaining[std::rand() % ValidMovesRemaining.size()];
+  auto CommandPosition = std::find(ValidMovesRemaining.begin(), ValidMovesRemaining.end(), Guess);
+  ValidMovesRemaining.erase(CommandPosition);
 
   if (!Check_Guess_Against_Word(Guess, WordToBeGuessed, CurrentGuessOfWord))
   {
