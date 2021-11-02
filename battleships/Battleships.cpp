@@ -3,6 +3,10 @@
 //  @Author: Junaid Afzal
 //
 
+// to prevent max error with windows.h redefining it
+// https://stackoverflow.com/questions/7035023/stdmax-expected-an-identifier/7035078
+#define NOMINMAX
+
 #include "Battleships.hpp"
 #include <iostream>
 #include <iomanip>
@@ -136,7 +140,7 @@ void Ask_User_For_Ship_Positions(std::vector<std::vector<std::string>> &PlayerOn
       std::cout << "\n\nEnter the " << ShipSize << " grid locations for the Carrier: ";
 
       // Using std::getline so string with spaces is read in
-      getline(std::cin, CurrentShipPositions_string);
+      std::getline(std::cin, CurrentShipPositions_string);
 
       // If error checking returns false then continue to next iteration
       if (!Error_Checking_Ordering_Orientation_On_User_Ship_Positions(PlayerOneBoard, CurrentShipPositions_string, CurrentShipPositions_ints, ShipSize, CurrentShipPositionsOrientation))
@@ -164,7 +168,7 @@ void Ask_User_For_Ship_Positions(std::vector<std::vector<std::string>> &PlayerOn
       std::cout << "\n\nEnter the " << ShipSize << " grid locations for the Battleship: ";
 
       // Using std::getline so string with spaces is read in
-      getline(std::cin, CurrentShipPositions_string);
+      std::getline(std::cin, CurrentShipPositions_string);
 
       // If error checking returns false then continue to next iteration
       if (!Error_Checking_Ordering_Orientation_On_User_Ship_Positions(PlayerOneBoard, CurrentShipPositions_string, CurrentShipPositions_ints, ShipSize, CurrentShipPositionsOrientation))
@@ -192,7 +196,7 @@ void Ask_User_For_Ship_Positions(std::vector<std::vector<std::string>> &PlayerOn
       std::cout << "\n\nEnter the " << ShipSize << " grid locations for the Destroyer: ";
 
       // Using std::getline so string with spaces is read in
-      getline(std::cin, CurrentShipPositions_string);
+      std::getline(std::cin, CurrentShipPositions_string);
 
       // If error checking returns false then continue to next iteration
       if (!Error_Checking_Ordering_Orientation_On_User_Ship_Positions(PlayerOneBoard, CurrentShipPositions_string, CurrentShipPositions_ints, ShipSize, CurrentShipPositionsOrientation))
@@ -220,7 +224,7 @@ void Ask_User_For_Ship_Positions(std::vector<std::vector<std::string>> &PlayerOn
       std::cout << "\n\nEnter the " << ShipSize << " grid locations for the Submarine: ";
 
       // Using std::getline so string with spaces is read in
-      getline(std::cin, CurrentShipPositions_string);
+      std::getline(std::cin, CurrentShipPositions_string);
 
       // If error checking returns false then continue to next iteration
       if (!Error_Checking_Ordering_Orientation_On_User_Ship_Positions(PlayerOneBoard, CurrentShipPositions_string, CurrentShipPositions_ints, ShipSize, CurrentShipPositionsOrientation))
@@ -248,7 +252,7 @@ void Ask_User_For_Ship_Positions(std::vector<std::vector<std::string>> &PlayerOn
       std::cout << "\n\nEnter the " << ShipSize << " grid locations for the Patrol Boat: ";
 
       // Using std::getline so string with spaces is read in
-      getline(std::cin, CurrentShipPositions_string);
+      std::getline(std::cin, CurrentShipPositions_string);
 
       // If error checking returns false then continue to next iteration
       if (!Error_Checking_Ordering_Orientation_On_User_Ship_Positions(PlayerOneBoard, CurrentShipPositions_string, CurrentShipPositions_ints, ShipSize, CurrentShipPositionsOrientation))
@@ -280,8 +284,7 @@ void Ask_User_For_Ship_Positions(std::vector<std::vector<std::string>> &PlayerOn
 void Display_Game_For_User(const std::vector<std::vector<std::string>> &PlayerOneBoard,
                            const std::vector<std::vector<std::string>> &PlayerOneOpponentBoard)
 {
-  // ***Better alternative needed***
-  // Clears terminal window
+  // Start from blank terminal
   Clear_Terminal();
 
   std::cout << "--------------------Battleships--------------------";
@@ -366,8 +369,7 @@ void Clear_Terminal(void)
 void Display_Game_For_Computers(const std::vector<std::vector<std::string>> &PlayerOneBoard,
                                 const std::vector<std::vector<std::string>> &PlayerTwoBoard)
 {
-  // ***Better alternative needed***
-  // Clears terminal window
+  // Start from blank terminal
   Clear_Terminal();
 
   std::cout << "--------------------Battleships--------------------";
@@ -965,7 +967,7 @@ void Display_Game_Over_Message(const std::string &CurrentPlayer,
   else
     std::cout << "\n\nGAME OVER\n\nPlayer Two has won! The game lasted " << NumberOfTurns << " turns";
 
-  std::cout << "\n\nPress 'Q' to quit the game OR press any other key to play again...";
+  std::cout << "\n\nPress 'Q' to quit OR any other key to play again...";
 
   // Gets key pressed and then checks and clears terminal window if replaying
   char Decision = _getch();
@@ -974,6 +976,6 @@ void Display_Game_Over_Message(const std::string &CurrentPlayer,
     GameIsRunning = false;
 
   else
-    // Start from blank console
+    // Start from blank terminal
     Clear_Terminal();
 }
