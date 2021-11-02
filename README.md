@@ -8,7 +8,9 @@
   * 2 players represent human vs human
   * 1 player represents a human vs computer
   * 0 players represent computer vs computer
-* The computer is 'dumb' as it picks random positions
+* AI Difficulty
+  * Easy = random
+  * Hard = minimax algorithm
 * The terminal is 'refreshed' using a method that is only supported on Windows
 
 <p align="center">
@@ -21,9 +23,11 @@
   * 2 players represent human vs human
   * 1 player represents a human vs computer, with the human player deciding who the guesser is
   * 0 players represent computer vs computer
+* AI Difficulty
+  * Easy = Random guessing and picks shorter words to guess from `hangman/Words.txt`
+  * Hard = Probabilistic guessing and pick longer words to guess from `hangman/Words.txt`
 * No hyphens/spaces/non-letters are allowed in the word to be guessed
-* Guessing with a word will count as one guess and will not replace any letters
-* The computer is 'dumb' by either randomly picking a word from `hangman/Words.txt` or a random letter when guessing
+* No guessing the whole word (only single letter guesses allowed)
 * The terminal is 'refreshed' using a method that is only supported on Windows
 
 <p align="center">
