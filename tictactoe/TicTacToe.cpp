@@ -16,13 +16,15 @@
 #include <limits>
 #include <algorithm>
 #include <conio.h>
+#include <iomanip>
+#include <string>
 
 
 
 void Setup_Game(unsigned int &NumberOfTurns,
-                unsigned int &CurrentPlayer,
+                unsigned char &CurrentPlayer,
                 unsigned int &NumberOfPlayers,
-                unsigned int &UserXO,
+                unsigned char &UserXO,
                 std::string &AIDifficulty,
                 std::vector<std::vector<std::string>> &GameData,
                 std::vector<int> &ValidMovesRemaining)
@@ -41,7 +43,7 @@ void Setup_Game(unsigned int &NumberOfTurns,
   }
 
   // Ask user for number of players
-  NumberOfPlayers = Get_Number_Of_Players(GameData, NumberOfPlayers);
+  NumberOfPlayers = Get_Number_Of_Players(GameData);
 
   // If only one human user then ask them for which player they want to be (X or O)
   if (NumberOfPlayers == 1)
@@ -60,175 +62,79 @@ void Setup_Game(unsigned int &NumberOfTurns,
     CurrentPlayer = 'O';
 }
 
-int Get_Number_Of_Players(const std::vector<std::vector<std::string>> &GameData,
-                          unsigned int &NumberOfPlayers)
+unsigned int Get_Number_Of_Players(const std::vector<std::vector<std::string>> &GameData)
 {
   bool IsValueCorrect = false; // Flag for if input value is valid
+  std::string Input;
 
   while (!IsValueCorrect)
   {
     Display_Game(GameData, "N/A", "N/A");
     std::cout << "\n\nEnter the number of human players ";
 
-    std::cin >> NumberOfPlayers;
+    std::getline(std::cin, Input);
 
-    if (std::cin.fail()) // Check if cin failed
-    {
-      // Clear buffer and retry
-      std::cin.clear();
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-      continue;
-    }
-
-    else if (NumberOfPlayers < 0 || NumberOfPlayers > 2) // Only 0, 1 and 2 players allowed
-    {
-      // Clear buffer and retry
-      std::cin.clear();
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-      continue;
-    }
-
-    else
+    // Only 0, 1 and 2 players allowed
+    if (Input == "0" || Input == "1" || Input == "2")
       IsValueCorrect = true;
   }
 
-  // Clear buffer
-  std::cin.clear();
-  std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-  return NumberOfPlayers;
+  return std::stoi(Input, nullptr, 10);
 }
 
-int Get_User_X_O_Choice(const std::vector<std::vector<std::string>> &GameData,
-                        const unsigned int &NumberOfPlayers)
+unsigned char Get_User_X_O_Choice(const std::vector<std::vector<std::string>> &GameData,
+                                  const unsigned int &NumberOfPlayers)
 {
   bool IsValueCorrect = false; // Flag for if input value is valid
-  char UserXOChoice = 0;
+  std::string Input;
 
   while (!IsValueCorrect)
   {
     Display_Game(GameData, std::to_string(NumberOfPlayers), "N/A");
-    std::cout << "\n\nEnter you player counter (X or O) ";
+    std::cout << "\n\nWhat player would you like to be (X or O) ";
 
-    std::cin >> UserXOChoice;
-    // Check if cin failed
-    if (std::cin.fail())
-    {
-      // Clear buffer and retry
-      std::cin.clear();
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-      continue;
-    }
-    // Only X and O inputs allowed
-    else if (UserXOChoice != 'X' && UserXOChoice != 'x' && UserXOChoice != 'O' && UserXOChoice != 'o')
-    {
-      // Clear buffer and retry
-      std::cin.clear();
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-      continue;
-    }
+    std::getline(std::cin, Input);
 
-    else // all tests passed then input so is valid
+    Capitalise_Word(Input);
+
+    // Only X and O allowed
+    if (Input == "X" || Input == "O")
       IsValueCorrect = true;
   }
 
-  // Clear buffer
-  std::cin.clear();
-  std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-  // Capitalise to simplify proceeding code
-  if (UserXOChoice == 'o')
-    UserXOChoice = 'O';
-
-  if (UserXOChoice == 'x')
-    UserXOChoice = 'X';
-
-  return UserXOChoice;
+  return Input[0];
 }
 
 std::string Get_AI_Difficulty(const std::vector<std::vector<std::string>> &GameData,
                               const unsigned int &NumberOfPlayers)
 {
   bool IsValueCorrect = false; // Flag for if input value is valid
-  std::string AIDifficulty;
+  std::string Input;
 
   while (!IsValueCorrect)
   {
     Display_Game(GameData, std::to_string(NumberOfPlayers), "N/A");
     std::cout << "\n\nEnter the AI difficulty (EASY or HARD) ";
 
-    std::cin >> AIDifficulty;
-    // Check if cin failed
-    if (std::cin.fail())
-    {
-      // Clear buffer and retry
-      std::cin.clear();
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-      continue;
-    }
+    std::getline(std::cin, Input);
 
-        // Only accept chars that are either capital or lowercase letters
-    for (unsigned int i = 0; i < AIDifficulty.size(); i++)
-    {
-      if (AIDifficulty[i] < 'A')
-      {
-        // Clear buffer and retry
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        IsValueCorrect = false;
-        break;
-      }
+    Capitalise_Word(Input);
 
-      else if (AIDifficulty[i] > 'z')
-      {
-        // Clear buffer and retry
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        IsValueCorrect = false;
-        break;
-      }
-
-      // Check for [ \ ] ^ _ ` as they occur in between the uppercase and lowercase letters blocks
-      else if (AIDifficulty[i] >= 91 && AIDifficulty[i] <= 96)
-      {
-        // Clear buffer and retry
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        IsValueCorrect = false;
-        break;
-      }
-    }
-
-    Capitalise_Word(AIDifficulty);
-
-    // Only X and O inputs allowed
-    if (AIDifficulty != "EASY" && AIDifficulty != "HARD")
-    {
-      // Clear buffer and retry
-      std::cin.clear();
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-      continue;
-    }
-
-    else // all tests passed then input so is valid
+    if (Input == "EASY" || Input == "HARD")
       IsValueCorrect = true;
   }
 
-  // Clear buffer
-  std::cin.clear();
-  std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-  return AIDifficulty;
+  return Input;
 }
 
-void Capitalise_Word(std::string &aWord)
+void Capitalise_Word(std::string &Input)
 {
-  // Assuming aWord contains only letters of unkown capitalisation, if
+  // Assuming Input contains only letters of unkown capitalisation, if
   // a letter is lower case (>=97) then minus 32 to capitalise it
-  for (unsigned int i = 0; i < aWord.size(); i++)
+  for (unsigned int i = 0; i < Input.size(); i++)
   {
-    if (aWord[i] >= 97)
-      aWord[i] -= 32;
+    if (Input[i] >= 'a' && Input[i] <= 'z')
+      Input[i] -= 32;
   }
 }
 
@@ -294,7 +200,10 @@ void Display_Game(const std::vector<std::vector<std::string>> &GameData,
 
   // Line 3
   std::cout << "\n " << GameData[1][0] << ' ' << (char)179 << ' ' << GameData[1][1] << ' ' << (char)179 << ' ' << GameData[1][2] << ' ';
-  std::cout << "\t# of Players  = " << NumberOfPlayers << '\t';
+  if (NumberOfPlayers == "N/A")
+    std::cout << "\t # of Players = " << NumberOfPlayers << '\t';
+  else
+    std::cout << "\t  # of Players = " << NumberOfPlayers << '\t';
   std::cout << " 4 " << (char)179 << " 5 " << (char)179 << " 6 \n";
 
   // Line 4
@@ -347,7 +256,7 @@ void Clear_Terminal(void)
   SetConsoleCursorPosition( hStdOut, homeCoords );
 }
 
-void Toggle_Player(unsigned int &CurrentPlayer)
+void Toggle_Player(unsigned char &CurrentPlayer)
 {
   if (CurrentPlayer == 'X')
     CurrentPlayer = 'O';
@@ -359,29 +268,30 @@ void Toggle_Player(unsigned int &CurrentPlayer)
 void Ask_User_For_Next_Input(std::vector<std::vector<std::string>> &GameData,
                              const unsigned int &NumberOfPlayers,
                              const std::string &AIDifficulty,
-                             const unsigned int &CurrentPlayer,
+                             const unsigned char &CurrentPlayer,
                              std::vector<int> &ValidMovesRemaining)
 {
   bool IsValueCorrect = false; // Flag for if input value is valid
-  int UserCommand, Row, Column;
+  std::string Input;
+  unsigned int UserCommand, Row, Column;
 
   while (!IsValueCorrect)
   {
     Display_Game(GameData, std::to_string(NumberOfPlayers), AIDifficulty);
-    std::cout << "\n\nPlayer " << (char)CurrentPlayer << ", please enter your command ";
+    std::cout << "\n\nPlayer " << CurrentPlayer << ", please enter your command ";
 
-    std::cin >> UserCommand;
+    std::getline(std::cin, Input);
 
-    if (std::cin.fail()) // Check if cin failed
-    {
-      // Clear buffer, set flag to false and retry
-      std::cin.clear();
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    // Only one character allowed
+    if (Input.size() != 1)
       continue;
-    }
+
+    // Only 1-9 allowed
+    if (Input[0] < '1' || Input[0] > '9')
+      continue;
 
     // To get it into range of 0-8
-    UserCommand--;
+    UserCommand = std::stoi(Input, nullptr, 10) - 1;
 
     auto CommandPosition = std::find(ValidMovesRemaining.begin(), ValidMovesRemaining.end(), UserCommand);
 
@@ -394,18 +304,6 @@ void Ask_User_For_Next_Input(std::vector<std::vector<std::string>> &GameData,
       GameData[Row][Column] = CurrentPlayer;
 
       ValidMovesRemaining.erase(CommandPosition);
-
-      // Clear buffer
-      std::cin.clear();
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    }
-
-    else
-    {
-      // Clear buffer, set flag to false and retry
-      std::cin.clear();
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-      continue;
     }
   }
 }
@@ -413,43 +311,38 @@ void Ask_User_For_Next_Input(std::vector<std::vector<std::string>> &GameData,
 void Ask_Computer_For_Next_Input(std::vector<std::vector<std::string>> &GameData,
                                  const unsigned int &NumberOfPlayers,
                                  const std::string &AIDifficulty,
-                                 const unsigned int &CurrentPlayer,
+                                 const unsigned char &CurrentPlayer,
                                  std::vector<int> &ValidMovesRemaining)
 {
+  unsigned int ComputerCommand, Row, Column;
+
+  Display_Game(GameData, std::to_string(NumberOfPlayers), AIDifficulty);
 
   if (AIDifficulty == "EASY")
   {
-    bool IsValueCorrect = false; // Flag for if input value is valid
-    unsigned int ComputerCommand, Row, Column;
-
-    Display_Game(GameData, std::to_string(NumberOfPlayers), AIDifficulty);
-
-    // Computer is dumb and picks a pseudo random number as command
     ComputerCommand = ValidMovesRemaining[std::rand() % ValidMovesRemaining.size()];
-
-    Column = ComputerCommand % 3;
-    Row = ComputerCommand / 3;
-
-    // Go to the command position in the grid and overwrite with the current player
-    GameData[Row][Column] = CurrentPlayer;
-
     auto CommandPosition = std::find(ValidMovesRemaining.begin(), ValidMovesRemaining.end(), ComputerCommand);
     ValidMovesRemaining.erase(CommandPosition);
   }
+  else // Hard
+    ComputerCommand = MiniMax_Algorithm();
 
-  else
-    MiniMax_Algorithm();
+  Column = ComputerCommand % 3;
+  Row = ComputerCommand / 3;
+
+  // Go to the command position in the grid and overwrite with the current player
+  GameData[Row][Column] = CurrentPlayer;
 }
 
-void MiniMax_Algorithm(void)
+unsigned int MiniMax_Algorithm(void)
 {
-
+  return 0;
 }
 
 void Display_Game_Over_Message(const std::vector<std::vector<std::string>> &GameData,
                                const unsigned int &NumberOfPlayers,
                                const std::string &AIDifficulty,
-                               const unsigned int &CurrentPlayer,
+                               const unsigned char &CurrentPlayer,
                                const unsigned int &NumberOfTurns,
                                bool &GameIsRunning)
 {
@@ -458,13 +351,13 @@ void Display_Game_Over_Message(const std::vector<std::vector<std::string>> &Game
   // Winner will be current player as Toggle_Player() function has not been called
   // from receiving input and determining winner
   if (Winning_Conditions_Met(GameData))
-    std::cout << "\n\nGAME OVER\n\n" << (char)CurrentPlayer << " has won! The game lasted " << NumberOfTurns << " turns.";
+    std::cout << "\n\n\t\t     GAME OVER\n\n\t" << CurrentPlayer << " has won! The game lasted " << NumberOfTurns << " turns.";
 
   // No winner so a draw
   else
-    std::cout << "\n\nGAME OVER\n\nIt is a draw! The game lasted " << NumberOfTurns << " turns.";
+    std::cout << "\n\n\t\t     GAME OVER\n\n      It is a draw! The game lasted " << NumberOfTurns << " turns.";
 
-  std::cout << "\n\nPress 'Q' to quit the game OR press any other key to play again...";
+  std::cout << "\n\nPress 'Q' to quit OR any other key to play again...";
 
   // Gets key pressed and then checks and clears terminal window if replaying
   char Decision = _getch();
