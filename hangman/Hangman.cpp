@@ -9,6 +9,7 @@
 #include <windows.h>
 
 #include "Hangman.hpp"
+#include "Functions.hpp"
 #include <iostream>
 #include <ctime>
 #include <limits>
@@ -176,33 +177,8 @@ std::string Get_Who_Is_Guessing(const unsigned int &NumberOfPlayers,
 
 std::string Get_Word_To_Be_Guessed_From_Computer(const std::vector<unsigned char> &IncorrectGuesses)
 {
-  bool IsValueCorrect = false; // Flag for if input value is valid
-  std::string WordToBeGuessed;
-
-  std::ifstream WordList("Words.txt");
-
-  if (WordList.is_open())
-  {
-    unsigned long int LineNumber = (std::rand() % 65189) + 1;
-    unsigned long int CurrentLineNumber = 0;
-
-    while (CurrentLineNumber != LineNumber)
-    {
-      std::getline(WordList, WordToBeGuessed);
-      CurrentLineNumber++;
-    }
-  }
-
-  else
-  {
-    std::cout << "\n\nUnable to open Words.txt\n\n";
-    exit(1);
-  }
-
-  // Capitalise all letters so that only capital letter need to be dealt with
-  Capitalise_Word(WordToBeGuessed);
-
-  return WordToBeGuessed;
+  std::vector<std::string> Words = Create_Word_List();
+  return Words[std::rand() % Words.size()];
 }
 
 bool Game_Over(const unsigned int &NumberOfErrors)
@@ -424,7 +400,7 @@ void Ask_User_For_Next_Guess(std::vector<unsigned char> &IncorrectGuesses,
     if (Input[0] < 'A' || Input[0] > 'Z')
     {
       IsValueCorrect = false;
-      break;
+      continue;
     }
 
     //Check if this string has already been guessed both correctly or incorrectly
@@ -500,7 +476,7 @@ void Ask_Computer_For_Next_Guess(std::vector<unsigned char> &IncorrectGuesses,
     CorrectGuesses.push_back(Guess);
 }
 
-bool Check_Guess_Against_Word(const char &Guess,
+bool Check_Guess_Against_Word(const unsigned char &Guess,
                               const std::string &WordToBeGuessed,
                               std::string &CurrentGuessOfWord)
 {
