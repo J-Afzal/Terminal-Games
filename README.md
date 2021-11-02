@@ -48,6 +48,3 @@
  <img src="battleships/Battleships%20Playing.png" width=1000>
  <img src="battleships/Battleships%20Game%20Over.png" width=1000>
 </p>
-
-## Warning
-Terminal 'refreshing' is only supported on Windows Command Prompt and Windows Powershell
