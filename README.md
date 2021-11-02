@@ -1,9 +1,9 @@
 ## Game List:
-* TicTacToe
+* Tic Tac Toe
 * Hangman
 * Battleships
 
-## TicTacToe
+## Tic Tac Toe
 * Supports 0-2 players
   * 2 players represent human vs human
   * 1 player represents a human vs computer
