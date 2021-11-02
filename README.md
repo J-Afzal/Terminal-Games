@@ -26,6 +26,7 @@
 * AI Difficulty
   * Easy = Random guessing and picks shorter words to guess from `hangman/Words.txt`
   * Hard = Probabilistic guessing and pick longer words to guess from `hangman/Words.txt`
+* `hangman/Words.txt` contains some of the most common English words
 * No hyphens/spaces/non-letters are allowed in the word to be guessed
 * No guessing the whole word (only single letter guesses allowed)
 * The terminal is 'refreshed' using a method that is only supported on Windows
