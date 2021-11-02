@@ -80,5 +80,7 @@ int main(void)
     Display_Game_Over_Message(CurrentPlayer, NumberOfTurns, GameIsRunning);
   }
 
+  Clear_Terminal();
+
   return 0;
 }
