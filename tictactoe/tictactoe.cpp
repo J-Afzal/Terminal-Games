@@ -51,7 +51,7 @@ void Setup_Game(std::vector<std::vector<std::string>> &GameData,
       Display_Game(GameData, std::to_string(NumberOfPlayers), "N/A");
       std::cout << "\n\nWhat player would you like to be? (Player One = X and Player Two = O): ";
     }
-    while(Get_User_Player_Choice(UserPlayerChoice));
+    while(!Get_User_Player_Choice(UserPlayerChoice));
   }
 
   // If AI involved get difficulty
@@ -62,7 +62,7 @@ void Setup_Game(std::vector<std::vector<std::string>> &GameData,
       Display_Game(GameData, std::to_string(NumberOfPlayers), "N/A");
       std::cout << "\n\nPlease enter the AI difficulty (EASY or HARD): ";
     }
-    while (Get_AI_Difficulty(AIDifficulty));
+    while (!Get_AI_Difficulty(AIDifficulty));
   }
 
   // Set seed to system time at 0 to create pseudo random numbers
@@ -95,7 +95,7 @@ void Display_Game(const std::vector<std::vector<std::string>> &GameData,
   // Line 3
   std::cout << "\n " << GameData[1][0] << ' ' << (char)179 << ' ' << GameData[1][1] << ' ' << (char)179 << ' ' << GameData[1][2] << ' ';
   if (NumberOfPlayers == "N/A")
-    std::cout << "\t # of Players = " << NumberOfPlayers << '\t';
+    std::cout << "\t# of Players = " << NumberOfPlayers << '\t';
   else
     std::cout << "\t  # of Players = " << NumberOfPlayers << '\t';
   std::cout << " 4 " << (char)179 << " 5 " << (char)179 << " 6 \n";
@@ -125,9 +125,9 @@ void Get_Next_User_Command(std::vector<std::vector<std::string>> &GameData,
   {
     Display_Game(GameData, std::to_string(NumberOfPlayers), AIDifficulty);
     if (CurrentPlayer == "PLAYER ONE")
-      std::cout << "\n\nPlayer X, please enter your command ";
+      std::cout << "\n\nPlayer X, please enter your next command: ";
     else
-      std::cout << "\n\nPlayer O, please enter your command ";
+      std::cout << "\n\nPlayer O, please enter your next command: ";
 
     std::getline(std::cin, Input);
 

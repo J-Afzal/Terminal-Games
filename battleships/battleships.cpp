@@ -63,16 +63,16 @@ void Setup_Game(std::vector<std::vector<std::string>> &PlayerOneBoard,
   do
   {
     Display_Game(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, "N/A", "N/A", false);
-    std::cout << "\n\nEnter the number of human players ";
+    std::cout << "\n\nPlease enter the number of human players: ";
   }
-  while(Get_Number_Of_Players(NumberOfPlayers, 0, 1));
+  while(!Get_Number_Of_Players(NumberOfPlayers, 0, 1));
 
   do
   {
-        Display_Game(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, std::to_string(NumberOfPlayers), "N/A", false);
-    std::cout << "\n\nEnter the AI difficulty (EASY or HARD) ";
+    Display_Game(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, std::to_string(NumberOfPlayers), "N/A", false);
+    std::cout << "\n\nPlease enter the AI difficulty (EASY or HARD): ";
   }
-  while(Get_AI_Difficulty(AIDifficulty));
+  while(!Get_AI_Difficulty(AIDifficulty));
 
   // If 1 then 1 human player and one AI player
   if (NumberOfPlayers == 1)
@@ -116,7 +116,7 @@ void Get_User_Ship_Positions(std::vector<std::vector<std::string>> &PlayerOneBoa
         Display_Game(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, std::to_string(NumberOfPlayers), AIDifficulty, false);
 
         // User prompt for ship locations
-        std::cout << "\n\nEnter the " << ShipSize << " grid locations for the Carrier: ";
+        std::cout << "\n\nPlease enter the " << ShipSize << " grid locations for the Carrier: ";
 
         // Using std::getline so string with spaces is read in
         std::getline(std::cin, Input);
@@ -144,7 +144,7 @@ void Get_User_Ship_Positions(std::vector<std::vector<std::string>> &PlayerOneBoa
         Display_Game(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, std::to_string(NumberOfPlayers), AIDifficulty, false);
 
         // User prompt for ship locations
-        std::cout << "\n\nEnter the " << ShipSize << " grid locations for the Battleship: ";
+        std::cout << "\n\nPlease enter the " << ShipSize << " grid locations for the Battleship: ";
 
         // Using std::getline so string with spaces is read in
         std::getline(std::cin, Input);
@@ -171,7 +171,7 @@ void Get_User_Ship_Positions(std::vector<std::vector<std::string>> &PlayerOneBoa
         Display_Game(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, std::to_string(NumberOfPlayers), AIDifficulty, false);
 
         // User prompt for ship locations
-        std::cout << "\n\nEnter the " << ShipSize << " grid locations for the Destroyer: ";
+        std::cout << "\n\nPlease enter the " << ShipSize << " grid locations for the Destroyer: ";
 
         // Using std::getline so string with spaces is read in
         std::getline(std::cin, Input);
@@ -199,7 +199,7 @@ void Get_User_Ship_Positions(std::vector<std::vector<std::string>> &PlayerOneBoa
         Display_Game(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, std::to_string(NumberOfPlayers), AIDifficulty, false);
 
         // User prompt for ship locations
-        std::cout << "\n\nEnter the " << ShipSize << " grid locations for the Submarine: ";
+        std::cout << "\n\nPlease enter the " << ShipSize << " grid locations for the Submarine: ";
 
         // Using std::getline so string with spaces is read in
         std::getline(std::cin, Input);
@@ -227,7 +227,7 @@ void Get_User_Ship_Positions(std::vector<std::vector<std::string>> &PlayerOneBoa
         Display_Game(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, std::to_string(NumberOfPlayers), AIDifficulty, false);
 
         // User prompt for ship locations
-        std::cout << "\n\nEnter the " << ShipSize << " grid locations for the Patrol Boat: ";
+        std::cout << "\n\nPlease enter the " << ShipSize << " grid locations for the Patrol Boat: ";
 
         // Using std::getline so string with spaces is read in
         std::getline(std::cin, Input);
@@ -854,7 +854,7 @@ unsigned int Get_Next_User_Command(const std::vector<std::vector<std::string>> &
   {
     Display_Game(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, std::to_string(NumberOfPlayers), AIDifficulty, false);
     // Prompt user for next command that will be the next grid position to attack
-    std::cout << "\n\nPlayer One, please enter your next command ";
+    std::cout << "\n\nPlayer One, please enter your next command: ";
 
     std::getline(std::cin, Input);
 

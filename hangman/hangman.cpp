@@ -29,9 +29,9 @@ void Setup_Game(unsigned int &NumberOfPlayers,
   do
   {
     Display_Game(0, "N/A", AIDifficulty, IncorrectGuesses, "");
-    std::cout << "\n\n\n\n\nPlease enter the number of players: ";
+    std::cout << "\n\n\n\n\nPlease enter the number of human players: ";
   }
-  while(Get_Number_Of_Players(NumberOfPlayers, 0, 2));
+  while(!Get_Number_Of_Players(NumberOfPlayers, 0, 2));
 
   if (NumberOfPlayers == 0)
     PlayerThatIsGuessing = "AI";
@@ -43,13 +43,16 @@ void Setup_Game(unsigned int &NumberOfPlayers,
       Display_Game(0, std::to_string(NumberOfPlayers), AIDifficulty, IncorrectGuesses, "");
       std::cout << "\n\n\n\n\nWhat player would you like to be? (Player One = Guesser and Player Two = Set the word): ";
     }
-    while(Get_User_Player_Choice(PlayerThatIsGuessing));
+    while(!Get_User_Player_Choice(PlayerThatIsGuessing));
 
     if (PlayerThatIsGuessing == "PLAYER ONE")
       PlayerThatIsGuessing = "HUMAN";
     else
       PlayerThatIsGuessing = "AI";
   }
+
+  else
+    PlayerThatIsGuessing = "HUMAN";
 
   if (NumberOfPlayers == 0 || NumberOfPlayers == 1)
   {
@@ -58,12 +61,12 @@ void Setup_Game(unsigned int &NumberOfPlayers,
       Display_Game(0, std::to_string(NumberOfPlayers), AIDifficulty, IncorrectGuesses, "");
       std::cout << "\n\n\n\n\nPlease enter the AI difficulty (EASY or HARD): ";
     }
-    while(Get_AI_Difficulty(AIDifficulty));
+    while(!Get_AI_Difficulty(AIDifficulty));
   }
 
 
 
-  if (PlayerThatIsGuessing == "AI" || NumberOfPlayers == 2)
+  if ((PlayerThatIsGuessing == "AI" && NumberOfPlayers == 1) || (PlayerThatIsGuessing == "HUMAN" && NumberOfPlayers == 2))
     WordToBeGuessed = Get_Word_To_Be_Guessed_From_User(IncorrectGuesses, NumberOfPlayers, AIDifficulty);
   else
     WordToBeGuessed = Get_Word_To_Be_Guessed_From_AI();
@@ -90,7 +93,7 @@ std::string Get_Word_To_Be_Guessed_From_User(const std::vector<unsigned char> &I
     IsValueCorrect = true;
 
     Display_Game(0, std::to_string(NumberOfPlayers), AIDifficulty, IncorrectGuesses, "");
-    std::cout << "\n\n\n\n\nEnter the word to be guessed: ";
+    std::cout << "\n\n\n\n\nPlease enter the word to be guessed: ";
 
     std::getline(std::cin, Input);
 
@@ -130,10 +133,14 @@ void Display_Game(const unsigned int &NumberOfErrors,
   switch (NumberOfErrors)
   {
   case 0:
-    std::cout << "\n\t\t\t\t\t       Hangman"
-              << "\n\n\t\t\t\t\t   # of Players = " << NumberOfPlayers
-              << "\n\n\t\t\t\t\t AI Difficulty = " << AIDifficulty
-              << "\n\n\n";
+    std::cout << "\n\t\t\t\t\t       Hangman";
+
+    if (NumberOfPlayers == "N/A")
+      std::cout << "\n\n\t\t\t\t\t # of Players = " << NumberOfPlayers;
+    else
+      std::cout << "\n\n\t\t\t\t\t   # of Players = " << NumberOfPlayers;
+
+    std::cout << "\n\n\t\t\t\t\t AI Difficulty = " << AIDifficulty << "\n\n\n";
     break;
 
   case 1:
@@ -277,7 +284,7 @@ void Get_Next_User_Guess(unsigned int &NumberOfErrors,
   while (!IsValueCorrect)
   {
     Display_Game(NumberOfErrors, std::to_string(NumberOfPlayers), AIDifficulty, IncorrectGuesses, CurrentGuessOfWord);
-    std::cout << "\n\nEnter your guess: ";
+    std::cout << "\n\nGuesser, please enter your next guess: ";
 
     std::getline(std::cin, Input);
 

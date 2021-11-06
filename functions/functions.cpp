@@ -9,15 +9,20 @@ bool Get_Number_Of_Players(unsigned int &NumberOfPlayers,
   std::string Input;
   std::getline(std::cin, Input);
 
-  // Only 0, 1 and 2 players allowed
-  if (Input[0] < (char)MinPlayers || Input[0] > (char)MaxPlayers)
+  if (Input.empty())
+    return false;
+
+  for (unsigned int i = 0; i < Input.size(); i++)
+    if (Input[i] < 48 || Input[i] > 57)
+      return false;
+
+  NumberOfPlayers = std::stoi(Input, nullptr, 10);
+
+  if (NumberOfPlayers < MinPlayers || NumberOfPlayers > MaxPlayers)
     return false;
 
   else
-  {
-    NumberOfPlayers = std::stoi(Input, nullptr, 10);
     return true;
-  }
 }
 
 bool Get_User_Player_Choice(std::string &UserPlayerChoice)
