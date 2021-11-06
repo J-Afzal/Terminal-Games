@@ -586,117 +586,222 @@ void Display_Game(const std::vector<std::vector<std::string>> &PlayerOneBoard,
   Clear_Terminal();
 
   // Top Row of both boards
-  std::cout << "\t\t  PLAYER ONE\t\t\t\t\t\t                                          PLAYER TWO\n";
-
-  std::cout << (char)218 << (char)196 << (char)196 << (char)196;
-
-  for (unsigned int i = 0; i < 10; i++)
-    std::cout << (char)194 << (char)196 << (char)196 << (char)196;
-
-  std::cout << (char)191 << "\t\t\t\t\t\t\t" << (char)218 << (char)196 << (char)196 << (char)196;
+  std::string Output = "\t\t  PLAYER ONE\t\t\t\t\t\t                                          PLAYER TWO\n";
+  Output.insert(Output.size(), 1, (char)218);
+  Output.insert(Output.size(), 3, (char)196);
 
   for (unsigned int i = 0; i < 10; i++)
-    std::cout << (char)194 << (char)196 << (char)196 << (char)196;
+  {
+    Output.insert(Output.size(), 1, (char)194);
+    Output.insert(Output.size(), 3, (char)196);
+  }
 
-  std::cout << (char)191 << '\n';
+  Output.insert(Output.size(), 1, (char)191);
+  Output.append("\t\t\t\t\t\t\t");
+  Output.insert(Output.size(), 1, (char)218);
+  Output.insert(Output.size(), 3, (char)196);
 
-  std::cout << (char)179 << "   " << (char)179 << " A " << (char)179  << " B " << (char)179 << " C " << (char)179 << " D " << (char)179 << " E "
-            << (char)179 << " F " << (char)179 << " G " << (char)179 << " H " << (char)179 << " I " << (char)179 << " J " << (char)179
-            << "\t\t\t BATTLESHIPS\t\t\t"
-            << (char)179 << "   " << (char)179 << " A " << (char)179  << " B " << (char)179 << " C " << (char)179 << " D " << (char)179 << " E "
-            << (char)179 << " F " << (char)179 << " G " << (char)179 << " H " << (char)179 << " I " << (char)179 << " J " << (char)179 << '\n';
+  for (unsigned int i = 0; i < 10; i++)
+  {
+    Output.insert(Output.size(), 1, (char)194);
+    Output.insert(Output.size(), 3, (char)196);
+  }
+
+  Output.insert(Output.size(), 1, (char)191);
+  Output.append("\n");
+
+  Output.insert(Output.size(), 1, (char)179);
+  Output.append("   ");
+  Output.insert(Output.size(), 1, (char)179);
+  Output.append(" A ");
+  Output.insert(Output.size(), 1, (char)179);
+  Output.append(" B ");
+  Output.insert(Output.size(), 1, (char)179);
+  Output.append(" C ");
+  Output.insert(Output.size(), 1, (char)179);
+  Output.append(" D ");
+  Output.insert(Output.size(), 1, (char)179);
+  Output.append(" E ");
+  Output.insert(Output.size(), 1, (char)179);
+  Output.append(" F ");
+  Output.insert(Output.size(), 1, (char)179);
+  Output.append(" G ");
+  Output.insert(Output.size(), 1, (char)179);
+  Output.append(" H ");
+  Output.insert(Output.size(), 1, (char)179);
+  Output.append(" I ");
+  Output.insert(Output.size(), 1, (char)179);
+  Output.append(" J ");
+  Output.insert(Output.size(), 1, (char)179);
+  Output.append("\t\t\t BATTLESHIPS\t\t\t");
+  Output.insert(Output.size(), 1, (char)179);
+  Output.append("   ");
+  Output.insert(Output.size(), 1, (char)179);
+  Output.append(" A ");
+  Output.insert(Output.size(), 1, (char)179);
+  Output.append(" B ");
+  Output.insert(Output.size(), 1, (char)179);
+  Output.append(" C ");
+  Output.insert(Output.size(), 1, (char)179);
+  Output.append(" D ");
+  Output.insert(Output.size(), 1, (char)179);
+  Output.append(" E ");
+  Output.insert(Output.size(), 1, (char)179);
+  Output.append(" F ");
+  Output.insert(Output.size(), 1, (char)179);
+  Output.append(" G ");
+  Output.insert(Output.size(), 1, (char)179);
+  Output.append(" H ");
+  Output.insert(Output.size(), 1, (char)179);
+  Output.append(" I ");
+  Output.insert(Output.size(), 1, (char)179);
+  Output.append(" J ");
+  Output.insert(Output.size(), 1, (char)179);
+  Output.append("\n");
 
   // Main parts of both boards and centre information
   for (unsigned int i = 0; i < 10; i++)
   {
     // Player One Board horizontal dividers
-    std::cout << (char)195 << (char)196 << (char)196 << (char)196;
+    Output.insert(Output.size(), 1, (char)195);
+    Output.insert(Output.size(), 3, (char)196);
 
     for (unsigned int j = 0; j < 10; j++)
-      std::cout << (char)197 << (char)196 << (char)196 << (char)196;
+    {
+      Output.insert(Output.size(), 1, (char)197);
+      Output.insert(Output.size(), 3, (char)196);
+    }
 
-    std::cout << (char)180;
+    Output.insert(Output.size(), 1, (char)180);
 
     // Centre information Part 1
     switch (i)
     {
     case 3:
-      std::cout << "\tCarrier\t\t\t\t      Carrier\t";
+      Output.append("\tCarrier\t\t\t\t      Carrier\t");
     break;
 
     case 5: // Battleship
-      std::cout << '\t';
+      Output.append("\t");
       for (unsigned int j = 0; j < 4; j++)
       {
         if (j < PlayerOneShipsRemaining.at("B"))
-          std::cout << (char)178 << (char)178 << (char)178 << ' ';
+        {
+          Output.insert(Output.size(), 3, (char)178);
+          Output.append(" ");
+        }
         else
-          std::cout << (char)176 << (char)176 << (char)176 << ' ';
+        {
+          Output.insert(Output.size(), 3, (char)176);
+          Output.append(" ");
+        }
       }
-      std::cout << "\t      ";
+      Output.append("\t      ");
       for (unsigned int j = 0; j < 4; j++)
       {
         if (j < (4-PlayerTwoShipsRemaining.at("B")))
-          std::cout << (char)176 << (char)176 << (char)176 << ' ';
+        {
+          Output.insert(Output.size(), 3, (char)176);
+          Output.append(" ");
+        }
         else
-          std::cout << (char)178 << (char)178 << (char)178 << ' ';
+        {
+          Output.insert(Output.size(), 3, (char)178);
+          Output.append(" ");
+        }
       }
-      std::cout << '\t';
+      Output.append("\t");
     break;
 
     case 6:
-      std::cout << "\tDestroyer\t\t\t    Destroyer\t";
+      Output.append("\tDestroyer\t\t\t    Destroyer\t");
     break;
 
     case 8: // Submarine
-      std::cout << '\t';
+      Output.append("\t");
       for (unsigned int j = 0; j < 3; j++)
       {
         if (j < PlayerOneShipsRemaining.at("S"))
-          std::cout << (char)178 << (char)178 << (char)178 << ' ';
+        {
+          Output.insert(Output.size(), 3, (char)178);
+          Output.append(" ");
+        }
         else
-          std::cout << (char)176 << (char)176 << (char)176 << ' ';
+        {
+          Output.insert(Output.size(), 3, (char)176);
+          Output.append(" ");
+        }
       }
-      std::cout << "\t\t\t  ";
+      Output.append("\t\t\t  ");
       for (unsigned int j = 0; j < 3; j++)
       {
         if (j < (3-PlayerTwoShipsRemaining.at("S")))
-          std::cout << (char)176 << (char)176 << (char)176 << ' ';
+        {
+          Output.insert(Output.size(), 3, (char)176);
+          Output.append(" ");
+        }
         else
-          std::cout << (char)178 << (char)178 << (char)178 << ' ';
+        {
+          Output.insert(Output.size(), 3, (char)178);
+          Output.append(" ");
+        }
       }
-      std::cout << '\t';
+      Output.append("\t");
     break;
 
     case 9:
-      std::cout << "\tPatrol Boat\t\t\t  Patrol Boat\t";
+      Output.append("\tPatrol Boat\t\t\t  Patrol Boat\t");
     break;
 
     default:
-      std::cout << "\t\t\t\t\t\t\t";
+      Output.append("\t\t\t\t\t\t\t");
     break;
     }
 
     // Player Two Board horizontal dividers
-    std::cout << (char)195 << (char)196 << (char)196 << (char)196;
+    Output.insert(Output.size(), 1, (char)195);
+    Output.insert(Output.size(), 3, (char)196);
 
     for (unsigned int j = 0; j < 10; j++)
-      std::cout << (char)197 << (char)196 << (char)196 << (char)196;
+    {
+      Output.insert(Output.size(), 1, (char)197);
+      Output.insert(Output.size(), 3, (char)196);
+    }
 
-    std::cout << (char)180 << '\n';
+    Output.insert(Output.size(), 1, (char)180);
+    Output.append("\n");
 
     // Player One Board
-    std::cout << (char)179 << ' ' << i << ' ' << (char)179;
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append(" ");
+    Output.insert(Output.size(), 1, i+48);
+    Output.append(" ");
+    Output.insert(Output.size(), 1, (char)179);
+
     for (unsigned int j = 0; j < 10; j++)
     {
       if (PlayerOneBoard[i][j] == "C" || PlayerOneBoard[i][j] == "B" || PlayerOneBoard[i][j] == "D" || PlayerOneBoard[i][j] == "S" || PlayerOneBoard[i][j] == "P")
-        std::cout << (char)178 << (char)178 << (char)178 << (char)179;
+      {
+        Output.insert(Output.size(), 3, (char)178);
+        Output.insert(Output.size(), 1, (char)179);
+      }
       else if (PlayerOneBoard[i][j] == "Hit")
-        std::cout << (char)176 << (char)176 << (char)176 << (char)179;
+      {
+        Output.insert(Output.size(), 3, (char)176);
+        Output.insert(Output.size(), 1, (char)179);
+      }
       else if (PlayerOneBoard[i][j] == "Miss")
-        std::cout << ' ' << (char)250 << ' ' << (char)179;
+      {
+        Output.append(" ");
+        Output.insert(Output.size(), 1, (char)250);
+        Output.append(" ");
+        Output.insert(Output.size(), 1, (char)179);
+      }
       else
-        std::cout << "   " << (char)179;
+      {
+        Output.append("   ");
+        Output.insert(Output.size(), 1, (char)179);
+      }
     }
 
     // Centre Information Part 2
@@ -704,116 +809,192 @@ void Display_Game(const std::vector<std::vector<std::string>> &PlayerOneBoard,
     {
     case 0:
       if (NumberOfPlayers == "N/A")
-        std::cout << "\t\t     # of Players = " << NumberOfPlayers << "\t\t\t";
+      {
+        Output.append("\t\t     # of Players = ");
+        Output.append(NumberOfPlayers);
+        Output.append("\t\t\t");
+      }
+
       else
-        std::cout << "\t\t       # of Players = " << NumberOfPlayers << "\t\t\t";
+      {
+        Output.append("\t\t       # of Players = ");
+        Output.append(NumberOfPlayers);
+        Output.append("\t\t\t");
+      }
     break;
 
     case 1:
-        std::cout << "\t\t     AI Difficulty = " << AIDifficulty << "\t\t";
+        Output.append("\t\t     AI Difficulty = ");
+        Output.append(AIDifficulty);
+        Output.append("\t\t");
     break;
 
     case 3: // Carrier
-      std::cout << '\t';
+      Output.append("\t");
       for (unsigned int j = 0; j < 5; j++)
       {
         if (j < PlayerOneShipsRemaining.at("C"))
-          std::cout << (char)178 << (char)178 << (char)178 << ' ';
+        {
+          Output.insert(Output.size(), 3, (char)178);
+          Output.append(" ");
+        }
         else
-          std::cout << (char)176 << (char)176 << (char)176 << ' ';
+        {
+          Output.insert(Output.size(), 3, (char)176);
+          Output.append(" ");
+        }
       }
-      std::cout << "\t  ";
+      Output.append("\t  ");
       for (unsigned int j = 0; j < 5; j++)
       {
         if (j < (5-PlayerTwoShipsRemaining.at("C")))
-          std::cout << (char)176 << (char)176 << (char)176 << ' ';
+        {
+          Output.insert(Output.size(), 3, (char)176);
+          Output.append(" ");
+        }
         else
-          std::cout << (char)178 << (char)178 << (char)178 << ' ';
+        {
+          Output.insert(Output.size(), 3, (char)178);
+          Output.append(" ");
+        }
       }
-      std::cout << '\t';
+      Output.append("\t");
     break;
 
     case 4:
-      std::cout << "\tBattleship\t\t\t   Battleship\t";
+      Output.append("\tBattleship\t\t\t   Battleship\t");
     break;
 
     case 6: // Destroyer
-      std::cout << '\t';
+      Output.append("\t");
       for (unsigned int j = 0; j < 3; j++)
       {
         if (j < PlayerOneShipsRemaining.at("D"))
-          std::cout << (char)178 << (char)178 << (char)178 << ' ';
+        {
+          Output.insert(Output.size(), 3, (char)178);
+          Output.append(" ");
+        }
         else
-          std::cout << (char)176 << (char)176 << (char)176 << ' ';
+        {
+          Output.insert(Output.size(), 3, (char)176);
+          Output.append(" ");
+        }
       }
-      std::cout << "\t\t\t  ";
+      Output.append("\t\t\t  ");
       for (unsigned int j = 0; j < 3; j++)
       {
         if (j < (3-PlayerTwoShipsRemaining.at("D")))
-          std::cout << (char)176 << (char)176 << (char)176 << ' ';
+        {
+          Output.insert(Output.size(), 3, (char)176);
+          Output.append(" ");
+        }
         else
-          std::cout << (char)178 << (char)178 << (char)178 << ' ';
+        {
+          Output.insert(Output.size(), 3, (char)178);
+          Output.append(" ");
+        }
       }
-      std::cout << '\t';
+      Output.append("\t");
     break;
 
     case 7:
-      std::cout << "\tSubmarine\t\t\t    Submarine\t";
+      Output.append("\tSubmarine\t\t\t    Submarine\t");
     break;
 
     case 9: // Patrol Boat
-      std::cout << '\t';
+      Output.append("\t");
       for (unsigned int j = 0; j < 2; j++)
       {
         if (j < PlayerOneShipsRemaining.at("P"))
-          std::cout << (char)178 << (char)178 << (char)178 << ' ';
+        {
+          Output.insert(Output.size(), 3, (char)178);
+          Output.append(" ");
+        }
         else
-          std::cout << (char)176 << (char)176 << (char)176 << ' ';
+        {
+          Output.insert(Output.size(), 3, (char)176);
+          Output.append(" ");
+        }
       }
-      std::cout << "\t\t\t      ";
+      Output.append("\t\t\t      ");
       for (unsigned int j = 0; j < 2; j++)
       {
         if (j < (2-PlayerTwoShipsRemaining.at("P")))
-          std::cout << (char)176 << (char)176 << (char)176 << ' ';
+        {
+          Output.insert(Output.size(), 3, (char)176);
+          Output.append(" ");
+        }
         else
-          std::cout << (char)178 << (char)178 << (char)178 << ' ';
+        {
+          Output.insert(Output.size(), 3, (char)178);
+          Output.append(" ");
+        }
       }
-      std::cout << '\t';
+      Output.append("\t");
     break;
 
     default:
-      std::cout << "\t\t\t\t\t\t\t";
+      Output.append("\t\t\t\t\t\t\t");
     break;
     }
 
     // Player Two Board
-    std::cout << (char)179 << ' ' << i << ' ' << (char)179;
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append(" ");
+    Output.insert(Output.size(), 1, i+48);
+    Output.append(" ");
+    Output.insert(Output.size(), 1, (char)179);
     for (unsigned int j = 0; j < 10; j++)
     {
       if ((GameOver || NumberOfPlayers == "0") && (PlayerTwoBoard[i][j] == "C" || PlayerTwoBoard[i][j] == "B" || PlayerTwoBoard[i][j] == "D" || PlayerTwoBoard[i][j] == "S" || PlayerTwoBoard[i][j] == "P"))
-        std::cout << (char)178 << (char)178 << (char)178 << (char)179;
+      {
+        Output.insert(Output.size(), 3, (char)178);
+        Output.insert(Output.size(), 1, (char)179);
+      }
       else if (PlayerTwoBoard[i][j] == "Hit")
-        std::cout << (char)176 << (char)176 << (char)176 << (char)179;
+      {
+        Output.insert(Output.size(), 3, (char)176);
+        Output.insert(Output.size(), 1, (char)179);
+      }
       else if (PlayerTwoBoard[i][j] == "Miss")
-        std::cout << ' ' << (char)250 << ' ' << (char)179;
+      {
+        Output.append(" ");
+        Output.insert(Output.size(), 1, (char)250);
+        Output.append(" ");
+        Output.insert(Output.size(), 1, (char)179);
+      }
       else
-        std::cout << "   " << (char)179;
+      {
+        Output.append("   ");
+        Output.insert(Output.size(), 1, (char)179);
+      }
     }
-    std::cout << '\n';
+    Output.append("\n");
   }
 
   // Bottom row of both boards
-  std::cout << (char)192 << (char)196 << (char)196 << (char)196;
+  Output.insert(Output.size(), 1, (char)192);
+  Output.insert(Output.size(), 3, (char)196);
 
   for (unsigned int j = 0; j < 10; j++)
-    std::cout << (char)193 << (char)196 << (char)196 << (char)196;
+  {
+    Output.insert(Output.size(), 1, (char)193);
+    Output.insert(Output.size(), 3, (char)196);
+  }
 
-  std::cout << (char)217 << "\t\t\t\t\t\t\t" << (char)192 << (char)196 << (char)196 << (char)196;
+  Output.insert(Output.size(), 1, (char)217);
+  Output.append("\t\t\t\t\t\t\t");
+  Output.insert(Output.size(), 1, (char)192);
+  Output.insert(Output.size(), 3, (char)196);
 
   for (unsigned int j = 0; j < 10; j++)
-    std::cout << (char)193 << (char)196 << (char)196 << (char)196;
+  {
+    Output.insert(Output.size(), 1, (char)193);
+    Output.insert(Output.size(), 3, (char)196);
+  }
 
-  std::cout << (char)217;
+  Output.insert(Output.size(), 1, (char)217);
+  std::cout << Output;
 }
 
 bool Winning_Conditions_Met(const std::vector<std::vector<std::string>> &PlayerOneBoard,
