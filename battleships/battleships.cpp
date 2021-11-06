@@ -686,29 +686,19 @@ void Display_Game(const std::vector<std::vector<std::string>> &PlayerOneBoard,
       for (unsigned int j = 0; j < 4; j++)
       {
         if (j < PlayerOneShipsRemaining.at("B"))
-        {
           Output.insert(Output.size(), 3, (char)178);
-          Output.append(" ");
-        }
         else
-        {
           Output.insert(Output.size(), 3, (char)176);
-          Output.append(" ");
-        }
+        Output.append(" ");
       }
       Output.append("\t      ");
       for (unsigned int j = 0; j < 4; j++)
       {
         if (j < (4-PlayerTwoShipsRemaining.at("B")))
-        {
           Output.insert(Output.size(), 3, (char)176);
-          Output.append(" ");
-        }
         else
-        {
           Output.insert(Output.size(), 3, (char)178);
-          Output.append(" ");
-        }
+        Output.append(" ");
       }
       Output.append("\t");
     break;
@@ -722,29 +712,19 @@ void Display_Game(const std::vector<std::vector<std::string>> &PlayerOneBoard,
       for (unsigned int j = 0; j < 3; j++)
       {
         if (j < PlayerOneShipsRemaining.at("S"))
-        {
           Output.insert(Output.size(), 3, (char)178);
-          Output.append(" ");
-        }
         else
-        {
           Output.insert(Output.size(), 3, (char)176);
-          Output.append(" ");
-        }
+        Output.append(" ");
       }
       Output.append("\t\t\t  ");
       for (unsigned int j = 0; j < 3; j++)
       {
         if (j < (3-PlayerTwoShipsRemaining.at("S")))
-        {
           Output.insert(Output.size(), 3, (char)176);
-          Output.append(" ");
-        }
         else
-        {
           Output.insert(Output.size(), 3, (char)178);
-          Output.append(" ");
-        }
+        Output.append(" ");
       }
       Output.append("\t");
     break;
@@ -781,27 +761,18 @@ void Display_Game(const std::vector<std::vector<std::string>> &PlayerOneBoard,
     for (unsigned int j = 0; j < 10; j++)
     {
       if (PlayerOneBoard[i][j] == "C" || PlayerOneBoard[i][j] == "B" || PlayerOneBoard[i][j] == "D" || PlayerOneBoard[i][j] == "S" || PlayerOneBoard[i][j] == "P")
-      {
         Output.insert(Output.size(), 3, (char)178);
-        Output.insert(Output.size(), 1, (char)179);
-      }
       else if (PlayerOneBoard[i][j] == "Hit")
-      {
         Output.insert(Output.size(), 3, (char)176);
-        Output.insert(Output.size(), 1, (char)179);
-      }
       else if (PlayerOneBoard[i][j] == "Miss")
       {
         Output.append(" ");
         Output.insert(Output.size(), 1, (char)250);
         Output.append(" ");
-        Output.insert(Output.size(), 1, (char)179);
       }
       else
-      {
         Output.append("   ");
-        Output.insert(Output.size(), 1, (char)179);
-      }
+      Output.insert(Output.size(), 1, (char)179);
     }
 
     // Centre Information Part 2
@@ -809,24 +780,13 @@ void Display_Game(const std::vector<std::vector<std::string>> &PlayerOneBoard,
     {
     case 0:
       if (NumberOfPlayers == "N/A")
-      {
-        Output.append("\t\t     # of Players = ");
-        Output.append(NumberOfPlayers);
-        Output.append("\t\t\t");
-      }
-
+        Output.append("\t\t     # of Players = " + NumberOfPlayers + "\t\t\t");
       else
-      {
-        Output.append("\t\t       # of Players = ");
-        Output.append(NumberOfPlayers);
-        Output.append("\t\t\t");
-      }
+        Output.append("\t\t       # of Players = " + NumberOfPlayers + "\t\t\t");
     break;
 
     case 1:
-        Output.append("\t\t     AI Difficulty = ");
-        Output.append(AIDifficulty);
-        Output.append("\t\t");
+        Output.append("\t\t     AI Difficulty = " + AIDifficulty + "\t\t");
     break;
 
     case 3: // Carrier
@@ -834,29 +794,19 @@ void Display_Game(const std::vector<std::vector<std::string>> &PlayerOneBoard,
       for (unsigned int j = 0; j < 5; j++)
       {
         if (j < PlayerOneShipsRemaining.at("C"))
-        {
           Output.insert(Output.size(), 3, (char)178);
-          Output.append(" ");
-        }
         else
-        {
           Output.insert(Output.size(), 3, (char)176);
-          Output.append(" ");
-        }
+        Output.append(" ");
       }
       Output.append("\t  ");
       for (unsigned int j = 0; j < 5; j++)
       {
         if (j < (5-PlayerTwoShipsRemaining.at("C")))
-        {
           Output.insert(Output.size(), 3, (char)176);
-          Output.append(" ");
-        }
         else
-        {
           Output.insert(Output.size(), 3, (char)178);
-          Output.append(" ");
-        }
+        Output.append(" ");
       }
       Output.append("\t");
     break;
@@ -870,29 +820,19 @@ void Display_Game(const std::vector<std::vector<std::string>> &PlayerOneBoard,
       for (unsigned int j = 0; j < 3; j++)
       {
         if (j < PlayerOneShipsRemaining.at("D"))
-        {
           Output.insert(Output.size(), 3, (char)178);
-          Output.append(" ");
-        }
         else
-        {
           Output.insert(Output.size(), 3, (char)176);
-          Output.append(" ");
-        }
+        Output.append(" ");
       }
       Output.append("\t\t\t  ");
       for (unsigned int j = 0; j < 3; j++)
       {
         if (j < (3-PlayerTwoShipsRemaining.at("D")))
-        {
           Output.insert(Output.size(), 3, (char)176);
-          Output.append(" ");
-        }
         else
-        {
           Output.insert(Output.size(), 3, (char)178);
-          Output.append(" ");
-        }
+        Output.append(" ");
       }
       Output.append("\t");
     break;
@@ -906,29 +846,19 @@ void Display_Game(const std::vector<std::vector<std::string>> &PlayerOneBoard,
       for (unsigned int j = 0; j < 2; j++)
       {
         if (j < PlayerOneShipsRemaining.at("P"))
-        {
           Output.insert(Output.size(), 3, (char)178);
-          Output.append(" ");
-        }
         else
-        {
           Output.insert(Output.size(), 3, (char)176);
-          Output.append(" ");
-        }
+        Output.append(" ");
       }
       Output.append("\t\t\t      ");
       for (unsigned int j = 0; j < 2; j++)
       {
         if (j < (2-PlayerTwoShipsRemaining.at("P")))
-        {
           Output.insert(Output.size(), 3, (char)176);
-          Output.append(" ");
-        }
         else
-        {
           Output.insert(Output.size(), 3, (char)178);
-          Output.append(" ");
-        }
+        Output.append(" ");
       }
       Output.append("\t");
     break;
@@ -947,27 +877,18 @@ void Display_Game(const std::vector<std::vector<std::string>> &PlayerOneBoard,
     for (unsigned int j = 0; j < 10; j++)
     {
       if ((GameOver || NumberOfPlayers == "0") && (PlayerTwoBoard[i][j] == "C" || PlayerTwoBoard[i][j] == "B" || PlayerTwoBoard[i][j] == "D" || PlayerTwoBoard[i][j] == "S" || PlayerTwoBoard[i][j] == "P"))
-      {
         Output.insert(Output.size(), 3, (char)178);
-        Output.insert(Output.size(), 1, (char)179);
-      }
       else if (PlayerTwoBoard[i][j] == "Hit")
-      {
         Output.insert(Output.size(), 3, (char)176);
-        Output.insert(Output.size(), 1, (char)179);
-      }
       else if (PlayerTwoBoard[i][j] == "Miss")
       {
         Output.append(" ");
         Output.insert(Output.size(), 1, (char)250);
         Output.append(" ");
-        Output.insert(Output.size(), 1, (char)179);
       }
       else
-      {
         Output.append("   ");
-        Output.insert(Output.size(), 1, (char)179);
-      }
+      Output.insert(Output.size(), 1, (char)179);
     }
     Output.append("\n");
   }
