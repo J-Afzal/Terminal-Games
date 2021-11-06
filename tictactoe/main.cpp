@@ -21,7 +21,7 @@ int main(void)
     // The user is asked for the number of (human) players
     // If this is 1, the human player is asked if they want to be player X or player O
     // The current player (and thus the player that starts) is assigned pseudo randomly
-    Setup_Game(NumberOfTurns, CurrentPlayer, NumberOfPlayers, UserPlayerChoice, AIDifficulty, GameData, ValidMovesRemaining);
+    Setup_Game(GameData, ValidMovesRemaining, NumberOfPlayers, UserPlayerChoice, AIDifficulty, CurrentPlayer);
 
     // Loop until a winning condition is met or no more moves are possible
     while (!Game_Over(NumberOfTurns) && !Winning_Conditions_Met(GameData))
@@ -30,10 +30,10 @@ int main(void)
 
       // Check if user input is required
       if (NumberOfPlayers == 2 || CurrentPlayer == UserPlayerChoice)
-        Ask_User_For_Next_Input(GameData, NumberOfPlayers, AIDifficulty, CurrentPlayer, ValidMovesRemaining); // Game is displayed before user is asked for an input
+        Get_Next_User_Command(GameData, NumberOfPlayers, AIDifficulty, CurrentPlayer, ValidMovesRemaining); // Game is displayed before user is asked for an input
 
       else
-        Ask_Computer_For_Next_Input(GameData, NumberOfPlayers, AIDifficulty, CurrentPlayer, ValidMovesRemaining); // Game is displayed before computer is asked for an input
+        Get_Next_AI_Command(GameData, NumberOfPlayers, AIDifficulty, CurrentPlayer, ValidMovesRemaining); // Game is displayed before AI  is asked for an input
 
       NumberOfTurns++;
     }

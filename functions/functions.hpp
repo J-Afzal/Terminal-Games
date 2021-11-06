@@ -14,13 +14,13 @@ bool Get_User_Player_Choice(std::string &UserPlayerChoice);
 
 bool Get_AI_Difficulty(std::string &AIDifficulty);
 
-void Capitalise_Word(std::string &aWord);
+void Capitalise_Word(std::string &Input);
 
 // Windows API method taken from https://www.cplusplus.com/articles/4z18T05o
 void Clear_Terminal(void);
 
 void Toggle_Player(std::string &CurrentPlayer);
 
-std::vector<std::string> Create_Word_List(void);
+std::vector<std::string> Generate_Word_List(void);
 
 #endif

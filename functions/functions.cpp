@@ -112,7 +112,7 @@ void Toggle_Player(std::string &CurrentPlayer)
     CurrentPlayer = "PLAYER ONE";
 }
 
-std::vector<std::string> Create_Word_List(void)
+std::vector<std::string> Generate_Word_List(void)
 {
   std::vector<std::string> WordList = {
     "ABILITY",

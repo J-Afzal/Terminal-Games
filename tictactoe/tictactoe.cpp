@@ -3,8 +3,6 @@
 //  @Author: Junaid Afzal
 //
 
-
-
 // to prevent max error with windows.h redefining it
 // https://stackoverflow.com/questions/7035023/stdmax-expected-an-identifier/7035078
 #define NOMINMAX
@@ -13,22 +11,16 @@
 #include "tictactoe.hpp"
 #include "functions.hpp"
 #include <iostream>
-#include <ctime>
-#include <limits>
+#include <iomanip>
 #include <algorithm>
 #include <conio.h>
-#include <iomanip>
-#include <string>
 
-
-
-void Setup_Game(unsigned int &NumberOfTurns,
-                std::string &CurrentPlayer,
+void Setup_Game(std::vector<std::vector<std::string>> &GameData,
+                std::vector<unsigned int> &ValidMovesRemaining,
                 unsigned int &NumberOfPlayers,
                 std::string &UserPlayerChoice,
                 std::string &AIDifficulty,
-                std::vector<std::vector<std::string>> &GameData,
-                std::vector<unsigned int> &ValidMovesRemaining)
+                std::string &CurrentPlayer)
 {
   // The for loops add the 3 rows and columns to the grid and the the appropriate grid values
   for (unsigned int i = 0, GridNumber = 0; i < 3; i++)
@@ -36,7 +28,7 @@ void Setup_Game(unsigned int &NumberOfTurns,
     std::vector<std::string> Rows;
     GameData.push_back(Rows);
 
-    for (int j = 0; j < 3; j++, GridNumber++)
+    for (unsigned int j = 0; j < 3; j++, GridNumber++)
     {
       GameData[i].push_back(" ");
       ValidMovesRemaining.push_back(GridNumber);
@@ -70,7 +62,7 @@ void Setup_Game(unsigned int &NumberOfTurns,
       Display_Game(GameData, std::to_string(NumberOfPlayers), "N/A");
       std::cout << "\n\nPlease enter the AI difficulty (EASY or HARD): ";
     }
-    while (Get_AI_Difficulty(UserPlayerChoice));
+    while (Get_AI_Difficulty(AIDifficulty));
   }
 
   // Set seed to system time at 0 to create pseudo random numbers
@@ -81,49 +73,6 @@ void Setup_Game(unsigned int &NumberOfTurns,
     CurrentPlayer = "PLAYER ONE"; // X
   else
     CurrentPlayer = "PLAYER TWO"; // O
-}
-
-bool Game_Over(const unsigned int &NumberOfTurns)
-{
-  // End the game once 9 turns have taken place
-  if (NumberOfTurns == 9)
-    return true;
-
-  else
-    return false;
-}
-
-bool Winning_Conditions_Met(const std::vector<std::vector<std::string>> &GameData)
-{
-  // Check Horizontals
-  if (GameData[0][0]!= " " && GameData[0][0] == GameData[0][1] && GameData[0][1] == GameData[0][2])
-    return true;
-
-  else if (GameData[1][0]!= " " && GameData[1][0] == GameData[1][1] && GameData[1][1] == GameData[1][2])
-    return true;
-
-  else if (GameData[2][0]!= " " && GameData[2][0] == GameData[2][1] && GameData[2][1] == GameData[2][2])
-    return true;
-
-  // Check verticals
-  else if (GameData[0][0]!= " " && GameData[0][0] == GameData[1][0] && GameData[1][0] == GameData[2][0])
-    return true;
-
-  else if (GameData[0][1]!= " " && GameData[0][1] == GameData[1][1] && GameData[1][1] == GameData[2][1])
-    return true;
-
-  else if (GameData[0][2]!= " " && GameData[0][2] == GameData[1][2] && GameData[1][2] == GameData[2][2])
-    return true;
-
-  // Check diagonals
-  else if (GameData[0][0]!= " " && GameData[0][0] == GameData[1][1] && GameData[1][1] == GameData[2][2])
-    return true;
-
-  else if (GameData[2][0]!= " " && GameData[2][0] == GameData[1][1] && GameData[1][1] == GameData[0][2])
-    return true;
-
-  else
-    return false;
 }
 
 void Display_Game(const std::vector<std::vector<std::string>> &GameData,
@@ -162,11 +111,11 @@ void Display_Game(const std::vector<std::vector<std::string>> &GameData,
   std::cout << " 7 " << (char)179 << " 8 " << (char)179 << " 9 \n";
 }
 
-void Ask_User_For_Next_Input(std::vector<std::vector<std::string>> &GameData,
-                             const unsigned int &NumberOfPlayers,
-                             const std::string &AIDifficulty,
-                             const std::string &CurrentPlayer,
-                             std::vector<unsigned int> &ValidMovesRemaining)
+void Get_Next_User_Command(std::vector<std::vector<std::string>> &GameData,
+                           const unsigned int &NumberOfPlayers,
+                           const std::string &AIDifficulty,
+                           const std::string &CurrentPlayer,
+                           std::vector<unsigned int> &ValidMovesRemaining)
 {
   bool IsValueCorrect = false; // Flag for if input value is valid
   std::string Input;
@@ -212,28 +161,71 @@ void Ask_User_For_Next_Input(std::vector<std::vector<std::string>> &GameData,
   }
 }
 
-void Ask_Computer_For_Next_Input(std::vector<std::vector<std::string>> &GameData,
-                                 const unsigned int &NumberOfPlayers,
-                                 const std::string &AIDifficulty,
-                                 const std::string &CurrentPlayer,
-                                 std::vector<unsigned int> &ValidMovesRemaining)
+void Get_Next_AI_Command(std::vector<std::vector<std::string>> &GameData,
+                         const unsigned int &NumberOfPlayers,
+                         const std::string &AIDifficulty,
+                         const std::string &CurrentPlayer,
+                         std::vector<unsigned int> &ValidMovesRemaining)
 {
-  unsigned int ComputerCommand, Row, Column;
+  unsigned int AICommand, Row, Column;
 
   Display_Game(GameData, std::to_string(NumberOfPlayers), AIDifficulty);
 
-  ComputerCommand = ValidMovesRemaining[std::rand() % ValidMovesRemaining.size()];
-  auto CommandPosition = std::find(ValidMovesRemaining.begin(), ValidMovesRemaining.end(), ComputerCommand);
+  AICommand = ValidMovesRemaining[std::rand() % ValidMovesRemaining.size()];
+  auto CommandPosition = std::find(ValidMovesRemaining.begin(), ValidMovesRemaining.end(), AICommand);
   ValidMovesRemaining.erase(CommandPosition);
 
-  Column = ComputerCommand % 3;
-  Row = ComputerCommand / 3;
+  Column = AICommand % 3;
+  Row = AICommand / 3;
 
   // Go to the command position in the grid and overwrite with the current player
   if (CurrentPlayer == "PLAYER ONE")
     GameData[Row][Column] = "X";
   else
     GameData[Row][Column] = "O";
+}
+
+bool Game_Over(const unsigned int &NumberOfTurns)
+{
+  // End the game once 9 turns have taken place
+  if (NumberOfTurns == 9)
+    return true;
+
+  else
+    return false;
+}
+
+bool Winning_Conditions_Met(const std::vector<std::vector<std::string>> &GameData)
+{
+  // Check Horizontals
+  if (GameData[0][0]!= " " && GameData[0][0] == GameData[0][1] && GameData[0][1] == GameData[0][2])
+    return true;
+
+  else if (GameData[1][0]!= " " && GameData[1][0] == GameData[1][1] && GameData[1][1] == GameData[1][2])
+    return true;
+
+  else if (GameData[2][0]!= " " && GameData[2][0] == GameData[2][1] && GameData[2][1] == GameData[2][2])
+    return true;
+
+  // Check verticals
+  else if (GameData[0][0]!= " " && GameData[0][0] == GameData[1][0] && GameData[1][0] == GameData[2][0])
+    return true;
+
+  else if (GameData[0][1]!= " " && GameData[0][1] == GameData[1][1] && GameData[1][1] == GameData[2][1])
+    return true;
+
+  else if (GameData[0][2]!= " " && GameData[0][2] == GameData[1][2] && GameData[1][2] == GameData[2][2])
+    return true;
+
+  // Check diagonals
+  else if (GameData[0][0]!= " " && GameData[0][0] == GameData[1][1] && GameData[1][1] == GameData[2][2])
+    return true;
+
+  else if (GameData[2][0]!= " " && GameData[2][0] == GameData[1][1] && GameData[1][1] == GameData[0][2])
+    return true;
+
+  else
+    return false;
 }
 
 void Display_Game_Over_Message(const std::vector<std::vector<std::string>> &GameData,
@@ -263,9 +255,7 @@ void Display_Game_Over_Message(const std::vector<std::vector<std::string>> &Game
   std::cout << "\n\nPress 'Q' to quit OR any other key to play again...";
 
   // Gets key pressed and then checks and clears terminal window if replaying
-  char Decision = _getch();
-
-  if (Decision == 'q')
+  if (_getch() == 'q')
     GameIsRunning = false;
 
   else

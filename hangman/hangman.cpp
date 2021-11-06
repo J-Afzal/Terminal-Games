@@ -11,39 +11,36 @@
 #include "hangman.hpp"
 #include "functions.hpp"
 #include <iostream>
-#include <ctime>
-#include <limits>
-#include <fstream>
-#include <conio.h>
 #include <iomanip>
 #include <algorithm>
+#include <conio.h>
 
-void Setup_Game(std::string &WordToBeGuessed,
-                std::string &CurrentGuessOfWord,
-                unsigned int &NumberOfPlayers,
+void Setup_Game(unsigned int &NumberOfPlayers,
                 std::string &PlayerThatIsGuessing,
-                std::vector<unsigned char> &IncorrectGuesses,
                 std::string &AIDifficulty,
-                std::vector<unsigned char> &ValidMovesRemaining)
+                std::string &WordToBeGuessed,
+                std::string &CurrentGuessOfWord,
+                std::vector<unsigned char> &ValidMovesRemaining,
+                const std::vector<unsigned char> &IncorrectGuesses)
 {
   // Set seed of srand to time(0) so pseudo random
   std::srand((unsigned int)std::time(0));
 
   do
   {
-    Display_Game(0, "", IncorrectGuesses, "N/A", "N/A");
+    Display_Game(0, "N/A", AIDifficulty, IncorrectGuesses, "");
     std::cout << "\n\n\n\n\nPlease enter the number of players: ";
   }
   while(Get_Number_Of_Players(NumberOfPlayers, 0, 2));
 
   if (NumberOfPlayers == 0)
-    PlayerThatIsGuessing = "COMPUTER";
+    PlayerThatIsGuessing = "AI";
 
   else if (NumberOfPlayers == 1)
   {
     do
     {
-      Display_Game(0, "", IncorrectGuesses, std::to_string(NumberOfPlayers), AIDifficulty);
+      Display_Game(0, std::to_string(NumberOfPlayers), AIDifficulty, IncorrectGuesses, "");
       std::cout << "\n\n\n\n\nWhat player would you like to be? (Player One = Guesser and Player Two = Set the word): ";
     }
     while(Get_User_Player_Choice(PlayerThatIsGuessing));
@@ -51,25 +48,25 @@ void Setup_Game(std::string &WordToBeGuessed,
     if (PlayerThatIsGuessing == "PLAYER ONE")
       PlayerThatIsGuessing = "HUMAN";
     else
-      PlayerThatIsGuessing = "COMPUTER";
+      PlayerThatIsGuessing = "AI";
   }
 
   if (NumberOfPlayers == 0 || NumberOfPlayers == 1)
   {
     do
     {
-      Display_Game(0, "", IncorrectGuesses, std::to_string(NumberOfPlayers), "N/A");
-      std::cout << "\n\n\n\n\nPlease Enter the AI difficulty (EASY or HARD) ";
+      Display_Game(0, std::to_string(NumberOfPlayers), AIDifficulty, IncorrectGuesses, "");
+      std::cout << "\n\n\n\n\nPlease enter the AI difficulty (EASY or HARD): ";
     }
     while(Get_AI_Difficulty(AIDifficulty));
   }
 
 
 
-  if (PlayerThatIsGuessing == "COMPUTER" || NumberOfPlayers == 2)
-    WordToBeGuessed = Get_Word_To_Be_Guessed_From_User(NumberOfPlayers, IncorrectGuesses, AIDifficulty);
+  if (PlayerThatIsGuessing == "AI" || NumberOfPlayers == 2)
+    WordToBeGuessed = Get_Word_To_Be_Guessed_From_User(IncorrectGuesses, NumberOfPlayers, AIDifficulty);
   else
-    WordToBeGuessed = Get_Word_To_Be_Guessed_From_Computer();
+    WordToBeGuessed = Get_Word_To_Be_Guessed_From_AI();
 
   // Create the current guess to be the same size as the word to be guessed but only containing underscores
   for (unsigned int i = 0; i < WordToBeGuessed.size(); i++)
@@ -79,8 +76,8 @@ void Setup_Game(std::string &WordToBeGuessed,
     ValidMovesRemaining.push_back(65+i);
 }
 
-std::string Get_Word_To_Be_Guessed_From_User(const unsigned int &NumberOfPlayers,
-                                             const std::vector<unsigned char> &IncorrectGuesses,
+std::string Get_Word_To_Be_Guessed_From_User(const std::vector<unsigned char> &IncorrectGuesses,
+                                             const unsigned int &NumberOfPlayers,
                                              const std::string &AIDifficulty)
 {
   bool IsValueCorrect = false; // Flag for if input value is valid
@@ -92,7 +89,7 @@ std::string Get_Word_To_Be_Guessed_From_User(const unsigned int &NumberOfPlayers
     // within a nested if statements within nested for loops
     IsValueCorrect = true;
 
-    Display_Game(0, "", IncorrectGuesses, std::to_string(NumberOfPlayers), AIDifficulty);
+    Display_Game(0, std::to_string(NumberOfPlayers), AIDifficulty, IncorrectGuesses, "");
     std::cout << "\n\n\n\n\nEnter the word to be guessed: ";
 
     std::getline(std::cin, Input);
@@ -114,36 +111,17 @@ std::string Get_Word_To_Be_Guessed_From_User(const unsigned int &NumberOfPlayers
   return Input;
 }
 
-std::string Get_Word_To_Be_Guessed_From_Computer(void)
+std::string Get_Word_To_Be_Guessed_From_AI(void)
 {
-  std::vector<std::string> Words = Create_Word_List();
+  std::vector<std::string> Words = Generate_Word_List();
   return Words[std::rand() % Words.size()];
 }
 
-bool Winning_Conditions_Met(const std::string &WordToBeGuessed,
-                            const std::string &CurrentGuessOfWord,
-                            const unsigned int &NumberOfErrors)
-{
-  // 10 errors mean that the final state of the hangman drawing has been reached
-  if (NumberOfErrors == 10)
-    return true;
-
-  else
-  {
-    // If there is any difference then winning condition not met
-    for (unsigned int i = 0; i < WordToBeGuessed.size(); i++)
-      if (WordToBeGuessed[i] != CurrentGuessOfWord[i])
-        return false;
-
-    return true;
-  }
-}
-
 void Display_Game(const unsigned int &NumberOfErrors,
-                  const std::string &CurrentGuessOfWord,
-                  const std::vector<unsigned char> &IncorrectGuesses,
                   const std::string &NumberOfPlayers,
-                  const std::string &AIDifficulty)
+                  const std::string &AIDifficulty,
+                  const std::vector<unsigned char> &IncorrectGuesses,
+                  const std::string &CurrentGuessOfWord)
 {
   // Start from blank terminal
   Clear_Terminal();
@@ -265,21 +243,40 @@ void Display_Game(const unsigned int &NumberOfErrors,
     std::cout << CurrentGuessOfWord[i] << " ";
 }
 
-void Ask_User_For_Next_Guess(std::vector<unsigned char> &IncorrectGuesses,
-                             std::vector<unsigned char> &CorrectGuesses,
-                             unsigned int &NumberOfErrors,
-                             std::string &CurrentGuessOfWord,
-                             const std::string &AIDifficulty,
-                             const unsigned int &NumberOfPlayers,
-                             std::string &WordToBeGuessed,
-                             std::vector<unsigned char> &ValidMovesRemaining)
+bool Winning_Conditions_Met(const unsigned int &NumberOfErrors,
+                            const std::string &WordToBeGuessed,
+                            const std::string &CurrentGuessOfWord)
+{
+  // 10 errors mean that the final state of the hangman drawing has been reached
+  if (NumberOfErrors == 10)
+    return true;
+
+  else
+  {
+    // If there is any difference then winning condition not met
+    for (unsigned int i = 0; i < WordToBeGuessed.size(); i++)
+      if (WordToBeGuessed[i] != CurrentGuessOfWord[i])
+        return false;
+
+    return true;
+  }
+}
+
+void Get_Next_User_Guess(unsigned int &NumberOfErrors,
+                         const unsigned int &NumberOfPlayers,
+                         const std::string &AIDifficulty,
+                         std::vector<unsigned char> &IncorrectGuesses,
+                         std::vector<unsigned char> &CorrectGuesses,
+                         std::vector<unsigned char> &ValidMovesRemaining,
+                         std::string &CurrentGuessOfWord,
+                         const std::string &WordToBeGuessed)
 {
   bool IsValueCorrect = false; // Flag for if input value is valid
   std::string Input;
 
   while (!IsValueCorrect)
   {
-    Display_Game(NumberOfErrors, CurrentGuessOfWord, IncorrectGuesses, std::to_string(NumberOfPlayers), AIDifficulty);
+    Display_Game(NumberOfErrors, std::to_string(NumberOfPlayers), AIDifficulty, IncorrectGuesses, CurrentGuessOfWord);
     std::cout << "\n\nEnter your guess: ";
 
     std::getline(std::cin, Input);
@@ -298,32 +295,31 @@ void Ask_User_For_Next_Guess(std::vector<unsigned char> &IncorrectGuesses,
     }
   }
 
-  if (!Check_Guess_Against_Word(Input[0], WordToBeGuessed, CurrentGuessOfWord))
+  if (!Check_Guess_Against_Word_To_Be_Guessed(WordToBeGuessed, Input[0], CurrentGuessOfWord))
   {
     IncorrectGuesses.push_back(Input[0]);
     NumberOfErrors++;
   }
   else
     CorrectGuesses.push_back(Input[0]);
-
 }
 
-void Ask_Computer_For_Next_Guess(std::vector<unsigned char> &IncorrectGuesses,
-                                 std::vector<unsigned char> &CorrectGuesses,
-                                 unsigned int &NumberOfErrors,
-                                 std::string &CurrentGuessOfWord,
-                                 const std::string &AIDifficulty,
-                                 const unsigned int &NumberOfPlayers,
-                                 std::string &WordToBeGuessed,
-                                 std::vector<unsigned char> &ValidMovesRemaining)
+void Get_Next_AI_Guess(unsigned int &NumberOfErrors,
+                       const unsigned int &NumberOfPlayers,
+                       const std::string &AIDifficulty,
+                       std::vector<unsigned char> &IncorrectGuesses,
+                       std::vector<unsigned char> &CorrectGuesses,
+                       std::vector<unsigned char> &ValidMovesRemaining,
+                       std::string &CurrentGuessOfWord,
+                       const std::string &WordToBeGuessed)
 {
-  Display_Game(NumberOfErrors, CurrentGuessOfWord, IncorrectGuesses, std::to_string(NumberOfPlayers), AIDifficulty);
+  Display_Game(NumberOfErrors, std::to_string(NumberOfPlayers), AIDifficulty, IncorrectGuesses, CurrentGuessOfWord);
 
   unsigned char Guess = ValidMovesRemaining[std::rand() % ValidMovesRemaining.size()];
   auto CommandPosition = std::find(ValidMovesRemaining.begin(), ValidMovesRemaining.end(), Guess);
   ValidMovesRemaining.erase(CommandPosition);
 
-  if (!Check_Guess_Against_Word(Guess, WordToBeGuessed, CurrentGuessOfWord))
+  if (!Check_Guess_Against_Word_To_Be_Guessed(WordToBeGuessed, Guess, CurrentGuessOfWord))
   {
     IncorrectGuesses.push_back(Guess);
     NumberOfErrors++;
@@ -332,36 +328,34 @@ void Ask_Computer_For_Next_Guess(std::vector<unsigned char> &IncorrectGuesses,
     CorrectGuesses.push_back(Guess);
 }
 
-bool Check_Guess_Against_Word(const unsigned char &Guess,
-                              const std::string &WordToBeGuessed,
-                              std::string &CurrentGuessOfWord)
+bool Check_Guess_Against_Word_To_Be_Guessed(const std::string &WordToBeGuessed,
+                                            const unsigned char &Guess,
+                                            std::string &CurrentGuessOfWord)
 {
   bool IsGuessCorrect = false;
 
   // If below is true then guess is a letter and every occurrence of this letter
   // needs to be deposited is the current guess of word
   for (unsigned int i = 0; i < WordToBeGuessed.size(); i++)
-  {
     if (WordToBeGuessed[i] == Guess)
     {
       IsGuessCorrect = true;
       CurrentGuessOfWord[i] = Guess;
     }
-  }
 
   return IsGuessCorrect;
 }
 
 void Display_Game_Over_Message(const unsigned int &NumberOfErrors,
-                               const std::string &CurrentGuessOfWord,
-                               const std::vector<unsigned char> &IncorrectGuesses,
-                               const unsigned int &NumberOfTurns,
-                               const std::string &WordToBeGuessed,
-                               bool &GameIsRunning,
+                               const unsigned int &NumberOfPlayers,
                                const std::string &AIDifficulty,
-                               const unsigned int &NumberOfPlayers)
+                               const std::vector<unsigned char> &IncorrectGuesses,
+                               const std::string &CurrentGuessOfWord,
+                               const std::string &WordToBeGuessed,
+                               const unsigned int &NumberOfTurns,
+                               bool &GameIsRunning)
 {
-  Display_Game(NumberOfErrors, CurrentGuessOfWord, IncorrectGuesses, std::to_string(NumberOfPlayers), AIDifficulty);
+  Display_Game(NumberOfErrors, std::to_string(NumberOfPlayers), AIDifficulty, IncorrectGuesses, CurrentGuessOfWord);
   // If the below is true then hangman has reached its final state and thus user has lost
   if (NumberOfErrors == 10)
     std::cout << "  (The word was " << WordToBeGuessed << ")\n\n\n\t\t\tGAME OVER\n\n       The guesser has lost but lasted for " << NumberOfTurns << " turns!";
@@ -372,9 +366,7 @@ void Display_Game_Over_Message(const unsigned int &NumberOfErrors,
   std::cout << "\n\n     Press 'Q' to quit OR any other key to play again...";
 
   // Gets key pressed and then checks and clears terminal window if replaying
-  char Decision = _getch();
-
-  if (Decision == 'q')
+  if (_getch() == 'q')
     GameIsRunning = false;
 
   else

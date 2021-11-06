@@ -17,27 +17,25 @@
 
 void Setup_Game(std::vector<std::vector<std::string>> &PlayerOneBoard,
                 std::vector<std::vector<std::string>> &PlayerTwoBoard,
-                unsigned int &NumberOfPlayers,
-                std::string &CurrentPlayer,
-                std::string &AIDifficulty,
                 std::vector<unsigned int> &PlayerOneValidMovesRemaining,
                 std::vector<unsigned int> &PlayerTwoValidMovesRemaining,
                 std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
-                std::map<std::string, unsigned int> &PlayerTwoShipsRemaining)
+                std::map<std::string, unsigned int> &PlayerTwoShipsRemaining,
+                unsigned int &NumberOfPlayers,
+                std::string &AIDifficulty,
+                std::string &CurrentPlayer)
 {
   // Board size is a standard 10 x 10
-  unsigned int NumberOfRows = 10, NumberOfColumns = 10;
-
-  // The ComputerBoard and UserBoard will be filled with spaces while the opponent boards will be filled
+  // The AIBoard and UserBoard will be filled with spaces while the opponent boards will be filled
   // with incrementing numbers from 0 - 99, left to right and then top to bottom
-  for (unsigned int i = 0, GridNumber = 0; i < NumberOfRows; i++)
+  for (unsigned int i = 0, GridNumber = 0; i < 10; i++)
   {
     std::vector<std::string> Row;
 
     PlayerOneBoard.push_back(Row);
     PlayerTwoBoard.push_back(Row);
 
-    for (unsigned int j = 0; j < NumberOfColumns; j++, GridNumber++)
+    for (unsigned int j = 0; j < 10; j++, GridNumber++)
     {
       PlayerOneBoard[i].push_back(" ");
       PlayerTwoBoard[i].push_back(" ");
@@ -76,15 +74,15 @@ void Setup_Game(std::vector<std::vector<std::string>> &PlayerOneBoard,
   }
   while(Get_AI_Difficulty(AIDifficulty));
 
-  // If 1 then 1 human player and one computer player
+  // If 1 then 1 human player and one AI player
   if (NumberOfPlayers == 1)
-    Ask_User_For_Ship_Positions(PlayerOneBoard, PlayerTwoBoard, NumberOfPlayers, AIDifficulty, PlayerOneShipsRemaining, PlayerTwoShipsRemaining);
+    Get_User_Ship_Positions(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, NumberOfPlayers, AIDifficulty);
 
-  else // then zero human players and two computer players
-    Get_Computer_Ship_Positions(PlayerOneBoard);
+  else // then zero human players and two AI players
+    Get_AI_Ship_Positions(PlayerOneBoard);
 
-  // Ask computer for the ship positions and update computer board
-  Get_Computer_Ship_Positions(PlayerTwoBoard);
+  // Ask AI for the ship positions and update AI board
+  Get_AI_Ship_Positions(PlayerTwoBoard);
 
   // Use std::rand() to randomly choose the player to start
   if ((std::rand() % 2) == 0)
@@ -93,12 +91,12 @@ void Setup_Game(std::vector<std::vector<std::string>> &PlayerOneBoard,
     CurrentPlayer = "PLAYER TWO";
 }
 
-void Ask_User_For_Ship_Positions(std::vector<std::vector<std::string>> &PlayerOneBoard,
-                                 const std::vector<std::vector<std::string>> &PlayerTwoBoard,
-                                 const unsigned int &NumberOfPlayers,
-                                 const std::string &AIDifficulty,
-                                 const std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
-                                 const std::map<std::string, unsigned int> &PlayerTwoShipsRemaining)
+void Get_User_Ship_Positions(std::vector<std::vector<std::string>> &PlayerOneBoard,
+                             const std::vector<std::vector<std::string>> &PlayerTwoBoard,
+                             const std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
+                             const std::map<std::string, unsigned int> &PlayerTwoShipsRemaining,
+                             const unsigned int &NumberOfPlayers,
+                             const std::string &AIDifficulty)
 {
   for (unsigned int CurrentShip = 0; CurrentShip < 5; CurrentShip++)
   {
@@ -249,10 +247,331 @@ void Ask_User_For_Ship_Positions(std::vector<std::vector<std::string>> &PlayerOn
 
     default:
       // Error message stating where it has occurred
-      std::cout << "Ask_User_For_Ship_Positions() switch statement error\n";
+      std::cout << "Get_User_Ship_Positions() switch statement error\n";
       break;
     }
   }
+}
+
+bool Error_Checking_On_User_Ship_Positions(std::vector<std::vector<std::string>> &PlayerOneBoard,
+                                           std::string &Input,
+                                           std::vector<unsigned int> &ShipPositionRows,
+                                           std::vector<unsigned int> &ShipPositionColumns,
+                                           const unsigned int &ShipSize)
+{
+  // capitalise and separate single string in to command strings
+  Capitalise_Word(Input);
+
+  if (Input.back() != ' ')
+    Input.push_back(' ');
+
+  std::vector<std::string> IndividualCoordinates;
+  std::string Temp;
+  for (unsigned int i = 0; i < Input.size(); i++)
+  {
+    if (Input[i] == ' ')
+    {
+      IndividualCoordinates.push_back(Temp);
+      Temp.clear();
+    }
+
+    else
+      Temp.push_back(Input[i]);
+  }
+
+  // check right number of commands
+  if (IndividualCoordinates.size() != ShipSize)
+    return false;
+
+  // check first character is letter and second is number and each command is size of 2
+  for (unsigned int i = 0; i < IndividualCoordinates.size(); i++)
+  {
+    if (IndividualCoordinates[i].size() != 2)
+      return false;
+
+    if (IndividualCoordinates[i][0] < 'A' || IndividualCoordinates[i][0] > 'J')
+      return false;
+
+    if (IndividualCoordinates[i][1] < '0' || IndividualCoordinates[i][1] > '9')
+      return false;
+  }
+
+  // check whether letters or numbers of all commands are identical
+  bool LettersIdentical = true, NumbersIdentical = true;
+
+  for (unsigned int i = 1; i < IndividualCoordinates.size(); i++)
+  {
+    if (IndividualCoordinates[i][0] != IndividualCoordinates[0][0])
+      LettersIdentical = false;
+
+    if (IndividualCoordinates[i][1] != IndividualCoordinates[0][1])
+      NumbersIdentical = false;
+  }
+
+  if (LettersIdentical && !NumbersIdentical)
+  {
+    // check that number is increment by one each time
+    for (unsigned int i = 1; i < IndividualCoordinates.size(); i++)
+      if (IndividualCoordinates[i][1] != (IndividualCoordinates[i-1][1] + 1))
+        return false;
+
+    // thus ShipOrientation = "Vertical";
+  }
+
+  else if (NumbersIdentical && !LettersIdentical)
+  {
+    // check that letter is increment by one each time
+    for (unsigned int i = 1; i < IndividualCoordinates.size(); i++)
+      if (IndividualCoordinates[i][0] != (IndividualCoordinates[i-1][0] + 1))
+        return false;
+
+    // thus ShipOrientation = "Horizontal";
+  }
+
+  else // No diagonals allowed
+    return false;
+
+  // Convert A0, B5, etc to row and columns
+  for (unsigned int i = 0; i < IndividualCoordinates.size(); i++)
+  {
+    Temp = IndividualCoordinates[i][1];
+    ShipPositionRows.push_back(std::stoi(Temp, nullptr, 10));
+    Temp = (IndividualCoordinates[i][0] - 17);
+    ShipPositionColumns.push_back(std::stoi(Temp, nullptr, 10));
+  }
+
+  // Check if any of the ship positions are already occupied by another ship
+  for (unsigned int i = 0; i < IndividualCoordinates.size(); i++)
+  {
+    // Check if CurrentShipPositions_ints position is already occupied by another ship
+    if (PlayerOneBoard[ShipPositionRows[i]][ShipPositionColumns[i]] == "C" ||
+        PlayerOneBoard[ShipPositionRows[i]][ShipPositionColumns[i]] == "B" ||
+        PlayerOneBoard[ShipPositionRows[i]][ShipPositionColumns[i]] == "D" ||
+        PlayerOneBoard[ShipPositionRows[i]][ShipPositionColumns[i]] == "S" ||
+        PlayerOneBoard[ShipPositionRows[i]][ShipPositionColumns[i]] == "P")
+      return false;
+  }
+
+  return true;
+}
+
+void Get_AI_Ship_Positions(std::vector<std::vector<std::string>> &AIBoard)
+{
+  for (unsigned int i = 0; i < 5; i++)
+  {
+    bool isValueCorrect = false;
+
+    switch (i)
+    {
+    case 0:
+    {
+      while (!isValueCorrect)
+      {
+        std::vector<unsigned int> ShipPositionRows, ShipPositionColumns;
+        // Carrier of size 5
+        unsigned int ShipSize = 5;
+
+        // Ask AI for ship position
+        Generate_AI_Ship_Positions(ShipPositionRows, ShipPositionColumns, ShipSize);
+
+        // If error checking returns false then continue to next iteration
+        if (!Error_Checking_On_AI_Ship_Positions(AIBoard, ShipPositionRows, ShipPositionColumns))
+          continue;
+
+        isValueCorrect = true;
+
+        // Place ship on AIBoard using the CurrentShipPositions_ints positions and marking with 'C' for carrier
+        Place_Ship(AIBoard, ShipPositionRows, ShipPositionColumns, "C");
+      }
+
+      break;
+    }
+
+    case 1:
+    {
+      while (!isValueCorrect)
+      {
+        std::vector<unsigned int> ShipPositionRows, ShipPositionColumns;
+
+        // Battleship of size 4
+        unsigned int ShipSize = 4;
+
+        // Ask AI for ship position
+        Generate_AI_Ship_Positions(ShipPositionRows, ShipPositionColumns, ShipSize);
+
+        // If error checking returns false then continue to next iteration
+        if (!Error_Checking_On_AI_Ship_Positions(AIBoard, ShipPositionRows, ShipPositionColumns))
+          continue;
+
+        isValueCorrect = true;
+
+
+        // Place ship on AIBoard using the CurrentShipPositions_ints positions and marking with 'B' for battleship
+        Place_Ship(AIBoard, ShipPositionRows, ShipPositionColumns, "B");
+      }
+
+      break;
+    }
+
+    case 2:
+    {
+      while (!isValueCorrect)
+      {
+        std::vector<unsigned int> ShipPositionRows, ShipPositionColumns;
+
+        // Destroyer of size 3
+        unsigned int ShipSize = 3;
+
+        // Ask AI for ship position
+        Generate_AI_Ship_Positions(ShipPositionRows, ShipPositionColumns, ShipSize);
+
+        // If error checking returns false then continue to next iteration
+        if (!Error_Checking_On_AI_Ship_Positions(AIBoard, ShipPositionRows, ShipPositionColumns))
+          continue;
+
+        isValueCorrect = true;
+
+        // Place ship on AIBoard using the CurrentShipPositions_ints positions and marking with 'D' for destroyer
+        Place_Ship(AIBoard, ShipPositionRows, ShipPositionColumns, "D");
+      }
+
+      break;
+    }
+
+    case 3:
+    {
+      while (!isValueCorrect)
+      {
+        std::vector<unsigned int> ShipPositionRows, ShipPositionColumns;
+
+        // Submarine of size 3
+        unsigned int ShipSize = 3;
+
+        // Ask AI for ship position
+        Generate_AI_Ship_Positions(ShipPositionRows, ShipPositionColumns, ShipSize);
+
+        // If error checking returns false then continue to next iteration
+        if (!Error_Checking_On_AI_Ship_Positions(AIBoard, ShipPositionRows, ShipPositionColumns))
+          continue;
+
+        isValueCorrect = true;
+
+        // Place ship on AIBoard using the CurrentShipPositions_ints positions and marking with 'S' for submarine
+        Place_Ship(AIBoard, ShipPositionRows, ShipPositionColumns, "S");
+      }
+
+      break;
+    }
+
+    case 4:
+    {
+      while (!isValueCorrect)
+      {
+        std::vector<unsigned int> ShipPositionRows, ShipPositionColumns;
+
+        // Patrol Boat of size 2
+        unsigned int ShipSize = 2;
+
+        // Ask AI for ship position
+        Generate_AI_Ship_Positions(ShipPositionRows, ShipPositionColumns, ShipSize);
+
+        // If error checking returns false then continue to next iteration
+        if (!Error_Checking_On_AI_Ship_Positions(AIBoard, ShipPositionRows, ShipPositionColumns))
+          continue;
+
+        isValueCorrect = true;
+
+        // Place ship on AIBoard using the CurrentShipPositions_ints positions and marking with 'P' for patrol boat
+        Place_Ship(AIBoard, ShipPositionRows, ShipPositionColumns, "P");
+      }
+
+      break;
+    }
+
+    default:
+      // Error message stating where it has occurred
+      std::cout << "Ask_AI_For_Ship_Positions() switch statement error\n";
+      break;
+    }
+  }
+}
+
+void Generate_AI_Ship_Positions(std::vector<unsigned int> &ShipPositionRows,
+                                std::vector<unsigned int> &ShipPositionColumns,
+                                const unsigned int &ShipSize)
+
+{
+  // Singles represents the column number; Tens the row number; and the FirstValue
+  // is the first value of the gird positions when ordered in ascending order
+  unsigned int Column, Row;
+
+  // Use std::rand() to randomly choose between a vertical or horizontal orientation
+  if ((std::rand() % 2) == 0)
+  {
+    //ShipOrientation = "Horizontal";
+
+    // A max column number exists, as ship is horizontal, which is linked with the size of the ship
+    // with the assumption being this value will be the first and smallest of the positions
+    Column = std::rand() % (11 - ShipSize);
+
+    // Any row number allowed as ship is horizontal
+    Row = std::rand() % 10;
+
+    // Horizontal positions have a difference in columns of 1 between positions
+    for (unsigned int i = 0; i < ShipSize; i++)
+    {
+      ShipPositionRows.push_back(Row);
+      ShipPositionColumns.push_back(Column+i);
+    }
+  }
+
+  else
+  {
+    //ShipOrientation = "Vertical";
+
+    // Any column number allowed as ship is vertical
+    Column = std::rand() % 10;
+
+    // A max row number exists, as ship is vertical, which is linked with the size of the ship
+    // with the assumption being this value will be the first and smallest of the positions
+    Row = std::rand() % (11 - ShipSize);
+
+    // Vertical positions have a difference of AIBoard.size(), which is 10, between positions
+    for (unsigned int i = 0; i < ShipSize; i++)
+    {
+      ShipPositionRows.push_back(Row+i);
+      ShipPositionColumns.push_back(Column);
+    }
+  }
+}
+
+bool Error_Checking_On_AI_Ship_Positions(const std::vector<std::vector<std::string>> &AIBoard,
+                                         const std::vector<unsigned int> &ShipPositionRows,
+                                         const std::vector<unsigned int> &ShipPositionColumns)
+{
+  // Only check required is if any of the ship positions are already occupied by another ship
+  for (unsigned int i = 0; i < ShipPositionRows.size(); i++)
+  {
+    // Check if CurrentShipPositions_ints position is already occupied by another ship
+    if (AIBoard[ShipPositionRows[i]][ShipPositionColumns[i]] == "C" ||
+        AIBoard[ShipPositionRows[i]][ShipPositionColumns[i]] == "B" ||
+        AIBoard[ShipPositionRows[i]][ShipPositionColumns[i]] == "D" ||
+        AIBoard[ShipPositionRows[i]][ShipPositionColumns[i]] == "S" ||
+        AIBoard[ShipPositionRows[i]][ShipPositionColumns[i]] == "P")
+      return false;
+  }
+
+  return true;
+}
+
+void Place_Ship(std::vector<std::vector<std::string>> &anyBoard,
+                const std::vector<unsigned int> &ShipPositionRows,
+                const std::vector<unsigned int> &ShipPositionColumns,
+                const std::string ShipName)
+{
+  // Go through all CurrentShipPositions positions and overwrite its value with the ship name
+  for (unsigned int i = 0; i < ShipPositionRows.size(); i++)
+    anyBoard[ShipPositionRows[i]][ShipPositionColumns[i]] = ShipName;
 }
 
 void Display_Game(const std::vector<std::vector<std::string>> &PlayerOneBoard,
@@ -497,327 +816,6 @@ void Display_Game(const std::vector<std::vector<std::string>> &PlayerOneBoard,
   std::cout << (char)217;
 }
 
-bool Error_Checking_On_User_Ship_Positions(std::vector<std::vector<std::string>> &PlayerOneBoard,
-                                                                std::string &Input,
-                                                                std::vector<unsigned int> &ShipPositionRows,
-                                                                std::vector<unsigned int> &ShipPositionColumns,
-                                                                const unsigned int &ShipSize)
-{
-  // capitalise and separate single string in to command strings
-  Capitalise_Word(Input);
-
-  if (Input.back() != ' ')
-    Input.push_back(' ');
-
-  std::vector<std::string> IndividualCoordinates;
-  std::string Temp;
-  for (unsigned int i = 0; i < Input.size(); i++)
-  {
-    if (Input[i] == ' ')
-    {
-      IndividualCoordinates.push_back(Temp);
-      Temp.clear();
-    }
-
-    else
-      Temp.push_back(Input[i]);
-  }
-
-  // check right number of commands
-  if (IndividualCoordinates.size() != ShipSize)
-    return false;
-
-  // check first character is letter and second is number and each command is size of 2
-  for (unsigned int i = 0; i < IndividualCoordinates.size(); i++)
-  {
-    if (IndividualCoordinates[i].size() != 2)
-      return false;
-
-    if (IndividualCoordinates[i][0] < 'A' || IndividualCoordinates[i][0] > 'J')
-      return false;
-
-    if (IndividualCoordinates[i][1] < '0' || IndividualCoordinates[i][1] > '9')
-      return false;
-  }
-
-  // check whether letters or numbers of all commands are identical
-  bool LettersIdentical = true, NumbersIdentical = true;
-
-  for (unsigned int i = 1; i < IndividualCoordinates.size(); i++)
-  {
-    if (IndividualCoordinates[i][0] != IndividualCoordinates[0][0])
-      LettersIdentical = false;
-
-    if (IndividualCoordinates[i][1] != IndividualCoordinates[0][1])
-      NumbersIdentical = false;
-  }
-
-  if (LettersIdentical && !NumbersIdentical)
-  {
-    // check that number is increment by one each time
-    for (unsigned int i = 1; i < IndividualCoordinates.size(); i++)
-      if (IndividualCoordinates[i][1] != (IndividualCoordinates[i-1][1] + 1))
-        return false;
-
-    // thus ShipOrientation = "Vertical";
-  }
-
-  else if (NumbersIdentical && !LettersIdentical)
-  {
-    // check that letter is increment by one each time
-    for (unsigned int i = 1; i < IndividualCoordinates.size(); i++)
-      if (IndividualCoordinates[i][0] != (IndividualCoordinates[i-1][0] + 1))
-        return false;
-
-    // thus ShipOrientation = "Horizontal";
-  }
-
-  else // No diagonals allowed
-    return false;
-
-  // Convert A0, B5, etc to row and columns
-  for (unsigned int i = 0; i < IndividualCoordinates.size(); i++)
-  {
-    Temp = IndividualCoordinates[i][1];
-    ShipPositionRows.push_back(std::stoi(Temp, nullptr, 10));
-    Temp = (IndividualCoordinates[i][0] - 17);
-    ShipPositionColumns.push_back(std::stoi(Temp, nullptr, 10));
-  }
-
-  // Check if any of the ship positions are already occupied by another ship
-  for (unsigned int i = 0; i < IndividualCoordinates.size(); i++)
-  {
-    // Check if CurrentShipPositions_ints position is already occupied by another ship
-    if (PlayerOneBoard[ShipPositionRows[i]][ShipPositionColumns[i]] == "C" ||
-        PlayerOneBoard[ShipPositionRows[i]][ShipPositionColumns[i]] == "B" ||
-        PlayerOneBoard[ShipPositionRows[i]][ShipPositionColumns[i]] == "D" ||
-        PlayerOneBoard[ShipPositionRows[i]][ShipPositionColumns[i]] == "S" ||
-        PlayerOneBoard[ShipPositionRows[i]][ShipPositionColumns[i]] == "P")
-      return false;
-  }
-
-  return true;
-}
-
-void Place_Ship(std::vector<std::vector<std::string>> &anyBoard,
-                const std::vector<unsigned int> &ShipPositionRows,
-                const std::vector<unsigned int> &ShipPositionColumns,
-                const std::string ShipName)
-{
-  // Go through all CurrentShipPositions positions and overwrite its value with the ship name
-  for (unsigned int i = 0; i < ShipPositionRows.size(); i++)
-    anyBoard[ShipPositionRows[i]][ShipPositionColumns[i]] = ShipName;
-}
-
-void Get_Computer_Ship_Positions(std::vector<std::vector<std::string>> &ComputerBoard)
-{
-  for (unsigned int i = 0; i < 5; i++)
-  {
-    bool isValueCorrect = false;
-
-    switch (i)
-    {
-    case 0:
-    {
-      while (!isValueCorrect)
-      {
-        std::vector<unsigned int> ShipPositionRows, ShipPositionColumns;
-        // Carrier of size 5
-        unsigned int ShipSize = 5;
-
-        // Ask computer for ship position
-        Generate_Computer_Ship_Positions(ShipPositionRows, ShipPositionColumns, ShipSize);
-
-        // If error checking returns false then continue to next iteration
-        if (!Error_Checking_On_Computer_Ship_Positions(ComputerBoard, ShipPositionRows, ShipPositionColumns))
-          continue;
-
-        isValueCorrect = true;
-
-        // Place ship on ComputerBoard using the CurrentShipPositions_ints positions and marking with 'C' for carrier
-        Place_Ship(ComputerBoard, ShipPositionRows, ShipPositionColumns, "C");
-      }
-
-      break;
-    }
-
-    case 1:
-    {
-      while (!isValueCorrect)
-      {
-        std::vector<unsigned int> ShipPositionRows, ShipPositionColumns;
-
-        // Battleship of size 4
-        unsigned int ShipSize = 4;
-
-        // Ask computer for ship position
-        Generate_Computer_Ship_Positions(ShipPositionRows, ShipPositionColumns, ShipSize);
-
-        // If error checking returns false then continue to next iteration
-        if (!Error_Checking_On_Computer_Ship_Positions(ComputerBoard, ShipPositionRows, ShipPositionColumns))
-          continue;
-
-        isValueCorrect = true;
-
-
-        // Place ship on ComputerBoard using the CurrentShipPositions_ints positions and marking with 'B' for battleship
-        Place_Ship(ComputerBoard, ShipPositionRows, ShipPositionColumns, "B");
-      }
-
-      break;
-    }
-
-    case 2:
-    {
-      while (!isValueCorrect)
-      {
-        std::vector<unsigned int> ShipPositionRows, ShipPositionColumns;
-
-        // Destroyer of size 3
-        unsigned int ShipSize = 3;
-
-        // Ask computer for ship position
-        Generate_Computer_Ship_Positions(ShipPositionRows, ShipPositionColumns, ShipSize);
-
-        // If error checking returns false then continue to next iteration
-        if (!Error_Checking_On_Computer_Ship_Positions(ComputerBoard, ShipPositionRows, ShipPositionColumns))
-          continue;
-
-        isValueCorrect = true;
-
-        // Place ship on ComputerBoard using the CurrentShipPositions_ints positions and marking with 'D' for destroyer
-        Place_Ship(ComputerBoard, ShipPositionRows, ShipPositionColumns, "D");
-      }
-
-      break;
-    }
-
-    case 3:
-    {
-      while (!isValueCorrect)
-      {
-        std::vector<unsigned int> ShipPositionRows, ShipPositionColumns;
-
-        // Submarine of size 3
-        unsigned int ShipSize = 3;
-
-        // Ask computer for ship position
-        Generate_Computer_Ship_Positions(ShipPositionRows, ShipPositionColumns, ShipSize);
-
-        // If error checking returns false then continue to next iteration
-        if (!Error_Checking_On_Computer_Ship_Positions(ComputerBoard, ShipPositionRows, ShipPositionColumns))
-          continue;
-
-        isValueCorrect = true;
-
-        // Place ship on ComputerBoard using the CurrentShipPositions_ints positions and marking with 'S' for submarine
-        Place_Ship(ComputerBoard, ShipPositionRows, ShipPositionColumns, "S");
-      }
-
-      break;
-    }
-
-    case 4:
-    {
-      while (!isValueCorrect)
-      {
-        std::vector<unsigned int> ShipPositionRows, ShipPositionColumns;
-
-        // Patrol Boat of size 2
-        unsigned int ShipSize = 2;
-
-        // Ask computer for ship position
-        Generate_Computer_Ship_Positions(ShipPositionRows, ShipPositionColumns, ShipSize);
-
-        // If error checking returns false then continue to next iteration
-        if (!Error_Checking_On_Computer_Ship_Positions(ComputerBoard, ShipPositionRows, ShipPositionColumns))
-          continue;
-
-        isValueCorrect = true;
-
-        // Place ship on ComputerBoard using the CurrentShipPositions_ints positions and marking with 'P' for patrol boat
-        Place_Ship(ComputerBoard, ShipPositionRows, ShipPositionColumns, "P");
-      }
-
-      break;
-    }
-
-    default:
-      // Error message stating where it has occurred
-      std::cout << "Ask_Computer_For_Ship_Positions() switch statement error\n";
-      break;
-    }
-  }
-}
-
-void Generate_Computer_Ship_Positions(std::vector<unsigned int> &ShipPositionRows,
-                                      std::vector<unsigned int> &ShipPositionColumns,
-                                      const unsigned int &ShipSize)
-
-{
-  // Singles represents the column number; Tens the row number; and the FirstValue
-  // is the first value of the gird positions when ordered in ascending order
-  unsigned int Column, Row;
-
-  // Use std::rand() to randomly choose between a vertical or horizontal orientation
-  if ((std::rand() % 2) == 0)
-  {
-    //ShipOrientation = "Horizontal";
-
-    // A max column number exists, as ship is horizontal, which is linked with the size of the ship
-    // with the assumption being this value will be the first and smallest of the positions
-    Column = std::rand() % (11 - ShipSize);
-
-    // Any row number allowed as ship is horizontal
-    Row = std::rand() % 10;
-
-    // Horizontal positions have a difference in columns of 1 between positions
-    for (unsigned int i = 0; i < ShipSize; i++)
-    {
-      ShipPositionRows.push_back(Row);
-      ShipPositionColumns.push_back(Column+i);
-    }
-  }
-
-  else
-  {
-    //ShipOrientation = "Vertical";
-
-    // Any column number allowed as ship is vertical
-    Column = std::rand() % 10;
-
-    // A max row number exists, as ship is vertical, which is linked with the size of the ship
-    // with the assumption being this value will be the first and smallest of the positions
-    Row = std::rand() % (11 - ShipSize);
-
-    // Vertical positions have a difference of ComputerBoard.size(), which is 10, between positions
-    for (unsigned int i = 0; i < ShipSize; i++)
-    {
-      ShipPositionRows.push_back(Row+i);
-      ShipPositionColumns.push_back(Column);
-    }
-  }
-}
-
-bool Error_Checking_On_Computer_Ship_Positions(const std::vector<std::vector<std::string>> &ComputerBoard,
-                                               const std::vector<unsigned int> &ShipPositionRows,
-                                               const std::vector<unsigned int> &ShipPositionColumns)
-{
-  // Only check required is if any of the ship positions are already occupied by another ship
-  for (unsigned int i = 0; i < ShipPositionRows.size(); i++)
-  {
-    // Check if CurrentShipPositions_ints position is already occupied by another ship
-    if (ComputerBoard[ShipPositionRows[i]][ShipPositionColumns[i]] == "C" ||
-        ComputerBoard[ShipPositionRows[i]][ShipPositionColumns[i]] == "B" ||
-        ComputerBoard[ShipPositionRows[i]][ShipPositionColumns[i]] == "D" ||
-        ComputerBoard[ShipPositionRows[i]][ShipPositionColumns[i]] == "S" ||
-        ComputerBoard[ShipPositionRows[i]][ShipPositionColumns[i]] == "P")
-      return false;
-  }
-
-  return true;
-}
-
 bool Winning_Conditions_Met(const std::vector<std::vector<std::string>> &PlayerOneBoard,
                             const std::vector<std::vector<std::string>> &PlayerTwoBoard)
 {
@@ -841,12 +839,12 @@ bool Winning_Conditions_Met(const std::vector<std::vector<std::string>> &PlayerO
     return false;
 }
 
-int Ask_User_For_Next_Command(const std::vector<std::vector<std::string>> &PlayerOneBoard,
-                              const std::vector<std::vector<std::string>> &PlayerTwoBoard,
-                              const unsigned int &NumberOfPlayers,
-                              const std::string &AIDifficulty,
-                              const std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
-                              const std::map<std::string, unsigned int> &PlayerTwoShipsRemaining)
+unsigned int Get_Next_User_Command(const std::vector<std::vector<std::string>> &PlayerOneBoard,
+                                   const std::vector<std::vector<std::string>> &PlayerTwoBoard,
+                                   const std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
+                                   const std::map<std::string, unsigned int> &PlayerTwoShipsRemaining,
+                                   const unsigned int &NumberOfPlayers,
+                                   const std::string &AIDifficulty)
 {
   bool IsValueCorrect = false; // Flag for if input value is valid
   std::string Input;
@@ -883,15 +881,15 @@ int Ask_User_For_Next_Command(const std::vector<std::vector<std::string>> &Playe
   return Row*10 + Column;
 }
 
-int Ask_Computer_For_Next_Command(const std::vector<std::vector<std::string>> &PlayerOneBoard,
-                                  const std::vector<std::vector<std::string>> &PlayerTwoBoard,
-                                  std::vector<unsigned int> &PlayerOneValidMovesRemaining,
-                                  std::vector<unsigned int> &PlayerTwoValidMovesRemaining,
-                                  const unsigned int &NumberOfPlayers,
-                                  const std::string &CurrentPlayer,
-                                  const std::string &AIDifficulty,
-                                  const std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
-                                  const std::map<std::string, unsigned int> &PlayerTwoShipsRemaining)
+unsigned int Get_Next_AI_Command(const std::vector<std::vector<std::string>> &PlayerOneBoard,
+                                 const std::vector<std::vector<std::string>> &PlayerTwoBoard,
+                                 const std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
+                                 const std::map<std::string, unsigned int> &PlayerTwoShipsRemaining,
+                                 std::vector<unsigned int> &PlayerOneValidMovesRemaining,
+                                 std::vector<unsigned int> &PlayerTwoValidMovesRemaining,
+                                 const unsigned int &NumberOfPlayers,
+                                 const std::string &AIDifficulty,
+                                 const std::string &CurrentPlayer)
 {
   std::vector<unsigned int> ValidMovesRemaining;
 
@@ -901,10 +899,10 @@ int Ask_Computer_For_Next_Command(const std::vector<std::vector<std::string>> &P
     ValidMovesRemaining = PlayerTwoValidMovesRemaining;
 
   Display_Game(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, std::to_string(NumberOfPlayers), AIDifficulty, false);
-  // Computer randomly chooses a value from 0 to 99
+  // AI randomly chooses a value from 0 to 99
 
-  unsigned int ComputerCommand = ValidMovesRemaining[std::rand() % ValidMovesRemaining.size()];
-  auto CommandPosition = std::find(ValidMovesRemaining.begin(), ValidMovesRemaining.end(), ComputerCommand);
+  unsigned int AICommand = ValidMovesRemaining[std::rand() % ValidMovesRemaining.size()];
+  auto CommandPosition = std::find(ValidMovesRemaining.begin(), ValidMovesRemaining.end(), AICommand);
   ValidMovesRemaining.erase(CommandPosition);
 
   if (CurrentPlayer == "PLAYER ONE")
@@ -912,7 +910,7 @@ int Ask_Computer_For_Next_Command(const std::vector<std::vector<std::string>> &P
   else
     PlayerTwoValidMovesRemaining = ValidMovesRemaining;
 
-  return ComputerCommand;
+  return AICommand;
 }
 
 void Execute_Next_Turn(std::vector<std::vector<std::string>> &PlayerOneBoard,
@@ -950,15 +948,15 @@ void Execute_Next_Turn(std::vector<std::vector<std::string>> &PlayerOneBoard,
   }
 }
 
-void Display_Game_Over_Message(const std::string &CurrentPlayer,
-                               const unsigned int &NumberOfTurns,
-                               bool &GameIsRunning,
-                               const std::vector<std::vector<std::string>> &PlayerOneBoard,
+void Display_Game_Over_Message(const std::vector<std::vector<std::string>> &PlayerOneBoard,
                                const std::vector<std::vector<std::string>> &PlayerTwoBoard,
+                               const std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
+                               const std::map<std::string, unsigned int> &PlayerTwoShipsRemaining,
                                const unsigned int &NumberOfPlayers,
                                const std::string &AIDifficulty,
-                               const std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
-                               const std::map<std::string, unsigned int> &PlayerTwoShipsRemaining)
+                               const std::string &CurrentPlayer,
+                               const unsigned int &NumberOfTurns,
+                               bool &GameIsRunning)
 {
   Display_Game(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, std::to_string(NumberOfPlayers), AIDifficulty, true);
 
@@ -966,18 +964,14 @@ void Display_Game_Over_Message(const std::string &CurrentPlayer,
   // triggered since last attack and gamer over check
   if (CurrentPlayer == "PLAYER ONE")
     std::cout << "\n\n\t\t\t\t\t\t\t\t  GAME OVER\n\n\t\t\t\t\t       Player One has won! The game lasted " << NumberOfTurns << " turns.";
-
   else
     std::cout << "\n\n\t\t\t\t\t\t\t\t  GAME OVER\n\n\t\t\t\t\t       Player Two has won! The game lasted " << NumberOfTurns << " turns.";
 
   std::cout << "\n\n\t\t\t\t\t     Press 'Q' to quit OR any other key to play again...";
 
   // Gets key pressed and then checks and clears terminal window if replaying
-  char Decision = _getch();
-
-  if (Decision == 'q')
+  if (_getch() == 'q')
     GameIsRunning = false;
-
   else
     // Start from blank terminal
     Clear_Terminal();

@@ -20,7 +20,7 @@ int main(void)
     unsigned int NumberOfPlayers, NumberOfTurns = 0;
 
     // Setups all the variables so that game can be played
-    Setup_Game(PlayerOneBoard, PlayerTwoBoard, NumberOfPlayers, CurrentPlayer, AIDifficulty, PlayerOneValidMovesRemaining, PlayerTwoValidMovesRemaining, PlayerOneShipsRemaining, PlayerTwoShipsRemaining);
+    Setup_Game(PlayerOneBoard, PlayerTwoBoard, PlayerOneValidMovesRemaining, PlayerTwoValidMovesRemaining, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, NumberOfPlayers, AIDifficulty, CurrentPlayer);
 
     // Loop until a winning condition on either board exists
     while (!Winning_Conditions_Met(PlayerOneBoard, PlayerTwoBoard))
@@ -31,9 +31,9 @@ int main(void)
 
       // Human player is PLAYER ONE by default
       if (NumberOfPlayers == 1 && CurrentPlayer == "PLAYER ONE")
-        Command = Ask_User_For_Next_Command(PlayerOneBoard, PlayerTwoBoard, NumberOfPlayers, AIDifficulty, PlayerOneShipsRemaining, PlayerTwoShipsRemaining);
+        Command = Get_Next_User_Command(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, NumberOfPlayers, AIDifficulty);
       else
-        Command = Ask_Computer_For_Next_Command(PlayerOneBoard, PlayerTwoBoard, PlayerOneValidMovesRemaining, PlayerTwoValidMovesRemaining, NumberOfPlayers, CurrentPlayer, AIDifficulty, PlayerOneShipsRemaining, PlayerTwoShipsRemaining);
+        Command = Get_Next_AI_Command(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, PlayerOneValidMovesRemaining, PlayerTwoValidMovesRemaining, NumberOfPlayers, AIDifficulty, CurrentPlayer);
 
       // Carry out the attack and update the corresponding boards
       Execute_Next_Turn(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, CurrentPlayer, Command);
@@ -43,7 +43,7 @@ int main(void)
     }
 
     // Display the winning message as game is now over
-    Display_Game_Over_Message(CurrentPlayer, NumberOfTurns, GameIsRunning, PlayerOneBoard, PlayerTwoBoard, NumberOfPlayers, AIDifficulty, PlayerOneShipsRemaining, PlayerTwoShipsRemaining);
+    Display_Game_Over_Message(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, NumberOfPlayers, AIDifficulty, CurrentPlayer, NumberOfTurns, GameIsRunning);
   }
 
   Clear_Terminal();
