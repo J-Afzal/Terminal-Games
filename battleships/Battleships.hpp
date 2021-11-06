@@ -8,58 +8,76 @@
 
 #include <vector>
 #include <string>
+#include <map>
 
 // Setups all the variables so that game can be played
 void Setup_Game(std::vector<std::vector<std::string>> &PlayerOneBoard,
-                std::vector<std::vector<std::string>> &PlayerOneOpponentBoard,
                 std::vector<std::vector<std::string>> &PlayerTwoBoard,
-                std::vector<std::vector<std::string>> &PlayerTwoOpponentBoard,
                 unsigned int &NumberOfPlayers,
-                std::string &CurrentPlayer);
+                std::string &CurrentPlayer,
+                std::string &AIDifficulty,
+                std::vector<unsigned int> &PlayerOneValidMovesRemaining,
+                std::vector<unsigned int> &PlayerTwoValidMovesRemaining,
+                std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
+                std::map<std::string, unsigned int> &PlayerTwoShipsRemaining);
 
-int Ask_User_For_Number_Of_Players(void);
+int Ask_User_For_Number_Of_Players(const std::vector<std::vector<std::string>> &PlayerOneBoard,
+                                   const std::vector<std::vector<std::string>> &PlayerTwoBoard,
+                                   const std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
+                                   const std::map<std::string, unsigned int> &PlayerTwoShipsRemaining);
+
+std::string Get_AI_Difficulty(const std::vector<std::vector<std::string>> &PlayerOneBoard,
+                              const std::vector<std::vector<std::string>> &PlayerTwoBoard,
+                              const unsigned int &NumberOfPlayers,
+                              const std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
+                              const std::map<std::string, unsigned int> &PlayerTwoShipsRemaining);
+
+void Capitalise_Word(std::string &Input);
 
 // Gets the user to give ships positions for each ship, error checks, and then places the ships on the board
 void Ask_User_For_Ship_Positions(std::vector<std::vector<std::string>> &PlayerOneBoard,
-                                 const std::vector<std::vector<std::string>> &PlayerOneOpponentBoard);
+                                 const std::vector<std::vector<std::string>> &PlayerTwoBoard,
+                                 const unsigned int &NumberOfPlayers,
+                                 const std::string &AIDifficulty,
+                                 const std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
+                                 const std::map<std::string, unsigned int> &PlayerTwoShipsRemaining);
 
 // This only displays the boards of the user and the user's perspective of the computers board
-void Display_Game_For_User(const std::vector<std::vector<std::string>> &PlayerOneBoard,
-                           const std::vector<std::vector<std::string>> &PlayerOneOpponentBoard);
+void Display_Game(const std::vector<std::vector<std::string>> &PlayerOneBoard,
+                  const std::vector<std::vector<std::string>> &PlayerTwoBoard,
+                  const std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
+                  const std::map<std::string, unsigned int> &PlayerTwoShipsRemaining,
+                  const std::string &NumberOfPlayers,
+                  const std::string &AIDifficulty,
+                  const bool &GameOver);
 
 // Windows API method taken from https://www.cplusplus.com/articles/4z18T05o
 void Clear_Terminal(void);
 
-// Displays the two computer boards (used when in 0 player mode)
-void Display_Game_For_Computers(const std::vector<std::vector<std::string>> &PlayerOneBoard,
-                                const std::vector<std::vector<std::string>> &PlayerTwoBoard);
-
 bool Error_Checking_Ordering_Orientation_On_User_Ship_Positions(std::vector<std::vector<std::string>> &PlayerOneBoard,
-                                                                std::string &CurrentShipPositions_string,
-                                                                std::vector<int> &CurrentShipPositions_ints,
-                                                                const unsigned int &ShipSize,
-                                                                std::string &CurrentShipPositionsOrientation);
-
-bool Can_Ship_Be_Placed(const std::string &CurrentShipPositionsOrientation,
-                        const std::vector<int> &CurrentShipPositions_ints,
-                        const unsigned int &ShipSize);
+                                                                std::string &Input,
+                                                                std::vector<unsigned int> &ShipPositionRows,
+                                                                std::vector<unsigned int> &ShipPositionColumns,
+                                                                const unsigned int &ShipSize);
 
 // Overwrites anyBoard with the ship name at the CurrentShipPositions_ints positions
 void Place_Ship(std::vector<std::vector<std::string>> &anyBoard,
-                const std::vector<int> &CurrentShipPositions_ints,
+                const std::vector<unsigned int> &ShipPositionRows,
+                const std::vector<unsigned int> &ShipPositionColumns,
                 const std::string ShipName);
 
 // Gets the computer to give ships positions for each ship, error checks, and then places ship on the board
 void Ask_Computer_For_Ship_Positions(std::vector<std::vector<std::string>> &ComputerBoard);
 
 // Prompts computer to generate ship positions
-void Get_Computer_Ship_Positions(std::string &CurrentShipPositionsOrientation,
-                                 std::vector<int> &CurrentShipPositions_ints,
+void Get_Computer_Ship_Positions(std::vector<unsigned int> &ShipPositionRows,
+                                 std::vector<unsigned int> &ShipPositionColumns,
                                  const unsigned int &ShipSize);
 
 // Checking whether the computer generated ship postions have ships occupying them
 bool Error_Checking_On_Computer_Ship_Positions(const std::vector<std::vector<std::string>> &ComputerBoard,
-                                               const std::vector<int> &CurrentShipPositions_ints);
+                                               const std::vector<unsigned int> &ShipPositionRows,
+                                               const std::vector<unsigned int> &ShipPositionColumns);
 
 // If there are no ship letters left on either board, then true
 bool Winning_Conditions_Met(const std::vector<std::vector<std::string>> &PlayerOneBoard,
@@ -69,22 +87,40 @@ void Toggle_Player(std::string &CurrentPlayer);
 
 // Asks the user for the grid position to attack
 int Ask_User_For_Next_Command(const std::vector<std::vector<std::string>> &PlayerOneBoard,
-                              const std::vector<std::vector<std::string>> &PlayerOneOpponentBoard);
+                              const std::vector<std::vector<std::string>> &PlayerTwoBoard,
+                              const unsigned int &NumberOfPlayers,
+                              const std::string &AIDifficulty,
+                              const std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
+                              const std::map<std::string, unsigned int> &PlayerTwoShipsRemaining);
 
 // Asks the computer for the grid position to attack
-int Ask_Computer_For_Next_Command(const std::vector<std::vector<std::string>> &ComputerOpponentBoard);
+int Ask_Computer_For_Next_Command(const std::vector<std::vector<std::string>> &PlayerOneBoard,
+                                  const std::vector<std::vector<std::string>> &PlayerTwoBoard,
+                                  std::vector<unsigned int> &PlayerOneValidMovesRemaining,
+                                  std::vector<unsigned int> &PlayerTwoValidMovesRemaining,
+                                  const unsigned int &NumberOfPlayers,
+                                  const std::string &CurrentPlayer,
+                                  const std::string &AIDifficulty,
+                                  const std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
+                                  const std::map<std::string, unsigned int> &PlayerTwoShipsRemaining);
 
 // Carry out the attack and update the corresponding boards
 void Execute_Next_Turn(std::vector<std::vector<std::string>> &PlayerOneBoard,
-                       std::vector<std::vector<std::string>> &PlayerOneOpponentBoard,
                        std::vector<std::vector<std::string>> &PlayerTwoBoard,
-                       std::vector<std::vector<std::string>> &PlayerTwoOpponentBoard,
+                       std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
+                       std::map<std::string, unsigned int> &PlayerTwoShipsRemaining,
                        const std::string &CurrentPlayer,
                        const unsigned int &Command);
 
 // Displays the winning player and how many turns it took
 void Display_Game_Over_Message(const std::string &CurrentPlayer,
                                const unsigned int &NumberOfTurns,
-                               bool &GameIsRunning);
+                               bool &GameIsRunning,
+                               const std::vector<std::vector<std::string>> &PlayerOneBoard,
+                               const std::vector<std::vector<std::string>> &PlayerTwoBoard,
+                               const unsigned int &NumberOfPlayers,
+                               const std::string &AIDifficulty,
+                               const std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
+                               const std::map<std::string, unsigned int> &PlayerTwoShipsRemaining);
 
 #endif
