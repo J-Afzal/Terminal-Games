@@ -3,7 +3,8 @@
 //  @Author: Junaid Afzal
 //
 
-#include "TicTacToe.hpp"
+#include "tictactoe.hpp"
+#include "functions.hpp"
 
 int main(void)
 {
@@ -13,15 +14,14 @@ int main(void)
   {
     // GameData contains the Tic Tac Toe grid
     unsigned int NumberOfTurns = 0, NumberOfPlayers = 0;
-    unsigned char CurrentPlayer = 0, UserXOChoice = 0;
-    std::string AIDifficulty = "N/A";
+    std::string CurrentPlayer, UserPlayerChoice, AIDifficulty = "N/A";
     std::vector<std::vector<std::string>> GameData;
     std::vector<unsigned int> ValidMovesRemaining;
 
     // The user is asked for the number of (human) players
     // If this is 1, the human player is asked if they want to be player X or player O
     // The current player (and thus the player that starts) is assigned pseudo randomly
-    Setup_Game(NumberOfTurns, CurrentPlayer, NumberOfPlayers, UserXOChoice, AIDifficulty, GameData, ValidMovesRemaining);
+    Setup_Game(NumberOfTurns, CurrentPlayer, NumberOfPlayers, UserPlayerChoice, AIDifficulty, GameData, ValidMovesRemaining);
 
     // Loop until a winning condition is met or no more moves are possible
     while (!Game_Over(NumberOfTurns) && !Winning_Conditions_Met(GameData))
@@ -29,7 +29,7 @@ int main(void)
       Toggle_Player(CurrentPlayer);
 
       // Check if user input is required
-      if (NumberOfPlayers == 2 || CurrentPlayer == UserXOChoice)
+      if (NumberOfPlayers == 2 || CurrentPlayer == UserPlayerChoice)
         Ask_User_For_Next_Input(GameData, NumberOfPlayers, AIDifficulty, CurrentPlayer, ValidMovesRemaining); // Game is displayed before user is asked for an input
 
       else

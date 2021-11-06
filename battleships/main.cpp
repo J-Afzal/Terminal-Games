@@ -4,6 +4,7 @@
 //
 
 #include "Battleships.hpp"
+#include "Functions.hpp"
 
 int main(void)
 {

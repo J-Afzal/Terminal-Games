@@ -3,8 +3,8 @@
 //  @Author: Junaid Afzal
 //
 
-#ifndef Battleships_hpp
-#define Battleships_hpp
+#ifndef battleships_hpp
+#define battleships_hpp
 
 #include <vector>
 #include <string>
@@ -20,19 +20,6 @@ void Setup_Game(std::vector<std::vector<std::string>> &PlayerOneBoard,
                 std::vector<unsigned int> &PlayerTwoValidMovesRemaining,
                 std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
                 std::map<std::string, unsigned int> &PlayerTwoShipsRemaining);
-
-int Ask_User_For_Number_Of_Players(const std::vector<std::vector<std::string>> &PlayerOneBoard,
-                                   const std::vector<std::vector<std::string>> &PlayerTwoBoard,
-                                   const std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
-                                   const std::map<std::string, unsigned int> &PlayerTwoShipsRemaining);
-
-std::string Get_AI_Difficulty(const std::vector<std::vector<std::string>> &PlayerOneBoard,
-                              const std::vector<std::vector<std::string>> &PlayerTwoBoard,
-                              const unsigned int &NumberOfPlayers,
-                              const std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
-                              const std::map<std::string, unsigned int> &PlayerTwoShipsRemaining);
-
-void Capitalise_Word(std::string &Input);
 
 // Gets the user to give ships positions for each ship, error checks, and then places the ships on the board
 void Ask_User_For_Ship_Positions(std::vector<std::vector<std::string>> &PlayerOneBoard,
@@ -51,10 +38,7 @@ void Display_Game(const std::vector<std::vector<std::string>> &PlayerOneBoard,
                   const std::string &AIDifficulty,
                   const bool &GameOver);
 
-// Windows API method taken from https://www.cplusplus.com/articles/4z18T05o
-void Clear_Terminal(void);
-
-bool Error_Checking_Ordering_Orientation_On_User_Ship_Positions(std::vector<std::vector<std::string>> &PlayerOneBoard,
+bool Error_Checking_On_User_Ship_Positions(std::vector<std::vector<std::string>> &PlayerOneBoard,
                                                                 std::string &Input,
                                                                 std::vector<unsigned int> &ShipPositionRows,
                                                                 std::vector<unsigned int> &ShipPositionColumns,
@@ -67,12 +51,12 @@ void Place_Ship(std::vector<std::vector<std::string>> &anyBoard,
                 const std::string ShipName);
 
 // Gets the computer to give ships positions for each ship, error checks, and then places ship on the board
-void Ask_Computer_For_Ship_Positions(std::vector<std::vector<std::string>> &ComputerBoard);
+void Get_Computer_Ship_Positions(std::vector<std::vector<std::string>> &ComputerBoard);
 
 // Prompts computer to generate ship positions
-void Get_Computer_Ship_Positions(std::vector<unsigned int> &ShipPositionRows,
-                                 std::vector<unsigned int> &ShipPositionColumns,
-                                 const unsigned int &ShipSize);
+void Generate_Computer_Ship_Positions(std::vector<unsigned int> &ShipPositionRows,
+                                      std::vector<unsigned int> &ShipPositionColumns,
+                                      const unsigned int &ShipSize);
 
 // Checking whether the computer generated ship postions have ships occupying them
 bool Error_Checking_On_Computer_Ship_Positions(const std::vector<std::vector<std::string>> &ComputerBoard,
@@ -82,8 +66,6 @@ bool Error_Checking_On_Computer_Ship_Positions(const std::vector<std::vector<std
 // If there are no ship letters left on either board, then true
 bool Winning_Conditions_Met(const std::vector<std::vector<std::string>> &PlayerOneBoard,
                             const std::vector<std::vector<std::string>> &PlayerTwoBoard);
-
-void Toggle_Player(std::string &CurrentPlayer);
 
 // Asks the user for the grid position to attack
 int Ask_User_For_Next_Command(const std::vector<std::vector<std::string>> &PlayerOneBoard,

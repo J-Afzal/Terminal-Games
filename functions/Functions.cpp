@@ -1,4 +1,116 @@
-#include "Functions.hpp"
+#include "Windows.h"
+#include "functions.hpp"
+#include <iostream>
+
+bool Get_Number_Of_Players(unsigned int &NumberOfPlayers,
+                           const unsigned int &MinPlayers,
+                           const unsigned int &MaxPlayers)
+{
+  std::string Input;
+  std::getline(std::cin, Input);
+
+  // Only 0, 1 and 2 players allowed
+  if (Input[0] < (char)MinPlayers || Input[0] > (char)MaxPlayers)
+    return false;
+
+  else
+  {
+    NumberOfPlayers = std::stoi(Input, nullptr, 10);
+    return true;
+  }
+}
+
+bool Get_User_Player_Choice(std::string &UserPlayerChoice)
+{
+  std::string Input;
+  std::getline(std::cin, Input);
+
+  Capitalise_Word(Input);
+
+  // Only X and O allowed
+  if (Input != "PLAYER ONE" && Input != "PLAYER TWO")
+      return false;
+  else
+  {
+    UserPlayerChoice = Input;
+    return true;
+  }
+}
+
+bool Get_AI_Difficulty(std::string &AIDifficulty)
+{
+  std::string Input;
+  std::getline(std::cin, Input);
+
+  Capitalise_Word(Input);
+
+  if (Input != "EASY" && Input != "HARD")
+    return false;
+
+  else
+  {
+    AIDifficulty = Input;
+    return true;
+  }
+}
+
+void Capitalise_Word(std::string &Input)
+{
+  // Assuming Input contains only letters of unkown capitalisation, if
+  // a letter is lower case (>=97) then minus 32 to capitalise it
+  for (unsigned int i = 0; i < Input.size(); i++)
+  {
+    if (Input[i] >= 'a' && Input[i] <= 'z')
+      Input[i] -= 32;
+  }
+}
+
+void Clear_Terminal(void)
+{
+  // Windows API method taken from https://www.cplusplus.com/articles/4z18T05o
+  HANDLE                     hStdOut;
+  CONSOLE_SCREEN_BUFFER_INFO csbi;
+  DWORD                      count;
+  DWORD                      cellCount;
+  COORD                      homeCoords = { 0, 0 };
+
+  hStdOut = GetStdHandle( STD_OUTPUT_HANDLE );
+  if (hStdOut == INVALID_HANDLE_VALUE) return;
+
+  // Get the number of cells in the current buffer
+  if (!GetConsoleScreenBufferInfo( hStdOut, &csbi )) return;
+  cellCount = csbi.dwSize.X *csbi.dwSize.Y;
+
+  // Fill the entire buffer with spaces
+  if (!FillConsoleOutputCharacter(
+    hStdOut,
+    (TCHAR) ' ',
+    cellCount,
+    homeCoords,
+    &count
+    )) return;
+
+  // Fill the entire buffer with the current colors and attributes
+  if (!FillConsoleOutputAttribute(
+    hStdOut,
+    csbi.wAttributes,
+    cellCount,
+    homeCoords,
+    &count
+    )) return;
+
+  // Move the cursor home
+  SetConsoleCursorPosition( hStdOut, homeCoords );
+}
+
+void Toggle_Player(std::string &CurrentPlayer)
+{
+  if (CurrentPlayer == "PLAYER ONE")
+    CurrentPlayer = "PLAYER TWO";
+
+  else
+    CurrentPlayer = "PLAYER ONE";
+}
 
 std::vector<std::string> Create_Word_List(void)
 {

@@ -3,7 +3,8 @@
 //  @Author: Junaid Afzal
 //
 
-#include "Hangman.hpp"
+#include "hangman.hpp"
+#include "functions.hpp"
 
 int main(void)
 {
@@ -21,7 +22,7 @@ int main(void)
 
     // While the current guess of word and word to be guessed are not the same AND while the hangman drawing
     // has not reached its final stage, continue playing the game
-    while (!Game_Over(NumberOfErrors) && !Winning_Conditions_Met(WordToBeGuessed, CurrentGuessOfWord))
+    while (!Winning_Conditions_Met(WordToBeGuessed, CurrentGuessOfWord, NumberOfErrors))
     {
       // Prompt the human or computer user for a guess depending upon how many human players there are
       // The display is updated before asking for a guess with the current hangman state, the current guess

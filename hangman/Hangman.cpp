@@ -8,8 +8,8 @@
 #define NOMINMAX
 #include <windows.h>
 
-#include "Hangman.hpp"
-#include "Functions.hpp"
+#include "hangman.hpp"
+#include "functions.hpp"
 #include <iostream>
 #include <ctime>
 #include <limits>
@@ -29,33 +29,47 @@ void Setup_Game(std::string &WordToBeGuessed,
   // Set seed of srand to time(0) so pseudo random
   std::srand((unsigned int)std::time(0));
 
-  NumberOfPlayers = Get_Number_Of_Players(IncorrectGuesses);
-
-  switch (NumberOfPlayers)
+  do
   {
-  case 0:
-    AIDifficulty = Get_AI_Difficulty(NumberOfPlayers, IncorrectGuesses);
-    PlayerThatIsGuessing = "COMPUTER";
-    WordToBeGuessed = Get_Word_To_Be_Guessed_From_Computer(IncorrectGuesses);
-    break;
-
-  case 1:
-    AIDifficulty = Get_AI_Difficulty(NumberOfPlayers, IncorrectGuesses);
-    PlayerThatIsGuessing = Get_Who_Is_Guessing(NumberOfPlayers, IncorrectGuesses, AIDifficulty);
-    if (PlayerThatIsGuessing == "COMPUTER")
-      WordToBeGuessed = Get_Word_To_Be_Guessed_From_User(NumberOfPlayers, PlayerThatIsGuessing, IncorrectGuesses, AIDifficulty);
-    else
-      WordToBeGuessed = Get_Word_To_Be_Guessed_From_Computer(IncorrectGuesses);
-    break;
-
-  case 2:
-    PlayerThatIsGuessing = "HUMAN";
-    WordToBeGuessed = Get_Word_To_Be_Guessed_From_User(NumberOfPlayers, PlayerThatIsGuessing, IncorrectGuesses, AIDifficulty);
-    break;
-
-  default:
-    break;
+    Display_Game(0, "", IncorrectGuesses, "N/A", "N/A");
+    std::cout << "\n\n\n\n\nPlease enter the number of players: ";
   }
+  while(Get_Number_Of_Players(NumberOfPlayers, 0, 2));
+
+  if (NumberOfPlayers == 0)
+    PlayerThatIsGuessing = "COMPUTER";
+
+  else if (NumberOfPlayers == 1)
+  {
+    do
+    {
+      Display_Game(0, "", IncorrectGuesses, std::to_string(NumberOfPlayers), AIDifficulty);
+      std::cout << "\n\n\n\n\nWhat player would you like to be? (Player One = Guesser and Player Two = Set the word): ";
+    }
+    while(Get_User_Player_Choice(PlayerThatIsGuessing));
+
+    if (PlayerThatIsGuessing == "PLAYER ONE")
+      PlayerThatIsGuessing = "HUMAN";
+    else
+      PlayerThatIsGuessing = "COMPUTER";
+  }
+
+  if (NumberOfPlayers == 0 || NumberOfPlayers == 1)
+  {
+    do
+    {
+      Display_Game(0, "", IncorrectGuesses, std::to_string(NumberOfPlayers), "N/A");
+      std::cout << "\n\n\n\n\nPlease Enter the AI difficulty (EASY or HARD) ";
+    }
+    while(Get_AI_Difficulty(AIDifficulty));
+  }
+
+
+
+  if (PlayerThatIsGuessing == "COMPUTER" || NumberOfPlayers == 2)
+    WordToBeGuessed = Get_Word_To_Be_Guessed_From_User(NumberOfPlayers, IncorrectGuesses, AIDifficulty);
+  else
+    WordToBeGuessed = Get_Word_To_Be_Guessed_From_Computer();
 
   // Create the current guess to be the same size as the word to be guessed but only containing underscores
   for (unsigned int i = 0; i < WordToBeGuessed.size(); i++)
@@ -65,50 +79,7 @@ void Setup_Game(std::string &WordToBeGuessed,
     ValidMovesRemaining.push_back(65+i);
 }
 
-unsigned int Get_Number_Of_Players(const std::vector<unsigned char> &IncorrectGuesses)
-{
-  bool IsValueCorrect = false; // Flag for if input value is valid
-  std::string Input;
-
-  while (!IsValueCorrect)
-  {
-    Display_Game(0, "", IncorrectGuesses, "N/A", "N/A");
-    std::cout << "\n\n\n\n\nEnter the number of players: ";
-
-    std::getline(std::cin, Input);
-
-    // Only 0, 1 and 2 players allowed
-    if (Input == "0" || Input == "1" || Input == "2")
-      IsValueCorrect = true;
-  }
-
-  return std::stoi(Input, nullptr, 10);
-}
-
-std::string Get_AI_Difficulty(const unsigned int &NumberOfPlayers,
-                              const std::vector<unsigned char> &IncorrectGuesses)
-{
-  bool IsValueCorrect = false; // Flag for if input value is valid
-  std::string Input;
-
-  while (!IsValueCorrect)
-  {
-    Display_Game(0, "", IncorrectGuesses, std::to_string(NumberOfPlayers), "N/A");
-    std::cout << "\n\n\n\n\nEnter the AI difficulty (EASY or HARD) ";
-
-    std::getline(std::cin, Input);
-
-    Capitalise_Word(Input);
-
-    if (Input == "EASY" || Input == "HARD")
-      IsValueCorrect = true;
-  }
-
-  return Input;
-}
-
 std::string Get_Word_To_Be_Guessed_From_User(const unsigned int &NumberOfPlayers,
-                                             const std::string &PlayerThatIsGuessing,
                                              const std::vector<unsigned char> &IncorrectGuesses,
                                              const std::string &AIDifficulty)
 {
@@ -143,69 +114,29 @@ std::string Get_Word_To_Be_Guessed_From_User(const unsigned int &NumberOfPlayers
   return Input;
 }
 
-void Capitalise_Word(std::string &Input)
-{
-  // Assuming Input contains only letters of unkown capitalisation, if
-  // a letter is lower case (>=97) then minus 32 to capitalise it
-  for (unsigned int i = 0; i < Input.size(); i++)
-  {
-    if (Input[i] >= 'a' && Input[i] <= 'z')
-      Input[i] -= 32;
-  }
-}
-
-std::string Get_Who_Is_Guessing(const unsigned int &NumberOfPlayers,
-                                const std::vector<unsigned char> &IncorrectGuesses,
-                                const std::string &AIDifficulty)
-{
-  bool IsValueCorrect = false; // Flag for if input value is valid
-  std::string Input;
-
-  while (!IsValueCorrect)
-  {
-    // Set flag to true by default as difficult to continue to to next iteration of while loop
-    // within a nested if statements within nested for loops
-
-    Display_Game(0, "", IncorrectGuesses, std::to_string(NumberOfPlayers), AIDifficulty);
-    std::cout << "\n\n\n\n\nEnter player that will be guessing (HUMAN or COMPUTER): ";
-
-    std::getline(std::cin, Input);
-
-    Capitalise_Word(Input);
-
-    if (Input == "HUMAN" || Input == "COMPUTER")
-      IsValueCorrect = true;
-  }
-
-  return Input;
-}
-
-std::string Get_Word_To_Be_Guessed_From_Computer(const std::vector<unsigned char> &IncorrectGuesses)
+std::string Get_Word_To_Be_Guessed_From_Computer(void)
 {
   std::vector<std::string> Words = Create_Word_List();
   return Words[std::rand() % Words.size()];
 }
 
-bool Game_Over(const unsigned int &NumberOfErrors)
+bool Winning_Conditions_Met(const std::string &WordToBeGuessed,
+                            const std::string &CurrentGuessOfWord,
+                            const unsigned int &NumberOfErrors)
 {
-  // 10 errors mean that the final state of the
-  // hangman drawing has been reached
+  // 10 errors mean that the final state of the hangman drawing has been reached
   if (NumberOfErrors == 10)
     return true;
 
   else
-    return false;
-}
+  {
+    // If there is any difference then winning condition not met
+    for (unsigned int i = 0; i < WordToBeGuessed.size(); i++)
+      if (WordToBeGuessed[i] != CurrentGuessOfWord[i])
+        return false;
 
-bool Winning_Conditions_Met(const std::string &WordToBeGuessed,
-                            const std::string &CurrentGuessOfWord)
-{
-  // If there is any difference then winning condition not met
-  for (unsigned int i = 0; i < WordToBeGuessed.size(); i++)
-    if (WordToBeGuessed[i] != CurrentGuessOfWord[i])
-      return false;
-
-  return true;
+    return true;
+  }
 }
 
 void Display_Game(const unsigned int &NumberOfErrors,
@@ -332,44 +263,6 @@ void Display_Game(const unsigned int &NumberOfErrors,
   // Current guess of word
   for (unsigned int i = 0; i < CurrentGuessOfWord.size(); i++)
     std::cout << CurrentGuessOfWord[i] << " ";
-}
-
-void Clear_Terminal(void)
-{
-  // Windows API method taken from https://www.cplusplus.com/articles/4z18T05o
-  HANDLE                     hStdOut;
-  CONSOLE_SCREEN_BUFFER_INFO csbi;
-  DWORD                      count;
-  DWORD                      cellCount;
-  COORD                      homeCoords = { 0, 0 };
-
-  hStdOut = GetStdHandle( STD_OUTPUT_HANDLE );
-  if (hStdOut == INVALID_HANDLE_VALUE) return;
-
-  // Get the number of cells in the current buffer
-  if (!GetConsoleScreenBufferInfo( hStdOut, &csbi )) return;
-  cellCount = csbi.dwSize.X *csbi.dwSize.Y;
-
-  // Fill the entire buffer with spaces
-  if (!FillConsoleOutputCharacter(
-    hStdOut,
-    (TCHAR) ' ',
-    cellCount,
-    homeCoords,
-    &count
-    )) return;
-
-  // Fill the entire buffer with the current colors and attributes
-  if (!FillConsoleOutputAttribute(
-    hStdOut,
-    csbi.wAttributes,
-    cellCount,
-    homeCoords,
-    &count
-    )) return;
-
-  // Move the cursor home
-  SetConsoleCursorPosition( hStdOut, homeCoords );
 }
 
 void Ask_User_For_Next_Guess(std::vector<unsigned char> &IncorrectGuesses,
