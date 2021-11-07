@@ -24,9 +24,8 @@
   * 1 player represents a human vs computer, with the human player deciding who the guesser is
   * 0 players represent computer vs computer
 * AI Difficulty
-  * Easy = Random guessing and picks shorter words to guess from `hangman/Words.txt`
-  * Hard = Probabilistic guessing and pick longer words to guess from `hangman/Words.txt`
-* `hangman/Words.txt` contains some of the most common English words
+  * Easy = Random guessing and picks shorter words to guess from internal word list
+  * Hard = Probabilistic guessing and pick longer words to guess from from internal word list
 * No hyphens/spaces/non-letters are allowed in the word to be guessed
 * No guessing the whole word (only single letter guesses allowed)
 * The terminal is 'refreshed' using a method that is only supported on Windows
