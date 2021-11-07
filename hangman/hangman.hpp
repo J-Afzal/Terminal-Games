@@ -15,10 +15,10 @@ void Setup_Game(unsigned int &NumberOfPlayers,
                 std::string &AIDifficulty,
                 std::string &WordToBeGuessed,
                 std::string &CurrentGuessOfWord,
-                std::vector<unsigned char> &ValidMovesRemaining,
-                const std::vector<unsigned char> &IncorrectGuesses);
+                std::vector<std::string> &ValidMovesRemaining,
+                const std::vector<std::string> &IncorrectGuesses);
 
-std::string Get_Word_To_Be_Guessed_From_User(const std::vector<unsigned char> &IncorrectGuesses,
+std::string Get_Word_To_Be_Guessed_From_User(const std::vector<std::string> &IncorrectGuesses,
                                              const unsigned int &NumberOfPlayers,
                                              const std::string &AIDifficulty);
 
@@ -28,7 +28,7 @@ std::string Get_Word_To_Be_Guessed_From_AI(void);
 void Display_Game(const unsigned int &NumberOfErrors,
                   const std::string &NumberOfPlayers,
                   const std::string &AIDifficulty,
-                  const std::vector<unsigned char> &IncorrectGuesses,
+                  const std::vector<std::string> &IncorrectGuesses,
                   const std::string &CurrentGuessOfWord);
 
 // Checks if the hangman drawing has reached its final stage and
@@ -42,18 +42,18 @@ bool Winning_Conditions_Met(const unsigned int &NumberOfErrors,
 void Get_Next_User_Guess(unsigned int &NumberOfErrors,
                          const unsigned int &NumberOfPlayers,
                          const std::string &AIDifficulty,
-                         std::vector<unsigned char> &IncorrectGuesses,
-                         std::vector<unsigned char> &CorrectGuesses,
-                         std::vector<unsigned char> &ValidMovesRemaining,
+                         std::vector<std::string> &CorrectGuesses,
+                         std::vector<std::string> &ValidMovesRemaining,
+                         std::vector<std::string> &IncorrectGuesses,
                          std::string &CurrentGuessOfWord,
                          const std::string &WordToBeGuessed);
 
 void Get_Next_AI_Guess(unsigned int &NumberOfErrors,
                        const unsigned int &NumberOfPlayers,
                        const std::string &AIDifficulty,
-                       std::vector<unsigned char> &IncorrectGuesses,
-                       std::vector<unsigned char> &CorrectGuesses,
-                       std::vector<unsigned char> &ValidMovesRemaining,
+                       std::vector<std::string> &IncorrectGuesses,
+                       std::vector<std::string> &CorrectGuesses,
+                       std::vector<std::string> &ValidMovesRemaining,
                        std::string &CurrentGuessOfWord,
                        const std::string &WordToBeGuessed);
 
@@ -66,7 +66,7 @@ bool Check_Guess_Against_Word_To_Be_Guessed(const std::string &WordToBeGuessed,
 void Display_Game_Over_Message(const unsigned int &NumberOfErrors,
                                const unsigned int &NumberOfPlayers,
                                const std::string &AIDifficulty,
-                               const std::vector<unsigned char> &IncorrectGuesses,
+                               const std::vector<std::string> &IncorrectGuesses,
                                const std::string &CurrentGuessOfWord,
                                const std::string &WordToBeGuessed,
                                const unsigned int &NumberOfTurns,

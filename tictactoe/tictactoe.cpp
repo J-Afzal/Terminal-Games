@@ -83,32 +83,71 @@ void Display_Game(const std::vector<std::vector<std::string>> &GameData,
   Clear_Terminal();
 
   // Line 1
-  std::cout << ' ' << GameData[0][0] << ' ' << (char)179 << ' ' << GameData[0][1] << ' ' << (char)179 << ' ' << GameData[0][2] << ' ';
-  std::cout << "\t    Tic Tac Toe    \t";
-  std::cout << " 1 " << (char)179 << " 2 " << (char)179 << " 3 \n";
+  std::string Output = " ";
+  Output.append(GameData[0][0] + " ");
+  Output.insert(Output.size(), 1, (char)179);
+  Output.append(" " + GameData[0][1] + " ");
+  Output.insert(Output.size(), 1, (char)179);
+  Output.append(" " + GameData[0][2] + " ");
+  Output.append(" \t    Tic Tac Toe    \t 1 ");
+  Output.insert(Output.size(), 1, (char)179);
+  Output.append(" 2 ");
+  Output.insert(Output.size(), 1, (char)179);
+  Output.append(" 3 \n");
 
   // Line 2
-  std::cout << (char)196 << (char)196 << (char)196 << (char)197 << (char)196 << (char)196 << (char)196 << (char)197 << (char)196 << (char)196 << (char)196;
-  std::cout << "\t\t\t\t";
-  std::cout << (char)196 << (char)196 << (char)196 << (char)197 << (char)196 << (char)196 << (char)196 << (char)197 << (char)196 << (char)196 << (char)196;
+  Output.insert(Output.size(), 3, (char)196);
+  Output.insert(Output.size(), 1, (char)197);
+  Output.insert(Output.size(), 3, (char)196);
+  Output.insert(Output.size(), 1, (char)197);
+  Output.insert(Output.size(), 3, (char)196);
+  Output.append("\t\t\t\t");
+  Output.insert(Output.size(), 3, (char)196);
+  Output.insert(Output.size(), 1, (char)197);
+  Output.insert(Output.size(), 3, (char)196);
+  Output.insert(Output.size(), 1, (char)197);
+  Output.insert(Output.size(), 3, (char)196);
 
   // Line 3
-  std::cout << "\n " << GameData[1][0] << ' ' << (char)179 << ' ' << GameData[1][1] << ' ' << (char)179 << ' ' << GameData[1][2] << ' ';
+  Output.append("\n " + GameData[1][0] + " ");
+  Output.insert(Output.size(), 1, (char)179);
+  Output.append(" " + GameData[1][1] + " ");
+  Output.insert(Output.size(), 1, (char)179);
+  Output.append(" " + GameData[1][2] + " ");
   if (NumberOfPlayers == "N/A")
-    std::cout << "\t# of Players = " << NumberOfPlayers << '\t';
+    Output.append("\t# of Players = " + NumberOfPlayers + "\t 4 ");
   else
-    std::cout << "\t  # of Players = " << NumberOfPlayers << '\t';
-  std::cout << " 4 " << (char)179 << " 5 " << (char)179 << " 6 \n";
+    Output.append("\t  # of Players = " + NumberOfPlayers + "\t 4 ");
+  Output.insert(Output.size(), 1, (char)179);
+  Output.append(" 5 ");
+  Output.insert(Output.size(), 1, (char)179);
+  Output.append(" 6 \n");
 
   // Line 4
-  std::cout << (char)196 << (char)196 << (char)196 << (char)197 << (char)196 << (char)196 << (char)196 << (char)197 << (char)196 << (char)196 << (char)196;
-  std::cout << "\t\t\t\t";
-  std::cout << (char)196 << (char)196 << (char)196 << (char)197 << (char)196 << (char)196 << (char)196 << (char)197 << (char)196 << (char)196 << (char)196;
+  Output.insert(Output.size(), 3, (char)196);
+  Output.insert(Output.size(), 1, (char)197);
+  Output.insert(Output.size(), 3, (char)196);
+  Output.insert(Output.size(), 1, (char)197);
+  Output.insert(Output.size(), 3, (char)196);
+  Output.append("\t\t\t\t");
+  Output.insert(Output.size(), 3, (char)196);
+  Output.insert(Output.size(), 1, (char)197);
+  Output.insert(Output.size(), 3, (char)196);
+  Output.insert(Output.size(), 1, (char)197);
+  Output.insert(Output.size(), 3, (char)196);
 
   // Line 5
-  std::cout << "\n " << GameData[2][0] << ' ' << (char)179 << ' ' << GameData[2][1] << ' ' << (char)179 << ' ' << GameData[2][2] << ' ';
-  std::cout << "\tAI Difficulty = " << AIDifficulty << '\t';
-  std::cout << " 7 " << (char)179 << " 8 " << (char)179 << " 9 \n";
+  Output.append("\n " + GameData[2][0] + " ");
+  Output.insert(Output.size(), 1, (char)179);
+  Output.append(" " + GameData[2][1] + " ");
+  Output.insert(Output.size(), 1, (char)179);
+  Output.append(" " + GameData[2][2] + " \tAI Difficulty = " + AIDifficulty + "\t 7 ");
+  Output.insert(Output.size(), 1, (char)179);
+  Output.append(" 8 ");
+  Output.insert(Output.size(), 1, (char)179);
+  Output.append(" 9 \n");
+
+  std::cout << Output;
 }
 
 void Get_Next_User_Command(std::vector<std::vector<std::string>> &GameData,

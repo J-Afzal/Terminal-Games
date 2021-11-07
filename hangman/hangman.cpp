@@ -20,8 +20,8 @@ void Setup_Game(unsigned int &NumberOfPlayers,
                 std::string &AIDifficulty,
                 std::string &WordToBeGuessed,
                 std::string &CurrentGuessOfWord,
-                std::vector<unsigned char> &ValidMovesRemaining,
-                const std::vector<unsigned char> &IncorrectGuesses)
+                std::vector<std::string> &ValidMovesRemaining,
+                const std::vector<std::string> &IncorrectGuesses)
 {
   // Set seed of srand to time(0) so pseudo random
   std::srand((unsigned int)std::time(0));
@@ -75,11 +75,10 @@ void Setup_Game(unsigned int &NumberOfPlayers,
   for (unsigned int i = 0; i < WordToBeGuessed.size(); i++)
     CurrentGuessOfWord.push_back('_');
 
-  for (unsigned int i = 0; i < 26; i++)
-    ValidMovesRemaining.push_back(65+i);
+  ValidMovesRemaining = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
 }
 
-std::string Get_Word_To_Be_Guessed_From_User(const std::vector<unsigned char> &IncorrectGuesses,
+std::string Get_Word_To_Be_Guessed_From_User(const std::vector<std::string> &IncorrectGuesses,
                                              const unsigned int &NumberOfPlayers,
                                              const std::string &AIDifficulty)
 {
@@ -123,121 +122,246 @@ std::string Get_Word_To_Be_Guessed_From_AI(void)
 void Display_Game(const unsigned int &NumberOfErrors,
                   const std::string &NumberOfPlayers,
                   const std::string &AIDifficulty,
-                  const std::vector<unsigned char> &IncorrectGuesses,
+                  const std::vector<std::string> &IncorrectGuesses,
                   const std::string &CurrentGuessOfWord)
 {
   // Start from blank terminal
   Clear_Terminal();
 
+  std::string Output;
+
   // Draw the hangman drawing
   switch (NumberOfErrors)
   {
   case 0:
-    std::cout << "\n\t\t\t\t\t       Hangman";
-
+    Output = "\n\t\t\t\t\t       Hangman";
     if (NumberOfPlayers == "N/A")
-      std::cout << "\n\n\t\t\t\t\t # of Players = " << NumberOfPlayers;
+      Output.append("\n\n\t\t\t\t\t # of Players = " + NumberOfPlayers + "\n\n\t\t\t\t\t AI Difficulty = " + AIDifficulty + "\n\n\n");
     else
-      std::cout << "\n\n\t\t\t\t\t   # of Players = " << NumberOfPlayers;
-
-    std::cout << "\n\n\t\t\t\t\t AI Difficulty = " << AIDifficulty << "\n\n\n";
+      Output.append("\n\n\t\t\t\t\t   # of Players = " + NumberOfPlayers + "\n\n\t\t\t\t\t AI Difficulty = " + AIDifficulty + "\n\n\n");
     break;
 
   case 1:
-    std::cout << "\n\t\t   Incorrect Guesses\t       Hangman"
-              << "\n\n\t\t   " << IncorrectGuesses[0] << "\t\t\t   # of Players = " << NumberOfPlayers
-              << "\n\n\t\t\t\t\t AI Difficulty = " << AIDifficulty
-              << "\n" << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196
-              << "\n\n";
+    Output = "\n\t\t   Incorrect Guesses\t       Hangman\n\n\t\t   " + IncorrectGuesses[0] + "\t\t\t   # of Players = " + NumberOfPlayers + "\n\n\t\t\t\t\t AI Difficulty = " + AIDifficulty + "\n";
+    Output.insert(Output.size(), 9, (char)196);
+    Output.append("\n\n");
     break;
 
   case 2:
-    std::cout << "\n    " << (char)179 << "\t\t   Incorrect Guesses\t       Hangman"
-              << "\n    " << (char)179
-              << "\n    " << (char)179 << "\t\t   " << IncorrectGuesses[0] << "   " << IncorrectGuesses[1] << "\t\t   # of Players = " << NumberOfPlayers
-              << "\n    " << (char)179
-              << "\n    " << (char)179 << "\t\t\t\t\t AI Difficulty = " << AIDifficulty
-              << "\n" << (char)196 << (char)196 << (char)196 << (char)196 << (char)193 << (char)196 << (char)196 << (char)196 << (char)196 << "\n\n";
+    Output = "\n    ";
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("\t\t   Incorrect Guesses\t       Hangman\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("\t\t   " + IncorrectGuesses[0] + "   " + IncorrectGuesses[1] + "\t\t   # of Players = " + NumberOfPlayers + "\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("\t\t\t\t\t AI Difficulty = " + AIDifficulty + "\n");
+    Output.insert(Output.size(), 4, (char)196);
+    Output.insert(Output.size(), 1, (char)193);
+    Output.insert(Output.size(), 4, (char)196);
+    Output.append("\n\n");
     break;
 
   case 3:
-    std::cout << "    " << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196
-              << "\n    " << (char)179 << "\t\t   Incorrect Guesses\t       Hangman"
-              << "\n    " << (char)179
-              << "\n    " << (char)179 << "\t\t   " << IncorrectGuesses[0] << "   " << IncorrectGuesses[1] << "   " << IncorrectGuesses[2] << "\t\t   # of Players = " << NumberOfPlayers
-              << "\n    " << (char)179
-              << "\n    " << (char)179 << "\t\t\t\t\t AI Difficulty = " << AIDifficulty
-              << "\n" << (char)196 << (char)196 << (char)196 << (char)196 << (char)193 << (char)196 << (char)196 << (char)196 << (char)196 << "\n\n";
+    Output = "    ";
+    Output.insert(Output.size(), 1, (char)218);
+    Output.insert(Output.size(), 8, (char)196);
+    Output.append("\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("\t\t   Incorrect Guesses\t       Hangman\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("\t\t   " + IncorrectGuesses[0] + "   " + IncorrectGuesses[1] + "   " + IncorrectGuesses[2] + "\t\t   # of Players = " + NumberOfPlayers + "\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("\t\t\t\t\t AI Difficulty = " + AIDifficulty + "\n");
+    Output.insert(Output.size(), 4, (char)196);
+    Output.insert(Output.size(), 1, (char)193);
+    Output.insert(Output.size(), 4, (char)196);
+    Output.append("\n\n");
     break;
 
   case 4:
-    std::cout << "    " << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)191
-              << "\n    " << (char)179 << "       " << (char)179 << "\t   Incorrect Guesses\t       Hangman"
-              << "\n    " << (char)179
-              << "\n    " << (char)179 << "\t\t   " << IncorrectGuesses[0] << "   " << IncorrectGuesses[1] << "   " << IncorrectGuesses[2] << "   " << IncorrectGuesses[3] << "\t   # of Players = " << NumberOfPlayers
-              << "\n    " << (char)179
-              << "\n    " << (char)179 << "\t\t\t\t\t AI Difficulty = " << AIDifficulty
-              << "\n" << (char)196 << (char)196 << (char)196 << (char)196 << (char)193 << (char)196 << (char)196 << (char)196 << (char)196 << "\n\n";
+    Output = "    ";
+    Output.insert(Output.size(), 1, (char)218);
+    Output.insert(Output.size(), 7, (char)196);
+    Output.insert(Output.size(), 1, (char)191);
+    Output.append("\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("       ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("\t   Incorrect Guesses\t       Hangman\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("\t\t   " + IncorrectGuesses[0] + "   " + IncorrectGuesses[1] + "   " + IncorrectGuesses[2] + "   " + IncorrectGuesses[3] + "\t   # of Players = " + NumberOfPlayers + "\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("\t\t\t\t\t AI Difficulty = " + AIDifficulty + "\n");
+    Output.insert(Output.size(), 4, (char)196);
+    Output.insert(Output.size(), 1, (char)193);
+    Output.insert(Output.size(), 4, (char)196);
+    Output.append("\n\n");
     break;
 
   case 5:
-    std::cout << "    " << (char)218 << (char)196 << (char)196 << (char)196  << (char)196 << (char)196 << (char)196 << (char)196 << (char)191
-              << "\n    " << (char)179 << "       " << (char)179 << "\t   Incorrect Guesses\t       Hangman"
-              << "\n    " << (char)179 << "       O"
-              << "\n    " << (char)179 << "\t\t   " << IncorrectGuesses[0] << "   " << IncorrectGuesses[1] << "   " << IncorrectGuesses[2] << "   " << IncorrectGuesses[3] << "   " << IncorrectGuesses[4] << "\t   # of Players = " << NumberOfPlayers
-              << "\n    " << (char)179
-              << "\n    " << (char)179 << "\t\t\t\t\t AI Difficulty = " << AIDifficulty
-              << "\n" << (char)196 << (char)196 << (char)196 << (char)196 << (char)193 << (char)196 << (char)196 << (char)196 << (char)196 << "\n\n";
+    Output = "    ";
+    Output.insert(Output.size(), 1, (char)218);
+    Output.insert(Output.size(), 7, (char)196);
+    Output.insert(Output.size(), 1, (char)191);
+    Output.append("\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("       ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("\t   Incorrect Guesses\t       Hangman\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("       O\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("\t\t   " + IncorrectGuesses[0] + "   " + IncorrectGuesses[1] + "   " + IncorrectGuesses[2] + "   " + IncorrectGuesses[3] + "   " + IncorrectGuesses[4] + "\t   # of Players = " + NumberOfPlayers + "\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("\t\t\t\t\t AI Difficulty = " + AIDifficulty + "\n");
+    Output.insert(Output.size(), 4, (char)196);
+    Output.insert(Output.size(), 1, (char)193);
+    Output.insert(Output.size(), 4, (char)196);
+    Output.append("\n\n");
     break;
 
   case 6:
-    std::cout << "    " << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)191
-              << "\n    " << (char)179 << "       " << (char)179 << "\t   Incorrect Guesses\t       Hangman"
-              << "\n    " << (char)179 << "       O"
-              << "\n    " << (char)179 << "       " << (char)179 << "\t   " << IncorrectGuesses[0] << "   " << IncorrectGuesses[1] << "   " << IncorrectGuesses[2] << "   " << IncorrectGuesses[3] << "   " << IncorrectGuesses[4] << "\t   # of Players = " << NumberOfPlayers
-              << "\n    " << (char)179
-              << "\n    " << (char)179 << "\t\t   " << IncorrectGuesses[5] << "\t\t\t AI Difficulty = " << AIDifficulty
-              << "\n" << (char)196 << (char)196 << (char)196 << (char)196 << (char)193 << (char)196 << (char)196 << (char)196 << (char)196 << "\n\n";
+    Output.append("    ");
+    Output.insert(Output.size(), 1, (char)218);
+    Output.insert(Output.size(), 7, (char)196);
+    Output.insert(Output.size(), 1, (char)191);
+    Output.append("\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("       ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("\t   Incorrect Guesses\t       Hangman\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("       O\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("       ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("\t   " + IncorrectGuesses[0] + "   " + IncorrectGuesses[1] + "   " + IncorrectGuesses[2] + "   " + IncorrectGuesses[3] + "   " + IncorrectGuesses[4] + "\t   # of Players = " + NumberOfPlayers + "\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("\t\t   " + IncorrectGuesses[5] + "\t\t\t AI Difficulty = " + AIDifficulty + "\n");
+    Output.insert(Output.size(), 4, (char)196);
+    Output.insert(Output.size(), 1, (char)193);
+    Output.insert(Output.size(), 4, (char)196);
+    Output.append("\n\n");
     break;
 
   case 7:
-    std::cout << "    " << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)191
-              << "\n    " << (char)179 << "       " << (char)179 << "\t   Incorrect Guesses\t       Hangman"
-              << "\n    " << (char)179 << "       O"
-              << "\n    " << (char)179 << "       " << (char)179 << "\t   " << IncorrectGuesses[0] << "   " << IncorrectGuesses[1] << "   " << IncorrectGuesses[2] << "   " << IncorrectGuesses[3] << "   " << IncorrectGuesses[4] << "\t   # of Players = " << NumberOfPlayers
-              << "\n    " << (char)179 << "      /"
-              << "\n    " << (char)179 << "\t\t   " << IncorrectGuesses[5] << "   " << IncorrectGuesses[6] << "\t\t AI Difficulty = " << AIDifficulty
-              << "\n" << (char)196 << (char)196 << (char)196 << (char)196 << (char)193 << (char)196 << (char)196 << (char)196 << (char)196 << "\n\n";
+    Output.append("    ");
+    Output.insert(Output.size(), 1, (char)218);
+    Output.insert(Output.size(), 7, (char)196);
+    Output.insert(Output.size(), 1, (char)191);
+    Output.append("\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("       ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("\t   Incorrect Guesses\t       Hangman\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("       O\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("       ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("\t   " + IncorrectGuesses[0] + "   " + IncorrectGuesses[1] + "   " + IncorrectGuesses[2] + "   " + IncorrectGuesses[3] + "   " + IncorrectGuesses[4] + "\t   # of Players = " + NumberOfPlayers + "\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("      /\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("\t\t   " + IncorrectGuesses[5] + "   " + IncorrectGuesses[6] + "\t\t AI Difficulty = " + AIDifficulty + "\n");
+    Output.insert(Output.size(), 4, (char)196);
+    Output.insert(Output.size(), 1, (char)193);
+    Output.insert(Output.size(), 4, (char)196);
+    Output.append("\n\n");
     break;
 
   case 8:
-    std::cout << "    " << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)191
-              << "\n    " << (char)179 << "       " << (char)179 << "\t   Incorrect Guesses\t       Hangman"
-              << "\n    " << (char)179 << "       O"
-              << "\n    " << (char)179 << "       " << (char)179 << "\t   " << IncorrectGuesses[0] << "   " << IncorrectGuesses[1] << "   " << IncorrectGuesses[2] << "   " << IncorrectGuesses[3] << "   " << IncorrectGuesses[4] << "\t   # of Players = " << NumberOfPlayers
-              << "\n    " << (char)179 << "      / \\"
-              << "\n    " << (char)179 << "\t\t   " << IncorrectGuesses[5] << "   " << IncorrectGuesses[6] << "   " << IncorrectGuesses[7] << "\t\t AI Difficulty = " << AIDifficulty
-              << "\n" << (char)196 << (char)196 << (char)196 << (char)196 << (char)193 << (char)196 << (char)196 << (char)196 << (char)196 << "\n\n";
+    Output.append("    ");
+    Output.insert(Output.size(), 1, (char)218);
+    Output.insert(Output.size(), 7, (char)196);
+    Output.insert(Output.size(), 1, (char)191);
+    Output.append("\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("       ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("\t   Incorrect Guesses\t       Hangman\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("       O\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("       ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("\t   " + IncorrectGuesses[0] + "   " + IncorrectGuesses[1] + "   " + IncorrectGuesses[2] + "   " + IncorrectGuesses[3] + "   " + IncorrectGuesses[4] + "\t   # of Players = " + NumberOfPlayers + "\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("      / \\\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("\t\t   " + IncorrectGuesses[5] + "   " + IncorrectGuesses[6] + "   " + IncorrectGuesses[7] + "\t\t AI Difficulty = " + AIDifficulty + "\n");
+    Output.insert(Output.size(), 4, (char)196);
+    Output.insert(Output.size(), 1, (char)193);
+    Output.insert(Output.size(), 4, (char)196);
+    Output.append("\n\n");
     break;
 
   case 9:
-    std::cout << "    " << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)191
-              << "\n    " << (char)179 << "       " << (char)179 << "\t   Incorrect Guesses\t       Hangman"
-              << "\n    " << (char)179 << "       O"
-              << "\n    " << (char)179 << "      /" << (char)179 << "\t   " << IncorrectGuesses[0] << "   " << IncorrectGuesses[1] << "   " << IncorrectGuesses[2] << "   " << IncorrectGuesses[3] << "   " << IncorrectGuesses[4] << "\t   # of Players = " << NumberOfPlayers
-              << "\n    " << (char)179 << "      / \\"
-              << "\n    " << (char)179 << "\t\t   " << IncorrectGuesses[5] << "   " << IncorrectGuesses[6] << "   " << IncorrectGuesses[7] << "   " << IncorrectGuesses[8] << "\t AI Difficulty = " << AIDifficulty
-              << "\n" << (char)196 << (char)196 << (char)196 << (char)196 << (char)193 << (char)196 << (char)196 << (char)196 << (char)196 << "\n\n";
+    Output.append("    ");
+    Output.insert(Output.size(), 1, (char)218);
+    Output.insert(Output.size(), 7, (char)196);
+    Output.insert(Output.size(), 1, (char)191);
+    Output.append("\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("       ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("\t   Incorrect Guesses\t       Hangman\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("       O\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("      /");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("\t   " + IncorrectGuesses[0] + "   " + IncorrectGuesses[1] + "   " + IncorrectGuesses[2] + "   " + IncorrectGuesses[3] + "   " + IncorrectGuesses[4] + "\t   # of Players = " + NumberOfPlayers + "\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("      / \\\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("\t\t   " + IncorrectGuesses[5] + "   " + IncorrectGuesses[6] + "   " + IncorrectGuesses[7] + "   " + IncorrectGuesses[8] + "\t AI Difficulty = " + AIDifficulty + "\n");
+    Output.insert(Output.size(), 4, (char)196);
+    Output.insert(Output.size(), 1, (char)193);
+    Output.insert(Output.size(), 4, (char)196);
+    Output.append("\n\n");
     break;
 
   case 10:
-    std::cout << "    " << (char)218 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)196 << (char)191
-              << "\n    " << (char)179 << "       " << (char)179 << "\t   Incorrect Guesses\t       Hangman"
-              << "\n    " << (char)179 << "       O"
-              << "\n    " << (char)179 << "      /" << (char)179 << "\\" << "\t   " << IncorrectGuesses[0] << "   " << IncorrectGuesses[1] << "   " << IncorrectGuesses[2] << "   " << IncorrectGuesses[3] << "   " << IncorrectGuesses[4] << "\t   # of Players = " << NumberOfPlayers
-              << "\n    " << (char)179 << "      / \\"
-              << "\n    " << (char)179 << "\t\t   " << IncorrectGuesses[5] << "   " << IncorrectGuesses[6] << "   " << IncorrectGuesses[7] << "   " << IncorrectGuesses[8] << "   " << IncorrectGuesses[9] << "\t AI Difficulty = " << AIDifficulty
-              << "\n" << (char)196 << (char)196 << (char)196 << (char)196 << (char)193 << (char)196 << (char)196 << (char)196 << (char)196 << "\n\n";
+    Output.append("    ");
+    Output.insert(Output.size(), 1, (char)218);
+    Output.insert(Output.size(), 7, (char)196);
+    Output.insert(Output.size(), 1, (char)191);
+    Output.append("\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("       ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("\t   Incorrect Guesses\t       Hangman\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("       O\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("      /");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("\\\t   " + IncorrectGuesses[0] + "   " + IncorrectGuesses[1] + "   " + IncorrectGuesses[2] + "   " + IncorrectGuesses[3] + "   " + IncorrectGuesses[4] + "\t   # of Players = " + NumberOfPlayers + "\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("      / \\\n    ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.append("\t\t   " + IncorrectGuesses[5] + "   " + IncorrectGuesses[6] + "   " + IncorrectGuesses[7] + "   " + IncorrectGuesses[8] + "   " + IncorrectGuesses[9] + "\t AI Difficulty = " + AIDifficulty + "\n");
+    Output.insert(Output.size(), 4, (char)196);
+    Output.insert(Output.size(), 1, (char)193);
+    Output.insert(Output.size(), 4, (char)196);
+    Output.append("\n\n");
     break;
 
   default:
@@ -247,7 +371,12 @@ void Display_Game(const unsigned int &NumberOfErrors,
 
   // Current guess of word
   for (unsigned int i = 0; i < CurrentGuessOfWord.size(); i++)
-    std::cout << CurrentGuessOfWord[i] << " ";
+  {
+    Output.insert(Output.size(), 1, CurrentGuessOfWord[i]);
+    Output.append(" ");
+  }
+
+  std::cout << Output;
 }
 
 bool Winning_Conditions_Met(const unsigned int &NumberOfErrors,
@@ -272,9 +401,9 @@ bool Winning_Conditions_Met(const unsigned int &NumberOfErrors,
 void Get_Next_User_Guess(unsigned int &NumberOfErrors,
                          const unsigned int &NumberOfPlayers,
                          const std::string &AIDifficulty,
-                         std::vector<unsigned char> &IncorrectGuesses,
-                         std::vector<unsigned char> &CorrectGuesses,
-                         std::vector<unsigned char> &ValidMovesRemaining,
+                         std::vector<std::string> &IncorrectGuesses,
+                         std::vector<std::string> &CorrectGuesses,
+                         std::vector<std::string> &ValidMovesRemaining,
                          std::string &CurrentGuessOfWord,
                          const std::string &WordToBeGuessed)
 {
@@ -293,7 +422,7 @@ void Get_Next_User_Guess(unsigned int &NumberOfErrors,
 
     Capitalise_Word(Input);
 
-    auto CommandPosition = std::find(ValidMovesRemaining.begin(), ValidMovesRemaining.end(), Input[0]);
+    auto CommandPosition = std::find(ValidMovesRemaining.begin(), ValidMovesRemaining.end(), Input);
 
     if (CommandPosition != ValidMovesRemaining.end())
     {
@@ -304,29 +433,29 @@ void Get_Next_User_Guess(unsigned int &NumberOfErrors,
 
   if (!Check_Guess_Against_Word_To_Be_Guessed(WordToBeGuessed, Input[0], CurrentGuessOfWord))
   {
-    IncorrectGuesses.push_back(Input[0]);
+    IncorrectGuesses.push_back(Input);
     NumberOfErrors++;
   }
   else
-    CorrectGuesses.push_back(Input[0]);
+    CorrectGuesses.push_back(Input);
 }
 
 void Get_Next_AI_Guess(unsigned int &NumberOfErrors,
                        const unsigned int &NumberOfPlayers,
                        const std::string &AIDifficulty,
-                       std::vector<unsigned char> &IncorrectGuesses,
-                       std::vector<unsigned char> &CorrectGuesses,
-                       std::vector<unsigned char> &ValidMovesRemaining,
+                       std::vector<std::string> &IncorrectGuesses,
+                       std::vector<std::string> &CorrectGuesses,
+                       std::vector<std::string> &ValidMovesRemaining,
                        std::string &CurrentGuessOfWord,
                        const std::string &WordToBeGuessed)
 {
   Display_Game(NumberOfErrors, std::to_string(NumberOfPlayers), AIDifficulty, IncorrectGuesses, CurrentGuessOfWord);
 
-  unsigned char Guess = ValidMovesRemaining[std::rand() % ValidMovesRemaining.size()];
+  std::string Guess = ValidMovesRemaining[std::rand() % ValidMovesRemaining.size()];
   auto CommandPosition = std::find(ValidMovesRemaining.begin(), ValidMovesRemaining.end(), Guess);
   ValidMovesRemaining.erase(CommandPosition);
 
-  if (!Check_Guess_Against_Word_To_Be_Guessed(WordToBeGuessed, Guess, CurrentGuessOfWord))
+  if (!Check_Guess_Against_Word_To_Be_Guessed(WordToBeGuessed, Guess[0], CurrentGuessOfWord))
   {
     IncorrectGuesses.push_back(Guess);
     NumberOfErrors++;
@@ -356,7 +485,7 @@ bool Check_Guess_Against_Word_To_Be_Guessed(const std::string &WordToBeGuessed,
 void Display_Game_Over_Message(const unsigned int &NumberOfErrors,
                                const unsigned int &NumberOfPlayers,
                                const std::string &AIDifficulty,
-                               const std::vector<unsigned char> &IncorrectGuesses,
+                               const std::vector<std::string> &IncorrectGuesses,
                                const std::string &CurrentGuessOfWord,
                                const std::string &WordToBeGuessed,
                                const unsigned int &NumberOfTurns,

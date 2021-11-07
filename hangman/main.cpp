@@ -15,7 +15,7 @@ int main(void)
     // Hangman states represents the different states the hangman drawing can be in
     unsigned int NumberOfPlayers, NumberOfErrors = 0, NumberOfTurns = 0;
     std::string WordToBeGuessed, CurrentGuessOfWord, PlayerThatIsGuessing, AIDifficulty = "N/A";
-    std::vector<unsigned char> CorrectGuesses, IncorrectGuesses, ValidMovesRemaining;
+    std::vector<std::string> CorrectGuesses, IncorrectGuesses, ValidMovesRemaining;
 
     // Sets up the variables required by game
     Setup_Game(NumberOfPlayers, PlayerThatIsGuessing, AIDifficulty, WordToBeGuessed, CurrentGuessOfWord, ValidMovesRemaining, IncorrectGuesses);
