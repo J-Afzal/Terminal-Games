@@ -14,8 +14,8 @@
 * The terminal is 'refreshed' using a method that is only supported on Windows
 
 <p align="center">
- <img src="tictactoe/TicTacToe%20Playing.png" width=1000>
- <img src="tictactoe/TicTacToe%20Game%20Over.png" width=1000>
+ <img src="screenshots/TicTacToe%20Playing.png" width=1000>
+ <img src="screenshots/TicTacToe%20Game%20Over.png" width=1000>
 </p>
 
 ## Hangman
@@ -32,8 +32,8 @@
 * The terminal is 'refreshed' using a method that is only supported on Windows
 
 <p align="center">
- <img src="hangman/Hangman%20Playing.png" width=1000>
- <img src="hangman/Hangman%20Game%20Over.png" width=1000>
+ <img src="screenshots/Hangman%20Playing.png" width=1000>
+ <img src="screenshots/Hangman%20Game%20Over.png" width=1000>
 </p>
 
 ## Battleships
@@ -45,6 +45,6 @@
 * The terminal is 'refreshed' using a method that is only supported on Windows
 
 <p align="center">
- <img src="battleships/Battleships%20Playing.png" width=1000>
- <img src="battleships/Battleships%20Game%20Over.png" width=1000>
+ <img src="screenshots/Battleships%20Playing.png" width=1000>
+ <img src="screenshots/Battleships%20Game%20Over.png" width=1000>
 </p>
