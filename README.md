@@ -11,7 +11,7 @@
 * AI Difficulty
   * Easy = random
   * Hard = minimax algorithm
-* The terminal is 'refreshed' using a method that is only supported on Windows
+* The use of _getch() and terminal 'refreshing' method is only supported on Windows
 
 <p align="center">
  <img src="screenshots/TicTacToe%20Playing.png" width=1000>
@@ -28,7 +28,7 @@
   * Hard = Probabilistic guessing and pick longer words to guess from from internal word list
 * No hyphens/spaces/non-letters are allowed in the word to be guessed
 * No guessing the whole word (only single letter guesses allowed)
-* The terminal is 'refreshed' using a method that is only supported on Windows
+* The use of _getch() and terminal 'refreshing' method is only supported on Windows
 
 <p align="center">
  <img src="screenshots/Hangman%20Playing.png" width=1000>
@@ -41,7 +41,7 @@
   * 1 player represents a human vs computer
   * 0 players represent computer vs computer
 * The computer is 'dumb' as it picks random positions to place its ships and random locations to attack ships
-* The terminal is 'refreshed' using a method that is only supported on Windows
+* The use of _getch() and terminal 'refreshing' method is only supported on Windows
 
 <p align="center">
  <img src="screenshots/Battleships%20Playing.png" width=1000>
