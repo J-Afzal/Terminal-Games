@@ -1,7 +1,13 @@
-//
-//  @File: TicTacToe.hpp
-//  @Author: Junaid Afzal
-//
+/**
+ * @file tictactoe.hpp
+ * @author Junaid Afzal
+ * @brief Tic Tac Toe specific functions
+ * @version 1.0
+ * @date 07-11-2021
+ *
+ * @copyright Copyright (c) 2021
+ *
+ */
 
 #ifndef tictactoe_hpp
 #define tictactoe_hpp
@@ -9,44 +15,106 @@
 #include <vector>
 #include <string>
 
-// Pseudo randomly selects the player to go first; creates the board; gets the
-// number of human players; and if one human player playing then gets the user's
-// choice of being player X or player O
-void Setup_Game(std::vector<std::vector<std::string>> &GameData,
+/**
+ * @brief The Tic Tac Toe grid and list of valid moves are created, number of
+ * players are retrieved, if only one human player is present they are asked
+ * which player they would like to be, if AI is involved the user is prompted
+ * for the AI difficulty, and finally the current player is randomly assigned.
+ *
+ * @param TicTacToeGrid
+ * @param ValidMovesRemaining
+ * @param NumberOfPlayers
+ * @param UserPlayerChoice
+ * @param AIDifficulty
+ * @param CurrentPlayer
+ */
+void Setup_Game(std::vector<std::vector<std::string>> &TicTacToeGrid,
                 std::vector<unsigned int> &ValidMovesRemaining,
                 unsigned int &NumberOfPlayers,
                 std::string &UserPlayerChoice,
                 std::string &AIDifficulty,
                 std::string &CurrentPlayer);
 
-void Display_Game(const std::vector<std::vector<std::string>> &GameData,
+/**
+ * @brief The Tic Tac Toe grid is displayed, and to the right of that,
+ * the number of players and the AI difficulty is displayed, and to the
+ * right of that, the Tic Tac Toe matrix grid is displayed that shows
+ * what each command represents on the Tic Tac Toe grid.
+ *
+ * @param TicTacToeGrid
+ * @param NumberOfPlayers
+ * @param AIDifficulty
+ */
+void Display_Game(const std::vector<std::vector<std::string>> &TicTacToeGrid,
                   const std::string &NumberOfPlayers,
                   const std::string &AIDifficulty);
 
-// User is prompted for their next move and repeated, if necessary, until a valid move is given
-void Get_Next_User_Command(std::vector<std::vector<std::string>> &GameData,
+/**
+ * @brief The user is prompted for their next command and, if necessary, repeated until
+ * a valid command is given.
+ *
+ * @param TicTacToeGrid
+ * @param NumberOfPlayers
+ * @param AIDifficulty
+ * @param CurrentPlayer
+ * @param ValidMovesRemaining
+ */
+void Get_Next_User_Command(std::vector<std::vector<std::string>> &TicTacToeGrid,
                            const unsigned int &NumberOfPlayers,
                            const std::string &AIDifficulty,
                            const std::string &CurrentPlayer,
                            std::vector<unsigned int> &ValidMovesRemaining);
 
-// The AI randomly picks a number from one to nine until the number chosen
-// hasn't already been picked previously in the game. A better solution would be to
-// have a list of all available moves and then randomly picking from that list.
-void Get_Next_AI_Command(std::vector<std::vector<std::string>> &GameData,
+/**
+ * @brief If AIDifficulty is set to easy, then a random valid location on the
+ * Tic Tac Toe grid is chosen. If AIDifficulty is set to hard then the MiniMax()
+ * algorithm is used.
+ *
+ * @param TicTacToeGrid
+ * @param NumberOfPlayers
+ * @param AIDifficulty
+ * @param CurrentPlayer
+ * @param ValidMovesRemaining
+ */
+void Get_Next_AI_Command(std::vector<std::vector<std::string>> &TicTacToeGrid,
                          const unsigned int &NumberOfPlayers,
                          const std::string &AIDifficulty,
                          const std::string &CurrentPlayer,
                          std::vector<unsigned int> &ValidMovesRemaining);
 
-// True if all places on grid have been occupied which occurs once nine turns have taken place
+/**
+ * @brief Checks if there are still empty places to play a move
+ * on the Tic Tac Toe grid.
+ *
+ * @param NumberOfTurns
+ * @return true,if more moves can be played
+ * @return false, if no more moves can be played
+ */
 bool Game_Over(const unsigned int &NumberOfTurns);
 
-// Checks for three in a row for both X and O
-bool Winning_Conditions_Met(const std::vector<std::vector<std::string>> &GameData);
+/**
+ * @brief Checks for three in a row X/O on the Tic Tac Toe grid.
+ *
+ * @param TicTacToeGrid
+ * @return true, if three in a row exists
+ * @return false, if three in a row does NOT exists
+ */
+bool Winning_Conditions_Met(const std::vector<std::vector<std::string>> &TicTacToeGrid);
 
-// Displays the player that is the winner, or not if the game is a draw and how many turns it took
-void Display_Game_Over_Message(const std::vector<std::vector<std::string>> &GameData,
+/**
+ * @brief First calls Display_Game() once more. If winning condition was met, then the winner is the current
+ * player is the winner as Toggle_Player() function has not been called since most recent turn and now. If
+ * no winner then it is draw. This informations is displayed to the user and _getch() is used to get a key press
+ * for what the GameIsRunning should be set to (true = play another game and false = quit game).
+ *
+ * @param TicTacToeGrid
+ * @param NumberOfPlayers
+ * @param AIDifficulty
+ * @param CurrentPlayer
+ * @param NumberOfTurns
+ * @param GameIsRunning
+ */
+void Display_Game_Over_Message(const std::vector<std::vector<std::string>> &TicTacToeGrid,
                                const unsigned int &NumberOfPlayers,
                                const std::string &AIDifficulty,
                                const std::string &CurrentPlayer,

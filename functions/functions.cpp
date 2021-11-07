@@ -1,4 +1,21 @@
-#include "Windows.h"
+/**
+ * @file functions.cpp
+ * @author Junaid Afzal
+ * @brief Implementation of functions.hpp
+ * @version 1.0
+ * @date 07-11-2021
+ *
+ * @copyright Copyright (c) 2021
+ *
+ */
+
+/**
+ * @brief Due to <windows.h> redefining the max() function, #define NOMINMAX
+ * is used before <windows.h> is included, with thanks to
+ * https://stackoverflow.com/questions/7035023/stdmax-expected-an-identifier/7035078
+ */
+#define NOMINMAX
+#include <windows.h>
 #include "functions.hpp"
 #include <iostream>
 
@@ -20,54 +37,39 @@ bool Get_Number_Of_Players(unsigned int &NumberOfPlayers,
 
   if (NumberOfPlayers < MinPlayers || NumberOfPlayers > MaxPlayers)
     return false;
-
   else
     return true;
 }
 
 bool Get_User_Player_Choice(std::string &UserPlayerChoice)
 {
-  std::string Input;
-  std::getline(std::cin, Input);
+  std::getline(std::cin, UserPlayerChoice);
 
-  Capitalise_Word(Input);
+  Capitalise_Word(UserPlayerChoice);
 
-  // Only X and O allowed
-  if (Input != "PLAYER ONE" && Input != "PLAYER TWO")
-      return false;
+  if (UserPlayerChoice != "PLAYER ONE" && UserPlayerChoice != "PLAYER TWO")
+    return false;
   else
-  {
-    UserPlayerChoice = Input;
     return true;
-  }
 }
 
 bool Get_AI_Difficulty(std::string &AIDifficulty)
 {
-  std::string Input;
-  std::getline(std::cin, Input);
+  std::getline(std::cin, AIDifficulty);
 
-  Capitalise_Word(Input);
+  Capitalise_Word(AIDifficulty);
 
-  if (Input != "EASY" && Input != "HARD")
+  if (AIDifficulty != "EASY" && AIDifficulty != "HARD")
     return false;
-
   else
-  {
-    AIDifficulty = Input;
     return true;
-  }
 }
 
 void Capitalise_Word(std::string &Input)
 {
-  // Assuming Input contains only letters of unkown capitalisation, if
-  // a letter is lower case (>=97) then minus 32 to capitalise it
   for (unsigned int i = 0; i < Input.size(); i++)
-  {
     if (Input[i] >= 'a' && Input[i] <= 'z')
       Input[i] -= 32;
-  }
 }
 
 void Clear_Terminal(void)

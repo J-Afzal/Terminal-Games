@@ -1,7 +1,13 @@
-//
-//  @File: main.cpp for Battleships
-//  @Author: Junaid Afzal
-//
+/**
+ * @file main.cpp
+ * @author Junaid Afzal
+ * @brief Game loop for Battleships
+ * @version 1.0
+ * @date 07-11-2021
+ *
+ * @copyright Copyright (c) 2021
+ *
+ */
 
 #include "Battleships.hpp"
 #include "Functions.hpp"
@@ -12,41 +18,33 @@ int main(void)
 
   while (GameIsRunning)
   {
-    // Variables needed for the game
     std::vector<std::vector<std::string>> PlayerOneBoard, PlayerTwoBoard;
-    std::string CurrentPlayer, AIDifficulty;
     std::vector<unsigned int> PlayerOneValidMovesRemaining, PlayerTwoValidMovesRemaining;
     std::map<std::string, unsigned int> PlayerOneShipsRemaining, PlayerTwoShipsRemaining;
     unsigned int NumberOfPlayers, NumberOfTurns = 0;
+    std::string CurrentPlayer, AIDifficulty;
 
-    // Setups all the variables so that game can be played
     Setup_Game(PlayerOneBoard, PlayerTwoBoard, PlayerOneValidMovesRemaining, PlayerTwoValidMovesRemaining, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, NumberOfPlayers, AIDifficulty, CurrentPlayer);
 
-    // Loop until a winning condition on either board exists
     while (!Winning_Conditions_Met(PlayerOneBoard, PlayerTwoBoard))
     {
       Toggle_Player(CurrentPlayer);
 
       unsigned int Command;
 
-      // Human player is PLAYER ONE by default
+      // Display_Game() called before either user or AI are asked for an input
       if (NumberOfPlayers == 1 && CurrentPlayer == "PLAYER ONE")
         Command = Get_Next_User_Command(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, NumberOfPlayers, AIDifficulty);
       else
         Command = Get_Next_AI_Command(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, PlayerOneValidMovesRemaining, PlayerTwoValidMovesRemaining, NumberOfPlayers, AIDifficulty, CurrentPlayer);
 
-      // Carry out the attack and update the corresponding boards
       Execute_Next_Turn(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, CurrentPlayer, Command);
 
-      // Increment the number of turns
       NumberOfTurns++;
     }
 
-    // Display the winning message as game is now over
     Display_Game_Over_Message(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, NumberOfPlayers, AIDifficulty, CurrentPlayer, NumberOfTurns, GameIsRunning);
   }
-
-  Clear_Terminal();
 
   return 0;
 }
