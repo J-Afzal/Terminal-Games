@@ -14,6 +14,14 @@
 
 #include <vector>
 #include <string>
+#include <Windows.h>
+
+/**
+ * @brief Game loop for Hangman
+ *
+ * @param ConsoleHandle
+ */
+void Play_Hangman(const HANDLE &ConsoleHandle);
 
 /**
  * @brief The number of players are retrieved, if only one human player is present
@@ -28,6 +36,7 @@
  * @param CurrentGuessOfWord
  * @param ValidMovesRemaining
  * @param IncorrectGuesses
+ * @param ConsoleHandle
  */
 void Setup_Game(unsigned int &NumberOfPlayers,
                 std::string &PlayerThatIsGuessing,
@@ -35,7 +44,36 @@ void Setup_Game(unsigned int &NumberOfPlayers,
                 std::string &WordToBeGuessed,
                 std::string &CurrentGuessOfWord,
                 std::vector<std::string> &ValidMovesRemaining,
-                const std::vector<std::string> &IncorrectGuesses);
+                const std::vector<std::string> &IncorrectGuesses,
+                const HANDLE &ConsoleHandle);
+
+/**
+ * @brief Does what what you think
+ *
+ * @param IncorrectGuesses
+ * @return unsigned int
+ */
+unsigned int Get_Number_Of_Players(const std::vector<std::string> &IncorrectGuesses);
+
+/**
+ * @brief Does what what you think
+ *
+ * @param NumberOfPlayers
+ * @param IncorrectGuesses
+ * @return std::string
+ */
+std::string Get_User_Player_Choice(const unsigned int &NumberOfPlayers,
+                                   const std::vector<std::string> &IncorrectGuesses);
+
+/**
+ * @brief Does what what you think
+ *
+ * @param NumberOfPlayers
+ * @param IncorrectGuesses
+ * @return std::string
+ */
+std::string Get_AI_Difficulty(const unsigned int &NumberOfPlayers,
+                              const std::vector<std::string> &IncorrectGuesses);
 
 /**
  * @brief The user is prompted for the word to be guessed, and if necessary,
@@ -44,11 +82,13 @@ void Setup_Game(unsigned int &NumberOfPlayers,
  * @param IncorrectGuesses
  * @param NumberOfPlayers
  * @param AIDifficulty
+ * @param ConsoleHandle
  * @return std::string
  */
 std::string Get_Word_To_Be_Guessed_From_User(const std::vector<std::string> &IncorrectGuesses,
                                              const unsigned int &NumberOfPlayers,
-                                             const std::string &AIDifficulty);
+                                             const std::string &AIDifficulty,
+                                             const HANDLE ConsoleHandle);
 
 /**
  * @brief This function calls Generate_Word_List() and then picks a

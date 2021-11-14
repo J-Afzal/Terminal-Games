@@ -14,6 +14,16 @@
 
 #include <vector>
 #include <string>
+#include <Windows.h>
+
+/**
+ * @brief Game loop for Tic Tac Toe
+ *
+ * @param ConsoleHandle
+ * @param CursorInfo
+ */
+void Play_Tic_Tac_Toe(const HANDLE &ConsoleHandle,
+                      CONSOLE_CURSOR_INFO &CursorInfo);
 
 /**
  * @brief The Tic Tac Toe grid and list of valid moves are created, number of
@@ -34,6 +44,34 @@ void Setup_Game(std::vector<std::vector<std::string>> &TicTacToeGrid,
                 std::string &UserPlayerChoice,
                 std::string &AIDifficulty,
                 std::string &CurrentPlayer);
+
+/**
+ * @brief Does what what you think
+ *
+ * @param TicTacToeGrid
+ * @return unsigned int
+ */
+unsigned int Get_Number_Of_Players(const std::vector<std::vector<std::string>> &TicTacToeGrid);
+
+/**
+ * @brief Does what what you think
+ *
+ * @param TicTacToeGrid
+ * @param NumberOfPlayers
+ * @return std::string
+ */
+std::string Get_User_Player_Choice(const std::vector<std::vector<std::string>> &TicTacToeGrid,
+                                   const unsigned int &NumberOfPlayers);
+
+/**
+ * @brief Does what what you think
+ *
+ * @param TicTacToeGrid
+ * @param NumberOfPlayers
+ * @return std::string
+ */
+std::string Get_AI_Difficulty(const std::vector<std::vector<std::string>> &TicTacToeGrid,
+                              const unsigned int &NumberOfPlayers);
 
 /**
  * @brief The Tic Tac Toe grid is displayed, and to the right of that,
@@ -58,12 +96,14 @@ void Display_Game(const std::vector<std::vector<std::string>> &TicTacToeGrid,
  * @param AIDifficulty
  * @param CurrentPlayer
  * @param ValidMovesRemaining
+ * @param ConsoleHandle
  */
 void Get_Next_User_Command(std::vector<std::vector<std::string>> &TicTacToeGrid,
                            const unsigned int &NumberOfPlayers,
                            const std::string &AIDifficulty,
                            const std::string &CurrentPlayer,
-                           std::vector<unsigned int> &ValidMovesRemaining);
+                           std::vector<unsigned int> &ValidMovesRemaining,
+                           const HANDLE &ConsoleHandle);
 
 /**
  * @brief If AIDifficulty is set to easy, then a random valid location on the

@@ -8,61 +8,128 @@
  * @copyright Copyright (c) 2021
  *
  */
-
-/**
- * @brief Due to <windows.h> redefining the max() function, #define NOMINMAX
- * is used before <windows.h> is included, with thanks to
- * https://stackoverflow.com/questions/7035023/stdmax-expected-an-identifier/7035078
- */
-#define NOMINMAX
-#include <windows.h>
 #include "functions.hpp"
 #include <iostream>
+#include <Windows.h>
 
-bool Get_Number_Of_Players(unsigned int &NumberOfPlayers,
-                           const unsigned int &MinPlayers,
-                           const unsigned int &MaxPlayers)
+void Display_UI(const unsigned int &CurrentSelection)
 {
-  std::string Input;
-  std::getline(std::cin, Input);
+  Clear_Terminal();
 
-  if (Input.empty())
-    return false;
+  std::string Output;
 
-  for (unsigned int i = 0; i < Input.size(); i++)
-    if (Input[i] < 48 || Input[i] > 57)
-      return false;
+  // Top bar
+  Output.append(WHITE);
+  Output.insert(Output.size(), 1, (char)201);
+  Output.insert(Output.size(), 30, (char)205);
+  Output.insert(Output.size(), 1, (char)187);
 
-  NumberOfPlayers = std::stoi(Input, nullptr, 10);
+  Output.append("\n");
+  Output.insert(Output.size(), 1, (char)186);
+  Output.append(RED);
+  Output.append("\t Terminal-Games\t       ");
+  Output.append(WHITE);
+  Output.insert(Output.size(), 1, (char)186);
 
-  if (NumberOfPlayers < MinPlayers || NumberOfPlayers > MaxPlayers)
-    return false;
+  Output.append("\n");
+  Output.insert(Output.size(), 1, (char)200);
+  Output.insert(Output.size(), 30, (char)205);
+  Output.insert(Output.size(), 1, (char)188);
+
+  // Centre game list
+  Output.append("\n");
+  Output.insert(Output.size(), 1, (char)201);
+  Output.insert(Output.size(), 30, (char)205);
+  Output.insert(Output.size(), 1, (char)187);
+
+  Output.append("\n");
+  Output.insert(Output.size(), 1, (char)186);
+  if (CurrentSelection == 3)
+  {
+    Output.append(BLUE);
+    Output.append("\t> Tic Tac Toe\t       ");
+    Output.append(WHITE);
+  }
   else
-    return true;
-}
+    Output.append("\t  Tic Tac Toe\t       ");
+  Output.insert(Output.size(), 1, (char)186);
 
-bool Get_User_Player_Choice(std::string &UserPlayerChoice)
-{
-  std::getline(std::cin, UserPlayerChoice);
+  Output.append("\n");
+  Output.insert(Output.size(), 1, (char)186);
+  Output.append("\t\t\t       ");
+  Output.insert(Output.size(), 1, (char)186);
 
-  Capitalise_Word(UserPlayerChoice);
-
-  if (UserPlayerChoice != "PLAYER ONE" && UserPlayerChoice != "PLAYER TWO")
-    return false;
+  Output.append("\n");
+  Output.insert(Output.size(), 1, (char)186);
+  if (CurrentSelection == 2)
+  {
+    Output.append(BLUE);
+    Output.append("\t  > Hangman\t       ");
+    Output.append(WHITE);
+  }
   else
-    return true;
-}
+    Output.append("\t    Hangman\t       ");
+  Output.insert(Output.size(), 1, (char)186);
 
-bool Get_AI_Difficulty(std::string &AIDifficulty)
-{
-  std::getline(std::cin, AIDifficulty);
+  Output.append("\n");
+  Output.insert(Output.size(), 1, (char)186);
+  Output.append("\t\t\t       ");
+  Output.insert(Output.size(), 1, (char)186);
 
-  Capitalise_Word(AIDifficulty);
-
-  if (AIDifficulty != "EASY" && AIDifficulty != "HARD")
-    return false;
+  Output.append("\n");
+  Output.insert(Output.size(), 1, (char)186);
+  if (CurrentSelection == 1)
+  {
+    Output.append(BLUE);
+    Output.append("\t> Battleships\t       ");
+    Output.append(WHITE);
+  }
   else
-    return true;
+    Output.append("\t  Battleships\t       ");
+  Output.insert(Output.size(), 1, (char)186);
+
+  Output.append("\n");
+  Output.insert(Output.size(), 1, (char)186);
+  Output.append("\t\t\t       ");
+  Output.insert(Output.size(), 1, (char)186);
+
+  Output.append("\n");
+  Output.insert(Output.size(), 1, (char)186);
+  if (CurrentSelection == 0)
+  {
+    Output.append(BLUE);
+    Output.append("   > Snakes (Coming Soon!)    ");
+    Output.append(WHITE);
+  }
+  else
+    Output.append("     Snakes (Coming Soon!)    ");
+  Output.insert(Output.size(), 1, (char)186);
+
+  Output.append("\n");
+  Output.insert(Output.size(), 1, (char)200);
+  Output.insert(Output.size(), 30, (char)205);
+  Output.insert(Output.size(), 1, (char)188);
+
+  // Bottom bar
+  Output.append("\n");
+  Output.insert(Output.size(), 1, (char)201);
+  Output.insert(Output.size(), 30, (char)205);
+  Output.insert(Output.size(), 1, (char)187);
+
+  Output.append("\n");
+  Output.insert(Output.size(), 1, (char)186);
+  Output.append(RED);
+  Output.append("\t    q = quit\t       ");
+  Output.append(WHITE);
+  Output.insert(Output.size(), 1, (char)186);
+
+  Output.append("\n");
+  Output.insert(Output.size(), 1, (char)200);
+  Output.insert(Output.size(), 30, (char)205);
+  Output.insert(Output.size(), 1, (char)188);
+  Output.append(RESET);
+
+  std::cout << Output;
 }
 
 void Capitalise_Word(std::string &Input)
@@ -82,10 +149,10 @@ void Clear_Terminal(void)
   COORD                      homeCoords = { 0, 0 };
 
   hStdOut = GetStdHandle( STD_OUTPUT_HANDLE );
-  if (hStdOut == INVALID_HANDLE_VALUE) return;
+  if (hStdOut == INVALID_HANDLE_VALUE) exit(1);
 
   // Get the number of cells in the current buffer
-  if (!GetConsoleScreenBufferInfo( hStdOut, &csbi )) return;
+  if (!GetConsoleScreenBufferInfo( hStdOut, &csbi )) exit(2);
   cellCount = csbi.dwSize.X *csbi.dwSize.Y;
 
   // Fill the entire buffer with spaces
@@ -95,7 +162,7 @@ void Clear_Terminal(void)
     cellCount,
     homeCoords,
     &count
-    )) return;
+    )) exit(3);
 
   // Fill the entire buffer with the current colors and attributes
   if (!FillConsoleOutputAttribute(
@@ -104,7 +171,7 @@ void Clear_Terminal(void)
     cellCount,
     homeCoords,
     &count
-    )) return;
+    )) exit(4);
 
   // Move the cursor home
   SetConsoleCursorPosition( hStdOut, homeCoords );

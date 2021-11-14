@@ -15,6 +15,16 @@
 #include <vector>
 #include <string>
 #include <map>
+#include <Windows.h>
+
+/**
+ * @brief Game loop for Battleships
+ *
+ * @param ConsoleHandle
+ * @param CursorInfo
+ */
+void Play_Battleships(const HANDLE &ConsoleHandle,
+                      CONSOLE_CURSOR_INFO &CursorInfo);
 
 /**
  * @brief The player boards, valid moves, and remaining ships for each player
@@ -32,6 +42,7 @@
  * @param NumberOfPlayers
  * @param AIDifficulty
  * @param CurrentPlayer
+ * @param ConsoleHandle
  */
 void Setup_Game(std::vector<std::vector<std::string>> &PlayerOneBoard,
                 std::vector<std::vector<std::string>> &PlayerTwoBoard,
@@ -41,7 +52,38 @@ void Setup_Game(std::vector<std::vector<std::string>> &PlayerOneBoard,
                 std::map<std::string, unsigned int> &PlayerTwoShipsRemaining,
                 unsigned int &NumberOfPlayers,
                 std::string &AIDifficulty,
-                std::string &CurrentPlayer);
+                std::string &CurrentPlayer,
+                const HANDLE &ConsoleHandle);
+
+/**
+ * @brief Does what what you think
+ *
+ * @param PlayerOneBoard
+ * @param PlayerTwoBoard
+ * @param PlayerOneShipsRemaining
+ * @param PlayerTwoShipsRemaining
+ * @return unsigned int
+ */
+unsigned int Get_Number_Of_Players(const std::vector<std::vector<std::string>> &PlayerOneBoard,
+                                   const std::vector<std::vector<std::string>> &PlayerTwoBoard,
+                                   const std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
+                                   const std::map<std::string, unsigned int> &PlayerTwoShipsRemaining);
+
+/**
+ * @brief Does what what you think
+ *
+ * @param PlayerOneBoard
+ * @param PlayerTwoBoard
+ * @param PlayerOneShipsRemaining
+ * @param PlayerTwoShipsRemaining
+ * @param NumberOfPlayers
+ * @return std::string
+ */
+std::string Get_AI_Difficulty(const std::vector<std::vector<std::string>> &PlayerOneBoard,
+                              const std::vector<std::vector<std::string>> &PlayerTwoBoard,
+                              const std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
+                              const std::map<std::string, unsigned int> &PlayerTwoShipsRemaining,
+                              const unsigned int &NumberOfPlayers);
 
 /**
  * @brief The user is prompted to enter sequentially increasing co-ordinates for
@@ -55,13 +97,15 @@ void Setup_Game(std::vector<std::vector<std::string>> &PlayerOneBoard,
  * @param PlayerTwoShipsRemaining
  * @param NumberOfPlayers
  * @param AIDifficulty
+ * @param ConsoleHandle
  */
 void Get_User_Ship_Positions(std::vector<std::vector<std::string>> &PlayerOneBoard,
                              const std::vector<std::vector<std::string>> &PlayerTwoBoard,
                              const std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
                              const std::map<std::string, unsigned int> &PlayerTwoShipsRemaining,
                              const unsigned int &NumberOfPlayers,
-                             const std::string &AIDifficulty);
+                             const std::string &AIDifficulty,
+                             const HANDLE &ConsoleHandle);
 
 /**
  * @brief The input is first capitalised and then separated in to the individual
@@ -172,16 +216,20 @@ bool Winning_Conditions_Met(const std::vector<std::vector<std::string>> &PlayerO
  * @param PlayerTwoBoard
  * @param PlayerOneShipsRemaining
  * @param PlayerTwoShipsRemaining
+ * @param ValidMovesRemaining
  * @param NumberOfPlayers
  * @param AIDifficulty
+ * @param ConsoleHandle
  * @return unsigned int
  */
 unsigned int Get_Next_User_Command(const std::vector<std::vector<std::string>> &PlayerOneBoard,
                                    const std::vector<std::vector<std::string>> &PlayerTwoBoard,
                                    const std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
                                    const std::map<std::string, unsigned int> &PlayerTwoShipsRemaining,
+                                   std::vector<unsigned int> &ValidMovesRemaining,
                                    const unsigned int &NumberOfPlayers,
-                                   const std::string &AIDifficulty);
+                                   const std::string &AIDifficulty,
+                                   const HANDLE &ConsoleHandle);
 
 /**
  * @brief If AIDifficulty is set to easy, then a random valid command is chosen.

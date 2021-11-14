@@ -17,39 +17,26 @@
 #include <string>
 
 /**
- * @brief Gets an input from the user and checks if it
- * is within the range that was given.
+ * @brief Bold text colours for the terminal
+ * using ANSI escape codes
  *
- * @param NumberOfPlayers
- * @param MinPlayers
- * @param MaxPlayers
- * @return true, if user input is within range
- * @return false, if user input is NOT within range
  */
-bool Get_Number_Of_Players(unsigned int &NumberOfPlayers,
-                           const unsigned int &MinPlayers,
-                           const unsigned int &MaxPlayers);
+#define RESET   "\x1B[0m"
+#define BLACK   "\x1B[1;30m"
+#define RED     "\x1B[1;31m"
+#define GREEN   "\x1B[1;32m"
+#define YELLOW  "\x1B[1;33m"
+#define BLUE    "\x1B[1;34m"
+#define MAGENTA "\x1B[1;35m"
+#define CYAN    "\x1B[1;36m"
+#define WHITE   "\x1B[1;37m"
 
 /**
- * @brief Gets an input from the user for which player they would
- * like to be and is only used when there is only one human
- * player. This function is not case sensitive.
+ * @brief Displays the main UI
  *
- * @param UserPlayerChoice
- * @return true, if user input is 'player one' or 'player two'
- * @return false, if user input neither 'player one' or 'player two'
+ * @param CurrentSelection
  */
-bool Get_User_Player_Choice(std::string &UserPlayerChoice);
-
-/**
- * @brief Gets an input from the user for which AI difficulty
- * they would like to be. This function is not case sensitive.
- *
- * @param AIDifficulty
- * @return true, if user input is 'easy' or 'hard'
- * @return false, if user input is NOT 'easy' or 'hard'
- */
-bool Get_AI_Difficulty(std::string &AIDifficulty);
+void Display_UI(const unsigned int &CurrentSelection);
 
 /**
  * @brief Checks if each character in Input is a lower case letter,

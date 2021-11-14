@@ -1,3 +1,6 @@
+## Warning
+This program has only been tested to run in the VS Code integrated powershell terminal on Windows due to the use of _getch(), Windows.h to refresh the terminal, and ANSI colour escape codes.
+
 ## Game List:
 * Tic Tac Toe
 * Hangman
@@ -11,7 +14,6 @@
 * AI Difficulty
   * Easy = random
   * Hard = minimax algorithm
-* The use of _getch() and terminal 'refreshing' method is only supported on Windows
 
 <p align="center">
  <img src="screenshots/TicTacToe%20Playing.png" width=1000>
@@ -26,9 +28,8 @@
 * AI Difficulty
   * Easy = Random guessing and picks shorter words to guess from internal word list
   * Hard = Probabilistic guessing and pick longer words to guess from from internal word list
-* No hyphens/spaces/non-letters are allowed in the word to be guessed
+* No hyphens/spaces/non-letters are allowed in the word to be guessed and must be 3-14 characters long
 * No guessing the whole word (only single letter guesses allowed)
-* The use of _getch() and terminal 'refreshing' method is only supported on Windows
 
 <p align="center">
  <img src="screenshots/Hangman%20Playing.png" width=1000>
@@ -40,8 +41,9 @@
   * 2 players representing human vs human is NOT supported as impossible to practically hide the opponent's board when using a single terminal
   * 1 player represents a human vs computer
   * 0 players represent computer vs computer
-* The computer is 'dumb' as it picks random positions to place its ships and random locations to attack ships
-* The use of _getch() and terminal 'refreshing' method is only supported on Windows
+* AI Difficulty
+  * Easy = Random placement of ships and random guessing of attack locations
+  * Hard = Same as Easy but once a successful attack has been made the AI then continues to attack in the area until that ship is sunk
 
 <p align="center">
  <img src="screenshots/Battleships%20Playing.png" width=1000>
