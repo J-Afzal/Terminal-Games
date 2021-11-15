@@ -23,12 +23,12 @@ This program has only been tested to run in the VS Code integrated powershell te
 ## Hangman
 * Supports 0-2 players
   * 2 players represent human vs human
-  * 1 player represents a human vs computer, with the human player deciding who the guesser is
+  * 1 player represents a human vs computer, with the human player deciding who is guessing
   * 0 players represent computer vs computer
 * AI Difficulty
   * Easy = Random guessing and picks shorter words to guess from internal word list
   * Hard = Probabilistic guessing and pick longer words to guess from from internal word list
-* No hyphens/spaces/non-letters are allowed in the word to be guessed and must be 3-14 characters long
+* The word to be guessed must be 3-14 characters long and contain no hyphens/spaces/non-letters
 * No guessing the whole word (only single letter guesses allowed)
 
 <p align="center">
