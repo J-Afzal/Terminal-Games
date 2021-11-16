@@ -88,7 +88,7 @@ std::string Get_AI_Difficulty(const unsigned int &NumberOfPlayers,
 std::string Get_Word_To_Be_Guessed_From_User(const std::vector<std::string> &IncorrectGuesses,
                                              const unsigned int &NumberOfPlayers,
                                              const std::string &AIDifficulty,
-                                             const HANDLE ConsoleHandle);
+                                             const HANDLE &ConsoleHandle);
 
 /**
  * @brief This function calls Generate_Word_List() and then picks a
@@ -110,14 +110,51 @@ std::string Get_Word_To_Be_Guessed_From_AI(void);
  * @param CurrentGuessOfWord
  * @param WordToBeGuessed
  * @param GameOver
+ * @return std::string
  */
-void Display_Game(const unsigned int &NumberOfErrors,
-                  const std::string &NumberOfPlayers,
-                  const std::string &AIDifficulty,
-                  const std::vector<std::string> &IncorrectGuesses,
-                  const std::string &CurrentGuessOfWord,
-                  const std::string &WordToBeGuessed,
-                  const bool &GameOver);
+std::string Main_Game_Display(const unsigned int &NumberOfErrors,
+                              const std::string &NumberOfPlayers,
+                              const std::string &AIDifficulty,
+                              const std::vector<std::string> &IncorrectGuesses,
+                              const std::string &CurrentGuessOfWord,
+                              const std::string &WordToBeGuessed,
+                              const bool &GameOver);
+
+/**
+ * @brief Creates an empty new line for any of the game boxes
+ *
+ * @return std::string
+ */
+std::string Hangman_Empty_Line(void);
+
+/**
+ * @brief Creates a new line containing text for any of the game boxes
+ *
+ * @param Input
+ * @return std::string
+ */
+std::string Hangman_New_Line(const std::string &Input);
+
+/**
+ * @brief Creates the top line of any of the game boxes
+ *
+ * @return std::string
+ */
+std::string Hangman_Top_Line(void);
+
+/**
+ * @brief Creates the bottom line of any of the game boxes
+ *
+ * @return std::string
+ */
+std::string Hangman_Bottom_Line(void);
+
+/**
+ * @brief Creates the bottom bar which contains the title of the game
+ *
+ * @return std::string
+ */
+std::string Hangman_Bottom_Bar(void);
 
 /**
  * @brief Checks whether the numbers of errors are ten (final hangman state)
@@ -146,6 +183,7 @@ bool Winning_Conditions_Met(const unsigned int &NumberOfErrors,
  * @param IncorrectGuesses
  * @param CurrentGuessOfWord
  * @param WordToBeGuessed
+ * @param ConsoleHandle
  */
 void Get_Next_User_Guess(unsigned int &NumberOfErrors,
                          const unsigned int &NumberOfPlayers,
@@ -154,7 +192,8 @@ void Get_Next_User_Guess(unsigned int &NumberOfErrors,
                          std::vector<std::string> &ValidMovesRemaining,
                          std::vector<std::string> &IncorrectGuesses,
                          std::string &CurrentGuessOfWord,
-                         const std::string &WordToBeGuessed);
+                         const std::string &WordToBeGuessed,
+                         const HANDLE &ConsoleHandle);
 
 /**
  * @brief If AIDifficulty is set to easy, then a random valid letter is chosen
@@ -193,10 +232,11 @@ bool Check_Guess_Against_Word_To_Be_Guessed(const std::string &WordToBeGuessed,
                                             std::string &CurrentGuessOfWord);
 
 /**
- * @brief First calls Display_Game() once more. If hangman is in its final state, then the winner is
- * the guesser and if not then the guesser has lost. This information is then displayed to the user along
- * with the word that was being guessed and the _getch() is used to get a key press for what the GameIsRunning
- * should be set to (true = play another game and false = quit game).
+ * @brief First calls Display_Game() once more. If hangman is in its final state, then
+ * the winner is the guesser and if not then the guesser has lost. This information is
+ * then displayed to the user along with the word that was being guessed and the _getch()
+ * is used to get a key press for what the GameIsRunning should be set to (true = play
+ * another game and false = quit game).
  *
  * @param NumberOfErrors
  * @param NumberOfPlayers

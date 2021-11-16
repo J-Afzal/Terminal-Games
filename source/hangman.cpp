@@ -32,7 +32,7 @@ void Play_Hangman(const HANDLE &ConsoleHandle)
     {
       // Display_Game() called before either user or AI are asked for an input
       if (PlayerThatIsGuessing == "HUMAN")
-        Get_Next_User_Guess(NumberOfErrors, NumberOfPlayers, AIDifficulty, IncorrectGuesses, CorrectGuesses, ValidMovesRemaining, CurrentGuessOfWord, WordToBeGuessed);
+        Get_Next_User_Guess(NumberOfErrors, NumberOfPlayers, AIDifficulty, IncorrectGuesses, CorrectGuesses, ValidMovesRemaining, CurrentGuessOfWord, WordToBeGuessed, ConsoleHandle);
       else
         Get_Next_AI_Guess(NumberOfErrors, NumberOfPlayers, AIDifficulty, IncorrectGuesses, CorrectGuesses, ValidMovesRemaining, CurrentGuessOfWord, WordToBeGuessed);
 
@@ -58,36 +58,36 @@ void Setup_Game(unsigned int &NumberOfPlayers,
 
   switch (NumberOfPlayers)
   {
-  case 0:
-    PlayerThatIsGuessing = "AI";
-    AIDifficulty = Get_AI_Difficulty(NumberOfPlayers, IncorrectGuesses);
-    WordToBeGuessed = Get_Word_To_Be_Guessed_From_AI();
-  break;
-
-  case 1:
-    PlayerThatIsGuessing = Get_User_Player_Choice(NumberOfPlayers, IncorrectGuesses);
-    AIDifficulty = Get_AI_Difficulty(NumberOfPlayers, IncorrectGuesses);
-
-    if (PlayerThatIsGuessing == "PLAYER ONE")
-    {
-      PlayerThatIsGuessing = "HUMAN";
-      WordToBeGuessed = Get_Word_To_Be_Guessed_From_AI();
-    }
-    else
-    {
+    case 0:
       PlayerThatIsGuessing = "AI";
+      AIDifficulty = Get_AI_Difficulty(NumberOfPlayers, IncorrectGuesses);
+      WordToBeGuessed = Get_Word_To_Be_Guessed_From_AI();
+    break;
+
+    case 1:
+      PlayerThatIsGuessing = Get_User_Player_Choice(NumberOfPlayers, IncorrectGuesses);
+      AIDifficulty = Get_AI_Difficulty(NumberOfPlayers, IncorrectGuesses);
+
+      if (PlayerThatIsGuessing == "PLAYER ONE")
+      {
+        PlayerThatIsGuessing = "HUMAN";
+        WordToBeGuessed = Get_Word_To_Be_Guessed_From_AI();
+      }
+      else
+      {
+        PlayerThatIsGuessing = "AI";
+        WordToBeGuessed = Get_Word_To_Be_Guessed_From_User(IncorrectGuesses, NumberOfPlayers, AIDifficulty, ConsoleHandle);
+      }
+    break;
+
+    case 2:
+      PlayerThatIsGuessing = "HUMAN";
       WordToBeGuessed = Get_Word_To_Be_Guessed_From_User(IncorrectGuesses, NumberOfPlayers, AIDifficulty, ConsoleHandle);
-    }
-  break;
+      AIDifficulty = "N/A";
+    break;
 
-  case 2:
-    PlayerThatIsGuessing = "HUMAN";
-    WordToBeGuessed = Get_Word_To_Be_Guessed_From_User(IncorrectGuesses, NumberOfPlayers, AIDifficulty, ConsoleHandle);
-    AIDifficulty = "N/A";
-  break;
-
-  default:
-  break;
+    default:
+    break;
   }
 
   for (unsigned int i = 0; i < WordToBeGuessed.size(); i++)
@@ -101,126 +101,74 @@ unsigned int Get_Number_Of_Players(const std::vector<std::string> &IncorrectGues
   unsigned int CurrentSelection = 0;
   unsigned char KeyPress = 0;
 
+  std::string CommonString = Main_Game_Display(0, "N/A", "N/A", IncorrectGuesses, "", "", false);
+  CommonString.append(Hangman_New_Line(" Please select the number of human players:                   "));
+
+  std::string CaseZero = CommonString;
+  CaseZero.append(Hangman_New_Line(BLUE + " > 0                                                          " + WHITE));
+  CaseZero.append(Hangman_New_Line("   1                                                          "));
+  CaseZero.append(Hangman_New_Line("   2                                                          "));
+  CaseZero.append(Hangman_Empty_Line());
+  CaseZero.append(Hangman_Bottom_Line());
+  CaseZero.append(Hangman_Bottom_Bar());
+
+  std::string CaseOne = CommonString;
+  CaseOne.append(Hangman_New_Line("   0                                                          "));
+  CaseOne.append(Hangman_New_Line(BLUE + " > 1                                                          " + WHITE));
+  CaseOne.append(Hangman_New_Line("   2                                                          "));
+  CaseOne.append(Hangman_Empty_Line());
+  CaseOne.append(Hangman_Bottom_Line());
+  CaseOne.append(Hangman_Bottom_Bar());
+
+  std::string CaseTwo = CommonString;
+  CaseTwo.append(Hangman_New_Line("   0                                                          "));
+  CaseTwo.append(Hangman_New_Line("   1                                                          "));
+  CaseTwo.append(Hangman_New_Line(BLUE + " > 2                                                          " + WHITE));
+  CaseTwo.append(Hangman_Empty_Line());
+  CaseTwo.append(Hangman_Bottom_Line());
+  CaseTwo.append(Hangman_Bottom_Bar());
+
   while (KeyPress != '\r')
   {
     switch (KeyPress)
     {
-    case 72: // up arrow key
-      if (CurrentSelection == 0)
-        CurrentSelection = 2;
-      else
-        CurrentSelection--;
-    break;
+      case 72: // up arrow key
+        if (CurrentSelection == 0)
+          CurrentSelection = 2;
+        else
+          CurrentSelection--;
+      break;
 
-    case 80: // down arrow key
-      if (CurrentSelection == 2)
-        CurrentSelection = 0;
-      else
-        CurrentSelection++;
-    break;
+      case 80: // down arrow key
+        if (CurrentSelection == 2)
+          CurrentSelection = 0;
+        else
+          CurrentSelection++;
+      break;
 
-    default:
-    break;
+      default:
+      break;
     }
 
-    Display_Game(0, "N/A", "N/A", IncorrectGuesses, "", "", false);
-
-    std::string Output;
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append(" Please select the number of human players:\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
+    Clear_Terminal();
 
     switch (CurrentSelection)
     {
-    case 0:
-      Output.insert(Output.size(), 1, (char)186);
-      Output.append(BLUE);
-      Output.append(" > 0\t\t\t\t\t\t\t       ");
-      Output.append(WHITE);
-      Output.insert(Output.size(), 1, (char)186);
+      case 0:
+        std::cout << CaseZero;
+      break;
 
-      Output.append("\n");
-      Output.insert(Output.size(), 1, (char)186);
-      Output.append("   1\t\t\t\t\t\t\t       ");
-      Output.insert(Output.size(), 1, (char)186);
+      case 1:
+        std::cout << CaseOne;
+      break;
 
-      Output.append("\n");
-      Output.insert(Output.size(), 1, (char)186);
-      Output.append("   2\t\t\t\t\t\t\t       ");
-      Output.insert(Output.size(), 1, (char)186);
-    break;
+      case 2:
+        std::cout << CaseTwo;
+      break;
 
-    case 1:
-      Output.insert(Output.size(), 1, (char)186);
-      Output.append("   0\t\t\t\t\t\t\t       ");
-      Output.insert(Output.size(), 1, (char)186);
-
-      Output.append("\n");
-      Output.insert(Output.size(), 1, (char)186);
-      Output.append(BLUE);
-      Output.append(" > 1\t\t\t\t\t\t\t       ");
-      Output.append(WHITE);
-      Output.insert(Output.size(), 1, (char)186);
-
-      Output.append("\n");
-      Output.insert(Output.size(), 1, (char)186);
-      Output.append("   2\t\t\t\t\t\t\t       ");
-      Output.insert(Output.size(), 1, (char)186);
-    break;
-
-    case 2:
-      Output.insert(Output.size(), 1, (char)186);
-      Output.append("   0\t\t\t\t\t\t\t       ");
-      Output.insert(Output.size(), 1, (char)186);
-
-      Output.append("\n");
-      Output.insert(Output.size(), 1, (char)186);
-      Output.append("   1\t\t\t\t\t\t\t       ");
-      Output.insert(Output.size(), 1, (char)186);
-
-      Output.append("\n");
-      Output.insert(Output.size(), 1, (char)186);
-      Output.append(BLUE);
-      Output.append(" > 2\t\t\t\t\t\t\t       ");
-      Output.append(WHITE);
-      Output.insert(Output.size(), 1, (char)186);
-    break;
-
-    default:
-    break;
+      default:
+      break;
     }
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("\t\t\t\t\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)200);
-    Output.insert(Output.size(), 62, (char)205);
-    Output.insert(Output.size(), 1, (char)188);
-
-    // Bottom bar
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)201);
-    Output.insert(Output.size(), 62, (char)205);
-    Output.insert(Output.size(), 1, (char)187);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append(RED);
-    Output.append("\t\t\t    Hangman\t\t\t       ");
-    Output.append(WHITE);
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)200);
-    Output.insert(Output.size(), 62, (char)205);
-    Output.insert(Output.size(), 1, (char)188);
-
-    std::cout << Output;
 
     KeyPress = _getch();
   }
@@ -234,103 +182,62 @@ std::string Get_User_Player_Choice(const unsigned int &NumberOfPlayers,
   unsigned int CurrentSelection = 0;
   unsigned char KeyPress = 0;
 
+  std::string CommonString = Main_Game_Display(0, std::to_string(NumberOfPlayers), "N/A", IncorrectGuesses, "", "", false);
+  CommonString.append(Hangman_New_Line(" Please select what player you would like to be:              "));
+
+  std::string CaseZero = CommonString;
+  CaseZero.append(Hangman_New_Line(BLUE + " > GUESSER                                                    " + WHITE));
+  CaseZero.append(Hangman_New_Line("   WORD SETTER                                                "));
+  CaseZero.append(Hangman_Empty_Line());
+  CaseZero.append(Hangman_Empty_Line());
+  CaseZero.append(Hangman_Bottom_Line());
+  CaseZero.append(Hangman_Bottom_Bar());
+
+  std::string CaseOne = CommonString;
+  CaseOne.append(Hangman_New_Line("   GUESSER                                                    "));
+  CaseOne.append(Hangman_New_Line(BLUE + " > WORD SETTER                                                " + WHITE));
+  CaseOne.append(Hangman_Empty_Line());
+  CaseOne.append(Hangman_Empty_Line());
+  CaseOne.append(Hangman_Bottom_Line());
+  CaseOne.append(Hangman_Bottom_Bar());
+
   while (KeyPress != '\r')
   {
     switch (KeyPress)
     {
-    case 72: // up arrow key
-      if (CurrentSelection == 0)
-        CurrentSelection = 1;
-      else
-        CurrentSelection--;
-    break;
+      case 72: // up arrow key
+        if (CurrentSelection == 0)
+          CurrentSelection = 1;
+        else
+          CurrentSelection--;
+      break;
 
-    case 80: // down arrow key
-      if (CurrentSelection == 1)
-        CurrentSelection = 0;
-      else
-        CurrentSelection++;
-    break;
+      case 80: // down arrow key
+        if (CurrentSelection == 1)
+          CurrentSelection = 0;
+        else
+          CurrentSelection++;
+      break;
 
-    default:
-    break;
+      default:
+      break;
     }
 
-    Display_Game(0, std::to_string(NumberOfPlayers), "N/A", IncorrectGuesses, "", "", false);
-
-    std::string Output;
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append(" Please select what player you would like to be:\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
+    Clear_Terminal();
 
     switch (CurrentSelection)
     {
-    case 0:
-      Output.insert(Output.size(), 1, (char)186);
-      Output.append(BLUE);
-      Output.append(" > GUESSER\t\t\t\t\t\t       ");
-      Output.append(WHITE);
-      Output.insert(Output.size(), 1, (char)186);
+      case 0:
+        std::cout << CaseZero;
+      break;
 
-      Output.append("\n");
-      Output.insert(Output.size(), 1, (char)186);
-      Output.append("   WORD SETTER\t\t\t\t\t\t       ");
-      Output.insert(Output.size(), 1, (char)186);
-    break;
+      case 1:
+        std::cout << CaseOne;
+      break;
 
-    case 1:
-      Output.insert(Output.size(), 1, (char)186);
-      Output.append("   GUESSER\t\t\t\t\t\t       ");
-      Output.insert(Output.size(), 1, (char)186);
-
-      Output.append("\n");
-      Output.insert(Output.size(), 1, (char)186);
-      Output.append(BLUE);
-      Output.append(" > WORD SETTER\t\t\t\t\t\t       ");
-      Output.append(WHITE);
-      Output.insert(Output.size(), 1, (char)186);
-    break;
-
-    default:
-    break;
+      default:
+      break;
     }
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("\t\t\t\t\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("\t\t\t\t\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)200);
-    Output.insert(Output.size(), 62, (char)205);
-    Output.insert(Output.size(), 1, (char)188);
-
-    // Bottom bar
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)201);
-    Output.insert(Output.size(), 62, (char)205);
-    Output.insert(Output.size(), 1, (char)187);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append(RED);
-    Output.append("\t\t\t    Hangman\t\t\t       ");
-    Output.append(WHITE);
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)200);
-    Output.insert(Output.size(), 62, (char)205);
-    Output.insert(Output.size(), 1, (char)188);
-
-    std::cout << Output;
 
     KeyPress = _getch();
   }
@@ -344,103 +251,62 @@ std::string Get_AI_Difficulty(const unsigned int &NumberOfPlayers,
   unsigned int CurrentSelection = 0;
   unsigned char KeyPress = 0;
 
+  std::string CommonString = Main_Game_Display(0, std::to_string(NumberOfPlayers), "N/A", IncorrectGuesses, "", "", false);
+  CommonString.append(Hangman_New_Line(" Please select the AI difficulty:                             "));
+
+  std::string CaseZero = CommonString;
+  CaseZero.append(Hangman_New_Line(BLUE + " > EASY                                                       " + WHITE));
+  CaseZero.append(Hangman_New_Line("   HARD (Coming Soon!)                                        "));
+  CaseZero.append(Hangman_Empty_Line());
+  CaseZero.append(Hangman_Empty_Line());
+  CaseZero.append(Hangman_Bottom_Line());
+  CaseZero.append(Hangman_Bottom_Bar());
+
+  std::string CaseTwo = CommonString;
+  CaseTwo.append(Hangman_New_Line("   EASY                                                       "));
+  CaseTwo.append(Hangman_New_Line(BLUE + " > HARD (Coming Soon!)                                        " + WHITE));
+  CaseTwo.append(Hangman_Empty_Line());
+  CaseTwo.append(Hangman_Empty_Line());
+  CaseTwo.append(Hangman_Bottom_Line());
+  CaseTwo.append(Hangman_Bottom_Bar());
+
   while (!(KeyPress == '\r' && CurrentSelection == 0))
   {
     switch (KeyPress)
     {
-    case 72: // up arrow key
-      if (CurrentSelection == 0)
-        CurrentSelection = 1;
-      else
-        CurrentSelection--;
-    break;
+      case 72: // up arrow key
+        if (CurrentSelection == 0)
+          CurrentSelection = 1;
+        else
+          CurrentSelection--;
+      break;
 
-    case 80: // down arrow key
-      if (CurrentSelection == 1)
-        CurrentSelection = 0;
-      else
-        CurrentSelection++;
-    break;
+      case 80: // down arrow key
+        if (CurrentSelection == 1)
+          CurrentSelection = 0;
+        else
+          CurrentSelection++;
+      break;
 
-    default:
-    break;
+      default:
+      break;
     }
 
-    Display_Game(0, std::to_string(NumberOfPlayers), "N/A", IncorrectGuesses, "", "", false);
-
-    std::string Output;
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append(" Please select the AI difficulty:\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
+    Clear_Terminal();
 
     switch (CurrentSelection)
     {
-    case 0:
-      Output.insert(Output.size(), 1, (char)186);
-      Output.append(BLUE);
-      Output.append(" > EASY\t\t\t\t\t\t       ");
-      Output.append(WHITE);
-      Output.insert(Output.size(), 1, (char)186);
+      case 0:
+        std::cout << CaseZero;
+      break;
 
-      Output.append("\n");
-      Output.insert(Output.size(), 1, (char)186);
-      Output.append("   HARD (Coming Soon!)\t\t\t\t\t       ");
-      Output.insert(Output.size(), 1, (char)186);
-    break;
+      case 1:
+        std::cout << CaseTwo;
+      break;
 
-    case 1:
-      Output.insert(Output.size(), 1, (char)186);
-      Output.append("   EASY\t\t\t\t\t\t       ");
-      Output.insert(Output.size(), 1, (char)186);
-
-      Output.append("\n");
-      Output.insert(Output.size(), 1, (char)186);
-      Output.append(BLUE);
-      Output.append(" > HARD (Coming Soon!)\t\t\t\t\t       ");
-      Output.append(WHITE);
-      Output.insert(Output.size(), 1, (char)186);
-    break;
-
-    default:
-    break;
+      default:
+      break;
     }
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("\t\t\t\t\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("\t\t\t\t\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)200);
-    Output.insert(Output.size(), 62, (char)205);
-    Output.insert(Output.size(), 1, (char)188);
-
-    // Bottom bar
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)201);
-    Output.insert(Output.size(), 62, (char)205);
-    Output.insert(Output.size(), 1, (char)187);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append(RED);
-    Output.append("\t\t\t    Hangman\t\t\t       ");
-    Output.append(WHITE);
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)200);
-    Output.insert(Output.size(), 62, (char)205);
-    Output.insert(Output.size(), 1, (char)188);
-
-    std::cout << Output;
 
     KeyPress = _getch();
   }
@@ -451,64 +317,26 @@ std::string Get_AI_Difficulty(const unsigned int &NumberOfPlayers,
 std::string Get_Word_To_Be_Guessed_From_User(const std::vector<std::string> &IncorrectGuesses,
                                              const unsigned int &NumberOfPlayers,
                                              const std::string &AIDifficulty,
-                                             const HANDLE ConsoleHandle)
+                                             const HANDLE &ConsoleHandle)
 {
   bool InputValid = false;
   std::string Input;
 
-  std::string Output;
-  Output.insert(Output.size(), 1, (char)186);
-  Output.append(" Please enter the word to be guessed: \t\t\t       ");
-  Output.insert(Output.size(), 1, (char)186);
-
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)186);
-  Output.append("\t\t\t\t\t\t\t       ");
-  Output.insert(Output.size(), 1, (char)186);
-
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)186);
-  Output.append("\t\t\t\t\t\t\t       ");
-  Output.insert(Output.size(), 1, (char)186);
-
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)186);
-  Output.append("\t\t\t\t\t\t\t       ");
-  Output.insert(Output.size(), 1, (char)186);
-
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)186);
-  Output.append("\t\t\t\t\t\t\t       ");
-  Output.insert(Output.size(), 1, (char)186);
-
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)200);
-  Output.insert(Output.size(), 62, (char)205);
-  Output.insert(Output.size(), 1, (char)188);
-
-  // Bottom bar
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)201);
-  Output.insert(Output.size(), 62, (char)205);
-  Output.insert(Output.size(), 1, (char)187);
-
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)186);
-  Output.append(RED);
-  Output.append("\t\t\t    Hangman\t\t\t       ");
-  Output.append(WHITE);
-  Output.insert(Output.size(), 1, (char)186);
-
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)200);
-  Output.insert(Output.size(), 62, (char)205);
-  Output.insert(Output.size(), 1, (char)188);
+  std::string Output = Main_Game_Display(0, std::to_string(NumberOfPlayers), AIDifficulty, IncorrectGuesses, "", "", false);
+  Output.append(Hangman_New_Line(" Please enter the word to be guessed:                         "));
+  Output.append(Hangman_Empty_Line());
+  Output.append(Hangman_Empty_Line());
+  Output.append(Hangman_Empty_Line());
+  Output.append(Hangman_Empty_Line());
+  Output.append(Hangman_Bottom_Line());
+  Output.append(Hangman_Bottom_Bar());
 
   while (!InputValid)
   {
     InputValid = true;
 
-    Display_Game(0, std::to_string(NumberOfPlayers), AIDifficulty, IncorrectGuesses, "", "", false);
+    Clear_Terminal();
+
     std::cout << Output;
 
     SetConsoleCursorPosition( ConsoleHandle, { 39, 13 } );
@@ -542,691 +370,488 @@ std::string Get_Word_To_Be_Guessed_From_AI(void)
   return Words[std::rand() % Words.size()];
 }
 
-void Display_Game(const unsigned int &NumberOfErrors,
-                  const std::string &NumberOfPlayers,
-                  const std::string &AIDifficulty,
-                  const std::vector<std::string> &IncorrectGuesses,
-                  const std::string &CurrentGuessOfWord,
-                  const std::string &WordToBeGuessed,
-                  const bool &GameOver)
+std::string Main_Game_Display(const unsigned int &NumberOfErrors,
+                              const std::string &NumberOfPlayers,
+                              const std::string &AIDifficulty,
+                              const std::vector<std::string> &IncorrectGuesses,
+                              const std::string &CurrentGuessOfWord,
+                              const std::string &WordToBeGuessed,
+                              const bool &GameOver)
 {
   Clear_Terminal();
 
   std::string Output;
 
   // Top bar
-  Output.append(WHITE);
+  Output.insert(Output.size(), WHITE);
+  Output.insert(Output.size(), 1, (char)201);
+  Output.insert(Output.size(), 62, (char)205);
+  Output.insert(Output.size(), 1, (char)187);
+  Output.insert(Output.size(), Hangman_New_Line(RED + "                        Terminal-Games                        " + WHITE));
+  Output.insert(Output.size(), Hangman_Bottom_Line());
+
+  // Centre information
+  Output.insert(Output.size(), Hangman_Top_Line());
+
+  // Line 1
+  switch (NumberOfErrors)
+  {
+    case 0:
+    case 1:
+    case 2:
+      Output.insert(Output.size(), Hangman_Empty_Line());
+    break;
+
+    case 3:
+      Output.insert(Output.size(), "\n");
+      Output.insert(Output.size(), 1, (char)186);
+      Output.insert(Output.size(), "     ");
+      Output.insert(Output.size(), 1, (char)218);
+      Output.insert(Output.size(), 8, (char)196);
+      Output.insert(Output.size(), "                                                ");
+      Output.insert(Output.size(), 1, (char)186);
+    break;
+
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+    case 10:
+      Output.insert(Output.size(), "\n");
+      Output.insert(Output.size(), 1, (char)186);
+      Output.insert(Output.size(), "     ");
+      Output.insert(Output.size(), 1, (char)218);
+      Output.insert(Output.size(), 7, (char)196);
+      Output.insert(Output.size(), 1, (char)191);
+      Output.insert(Output.size(), "                                                ");
+      Output.insert(Output.size(), 1, (char)186);
+    break;
+
+    default:
+    break;
+  }
+
+  // Line 2
+  switch (NumberOfErrors)
+  {
+    case 0:
+      Output.insert(Output.size(), Hangman_Empty_Line());
+    break;
+
+    case 1:
+      Output.insert(Output.size(), Hangman_New_Line("                                          Incorrect Guesses   "));
+    break;
+
+    case 2:
+    case 3:
+      Output.insert(Output.size(), "\n");
+      Output.insert(Output.size(), 1, (char)186);
+      Output.insert(Output.size(), "     ");
+      Output.insert(Output.size(), 1, (char)179);
+      Output.insert(Output.size(), "                                    Incorrect Guesses   ");
+      Output.insert(Output.size(), 1, (char)186);
+    break;
+
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+    case 10:
+      Output.insert(Output.size(), "\n");
+      Output.insert(Output.size(), 1, (char)186);
+      Output.insert(Output.size(), "     ");
+      Output.insert(Output.size(), 1, (char)179);
+      Output.insert(Output.size(), "       ");
+      Output.insert(Output.size(), 1, (char)179);
+      Output.insert(Output.size(), "                            Incorrect Guesses   ");
+      Output.insert(Output.size(), 1, (char)186);
+    break;
+
+    default:
+    break;
+  }
+
+  // Line 3
+  switch (NumberOfErrors)
+  {
+    case 0:
+      if (NumberOfPlayers == "N/A")
+        Output.insert(Output.size(), Hangman_New_Line("                   # of Players = " + NumberOfPlayers + "                         "));
+      else
+        Output.insert(Output.size(), Hangman_New_Line("                    # of Players = " + NumberOfPlayers + "                          "));
+    break;
+
+    case 1:
+      Output.insert(Output.size(), Hangman_New_Line("                    # of Players = " + NumberOfPlayers + "                          "));
+    break;
+
+    case 2:
+    case 3:
+    case 4:
+    Output.insert(Output.size(), "\n");
+    Output.insert(Output.size(), 1, (char)186);
+    Output.insert(Output.size(), "     ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.insert(Output.size(), "              # of Players = " + NumberOfPlayers + "                          ");
+    Output.insert(Output.size(), 1, (char)186);
+    break;
+
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+    case 10:
+    Output.insert(Output.size(), "\n");
+    Output.insert(Output.size(), 1, (char)186);
+    Output.insert(Output.size(), "     ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.insert(Output.size(), "       O      # of Players = " + NumberOfPlayers + "                          ");
+    Output.insert(Output.size(), 1, (char)186);
+    break;
+
+    default:
+    break;
+  }
+
+
+  // Line 4
+  switch (NumberOfErrors)
+  {
+    case 0:
+      Output.insert(Output.size(), Hangman_Empty_Line());
+    break;
+
+    case 1:
+      Output.insert(Output.size(), Hangman_New_Line("                                          " + IncorrectGuesses[0] + "                   "));
+    break;
+
+    case 2:
+      Output.insert(Output.size(), "\n");
+      Output.insert(Output.size(), 1, (char)186);
+      Output.insert(Output.size(), "     ");
+      Output.insert(Output.size(), 1, (char)179);
+      Output.insert(Output.size(), "                                    " + IncorrectGuesses[0] + "   " + IncorrectGuesses[1] + "               ");
+      Output.insert(Output.size(), 1, (char)186);
+    break;
+
+    case 3:
+      Output.insert(Output.size(), "\n");
+      Output.insert(Output.size(), 1, (char)186);
+      Output.insert(Output.size(), "     ");
+      Output.insert(Output.size(), 1, (char)179);
+      Output.insert(Output.size(), "                                    " + IncorrectGuesses[0] + "   " + IncorrectGuesses[1] + "   " + IncorrectGuesses[2] + "           ");
+      Output.insert(Output.size(), 1, (char)186);
+    break;
+
+    case 4:
+      Output.insert(Output.size(), "\n");
+      Output.insert(Output.size(), 1, (char)186);
+      Output.insert(Output.size(), "     ");
+      Output.insert(Output.size(), 1, (char)179);
+      Output.insert(Output.size(), "                                    " + IncorrectGuesses[0] + "   " + IncorrectGuesses[1] + "   " + IncorrectGuesses[2] + "   " + IncorrectGuesses[3] + "       ");
+      Output.insert(Output.size(), 1, (char)186);
+    break;
+
+    case 5:
+      Output.insert(Output.size(), "\n");
+      Output.insert(Output.size(), 1, (char)186);
+      Output.insert(Output.size(), "     ");
+      Output.insert(Output.size(), 1, (char)179);
+      Output.insert(Output.size(), "                                    " + IncorrectGuesses[0] + "   " + IncorrectGuesses[1] + "   " + IncorrectGuesses[2] + "   " + IncorrectGuesses[3] + "   " + IncorrectGuesses[4] + "   ");
+      Output.insert(Output.size(), 1, (char)186);
+    break;
+
+    case 6:
+    case 7:
+    case 8:
+      Output.insert(Output.size(), "\n");
+      Output.insert(Output.size(), 1, (char)186);
+      Output.insert(Output.size(), "     ");
+      Output.insert(Output.size(), 1, (char)179);
+      Output.insert(Output.size(), "       ");
+      Output.insert(Output.size(), 1, (char)179);
+      Output.insert(Output.size(), "                            " + IncorrectGuesses[0] + "   " + IncorrectGuesses[1] + "   " + IncorrectGuesses[2] + "   " + IncorrectGuesses[3] + "   " + IncorrectGuesses[4] + "   ");
+      Output.insert(Output.size(), 1, (char)186);
+    break;
+
+    case 9:
+      Output.insert(Output.size(), "\n");
+      Output.insert(Output.size(), 1, (char)186);
+      Output.insert(Output.size(), "     ");
+      Output.insert(Output.size(), 1, (char)179);
+      Output.insert(Output.size(), "      /");
+      Output.insert(Output.size(), 1, (char)179);
+      Output.insert(Output.size(), "                            " + IncorrectGuesses[0] + "   " + IncorrectGuesses[1] + "   " + IncorrectGuesses[2] + "   " + IncorrectGuesses[3] + "   " + IncorrectGuesses[4] + "   ");
+      Output.insert(Output.size(), 1, (char)186);
+    break;
+
+    case 10:
+      Output.insert(Output.size(), "\n");
+      Output.insert(Output.size(), 1, (char)186);
+      Output.insert(Output.size(), "     ");
+      Output.insert(Output.size(), 1, (char)179);
+      Output.insert(Output.size(), "      /");
+      Output.insert(Output.size(), 1, (char)179);
+      Output.insert(Output.size(), "\\                           " + IncorrectGuesses[0] + "   " + IncorrectGuesses[1] + "   " + IncorrectGuesses[2] + "   " + IncorrectGuesses[3] + "   " + IncorrectGuesses[4] + "   ");
+      Output.insert(Output.size(), 1, (char)186);
+    break;
+
+    default:
+    break;
+  }
+
+  // Line 5
+  switch (NumberOfErrors)
+  {
+    case 0:
+    case 1:
+      if (AIDifficulty == "N/A")
+        Output.insert(Output.size(), Hangman_New_Line("                   AI Difficulty = " + AIDifficulty + "                        "));
+      else
+        Output.insert(Output.size(), Hangman_New_Line("                  AI Difficulty = " + AIDifficulty + "                        "));
+    break;
+
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+      Output.insert(Output.size(), "\n");
+      Output.insert(Output.size(), 1, (char)186);
+      Output.insert(Output.size(), "     ");
+      Output.insert(Output.size(), 1, (char)179);
+      if (AIDifficulty == "N/A")
+        Output.insert(Output.size(), "             AI Difficulty = " + AIDifficulty + "                        ");
+      else
+        Output.insert(Output.size(), "            AI Difficulty = " + AIDifficulty + "                        ");
+      Output.insert(Output.size(), 1, (char)186);
+    break;
+
+    case 7:
+      Output.insert(Output.size(), "\n");
+      Output.insert(Output.size(), 1, (char)186);
+      Output.insert(Output.size(), "     ");
+      Output.insert(Output.size(), 1, (char)179);
+      if (AIDifficulty == "N/A")
+        Output.insert(Output.size(), "      /      AI Difficulty = " + AIDifficulty + "                        ");
+      else
+        Output.insert(Output.size(), "      /     AI Difficulty = " + AIDifficulty + "                        ");
+      Output.insert(Output.size(), 1, (char)186);
+    break;
+
+    case 8:
+    case 9:
+    case 10:
+      Output.insert(Output.size(), "\n");
+      Output.insert(Output.size(), 1, (char)186);
+      Output.insert(Output.size(), "     ");
+      Output.insert(Output.size(), 1, (char)179);
+      if (AIDifficulty == "N/A")
+        Output.insert(Output.size(), "      / \\    AI Difficulty = " + AIDifficulty + "                        ");
+      else
+        Output.insert(Output.size(), "      / \\   AI Difficulty = " + AIDifficulty + "                        ");
+      Output.insert(Output.size(), 1, (char)186);
+    break;
+
+    default:
+    break;
+  }
+
+  // Line 6
+  switch (NumberOfErrors)
+  {
+    case 0:
+      Output.insert(Output.size(), Hangman_Empty_Line());
+    break;
+
+    case 1:
+      Output.insert(Output.size(), Hangman_Empty_Line());
+    break;
+
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+      Output.insert(Output.size(), "\n");
+      Output.insert(Output.size(), 1, (char)186);
+      Output.insert(Output.size(), "     ");
+      Output.insert(Output.size(), 1, (char)179);
+      Output.insert(Output.size(), "                                                        ");
+      Output.insert(Output.size(), 1, (char)186);
+    break;
+
+    case 6:
+      Output.insert(Output.size(), "\n");
+      Output.insert(Output.size(), 1, (char)186);
+      Output.insert(Output.size(), "     ");
+      Output.insert(Output.size(), 1, (char)179);
+      Output.insert(Output.size(), "                                    " + IncorrectGuesses[5] + "                   ");
+      Output.insert(Output.size(), 1, (char)186);
+    break;
+
+    case 7:
+      Output.insert(Output.size(), "\n");
+      Output.insert(Output.size(), 1, (char)186);
+      Output.insert(Output.size(), "     ");
+      Output.insert(Output.size(), 1, (char)179);
+      Output.insert(Output.size(), "                                    " + IncorrectGuesses[5] + "   " + IncorrectGuesses[6] + "               ");
+      Output.insert(Output.size(), 1, (char)186);
+    break;
+
+    case 8:
+      Output.insert(Output.size(), "\n");
+      Output.insert(Output.size(), 1, (char)186);
+      Output.insert(Output.size(), "     ");
+      Output.insert(Output.size(), 1, (char)179);
+      Output.insert(Output.size(), "                                    " + IncorrectGuesses[5] + "   " + IncorrectGuesses[6] + "   " + IncorrectGuesses[7] + "           ");
+      Output.insert(Output.size(), 1, (char)186);
+    break;
+
+    case 9:
+      Output.insert(Output.size(), "\n");
+      Output.insert(Output.size(), 1, (char)186);
+      Output.insert(Output.size(), "     ");
+      Output.insert(Output.size(), 1, (char)179);
+      Output.insert(Output.size(), "                                    " + IncorrectGuesses[5] + "   " + IncorrectGuesses[6] + "   " + IncorrectGuesses[7] + "   " + IncorrectGuesses[8] + "       ");
+      Output.insert(Output.size(), 1, (char)186);
+    break;
+
+    case 10:
+      Output.insert(Output.size(), "\n");
+      Output.insert(Output.size(), 1, (char)186);
+      Output.insert(Output.size(), "     ");
+      Output.insert(Output.size(), 1, (char)179);
+      Output.insert(Output.size(), "                                    " + IncorrectGuesses[5] + "   " + IncorrectGuesses[6] + "   " + IncorrectGuesses[7] + "   " + IncorrectGuesses[8] + "   " + IncorrectGuesses[9] + "   ");
+      Output.insert(Output.size(), 1, (char)186);
+    break;
+
+    default:
+    break;
+  }
+
+  // Line 7
+  switch (NumberOfErrors)
+  {
+    case 0:
+
+      Output.insert(Output.size(), Hangman_Empty_Line());
+      break;
+
+    case 1:
+      Output.insert(Output.size(), "\n");
+      Output.insert(Output.size(), 1, (char)186);
+      Output.insert(Output.size(), " ");
+      Output.insert(Output.size(), 9, (char)196);
+      Output.insert(Output.size(), "                                                    ");
+      Output.insert(Output.size(), 1, (char)186);
+      break;
+
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+    case 10:
+      Output.insert(Output.size(), "\n");
+      Output.insert(Output.size(), 1, (char)186);
+      Output.insert(Output.size(), " ");
+      Output.insert(Output.size(), 4, (char)196);
+      Output.insert(Output.size(), 1, (char)193);
+      Output.insert(Output.size(), 4, (char)196);
+      Output.insert(Output.size(), "                                                    ");
+      Output.insert(Output.size(), 1, (char)186);
+    break;
+
+    default:
+    break;
+  }
+
+  // Word to be guessed, and thus current guess of word, are limited to a size in between 3 and 14
+  Output.insert(Output.size(), "\n");
+  Output.insert(Output.size(), 1, (char)186);
+
+  for (unsigned int i = 0; i < CurrentGuessOfWord.size(); i++)
+  {
+    Output.insert(Output.size(), " ");
+    Output.insert(Output.size(), 1, CurrentGuessOfWord[i]);
+  }
+
+  if (GameOver && NumberOfErrors == 10)
+  {
+    Output.insert(Output.size(), "   (The word was " + WordToBeGuessed + ")");
+    Output.insert(Output.size(), (62 - WordToBeGuessed.size()*3 - 18), ' ');
+  }
+  else
+    Output.insert(Output.size(), (62 - WordToBeGuessed.size()*2), ' ');
+
+  Output.insert(Output.size(), 1, (char)186);
+
+  Output.insert(Output.size(), Hangman_Empty_Line());
+
+  return Output;
+}
+
+std::string Hangman_Empty_Line(void)
+{
+  std::string Output;
+  Output.insert(Output.size(), "\n");
+  Output.insert(Output.size(), 1, (char)186);
+  Output.insert(Output.size(), 62, ' ');
+  Output.insert(Output.size(), 1, (char)186);
+
+  return Output;
+}
+
+std::string Hangman_New_Line(const std::string &Input)
+{
+  std::string Output;
+  Output.insert(Output.size(), "\n");
+  Output.insert(Output.size(), 1, (char)186);
+  Output.insert(Output.size(), Input);
+  Output.insert(Output.size(), 1, (char)186);
+
+  return Output;
+}
+
+std::string Hangman_Top_Line(void)
+{
+  std::string Output;
+  Output.insert(Output.size(), "\n");
   Output.insert(Output.size(), 1, (char)201);
   Output.insert(Output.size(), 62, (char)205);
   Output.insert(Output.size(), 1, (char)187);
 
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)186);
-  Output.append(RED);
-  Output.append("\t\t\t Terminal-Games\t\t\t       ");
-  Output.append(WHITE);
-  Output.insert(Output.size(), 1, (char)186);
+  return Output;
+}
 
-  Output.append("\n");
+std::string Hangman_Bottom_Line(void)
+{
+  std::string Output;
+  Output.insert(Output.size(), "\n");
   Output.insert(Output.size(), 1, (char)200);
   Output.insert(Output.size(), 62, (char)205);
   Output.insert(Output.size(), 1, (char)188);
 
-  // Centre information
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)201);
-  Output.insert(Output.size(), 62, (char)205);
-  Output.insert(Output.size(), 1, (char)187);
-  Output.append("\n");
+  return Output;
+}
 
-  switch (NumberOfErrors)
-  {
-  case 0:
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("\t\t\t\t\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
+std::string Hangman_Bottom_Bar(void)
+{
+  std::string Output;
+  Output.append(Hangman_Top_Line());
+  Output.append(Hangman_New_Line(RED + "                           Hangman                            " + WHITE));
+  Output.append(Hangman_Bottom_Line());
 
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("\t\t\t\t\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
 
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    if (NumberOfPlayers == "N/A")
-      Output.append("\t\t    # of Players = " + NumberOfPlayers + "\t\t\t       ");
-    else
-      Output.append("\t\t     # of Players = " + NumberOfPlayers + "\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("\t\t\t\t\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    if (AIDifficulty == "N/A")
-      Output.append("\t\t    AI Difficulty = " + AIDifficulty + "\t\t\t       ");
-    else
-      Output.append("\t\t   AI Difficulty = " + AIDifficulty + "\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("\t\t\t\t\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("\t\t\t\t\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-    break;
-
-  case 1:
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("\t\t\t\t\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("\t\t\t\t\t   Incorrect Guesses   ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("\t\t     # of Players = " + NumberOfPlayers + "\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("\t\t\t\t\t   " + IncorrectGuesses[0] + "\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    if (AIDifficulty == "N/A")
-      Output.append("\t\t    AI Difficulty = " + AIDifficulty + "\t\t\t       ");
-    else
-      Output.append("\t\t   AI Difficulty = " + AIDifficulty + "\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("\t\t\t\t\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append(" ");
-    Output.insert(Output.size(), 9, (char)196);
-    Output.append("\t\t\t\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-    break;
-
-  case 2:
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("\t\t\t\t\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("\t\t\t\t\t   Incorrect Guesses   ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("\t\t     # of Players = " + NumberOfPlayers + "\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("\t\t\t\t\t   " + IncorrectGuesses[0] + "   " + IncorrectGuesses[1] + "\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    if (AIDifficulty == "N/A")
-      Output.append("\t\t    AI Difficulty = " + AIDifficulty + "\t\t\t       ");
-    else
-      Output.append("\t\t   AI Difficulty = " + AIDifficulty + "\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("\t\t\t\t\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append(" ");
-    Output.insert(Output.size(), 4, (char)196);
-    Output.insert(Output.size(), 1, (char)193);
-    Output.insert(Output.size(), 4, (char)196);
-    Output.append("\t\t\t\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-    break;
-
-  case 3:
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)218);
-    Output.insert(Output.size(), 8, (char)196);
-    Output.append("\t\t\t\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("\t\t\t\t\t   Incorrect Guesses   ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("\t\t     # of Players = " + NumberOfPlayers + "\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("\t\t\t\t\t   " + IncorrectGuesses[0] + "   " + IncorrectGuesses[1] + "   " + IncorrectGuesses[2] + "\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    if (AIDifficulty == "N/A")
-      Output.append("\t\t    AI Difficulty = " + AIDifficulty + "\t\t\t       ");
-    else
-      Output.append("\t\t   AI Difficulty = " + AIDifficulty + "\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("\t\t\t\t\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append(" ");
-    Output.insert(Output.size(), 4, (char)196);
-    Output.insert(Output.size(), 1, (char)193);
-    Output.insert(Output.size(), 4, (char)196);
-    Output.append("\t\t\t\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-    break;
-
-  case 4:
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)218);
-    Output.insert(Output.size(), 7, (char)196);
-    Output.insert(Output.size(), 1, (char)191);
-    Output.append("\t\t\t\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("       ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("\t\t\t\t   Incorrect Guesses   ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("\t\t     # of Players = " + NumberOfPlayers + "\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("\t\t\t\t\t   " + IncorrectGuesses[0] + "   " + IncorrectGuesses[1] + "   " + IncorrectGuesses[2] + "   " + IncorrectGuesses[3] + "       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    if (AIDifficulty == "N/A")
-      Output.append("\t\t    AI Difficulty = " + AIDifficulty + "\t\t\t       ");
-    else
-      Output.append("\t\t   AI Difficulty = " + AIDifficulty + "\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("\t\t\t\t\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append(" ");
-    Output.insert(Output.size(), 4, (char)196);
-    Output.insert(Output.size(), 1, (char)193);
-    Output.insert(Output.size(), 4, (char)196);
-    Output.append("\t\t\t\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-    break;
-
-  case 5:
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)218);
-    Output.insert(Output.size(), 7, (char)196);
-    Output.insert(Output.size(), 1, (char)191);
-    Output.append("\t\t\t\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("       ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("\t\t\t\t   Incorrect Guesses   ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("       O      # of Players = " + NumberOfPlayers + "\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("\t\t\t\t\t   " + IncorrectGuesses[0] + "   " + IncorrectGuesses[1] + "   " + IncorrectGuesses[2] + "   " + IncorrectGuesses[3] + "   " + IncorrectGuesses[4] + "   ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    if (AIDifficulty == "N/A")
-      Output.append("\t\t    AI Difficulty = " + AIDifficulty + "\t\t\t       ");
-    else
-      Output.append("\t\t   AI Difficulty = " + AIDifficulty + "\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("\t\t\t\t\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append(" ");
-    Output.insert(Output.size(), 4, (char)196);
-    Output.insert(Output.size(), 1, (char)193);
-    Output.insert(Output.size(), 4, (char)196);
-    Output.append("\t\t\t\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-    break;
-
-  case 6:
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)218);
-    Output.insert(Output.size(), 7, (char)196);
-    Output.insert(Output.size(), 1, (char)191);
-    Output.append("\t\t\t\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("       ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("\t\t\t\t   Incorrect Guesses   ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("       O      # of Players = " + NumberOfPlayers + "\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("       ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("\t\t\t\t   " + IncorrectGuesses[0] + "   " + IncorrectGuesses[1] + "   " + IncorrectGuesses[2] + "   " + IncorrectGuesses[3] + "   " + IncorrectGuesses[4] + "   ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    if (AIDifficulty == "N/A")
-      Output.append("\t\t    AI Difficulty = " + AIDifficulty + "\t\t\t       ");
-    else
-      Output.append("\t\t   AI Difficulty = " + AIDifficulty + "\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("\t\t\t\t\t   " + IncorrectGuesses[5] + "\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append(" ");
-    Output.insert(Output.size(), 4, (char)196);
-    Output.insert(Output.size(), 1, (char)193);
-    Output.insert(Output.size(), 4, (char)196);
-    Output.append("\t\t\t\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-    break;
-
-  case 7:
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)218);
-    Output.insert(Output.size(), 7, (char)196);
-    Output.insert(Output.size(), 1, (char)191);
-    Output.append("\t\t\t\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("       ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("\t\t\t\t   Incorrect Guesses   ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("       O      # of Players = " + NumberOfPlayers + "\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("       ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("\t\t\t\t   " + IncorrectGuesses[0] + "   " + IncorrectGuesses[1] + "   " + IncorrectGuesses[2] + "   " + IncorrectGuesses[3] + "   " + IncorrectGuesses[4] + "   ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    if (AIDifficulty == "N/A")
-      Output.append("      /\t    AI Difficulty = " + AIDifficulty + "\t\t\t       ");
-    else
-      Output.append("      /\t   AI Difficulty = " + AIDifficulty + "\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("\t\t\t\t\t   " + IncorrectGuesses[5] + "   " + IncorrectGuesses[6] + "\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append(" ");
-    Output.insert(Output.size(), 4, (char)196);
-    Output.insert(Output.size(), 1, (char)193);
-    Output.insert(Output.size(), 4, (char)196);
-    Output.append("\t\t\t\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-    break;
-
-  case 8:
-   Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)218);
-    Output.insert(Output.size(), 7, (char)196);
-    Output.insert(Output.size(), 1, (char)191);
-    Output.append("\t\t\t\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("       ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("\t\t\t\t   Incorrect Guesses   ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("       O      # of Players = " + NumberOfPlayers + "\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("       ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("\t\t\t\t   " + IncorrectGuesses[0] + "   " + IncorrectGuesses[1] + "   " + IncorrectGuesses[2] + "   " + IncorrectGuesses[3] + "   " + IncorrectGuesses[4] + "   ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    if (AIDifficulty == "N/A")
-      Output.append("      / \\    AI Difficulty = " + AIDifficulty + "\t\t\t       ");
-    else
-      Output.append("      / \\   AI Difficulty = " + AIDifficulty + "\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("\t\t\t\t\t   " + IncorrectGuesses[5] + "   " + IncorrectGuesses[6] + "   " + IncorrectGuesses[7] + "\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append(" ");
-    Output.insert(Output.size(), 4, (char)196);
-    Output.insert(Output.size(), 1, (char)193);
-    Output.insert(Output.size(), 4, (char)196);
-    Output.append("\t\t\t\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-    break;
-
-  case 9:
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)218);
-    Output.insert(Output.size(), 7, (char)196);
-    Output.insert(Output.size(), 1, (char)191);
-    Output.append("\t\t\t\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("       ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("\t\t\t\t   Incorrect Guesses   ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("       O      # of Players = " + NumberOfPlayers + "\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("      /");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("\t\t\t\t   " + IncorrectGuesses[0] + "   " + IncorrectGuesses[1] + "   " + IncorrectGuesses[2] + "   " + IncorrectGuesses[3] + "   " + IncorrectGuesses[4] + "   ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    if (AIDifficulty == "N/A")
-      Output.append("      / \\    AI Difficulty = " + AIDifficulty + "\t\t\t       ");
-    else
-      Output.append("      / \\   AI Difficulty = " + AIDifficulty + "\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("\t\t\t\t\t   " + IncorrectGuesses[5] + "   " + IncorrectGuesses[6] + "   " + IncorrectGuesses[7] + "   " + IncorrectGuesses[8] + "       ");
-
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append(" ");
-    Output.insert(Output.size(), 4, (char)196);
-    Output.insert(Output.size(), 1, (char)193);
-    Output.insert(Output.size(), 4, (char)196);
-    Output.append("\t\t\t\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-    break;
-
-  case 10:
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)218);
-    Output.insert(Output.size(), 7, (char)196);
-    Output.insert(Output.size(), 1, (char)191);
-    Output.append("\t\t\t\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("       ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("\t\t\t\t   Incorrect Guesses   ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("       O      # of Players = " + NumberOfPlayers + "\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("      /");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("\\\t\t\t   " + IncorrectGuesses[0] + "   " + IncorrectGuesses[1] + "   " + IncorrectGuesses[2] + "   " + IncorrectGuesses[3] + "   " + IncorrectGuesses[4] + "   ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    if (AIDifficulty == "N/A")
-      Output.append("      / \\    AI Difficulty = " + AIDifficulty + "\t\t\t       ");
-    else
-      Output.append("      / \\   AI Difficulty = " + AIDifficulty + "\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("     ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.append("\t\t\t\t\t   " + IncorrectGuesses[5] + "   " + IncorrectGuesses[6] + "   " + IncorrectGuesses[7] + "   " + IncorrectGuesses[8] + "   " + IncorrectGuesses[9] + "   ");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append(" ");
-    Output.insert(Output.size(), 4, (char)196);
-    Output.insert(Output.size(), 1, (char)193);
-    Output.insert(Output.size(), 4, (char)196);
-    Output.append("\t\t\t\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-    break;
-
-  default:
-  break;
-  }
-
-  // Word to be guessed, and thus current guess of word, are limited to a size in between 3 and 14
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)186);
-  for (unsigned int i = 0; i < CurrentGuessOfWord.size(); i++)
-  {
-    Output.append(" ");
-    Output.insert(Output.size(), 1, CurrentGuessOfWord[i]);
-  }
-  if (GameOver && NumberOfErrors == 10)
-  {
-    Output.append("   (The word was " + WordToBeGuessed + ")");
-    for (unsigned int i = 0; i < (62 - WordToBeGuessed.size()*3 - 18); i++)
-      Output.append(" ");
-  }
-  else
-    for (unsigned int i = 0; i < (62 - WordToBeGuessed.size()*2); i++)
-      Output.append(" ");
-
-  Output.insert(Output.size(), 1, (char)186);
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)186);
-  Output.append("\t\t\t\t\t\t\t       ");
-  Output.insert(Output.size(), 1, (char)186);
-
-  Output.append("\n");
-
-  std::cout << Output;
+  return Output;
 }
 
 bool Winning_Conditions_Met(const unsigned int &NumberOfErrors,
@@ -1253,95 +878,52 @@ void Get_Next_User_Guess(unsigned int &NumberOfErrors,
                          std::vector<std::string> &CorrectGuesses,
                          std::vector<std::string> &ValidMovesRemaining,
                          std::string &CurrentGuessOfWord,
-                         const std::string &WordToBeGuessed)
+                         const std::string &WordToBeGuessed,
+                         const HANDLE &ConsoleHandle)
 {
   std::string UserGuess;
   unsigned int CurrentSelection = 0;
   unsigned char KeyPress = 0;
 
+  std::string Output = Main_Game_Display(NumberOfErrors, std::to_string(NumberOfPlayers), AIDifficulty, IncorrectGuesses, CurrentGuessOfWord, WordToBeGuessed, false);
+  Output.append(Hangman_New_Line(" Guesser, please enter your next guess:                       "));
+  Output.append(Hangman_Empty_Line());
+  Output.append(Hangman_Empty_Line());
+  Output.append(Hangman_Empty_Line());
+  Output.append(Hangman_Empty_Line());
+  Output.append(Hangman_Bottom_Line());
+  Output.append(Hangman_Bottom_Bar());
+
   while (KeyPress != '\r')
   {
     switch (KeyPress)
     {
-    case 72: // up arrow key
-      if (CurrentSelection == 0)
-        CurrentSelection = ValidMovesRemaining.size() - 1;
-      else
-        CurrentSelection--;
+      case 72: // up arrow key
+        if (CurrentSelection == 0)
+          CurrentSelection = ValidMovesRemaining.size() - 1;
+        else
+          CurrentSelection--;
 
-    break;
+      break;
 
-    case 80: // down arrow key
-      if (CurrentSelection == ValidMovesRemaining.size() - 1)
-        CurrentSelection = 0;
-      else
-        CurrentSelection++;
-    break;
+      case 80: // down arrow key
+        if (CurrentSelection == ValidMovesRemaining.size() - 1)
+          CurrentSelection = 0;
+        else
+          CurrentSelection++;
+      break;
 
-    default:
-    break;
+      default:
+      break;
     }
 
-    Display_Game(NumberOfErrors, std::to_string(NumberOfPlayers), AIDifficulty, IncorrectGuesses, CurrentGuessOfWord, WordToBeGuessed, false);
-
-    std::string Output;
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("\t\t\t\t\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("Guesser, please enter your next guess: ");
-    Output.append(BLUE);
-    Output.append(ValidMovesRemaining[CurrentSelection]);
-    Output.append(WHITE);
-    Output.append("\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("\t\t\t\t\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("\t\t\t\t\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("\t\t\t\t\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("\t\t\t\t\t\t\t       ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)200);
-    Output.insert(Output.size(), 62, (char)205);
-    Output.insert(Output.size(), 1, (char)188);
-
-    // Bottom bar
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)201);
-    Output.insert(Output.size(), 62, (char)205);
-    Output.insert(Output.size(), 1, (char)187);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append(RED);
-    Output.append("\t\t\t    Hangman\t\t\t       ");
-    Output.append(WHITE);
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)200);
-    Output.insert(Output.size(), 62, (char)205);
-    Output.insert(Output.size(), 1, (char)188);
+    Clear_Terminal();
 
     std::cout << Output;
+
+    SetConsoleCursorPosition( ConsoleHandle, { 41, 13 } );
+
+    std::cout << BLUE + ValidMovesRemaining[CurrentSelection] + WHITE;
 
     KeyPress = _getch();
   }
@@ -1406,63 +988,19 @@ void Display_Game_Over_Message(const unsigned int &NumberOfErrors,
                                const unsigned int &NumberOfTurns,
                                bool &GameIsRunning)
 {
-  Display_Game(NumberOfErrors, std::to_string(NumberOfPlayers), AIDifficulty, IncorrectGuesses, CurrentGuessOfWord, WordToBeGuessed, true);
+  std::string Output = Main_Game_Display(NumberOfErrors, std::to_string(NumberOfPlayers), AIDifficulty, IncorrectGuesses, CurrentGuessOfWord, WordToBeGuessed, true);
+  Output.append(Hangman_New_Line("                          GAME OVER                           "));
+  Output.append(Hangman_Empty_Line());
 
-  std::string Output;
-  Output.insert(Output.size(), 1, (char)186);
-  Output.append("\t\t\t\t\t\t\t       ");
-  Output.insert(Output.size(), 1, (char)186);
-
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)186);
-  Output.append("\t\t\t   GAME OVER\t\t\t       ");
-  Output.insert(Output.size(), 1, (char)186);
-
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)186);
-  Output.append("\t\t\t\t\t\t\t       ");
-  Output.insert(Output.size(), 1, (char)186);
-
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)186);
   if (NumberOfErrors == 10)
-    Output.append("    The word setter has won! The game lasted for " + std::to_string(NumberOfTurns) + " turns!    ");
+    Output.append(Hangman_New_Line("      The word setter has won! The game lasted " + std::to_string(NumberOfTurns) + " turns!      "));
   else
-    Output.append("\t The guesser has won! The game lasted " + std::to_string(NumberOfTurns) + " turns.\t       ");
-  Output.insert(Output.size(), 1, (char)186);
+    Output.append(Hangman_New_Line("        The guesser has won! The game lasted " + std::to_string(NumberOfTurns) + " turns.        "));
 
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)186);
-  Output.append("\t\t\t\t\t\t\t       ");
-  Output.insert(Output.size(), 1, (char)186);
-
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)186);
-  Output.append("     Press 'Q' to quit OR any other key to play again...      ");
-  Output.insert(Output.size(), 1, (char)186);
-
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)200);
-  Output.insert(Output.size(), 62, (char)205);
-  Output.insert(Output.size(), 1, (char)188);
-
-  // Bottom bar
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)201);
-  Output.insert(Output.size(), 62, (char)205);
-  Output.insert(Output.size(), 1, (char)187);
-
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)186);
-  Output.append(RED);
-  Output.append("\t\t\t    Hangman\t\t\t       ");
-  Output.append(WHITE);
-  Output.insert(Output.size(), 1, (char)186);
-
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)200);
-  Output.insert(Output.size(), 62, (char)205);
-  Output.insert(Output.size(), 1, (char)188);
+  Output.append(Hangman_Empty_Line());
+  Output.append(Hangman_New_Line("     Press 'Q' to quit OR any other key to play again...      "));
+  Output.append(Hangman_Bottom_Line());
+  Output.append(Hangman_Bottom_Bar());
 
   std::cout << Output;
 
