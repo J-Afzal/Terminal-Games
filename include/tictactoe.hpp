@@ -74,18 +74,54 @@ std::string Get_AI_Difficulty(const std::vector<std::vector<std::string>> &TicTa
                               const unsigned int &NumberOfPlayers);
 
 /**
- * @brief The Tic Tac Toe grid is displayed, and to the right of that,
- * the number of players and the AI difficulty is displayed, and to the
- * right of that, the Tic Tac Toe matrix grid is displayed that shows
- * what each command represents on the Tic Tac Toe grid.
+ * @brief Creates a string that is used to display the game and consists of the top bar
+ * which contains the title Terminal_Games, Tic Tac Toe grid and to the right of that,
+ * the number of players and the AI difficulty
  *
  * @param TicTacToeGrid
  * @param NumberOfPlayers
  * @param AIDifficulty
+ * @return std::string
  */
-void Display_Game(const std::vector<std::vector<std::string>> &TicTacToeGrid,
-                  const std::string &NumberOfPlayers,
-                  const std::string &AIDifficulty);
+std::string Main_Game_Display(const std::vector<std::vector<std::string>> &TicTacToeGrid,
+                              const std::string &NumberOfPlayers,
+                              const std::string &AIDifficulty);
+
+/**
+ * @brief Creates an empty new line for any of the game boxes
+ *
+ * @return std::string
+ */
+std::string TicTacToe_Empty_Line(void);
+
+/**
+ * @brief Creates a new line containing text for any of the game boxes
+ *
+ * @param Input
+ * @return std::string
+ */
+std::string TicTacToe_New_Line(const std::string &Input);
+
+/**
+ * @brief Creates the top line of any of the game boxes
+ *
+ * @return std::string
+ */
+std::string TicTacToe_Top_Line(void);
+
+/**
+ * @brief Creates the bottom line of any of the game boxes
+ *
+ * @return std::string
+ */
+std::string TicTacToe_Bottom_Line(void);
+
+/**
+ * @brief Creates the bottom bar which contains the title of the game
+ *
+ * @return std::string
+ */
+std::string TicTacToe_Bottom_Bar(void);
 
 /**
  * @brief The user is prompted for their next command and, if necessary, repeated until
