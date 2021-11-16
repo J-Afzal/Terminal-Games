@@ -25,9 +25,11 @@ int main(void)
   HANDLE ConsoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
   if (ConsoleHandle == INVALID_HANDLE_VALUE)
     exit(1);
+
   CONSOLE_CURSOR_INFO CursorInfo;
   CursorInfo.dwSize = 100;
   CursorInfo.bVisible = FALSE;
+
   SetConsoleCursorInfo(ConsoleHandle, &CursorInfo);
 
   while(ProgramIsRunning)
