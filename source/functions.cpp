@@ -10,133 +10,109 @@
  */
 #include "functions.hpp"
 #include <iostream>
-#include <Windows.h>
 
-void Display_UI(const unsigned int &CurrentSelection)
+std::string Main_Game_Display(const unsigned int &CurrentSelection)
 {
   Clear_Terminal();
 
   std::string Output;
 
   // Top bar
-  Output.append(WHITE);
+  Output.insert(Output.size(), WHITE);
   Output.insert(Output.size(), 1, (char)201);
   Output.insert(Output.size(), 30, (char)205);
   Output.insert(Output.size(), 1, (char)187);
-
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)186);
-  Output.append(RED);
-  Output.append("\t Terminal-Games\t       ");
-  Output.append(WHITE);
-  Output.insert(Output.size(), 1, (char)186);
-
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)200);
-  Output.insert(Output.size(), 30, (char)205);
-  Output.insert(Output.size(), 1, (char)188);
+  Output.insert(Output.size(), Main_New_Line(RED + "        Terminal-Games        " + WHITE));
+  Output.insert(Output.size(), Main_Bottom_Line());
 
   // Centre game list
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)201);
-  Output.insert(Output.size(), 30, (char)205);
-  Output.insert(Output.size(), 1, (char)187);
+  Output.insert(Output.size(), Main_Top_Line());
 
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)186);
   if (CurrentSelection == 3)
-  {
-    Output.append(BLUE);
-    Output.append("\t> Tic Tac Toe\t       ");
-    Output.append(WHITE);
-  }
+    Output.insert(Output.size(), Main_New_Line(BLUE + "       > Tic Tac Toe          " + WHITE));
   else
-    Output.append("\t  Tic Tac Toe\t       ");
-  Output.insert(Output.size(), 1, (char)186);
+    Output.insert(Output.size(), Main_New_Line("         Tic Tac Toe          "));
 
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)186);
-  Output.append("\t\t\t       ");
-  Output.insert(Output.size(), 1, (char)186);
+  Output.insert(Output.size(), Main_Empty_Line());
 
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)186);
   if (CurrentSelection == 2)
-  {
-    Output.append(BLUE);
-    Output.append("\t  > Hangman\t       ");
-    Output.append(WHITE);
-  }
+    Output.insert(Output.size(), Main_New_Line(BLUE + "         > Hangman            " + WHITE));
   else
-    Output.append("\t    Hangman\t       ");
-  Output.insert(Output.size(), 1, (char)186);
+    Output.insert(Output.size(), Main_New_Line("           Hangman            "));
 
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)186);
-  Output.append("\t\t\t       ");
-  Output.insert(Output.size(), 1, (char)186);
+  Output.insert(Output.size(), Main_Empty_Line());
 
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)186);
   if (CurrentSelection == 1)
-  {
-    Output.append(BLUE);
-    Output.append("\t> Battleships\t       ");
-    Output.append(WHITE);
-  }
+    Output.insert(Output.size(), Main_New_Line(BLUE + "       > Battleships          " + WHITE));
   else
-    Output.append("\t  Battleships\t       ");
-  Output.insert(Output.size(), 1, (char)186);
+    Output.insert(Output.size(), Main_New_Line("         Battleships          "));
 
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)186);
-  Output.append("\t\t\t       ");
-  Output.insert(Output.size(), 1, (char)186);
+  Output.insert(Output.size(), Main_Empty_Line());
 
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)186);
   if (CurrentSelection == 0)
-  {
-    Output.append(BLUE);
-    Output.append("   > Snakes (Coming Soon!)    ");
-    Output.append(WHITE);
-  }
+    Output.insert(Output.size(), Main_New_Line(BLUE + "   > Snakes (Coming Soon!)    " + WHITE));
   else
-    Output.append("     Snakes (Coming Soon!)    ");
-  Output.insert(Output.size(), 1, (char)186);
+    Output.insert(Output.size(), Main_New_Line("     Snakes (Coming Soon!)    "));
 
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)200);
-  Output.insert(Output.size(), 30, (char)205);
-  Output.insert(Output.size(), 1, (char)188);
-
-  // Bottom bar
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)201);
-  Output.insert(Output.size(), 30, (char)205);
-  Output.insert(Output.size(), 1, (char)187);
-
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)186);
-  Output.append(RED);
-  Output.append("\t    q = quit\t       ");
-  Output.append(WHITE);
-  Output.insert(Output.size(), 1, (char)186);
-
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)200);
-  Output.insert(Output.size(), 30, (char)205);
-  Output.insert(Output.size(), 1, (char)188);
+  Output.append(Main_Bottom_Line());
+  Output.append(Main_Bottom_Bar());
   Output.append(RESET);
 
-  std::cout << Output;
+  return Output;
 }
 
-void Capitalise_Word(std::string &Input)
+std::string Main_Empty_Line(void)
 {
-  for (unsigned int i = 0; i < Input.size(); i++)
-    if (Input[i] >= 'a' && Input[i] <= 'z')
-      Input[i] -= 32;
+  std::string Output;
+  Output.insert(Output.size(), "\n");
+  Output.insert(Output.size(), 1, (char)186);
+  Output.insert(Output.size(), 30, ' ');
+  Output.insert(Output.size(), 1, (char)186);
+
+  return Output;
+}
+
+std::string Main_New_Line(const std::string &Input)
+{
+  std::string Output;
+  Output.insert(Output.size(), "\n");
+  Output.insert(Output.size(), 1, (char)186);
+  Output.insert(Output.size(), Input);
+  Output.insert(Output.size(), 1, (char)186);
+
+  return Output;
+}
+
+std::string Main_Top_Line(void)
+{
+  std::string Output;
+  Output.insert(Output.size(), "\n");
+  Output.insert(Output.size(), 1, (char)201);
+  Output.insert(Output.size(), 30, (char)205);
+  Output.insert(Output.size(), 1, (char)187);
+
+  return Output;
+}
+
+std::string Main_Bottom_Line(void)
+{
+  std::string Output;
+  Output.insert(Output.size(), "\n");
+  Output.insert(Output.size(), 1, (char)200);
+  Output.insert(Output.size(), 30, (char)205);
+  Output.insert(Output.size(), 1, (char)188);
+
+  return Output;
+}
+
+std::string Main_Bottom_Bar(void)
+{
+  std::string Output;
+  Output.append(Main_Top_Line());
+  Output.append(Main_New_Line(RED + "           q = quit           " + WHITE));
+  Output.append(Main_Bottom_Line());
+
+  return Output;
 }
 
 void Clear_Terminal(void)
@@ -184,6 +160,13 @@ void Toggle_Player(std::string &CurrentPlayer)
 
   else
     CurrentPlayer = "PLAYER ONE";
+}
+
+void Capitalise_Word(std::string &Input)
+{
+  for (unsigned int i = 0; i < Input.size(); i++)
+    if (Input[i] >= 'a' && Input[i] <= 'z')
+      Input[i] -= 32;
 }
 
 std::vector<std::string> Generate_Word_List(void)

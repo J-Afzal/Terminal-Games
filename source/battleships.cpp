@@ -517,14 +517,14 @@ std::string Battleships_Game_Display(const std::vector<std::vector<std::string>>
   Output.insert(Output.size(), 1, (char)201);
   Output.insert(Output.size(), 147, (char)205);
   Output.insert(Output.size(), 1, (char)187);
-  Output.append(Battleships_New_Line(RED + "                                                                  Terminal-Games                                                                   " + WHITE));
-  Output.append(Battleships_Bottom_Line());
+  Output.insert(Output.size(), Battleships_New_Line(RED + "                                                                  Terminal-Games                                                                   " + WHITE));
+  Output.insert(Output.size(), Battleships_Bottom_Line());
 
   // Main game box
-  Output.append(Battleships_Top_Line());
+  Output.insert(Output.size(), Battleships_Top_Line());
 
   // Top Row of both boards
-  Output.append(Battleships_New_Line("                    PLAYER ONE                                                                                       PLAYER TWO                    "));
+  Output.insert(Output.size(), Battleships_New_Line("                    PLAYER ONE                                                                                       PLAYER TWO                    "));
 
   Output.insert(Output.size(), "\n");
   Output.insert(Output.size(), 1, (char)186);
@@ -846,7 +846,7 @@ std::string Battleships_Game_Display(const std::vector<std::vector<std::string>>
   Output.insert(Output.size(), "   ");
   Output.insert(Output.size(), 1, (char)186);
 
-  Output.append(Battleships_Empty_Line());
+  Output.insert(Output.size(), Battleships_Empty_Line());
 
   return Output;
 }

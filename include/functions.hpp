@@ -15,37 +15,60 @@
 
 #include <vector>
 #include <string>
+#include <Windows.h>
 
 /**
  * @brief Bold text colours for the terminal
  * using ANSI escape codes
  *
  */
-#define RESET   "\x1B[0m"
-#define BLACK   "\x1B[1;30m"
-#define RED     "\x1B[1;31m"
-#define GREEN   "\x1B[1;32m"
-#define YELLOW  "\x1B[1;33m"
-#define BLUE    "\x1B[1;34m"
-#define MAGENTA "\x1B[1;35m"
-#define CYAN    "\x1B[1;36m"
-#define WHITE   "\x1B[1;37m"
+const std::string WHITE = "\x1B[1;37m";
+const std::string RED = "\x1B[1;31m";
+const std::string BLUE = "\x1B[1;34m";
+const std::string RESET = "\x1B[0m";
 
 /**
  * @brief Displays the main UI
  *
  * @param CurrentSelection
  */
-void Display_UI(const unsigned int &CurrentSelection);
+std::string Main_Game_Display(const unsigned int &CurrentSelection);
 
 /**
- * @brief Checks if each character in Input is a lower case letter,
- * and if it is, 32 is subtracted from the character to capitalise it.
- * Thus, non-letters in Input will remain unaffected.
+ * @brief Creates an empty new line for any of the game boxes
+ *
+ * @return std::string
+ */
+std::string Main_Empty_Line(void);
+
+/**
+ * @brief Creates a new line containing text for any of the game boxes
  *
  * @param Input
+ * @return std::string
  */
-void Capitalise_Word(std::string &Input);
+std::string Main_New_Line(const std::string &Input);
+
+/**
+ * @brief Creates the top line of any of the game boxes
+ *
+ * @return std::string
+ */
+std::string Main_Top_Line(void);
+
+/**
+ * @brief Creates the bottom line of any of the game boxes
+ *
+ * @return std::string
+ */
+std::string Main_Bottom_Line(void);
+
+/**
+ * @brief Creates the bottom bar which contains the title of the game
+ *
+ * @return std::string
+ */
+std::string Main_Bottom_Bar(void);
 
 /**
  * @brief A Windows specific method to clear the contents of
@@ -60,6 +83,15 @@ void Clear_Terminal(void);
  * @param CurrentPlayer
  */
 void Toggle_Player(std::string &CurrentPlayer);
+
+/**
+ * @brief Checks if each character in Input is a lower case letter,
+ * and if it is, 32 is subtracted from the character to capitalise it.
+ * Thus, non-letters in Input will remain unaffected.
+ *
+ * @param Input
+ */
+void Capitalise_Word(std::string &Input);
 
 /**
  * @brief Used by Hangman to create a list of the 1,000 most used word in English
