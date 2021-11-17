@@ -850,7 +850,6 @@ std::string Hangman_Bottom_Bar(void)
   Output.append(Hangman_New_Line(RED + "                           Hangman                            " + WHITE));
   Output.append(Hangman_Bottom_Line());
 
-
   return Output;
 }
 
