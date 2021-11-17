@@ -188,14 +188,51 @@ void Place_Ship(std::vector<std::vector<std::string>> &anyBoard,
  * @param NumberOfPlayers
  * @param AIDifficulty
  * @param GameOver
+ * @return std::string
  */
-void Display_Game(const std::vector<std::vector<std::string>> &PlayerOneBoard,
-                  const std::vector<std::vector<std::string>> &PlayerTwoBoard,
-                  const std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
-                  const std::map<std::string, unsigned int> &PlayerTwoShipsRemaining,
-                  const std::string &NumberOfPlayers,
-                  const std::string &AIDifficulty,
-                  const bool &GameOver);
+std::string Main_Game_Display(const std::vector<std::vector<std::string>> &PlayerOneBoard,
+                              const std::vector<std::vector<std::string>> &PlayerTwoBoard,
+                              const std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
+                              const std::map<std::string, unsigned int> &PlayerTwoShipsRemaining,
+                              const std::string &NumberOfPlayers,
+                              const std::string &AIDifficulty,
+                              const bool &GameOver);
+
+/**
+ * @brief Creates an empty new line for any of the game boxes
+ *
+ * @return std::string
+ */
+std::string Battleships_Empty_Line(void);
+
+/**
+ * @brief Creates a new line containing text for any of the game boxes
+ *
+ * @param Input
+ * @return std::string
+ */
+std::string Battleships_New_Line(const std::string &Input);
+
+/**
+ * @brief Creates the top line of any of the game boxes
+ *
+ * @return std::string
+ */
+std::string Battleships_Top_Line(void);
+
+/**
+ * @brief Creates the bottom line of any of the game boxes
+ *
+ * @return std::string
+ */
+std::string Battleships_Bottom_Line(void);
+
+/**
+ * @brief Creates the bottom bar which contains the title of the game
+ *
+ * @return std::string
+ */
+std::string Battleships_Bottom_Bar(void);
 
 /**
  * @brief Checks if there are any ship letters left on the board

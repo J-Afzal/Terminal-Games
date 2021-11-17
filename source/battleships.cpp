@@ -125,102 +125,63 @@ unsigned int Get_Number_Of_Players(const std::vector<std::vector<std::string>> &
   unsigned int CurrentSelection = 0;
   unsigned char KeyPress = 0;
 
+  std::string CommonString = Main_Game_Display(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, "N/A", "N/A", false);
+  CommonString.append(Battleships_New_Line(" Please select the number of human players:                                                                                                        "));
+
+  std::string CaseZero = CommonString;
+  CaseZero.append(Battleships_New_Line(BLUE + " > 0                                                                                                                                               " + WHITE));
+  CaseZero.append(Battleships_New_Line("   1                                                                                                                                               "));
+  CaseZero.append(Battleships_Empty_Line());
+  CaseZero.append(Battleships_Empty_Line());
+  CaseZero.append(Battleships_Bottom_Line());
+  CaseZero.append(Battleships_Bottom_Bar());
+
+  std::string CaseOne = CommonString;
+  CaseOne.append(Battleships_New_Line("   0                                                                                                                                               "));
+  CaseOne.append(Battleships_New_Line(BLUE + " > 1                                                                                                                                               " + WHITE));
+  CaseOne.append(Battleships_Empty_Line());
+  CaseOne.append(Battleships_Empty_Line());
+  CaseOne.append(Battleships_Bottom_Line());
+  CaseOne.append(Battleships_Bottom_Bar());
+
   while (KeyPress != '\r')
   {
     switch (KeyPress)
     {
-    case 72: // up arrow key
-      if (CurrentSelection == 0)
-        CurrentSelection = 1;
-      else
-        CurrentSelection--;
-    break;
+      case 72: // up arrow key
+        if (CurrentSelection == 0)
+          CurrentSelection = 1;
+        else
+          CurrentSelection--;
+      break;
 
-    case 80: // down arrow key
-      if (CurrentSelection == 1)
-        CurrentSelection = 0;
-      else
-        CurrentSelection++;
-    break;
+      case 80: // down arrow key
+        if (CurrentSelection == 1)
+          CurrentSelection = 0;
+        else
+          CurrentSelection++;
+      break;
 
-    default:
-    break;
+      default:
+      break;
     }
 
-    Display_Game(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, "N/A", "N/A", false);
+    Clear_Terminal();
 
-    std::string Output;
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append(" Please select the number of human players:\t\t\t\t\t\t\t\t                                            ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
 
     switch (CurrentSelection)
     {
-    case 0:
-      Output.insert(Output.size(), 1, (char)186);
-      Output.append(BLUE);
-      Output.append(" > 0\t\t\t\t\t\t\t\t\t\t\t\t\t                                            ");
-      Output.append(WHITE);
-      Output.insert(Output.size(), 1, (char)186);
+      case 0:
+        std::cout << CaseZero;
+      break;
 
-      Output.append("\n");
-      Output.insert(Output.size(), 1, (char)186);
-      Output.append("   1\t\t\t\t\t\t\t\t\t\t\t\t\t                                            ");
-      Output.insert(Output.size(), 1, (char)186);
-    break;
+      case 1:
+        std::cout << CaseOne;
+      break;
 
-    case 1:
-      Output.insert(Output.size(), 1, (char)186);
-      Output.append("   0\t\t\t\t\t\t\t\t\t\t\t\t\t                                            ");
-      Output.insert(Output.size(), 1, (char)186);
-
-      Output.append("\n");
-      Output.insert(Output.size(), 1, (char)186);
-      Output.append(BLUE);
-      Output.append(" > 1\t\t\t\t\t\t\t\t\t\t\t\t\t                                            ");
-      Output.append(WHITE);
-      Output.insert(Output.size(), 1, (char)186);
-
-    default:
-    break;
+      default:
+      break;
     }
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("\t\t\t\t\t\t\t\t\t\t\t\t\t\t                                    ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("\t\t\t\t\t\t\t\t\t\t\t\t\t\t                                    ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)200);
-    Output.insert(Output.size(), 147, (char)205);
-    Output.insert(Output.size(), 1, (char)188);
-
-    // Bottom bar
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)201);
-    Output.insert(Output.size(), 147, (char)205);
-    Output.insert(Output.size(), 1, (char)187);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append(RED);
-    Output.append("\t\t\t\t\t\t\t\t     Battleships\t\t\t\t                                    ");
-    Output.append(WHITE);
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)200);
-    Output.insert(Output.size(), 147, (char)205);
-    Output.insert(Output.size(), 1, (char)188);
-
-    std::cout << Output;
 
     KeyPress = _getch();
   }
@@ -237,102 +198,62 @@ std::string Get_AI_Difficulty(const std::vector<std::vector<std::string>> &Playe
   unsigned int CurrentSelection = 0;
   unsigned char KeyPress = 0;
 
+  std::string CommonString = Main_Game_Display(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, std::to_string(NumberOfPlayers), "N/A", false);
+  CommonString.append(Battleships_New_Line(" Please select the AI difficulty:                                                                                                                  "));
+
+  std::string CaseZero = CommonString;
+  CaseZero.append(Battleships_New_Line(BLUE + " > EASY                                                                                                                                            " + WHITE));
+  CaseZero.append(Battleships_New_Line("   HARD (Coming Soon!)                                                                                                                             "));
+  CaseZero.append(Battleships_Empty_Line());
+  CaseZero.append(Battleships_Empty_Line());
+  CaseZero.append(Battleships_Bottom_Line());
+  CaseZero.append(Battleships_Bottom_Bar());
+
+  std::string CaseOne = CommonString;
+  CaseOne.append(Battleships_New_Line("   EASY                                                                                                                                            "));
+  CaseOne.append(Battleships_New_Line(BLUE + " > HARD (Coming Soon!)                                                                                                                             " + WHITE));
+  CaseOne.append(Battleships_Empty_Line());
+  CaseOne.append(Battleships_Empty_Line());
+  CaseOne.append(Battleships_Bottom_Line());
+  CaseOne.append(Battleships_Bottom_Bar());
+
   while (!(KeyPress == '\r' && CurrentSelection == 0))
   {
     switch (KeyPress)
     {
-    case 72: // up arrow key
-      if (CurrentSelection == 0)
-        CurrentSelection = 1;
-      else
-        CurrentSelection--;
-    break;
+      case 72: // up arrow key
+        if (CurrentSelection == 0)
+          CurrentSelection = 1;
+        else
+          CurrentSelection--;
+      break;
 
-    case 80: // down arrow key
-      if (CurrentSelection == 1)
-        CurrentSelection = 0;
-      else
-        CurrentSelection++;
-    break;
+      case 80: // down arrow key
+        if (CurrentSelection == 1)
+          CurrentSelection = 0;
+        else
+          CurrentSelection++;
+      break;
 
-    default:
-    break;
+      default:
+      break;
     }
 
-    Display_Game(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, std::to_string(NumberOfPlayers), "N/A", false);
-
-    std::string Output;
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("  Please select the AI difficulty:\t\t\t\t\t\t\t\t\t                                            ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
+    Clear_Terminal();
 
     switch (CurrentSelection)
     {
-    case 0:
-      Output.insert(Output.size(), 1, (char)186);
-      Output.append(BLUE);
-      Output.append(" > EASY\t\t\t\t\t\t\t\t\t\t\t\t                                            ");
-      Output.append(WHITE);
-      Output.insert(Output.size(), 1, (char)186);
+      case 0:
+        std::cout << CaseZero;
+      break;
 
-      Output.append("\n");
-      Output.insert(Output.size(), 1, (char)186);
-      Output.append("   HARD (Coming Soon!)\t\t\t\t\t\t\t\t\t\t\t                                            ");
-      Output.insert(Output.size(), 1, (char)186);
-    break;
+      case 1:
+        std::cout << CaseOne;
+      break;
 
-    case 1:
-      Output.insert(Output.size(), 1, (char)186);
-      Output.append("   EASY\t\t\t\t\t\t\t\t\t\t\t\t                                            ");
-      Output.insert(Output.size(), 1, (char)186);
-
-      Output.append("\n");
-      Output.insert(Output.size(), 1, (char)186);
-      Output.append(BLUE);
-      Output.append(" > HARD (Coming Soon!)\t\t\t\t\t\t\t\t\t\t\t                                            ");
-      Output.append(WHITE);
-      Output.insert(Output.size(), 1, (char)186);
-
-    default:
-    break;
+      default:
+      break;
     }
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("\t\t\t\t\t\t\t\t\t\t\t\t\t\t                                    ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append("\t\t\t\t\t\t\t\t\t\t\t\t\t\t                                    ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)200);
-    Output.insert(Output.size(), 147, (char)205);
-    Output.insert(Output.size(), 1, (char)188);
-
-    // Bottom bar
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)201);
-    Output.insert(Output.size(), 147, (char)205);
-    Output.insert(Output.size(), 1, (char)187);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.append(RED);
-    Output.append("\t\t\t\t\t\t\t\t     Battleships\t\t\t\t                                    ");
-    Output.append(WHITE);
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.append("\n");
-    Output.insert(Output.size(), 1, (char)200);
-    Output.insert(Output.size(), 147, (char)205);
-    Output.insert(Output.size(), 1, (char)188);
-
-    std::cout << Output;
 
     KeyPress = _getch();
   }
@@ -348,380 +269,46 @@ void Get_User_Ship_Positions(std::vector<std::vector<std::string>> &PlayerOneBoa
                              const std::string &AIDifficulty,
                              const HANDLE &ConsoleHandle)
 {
-  for (unsigned int CurrentShip = 0; CurrentShip < 5; CurrentShip++)
+  std::vector<std::string> ShipCommands = {
+    " Please enter the 5 grid locations for the Carrier:                                                                                                ",
+    " Please enter the 4 grid locations for the Battleship:                                                                                             ",
+    " Please enter the 3 grid locations for the Destroyer:                                                                                              ",
+    " Please enter the 3 grid locations for the Submarine:                                                                                              ",
+    " Please enter the 2 grid locations for the Patrol Boat:                                                                                            "
+  };
+  std::vector<unsigned int> ShipSizes = {5, 4, 3, 3, 2};
+  std::vector<std::string> ShipLetters = {"C", "B", "D", "S", "P"};
+  std::vector<short> ShipCursorPosition = {53, 56, 55, 55, 57};
+  std::vector<unsigned int> ShipPositionRows, ShipPositionColumns;
+
+  for (unsigned int i = 0; i < 5; i++)
   {
+    std::string Output = Main_Game_Display(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, std::to_string(NumberOfPlayers), AIDifficulty, false);
+    Output.append(Battleships_New_Line(ShipCommands[i]));
+    Output.append(Battleships_Empty_Line());
+    Output.append(Battleships_Empty_Line());
+    Output.append(Battleships_Empty_Line());
+    Output.append(Battleships_Empty_Line());
+    Output.append(Battleships_Bottom_Line());
+    Output.append(Battleships_Bottom_Bar());
+
     bool InputValid = false;
     std::string Input;
-    std::vector<unsigned int> ShipPositionRows, ShipPositionColumns;
 
-    switch (CurrentShip)
+    while (!InputValid)
     {
-    case 0: // Carrier (C)
-    {
-      while (!InputValid)
-      {
-        unsigned int ShipSize = 5;
+      std::cout << Output;
 
-        Display_Game(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, std::to_string(NumberOfPlayers), AIDifficulty, false);
-        std::string Output;
+      SetConsoleCursorPosition( ConsoleHandle, { ShipCursorPosition[i], 29 } );
 
-        Output.insert(Output.size(), 1, (char)186);
-        Output.append(" Please enter the " + std::to_string(ShipSize) + " grid locations for the Carrier:\t\t\t\t\t\t\t                                            ");
-        Output.insert(Output.size(), 1, (char)186);
+      std::getline(std::cin, Input);
 
-        Output.append("\n");
-        Output.insert(Output.size(), 1, (char)186);
-        Output.append("\t\t\t\t\t\t\t\t\t\t\t\t\t\t                                    ");
-        Output.insert(Output.size(), 1, (char)186);
+      if (!Error_Checking_On_User_Ship_Positions(PlayerOneBoard, Input, ShipPositionRows, ShipPositionColumns, ShipSizes[i]))
+        continue;
 
-        Output.append("\n");
-        Output.insert(Output.size(), 1, (char)186);
-        Output.append("\t\t\t\t\t\t\t\t\t\t\t\t\t\t                                    ");
-        Output.insert(Output.size(), 1, (char)186);
+      InputValid = true;
 
-        Output.append("\n");
-        Output.insert(Output.size(), 1, (char)186);
-        Output.append("\t\t\t\t\t\t\t\t\t\t\t\t\t\t                                    ");
-        Output.insert(Output.size(), 1, (char)186);
-
-        Output.append("\n");
-        Output.insert(Output.size(), 1, (char)186);
-        Output.append("\t\t\t\t\t\t\t\t\t\t\t\t\t\t                                    ");
-        Output.insert(Output.size(), 1, (char)186);
-
-        Output.append("\n");
-        Output.insert(Output.size(), 1, (char)200);
-        Output.insert(Output.size(), 147, (char)205);
-        Output.insert(Output.size(), 1, (char)188);
-
-        // Bottom bar
-        Output.append("\n");
-        Output.insert(Output.size(), 1, (char)201);
-        Output.insert(Output.size(), 147, (char)205);
-        Output.insert(Output.size(), 1, (char)187);
-
-        Output.append("\n");
-        Output.insert(Output.size(), 1, (char)186);
-        Output.append(RED);
-        Output.append("\t\t\t\t\t\t\t\t     Battleships\t\t\t\t                                    ");
-        Output.append(WHITE);
-        Output.insert(Output.size(), 1, (char)186);
-
-        Output.append("\n");
-        Output.insert(Output.size(), 1, (char)200);
-        Output.insert(Output.size(), 147, (char)205);
-        Output.insert(Output.size(), 1, (char)188);
-
-        std::cout << Output;
-
-        SetConsoleCursorPosition( ConsoleHandle, { 53, 29 } );
-
-        std::getline(std::cin, Input);
-
-        if (!Error_Checking_On_User_Ship_Positions(PlayerOneBoard, Input, ShipPositionRows, ShipPositionColumns, ShipSize))
-          continue;
-
-        InputValid = true;
-
-        Place_Ship(PlayerOneBoard, ShipPositionRows, ShipPositionColumns, "C");
-      }
-
-      break;
-    }
-
-    case 1: // Battleship (B)
-    {
-      while (!InputValid)
-      {
-        unsigned int ShipSize = 4;
-
-        Display_Game(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, std::to_string(NumberOfPlayers), AIDifficulty, false);
-        std::string Output;
-
-        Output.insert(Output.size(), 1, (char)186);
-        Output.append(" Please enter the " + std::to_string(ShipSize) + " grid locations for the Battleship:\t\t\t\t\t\t\t                                            ");
-        Output.insert(Output.size(), 1, (char)186);
-
-        Output.append("\n");
-        Output.insert(Output.size(), 1, (char)186);
-        Output.append("\t\t\t\t\t\t\t\t\t\t\t\t\t\t                                    ");
-        Output.insert(Output.size(), 1, (char)186);
-
-        Output.append("\n");
-        Output.insert(Output.size(), 1, (char)186);
-        Output.append("\t\t\t\t\t\t\t\t\t\t\t\t\t\t                                    ");
-        Output.insert(Output.size(), 1, (char)186);
-
-        Output.append("\n");
-        Output.insert(Output.size(), 1, (char)186);
-        Output.append("\t\t\t\t\t\t\t\t\t\t\t\t\t\t                                    ");
-        Output.insert(Output.size(), 1, (char)186);
-
-        Output.append("\n");
-        Output.insert(Output.size(), 1, (char)186);
-        Output.append("\t\t\t\t\t\t\t\t\t\t\t\t\t\t                                    ");
-        Output.insert(Output.size(), 1, (char)186);
-
-        Output.append("\n");
-        Output.insert(Output.size(), 1, (char)200);
-        Output.insert(Output.size(), 147, (char)205);
-        Output.insert(Output.size(), 1, (char)188);
-
-        // Bottom bar
-        Output.append("\n");
-        Output.insert(Output.size(), 1, (char)201);
-        Output.insert(Output.size(), 147, (char)205);
-        Output.insert(Output.size(), 1, (char)187);
-
-        Output.append("\n");
-        Output.insert(Output.size(), 1, (char)186);
-        Output.append(RED);
-        Output.append("\t\t\t\t\t\t\t\t     Battleships\t\t\t\t                                    ");
-        Output.append(WHITE);
-        Output.insert(Output.size(), 1, (char)186);
-
-        Output.append("\n");
-        Output.insert(Output.size(), 1, (char)200);
-        Output.insert(Output.size(), 147, (char)205);
-        Output.insert(Output.size(), 1, (char)188);
-
-        std::cout << Output;
-
-        SetConsoleCursorPosition( ConsoleHandle, { 56, 29 } );
-
-        std::getline(std::cin, Input);
-
-        if (!Error_Checking_On_User_Ship_Positions(PlayerOneBoard, Input, ShipPositionRows, ShipPositionColumns, ShipSize))
-          continue;
-
-        InputValid = true;
-
-        Place_Ship(PlayerOneBoard, ShipPositionRows, ShipPositionColumns, "B");
-      }
-      break;
-    }
-
-    case 2: // Destroyer (D)
-    {
-      while (!InputValid)
-      {
-        unsigned int ShipSize = 3;
-
-        Display_Game(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, std::to_string(NumberOfPlayers), AIDifficulty, false);
-        std::string Output;
-
-        Output.insert(Output.size(), 1, (char)186);
-        Output.append(" Please enter the " + std::to_string(ShipSize) + " grid locations for the Destroyer:\t\t\t\t\t\t\t                                            ");
-        Output.insert(Output.size(), 1, (char)186);
-
-        Output.append("\n");
-        Output.insert(Output.size(), 1, (char)186);
-        Output.append("\t\t\t\t\t\t\t\t\t\t\t\t\t\t                                    ");
-        Output.insert(Output.size(), 1, (char)186);
-
-        Output.append("\n");
-        Output.insert(Output.size(), 1, (char)186);
-        Output.append("\t\t\t\t\t\t\t\t\t\t\t\t\t\t                                    ");
-        Output.insert(Output.size(), 1, (char)186);
-
-        Output.append("\n");
-        Output.insert(Output.size(), 1, (char)186);
-        Output.append("\t\t\t\t\t\t\t\t\t\t\t\t\t\t                                    ");
-        Output.insert(Output.size(), 1, (char)186);
-
-        Output.append("\n");
-        Output.insert(Output.size(), 1, (char)186);
-        Output.append("\t\t\t\t\t\t\t\t\t\t\t\t\t\t                                    ");
-        Output.insert(Output.size(), 1, (char)186);
-
-        Output.append("\n");
-        Output.insert(Output.size(), 1, (char)200);
-        Output.insert(Output.size(), 147, (char)205);
-        Output.insert(Output.size(), 1, (char)188);
-
-        // Bottom bar
-        Output.append("\n");
-        Output.insert(Output.size(), 1, (char)201);
-        Output.insert(Output.size(), 147, (char)205);
-        Output.insert(Output.size(), 1, (char)187);
-
-        Output.append("\n");
-        Output.insert(Output.size(), 1, (char)186);
-        Output.append(RED);
-        Output.append("\t\t\t\t\t\t\t\t     Battleships\t\t\t\t                                    ");
-        Output.append(WHITE);
-        Output.insert(Output.size(), 1, (char)186);
-
-        Output.append("\n");
-        Output.insert(Output.size(), 1, (char)200);
-        Output.insert(Output.size(), 147, (char)205);
-        Output.insert(Output.size(), 1, (char)188);
-
-        std::cout << Output;
-
-        SetConsoleCursorPosition( ConsoleHandle, { 55, 29 } );
-
-        std::getline(std::cin, Input);
-
-        if (!Error_Checking_On_User_Ship_Positions(PlayerOneBoard, Input, ShipPositionRows, ShipPositionColumns, ShipSize))
-          continue;
-
-        InputValid = true;
-
-        Place_Ship(PlayerOneBoard, ShipPositionRows, ShipPositionColumns, "D");
-      }
-
-      break;
-    }
-
-    case 3: // Submarine (S)
-    {
-      while (!InputValid)
-      {
-        unsigned int ShipSize = 3;
-
-        Display_Game(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, std::to_string(NumberOfPlayers), AIDifficulty, false);
-        std::string Output;
-
-        Output.insert(Output.size(), 1, (char)186);
-        Output.append(" Please enter the " + std::to_string(ShipSize) + " grid locations for the Submarine:\t\t\t\t\t\t\t                                            ");
-        Output.insert(Output.size(), 1, (char)186);
-
-        Output.append("\n");
-        Output.insert(Output.size(), 1, (char)186);
-        Output.append("\t\t\t\t\t\t\t\t\t\t\t\t\t\t                                    ");
-        Output.insert(Output.size(), 1, (char)186);
-
-        Output.append("\n");
-        Output.insert(Output.size(), 1, (char)186);
-        Output.append("\t\t\t\t\t\t\t\t\t\t\t\t\t\t                                    ");
-        Output.insert(Output.size(), 1, (char)186);
-
-        Output.append("\n");
-        Output.insert(Output.size(), 1, (char)186);
-        Output.append("\t\t\t\t\t\t\t\t\t\t\t\t\t\t                                    ");
-        Output.insert(Output.size(), 1, (char)186);
-
-        Output.append("\n");
-        Output.insert(Output.size(), 1, (char)186);
-        Output.append("\t\t\t\t\t\t\t\t\t\t\t\t\t\t                                    ");
-        Output.insert(Output.size(), 1, (char)186);
-
-        Output.append("\n");
-        Output.insert(Output.size(), 1, (char)200);
-        Output.insert(Output.size(), 147, (char)205);
-        Output.insert(Output.size(), 1, (char)188);
-
-        // Bottom bar
-        Output.append("\n");
-        Output.insert(Output.size(), 1, (char)201);
-        Output.insert(Output.size(), 147, (char)205);
-        Output.insert(Output.size(), 1, (char)187);
-
-        Output.append("\n");
-        Output.insert(Output.size(), 1, (char)186);
-        Output.append(RED);
-        Output.append("\t\t\t\t\t\t\t\t     Battleships\t\t\t\t                                    ");
-        Output.append(WHITE);
-        Output.insert(Output.size(), 1, (char)186);
-
-        Output.append("\n");
-        Output.insert(Output.size(), 1, (char)200);
-        Output.insert(Output.size(), 147, (char)205);
-        Output.insert(Output.size(), 1, (char)188);
-
-        std::cout << Output;
-
-        SetConsoleCursorPosition( ConsoleHandle, { 55, 29 } );
-
-        std::getline(std::cin, Input);
-
-        if (!Error_Checking_On_User_Ship_Positions(PlayerOneBoard, Input, ShipPositionRows, ShipPositionColumns, ShipSize))
-          continue;
-
-        InputValid = true;
-
-        Place_Ship(PlayerOneBoard, ShipPositionRows, ShipPositionColumns, "S");
-      }
-
-      break;
-    }
-
-    case 4: // Patrol Boat (P)
-    {
-      while (!InputValid)
-      {
-        unsigned int ShipSize = 2;
-
-        Display_Game(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, std::to_string(NumberOfPlayers), AIDifficulty, false);
-        std::string Output;
-
-        Output.insert(Output.size(), 1, (char)186);
-        Output.append(" Please enter the " + std::to_string(ShipSize) + " grid locations for the Patrol Boat:\t\t\t\t\t\t\t                                    ");
-        Output.insert(Output.size(), 1, (char)186);
-
-        Output.append("\n");
-        Output.insert(Output.size(), 1, (char)186);
-        Output.append("\t\t\t\t\t\t\t\t\t\t\t\t\t\t                                    ");
-        Output.insert(Output.size(), 1, (char)186);
-
-        Output.append("\n");
-        Output.insert(Output.size(), 1, (char)186);
-        Output.append("\t\t\t\t\t\t\t\t\t\t\t\t\t\t                                    ");
-        Output.insert(Output.size(), 1, (char)186);
-
-        Output.append("\n");
-        Output.insert(Output.size(), 1, (char)186);
-        Output.append("\t\t\t\t\t\t\t\t\t\t\t\t\t\t                                    ");
-        Output.insert(Output.size(), 1, (char)186);
-
-        Output.append("\n");
-        Output.insert(Output.size(), 1, (char)186);
-        Output.append("\t\t\t\t\t\t\t\t\t\t\t\t\t\t                                    ");
-        Output.insert(Output.size(), 1, (char)186);
-
-        Output.append("\n");
-        Output.insert(Output.size(), 1, (char)200);
-        Output.insert(Output.size(), 147, (char)205);
-        Output.insert(Output.size(), 1, (char)188);
-
-        // Bottom bar
-        Output.append("\n");
-        Output.insert(Output.size(), 1, (char)201);
-        Output.insert(Output.size(), 147, (char)205);
-        Output.insert(Output.size(), 1, (char)187);
-
-        Output.append("\n");
-        Output.insert(Output.size(), 1, (char)186);
-        Output.append(RED);
-        Output.append("\t\t\t\t\t\t\t\t     Battleships\t\t\t\t                                    ");
-        Output.append(WHITE);
-        Output.insert(Output.size(), 1, (char)186);
-
-        Output.append("\n");
-        Output.insert(Output.size(), 1, (char)200);
-        Output.insert(Output.size(), 147, (char)205);
-        Output.insert(Output.size(), 1, (char)188);
-
-        std::cout << Output;
-
-        SetConsoleCursorPosition( ConsoleHandle, { 57, 29 } );
-
-        std::getline(std::cin, Input);
-
-        if (!Error_Checking_On_User_Ship_Positions(PlayerOneBoard, Input, ShipPositionRows, ShipPositionColumns, ShipSize))
-          continue;
-
-        InputValid = true;
-
-        Place_Ship(PlayerOneBoard, ShipPositionRows, ShipPositionColumns, "P");
-      }
-
-      break;
-    }
-
-    default:
-    break;
+      Place_Ship(PlayerOneBoard, ShipPositionRows, ShipPositionColumns, ShipLetters[i]);
     }
   }
 }
@@ -748,7 +335,6 @@ bool Error_Checking_On_User_Ship_Positions(std::vector<std::vector<std::string>>
       IndividualCoordinates.push_back(Temp);
       Temp.clear();
     }
-
     else
       Temp.push_back(Input[i]);
   }
@@ -762,10 +348,8 @@ bool Error_Checking_On_User_Ship_Positions(std::vector<std::vector<std::string>>
   {
     if (IndividualCoordinates[i].size() != 2)
       return false;
-
     if (IndividualCoordinates[i][0] < 'A' || IndividualCoordinates[i][0] > 'J')
       return false;
-
     if (IndividualCoordinates[i][1] < '0' || IndividualCoordinates[i][1] > '9')
       return false;
   }
@@ -777,7 +361,6 @@ bool Error_Checking_On_User_Ship_Positions(std::vector<std::vector<std::string>>
   {
     if (IndividualCoordinates[i][0] != IndividualCoordinates[0][0])
       LettersIdentical = false;
-
     if (IndividualCoordinates[i][1] != IndividualCoordinates[0][1])
       NumbersIdentical = false;
   }
@@ -789,7 +372,6 @@ bool Error_Checking_On_User_Ship_Positions(std::vector<std::vector<std::string>>
       if (IndividualCoordinates[i][1] != (IndividualCoordinates[i-1][1] + 1))
         return false;
   }
-
   else if (NumbersIdentical && !LettersIdentical) // Horizontal
   {
     // Check that letter is increment by one after each co-ordinate
@@ -797,9 +379,11 @@ bool Error_Checking_On_User_Ship_Positions(std::vector<std::vector<std::string>>
       if (IndividualCoordinates[i][0] != (IndividualCoordinates[i-1][0] + 1))
         return false;
   }
-
   else // No diagonals allowed
     return false;
+
+  ShipPositionRows.clear();
+  ShipPositionColumns.clear();
 
   // Convert A0, B5, etc to row and columns
   for (unsigned int i = 0; i < IndividualCoordinates.size(); i++)
@@ -826,119 +410,24 @@ bool Error_Checking_On_User_Ship_Positions(std::vector<std::vector<std::string>>
 
 void Get_AI_Ship_Positions(std::vector<std::vector<std::string>> &AIBoard)
 {
+  std::vector<unsigned int> ShipSizes = {5, 4, 3, 3, 2};
+  std::vector<std::string> ShipLetters = {"C", "B", "D", "S", "P"};
+  std::vector<unsigned int> ShipPositionRows, ShipPositionColumns;
+
   for (unsigned int i = 0; i < 5; i++)
   {
     bool InputValid = false;
 
-    switch (i)
+    while (!InputValid)
     {
-    case 0: // Carrier (C)
-    {
-      while (!InputValid)
-      {
-        std::vector<unsigned int> ShipPositionRows, ShipPositionColumns;
+      Generate_AI_Ship_Positions(ShipPositionRows, ShipPositionColumns, ShipSizes[i]);
 
-        unsigned int ShipSize = 5;
+      if (!Error_Checking_On_AI_Ship_Positions(AIBoard, ShipPositionRows, ShipPositionColumns))
+        continue;
 
-        Generate_AI_Ship_Positions(ShipPositionRows, ShipPositionColumns, ShipSize);
+      InputValid = true;
 
-        if (!Error_Checking_On_AI_Ship_Positions(AIBoard, ShipPositionRows, ShipPositionColumns))
-          continue;
-
-        InputValid = true;
-
-        Place_Ship(AIBoard, ShipPositionRows, ShipPositionColumns, "C");
-      }
-
-      break;
-    }
-
-    case 1: // Battleship (B)
-    {
-      while (!InputValid)
-      {
-        std::vector<unsigned int> ShipPositionRows, ShipPositionColumns;
-
-        unsigned int ShipSize = 4;
-
-        Generate_AI_Ship_Positions(ShipPositionRows, ShipPositionColumns, ShipSize);
-
-        if (!Error_Checking_On_AI_Ship_Positions(AIBoard, ShipPositionRows, ShipPositionColumns))
-          continue;
-
-        InputValid = true;
-
-        Place_Ship(AIBoard, ShipPositionRows, ShipPositionColumns, "B");
-      }
-
-      break;
-    }
-
-    case 2: // Destroyer (D)
-    {
-      while (!InputValid)
-      {
-        std::vector<unsigned int> ShipPositionRows, ShipPositionColumns;
-
-        unsigned int ShipSize = 3;
-
-        Generate_AI_Ship_Positions(ShipPositionRows, ShipPositionColumns, ShipSize);
-
-        if (!Error_Checking_On_AI_Ship_Positions(AIBoard, ShipPositionRows, ShipPositionColumns))
-          continue;
-
-        InputValid = true;
-
-        Place_Ship(AIBoard, ShipPositionRows, ShipPositionColumns, "D");
-      }
-
-      break;
-    }
-
-    case 3: // Submarine (S)
-    {
-      while (!InputValid)
-      {
-        std::vector<unsigned int> ShipPositionRows, ShipPositionColumns;
-
-        unsigned int ShipSize = 3;
-
-        Generate_AI_Ship_Positions(ShipPositionRows, ShipPositionColumns, ShipSize);
-
-        if (!Error_Checking_On_AI_Ship_Positions(AIBoard, ShipPositionRows, ShipPositionColumns))
-          continue;
-
-        InputValid = true;
-
-        Place_Ship(AIBoard, ShipPositionRows, ShipPositionColumns, "S");
-      }
-
-      break;
-    }
-
-    case 4: // Patrol Boat (P)
-    {
-      while (!InputValid)
-      {
-        std::vector<unsigned int> ShipPositionRows, ShipPositionColumns;
-
-        unsigned int ShipSize = 2;
-
-        Generate_AI_Ship_Positions(ShipPositionRows, ShipPositionColumns, ShipSize);
-
-        if (!Error_Checking_On_AI_Ship_Positions(AIBoard, ShipPositionRows, ShipPositionColumns))
-          continue;
-
-        InputValid = true;
-
-        Place_Ship(AIBoard, ShipPositionRows, ShipPositionColumns, "P");
-      }
-
-      break;
-    }
-
-    default:
-    break;
+      Place_Ship(AIBoard, ShipPositionRows, ShipPositionColumns, ShipLetters[i]);
     }
   }
 }
@@ -949,6 +438,8 @@ void Generate_AI_Ship_Positions(std::vector<unsigned int> &ShipPositionRows,
 
 {
   unsigned int Column, Row;
+  ShipPositionRows.clear();
+  ShipPositionColumns.clear();
 
   if ((std::rand() % 2) == 0) // Horizontal
   {
@@ -1009,233 +500,190 @@ void Place_Ship(std::vector<std::vector<std::string>> &anyBoard,
     anyBoard[ShipPositionRows[i]][ShipPositionColumns[i]] = ShipName;
 }
 
-void Display_Game(const std::vector<std::vector<std::string>> &PlayerOneBoard,
-                  const std::vector<std::vector<std::string>> &PlayerTwoBoard,
-                  const std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
-                  const std::map<std::string, unsigned int> &PlayerTwoShipsRemaining,
-                  const std::string &NumberOfPlayers,
-                  const std::string &AIDifficulty,
-                  const bool &GameOver)
+std::string Main_Game_Display(const std::vector<std::vector<std::string>> &PlayerOneBoard,
+                              const std::vector<std::vector<std::string>> &PlayerTwoBoard,
+                              const std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
+                              const std::map<std::string, unsigned int> &PlayerTwoShipsRemaining,
+                              const std::string &NumberOfPlayers,
+                              const std::string &AIDifficulty,
+                              const bool &GameOver)
 {
   Clear_Terminal();
 
   std::string Output;
 
   // Top bar
-  Output.append(WHITE);
+  Output.insert(Output.size(), WHITE);
   Output.insert(Output.size(), 1, (char)201);
   Output.insert(Output.size(), 147, (char)205);
   Output.insert(Output.size(), 1, (char)187);
-
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)186);
-  Output.append(RED);
-  Output.append("\t\t\t\t\t\t\t\t   Terminal-Games\t\t\t\t                                    ");
-  Output.append(WHITE);
-  Output.insert(Output.size(), 1, (char)186);
-
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)200);
-  Output.insert(Output.size(), 147, (char)205);
-  Output.insert(Output.size(), 1, (char)188);
+  Output.append(Battleships_New_Line(RED + "                                                                  Terminal-Games                                                                   " + WHITE));
+  Output.append(Battleships_Bottom_Line());
 
   // Main game box
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)201);
-  Output.insert(Output.size(), 147, (char)205);
-  Output.insert(Output.size(), 1, (char)187);
+  Output.append(Battleships_Top_Line());
 
   // Top Row of both boards
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)186);
-  Output.append("\t\t     PLAYER ONE\t\t\t\t\t\t                                             PLAYER TWO                     ");
-  Output.insert(Output.size(), 1, (char)186);
+  Output.append(Battleships_New_Line("                    PLAYER ONE                                                                                       PLAYER TWO                    "));
 
-  Output.append("\n");
+  Output.insert(Output.size(), "\n");
   Output.insert(Output.size(), 1, (char)186);
-  Output.append("   ");
-  Output.insert(Output.size(), 1, (char)218);
-  Output.insert(Output.size(), 3, (char)196);
-
-  for (unsigned int i = 0; i < 10; i++)
+  Output.insert(Output.size(), "   ");
+  for (unsigned int i = 0; i < 2; i++)
   {
-    Output.insert(Output.size(), 1, (char)194);
+    Output.insert(Output.size(), 1, (char)218);
     Output.insert(Output.size(), 3, (char)196);
+    for (unsigned int j = 0; j < 10; j++)
+    {
+      Output.insert(Output.size(), 1, (char)194);
+      Output.insert(Output.size(), 3, (char)196);
+    }
+    Output.insert(Output.size(), 1, (char)191);
+
+    if (i == 0)
+      Output.insert(Output.size(), "                                                   ");
   }
+  Output.insert(Output.size(), "   ");
+  Output.insert(Output.size(), 1, (char)186);
 
-  Output.insert(Output.size(), 1, (char)191);
-  Output.append("\t\t\t\t\t\t    ");
-  Output.insert(Output.size(), 1, (char)218);
-  Output.insert(Output.size(), 3, (char)196);
-
-  for (unsigned int i = 0; i < 10; i++)
+  Output.insert(Output.size(), "\n");
+  Output.insert(Output.size(), 1, (char)186);
+  Output.insert(Output.size(), "   ");
+  for (unsigned int i = 0; i < 2; i++)
   {
-    Output.insert(Output.size(), 1, (char)194);
-    Output.insert(Output.size(), 3, (char)196);
+    Output.insert(Output.size(), 1, (char)179);
+    Output.insert(Output.size(), "   ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.insert(Output.size(), " A ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.insert(Output.size(), " B ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.insert(Output.size(), " C ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.insert(Output.size(), " D ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.insert(Output.size(), " E ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.insert(Output.size(), " F ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.insert(Output.size(), " G ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.insert(Output.size(), " H ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.insert(Output.size(), " I ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.insert(Output.size(), " J ");
+    Output.insert(Output.size(), 1, (char)179);
+
+    if (i == 0)
+      Output.insert(Output.size(), "                                                   ");
   }
-
-  Output.insert(Output.size(), 1, (char)191);
-  Output.append("   ");
-  Output.insert(Output.size(), 1, (char)186);
-
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)186);
-  Output.append("   ");
-  Output.insert(Output.size(), 1, (char)179);
-  Output.append("   ");
-  Output.insert(Output.size(), 1, (char)179);
-  Output.append(" A ");
-  Output.insert(Output.size(), 1, (char)179);
-  Output.append(" B ");
-  Output.insert(Output.size(), 1, (char)179);
-  Output.append(" C ");
-  Output.insert(Output.size(), 1, (char)179);
-  Output.append(" D ");
-  Output.insert(Output.size(), 1, (char)179);
-  Output.append(" E ");
-  Output.insert(Output.size(), 1, (char)179);
-  Output.append(" F ");
-  Output.insert(Output.size(), 1, (char)179);
-  Output.append(" G ");
-  Output.insert(Output.size(), 1, (char)179);
-  Output.append(" H ");
-  Output.insert(Output.size(), 1, (char)179);
-  Output.append(" I ");
-  Output.insert(Output.size(), 1, (char)179);
-  Output.append(" J ");
-  Output.insert(Output.size(), 1, (char)179);
-  Output.append("\t\t\t\t\t\t    ");
-  Output.insert(Output.size(), 1, (char)179);
-  Output.append("   ");
-  Output.insert(Output.size(), 1, (char)179);
-  Output.append(" A ");
-  Output.insert(Output.size(), 1, (char)179);
-  Output.append(" B ");
-  Output.insert(Output.size(), 1, (char)179);
-  Output.append(" C ");
-  Output.insert(Output.size(), 1, (char)179);
-  Output.append(" D ");
-  Output.insert(Output.size(), 1, (char)179);
-  Output.append(" E ");
-  Output.insert(Output.size(), 1, (char)179);
-  Output.append(" F ");
-  Output.insert(Output.size(), 1, (char)179);
-  Output.append(" G ");
-  Output.insert(Output.size(), 1, (char)179);
-  Output.append(" H ");
-  Output.insert(Output.size(), 1, (char)179);
-  Output.append(" I ");
-  Output.insert(Output.size(), 1, (char)179);
-  Output.append(" J ");
-  Output.insert(Output.size(), 1, (char)179);
-  Output.append("   ");
+  Output.insert(Output.size(), "   ");
   Output.insert(Output.size(), 1, (char)186);
 
   // Main parts of both boards and centre information
   for (unsigned int i = 0; i < 10; i++)
   {
-    Output.append("\n");
+    // Part 1
+    Output.insert(Output.size(), "\n");
     Output.insert(Output.size(), 1, (char)186);
-    Output.append("   ");
+    Output.insert(Output.size(), "   ");
 
-    // Player One Board horizontal dividers
+    // Player One Board horizontal dividers Part 1
     Output.insert(Output.size(), 1, (char)195);
     Output.insert(Output.size(), 3, (char)196);
-
     for (unsigned int j = 0; j < 10; j++)
     {
       Output.insert(Output.size(), 1, (char)197);
       Output.insert(Output.size(), 3, (char)196);
     }
-
     Output.insert(Output.size(), 1, (char)180);
 
     // Centre information Part 1
     switch (i)
     {
-    case 3:
-      Output.append("   Carrier\t\t\t\t  Carrier   ");
-    break;
+      case 3:
+        Output.insert(Output.size(), "   Carrier                               Carrier   ");
+      break;
 
-    case 5: // Battleship
-      Output.append("   ");
-      for (unsigned int j = 0; j < 4; j++)
-      {
-        if (j < PlayerOneShipsRemaining.at("B"))
-          Output.insert(Output.size(), 3, (char)178);
-        else
-          Output.insert(Output.size(), 3, (char)176);
-        Output.append(" ");
-      }
-      Output.append("\t\t  ");
-      for (unsigned int j = 0; j < 4; j++)
-      {
-        if (j < (4-PlayerTwoShipsRemaining.at("B")))
-          Output.insert(Output.size(), 3, (char)176);
-        else
-          Output.insert(Output.size(), 3, (char)178);
-        Output.append(" ");
-      }
-      Output.append("  ");
-    break;
+      case 5: // Battleship
+        Output.insert(Output.size(), "   ");
+        for (unsigned int j = 0; j < 4; j++)
+        {
+          if (j < PlayerOneShipsRemaining.at("B"))
+            Output.insert(Output.size(), 3, (char)178);
+          else
+            Output.insert(Output.size(), 3, (char)176);
+          Output.insert(Output.size(), " ");
+        }
+        Output.insert(Output.size(), "              ");
+        for (unsigned int j = 0; j < 4; j++)
+        {
+          if (j < (4-PlayerTwoShipsRemaining.at("B")))
+            Output.insert(Output.size(), 3, (char)176);
+          else
+            Output.insert(Output.size(), 3, (char)178);
+          Output.insert(Output.size(), " ");
+        }
+        Output.insert(Output.size(), "  ");
+      break;
 
-    case 6:
-      Output.append("   Destroyer\t\t\t\tDestroyer   ");
-    break;
+      case 6:
+        Output.insert(Output.size(), "   Destroyer                           Destroyer   ");
+      break;
 
-    case 8: // Submarine
-      Output.append("   ");
-      for (unsigned int j = 0; j < 3; j++)
-      {
-        if (j < PlayerOneShipsRemaining.at("S"))
-          Output.insert(Output.size(), 3, (char)178);
-        else
-          Output.insert(Output.size(), 3, (char)176);
-        Output.append(" ");
-      }
-      Output.append("\t\t      ");
-      for (unsigned int j = 0; j < 3; j++)
-      {
-        if (j < (3-PlayerTwoShipsRemaining.at("S")))
-          Output.insert(Output.size(), 3, (char)176);
-        else
-          Output.insert(Output.size(), 3, (char)178);
-        Output.append(" ");
-      }
-      Output.append("  ");
-    break;
+      case 8: // Submarine
+        Output.insert(Output.size(), "   ");
+        for (unsigned int j = 0; j < 3; j++)
+        {
+          if (j < PlayerOneShipsRemaining.at("S"))
+            Output.insert(Output.size(), 3, (char)178);
+          else
+            Output.insert(Output.size(), 3, (char)176);
+          Output.insert(Output.size(), " ");
+        }
+        Output.insert(Output.size(), "                      ");
+        for (unsigned int j = 0; j < 3; j++)
+        {
+          if (j < (3-PlayerTwoShipsRemaining.at("S")))
+            Output.insert(Output.size(), 3, (char)176);
+          else
+            Output.insert(Output.size(), 3, (char)178);
+          Output.insert(Output.size(), " ");
+        }
+        Output.insert(Output.size(), "  ");
+      break;
 
-    case 9:
-      Output.append("   Patrol Boat\t\t\t      Patrol Boat   ");
-    break;
+      case 9:
+        Output.insert(Output.size(), "   Patrol Boat                       Patrol Boat   ");
+      break;
 
-    default:
-      Output.append("\t\t\t\t\t\t    ");
-    break;
+      default:
+        Output.insert(Output.size(), "                                                   ");
+      break;
     }
 
-    // Player Two Board horizontal dividers
+    // Player Two Board horizontal dividers Part 1
     Output.insert(Output.size(), 1, (char)195);
     Output.insert(Output.size(), 3, (char)196);
-
     for (unsigned int j = 0; j < 10; j++)
     {
       Output.insert(Output.size(), 1, (char)197);
       Output.insert(Output.size(), 3, (char)196);
     }
-
     Output.insert(Output.size(), 1, (char)180);
-    Output.append("   ");
+    Output.insert(Output.size(), "   ");
     Output.insert(Output.size(), 1, (char)186);
 
-    // Player One Board
-    Output.append("\n");
+
+    // Player One Board Part 2
+    Output.insert(Output.size(), "\n");
     Output.insert(Output.size(), 1, (char)186);
-    Output.append("   ");
+    Output.insert(Output.size(), "   ");
     Output.insert(Output.size(), 1, (char)179);
-    Output.append(" ");
+    Output.insert(Output.size(), " ");
     Output.insert(Output.size(), 1, i+48);
-    Output.append(" ");
+    Output.insert(Output.size(), " ");
     Output.insert(Output.size(), 1, (char)179);
 
     for (unsigned int j = 0; j < 10; j++)
@@ -1246,116 +694,116 @@ void Display_Game(const std::vector<std::vector<std::string>> &PlayerOneBoard,
         Output.insert(Output.size(), 3, (char)176);
       else if (PlayerOneBoard[i][j] == "Miss")
       {
-        Output.append(" ");
+        Output.insert(Output.size(), " ");
         Output.insert(Output.size(), 1, (char)250);
-        Output.append(" ");
+        Output.insert(Output.size(), " ");
       }
       else
-        Output.append("   ");
+        Output.insert(Output.size(), "   ");
       Output.insert(Output.size(), 1, (char)179);
     }
 
     // Centre Information Part 2
     switch (i)
     {
-    case 0:
-      if (NumberOfPlayers == "N/A")
-        Output.append("\t\t # of Players = " + NumberOfPlayers + "\t\t    ");
-      else
-        Output.append("\t\t  # of Players = " + NumberOfPlayers + "\t\t    ");
-    break;
-
-    case 1:
-      if (AIDifficulty == "N/A")
-        Output.append("\t\t AI Difficulty = " + AIDifficulty + "\t\t    ");
-      else
-        Output.append("\t\tAI Difficulty = " + AIDifficulty + "\t\t    ");
-    break;
-
-    case 3: // Carrier
-      Output.append("   ");
-      for (unsigned int j = 0; j < 5; j++)
-      {
-        if (j < PlayerOneShipsRemaining.at("C"))
-          Output.insert(Output.size(), 3, (char)178);
+      case 0:
+        if (NumberOfPlayers == "N/A")
+          Output.insert(Output.size(), "                # of Players = " + NumberOfPlayers + "                 ");
         else
-          Output.insert(Output.size(), 3, (char)176);
-        Output.append(" ");
-      }
-      Output.append("      ");
-      for (unsigned int j = 0; j < 5; j++)
-      {
-        if (j < (5-PlayerTwoShipsRemaining.at("C")))
-          Output.insert(Output.size(), 3, (char)176);
-        else
-          Output.insert(Output.size(), 3, (char)178);
-        Output.append(" ");
-      }
-      Output.append("  ");
-    break;
+          Output.insert(Output.size(), "                 # of Players = " + NumberOfPlayers + "                  ");
+      break;
 
-    case 4:
-      Output.append("   Battleship\t\t\t       Battleship   ");
-    break;
-
-    case 6: // Destroyer
-      Output.append("   ");
-      for (unsigned int j = 0; j < 3; j++)
-      {
-        if (j < PlayerOneShipsRemaining.at("D"))
-          Output.insert(Output.size(), 3, (char)178);
+      case 1:
+        if (AIDifficulty == "N/A")
+          Output.insert(Output.size(), "                AI Difficulty = " + AIDifficulty + "                ");
         else
-          Output.insert(Output.size(), 3, (char)176);
-        Output.append(" ");
-      }
-      Output.append("\t\t      ");
-      for (unsigned int j = 0; j < 3; j++)
-      {
-        if (j < (3-PlayerTwoShipsRemaining.at("D")))
-          Output.insert(Output.size(), 3, (char)176);
-        else
-          Output.insert(Output.size(), 3, (char)178);
-        Output.append(" ");
-      }
-      Output.append("  ");
-    break;
+          Output.insert(Output.size(), "               AI Difficulty = " + AIDifficulty + "                ");
+      break;
 
-    case 7:
-      Output.append("   Submarine\t\t\t\tSubmarine   ");
-    break;
+      case 3: // Carrier
+        Output.insert(Output.size(), "   ");
+        for (unsigned int j = 0; j < 5; j++)
+        {
+          if (j < PlayerOneShipsRemaining.at("C"))
+            Output.insert(Output.size(), 3, (char)178);
+          else
+            Output.insert(Output.size(), 3, (char)176);
+          Output.insert(Output.size(), " ");
+        }
+        Output.insert(Output.size(), "      ");
+        for (unsigned int j = 0; j < 5; j++)
+        {
+          if (j < (5-PlayerTwoShipsRemaining.at("C")))
+            Output.insert(Output.size(), 3, (char)176);
+          else
+            Output.insert(Output.size(), 3, (char)178);
+          Output.insert(Output.size(), " ");
+        }
+        Output.insert(Output.size(), "  ");
+      break;
 
-    case 9: // Patrol Boat
-      Output.append("   ");
-      for (unsigned int j = 0; j < 2; j++)
-      {
-        if (j < PlayerOneShipsRemaining.at("P"))
-          Output.insert(Output.size(), 3, (char)178);
-        else
-          Output.insert(Output.size(), 3, (char)176);
-        Output.append(" ");
-      }
-      Output.append("\t\t\t\t  ");
-      for (unsigned int j = 0; j < 2; j++)
-      {
-        if (j < (2-PlayerTwoShipsRemaining.at("P")))
-          Output.insert(Output.size(), 3, (char)176);
-        else
-          Output.insert(Output.size(), 3, (char)178);
-        Output.append(" ");
-      }
-      Output.append("  ");
-    break;
+      case 4:
+        Output.insert(Output.size(), "   Battleship                         Battleship   ");
+      break;
 
-    default:
-      Output.append("\t\t\t\t\t\t    ");
-    break;
+      case 6: // Destroyer
+        Output.insert(Output.size(), "   ");
+        for (unsigned int j = 0; j < 3; j++)
+        {
+          if (j < PlayerOneShipsRemaining.at("D"))
+            Output.insert(Output.size(), 3, (char)178);
+          else
+            Output.insert(Output.size(), 3, (char)176);
+          Output.insert(Output.size(), " ");
+        }
+        Output.insert(Output.size(), "                      ");
+        for (unsigned int j = 0; j < 3; j++)
+        {
+          if (j < (3-PlayerTwoShipsRemaining.at("D")))
+            Output.insert(Output.size(), 3, (char)176);
+          else
+            Output.insert(Output.size(), 3, (char)178);
+          Output.insert(Output.size(), " ");
+        }
+        Output.insert(Output.size(), "  ");
+      break;
+
+      case 7:
+        Output.insert(Output.size(), "   Submarine                           Submarine   ");
+      break;
+
+      case 9: // Patrol Boat
+        Output.insert(Output.size(), "   ");
+        for (unsigned int j = 0; j < 2; j++)
+        {
+          if (j < PlayerOneShipsRemaining.at("P"))
+            Output.insert(Output.size(), 3, (char)178);
+          else
+            Output.insert(Output.size(), 3, (char)176);
+          Output.insert(Output.size(), " ");
+        }
+        Output.insert(Output.size(), "                              ");
+        for (unsigned int j = 0; j < 2; j++)
+        {
+          if (j < (2-PlayerTwoShipsRemaining.at("P")))
+            Output.insert(Output.size(), 3, (char)176);
+          else
+            Output.insert(Output.size(), 3, (char)178);
+          Output.insert(Output.size(), " ");
+        }
+        Output.insert(Output.size(), "  ");
+      break;
+
+      default:
+        Output.insert(Output.size(), "                                                   ");
+      break;
     }
 
-    // Player Two Board
+    // Player Two Board Part 2
     Output.insert(Output.size(), 1, (char)179);
-    Output.append(" ");
+    Output.insert(Output.size(), " ");
     Output.insert(Output.size(), 1, i+48);
-    Output.append(" ");
+    Output.insert(Output.size(), " ");
     Output.insert(Output.size(), 1, (char)179);
     for (unsigned int j = 0; j < 10; j++)
     {
@@ -1365,54 +813,96 @@ void Display_Game(const std::vector<std::vector<std::string>> &PlayerOneBoard,
         Output.insert(Output.size(), 3, (char)176);
       else if (PlayerTwoBoard[i][j] == "Miss")
       {
-        Output.append(" ");
+        Output.insert(Output.size(), " ");
         Output.insert(Output.size(), 1, (char)250);
-        Output.append(" ");
+        Output.insert(Output.size(), " ");
       }
       else
-        Output.append("   ");
+        Output.insert(Output.size(), "   ");
       Output.insert(Output.size(), 1, (char)179);
     }
-    Output.append("   ");
+    Output.insert(Output.size(), "   ");
     Output.insert(Output.size(), 1, (char)186);
   }
 
   // Bottom row of both boards
-  Output.append("\n");
+  Output.insert(Output.size(), "\n");
   Output.insert(Output.size(), 1, (char)186);
-  Output.append("   ");
-  Output.insert(Output.size(), 1, (char)192);
-  Output.insert(Output.size(), 3, (char)196);
-
-  for (unsigned int j = 0; j < 10; j++)
+  Output.insert(Output.size(), "   ");
+  for (unsigned int i = 0; i < 2; i++)
   {
-    Output.insert(Output.size(), 1, (char)193);
+    Output.insert(Output.size(), 1, (char)192);
     Output.insert(Output.size(), 3, (char)196);
+    for (unsigned int j = 0; j < 10; j++)
+    {
+      Output.insert(Output.size(), 1, (char)193);
+      Output.insert(Output.size(), 3, (char)196);
+    }
+    Output.insert(Output.size(), 1, (char)217);
+
+    if (i == 0)
+      Output.insert(Output.size(), "                                                   ");
   }
-
-  Output.insert(Output.size(), 1, (char)217);
-  Output.append("\t\t\t\t\t\t    ");
-  Output.insert(Output.size(), 1, (char)192);
-  Output.insert(Output.size(), 3, (char)196);
-
-  for (unsigned int j = 0; j < 10; j++)
-  {
-    Output.insert(Output.size(), 1, (char)193);
-    Output.insert(Output.size(), 3, (char)196);
-  }
-
-  Output.insert(Output.size(), 1, (char)217);
-  Output.append("   ");
+  Output.insert(Output.size(), "   ");
   Output.insert(Output.size(), 1, (char)186);
 
-  Output.append("\n");
+  Output.append(Battleships_Empty_Line());
+
+  return Output;
+}
+
+std::string Battleships_Empty_Line(void)
+{
+  std::string Output;
+  Output.insert(Output.size(), "\n");
   Output.insert(Output.size(), 1, (char)186);
-  Output.append("\t\t\t\t\t\t\t\t\t\t\t\t\t\t                                    ");
+  Output.insert(Output.size(), "                                                                                                                                                   ");
   Output.insert(Output.size(), 1, (char)186);
 
-  Output.append("\n");
+  return Output;
+}
 
-  std::cout << Output;
+std::string Battleships_New_Line(const std::string &Input)
+{
+  std::string Output;
+  Output.insert(Output.size(), "\n");
+  Output.insert(Output.size(), 1, (char)186);
+  Output.insert(Output.size(), Input);
+  Output.insert(Output.size(), 1, (char)186);
+
+  return Output;
+}
+
+std::string Battleships_Top_Line(void)
+{
+  std::string Output;
+  Output.insert(Output.size(), "\n");
+  Output.insert(Output.size(), 1, (char)201);
+  Output.insert(Output.size(), 147, (char)205);
+  Output.insert(Output.size(), 1, (char)187);
+
+  return Output;
+}
+
+std::string Battleships_Bottom_Line(void)
+{
+  std::string Output;
+  Output.insert(Output.size(), "\n");
+  Output.insert(Output.size(), 1, (char)200);
+  Output.insert(Output.size(), 147, (char)205);
+  Output.insert(Output.size(), 1, (char)188);
+
+  return Output;
+}
+
+std::string Battleships_Bottom_Bar(void)
+{
+  std::string Output;
+  Output.append(Battleships_Top_Line());
+  Output.append(Battleships_New_Line(RED + "                                                                    Battleships                                                                    " + WHITE));
+  Output.append(Battleships_Bottom_Line());
+
+  return Output;
 }
 
 bool Winning_Conditions_Met(const std::vector<std::vector<std::string>> &PlayerOneBoard,
@@ -1449,55 +939,14 @@ unsigned int Get_Next_User_Command(const std::vector<std::vector<std::string>> &
   unsigned int UserCommand, Row = ValidMovesRemaining[0] / 10, Column = ValidMovesRemaining[0] % 10;
   unsigned char KeyPress = 0;
 
-  std::string Output;
-  Output.insert(Output.size(), 1, (char)186);
-  Output.append(" Player One, please enter your next command!\t\t\t\t\t\t                                                            ");
-  Output.insert(Output.size(), 1, (char)186);
-
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)186);
-  Output.append("\t\t\t\t\t\t\t\t\t\t\t\t\t\t                                    ");
-  Output.insert(Output.size(), 1, (char)186);
-
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)186);
-  Output.append("\t\t\t\t\t\t\t\t\t\t\t\t\t\t                                    ");
-  Output.insert(Output.size(), 1, (char)186);
-
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)186);
-  Output.append("\t\t\t\t\t\t\t\t\t\t\t\t\t\t                                    ");
-  Output.insert(Output.size(), 1, (char)186);
-
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)186);
-  Output.append("\t\t\t\t\t\t\t\t\t\t\t\t\t\t                                    ");
-  Output.insert(Output.size(), 1, (char)186);
-
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)200);
-  Output.insert(Output.size(), 147, (char)205);
-  Output.insert(Output.size(), 1, (char)188);
-
-  // Bottom bar
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)201);
-  Output.insert(Output.size(), 147, (char)205);
-  Output.insert(Output.size(), 1, (char)187);
-
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)186);
-  Output.append(RED);
-  Output.append("\t\t\t\t\t\t\t\t     Battleships\t\t\t\t                                    ");
-  Output.append(WHITE);
-  Output.insert(Output.size(), 1, (char)186);
-
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)200);
-  Output.insert(Output.size(), 147, (char)205);
-  Output.insert(Output.size(), 1, (char)188);
-
-  std::cout << Output;
+  std::string Output = Main_Game_Display(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, std::to_string(NumberOfPlayers), AIDifficulty, false);
+  Output.append(Battleships_New_Line(" Player One, please enter your next command!                                                                                                       "));
+  Output.append(Battleships_Empty_Line());
+  Output.append(Battleships_Empty_Line());
+  Output.append(Battleships_Empty_Line());
+  Output.append(Battleships_Empty_Line());
+  Output.append(Battleships_Bottom_Line());
+  Output.append(Battleships_Bottom_Bar());
 
   while (!InputValid)
   {
@@ -1505,39 +954,40 @@ unsigned int Get_Next_User_Command(const std::vector<std::vector<std::string>> &
     {
       switch (KeyPress)
       {
-      case 72: // up arrow key
-        if (Row == 0)
-          Row = 9;
-        else
-          Row--;
-      break;
+        case 72: // up arrow key
+          if (Row == 0)
+            Row = 9;
+          else
+            Row--;
+        break;
 
-      case 80: // down arrow key
-        if (Row == 9)
-          Row = 0;
-        else
-          Row++;
-      break;
+        case 80: // down arrow key
+          if (Row == 9)
+            Row = 0;
+          else
+            Row++;
+        break;
 
-      case 75: // left arrow key
-        if (Column == 0)
-          Column = 9;
-        else
-          Column--;
-      break;
+        case 75: // left arrow key
+          if (Column == 0)
+            Column = 9;
+          else
+            Column--;
+        break;
 
-      case 77: // right arrow key
-        if (Column == 9)
-          Column = 0;
-        else
-          Column++;
-      break;
+        case 77: // right arrow key
+          if (Column == 9)
+            Column = 0;
+          else
+            Column++;
+        break;
 
-      default:
-      break;
+        default:
+        break;
       }
 
-      Display_Game(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, std::to_string(NumberOfPlayers), AIDifficulty, false);
+      Clear_Terminal();
+
       std::cout << Output;
 
       COORD CursorPosition;
@@ -1635,57 +1085,19 @@ void Display_Game_Over_Message(const std::vector<std::vector<std::string>> &Play
                                const unsigned int &NumberOfTurns,
                                bool &GameIsRunning)
 {
-  Display_Game(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, std::to_string(NumberOfPlayers), AIDifficulty, true);
-  std::string Output;
-  Output.insert(Output.size(), 1, (char)186);
-  Output.append("\t\t\t\t\t\t\t\t      GAME OVER\t\t\t\t\t                                    ");
-  Output.insert(Output.size(), 1, (char)186);
+  std::string Output = Main_Game_Display(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, std::to_string(NumberOfPlayers), AIDifficulty, true);
+  Output.append(Battleships_New_Line("                                                                     GAME OVER                                                                     "));
+  Output.append(Battleships_Empty_Line());
 
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)186);
-  Output.append("\t\t\t\t\t\t\t\t\t\t\t\t\t\t                                    ");
-  Output.insert(Output.size(), 1, (char)186);
-
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)186);
   if (CurrentPlayer == "PLAYER ONE")
-    Output.append("\t\t\t\t\t\t   Player One has won! The game lasted " + std::to_string(NumberOfTurns) + " turns.\t\t                                    ");
+    Output.append(Battleships_New_Line("                                                  Player One has won! The game lasted " + std::to_string(NumberOfTurns) + " turns.                                                   "));
   else
-    Output.append("\t\t\t\t\t\t   Player Two has won! The game lasted " + std::to_string(NumberOfTurns) + " turns.\t\t                                    ");
-  Output.insert(Output.size(), 1, (char)186);
+    Output.append(Battleships_New_Line("                                                  Player Two has won! The game lasted " + std::to_string(NumberOfTurns) + " turns.                                                   "));
 
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)186);
-  Output.append("\t\t\t\t\t\t\t\t\t\t\t\t\t\t                                    ");
-  Output.insert(Output.size(), 1, (char)186);
-
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)186);
-  Output.append("\t\t\t\t\t\t Press 'Q' to quit OR any other key to play again...\t\t                                    ");
-  Output.insert(Output.size(), 1, (char)186);
-
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)200);
-  Output.insert(Output.size(), 147, (char)205);
-  Output.insert(Output.size(), 1, (char)188);
-
-  // Bottom bar
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)201);
-  Output.insert(Output.size(), 147, (char)205);
-  Output.insert(Output.size(), 1, (char)187);
-
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)186);
-  Output.append(RED);
-  Output.append("\t\t\t\t\t\t\t\t     Battleships\t\t\t\t                                    ");
-  Output.append(WHITE);
-  Output.insert(Output.size(), 1, (char)186);
-
-  Output.append("\n");
-  Output.insert(Output.size(), 1, (char)200);
-  Output.insert(Output.size(), 147, (char)205);
-  Output.insert(Output.size(), 1, (char)188);
+  Output.append(Battleships_Empty_Line());
+  Output.append(Battleships_New_Line("                                                Press 'Q' to quit OR any other key to play again...                                                "));
+  Output.append(Battleships_Bottom_Line());
+  Output.append(Battleships_Bottom_Bar());
 
   std::cout << Output;
 
