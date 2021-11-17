@@ -28,31 +28,24 @@ std::string Main_Game_Display(const unsigned int &CurrentSelection)
   // Centre game list
   Output.insert(Output.size(), Main_Top_Line());
 
-  if (CurrentSelection == 3)
+  if (CurrentSelection == 2)
     Output.insert(Output.size(), Main_New_Line(BLUE + "       > Tic Tac Toe          " + WHITE));
   else
     Output.insert(Output.size(), Main_New_Line("         Tic Tac Toe          "));
 
   Output.insert(Output.size(), Main_Empty_Line());
 
-  if (CurrentSelection == 2)
+  if (CurrentSelection == 1)
     Output.insert(Output.size(), Main_New_Line(BLUE + "         > Hangman            " + WHITE));
   else
     Output.insert(Output.size(), Main_New_Line("           Hangman            "));
 
   Output.insert(Output.size(), Main_Empty_Line());
 
-  if (CurrentSelection == 1)
+  if (CurrentSelection == 0)
     Output.insert(Output.size(), Main_New_Line(BLUE + "       > Battleships          " + WHITE));
   else
     Output.insert(Output.size(), Main_New_Line("         Battleships          "));
-
-  Output.insert(Output.size(), Main_Empty_Line());
-
-  if (CurrentSelection == 0)
-    Output.insert(Output.size(), Main_New_Line(BLUE + "   > Snakes (Coming Soon!)    " + WHITE));
-  else
-    Output.insert(Output.size(), Main_New_Line("     Snakes (Coming Soon!)    "));
 
   Output.append(Main_Bottom_Line());
   Output.append(Main_Bottom_Bar());

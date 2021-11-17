@@ -20,7 +20,7 @@
 int main(void)
 {
   bool ProgramIsRunning = true;
-  unsigned int CurrentSelection = 3;
+  unsigned int CurrentSelection = 2;
 
   HANDLE ConsoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
   if (ConsoleHandle == INVALID_HANDLE_VALUE)
@@ -39,7 +39,7 @@ int main(void)
     switch (_getch())
     {
       case 72: // up arrow key
-        if (CurrentSelection == 3)
+        if (CurrentSelection == 2)
           CurrentSelection = 0;
         else
           CurrentSelection++;
@@ -47,7 +47,7 @@ int main(void)
 
       case 80: // down arrow key
         if (CurrentSelection == 0)
-          CurrentSelection = 3;
+          CurrentSelection = 2;
         else
           CurrentSelection--;
       break;
@@ -56,17 +56,14 @@ int main(void)
         switch (CurrentSelection)
         {
           case 0:
-          break;
-
-          case 1:
             Play_Battleships(ConsoleHandle, CursorInfo);
           break;
 
-          case 2:
+          case 1:
             Play_Hangman(ConsoleHandle);
           break;
 
-          case 3:
+          case 2:
             Play_Tic_Tac_Toe(ConsoleHandle, CursorInfo);
           break;
 

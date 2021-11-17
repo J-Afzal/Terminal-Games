@@ -51,11 +51,7 @@
  <img src="screenshots/Battleships%20Playing.png">
 </p>
 
-# Snake
-* Supports only 1 player
-
 # Needed Improvements
-* Implement snake game
 * TicTacToe - Implement Hard AI to use the Minimax Algorithm as seen [here](!https://www.geeksforgeeks.org/minimax-algorithm-in-game-theory-set-1-introduction/)
 * Hangman - Implement Hard AI to to use probabilistic guessing as seen [here](!https://www.datagenetics.com/blog/april12012/) and to choose longer words and implement Easy AI to choose shorter words
 * Battleships - Implement Hard AI to continue to attack in a smart manner once a successful hot has been made until the ship is sunk
