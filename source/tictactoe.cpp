@@ -511,6 +511,8 @@ void Get_Next_User_Command(std::vector<std::vector<std::string>> &TicTacToeGrid,
         break;
       }
 
+      Clear_Terminal();
+
       std::cout << Output;
 
       COORD CursorPosition;

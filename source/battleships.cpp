@@ -297,6 +297,8 @@ void Get_User_Ship_Positions(std::vector<std::vector<std::string>> &PlayerOneBoa
 
     while (!InputValid)
     {
+      Clear_Terminal();
+
       std::cout << Output;
 
       SetConsoleCursorPosition( ConsoleHandle, { ShipCursorPosition[i], 29 } );
