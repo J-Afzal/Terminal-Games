@@ -1,5 +1,5 @@
 ## Warning
-This program has only been tested to run in the VS Code integrated powershell terminal on Windows due to the use of _getch(), Windows.h to refresh the terminal, and ANSI colour escape codes.
+This program was developed and tested on the VS Code integrated powershell terminal on Windows 10 and so may not work as shown below in other terminals due to the use of _getch(), Windows.h, and ANSI colour escape codes.
 
 ## Game List:
 * Tic Tac Toe
