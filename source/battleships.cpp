@@ -125,7 +125,7 @@ unsigned int Get_Number_Of_Players(const std::vector<std::vector<std::string>> &
   unsigned int CurrentSelection = 0;
   unsigned char KeyPress = 0;
 
-  std::string CommonString = Main_Game_Display(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, "N/A", "N/A", false);
+  std::string CommonString = Battleships_Game_Display(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, "N/A", "N/A", false);
   CommonString.append(Battleships_New_Line(" Please select the number of human players:                                                                                                        "));
 
   std::string CaseZero = CommonString;
@@ -198,7 +198,7 @@ std::string Get_AI_Difficulty(const std::vector<std::vector<std::string>> &Playe
   unsigned int CurrentSelection = 0;
   unsigned char KeyPress = 0;
 
-  std::string CommonString = Main_Game_Display(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, std::to_string(NumberOfPlayers), "N/A", false);
+  std::string CommonString = Battleships_Game_Display(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, std::to_string(NumberOfPlayers), "N/A", false);
   CommonString.append(Battleships_New_Line(" Please select the AI difficulty:                                                                                                                  "));
 
   std::string CaseZero = CommonString;
@@ -283,7 +283,7 @@ void Get_User_Ship_Positions(std::vector<std::vector<std::string>> &PlayerOneBoa
 
   for (unsigned int i = 0; i < 5; i++)
   {
-    std::string Output = Main_Game_Display(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, std::to_string(NumberOfPlayers), AIDifficulty, false);
+    std::string Output = Battleships_Game_Display(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, std::to_string(NumberOfPlayers), AIDifficulty, false);
     Output.append(Battleships_New_Line(ShipCommands[i]));
     Output.append(Battleships_Empty_Line());
     Output.append(Battleships_Empty_Line());
@@ -500,13 +500,13 @@ void Place_Ship(std::vector<std::vector<std::string>> &anyBoard,
     anyBoard[ShipPositionRows[i]][ShipPositionColumns[i]] = ShipName;
 }
 
-std::string Main_Game_Display(const std::vector<std::vector<std::string>> &PlayerOneBoard,
-                              const std::vector<std::vector<std::string>> &PlayerTwoBoard,
-                              const std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
-                              const std::map<std::string, unsigned int> &PlayerTwoShipsRemaining,
-                              const std::string &NumberOfPlayers,
-                              const std::string &AIDifficulty,
-                              const bool &GameOver)
+std::string Battleships_Game_Display(const std::vector<std::vector<std::string>> &PlayerOneBoard,
+                                     const std::vector<std::vector<std::string>> &PlayerTwoBoard,
+                                     const std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
+                                     const std::map<std::string, unsigned int> &PlayerTwoShipsRemaining,
+                                     const std::string &NumberOfPlayers,
+                                     const std::string &AIDifficulty,
+                                     const bool &GameOver)
 {
   Clear_Terminal();
 
@@ -939,7 +939,7 @@ unsigned int Get_Next_User_Command(const std::vector<std::vector<std::string>> &
   unsigned int UserCommand, Row = ValidMovesRemaining[0] / 10, Column = ValidMovesRemaining[0] % 10;
   unsigned char KeyPress = 0;
 
-  std::string Output = Main_Game_Display(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, std::to_string(NumberOfPlayers), AIDifficulty, false);
+  std::string Output = Battleships_Game_Display(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, std::to_string(NumberOfPlayers), AIDifficulty, false);
   Output.append(Battleships_New_Line(" Player One, please enter your next command!                                                                                                       "));
   Output.append(Battleships_Empty_Line());
   Output.append(Battleships_Empty_Line());
@@ -1085,7 +1085,7 @@ void Display_Game_Over_Message(const std::vector<std::vector<std::string>> &Play
                                const unsigned int &NumberOfTurns,
                                bool &GameIsRunning)
 {
-  std::string Output = Main_Game_Display(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, std::to_string(NumberOfPlayers), AIDifficulty, true);
+  std::string Output = Battleships_Game_Display(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, std::to_string(NumberOfPlayers), AIDifficulty, true);
   Output.append(Battleships_New_Line("                                                                     GAME OVER                                                                     "));
   Output.append(Battleships_Empty_Line());
 

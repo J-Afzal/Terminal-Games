@@ -190,13 +190,13 @@ void Place_Ship(std::vector<std::vector<std::string>> &anyBoard,
  * @param GameOver
  * @return std::string
  */
-std::string Main_Game_Display(const std::vector<std::vector<std::string>> &PlayerOneBoard,
-                              const std::vector<std::vector<std::string>> &PlayerTwoBoard,
-                              const std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
-                              const std::map<std::string, unsigned int> &PlayerTwoShipsRemaining,
-                              const std::string &NumberOfPlayers,
-                              const std::string &AIDifficulty,
-                              const bool &GameOver);
+std::string Battleships_Game_Display(const std::vector<std::vector<std::string>> &PlayerOneBoard,
+                                     const std::vector<std::vector<std::string>> &PlayerTwoBoard,
+                                     const std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
+                                     const std::map<std::string, unsigned int> &PlayerTwoShipsRemaining,
+                                     const std::string &NumberOfPlayers,
+                                     const std::string &AIDifficulty,
+                                     const bool &GameOver);
 
 /**
  * @brief Creates an empty new line for any of the game boxes

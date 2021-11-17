@@ -101,7 +101,7 @@ unsigned int Get_Number_Of_Players(const std::vector<std::string> &IncorrectGues
   unsigned int CurrentSelection = 0;
   unsigned char KeyPress = 0;
 
-  std::string CommonString = Main_Game_Display(0, "N/A", "N/A", IncorrectGuesses, "", "", false);
+  std::string CommonString = Hangman_Game_Display(0, "N/A", "N/A", IncorrectGuesses, "", "", false);
   CommonString.append(Hangman_New_Line(" Please select the number of human players:                   "));
 
   std::string CaseZero = CommonString;
@@ -182,7 +182,7 @@ std::string Get_User_Player_Choice(const unsigned int &NumberOfPlayers,
   unsigned int CurrentSelection = 0;
   unsigned char KeyPress = 0;
 
-  std::string CommonString = Main_Game_Display(0, std::to_string(NumberOfPlayers), "N/A", IncorrectGuesses, "", "", false);
+  std::string CommonString = Hangman_Game_Display(0, std::to_string(NumberOfPlayers), "N/A", IncorrectGuesses, "", "", false);
   CommonString.append(Hangman_New_Line(" Please select what player you would like to be:              "));
 
   std::string CaseZero = CommonString;
@@ -251,7 +251,7 @@ std::string Get_AI_Difficulty(const unsigned int &NumberOfPlayers,
   unsigned int CurrentSelection = 0;
   unsigned char KeyPress = 0;
 
-  std::string CommonString = Main_Game_Display(0, std::to_string(NumberOfPlayers), "N/A", IncorrectGuesses, "", "", false);
+  std::string CommonString = Hangman_Game_Display(0, std::to_string(NumberOfPlayers), "N/A", IncorrectGuesses, "", "", false);
   CommonString.append(Hangman_New_Line(" Please select the AI difficulty:                             "));
 
   std::string CaseZero = CommonString;
@@ -322,7 +322,7 @@ std::string Get_Word_To_Be_Guessed_From_User(const std::vector<std::string> &Inc
   bool InputValid = false;
   std::string Input;
 
-  std::string Output = Main_Game_Display(0, std::to_string(NumberOfPlayers), AIDifficulty, IncorrectGuesses, "", "", false);
+  std::string Output = Hangman_Game_Display(0, std::to_string(NumberOfPlayers), AIDifficulty, IncorrectGuesses, "", "", false);
   Output.append(Hangman_New_Line(" Please enter the word to be guessed:                         "));
   Output.append(Hangman_Empty_Line());
   Output.append(Hangman_Empty_Line());
@@ -370,13 +370,13 @@ std::string Get_Word_To_Be_Guessed_From_AI(void)
   return Words[std::rand() % Words.size()];
 }
 
-std::string Main_Game_Display(const unsigned int &NumberOfErrors,
-                              const std::string &NumberOfPlayers,
-                              const std::string &AIDifficulty,
-                              const std::vector<std::string> &IncorrectGuesses,
-                              const std::string &CurrentGuessOfWord,
-                              const std::string &WordToBeGuessed,
-                              const bool &GameOver)
+std::string Hangman_Game_Display(const unsigned int &NumberOfErrors,
+                                 const std::string &NumberOfPlayers,
+                                 const std::string &AIDifficulty,
+                                 const std::vector<std::string> &IncorrectGuesses,
+                                 const std::string &CurrentGuessOfWord,
+                                 const std::string &WordToBeGuessed,
+                                 const bool &GameOver)
 {
   Clear_Terminal();
 
@@ -884,7 +884,7 @@ void Get_Next_User_Guess(unsigned int &NumberOfErrors,
   unsigned int CurrentSelection = 0;
   unsigned char KeyPress = 0;
 
-  std::string Output = Main_Game_Display(NumberOfErrors, std::to_string(NumberOfPlayers), AIDifficulty, IncorrectGuesses, CurrentGuessOfWord, WordToBeGuessed, false);
+  std::string Output = Hangman_Game_Display(NumberOfErrors, std::to_string(NumberOfPlayers), AIDifficulty, IncorrectGuesses, CurrentGuessOfWord, WordToBeGuessed, false);
   Output.append(Hangman_New_Line(" Guesser, please enter your next guess:                       "));
   Output.append(Hangman_Empty_Line());
   Output.append(Hangman_Empty_Line());
@@ -987,7 +987,7 @@ void Display_Game_Over_Message(const unsigned int &NumberOfErrors,
                                const unsigned int &NumberOfTurns,
                                bool &GameIsRunning)
 {
-  std::string Output = Main_Game_Display(NumberOfErrors, std::to_string(NumberOfPlayers), AIDifficulty, IncorrectGuesses, CurrentGuessOfWord, WordToBeGuessed, true);
+  std::string Output = Hangman_Game_Display(NumberOfErrors, std::to_string(NumberOfPlayers), AIDifficulty, IncorrectGuesses, CurrentGuessOfWord, WordToBeGuessed, true);
   Output.append(Hangman_New_Line("                          GAME OVER                           "));
   Output.append(Hangman_Empty_Line());
 

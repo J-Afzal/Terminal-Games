@@ -112,13 +112,13 @@ std::string Get_Word_To_Be_Guessed_From_AI(void);
  * @param GameOver
  * @return std::string
  */
-std::string Main_Game_Display(const unsigned int &NumberOfErrors,
-                              const std::string &NumberOfPlayers,
-                              const std::string &AIDifficulty,
-                              const std::vector<std::string> &IncorrectGuesses,
-                              const std::string &CurrentGuessOfWord,
-                              const std::string &WordToBeGuessed,
-                              const bool &GameOver);
+std::string Hangman_Game_Display(const unsigned int &NumberOfErrors,
+                                 const std::string &NumberOfPlayers,
+                                 const std::string &AIDifficulty,
+                                 const std::vector<std::string> &IncorrectGuesses,
+                                 const std::string &CurrentGuessOfWord,
+                                 const std::string &WordToBeGuessed,
+                                 const bool &GameOver);
 
 /**
  * @brief Creates an empty new line for any of the game boxes

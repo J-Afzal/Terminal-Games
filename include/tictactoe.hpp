@@ -83,9 +83,9 @@ std::string Get_AI_Difficulty(const std::vector<std::vector<std::string>> &TicTa
  * @param AIDifficulty
  * @return std::string
  */
-std::string Main_Game_Display(const std::vector<std::vector<std::string>> &TicTacToeGrid,
-                              const std::string &NumberOfPlayers,
-                              const std::string &AIDifficulty);
+std::string TicTacToe_Game_Display(const std::vector<std::vector<std::string>> &TicTacToeGrid,
+                                   const std::string &NumberOfPlayers,
+                                   const std::string &AIDifficulty);
 
 /**
  * @brief Creates an empty new line for any of the game boxes
