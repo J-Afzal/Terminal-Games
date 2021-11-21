@@ -32,51 +32,51 @@ int main(void)
 
   SetConsoleCursorInfo(ConsoleHandle, &CursorInfo);
 
-  while(ProgramIsRunning)
+  while (ProgramIsRunning)
   {
     std::cout << Main_Game_Display(CurrentSelection);
 
     switch (_getch())
     {
-      case 72: // up arrow key
-        if (CurrentSelection == 2)
-          CurrentSelection = 0;
-        else
-          CurrentSelection++;
+    case 72: // up arrow key
+      if (CurrentSelection == 2)
+        CurrentSelection = 0;
+      else
+        CurrentSelection++;
       break;
 
-      case 80: // down arrow key
-        if (CurrentSelection == 0)
-          CurrentSelection = 2;
-        else
-          CurrentSelection--;
+    case 80: // down arrow key
+      if (CurrentSelection == 0)
+        CurrentSelection = 2;
+      else
+        CurrentSelection--;
       break;
 
-      case '\r': // enter key
-        switch (CurrentSelection)
-        {
-          case 0:
-            Play_Battleships(ConsoleHandle, CursorInfo);
-          break;
+    case '\r': // enter key
+      switch (CurrentSelection)
+      {
+      case 0:
+        Play_Battleships(ConsoleHandle, CursorInfo);
+        break;
 
-          case 1:
-            Play_Hangman(ConsoleHandle);
-          break;
+      case 1:
+        Play_Hangman(ConsoleHandle);
+        break;
 
-          case 2:
-            Play_Tic_Tac_Toe(ConsoleHandle, CursorInfo);
-          break;
-
-          default:
-          break;
-        }
-      break;
-
-      case 'q':
-        ProgramIsRunning = false;
-      break;
+      case 2:
+        Play_Tic_Tac_Toe(ConsoleHandle, CursorInfo);
+        break;
 
       default:
+        break;
+      }
+      break;
+
+    case 'q':
+      ProgramIsRunning = false;
+      break;
+
+    default:
       break;
     }
   }

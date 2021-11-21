@@ -58,42 +58,42 @@ void Setup_Game(unsigned int &NumberOfPlayers,
 
   switch (NumberOfPlayers)
   {
-    case 0:
-      PlayerThatIsGuessing = "AI";
-      AIDifficulty = Get_AI_Difficulty(NumberOfPlayers, IncorrectGuesses);
-      WordToBeGuessed = Get_Word_To_Be_Guessed_From_AI();
+  case 0:
+    PlayerThatIsGuessing = "AI";
+    AIDifficulty = Get_AI_Difficulty(NumberOfPlayers, IncorrectGuesses);
+    WordToBeGuessed = Get_Word_To_Be_Guessed_From_AI();
     break;
 
-    case 1:
-      PlayerThatIsGuessing = Get_User_Player_Choice(NumberOfPlayers, IncorrectGuesses);
-      AIDifficulty = Get_AI_Difficulty(NumberOfPlayers, IncorrectGuesses);
+  case 1:
+    PlayerThatIsGuessing = Get_User_Player_Choice(NumberOfPlayers, IncorrectGuesses);
+    AIDifficulty = Get_AI_Difficulty(NumberOfPlayers, IncorrectGuesses);
 
-      if (PlayerThatIsGuessing == "PLAYER ONE")
-      {
-        PlayerThatIsGuessing = "HUMAN";
-        WordToBeGuessed = Get_Word_To_Be_Guessed_From_AI();
-      }
-      else
-      {
-        PlayerThatIsGuessing = "AI";
-        WordToBeGuessed = Get_Word_To_Be_Guessed_From_User(IncorrectGuesses, NumberOfPlayers, AIDifficulty, ConsoleHandle);
-      }
-    break;
-
-    case 2:
+    if (PlayerThatIsGuessing == "PLAYER ONE")
+    {
       PlayerThatIsGuessing = "HUMAN";
+      WordToBeGuessed = Get_Word_To_Be_Guessed_From_AI();
+    }
+    else
+    {
+      PlayerThatIsGuessing = "AI";
       WordToBeGuessed = Get_Word_To_Be_Guessed_From_User(IncorrectGuesses, NumberOfPlayers, AIDifficulty, ConsoleHandle);
-      AIDifficulty = "N/A";
+    }
     break;
 
-    default:
+  case 2:
+    PlayerThatIsGuessing = "HUMAN";
+    WordToBeGuessed = Get_Word_To_Be_Guessed_From_User(IncorrectGuesses, NumberOfPlayers, AIDifficulty, ConsoleHandle);
+    AIDifficulty = "N/A";
+    break;
+
+  default:
     break;
   }
 
   for (unsigned int i = 0; i < WordToBeGuessed.size(); i++)
     CurrentGuessOfWord.push_back('_');
 
-  ValidMovesRemaining = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
+  ValidMovesRemaining = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
 }
 
 unsigned int Get_Number_Of_Players(const std::vector<std::string> &IncorrectGuesses)
@@ -132,21 +132,21 @@ unsigned int Get_Number_Of_Players(const std::vector<std::string> &IncorrectGues
   {
     switch (KeyPress)
     {
-      case 72: // up arrow key
-        if (CurrentSelection == 0)
-          CurrentSelection = 2;
-        else
-          CurrentSelection--;
+    case 72: // up arrow key
+      if (CurrentSelection == 0)
+        CurrentSelection = 2;
+      else
+        CurrentSelection--;
       break;
 
-      case 80: // down arrow key
-        if (CurrentSelection == 2)
-          CurrentSelection = 0;
-        else
-          CurrentSelection++;
+    case 80: // down arrow key
+      if (CurrentSelection == 2)
+        CurrentSelection = 0;
+      else
+        CurrentSelection++;
       break;
 
-      default:
+    default:
       break;
     }
 
@@ -154,19 +154,19 @@ unsigned int Get_Number_Of_Players(const std::vector<std::string> &IncorrectGues
 
     switch (CurrentSelection)
     {
-      case 0:
-        std::cout << CaseZero;
+    case 0:
+      std::cout << CaseZero;
       break;
 
-      case 1:
-        std::cout << CaseOne;
+    case 1:
+      std::cout << CaseOne;
       break;
 
-      case 2:
-        std::cout << CaseTwo;
+    case 2:
+      std::cout << CaseTwo;
       break;
 
-      default:
+    default:
       break;
     }
 
@@ -205,21 +205,21 @@ std::string Get_User_Player_Choice(const unsigned int &NumberOfPlayers,
   {
     switch (KeyPress)
     {
-      case 72: // up arrow key
-        if (CurrentSelection == 0)
-          CurrentSelection = 1;
-        else
-          CurrentSelection--;
+    case 72: // up arrow key
+      if (CurrentSelection == 0)
+        CurrentSelection = 1;
+      else
+        CurrentSelection--;
       break;
 
-      case 80: // down arrow key
-        if (CurrentSelection == 1)
-          CurrentSelection = 0;
-        else
-          CurrentSelection++;
+    case 80: // down arrow key
+      if (CurrentSelection == 1)
+        CurrentSelection = 0;
+      else
+        CurrentSelection++;
       break;
 
-      default:
+    default:
       break;
     }
 
@@ -227,15 +227,15 @@ std::string Get_User_Player_Choice(const unsigned int &NumberOfPlayers,
 
     switch (CurrentSelection)
     {
-      case 0:
-        std::cout << CaseZero;
+    case 0:
+      std::cout << CaseZero;
       break;
 
-      case 1:
-        std::cout << CaseOne;
+    case 1:
+      std::cout << CaseOne;
       break;
 
-      default:
+    default:
       break;
     }
 
@@ -274,21 +274,21 @@ std::string Get_AI_Difficulty(const unsigned int &NumberOfPlayers,
   {
     switch (KeyPress)
     {
-      case 72: // up arrow key
-        if (CurrentSelection == 0)
-          CurrentSelection = 1;
-        else
-          CurrentSelection--;
+    case 72: // up arrow key
+      if (CurrentSelection == 0)
+        CurrentSelection = 1;
+      else
+        CurrentSelection--;
       break;
 
-      case 80: // down arrow key
-        if (CurrentSelection == 1)
-          CurrentSelection = 0;
-        else
-          CurrentSelection++;
+    case 80: // down arrow key
+      if (CurrentSelection == 1)
+        CurrentSelection = 0;
+      else
+        CurrentSelection++;
       break;
 
-      default:
+    default:
       break;
     }
 
@@ -296,15 +296,15 @@ std::string Get_AI_Difficulty(const unsigned int &NumberOfPlayers,
 
     switch (CurrentSelection)
     {
-      case 0:
-        std::cout << CaseZero;
+    case 0:
+      std::cout << CaseZero;
       break;
 
-      case 1:
-        std::cout << CaseTwo;
+    case 1:
+      std::cout << CaseTwo;
       break;
 
-      default:
+    default:
       break;
     }
 
@@ -339,7 +339,7 @@ std::string Get_Word_To_Be_Guessed_From_User(const std::vector<std::string> &Inc
 
     std::cout << Output;
 
-    SetConsoleCursorPosition( ConsoleHandle, { 39, 13 } );
+    SetConsoleCursorPosition(ConsoleHandle, {39, 13});
 
     std::getline(std::cin, Input);
 
@@ -396,102 +396,102 @@ std::string Hangman_Game_Display(const unsigned int &NumberOfErrors,
   // Line 1
   switch (NumberOfErrors)
   {
-    case 0:
-    case 1:
-    case 2:
-      Output.insert(Output.size(), Hangman_Empty_Line());
+  case 0:
+  case 1:
+  case 2:
+    Output.insert(Output.size(), Hangman_Empty_Line());
     break;
 
-    case 3:
-      Output.insert(Output.size(), "\n");
-      Output.insert(Output.size(), 1, (char)186);
-      Output.insert(Output.size(), "     ");
-      Output.insert(Output.size(), 1, (char)218);
-      Output.insert(Output.size(), 8, (char)196);
-      Output.insert(Output.size(), "                                                ");
-      Output.insert(Output.size(), 1, (char)186);
+  case 3:
+    Output.insert(Output.size(), "\n");
+    Output.insert(Output.size(), 1, (char)186);
+    Output.insert(Output.size(), "     ");
+    Output.insert(Output.size(), 1, (char)218);
+    Output.insert(Output.size(), 8, (char)196);
+    Output.insert(Output.size(), "                                                ");
+    Output.insert(Output.size(), 1, (char)186);
     break;
 
-    case 4:
-    case 5:
-    case 6:
-    case 7:
-    case 8:
-    case 9:
-    case 10:
-      Output.insert(Output.size(), "\n");
-      Output.insert(Output.size(), 1, (char)186);
-      Output.insert(Output.size(), "     ");
-      Output.insert(Output.size(), 1, (char)218);
-      Output.insert(Output.size(), 7, (char)196);
-      Output.insert(Output.size(), 1, (char)191);
-      Output.insert(Output.size(), "                                                ");
-      Output.insert(Output.size(), 1, (char)186);
+  case 4:
+  case 5:
+  case 6:
+  case 7:
+  case 8:
+  case 9:
+  case 10:
+    Output.insert(Output.size(), "\n");
+    Output.insert(Output.size(), 1, (char)186);
+    Output.insert(Output.size(), "     ");
+    Output.insert(Output.size(), 1, (char)218);
+    Output.insert(Output.size(), 7, (char)196);
+    Output.insert(Output.size(), 1, (char)191);
+    Output.insert(Output.size(), "                                                ");
+    Output.insert(Output.size(), 1, (char)186);
     break;
 
-    default:
+  default:
     break;
   }
 
   // Line 2
   switch (NumberOfErrors)
   {
-    case 0:
-      Output.insert(Output.size(), Hangman_Empty_Line());
+  case 0:
+    Output.insert(Output.size(), Hangman_Empty_Line());
     break;
 
-    case 1:
-      Output.insert(Output.size(), Hangman_New_Line("                                          Incorrect Guesses   "));
+  case 1:
+    Output.insert(Output.size(), Hangman_New_Line("                                          Incorrect Guesses   "));
     break;
 
-    case 2:
-    case 3:
-      Output.insert(Output.size(), "\n");
-      Output.insert(Output.size(), 1, (char)186);
-      Output.insert(Output.size(), "     ");
-      Output.insert(Output.size(), 1, (char)179);
-      Output.insert(Output.size(), "                                    Incorrect Guesses   ");
-      Output.insert(Output.size(), 1, (char)186);
+  case 2:
+  case 3:
+    Output.insert(Output.size(), "\n");
+    Output.insert(Output.size(), 1, (char)186);
+    Output.insert(Output.size(), "     ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.insert(Output.size(), "                                    Incorrect Guesses   ");
+    Output.insert(Output.size(), 1, (char)186);
     break;
 
-    case 4:
-    case 5:
-    case 6:
-    case 7:
-    case 8:
-    case 9:
-    case 10:
-      Output.insert(Output.size(), "\n");
-      Output.insert(Output.size(), 1, (char)186);
-      Output.insert(Output.size(), "     ");
-      Output.insert(Output.size(), 1, (char)179);
-      Output.insert(Output.size(), "       ");
-      Output.insert(Output.size(), 1, (char)179);
-      Output.insert(Output.size(), "                            Incorrect Guesses   ");
-      Output.insert(Output.size(), 1, (char)186);
+  case 4:
+  case 5:
+  case 6:
+  case 7:
+  case 8:
+  case 9:
+  case 10:
+    Output.insert(Output.size(), "\n");
+    Output.insert(Output.size(), 1, (char)186);
+    Output.insert(Output.size(), "     ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.insert(Output.size(), "       ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.insert(Output.size(), "                            Incorrect Guesses   ");
+    Output.insert(Output.size(), 1, (char)186);
     break;
 
-    default:
+  default:
     break;
   }
 
   // Line 3
   switch (NumberOfErrors)
   {
-    case 0:
-      if (NumberOfPlayers == "N/A")
-        Output.insert(Output.size(), Hangman_New_Line("                   # of Players = " + NumberOfPlayers + "                         "));
-      else
-        Output.insert(Output.size(), Hangman_New_Line("                    # of Players = " + NumberOfPlayers + "                          "));
-    break;
-
-    case 1:
+  case 0:
+    if (NumberOfPlayers == "N/A")
+      Output.insert(Output.size(), Hangman_New_Line("                   # of Players = " + NumberOfPlayers + "                         "));
+    else
       Output.insert(Output.size(), Hangman_New_Line("                    # of Players = " + NumberOfPlayers + "                          "));
     break;
 
-    case 2:
-    case 3:
-    case 4:
+  case 1:
+    Output.insert(Output.size(), Hangman_New_Line("                    # of Players = " + NumberOfPlayers + "                          "));
+    break;
+
+  case 2:
+  case 3:
+  case 4:
     Output.insert(Output.size(), "\n");
     Output.insert(Output.size(), 1, (char)186);
     Output.insert(Output.size(), "     ");
@@ -500,12 +500,12 @@ std::string Hangman_Game_Display(const unsigned int &NumberOfErrors,
     Output.insert(Output.size(), 1, (char)186);
     break;
 
-    case 5:
-    case 6:
-    case 7:
-    case 8:
-    case 9:
-    case 10:
+  case 5:
+  case 6:
+  case 7:
+  case 8:
+  case 9:
+  case 10:
     Output.insert(Output.size(), "\n");
     Output.insert(Output.size(), 1, (char)186);
     Output.insert(Output.size(), "     ");
@@ -514,263 +514,262 @@ std::string Hangman_Game_Display(const unsigned int &NumberOfErrors,
     Output.insert(Output.size(), 1, (char)186);
     break;
 
-    default:
+  default:
     break;
   }
-
 
   // Line 4
   switch (NumberOfErrors)
   {
-    case 0:
-      Output.insert(Output.size(), Hangman_Empty_Line());
+  case 0:
+    Output.insert(Output.size(), Hangman_Empty_Line());
     break;
 
-    case 1:
-      Output.insert(Output.size(), Hangman_New_Line("                                          " + IncorrectGuesses[0] + "                   "));
+  case 1:
+    Output.insert(Output.size(), Hangman_New_Line("                                          " + IncorrectGuesses[0] + "                   "));
     break;
 
-    case 2:
-      Output.insert(Output.size(), "\n");
-      Output.insert(Output.size(), 1, (char)186);
-      Output.insert(Output.size(), "     ");
-      Output.insert(Output.size(), 1, (char)179);
-      Output.insert(Output.size(), "                                    " + IncorrectGuesses[0] + "   " + IncorrectGuesses[1] + "               ");
-      Output.insert(Output.size(), 1, (char)186);
+  case 2:
+    Output.insert(Output.size(), "\n");
+    Output.insert(Output.size(), 1, (char)186);
+    Output.insert(Output.size(), "     ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.insert(Output.size(), "                                    " + IncorrectGuesses[0] + "   " + IncorrectGuesses[1] + "               ");
+    Output.insert(Output.size(), 1, (char)186);
     break;
 
-    case 3:
-      Output.insert(Output.size(), "\n");
-      Output.insert(Output.size(), 1, (char)186);
-      Output.insert(Output.size(), "     ");
-      Output.insert(Output.size(), 1, (char)179);
-      Output.insert(Output.size(), "                                    " + IncorrectGuesses[0] + "   " + IncorrectGuesses[1] + "   " + IncorrectGuesses[2] + "           ");
-      Output.insert(Output.size(), 1, (char)186);
+  case 3:
+    Output.insert(Output.size(), "\n");
+    Output.insert(Output.size(), 1, (char)186);
+    Output.insert(Output.size(), "     ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.insert(Output.size(), "                                    " + IncorrectGuesses[0] + "   " + IncorrectGuesses[1] + "   " + IncorrectGuesses[2] + "           ");
+    Output.insert(Output.size(), 1, (char)186);
     break;
 
-    case 4:
-      Output.insert(Output.size(), "\n");
-      Output.insert(Output.size(), 1, (char)186);
-      Output.insert(Output.size(), "     ");
-      Output.insert(Output.size(), 1, (char)179);
-      Output.insert(Output.size(), "                                    " + IncorrectGuesses[0] + "   " + IncorrectGuesses[1] + "   " + IncorrectGuesses[2] + "   " + IncorrectGuesses[3] + "       ");
-      Output.insert(Output.size(), 1, (char)186);
+  case 4:
+    Output.insert(Output.size(), "\n");
+    Output.insert(Output.size(), 1, (char)186);
+    Output.insert(Output.size(), "     ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.insert(Output.size(), "                                    " + IncorrectGuesses[0] + "   " + IncorrectGuesses[1] + "   " + IncorrectGuesses[2] + "   " + IncorrectGuesses[3] + "       ");
+    Output.insert(Output.size(), 1, (char)186);
     break;
 
-    case 5:
-      Output.insert(Output.size(), "\n");
-      Output.insert(Output.size(), 1, (char)186);
-      Output.insert(Output.size(), "     ");
-      Output.insert(Output.size(), 1, (char)179);
-      Output.insert(Output.size(), "                                    " + IncorrectGuesses[0] + "   " + IncorrectGuesses[1] + "   " + IncorrectGuesses[2] + "   " + IncorrectGuesses[3] + "   " + IncorrectGuesses[4] + "   ");
-      Output.insert(Output.size(), 1, (char)186);
+  case 5:
+    Output.insert(Output.size(), "\n");
+    Output.insert(Output.size(), 1, (char)186);
+    Output.insert(Output.size(), "     ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.insert(Output.size(), "                                    " + IncorrectGuesses[0] + "   " + IncorrectGuesses[1] + "   " + IncorrectGuesses[2] + "   " + IncorrectGuesses[3] + "   " + IncorrectGuesses[4] + "   ");
+    Output.insert(Output.size(), 1, (char)186);
     break;
 
-    case 6:
-    case 7:
-    case 8:
-      Output.insert(Output.size(), "\n");
-      Output.insert(Output.size(), 1, (char)186);
-      Output.insert(Output.size(), "     ");
-      Output.insert(Output.size(), 1, (char)179);
-      Output.insert(Output.size(), "       ");
-      Output.insert(Output.size(), 1, (char)179);
-      Output.insert(Output.size(), "                            " + IncorrectGuesses[0] + "   " + IncorrectGuesses[1] + "   " + IncorrectGuesses[2] + "   " + IncorrectGuesses[3] + "   " + IncorrectGuesses[4] + "   ");
-      Output.insert(Output.size(), 1, (char)186);
+  case 6:
+  case 7:
+  case 8:
+    Output.insert(Output.size(), "\n");
+    Output.insert(Output.size(), 1, (char)186);
+    Output.insert(Output.size(), "     ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.insert(Output.size(), "       ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.insert(Output.size(), "                            " + IncorrectGuesses[0] + "   " + IncorrectGuesses[1] + "   " + IncorrectGuesses[2] + "   " + IncorrectGuesses[3] + "   " + IncorrectGuesses[4] + "   ");
+    Output.insert(Output.size(), 1, (char)186);
     break;
 
-    case 9:
-      Output.insert(Output.size(), "\n");
-      Output.insert(Output.size(), 1, (char)186);
-      Output.insert(Output.size(), "     ");
-      Output.insert(Output.size(), 1, (char)179);
-      Output.insert(Output.size(), "      /");
-      Output.insert(Output.size(), 1, (char)179);
-      Output.insert(Output.size(), "                            " + IncorrectGuesses[0] + "   " + IncorrectGuesses[1] + "   " + IncorrectGuesses[2] + "   " + IncorrectGuesses[3] + "   " + IncorrectGuesses[4] + "   ");
-      Output.insert(Output.size(), 1, (char)186);
+  case 9:
+    Output.insert(Output.size(), "\n");
+    Output.insert(Output.size(), 1, (char)186);
+    Output.insert(Output.size(), "     ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.insert(Output.size(), "      /");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.insert(Output.size(), "                            " + IncorrectGuesses[0] + "   " + IncorrectGuesses[1] + "   " + IncorrectGuesses[2] + "   " + IncorrectGuesses[3] + "   " + IncorrectGuesses[4] + "   ");
+    Output.insert(Output.size(), 1, (char)186);
     break;
 
-    case 10:
-      Output.insert(Output.size(), "\n");
-      Output.insert(Output.size(), 1, (char)186);
-      Output.insert(Output.size(), "     ");
-      Output.insert(Output.size(), 1, (char)179);
-      Output.insert(Output.size(), "      /");
-      Output.insert(Output.size(), 1, (char)179);
-      Output.insert(Output.size(), "\\                           " + IncorrectGuesses[0] + "   " + IncorrectGuesses[1] + "   " + IncorrectGuesses[2] + "   " + IncorrectGuesses[3] + "   " + IncorrectGuesses[4] + "   ");
-      Output.insert(Output.size(), 1, (char)186);
+  case 10:
+    Output.insert(Output.size(), "\n");
+    Output.insert(Output.size(), 1, (char)186);
+    Output.insert(Output.size(), "     ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.insert(Output.size(), "      /");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.insert(Output.size(), "\\                           " + IncorrectGuesses[0] + "   " + IncorrectGuesses[1] + "   " + IncorrectGuesses[2] + "   " + IncorrectGuesses[3] + "   " + IncorrectGuesses[4] + "   ");
+    Output.insert(Output.size(), 1, (char)186);
     break;
 
-    default:
+  default:
     break;
   }
 
   // Line 5
   switch (NumberOfErrors)
   {
-    case 0:
-    case 1:
-      if (AIDifficulty == "N/A")
-        Output.insert(Output.size(), Hangman_New_Line("                   AI Difficulty = " + AIDifficulty + "                        "));
-      else
-        Output.insert(Output.size(), Hangman_New_Line("                  AI Difficulty = " + AIDifficulty + "                        "));
+  case 0:
+  case 1:
+    if (AIDifficulty == "N/A")
+      Output.insert(Output.size(), Hangman_New_Line("                   AI Difficulty = " + AIDifficulty + "                        "));
+    else
+      Output.insert(Output.size(), Hangman_New_Line("                  AI Difficulty = " + AIDifficulty + "                        "));
     break;
 
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-    case 6:
-      Output.insert(Output.size(), "\n");
-      Output.insert(Output.size(), 1, (char)186);
-      Output.insert(Output.size(), "     ");
-      Output.insert(Output.size(), 1, (char)179);
-      if (AIDifficulty == "N/A")
-        Output.insert(Output.size(), "             AI Difficulty = " + AIDifficulty + "                        ");
-      else
-        Output.insert(Output.size(), "            AI Difficulty = " + AIDifficulty + "                        ");
-      Output.insert(Output.size(), 1, (char)186);
+  case 2:
+  case 3:
+  case 4:
+  case 5:
+  case 6:
+    Output.insert(Output.size(), "\n");
+    Output.insert(Output.size(), 1, (char)186);
+    Output.insert(Output.size(), "     ");
+    Output.insert(Output.size(), 1, (char)179);
+    if (AIDifficulty == "N/A")
+      Output.insert(Output.size(), "             AI Difficulty = " + AIDifficulty + "                        ");
+    else
+      Output.insert(Output.size(), "            AI Difficulty = " + AIDifficulty + "                        ");
+    Output.insert(Output.size(), 1, (char)186);
     break;
 
-    case 7:
-      Output.insert(Output.size(), "\n");
-      Output.insert(Output.size(), 1, (char)186);
-      Output.insert(Output.size(), "     ");
-      Output.insert(Output.size(), 1, (char)179);
-      if (AIDifficulty == "N/A")
-        Output.insert(Output.size(), "      /      AI Difficulty = " + AIDifficulty + "                        ");
-      else
-        Output.insert(Output.size(), "      /     AI Difficulty = " + AIDifficulty + "                        ");
-      Output.insert(Output.size(), 1, (char)186);
+  case 7:
+    Output.insert(Output.size(), "\n");
+    Output.insert(Output.size(), 1, (char)186);
+    Output.insert(Output.size(), "     ");
+    Output.insert(Output.size(), 1, (char)179);
+    if (AIDifficulty == "N/A")
+      Output.insert(Output.size(), "      /      AI Difficulty = " + AIDifficulty + "                        ");
+    else
+      Output.insert(Output.size(), "      /     AI Difficulty = " + AIDifficulty + "                        ");
+    Output.insert(Output.size(), 1, (char)186);
     break;
 
-    case 8:
-    case 9:
-    case 10:
-      Output.insert(Output.size(), "\n");
-      Output.insert(Output.size(), 1, (char)186);
-      Output.insert(Output.size(), "     ");
-      Output.insert(Output.size(), 1, (char)179);
-      if (AIDifficulty == "N/A")
-        Output.insert(Output.size(), "      / \\    AI Difficulty = " + AIDifficulty + "                        ");
-      else
-        Output.insert(Output.size(), "      / \\   AI Difficulty = " + AIDifficulty + "                        ");
-      Output.insert(Output.size(), 1, (char)186);
+  case 8:
+  case 9:
+  case 10:
+    Output.insert(Output.size(), "\n");
+    Output.insert(Output.size(), 1, (char)186);
+    Output.insert(Output.size(), "     ");
+    Output.insert(Output.size(), 1, (char)179);
+    if (AIDifficulty == "N/A")
+      Output.insert(Output.size(), "      / \\    AI Difficulty = " + AIDifficulty + "                        ");
+    else
+      Output.insert(Output.size(), "      / \\   AI Difficulty = " + AIDifficulty + "                        ");
+    Output.insert(Output.size(), 1, (char)186);
     break;
 
-    default:
+  default:
     break;
   }
 
   // Line 6
   switch (NumberOfErrors)
   {
-    case 0:
-      Output.insert(Output.size(), Hangman_Empty_Line());
+  case 0:
+    Output.insert(Output.size(), Hangman_Empty_Line());
     break;
 
-    case 1:
-      Output.insert(Output.size(), Hangman_Empty_Line());
+  case 1:
+    Output.insert(Output.size(), Hangman_Empty_Line());
     break;
 
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-      Output.insert(Output.size(), "\n");
-      Output.insert(Output.size(), 1, (char)186);
-      Output.insert(Output.size(), "     ");
-      Output.insert(Output.size(), 1, (char)179);
-      Output.insert(Output.size(), "                                                        ");
-      Output.insert(Output.size(), 1, (char)186);
+  case 2:
+  case 3:
+  case 4:
+  case 5:
+    Output.insert(Output.size(), "\n");
+    Output.insert(Output.size(), 1, (char)186);
+    Output.insert(Output.size(), "     ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.insert(Output.size(), "                                                        ");
+    Output.insert(Output.size(), 1, (char)186);
     break;
 
-    case 6:
-      Output.insert(Output.size(), "\n");
-      Output.insert(Output.size(), 1, (char)186);
-      Output.insert(Output.size(), "     ");
-      Output.insert(Output.size(), 1, (char)179);
-      Output.insert(Output.size(), "                                    " + IncorrectGuesses[5] + "                   ");
-      Output.insert(Output.size(), 1, (char)186);
+  case 6:
+    Output.insert(Output.size(), "\n");
+    Output.insert(Output.size(), 1, (char)186);
+    Output.insert(Output.size(), "     ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.insert(Output.size(), "                                    " + IncorrectGuesses[5] + "                   ");
+    Output.insert(Output.size(), 1, (char)186);
     break;
 
-    case 7:
-      Output.insert(Output.size(), "\n");
-      Output.insert(Output.size(), 1, (char)186);
-      Output.insert(Output.size(), "     ");
-      Output.insert(Output.size(), 1, (char)179);
-      Output.insert(Output.size(), "                                    " + IncorrectGuesses[5] + "   " + IncorrectGuesses[6] + "               ");
-      Output.insert(Output.size(), 1, (char)186);
+  case 7:
+    Output.insert(Output.size(), "\n");
+    Output.insert(Output.size(), 1, (char)186);
+    Output.insert(Output.size(), "     ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.insert(Output.size(), "                                    " + IncorrectGuesses[5] + "   " + IncorrectGuesses[6] + "               ");
+    Output.insert(Output.size(), 1, (char)186);
     break;
 
-    case 8:
-      Output.insert(Output.size(), "\n");
-      Output.insert(Output.size(), 1, (char)186);
-      Output.insert(Output.size(), "     ");
-      Output.insert(Output.size(), 1, (char)179);
-      Output.insert(Output.size(), "                                    " + IncorrectGuesses[5] + "   " + IncorrectGuesses[6] + "   " + IncorrectGuesses[7] + "           ");
-      Output.insert(Output.size(), 1, (char)186);
+  case 8:
+    Output.insert(Output.size(), "\n");
+    Output.insert(Output.size(), 1, (char)186);
+    Output.insert(Output.size(), "     ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.insert(Output.size(), "                                    " + IncorrectGuesses[5] + "   " + IncorrectGuesses[6] + "   " + IncorrectGuesses[7] + "           ");
+    Output.insert(Output.size(), 1, (char)186);
     break;
 
-    case 9:
-      Output.insert(Output.size(), "\n");
-      Output.insert(Output.size(), 1, (char)186);
-      Output.insert(Output.size(), "     ");
-      Output.insert(Output.size(), 1, (char)179);
-      Output.insert(Output.size(), "                                    " + IncorrectGuesses[5] + "   " + IncorrectGuesses[6] + "   " + IncorrectGuesses[7] + "   " + IncorrectGuesses[8] + "       ");
-      Output.insert(Output.size(), 1, (char)186);
+  case 9:
+    Output.insert(Output.size(), "\n");
+    Output.insert(Output.size(), 1, (char)186);
+    Output.insert(Output.size(), "     ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.insert(Output.size(), "                                    " + IncorrectGuesses[5] + "   " + IncorrectGuesses[6] + "   " + IncorrectGuesses[7] + "   " + IncorrectGuesses[8] + "       ");
+    Output.insert(Output.size(), 1, (char)186);
     break;
 
-    case 10:
-      Output.insert(Output.size(), "\n");
-      Output.insert(Output.size(), 1, (char)186);
-      Output.insert(Output.size(), "     ");
-      Output.insert(Output.size(), 1, (char)179);
-      Output.insert(Output.size(), "                                    " + IncorrectGuesses[5] + "   " + IncorrectGuesses[6] + "   " + IncorrectGuesses[7] + "   " + IncorrectGuesses[8] + "   " + IncorrectGuesses[9] + "   ");
-      Output.insert(Output.size(), 1, (char)186);
+  case 10:
+    Output.insert(Output.size(), "\n");
+    Output.insert(Output.size(), 1, (char)186);
+    Output.insert(Output.size(), "     ");
+    Output.insert(Output.size(), 1, (char)179);
+    Output.insert(Output.size(), "                                    " + IncorrectGuesses[5] + "   " + IncorrectGuesses[6] + "   " + IncorrectGuesses[7] + "   " + IncorrectGuesses[8] + "   " + IncorrectGuesses[9] + "   ");
+    Output.insert(Output.size(), 1, (char)186);
     break;
 
-    default:
+  default:
     break;
   }
 
   // Line 7
   switch (NumberOfErrors)
   {
-    case 0:
+  case 0:
 
-      Output.insert(Output.size(), Hangman_Empty_Line());
-      break;
-
-    case 1:
-      Output.insert(Output.size(), "\n");
-      Output.insert(Output.size(), 1, (char)186);
-      Output.insert(Output.size(), " ");
-      Output.insert(Output.size(), 9, (char)196);
-      Output.insert(Output.size(), "                                                    ");
-      Output.insert(Output.size(), 1, (char)186);
-      break;
-
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-    case 6:
-    case 7:
-    case 8:
-    case 9:
-    case 10:
-      Output.insert(Output.size(), "\n");
-      Output.insert(Output.size(), 1, (char)186);
-      Output.insert(Output.size(), " ");
-      Output.insert(Output.size(), 4, (char)196);
-      Output.insert(Output.size(), 1, (char)193);
-      Output.insert(Output.size(), 4, (char)196);
-      Output.insert(Output.size(), "                                                    ");
-      Output.insert(Output.size(), 1, (char)186);
+    Output.insert(Output.size(), Hangman_Empty_Line());
     break;
 
-    default:
+  case 1:
+    Output.insert(Output.size(), "\n");
+    Output.insert(Output.size(), 1, (char)186);
+    Output.insert(Output.size(), " ");
+    Output.insert(Output.size(), 9, (char)196);
+    Output.insert(Output.size(), "                                                    ");
+    Output.insert(Output.size(), 1, (char)186);
+    break;
+
+  case 2:
+  case 3:
+  case 4:
+  case 5:
+  case 6:
+  case 7:
+  case 8:
+  case 9:
+  case 10:
+    Output.insert(Output.size(), "\n");
+    Output.insert(Output.size(), 1, (char)186);
+    Output.insert(Output.size(), " ");
+    Output.insert(Output.size(), 4, (char)196);
+    Output.insert(Output.size(), 1, (char)193);
+    Output.insert(Output.size(), 4, (char)196);
+    Output.insert(Output.size(), "                                                    ");
+    Output.insert(Output.size(), 1, (char)186);
+    break;
+
+  default:
     break;
   }
 
@@ -787,10 +786,10 @@ std::string Hangman_Game_Display(const unsigned int &NumberOfErrors,
   if (GameOver && NumberOfErrors == 10)
   {
     Output.insert(Output.size(), "   (The word was " + WordToBeGuessed + ")");
-    Output.insert(Output.size(), (62 - WordToBeGuessed.size()*3 - 18), ' ');
+    Output.insert(Output.size(), (62 - WordToBeGuessed.size() * 3 - 18), ' ');
   }
   else
-    Output.insert(Output.size(), (62 - WordToBeGuessed.size()*2), ' ');
+    Output.insert(Output.size(), (62 - WordToBeGuessed.size() * 2), ' ');
 
   Output.insert(Output.size(), 1, (char)186);
 
@@ -897,22 +896,22 @@ void Get_Next_User_Guess(unsigned int &NumberOfErrors,
   {
     switch (KeyPress)
     {
-      case 72: // up arrow key
-        if (CurrentSelection == 0)
-          CurrentSelection = ValidMovesRemaining.size() - 1;
-        else
-          CurrentSelection--;
+    case 72: // up arrow key
+      if (CurrentSelection == 0)
+        CurrentSelection = ValidMovesRemaining.size() - 1;
+      else
+        CurrentSelection--;
 
       break;
 
-      case 80: // down arrow key
-        if (CurrentSelection == ValidMovesRemaining.size() - 1)
-          CurrentSelection = 0;
-        else
-          CurrentSelection++;
+    case 80: // down arrow key
+      if (CurrentSelection == ValidMovesRemaining.size() - 1)
+        CurrentSelection = 0;
+      else
+        CurrentSelection++;
       break;
 
-      default:
+    default:
       break;
     }
 
@@ -920,7 +919,7 @@ void Get_Next_User_Guess(unsigned int &NumberOfErrors,
 
     std::cout << Output;
 
-    SetConsoleCursorPosition( ConsoleHandle, { 41, 13 } );
+    SetConsoleCursorPosition(ConsoleHandle, {41, 13});
 
     std::cout << BLUE + ValidMovesRemaining[CurrentSelection] + WHITE;
 

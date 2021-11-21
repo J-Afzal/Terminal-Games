@@ -148,38 +148,37 @@ unsigned int Get_Number_Of_Players(const std::vector<std::vector<std::string>> &
   {
     switch (KeyPress)
     {
-      case 72: // up arrow key
-        if (CurrentSelection == 0)
-          CurrentSelection = 1;
-        else
-          CurrentSelection--;
+    case 72: // up arrow key
+      if (CurrentSelection == 0)
+        CurrentSelection = 1;
+      else
+        CurrentSelection--;
       break;
 
-      case 80: // down arrow key
-        if (CurrentSelection == 1)
-          CurrentSelection = 0;
-        else
-          CurrentSelection++;
+    case 80: // down arrow key
+      if (CurrentSelection == 1)
+        CurrentSelection = 0;
+      else
+        CurrentSelection++;
       break;
 
-      default:
+    default:
       break;
     }
 
     Clear_Terminal();
 
-
     switch (CurrentSelection)
     {
-      case 0:
-        std::cout << CaseZero;
+    case 0:
+      std::cout << CaseZero;
       break;
 
-      case 1:
-        std::cout << CaseOne;
+    case 1:
+      std::cout << CaseOne;
       break;
 
-      default:
+    default:
       break;
     }
 
@@ -221,21 +220,21 @@ std::string Get_AI_Difficulty(const std::vector<std::vector<std::string>> &Playe
   {
     switch (KeyPress)
     {
-      case 72: // up arrow key
-        if (CurrentSelection == 0)
-          CurrentSelection = 1;
-        else
-          CurrentSelection--;
+    case 72: // up arrow key
+      if (CurrentSelection == 0)
+        CurrentSelection = 1;
+      else
+        CurrentSelection--;
       break;
 
-      case 80: // down arrow key
-        if (CurrentSelection == 1)
-          CurrentSelection = 0;
-        else
-          CurrentSelection++;
+    case 80: // down arrow key
+      if (CurrentSelection == 1)
+        CurrentSelection = 0;
+      else
+        CurrentSelection++;
       break;
 
-      default:
+    default:
       break;
     }
 
@@ -243,15 +242,15 @@ std::string Get_AI_Difficulty(const std::vector<std::vector<std::string>> &Playe
 
     switch (CurrentSelection)
     {
-      case 0:
-        std::cout << CaseZero;
+    case 0:
+      std::cout << CaseZero;
       break;
 
-      case 1:
-        std::cout << CaseOne;
+    case 1:
+      std::cout << CaseOne;
       break;
 
-      default:
+    default:
       break;
     }
 
@@ -270,12 +269,11 @@ void Get_User_Ship_Positions(std::vector<std::vector<std::string>> &PlayerOneBoa
                              const HANDLE &ConsoleHandle)
 {
   std::vector<std::string> ShipCommands = {
-    " Please enter the 5 grid locations for the Carrier:                                                                                                ",
-    " Please enter the 4 grid locations for the Battleship:                                                                                             ",
-    " Please enter the 3 grid locations for the Destroyer:                                                                                              ",
-    " Please enter the 3 grid locations for the Submarine:                                                                                              ",
-    " Please enter the 2 grid locations for the Patrol Boat:                                                                                            "
-  };
+      " Please enter the 5 grid locations for the Carrier:                                                                                                ",
+      " Please enter the 4 grid locations for the Battleship:                                                                                             ",
+      " Please enter the 3 grid locations for the Destroyer:                                                                                              ",
+      " Please enter the 3 grid locations for the Submarine:                                                                                              ",
+      " Please enter the 2 grid locations for the Patrol Boat:                                                                                            "};
   std::vector<unsigned int> ShipSizes = {5, 4, 3, 3, 2};
   std::vector<std::string> ShipLetters = {"C", "B", "D", "S", "P"};
   std::vector<short> ShipCursorPosition = {53, 56, 55, 55, 57};
@@ -301,7 +299,7 @@ void Get_User_Ship_Positions(std::vector<std::vector<std::string>> &PlayerOneBoa
 
       std::cout << Output;
 
-      SetConsoleCursorPosition( ConsoleHandle, { ShipCursorPosition[i], 29 } );
+      SetConsoleCursorPosition(ConsoleHandle, {ShipCursorPosition[i], 29});
 
       std::getline(std::cin, Input);
 
@@ -371,14 +369,14 @@ bool Error_Checking_On_User_Ship_Positions(std::vector<std::vector<std::string>>
   {
     // Check that number is increment by one after each co-ordinate
     for (unsigned int i = 1; i < IndividualCoordinates.size(); i++)
-      if (IndividualCoordinates[i][1] != (IndividualCoordinates[i-1][1] + 1))
+      if (IndividualCoordinates[i][1] != (IndividualCoordinates[i - 1][1] + 1))
         return false;
   }
   else if (NumbersIdentical && !LettersIdentical) // Horizontal
   {
     // Check that letter is increment by one after each co-ordinate
     for (unsigned int i = 1; i < IndividualCoordinates.size(); i++)
-      if (IndividualCoordinates[i][0] != (IndividualCoordinates[i-1][0] + 1))
+      if (IndividualCoordinates[i][0] != (IndividualCoordinates[i - 1][0] + 1))
         return false;
   }
   else // No diagonals allowed
@@ -455,7 +453,7 @@ void Generate_AI_Ship_Positions(std::vector<unsigned int> &ShipPositionRows,
     for (unsigned int i = 0; i < ShipSize; i++)
     {
       ShipPositionRows.push_back(Row);
-      ShipPositionColumns.push_back(Column+i);
+      ShipPositionColumns.push_back(Column + i);
     }
   }
 
@@ -470,7 +468,7 @@ void Generate_AI_Ship_Positions(std::vector<unsigned int> &ShipPositionRows,
     // Vertical positions have a difference in rows of 1
     for (unsigned int i = 0; i < ShipSize; i++)
     {
-      ShipPositionRows.push_back(Row+i);
+      ShipPositionRows.push_back(Row + i);
       ShipPositionColumns.push_back(Column);
     }
   }
@@ -604,64 +602,64 @@ std::string Battleships_Game_Display(const std::vector<std::vector<std::string>>
     // Centre information Part 1
     switch (i)
     {
-      case 3:
-        Output.insert(Output.size(), "   Carrier                               Carrier   ");
+    case 3:
+      Output.insert(Output.size(), "   Carrier                               Carrier   ");
       break;
 
-      case 5: // Battleship
-        Output.insert(Output.size(), "   ");
-        for (unsigned int j = 0; j < 4; j++)
-        {
-          if (j < PlayerOneShipsRemaining.at("B"))
-            Output.insert(Output.size(), 3, (char)178);
-          else
-            Output.insert(Output.size(), 3, (char)176);
-          Output.insert(Output.size(), " ");
-        }
-        Output.insert(Output.size(), "              ");
-        for (unsigned int j = 0; j < 4; j++)
-        {
-          if (j < (4-PlayerTwoShipsRemaining.at("B")))
-            Output.insert(Output.size(), 3, (char)176);
-          else
-            Output.insert(Output.size(), 3, (char)178);
-          Output.insert(Output.size(), " ");
-        }
-        Output.insert(Output.size(), "  ");
+    case 5: // Battleship
+      Output.insert(Output.size(), "   ");
+      for (unsigned int j = 0; j < 4; j++)
+      {
+        if (j < PlayerOneShipsRemaining.at("B"))
+          Output.insert(Output.size(), 3, (char)178);
+        else
+          Output.insert(Output.size(), 3, (char)176);
+        Output.insert(Output.size(), " ");
+      }
+      Output.insert(Output.size(), "              ");
+      for (unsigned int j = 0; j < 4; j++)
+      {
+        if (j < (4 - PlayerTwoShipsRemaining.at("B")))
+          Output.insert(Output.size(), 3, (char)176);
+        else
+          Output.insert(Output.size(), 3, (char)178);
+        Output.insert(Output.size(), " ");
+      }
+      Output.insert(Output.size(), "  ");
       break;
 
-      case 6:
-        Output.insert(Output.size(), "   Destroyer                           Destroyer   ");
+    case 6:
+      Output.insert(Output.size(), "   Destroyer                           Destroyer   ");
       break;
 
-      case 8: // Submarine
-        Output.insert(Output.size(), "   ");
-        for (unsigned int j = 0; j < 3; j++)
-        {
-          if (j < PlayerOneShipsRemaining.at("S"))
-            Output.insert(Output.size(), 3, (char)178);
-          else
-            Output.insert(Output.size(), 3, (char)176);
-          Output.insert(Output.size(), " ");
-        }
-        Output.insert(Output.size(), "                      ");
-        for (unsigned int j = 0; j < 3; j++)
-        {
-          if (j < (3-PlayerTwoShipsRemaining.at("S")))
-            Output.insert(Output.size(), 3, (char)176);
-          else
-            Output.insert(Output.size(), 3, (char)178);
-          Output.insert(Output.size(), " ");
-        }
-        Output.insert(Output.size(), "  ");
+    case 8: // Submarine
+      Output.insert(Output.size(), "   ");
+      for (unsigned int j = 0; j < 3; j++)
+      {
+        if (j < PlayerOneShipsRemaining.at("S"))
+          Output.insert(Output.size(), 3, (char)178);
+        else
+          Output.insert(Output.size(), 3, (char)176);
+        Output.insert(Output.size(), " ");
+      }
+      Output.insert(Output.size(), "                      ");
+      for (unsigned int j = 0; j < 3; j++)
+      {
+        if (j < (3 - PlayerTwoShipsRemaining.at("S")))
+          Output.insert(Output.size(), 3, (char)176);
+        else
+          Output.insert(Output.size(), 3, (char)178);
+        Output.insert(Output.size(), " ");
+      }
+      Output.insert(Output.size(), "  ");
       break;
 
-      case 9:
-        Output.insert(Output.size(), "   Patrol Boat                       Patrol Boat   ");
+    case 9:
+      Output.insert(Output.size(), "   Patrol Boat                       Patrol Boat   ");
       break;
 
-      default:
-        Output.insert(Output.size(), "                                                   ");
+    default:
+      Output.insert(Output.size(), "                                                   ");
       break;
     }
 
@@ -677,14 +675,13 @@ std::string Battleships_Game_Display(const std::vector<std::vector<std::string>>
     Output.insert(Output.size(), "   ");
     Output.insert(Output.size(), 1, (char)186);
 
-
     // Player One Board Part 2
     Output.insert(Output.size(), "\n");
     Output.insert(Output.size(), 1, (char)186);
     Output.insert(Output.size(), "   ");
     Output.insert(Output.size(), 1, (char)179);
     Output.insert(Output.size(), " ");
-    Output.insert(Output.size(), 1, i+48);
+    Output.insert(Output.size(), 1, i + 48);
     Output.insert(Output.size(), " ");
     Output.insert(Output.size(), 1, (char)179);
 
@@ -708,103 +705,103 @@ std::string Battleships_Game_Display(const std::vector<std::vector<std::string>>
     // Centre Information Part 2
     switch (i)
     {
-      case 0:
-        if (NumberOfPlayers == "N/A")
-          Output.insert(Output.size(), "                # of Players = " + NumberOfPlayers + "                 ");
+    case 0:
+      if (NumberOfPlayers == "N/A")
+        Output.insert(Output.size(), "                # of Players = " + NumberOfPlayers + "                 ");
+      else
+        Output.insert(Output.size(), "                 # of Players = " + NumberOfPlayers + "                  ");
+      break;
+
+    case 1:
+      if (AIDifficulty == "N/A")
+        Output.insert(Output.size(), "                AI Difficulty = " + AIDifficulty + "                ");
+      else
+        Output.insert(Output.size(), "               AI Difficulty = " + AIDifficulty + "                ");
+      break;
+
+    case 3: // Carrier
+      Output.insert(Output.size(), "   ");
+      for (unsigned int j = 0; j < 5; j++)
+      {
+        if (j < PlayerOneShipsRemaining.at("C"))
+          Output.insert(Output.size(), 3, (char)178);
         else
-          Output.insert(Output.size(), "                 # of Players = " + NumberOfPlayers + "                  ");
-      break;
-
-      case 1:
-        if (AIDifficulty == "N/A")
-          Output.insert(Output.size(), "                AI Difficulty = " + AIDifficulty + "                ");
+          Output.insert(Output.size(), 3, (char)176);
+        Output.insert(Output.size(), " ");
+      }
+      Output.insert(Output.size(), "      ");
+      for (unsigned int j = 0; j < 5; j++)
+      {
+        if (j < (5 - PlayerTwoShipsRemaining.at("C")))
+          Output.insert(Output.size(), 3, (char)176);
         else
-          Output.insert(Output.size(), "               AI Difficulty = " + AIDifficulty + "                ");
+          Output.insert(Output.size(), 3, (char)178);
+        Output.insert(Output.size(), " ");
+      }
+      Output.insert(Output.size(), "  ");
       break;
 
-      case 3: // Carrier
-        Output.insert(Output.size(), "   ");
-        for (unsigned int j = 0; j < 5; j++)
-        {
-          if (j < PlayerOneShipsRemaining.at("C"))
-            Output.insert(Output.size(), 3, (char)178);
-          else
-            Output.insert(Output.size(), 3, (char)176);
-          Output.insert(Output.size(), " ");
-        }
-        Output.insert(Output.size(), "      ");
-        for (unsigned int j = 0; j < 5; j++)
-        {
-          if (j < (5-PlayerTwoShipsRemaining.at("C")))
-            Output.insert(Output.size(), 3, (char)176);
-          else
-            Output.insert(Output.size(), 3, (char)178);
-          Output.insert(Output.size(), " ");
-        }
-        Output.insert(Output.size(), "  ");
+    case 4:
+      Output.insert(Output.size(), "   Battleship                         Battleship   ");
       break;
 
-      case 4:
-        Output.insert(Output.size(), "   Battleship                         Battleship   ");
+    case 6: // Destroyer
+      Output.insert(Output.size(), "   ");
+      for (unsigned int j = 0; j < 3; j++)
+      {
+        if (j < PlayerOneShipsRemaining.at("D"))
+          Output.insert(Output.size(), 3, (char)178);
+        else
+          Output.insert(Output.size(), 3, (char)176);
+        Output.insert(Output.size(), " ");
+      }
+      Output.insert(Output.size(), "                      ");
+      for (unsigned int j = 0; j < 3; j++)
+      {
+        if (j < (3 - PlayerTwoShipsRemaining.at("D")))
+          Output.insert(Output.size(), 3, (char)176);
+        else
+          Output.insert(Output.size(), 3, (char)178);
+        Output.insert(Output.size(), " ");
+      }
+      Output.insert(Output.size(), "  ");
       break;
 
-      case 6: // Destroyer
-        Output.insert(Output.size(), "   ");
-        for (unsigned int j = 0; j < 3; j++)
-        {
-          if (j < PlayerOneShipsRemaining.at("D"))
-            Output.insert(Output.size(), 3, (char)178);
-          else
-            Output.insert(Output.size(), 3, (char)176);
-          Output.insert(Output.size(), " ");
-        }
-        Output.insert(Output.size(), "                      ");
-        for (unsigned int j = 0; j < 3; j++)
-        {
-          if (j < (3-PlayerTwoShipsRemaining.at("D")))
-            Output.insert(Output.size(), 3, (char)176);
-          else
-            Output.insert(Output.size(), 3, (char)178);
-          Output.insert(Output.size(), " ");
-        }
-        Output.insert(Output.size(), "  ");
+    case 7:
+      Output.insert(Output.size(), "   Submarine                           Submarine   ");
       break;
 
-      case 7:
-        Output.insert(Output.size(), "   Submarine                           Submarine   ");
+    case 9: // Patrol Boat
+      Output.insert(Output.size(), "   ");
+      for (unsigned int j = 0; j < 2; j++)
+      {
+        if (j < PlayerOneShipsRemaining.at("P"))
+          Output.insert(Output.size(), 3, (char)178);
+        else
+          Output.insert(Output.size(), 3, (char)176);
+        Output.insert(Output.size(), " ");
+      }
+      Output.insert(Output.size(), "                              ");
+      for (unsigned int j = 0; j < 2; j++)
+      {
+        if (j < (2 - PlayerTwoShipsRemaining.at("P")))
+          Output.insert(Output.size(), 3, (char)176);
+        else
+          Output.insert(Output.size(), 3, (char)178);
+        Output.insert(Output.size(), " ");
+      }
+      Output.insert(Output.size(), "  ");
       break;
 
-      case 9: // Patrol Boat
-        Output.insert(Output.size(), "   ");
-        for (unsigned int j = 0; j < 2; j++)
-        {
-          if (j < PlayerOneShipsRemaining.at("P"))
-            Output.insert(Output.size(), 3, (char)178);
-          else
-            Output.insert(Output.size(), 3, (char)176);
-          Output.insert(Output.size(), " ");
-        }
-        Output.insert(Output.size(), "                              ");
-        for (unsigned int j = 0; j < 2; j++)
-        {
-          if (j < (2-PlayerTwoShipsRemaining.at("P")))
-            Output.insert(Output.size(), 3, (char)176);
-          else
-            Output.insert(Output.size(), 3, (char)178);
-          Output.insert(Output.size(), " ");
-        }
-        Output.insert(Output.size(), "  ");
-      break;
-
-      default:
-        Output.insert(Output.size(), "                                                   ");
+    default:
+      Output.insert(Output.size(), "                                                   ");
       break;
     }
 
     // Player Two Board Part 2
     Output.insert(Output.size(), 1, (char)179);
     Output.insert(Output.size(), " ");
-    Output.insert(Output.size(), 1, i+48);
+    Output.insert(Output.size(), 1, i + 48);
     Output.insert(Output.size(), " ");
     Output.insert(Output.size(), 1, (char)179);
     for (unsigned int j = 0; j < 10; j++)
@@ -956,35 +953,35 @@ unsigned int Get_Next_User_Command(const std::vector<std::vector<std::string>> &
     {
       switch (KeyPress)
       {
-        case 72: // up arrow key
-          if (Row == 0)
-            Row = 9;
-          else
-            Row--;
+      case 72: // up arrow key
+        if (Row == 0)
+          Row = 9;
+        else
+          Row--;
         break;
 
-        case 80: // down arrow key
-          if (Row == 9)
-            Row = 0;
-          else
-            Row++;
+      case 80: // down arrow key
+        if (Row == 9)
+          Row = 0;
+        else
+          Row++;
         break;
 
-        case 75: // left arrow key
-          if (Column == 0)
-            Column = 9;
-          else
-            Column--;
+      case 75: // left arrow key
+        if (Column == 0)
+          Column = 9;
+        else
+          Column--;
         break;
 
-        case 77: // right arrow key
-          if (Column == 9)
-            Column = 0;
-          else
-            Column++;
+      case 77: // right arrow key
+        if (Column == 9)
+          Column = 0;
+        else
+          Column++;
         break;
 
-        default:
+      default:
         break;
       }
 
@@ -993,14 +990,14 @@ unsigned int Get_Next_User_Command(const std::vector<std::vector<std::string>> &
       std::cout << Output;
 
       COORD CursorPosition;
-      CursorPosition.X = 106+Column*4;
-      CursorPosition.Y = 8+Row*2;
+      CursorPosition.X = 106 + Column * 4;
+      CursorPosition.Y = 8 + Row * 2;
       SetConsoleCursorPosition(ConsoleHandle, CursorPosition);
 
       KeyPress = _getch();
     }
 
-    UserCommand = Row*10+Column;
+    UserCommand = Row * 10 + Column;
     auto CommandPosition = std::find(ValidMovesRemaining.begin(), ValidMovesRemaining.end(), UserCommand);
 
     if (CommandPosition != ValidMovesRemaining.end())
