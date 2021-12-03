@@ -993,7 +993,12 @@ void Display_Game_Over_Message(const unsigned int &NumberOfErrors,
   if (NumberOfErrors == 10)
     Output.append(Hangman_New_Line("      The word setter has won! The game lasted " + std::to_string(NumberOfTurns) + " turns!      "));
   else
-    Output.append(Hangman_New_Line("        The guesser has won! The game lasted " + std::to_string(NumberOfTurns) + " turns.        "));
+  {
+    if (NumberOfTurns < 10)
+      Output.append(Hangman_New_Line("        The guesser has won! The game lasted " + std::to_string(NumberOfTurns) + " turns.         "));
+    else
+      Output.append(Hangman_New_Line("        The guesser has won! The game lasted " + std::to_string(NumberOfTurns) + " turns.        "));
+  }
 
   Output.append(Hangman_Empty_Line());
   Output.append(Hangman_New_Line("     Press 'Q' to quit OR any other key to play again...      "));

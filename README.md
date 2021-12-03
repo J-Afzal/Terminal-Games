@@ -20,7 +20,7 @@
   * Hard = Uses Minimax algorithm
 
 <p align="center">
- <img src="screenshots/TicTacToe%20Playing.png">
+ <img src="screenshots/TicTacToe.gif">
 </p>
 
 # Hangman
@@ -35,7 +35,7 @@
 * No guessing the whole word is allowed (only single letter guesses allowed)
 
 <p align="center">
- <img src="screenshots/Hangman%20Playing.png">
+ <img src="screenshots/Hangman.gif">
 </p>
 
 # Battleships
@@ -48,7 +48,7 @@
   * Hard = Same as Easy but once a successful attack has been made the AI then continues to attack in the area until that ship is sunk
 
 <p align="center">
- <img src="screenshots/Battleships%20Playing.png">
+ <img src="screenshots/Battleships.gif">
 </p>
 
 # Needed Improvements
