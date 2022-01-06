@@ -177,9 +177,6 @@ unsigned int Get_Number_Of_Players(const std::vector<std::vector<std::string>> &
     case 1:
       std::cout << CaseOne;
       break;
-
-    default:
-      break;
     }
 
     KeyPress = _getch();
@@ -249,9 +246,6 @@ std::string Get_AI_Difficulty(const std::vector<std::vector<std::string>> &Playe
     case 1:
       std::cout << CaseOne;
       break;
-
-    default:
-      break;
     }
 
     KeyPress = _getch();
@@ -290,10 +284,10 @@ void Get_User_Ship_Positions(std::vector<std::vector<std::string>> &PlayerOneBoa
     Output.append(Battleships_Bottom_Line());
     Output.append(Battleships_Bottom_Bar());
 
-    bool InputValid = false;
+    bool InputInvalid = true;
     std::string Input;
 
-    while (!InputValid)
+    while (InputInvalid)
     {
       Clear_Terminal();
 
@@ -306,7 +300,7 @@ void Get_User_Ship_Positions(std::vector<std::vector<std::string>> &PlayerOneBoa
       if (!Error_Checking_On_User_Ship_Positions(PlayerOneBoard, Input, ShipPositionRows, ShipPositionColumns, ShipSizes[i]))
         continue;
 
-      InputValid = true;
+      InputInvalid = false;
 
       Place_Ship(PlayerOneBoard, ShipPositionRows, ShipPositionColumns, ShipLetters[i]);
     }
@@ -416,16 +410,16 @@ void Get_AI_Ship_Positions(std::vector<std::vector<std::string>> &AIBoard)
 
   for (unsigned int i = 0; i < 5; i++)
   {
-    bool InputValid = false;
+    bool InputInvalid = true;
 
-    while (!InputValid)
+    while (InputInvalid)
     {
       Generate_AI_Ship_Positions(ShipPositionRows, ShipPositionColumns, ShipSizes[i]);
 
       if (!Error_Checking_On_AI_Ship_Positions(AIBoard, ShipPositionRows, ShipPositionColumns))
         continue;
 
-      InputValid = true;
+      InputInvalid = false;
 
       Place_Ship(AIBoard, ShipPositionRows, ShipPositionColumns, ShipLetters[i]);
     }
@@ -934,7 +928,7 @@ unsigned int Get_Next_User_Command(const std::vector<std::vector<std::string>> &
                                    const std::string &AIDifficulty,
                                    const HANDLE &ConsoleHandle)
 {
-  bool InputValid = false;
+  bool InputInvalid = true;
   unsigned int UserCommand, Row = ValidMovesRemaining[0] / 10, Column = ValidMovesRemaining[0] % 10;
   unsigned char KeyPress = 0;
 
@@ -947,7 +941,7 @@ unsigned int Get_Next_User_Command(const std::vector<std::vector<std::string>> &
   Output.append(Battleships_Bottom_Line());
   Output.append(Battleships_Bottom_Bar());
 
-  while (!InputValid)
+  while (InputInvalid)
   {
     while (KeyPress != '\r')
     {
@@ -1002,7 +996,7 @@ unsigned int Get_Next_User_Command(const std::vector<std::vector<std::string>> &
 
     if (CommandPosition != ValidMovesRemaining.end())
     {
-      InputValid = true;
+      InputInvalid = false;
       ValidMovesRemaining.erase(CommandPosition);
     }
     else

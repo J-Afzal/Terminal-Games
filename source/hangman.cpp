@@ -165,9 +165,6 @@ unsigned int Get_Number_Of_Players(const std::vector<std::string> &IncorrectGues
     case 2:
       std::cout << CaseTwo;
       break;
-
-    default:
-      break;
     }
 
     KeyPress = _getch();
@@ -233,9 +230,6 @@ std::string Get_User_Player_Choice(const unsigned int &NumberOfPlayers,
 
     case 1:
       std::cout << CaseOne;
-      break;
-
-    default:
       break;
     }
 
@@ -303,9 +297,6 @@ std::string Get_AI_Difficulty(const unsigned int &NumberOfPlayers,
     case 1:
       std::cout << CaseTwo;
       break;
-
-    default:
-      break;
     }
 
     KeyPress = _getch();
@@ -319,7 +310,7 @@ std::string Get_Word_To_Be_Guessed_From_User(const std::vector<std::string> &Inc
                                              const std::string &AIDifficulty,
                                              const HANDLE &ConsoleHandle)
 {
-  bool InputValid = false;
+  bool InputInvalid = true;
   std::string Input;
 
   std::string Output = Hangman_Game_Display(0, std::to_string(NumberOfPlayers), AIDifficulty, IncorrectGuesses, "", "", false);
@@ -331,9 +322,9 @@ std::string Get_Word_To_Be_Guessed_From_User(const std::vector<std::string> &Inc
   Output.append(Hangman_Bottom_Line());
   Output.append(Hangman_Bottom_Bar());
 
-  while (!InputValid)
+  while (InputInvalid)
   {
-    InputValid = true;
+    InputInvalid = false;
 
     Clear_Terminal();
 
@@ -345,7 +336,7 @@ std::string Get_Word_To_Be_Guessed_From_User(const std::vector<std::string> &Inc
 
     if (Input.size() < 3 || Input.size() > 14)
     {
-      InputValid = false;
+      InputInvalid = true;
       continue;
     }
 
@@ -355,7 +346,7 @@ std::string Get_Word_To_Be_Guessed_From_User(const std::vector<std::string> &Inc
     {
       if (Input[i] < 'A' || Input[i] > 'Z')
       {
-        InputValid = false;
+        InputInvalid = true;
         break;
       }
     }

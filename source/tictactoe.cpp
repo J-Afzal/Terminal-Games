@@ -159,9 +159,6 @@ unsigned int Get_Number_Of_Players(const std::vector<std::vector<std::string>> &
     case 2:
       std::cout << CaseTwo;
       break;
-
-    default:
-      break;
     }
 
     KeyPress = _getch();
@@ -228,9 +225,6 @@ std::string Get_User_Player_Choice(const std::vector<std::vector<std::string>> &
     case 1:
       std::cout << CaseOne;
       break;
-
-    default:
-      break;
     }
 
     KeyPress = _getch();
@@ -296,9 +290,6 @@ std::string Get_AI_Difficulty(const std::vector<std::vector<std::string>> &TicTa
 
     case 1:
       std::cout << CaseTwo;
-      break;
-
-    default:
       break;
     }
 
@@ -453,7 +444,7 @@ void Get_Next_User_Command(std::vector<std::vector<std::string>> &TicTacToeGrid,
                            std::vector<unsigned int> &ValidMovesRemaining,
                            const HANDLE &ConsoleHandle)
 {
-  bool InputValid = false;
+  bool InputInvalid = true;
   unsigned int UserCommand, Row = ValidMovesRemaining[0] / 3, Column = ValidMovesRemaining[0] % 3;
   unsigned char KeyPress = 0;
 
@@ -471,7 +462,7 @@ void Get_Next_User_Command(std::vector<std::vector<std::string>> &TicTacToeGrid,
   Output.append(TicTacToe_Bottom_Line());
   Output.append(TicTacToe_Bottom_Bar());
 
-  while (!InputValid)
+  while (InputInvalid)
   {
     while (KeyPress != '\r')
     {
@@ -527,7 +518,7 @@ void Get_Next_User_Command(std::vector<std::vector<std::string>> &TicTacToeGrid,
 
     if (CommandPosition != ValidMovesRemaining.end())
     {
-      InputValid = true;
+      InputInvalid = false;
 
       if (CurrentPlayer == "PLAYER ONE")
         TicTacToeGrid[Row][Column] = "X";
