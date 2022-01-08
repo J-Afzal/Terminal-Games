@@ -102,31 +102,31 @@ unsigned int Get_Number_Of_Players(const std::vector<std::string> &IncorrectGues
   unsigned char KeyPress = 0;
 
   std::string CommonString = Hangman_Game_Display(0, "N/A", "N/A", IncorrectGuesses, "", "", false);
-  CommonString.append(Hangman_New_Line(" Please select the number of human players:                   "));
+  CommonString += Hangman_New_Line(" Please select the number of human players:                   ");
 
   std::string CaseZero = CommonString;
-  CaseZero.append(Hangman_New_Line(BLUE + " > 0                                                          " + WHITE));
-  CaseZero.append(Hangman_New_Line("   1                                                          "));
-  CaseZero.append(Hangman_New_Line("   2                                                          "));
-  CaseZero.append(Hangman_Empty_Line());
-  CaseZero.append(Hangman_Bottom_Line());
-  CaseZero.append(Hangman_Bottom_Bar());
+  CaseZero += Hangman_New_Line(BLUE + " > 0                                                          " + WHITE);
+  CaseZero += Hangman_New_Line("   1                                                          ");
+  CaseZero += Hangman_New_Line("   2                                                          ");
+  CaseZero += Hangman_Empty_Line();
+  CaseZero += Hangman_Bottom_Line();
+  CaseZero += Hangman_Bottom_Bar();
 
   std::string CaseOne = CommonString;
-  CaseOne.append(Hangman_New_Line("   0                                                          "));
-  CaseOne.append(Hangman_New_Line(BLUE + " > 1                                                          " + WHITE));
-  CaseOne.append(Hangman_New_Line("   2                                                          "));
-  CaseOne.append(Hangman_Empty_Line());
-  CaseOne.append(Hangman_Bottom_Line());
-  CaseOne.append(Hangman_Bottom_Bar());
+  CaseOne += Hangman_New_Line("   0                                                          ");
+  CaseOne += Hangman_New_Line(BLUE + " > 1                                                          " + WHITE);
+  CaseOne += Hangman_New_Line("   2                                                          ");
+  CaseOne += Hangman_Empty_Line();
+  CaseOne += Hangman_Bottom_Line();
+  CaseOne += Hangman_Bottom_Bar();
 
   std::string CaseTwo = CommonString;
-  CaseTwo.append(Hangman_New_Line("   0                                                          "));
-  CaseTwo.append(Hangman_New_Line("   1                                                          "));
-  CaseTwo.append(Hangman_New_Line(BLUE + " > 2                                                          " + WHITE));
-  CaseTwo.append(Hangman_Empty_Line());
-  CaseTwo.append(Hangman_Bottom_Line());
-  CaseTwo.append(Hangman_Bottom_Bar());
+  CaseTwo += Hangman_New_Line("   0                                                          ");
+  CaseTwo += Hangman_New_Line("   1                                                          ");
+  CaseTwo += Hangman_New_Line(BLUE + " > 2                                                          " + WHITE);
+  CaseTwo += Hangman_Empty_Line();
+  CaseTwo += Hangman_Bottom_Line();
+  CaseTwo += Hangman_Bottom_Bar();
 
   while (KeyPress != '\r')
   {
@@ -180,23 +180,23 @@ std::string Get_User_Player_Choice(const unsigned int &NumberOfPlayers,
   unsigned char KeyPress = 0;
 
   std::string CommonString = Hangman_Game_Display(0, std::to_string(NumberOfPlayers), "N/A", IncorrectGuesses, "", "", false);
-  CommonString.append(Hangman_New_Line(" Please select what player you would like to be:              "));
+  CommonString += Hangman_New_Line(" Please select what player you would like to be:              ");
 
   std::string CaseZero = CommonString;
-  CaseZero.append(Hangman_New_Line(BLUE + " > GUESSER                                                    " + WHITE));
-  CaseZero.append(Hangman_New_Line("   WORD SETTER                                                "));
-  CaseZero.append(Hangman_Empty_Line());
-  CaseZero.append(Hangman_Empty_Line());
-  CaseZero.append(Hangman_Bottom_Line());
-  CaseZero.append(Hangman_Bottom_Bar());
+  CaseZero += Hangman_New_Line(BLUE + " > GUESSER                                                    " + WHITE);
+  CaseZero += Hangman_New_Line("   WORD SETTER                                                ");
+  CaseZero += Hangman_Empty_Line();
+  CaseZero += Hangman_Empty_Line();
+  CaseZero += Hangman_Bottom_Line();
+  CaseZero += Hangman_Bottom_Bar();
 
   std::string CaseOne = CommonString;
-  CaseOne.append(Hangman_New_Line("   GUESSER                                                    "));
-  CaseOne.append(Hangman_New_Line(BLUE + " > WORD SETTER                                                " + WHITE));
-  CaseOne.append(Hangman_Empty_Line());
-  CaseOne.append(Hangman_Empty_Line());
-  CaseOne.append(Hangman_Bottom_Line());
-  CaseOne.append(Hangman_Bottom_Bar());
+  CaseOne += Hangman_New_Line("   GUESSER                                                    ");
+  CaseOne += Hangman_New_Line(BLUE + " > WORD SETTER                                                " + WHITE);
+  CaseOne += Hangman_Empty_Line();
+  CaseOne += Hangman_Empty_Line();
+  CaseOne += Hangman_Bottom_Line();
+  CaseOne += Hangman_Bottom_Bar();
 
   while (KeyPress != '\r')
   {
@@ -246,23 +246,23 @@ std::string Get_AI_Difficulty(const unsigned int &NumberOfPlayers,
   unsigned char KeyPress = 0;
 
   std::string CommonString = Hangman_Game_Display(0, std::to_string(NumberOfPlayers), "N/A", IncorrectGuesses, "", "", false);
-  CommonString.append(Hangman_New_Line(" Please select the AI difficulty:                             "));
+  CommonString += Hangman_New_Line(" Please select the AI difficulty:                             ");
 
   std::string CaseZero = CommonString;
-  CaseZero.append(Hangman_New_Line(BLUE + " > EASY                                                       " + WHITE));
-  CaseZero.append(Hangman_New_Line("   HARD (Coming Soon!)                                        "));
-  CaseZero.append(Hangman_Empty_Line());
-  CaseZero.append(Hangman_Empty_Line());
-  CaseZero.append(Hangman_Bottom_Line());
-  CaseZero.append(Hangman_Bottom_Bar());
+  CaseZero += Hangman_New_Line(BLUE + " > EASY                                                       " + WHITE);
+  CaseZero += Hangman_New_Line("   HARD (Coming Soon!)                                        ");
+  CaseZero += Hangman_Empty_Line();
+  CaseZero += Hangman_Empty_Line();
+  CaseZero += Hangman_Bottom_Line();
+  CaseZero += Hangman_Bottom_Bar();
 
   std::string CaseTwo = CommonString;
-  CaseTwo.append(Hangman_New_Line("   EASY                                                       "));
-  CaseTwo.append(Hangman_New_Line(BLUE + " > HARD (Coming Soon!)                                        " + WHITE));
-  CaseTwo.append(Hangman_Empty_Line());
-  CaseTwo.append(Hangman_Empty_Line());
-  CaseTwo.append(Hangman_Bottom_Line());
-  CaseTwo.append(Hangman_Bottom_Bar());
+  CaseTwo += Hangman_New_Line("   EASY                                                       ");
+  CaseTwo += Hangman_New_Line(BLUE + " > HARD (Coming Soon!)                                        " + WHITE);
+  CaseTwo += Hangman_Empty_Line();
+  CaseTwo += Hangman_Empty_Line();
+  CaseTwo += Hangman_Bottom_Line();
+  CaseTwo += Hangman_Bottom_Bar();
 
   while (!(KeyPress == '\r' && CurrentSelection == 0))
   {
@@ -314,13 +314,13 @@ std::string Get_Word_To_Be_Guessed_From_User(const std::vector<std::string> &Inc
   std::string Input;
 
   std::string Output = Hangman_Game_Display(0, std::to_string(NumberOfPlayers), AIDifficulty, IncorrectGuesses, "", "", false);
-  Output.append(Hangman_New_Line(" Please enter the word to be guessed:                         "));
-  Output.append(Hangman_Empty_Line());
-  Output.append(Hangman_Empty_Line());
-  Output.append(Hangman_Empty_Line());
-  Output.append(Hangman_Empty_Line());
-  Output.append(Hangman_Bottom_Line());
-  Output.append(Hangman_Bottom_Bar());
+  Output += Hangman_New_Line(" Please enter the word to be guessed:                         ");
+  Output += Hangman_Empty_Line();
+  Output += Hangman_Empty_Line();
+  Output += Hangman_Empty_Line();
+  Output += Hangman_Empty_Line();
+  Output += Hangman_Bottom_Line();
+  Output += Hangman_Bottom_Bar();
 
   while (InputInvalid)
   {
@@ -836,9 +836,9 @@ std::string Hangman_Bottom_Line(void)
 std::string Hangman_Bottom_Bar(void)
 {
   std::string Output;
-  Output.append(Hangman_Top_Line());
-  Output.append(Hangman_New_Line(RED + "                           Hangman                            " + WHITE));
-  Output.append(Hangman_Bottom_Line());
+  Output += Hangman_Top_Line();
+  Output += Hangman_New_Line(RED + "                           Hangman                            " + WHITE);
+  Output += Hangman_Bottom_Line();
 
   return Output;
 }
@@ -875,13 +875,13 @@ void Get_Next_User_Guess(unsigned int &NumberOfErrors,
   unsigned char KeyPress = 0;
 
   std::string Output = Hangman_Game_Display(NumberOfErrors, std::to_string(NumberOfPlayers), AIDifficulty, IncorrectGuesses, CurrentGuessOfWord, WordToBeGuessed, false);
-  Output.append(Hangman_New_Line(" Guesser, please enter your next guess:                       "));
-  Output.append(Hangman_Empty_Line());
-  Output.append(Hangman_Empty_Line());
-  Output.append(Hangman_Empty_Line());
-  Output.append(Hangman_Empty_Line());
-  Output.append(Hangman_Bottom_Line());
-  Output.append(Hangman_Bottom_Bar());
+  Output += Hangman_New_Line(" Guesser, please enter your next guess:                       ");
+  Output += Hangman_Empty_Line();
+  Output += Hangman_Empty_Line();
+  Output += Hangman_Empty_Line();
+  Output += Hangman_Empty_Line();
+  Output += Hangman_Bottom_Line();
+  Output += Hangman_Bottom_Bar();
 
   while (KeyPress != '\r')
   {
@@ -978,23 +978,23 @@ void Display_Game_Over_Message(const unsigned int &NumberOfErrors,
                                bool &GameIsRunning)
 {
   std::string Output = Hangman_Game_Display(NumberOfErrors, std::to_string(NumberOfPlayers), AIDifficulty, IncorrectGuesses, CurrentGuessOfWord, WordToBeGuessed, true);
-  Output.append(Hangman_New_Line("                          GAME OVER                           "));
-  Output.append(Hangman_Empty_Line());
+  Output += Hangman_New_Line("                          GAME OVER                           ");
+  Output += Hangman_Empty_Line();
 
   if (NumberOfErrors == 10)
-    Output.append(Hangman_New_Line("      The word setter has won! The game lasted " + std::to_string(NumberOfTurns) + " turns!      "));
+    Output += Hangman_New_Line("      The word setter has won! The game lasted " + std::to_string(NumberOfTurns) + " turns!      ");
   else
   {
     if (NumberOfTurns < 10)
-      Output.append(Hangman_New_Line("        The guesser has won! The game lasted " + std::to_string(NumberOfTurns) + " turns.         "));
+      Output += Hangman_New_Line("        The guesser has won! The game lasted " + std::to_string(NumberOfTurns) + " turns.         ");
     else
-      Output.append(Hangman_New_Line("        The guesser has won! The game lasted " + std::to_string(NumberOfTurns) + " turns.        "));
+      Output += Hangman_New_Line("        The guesser has won! The game lasted " + std::to_string(NumberOfTurns) + " turns.        ");
   }
 
-  Output.append(Hangman_Empty_Line());
-  Output.append(Hangman_New_Line("     Press 'Q' to quit OR any other key to play again...      "));
-  Output.append(Hangman_Bottom_Line());
-  Output.append(Hangman_Bottom_Bar());
+  Output += Hangman_Empty_Line();
+  Output += Hangman_New_Line("     Press 'Q' to quit OR any other key to play again...      ");
+  Output += Hangman_Bottom_Line();
+  Output += Hangman_Bottom_Bar();
 
   std::cout << Output;
 

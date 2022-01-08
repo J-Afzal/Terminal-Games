@@ -96,31 +96,31 @@ unsigned int Get_Number_Of_Players(const std::vector<std::vector<std::string>> &
   unsigned char KeyPress = 0;
 
   std::string CommonString = TicTacToe_Game_Display(TicTacToeGrid, "N/A", "N/A");
-  CommonString.append(TicTacToe_New_Line(" Please select the number of human players:          "));
+  CommonString += TicTacToe_New_Line(" Please select the number of human players:          ");
 
   std::string CaseZero = CommonString;
-  CaseZero.append(TicTacToe_New_Line(BLUE + " > 0                                                 " + WHITE));
-  CaseZero.append(TicTacToe_New_Line("   1                                                 "));
-  CaseZero.append(TicTacToe_New_Line("   2                                                 "));
-  CaseZero.append(TicTacToe_Empty_Line());
-  CaseZero.append(TicTacToe_Bottom_Line());
-  CaseZero.append(TicTacToe_Bottom_Bar());
+  CaseZero += TicTacToe_New_Line(BLUE + " > 0                                                 " + WHITE);
+  CaseZero += TicTacToe_New_Line("   1                                                 ");
+  CaseZero += TicTacToe_New_Line("   2                                                 ");
+  CaseZero += TicTacToe_Empty_Line();
+  CaseZero += TicTacToe_Bottom_Line();
+  CaseZero += TicTacToe_Bottom_Bar();
 
   std::string CaseOne = CommonString;
-  CaseOne.append(TicTacToe_New_Line("   0                                                 "));
-  CaseOne.append(TicTacToe_New_Line(BLUE + " > 1                                                 " + WHITE));
-  CaseOne.append(TicTacToe_New_Line("   2                                                 "));
-  CaseOne.append(TicTacToe_Empty_Line());
-  CaseOne.append(TicTacToe_Bottom_Line());
-  CaseOne.append(TicTacToe_Bottom_Bar());
+  CaseOne += TicTacToe_New_Line("   0                                                 ");
+  CaseOne += TicTacToe_New_Line(BLUE + " > 1                                                 " + WHITE);
+  CaseOne += TicTacToe_New_Line("   2                                                 ");
+  CaseOne += TicTacToe_Empty_Line();
+  CaseOne += TicTacToe_Bottom_Line();
+  CaseOne += TicTacToe_Bottom_Bar();
 
   std::string CaseTwo = CommonString;
-  CaseTwo.append(TicTacToe_New_Line("   0                                                 "));
-  CaseTwo.append(TicTacToe_New_Line("   1                                                 "));
-  CaseTwo.append(TicTacToe_New_Line(BLUE + " > 2                                                 " + WHITE));
-  CaseTwo.append(TicTacToe_Empty_Line());
-  CaseTwo.append(TicTacToe_Bottom_Line());
-  CaseTwo.append(TicTacToe_Bottom_Bar());
+  CaseTwo += TicTacToe_New_Line("   0                                                 ");
+  CaseTwo += TicTacToe_New_Line("   1                                                 ");
+  CaseTwo += TicTacToe_New_Line(BLUE + " > 2                                                 " + WHITE);
+  CaseTwo += TicTacToe_Empty_Line();
+  CaseTwo += TicTacToe_Bottom_Line();
+  CaseTwo += TicTacToe_Bottom_Bar();
 
   while (KeyPress != '\r')
   {
@@ -174,23 +174,23 @@ std::string Get_User_Player_Choice(const std::vector<std::vector<std::string>> &
   unsigned char KeyPress = 0;
 
   std::string CommonString = TicTacToe_Game_Display(TicTacToeGrid, std::to_string(NumberOfPlayers), "N/A");
-  CommonString.append(TicTacToe_New_Line(" Please select what player you would like to be:     "));
+  CommonString += TicTacToe_New_Line(" Please select what player you would like to be:     ");
 
   std::string CaseZero = CommonString;
-  CaseZero.append(TicTacToe_New_Line(BLUE + " > PLAYER X                                          " + WHITE));
-  CaseZero.append(TicTacToe_New_Line("   PLAYER O                                          "));
-  CaseZero.append(TicTacToe_Empty_Line());
-  CaseZero.append(TicTacToe_Empty_Line());
-  CaseZero.append(TicTacToe_Bottom_Line());
-  CaseZero.append(TicTacToe_Bottom_Bar());
+  CaseZero += TicTacToe_New_Line(BLUE + " > PLAYER X                                          " + WHITE);
+  CaseZero += TicTacToe_New_Line("   PLAYER O                                          ");
+  CaseZero += TicTacToe_Empty_Line();
+  CaseZero += TicTacToe_Empty_Line();
+  CaseZero += TicTacToe_Bottom_Line();
+  CaseZero += TicTacToe_Bottom_Bar();
 
   std::string CaseOne = CommonString;
-  CaseOne.append(TicTacToe_New_Line("   PLAYER X                                          "));
-  CaseOne.append(TicTacToe_New_Line(BLUE + " > PLAYER O                                          " + WHITE));
-  CaseOne.append(TicTacToe_Empty_Line());
-  CaseOne.append(TicTacToe_Empty_Line());
-  CaseOne.append(TicTacToe_Bottom_Line());
-  CaseOne.append(TicTacToe_Bottom_Bar());
+  CaseOne += TicTacToe_New_Line("   PLAYER X                                          ");
+  CaseOne += TicTacToe_New_Line(BLUE + " > PLAYER O                                          " + WHITE);
+  CaseOne += TicTacToe_Empty_Line();
+  CaseOne += TicTacToe_Empty_Line();
+  CaseOne += TicTacToe_Bottom_Line();
+  CaseOne += TicTacToe_Bottom_Bar();
 
   while (KeyPress != '\r')
   {
@@ -240,23 +240,23 @@ std::string Get_AI_Difficulty(const std::vector<std::vector<std::string>> &TicTa
   unsigned char KeyPress = 0;
 
   std::string CommonString = TicTacToe_Game_Display(TicTacToeGrid, std::to_string(NumberOfPlayers), "N/A");
-  CommonString.append(TicTacToe_New_Line(" Please select the AI difficulty:                    "));
+  CommonString += TicTacToe_New_Line(" Please select the AI difficulty:                    ");
 
   std::string CaseZero = CommonString;
-  CaseZero.append(TicTacToe_New_Line(BLUE + " > EASY                                              " + WHITE));
-  CaseZero.append(TicTacToe_New_Line("   HARD (Coming Soon!)                               "));
-  CaseZero.append(TicTacToe_Empty_Line());
-  CaseZero.append(TicTacToe_Empty_Line());
-  CaseZero.append(TicTacToe_Bottom_Line());
-  CaseZero.append(TicTacToe_Bottom_Bar());
+  CaseZero += TicTacToe_New_Line(BLUE + " > EASY                                              " + WHITE);
+  CaseZero += TicTacToe_New_Line("   HARD (Coming Soon!)                               ");
+  CaseZero += TicTacToe_Empty_Line();
+  CaseZero += TicTacToe_Empty_Line();
+  CaseZero += TicTacToe_Bottom_Line();
+  CaseZero += TicTacToe_Bottom_Bar();
 
   std::string CaseTwo = CommonString;
-  CaseTwo.append(TicTacToe_New_Line("   EASY                                              "));
-  CaseTwo.append(TicTacToe_New_Line(BLUE + " > HARD (Coming Soon!)                               " + WHITE));
-  CaseTwo.append(TicTacToe_Empty_Line());
-  CaseTwo.append(TicTacToe_Empty_Line());
-  CaseTwo.append(TicTacToe_Bottom_Line());
-  CaseTwo.append(TicTacToe_Bottom_Bar());
+  CaseTwo += TicTacToe_New_Line("   EASY                                              ");
+  CaseTwo += TicTacToe_New_Line(BLUE + " > HARD (Coming Soon!)                               " + WHITE);
+  CaseTwo += TicTacToe_Empty_Line();
+  CaseTwo += TicTacToe_Empty_Line();
+  CaseTwo += TicTacToe_Bottom_Line();
+  CaseTwo += TicTacToe_Bottom_Bar();
 
   while (!(KeyPress == '\r' && CurrentSelection == 0))
   {
@@ -430,9 +430,9 @@ std::string TicTacToe_Bottom_Line(void)
 std::string TicTacToe_Bottom_Bar(void)
 {
   std::string Output;
-  Output.append(TicTacToe_Top_Line());
-  Output.append(TicTacToe_New_Line(RED + "                     Tic Tac Toe                     " + WHITE));
-  Output.append(TicTacToe_Bottom_Line());
+  Output += TicTacToe_Top_Line();
+  Output += TicTacToe_New_Line(RED + "                     Tic Tac Toe                     " + WHITE);
+  Output += TicTacToe_Bottom_Line();
 
   return Output;
 }
@@ -451,16 +451,16 @@ void Get_Next_User_Command(std::vector<std::vector<std::string>> &TicTacToeGrid,
   std::string Output = TicTacToe_Game_Display(TicTacToeGrid, std::to_string(NumberOfPlayers), AIDifficulty);
 
   if (CurrentPlayer == "PLAYER ONE")
-    Output.append(TicTacToe_New_Line(" Player X, please enter your next command!           "));
+    Output += TicTacToe_New_Line(" Player X, please enter your next command!           ");
   else
-    Output.append(TicTacToe_New_Line(" Player O, please enter your next command!           "));
+    Output += TicTacToe_New_Line(" Player O, please enter your next command!           ");
 
-  Output.append(TicTacToe_Empty_Line());
-  Output.append(TicTacToe_Empty_Line());
-  Output.append(TicTacToe_Empty_Line());
-  Output.append(TicTacToe_Empty_Line());
-  Output.append(TicTacToe_Bottom_Line());
-  Output.append(TicTacToe_Bottom_Bar());
+  Output += TicTacToe_Empty_Line();
+  Output += TicTacToe_Empty_Line();
+  Output += TicTacToe_Empty_Line();
+  Output += TicTacToe_Empty_Line();
+  Output += TicTacToe_Bottom_Line();
+  Output += TicTacToe_Bottom_Bar();
 
   while (InputInvalid)
   {
@@ -602,23 +602,23 @@ void Display_Game_Over_Message(const std::vector<std::vector<std::string>> &TicT
                                bool &GameIsRunning)
 {
   std::string Output = TicTacToe_Game_Display(TicTacToeGrid, std::to_string(NumberOfPlayers), AIDifficulty);
-  Output.append(TicTacToe_New_Line("                      GAME OVER                      "));
-  Output.append(TicTacToe_Empty_Line());
+  Output += TicTacToe_New_Line("                      GAME OVER                      ");
+  Output += TicTacToe_Empty_Line();
 
   if (Winning_Conditions_Met(TicTacToeGrid))
   {
     if (CurrentPlayer == "PLAYER ONE")
-      Output.append(TicTacToe_New_Line("     Player X has won! The game lasted " + std::to_string(NumberOfTurns) + " turns.      "));
+      Output += TicTacToe_New_Line("     Player X has won! The game lasted " + std::to_string(NumberOfTurns) + " turns.      ");
     else
-      Output.append(TicTacToe_New_Line("     Player O has won! The game lasted " + std::to_string(NumberOfTurns) + " turns.      "));
+      Output += TicTacToe_New_Line("     Player O has won! The game lasted " + std::to_string(NumberOfTurns) + " turns.      ");
   }
   else
-    Output.append(TicTacToe_New_Line("       It is a draw! The game lasted " + std::to_string(NumberOfTurns) + " turns.        "));
+    Output += TicTacToe_New_Line("       It is a draw! The game lasted " + std::to_string(NumberOfTurns) + " turns.        ");
 
-  Output.append(TicTacToe_Empty_Line());
-  Output.append(TicTacToe_New_Line(" Press 'Q' to quit OR any other key to play again... "));
-  Output.append(TicTacToe_Bottom_Line());
-  Output.append(TicTacToe_Bottom_Bar());
+  Output += TicTacToe_Empty_Line();
+  Output += TicTacToe_New_Line(" Press 'Q' to quit OR any other key to play again... ");
+  Output += TicTacToe_Bottom_Line();
+  Output += TicTacToe_Bottom_Bar();
 
   std::cout << Output;
 

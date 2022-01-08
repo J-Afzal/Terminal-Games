@@ -8,6 +8,7 @@
  * @copyright Copyright (c) 2021
  *
  */
+
 #include "functions.hpp"
 #include <iostream>
 
@@ -47,9 +48,9 @@ std::string Main_Game_Display(const unsigned int &CurrentSelection)
   else
     Output.insert(Output.size(), Main_New_Line("         Battleships          "));
 
-  Output.append(Main_Bottom_Line());
-  Output.append(Main_Bottom_Bar());
-  Output.append(RESET);
+  Output += Main_Bottom_Line();
+  Output += Main_Bottom_Bar();
+  Output += RESET;
 
   return Output;
 }
@@ -101,9 +102,9 @@ std::string Main_Bottom_Line(void)
 std::string Main_Bottom_Bar(void)
 {
   std::string Output;
-  Output.append(Main_Top_Line());
-  Output.append(Main_New_Line(RED + "           q = quit           " + WHITE));
-  Output.append(Main_Bottom_Line());
+  Output += Main_Top_Line();
+  Output += Main_New_Line(RED + "           q = quit           " + WHITE);
+  Output += Main_Bottom_Line();
 
   return Output;
 }

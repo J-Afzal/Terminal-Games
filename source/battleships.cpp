@@ -126,23 +126,23 @@ unsigned int Get_Number_Of_Players(const std::vector<std::vector<std::string>> &
   unsigned char KeyPress = 0;
 
   std::string CommonString = Battleships_Game_Display(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, "N/A", "N/A", false);
-  CommonString.append(Battleships_New_Line(" Please select the number of human players:                                                                                                        "));
+  CommonString += Battleships_New_Line(" Please select the number of human players:                                                                                                        ");
 
   std::string CaseZero = CommonString;
-  CaseZero.append(Battleships_New_Line(BLUE + " > 0                                                                                                                                               " + WHITE));
-  CaseZero.append(Battleships_New_Line("   1                                                                                                                                               "));
-  CaseZero.append(Battleships_Empty_Line());
-  CaseZero.append(Battleships_Empty_Line());
-  CaseZero.append(Battleships_Bottom_Line());
-  CaseZero.append(Battleships_Bottom_Bar());
+  CaseZero += Battleships_New_Line(BLUE + " > 0                                                                                                                                               " + WHITE);
+  CaseZero += Battleships_New_Line("   1                                                                                                                                               ");
+  CaseZero += Battleships_Empty_Line();
+  CaseZero += Battleships_Empty_Line();
+  CaseZero += Battleships_Bottom_Line();
+  CaseZero += Battleships_Bottom_Bar();
 
   std::string CaseOne = CommonString;
-  CaseOne.append(Battleships_New_Line("   0                                                                                                                                               "));
-  CaseOne.append(Battleships_New_Line(BLUE + " > 1                                                                                                                                               " + WHITE));
-  CaseOne.append(Battleships_Empty_Line());
-  CaseOne.append(Battleships_Empty_Line());
-  CaseOne.append(Battleships_Bottom_Line());
-  CaseOne.append(Battleships_Bottom_Bar());
+  CaseOne += Battleships_New_Line("   0                                                                                                                                               ");
+  CaseOne += Battleships_New_Line(BLUE + " > 1                                                                                                                                               " + WHITE);
+  CaseOne += Battleships_Empty_Line();
+  CaseOne += Battleships_Empty_Line();
+  CaseOne += Battleships_Bottom_Line();
+  CaseOne += Battleships_Bottom_Bar();
 
   while (KeyPress != '\r')
   {
@@ -195,23 +195,23 @@ std::string Get_AI_Difficulty(const std::vector<std::vector<std::string>> &Playe
   unsigned char KeyPress = 0;
 
   std::string CommonString = Battleships_Game_Display(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, std::to_string(NumberOfPlayers), "N/A", false);
-  CommonString.append(Battleships_New_Line(" Please select the AI difficulty:                                                                                                                  "));
+  CommonString += Battleships_New_Line(" Please select the AI difficulty:                                                                                                                  ");
 
   std::string CaseZero = CommonString;
-  CaseZero.append(Battleships_New_Line(BLUE + " > EASY                                                                                                                                            " + WHITE));
-  CaseZero.append(Battleships_New_Line("   HARD (Coming Soon!)                                                                                                                             "));
-  CaseZero.append(Battleships_Empty_Line());
-  CaseZero.append(Battleships_Empty_Line());
-  CaseZero.append(Battleships_Bottom_Line());
-  CaseZero.append(Battleships_Bottom_Bar());
+  CaseZero += Battleships_New_Line(BLUE + " > EASY                                                                                                                                            " + WHITE);
+  CaseZero += Battleships_New_Line("   HARD (Coming Soon!)                                                                                                                             ");
+  CaseZero += Battleships_Empty_Line();
+  CaseZero += Battleships_Empty_Line();
+  CaseZero += Battleships_Bottom_Line();
+  CaseZero += Battleships_Bottom_Bar();
 
   std::string CaseOne = CommonString;
-  CaseOne.append(Battleships_New_Line("   EASY                                                                                                                                            "));
-  CaseOne.append(Battleships_New_Line(BLUE + " > HARD (Coming Soon!)                                                                                                                             " + WHITE));
-  CaseOne.append(Battleships_Empty_Line());
-  CaseOne.append(Battleships_Empty_Line());
-  CaseOne.append(Battleships_Bottom_Line());
-  CaseOne.append(Battleships_Bottom_Bar());
+  CaseOne += Battleships_New_Line("   EASY                                                                                                                                            ");
+  CaseOne += Battleships_New_Line(BLUE + " > HARD (Coming Soon!)                                                                                                                             " + WHITE);
+  CaseOne += Battleships_Empty_Line();
+  CaseOne += Battleships_Empty_Line();
+  CaseOne += Battleships_Bottom_Line();
+  CaseOne += Battleships_Bottom_Bar();
 
   while (!(KeyPress == '\r' && CurrentSelection == 0))
   {
@@ -276,13 +276,13 @@ void Get_User_Ship_Positions(std::vector<std::vector<std::string>> &PlayerOneBoa
   for (unsigned int i = 0; i < 5; i++)
   {
     std::string Output = Battleships_Game_Display(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, std::to_string(NumberOfPlayers), AIDifficulty, false);
-    Output.append(Battleships_New_Line(ShipCommands[i]));
-    Output.append(Battleships_Empty_Line());
-    Output.append(Battleships_Empty_Line());
-    Output.append(Battleships_Empty_Line());
-    Output.append(Battleships_Empty_Line());
-    Output.append(Battleships_Bottom_Line());
-    Output.append(Battleships_Bottom_Bar());
+    Output += Battleships_New_Line(ShipCommands[i]);
+    Output += Battleships_Empty_Line();
+    Output += Battleships_Empty_Line();
+    Output += Battleships_Empty_Line();
+    Output += Battleships_Empty_Line();
+    Output += Battleships_Bottom_Line();
+    Output += Battleships_Bottom_Bar();
 
     bool InputInvalid = true;
     std::string Input;
@@ -891,9 +891,9 @@ std::string Battleships_Bottom_Line(void)
 std::string Battleships_Bottom_Bar(void)
 {
   std::string Output;
-  Output.append(Battleships_Top_Line());
-  Output.append(Battleships_New_Line(RED + "                                                                    Battleships                                                                    " + WHITE));
-  Output.append(Battleships_Bottom_Line());
+  Output += Battleships_Top_Line();
+  Output += Battleships_New_Line(RED + "                                                                    Battleships                                                                    " + WHITE);
+  Output += Battleships_Bottom_Line();
 
   return Output;
 }
@@ -933,13 +933,13 @@ unsigned int Get_Next_User_Command(const std::vector<std::vector<std::string>> &
   unsigned char KeyPress = 0;
 
   std::string Output = Battleships_Game_Display(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, std::to_string(NumberOfPlayers), AIDifficulty, false);
-  Output.append(Battleships_New_Line(" Player One, please enter your next command!                                                                                                       "));
-  Output.append(Battleships_Empty_Line());
-  Output.append(Battleships_Empty_Line());
-  Output.append(Battleships_Empty_Line());
-  Output.append(Battleships_Empty_Line());
-  Output.append(Battleships_Bottom_Line());
-  Output.append(Battleships_Bottom_Bar());
+  Output += Battleships_New_Line(" Player One, please enter your next command!                                                                                                       ");
+  Output += Battleships_Empty_Line();
+  Output += Battleships_Empty_Line();
+  Output += Battleships_Empty_Line();
+  Output += Battleships_Empty_Line();
+  Output += Battleships_Bottom_Line();
+  Output += Battleships_Bottom_Bar();
 
   while (InputInvalid)
   {
@@ -1079,18 +1079,18 @@ void Display_Game_Over_Message(const std::vector<std::vector<std::string>> &Play
                                bool &GameIsRunning)
 {
   std::string Output = Battleships_Game_Display(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, std::to_string(NumberOfPlayers), AIDifficulty, true);
-  Output.append(Battleships_New_Line("                                                                     GAME OVER                                                                     "));
-  Output.append(Battleships_Empty_Line());
+  Output += Battleships_New_Line("                                                                     GAME OVER                                                                     ");
+  Output += Battleships_Empty_Line();
 
   if (CurrentPlayer == "PLAYER ONE")
-    Output.append(Battleships_New_Line("                                                  Player One has won! The game lasted " + std::to_string(NumberOfTurns) + " turns.                                                   "));
+    Output += Battleships_New_Line("                                                  Player One has won! The game lasted " + std::to_string(NumberOfTurns) + " turns.                                                   ");
   else
-    Output.append(Battleships_New_Line("                                                  Player Two has won! The game lasted " + std::to_string(NumberOfTurns) + " turns.                                                   "));
+    Output += Battleships_New_Line("                                                  Player Two has won! The game lasted " + std::to_string(NumberOfTurns) + " turns.                                                   ");
 
-  Output.append(Battleships_Empty_Line());
-  Output.append(Battleships_New_Line("                                                Press 'Q' to quit OR any other key to play again...                                                "));
-  Output.append(Battleships_Bottom_Line());
-  Output.append(Battleships_Bottom_Bar());
+  Output += Battleships_Empty_Line();
+  Output += Battleships_New_Line("                                                Press 'Q' to quit OR any other key to play again...                                                ");
+  Output += Battleships_Bottom_Line();
+  Output += Battleships_Bottom_Bar();
 
   std::cout << Output;
 
