@@ -1,6 +1,6 @@
 # Game List
 <p align="center">
-  <img src="screenshots/Main%20Game%20Display.png">
+    <img src="screenshots/Main%20Game%20Display.png">
 </p>
 
 # GUI Features
@@ -12,15 +12,15 @@
 
 # Tic Tac Toe
 * Supports 0-2 players
-  * 2 players represent human vs human
-  * 1 player represents a human vs computer
-  * 0 players represent computer vs computer
+    * 2 players represent human vs human
+    * 1 player represents a human vs computer
+    * 0 players represent computer vs computer
 * AI Difficulty
-  * Easy = Random next command
-  * Hard = Uses Minimax algorithm
+    * Easy = Random next command
+    * Hard = Uses Minimax algorithm
 
 <p align="center">
-  <img src="screenshots/TicTacToe.gif">
+    <img src="screenshots/TicTacToe.gif">
 </p>
 
 # Hangman
@@ -35,20 +35,20 @@
 * No guessing the whole word is allowed (only single letter guesses allowed)
 
 <p align="center">
-  <img src="screenshots/Hangman.gif">
+    <img src="screenshots/Hangman.gif">
 </p>
 
 # Battleships
 * Supports 0-1 players
-  * 2 players representing human vs human is NOT supported as it is impossible to practically hide the opponent's board when using a single terminal
-  * 1 player represents a human vs computer
-  * 0 players represent computer vs computer
+    * 2 players representing human vs human is NOT supported as it is impossible to practically hide the opponent's board when using a single terminal
+    * 1 player represents a human vs computer
+    * 0 players represent computer vs computer
 * AI Difficulty
-  * Easy = Random placement of ships and random guessing of attack locations
-  * Hard = Same as Easy but once a successful attack has been made the AI then continues to attack in the area until that ship is sunk
+    * Easy = Random placement of ships and random guessing of attack locations
+    * Hard = Same as Easy but once a successful attack has been made the AI then continues to attack in the area until that ship is sunk
 
 <p align="center">
-  <img src="screenshots/Battleships.gif">
+    <img src="screenshots/Battleships.gif">
 </p>
 
 # Needed Improvements

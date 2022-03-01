@@ -10,76 +10,73 @@
  *
  */
 
+#include <iostream>
+#include <conio.h>
 #include "functions.hpp"
 #include "tictactoe.hpp"
 #include "hangman.hpp"
 #include "battleships.hpp"
-#include <iostream>
-#include <conio.h>
 
 int main(void)
 {
-  bool ProgramIsRunning = true;
-  unsigned int CurrentSelection = 2;
+    bool ProgramIsRunning = true;
+    unsigned int CurrentSelection = 2;
 
-  HANDLE ConsoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-  if (ConsoleHandle == INVALID_HANDLE_VALUE)
-    exit(1);
+    HANDLE ConsoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+    if (ConsoleHandle == INVALID_HANDLE_VALUE)
+        exit(1);
 
-  CONSOLE_CURSOR_INFO CursorInfo;
-  CursorInfo.dwSize = 100;
-  CursorInfo.bVisible = FALSE;
+    CONSOLE_CURSOR_INFO CursorInfo;
+    CursorInfo.dwSize = 100;
+    CursorInfo.bVisible = FALSE;
 
-  SetConsoleCursorInfo(ConsoleHandle, &CursorInfo);
+    SetConsoleCursorInfo(ConsoleHandle, &CursorInfo);
 
-  while (ProgramIsRunning)
-  {
-    std::cout << Main_Game_Display(CurrentSelection);
-
-    switch (_getch())
+    while (ProgramIsRunning)
     {
-    case 72: // up arrow key
-      if (CurrentSelection == 2)
-        CurrentSelection = 0;
-      else
-        CurrentSelection++;
-      break;
+        std::cout << Main_Game_Display(CurrentSelection);
 
-    case 80: // down arrow key
-      if (CurrentSelection == 0)
-        CurrentSelection = 2;
-      else
-        CurrentSelection--;
-      break;
+        switch (_getch())
+        {
+        case 72: // up arrow key
+            if (CurrentSelection == 2)
+                CurrentSelection = 0;
+            else
+                CurrentSelection++;
+            break;
 
-    case '\r': // enter key
-      switch (CurrentSelection)
-      {
-      case 0:
-        Play_Battleships(ConsoleHandle, CursorInfo);
-        break;
+        case 80: // down arrow key
+            if (CurrentSelection == 0)
+                CurrentSelection = 2;
+            else
+                CurrentSelection--;
+            break;
 
-      case 1:
-        Play_Hangman(ConsoleHandle);
-        break;
+        case '\r': // enter key
+            switch (CurrentSelection)
+            {
+            case 0:
+                Play_Battleships(ConsoleHandle, CursorInfo);
+                break;
 
-      case 2:
-        Play_Tic_Tac_Toe(ConsoleHandle, CursorInfo);
-        break;
+            case 1:
+                Play_Hangman(ConsoleHandle);
+                break;
 
-      default:
-        break;
-      }
-      break;
+            case 2:
+                Play_Tic_Tac_Toe(ConsoleHandle, CursorInfo);
+                break;
+            }
+            break;
 
-    case 'q':
-      ProgramIsRunning = false;
-      break;
+        case 'q':
+            ProgramIsRunning = false;
+            break;
 
-    default:
-      break;
+        default:
+            break;
+        }
     }
-  }
 
-  Clear_Terminal();
+    Clear_Terminal();
 }
