@@ -12,100 +12,72 @@
 #include <iostream>
 #include "functions.hpp"
 
-std::string Main_Game_Display(const unsigned int &CurrentSelection)
+std::string Main_Menu(const int &CurrentSelection)
 {
-    Clear_Terminal();
-
     std::string Output;
 
     // Top bar
-    Output.insert(Output.size(), WHITE);
-    Output.insert(Output.size(), 1, (char)201);
-    Output.insert(Output.size(), 30, (char)205);
-    Output.insert(Output.size(), 1, (char)187);
-    Output.insert(Output.size(), Main_New_Line(RED + "        Terminal-Games        " + WHITE));
-    Output.insert(Output.size(), Main_Bottom_Line());
+    Output += WHITE + Main_Menu_Top_Line() + Main_Menu_New_Line(RED + "        Terminal-Games        " + WHITE) + Main_Menu_Bottom_Line();
 
     // Centre game list
-    Output.insert(Output.size(), Main_Top_Line());
-
-    if (CurrentSelection == 2)
-        Output.insert(Output.size(), Main_New_Line(BLUE + "       > Tic Tac Toe          " + WHITE));
+    if (CurrentSelection == 0)
+        Output += Main_Menu_Top_Line() + Main_Menu_New_Line(BLUE + "       > Tic Tac Toe          " + WHITE) + Main_Menu_Empty_Line();
     else
-        Output.insert(Output.size(), Main_New_Line("         Tic Tac Toe          "));
-
-    Output.insert(Output.size(), Main_Empty_Line());
+        Output += Main_Menu_Top_Line() + Main_Menu_New_Line("         Tic Tac Toe          ") + Main_Menu_Empty_Line();
 
     if (CurrentSelection == 1)
-        Output.insert(Output.size(), Main_New_Line(BLUE + "         > Hangman            " + WHITE));
+        Output += Main_Menu_New_Line(BLUE + "         > Hangman            " + WHITE) + Main_Menu_Empty_Line();
     else
-        Output.insert(Output.size(), Main_New_Line("           Hangman            "));
+        Output += Main_Menu_New_Line("           Hangman            ") + Main_Menu_Empty_Line();
 
-    Output.insert(Output.size(), Main_Empty_Line());
-
-    if (CurrentSelection == 0)
-        Output.insert(Output.size(), Main_New_Line(BLUE + "       > Battleships          " + WHITE));
+    if (CurrentSelection == 2)
+        Output += Main_Menu_New_Line(BLUE + "       > Battleships          " + WHITE) + Main_Menu_Bottom_Line();
     else
-        Output.insert(Output.size(), Main_New_Line("         Battleships          "));
+        Output += Main_Menu_New_Line("         Battleships          ") + Main_Menu_Bottom_Line();
 
-    Output += Main_Bottom_Line();
-    Output += Main_Bottom_Bar();
-    Output += RESET;
+    // Bottom bar
+    Output += Main_Menu_Top_Line() + Main_Menu_New_Line(RED + "           q = quit           " + WHITE) + Main_Menu_Bottom_Line() + RESET;
 
     return Output;
 }
 
-std::string Main_Empty_Line(void)
+std::string Main_Menu_New_Line(const std::string &Input)
 {
     std::string Output;
-    Output.insert(Output.size(), "\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.insert(Output.size(), 30, ' ');
-    Output.insert(Output.size(), 1, (char)186);
-
-    return Output;
-}
-
-std::string Main_New_Line(const std::string &Input)
-{
-    std::string Output;
-    Output.insert(Output.size(), "\n");
     Output.insert(Output.size(), 1, (char)186);
     Output.insert(Output.size(), Input);
     Output.insert(Output.size(), 1, (char)186);
-
+    Output.insert(Output.size(), "\n");
     return Output;
 }
 
-std::string Main_Top_Line(void)
+std::string Main_Menu_Empty_Line(void)
 {
     std::string Output;
+    Output.insert(Output.size(), 1, (char)186);
+    Output.insert(Output.size(), 30, ' ');
+    Output.insert(Output.size(), 1, (char)186);
     Output.insert(Output.size(), "\n");
+    return Output;
+}
+
+std::string Main_Menu_Top_Line(void)
+{
+    std::string Output;
     Output.insert(Output.size(), 1, (char)201);
     Output.insert(Output.size(), 30, (char)205);
     Output.insert(Output.size(), 1, (char)187);
-
+    Output.insert(Output.size(), "\n");
     return Output;
 }
 
-std::string Main_Bottom_Line(void)
+std::string Main_Menu_Bottom_Line(void)
 {
     std::string Output;
-    Output.insert(Output.size(), "\n");
     Output.insert(Output.size(), 1, (char)200);
     Output.insert(Output.size(), 30, (char)205);
     Output.insert(Output.size(), 1, (char)188);
-
-    return Output;
-}
-
-std::string Main_Bottom_Bar(void)
-{
-    std::string Output;
-    Output += Main_Top_Line();
-    Output += Main_New_Line(RED + "           q = quit           " + WHITE);
-    Output += Main_Bottom_Line();
-
+    Output.insert(Output.size(), "\n");
     return Output;
 }
 
@@ -137,22 +109,6 @@ void Clear_Terminal(void)
 
     // Move the cursor home
     SetConsoleCursorPosition(hStdOut, homeCoords);
-}
-
-void Toggle_Player(std::string &CurrentPlayer)
-{
-    if (CurrentPlayer == "PLAYER ONE")
-        CurrentPlayer = "PLAYER TWO";
-
-    else
-        CurrentPlayer = "PLAYER ONE";
-}
-
-void Capitalise_Word(std::string &Input)
-{
-    for (unsigned int i = 0; i < Input.size(); i++)
-        if (Input[i] >= 'a' && Input[i] <= 'z')
-            Input[i] -= 32;
 }
 
 std::vector<std::string> Generate_Word_List(void)

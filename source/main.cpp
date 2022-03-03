@@ -19,9 +19,6 @@
 
 int main(void)
 {
-    bool ProgramIsRunning = true;
-    unsigned int CurrentSelection = 2;
-
     HANDLE ConsoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
     if (ConsoleHandle == INVALID_HANDLE_VALUE)
         exit(1);
@@ -32,50 +29,40 @@ int main(void)
 
     SetConsoleCursorInfo(ConsoleHandle, &CursorInfo);
 
-    while (ProgramIsRunning)
+    int KeyPress = 0, CurrentSelection = 0;
+    bool ProgramIsRunning = true;
+    while (true)
     {
-        std::cout << Main_Game_Display(CurrentSelection);
-
-        switch (_getch())
+        while (true)
         {
-        case 72: // up arrow key
-            if (CurrentSelection == 2)
-                CurrentSelection = 0;
-            else
-                CurrentSelection++;
-            break;
+            Clear_Terminal();
 
-        case 80: // down arrow key
-            if (CurrentSelection == 0)
-                CurrentSelection = 2;
-            else
-                CurrentSelection--;
-            break;
+            std::cout << Main_Menu(CurrentSelection);
 
-        case '\r': // enter key
-            switch (CurrentSelection)
+            KeyPress = _getch();
+
+            if (KeyPress == '\r')
+                break;
+            else if (KeyPress == 72) // up arrow key
+                (CurrentSelection == 0) ? CurrentSelection = 2 : --CurrentSelection;
+            else if (KeyPress == 80) // down arrow key
+                (CurrentSelection == 2) ? CurrentSelection = 0 : ++CurrentSelection;
+            else if (KeyPress == 'q')
             {
-            case 0:
-                Play_Battleships(ConsoleHandle, CursorInfo);
-                break;
-
-            case 1:
-                Play_Hangman(ConsoleHandle);
-                break;
-
-            case 2:
-                Play_Tic_Tac_Toe(ConsoleHandle, CursorInfo);
+                ProgramIsRunning = false;
                 break;
             }
-            break;
-
-        case 'q':
-            ProgramIsRunning = false;
-            break;
-
-        default:
-            break;
         }
+
+        if (!ProgramIsRunning)
+            break;
+
+        if (CurrentSelection == 0)
+            Play_Tic_Tac_Toe(ConsoleHandle, CursorInfo);
+        else if (CurrentSelection == 1)
+            Play_Hangman(ConsoleHandle);
+        else if (CurrentSelection == 2)
+            Play_Battleships(ConsoleHandle, CursorInfo);
     }
 
     Clear_Terminal();
