@@ -19,317 +19,246 @@
 void Play_Tic_Tac_Toe(const HANDLE &ConsoleHandle,
                       CONSOLE_CURSOR_INFO &CursorInfo)
 {
-    bool GameIsRunning = true;
-
+    bool GameIsRunning = true, QuitToMainMenu = false;
     while (GameIsRunning)
     {
-        unsigned int NumberOfTurns = 0, NumberOfPlayers = 0;
-        std::string CurrentPlayer, UserPlayerChoice, AIDifficulty = "N/A";
-        std::vector<unsigned int> ValidMovesRemaining;
-        std::vector<std::vector<std::string>> TicTacToeGrid;
+        std::vector<std::vector<char>> GameGrid;
+        std::vector<int> ValidMovesRemaining;
+        char CurrentPlayer, UserPlayerChoice;
+        int NumberOfTurns = 0, NumberOfPlayers = 0;
+        std::string AIDifficulty = "N/A";
 
-        Setup_Game(TicTacToeGrid, ValidMovesRemaining, NumberOfPlayers, UserPlayerChoice, AIDifficulty, CurrentPlayer);
+        Setup_Game(GameGrid, ValidMovesRemaining, CurrentPlayer, UserPlayerChoice, NumberOfPlayers, AIDifficulty, QuitToMainMenu);
 
-        while (!Game_Over(NumberOfTurns) && !Winning_Conditions_Met(TicTacToeGrid))
+        if (QuitToMainMenu)
+            break;
+
+        while (!Game_Over(NumberOfTurns) && !Winning_Conditions_Met(GameGrid))
         {
-            Toggle_Player(CurrentPlayer);
+            CurrentPlayer = (CurrentPlayer == 'X') ? 'O' : 'X';
 
             // Display_Game() called before either user or AI are asked for an input
             if (NumberOfPlayers == 2 || CurrentPlayer == UserPlayerChoice)
-            {
-                CursorInfo.bVisible = TRUE;
-                SetConsoleCursorInfo(ConsoleHandle, &CursorInfo);
-                Get_Next_User_Command(TicTacToeGrid, NumberOfPlayers, AIDifficulty, CurrentPlayer, ValidMovesRemaining, ConsoleHandle);
-                CursorInfo.bVisible = FALSE;
-                SetConsoleCursorInfo(ConsoleHandle, &CursorInfo);
-            }
-
+                Get_Next_User_Command(GameGrid, ValidMovesRemaining, CurrentPlayer, NumberOfPlayers, AIDifficulty, ConsoleHandle, CursorInfo, QuitToMainMenu);
             else
-                Get_Next_AI_Command(TicTacToeGrid, NumberOfPlayers, AIDifficulty, CurrentPlayer, ValidMovesRemaining);
+                Get_Next_AI_Command(GameGrid, ValidMovesRemaining, CurrentPlayer, NumberOfPlayers, AIDifficulty);
+
+            if (QuitToMainMenu)
+                break;
 
             NumberOfTurns++;
         }
 
-        Display_Game_Over_Message(TicTacToeGrid, NumberOfPlayers, AIDifficulty, CurrentPlayer, NumberOfTurns, GameIsRunning);
+        if (QuitToMainMenu)
+            break;
+
+        Display_Game_Over_Message(GameGrid, CurrentPlayer, NumberOfPlayers, NumberOfTurns, AIDifficulty, GameIsRunning);
     }
 }
 
-void Setup_Game(std::vector<std::vector<std::string>> &TicTacToeGrid,
-                std::vector<unsigned int> &ValidMovesRemaining,
-                unsigned int &NumberOfPlayers,
-                std::string &UserPlayerChoice,
+void Setup_Game(std::vector<std::vector<char>> &GameGrid,
+                std::vector<int> &ValidMovesRemaining,
+                char &CurrentPlayer,
+                char &UserPlayerChoice,
+                int &NumberOfPlayers,
                 std::string &AIDifficulty,
-                std::string &CurrentPlayer)
+                bool &QuitToMainMenu)
 {
-    for (unsigned int i = 0, GridNumber = 0; i < 3; i++)
+    for (int i = 0, GridNumber = 0; i < 3; i++)
     {
-        std::vector<std::string> Rows;
-        TicTacToeGrid.push_back(Rows);
+        std::vector<char> Rows;
+        GameGrid.push_back(Rows);
 
-        for (unsigned int j = 0; j < 3; j++, GridNumber++)
+        for (int j = 0; j < 3; j++, GridNumber++)
         {
-            TicTacToeGrid[i].push_back(" ");
+            GameGrid[i].push_back(' ');
             ValidMovesRemaining.push_back(GridNumber); // 0-8
         }
     }
 
-    NumberOfPlayers = Get_Number_Of_Players(TicTacToeGrid);
+    NumberOfPlayers = Get_Number_Of_Players(GameGrid, QuitToMainMenu);
+    if (QuitToMainMenu)
+        return;
 
     // If only one human user, then ask them which player they want to be (X or O)
     if (NumberOfPlayers == 1)
-        UserPlayerChoice = Get_User_Player_Choice(TicTacToeGrid, NumberOfPlayers);
+        UserPlayerChoice = Get_User_Player_Choice(GameGrid, NumberOfPlayers, QuitToMainMenu);
+    if (QuitToMainMenu)
+        return;
 
     // If AI involved get AI difficulty
     if (NumberOfPlayers < 2)
-        AIDifficulty = Get_AI_Difficulty(TicTacToeGrid, NumberOfPlayers);
+        AIDifficulty = Get_AI_Difficulty(GameGrid, NumberOfPlayers, QuitToMainMenu);
+    if (QuitToMainMenu)
+        return;
 
-    std::srand((unsigned int)std::time(0));
+    std::srand((int)std::time(0));
     if (std::rand() % 2 == 0)
-        CurrentPlayer = "PLAYER ONE"; // X
+        CurrentPlayer = 'X';
     else
-        CurrentPlayer = "PLAYER TWO"; // O
+        CurrentPlayer = 'O';
 }
 
-unsigned int Get_Number_Of_Players(const std::vector<std::vector<std::string>> &TicTacToeGrid)
+int Get_Number_Of_Players(const std::vector<std::vector<char>> &GameGrid,
+                          bool &QuitToMainMenu)
 {
-    unsigned int CurrentSelection = 0;
-    unsigned char KeyPress = 0;
-
-    std::string CommonString = TicTacToe_Game_Display(TicTacToeGrid, "N/A", "N/A");
-    CommonString += TicTacToe_New_Line(" Please select the number of human players:          ");
+    std::string CommonString = Get_Game_Display(GameGrid, "N/A", "N/A");
+    CommonString += New_Line(" Please select the number of human players:          ");
 
     std::string CaseZero = CommonString;
-    CaseZero += TicTacToe_New_Line(BLUE + " > 0                                                 " + WHITE);
-    CaseZero += TicTacToe_New_Line("   1                                                 ");
-    CaseZero += TicTacToe_New_Line("   2                                                 ");
-    CaseZero += TicTacToe_Empty_Line();
-    CaseZero += TicTacToe_Bottom_Line();
-    CaseZero += TicTacToe_Bottom_Bar();
+    CaseZero += New_Line(BLUE + " > 0                                                 " + WHITE);
+    CaseZero += New_Line("   1                                                 ");
+    CaseZero += New_Line("   2                                                 ");
+    CaseZero += Empty_Line() + Bottom_Line() + Bottom_Bar();
 
     std::string CaseOne = CommonString;
-    CaseOne += TicTacToe_New_Line("   0                                                 ");
-    CaseOne += TicTacToe_New_Line(BLUE + " > 1                                                 " + WHITE);
-    CaseOne += TicTacToe_New_Line("   2                                                 ");
-    CaseOne += TicTacToe_Empty_Line();
-    CaseOne += TicTacToe_Bottom_Line();
-    CaseOne += TicTacToe_Bottom_Bar();
+    CaseOne += New_Line("   0                                                 ");
+    CaseOne += New_Line(BLUE + " > 1                                                 " + WHITE);
+    CaseOne += New_Line("   2                                                 ");
+    CaseOne += Empty_Line() + Bottom_Line() + Bottom_Bar();
 
     std::string CaseTwo = CommonString;
-    CaseTwo += TicTacToe_New_Line("   0                                                 ");
-    CaseTwo += TicTacToe_New_Line("   1                                                 ");
-    CaseTwo += TicTacToe_New_Line(BLUE + " > 2                                                 " + WHITE);
-    CaseTwo += TicTacToe_Empty_Line();
-    CaseTwo += TicTacToe_Bottom_Line();
-    CaseTwo += TicTacToe_Bottom_Bar();
+    CaseTwo += New_Line("   0                                                 ");
+    CaseTwo += New_Line("   1                                                 ");
+    CaseTwo += New_Line(BLUE + " > 2                                                 " + WHITE);
+    CaseTwo += Empty_Line() + Bottom_Line() + Bottom_Bar();
 
-    while (KeyPress != '\r')
+    int KeyPress = 0, CurrentSelection = 0;
+    while (true)
     {
-        switch (KeyPress)
-        {
-        case 72: // up arrow key
-            if (CurrentSelection == 0)
-                CurrentSelection = 2;
-            else
-                CurrentSelection--;
-            break;
-
-        case 80: // down arrow key
-            if (CurrentSelection == 2)
-                CurrentSelection = 0;
-            else
-                CurrentSelection++;
-            break;
-
-        default:
-            break;
-        }
-
         Clear_Terminal();
 
-        switch (CurrentSelection)
-        {
-        case 0:
+        if (CurrentSelection == 0)
             std::cout << CaseZero;
-            break;
-
-        case 1:
+        else if (CurrentSelection == 1)
             std::cout << CaseOne;
-            break;
-
-        case 2:
+        else if (CurrentSelection == 2)
             std::cout << CaseTwo;
-            break;
-        }
 
         KeyPress = _getch();
+
+        if (KeyPress == '\r')
+            break;
+        else if (KeyPress == 72) // up arrow key
+            (CurrentSelection == 0) ? CurrentSelection = 2 : --CurrentSelection;
+        else if (KeyPress == 80) // down arrow key
+            (CurrentSelection == 2) ? CurrentSelection = 0 : ++CurrentSelection;
+        else if (KeyPress == 'q')
+        {
+            QuitToMainMenu = true;
+            return -1;
+        }
     }
 
     return CurrentSelection;
 }
 
-std::string Get_User_Player_Choice(const std::vector<std::vector<std::string>> &TicTacToeGrid,
-                                   const unsigned int &NumberOfPlayers)
+char Get_User_Player_Choice(const std::vector<std::vector<char>> &GameGrid,
+                            const int &NumberOfPlayers,
+                            bool &QuitToMainMenu)
 {
-    unsigned int CurrentSelection = 0;
-    unsigned char KeyPress = 0;
-
-    std::string CommonString = TicTacToe_Game_Display(TicTacToeGrid, std::to_string(NumberOfPlayers), "N/A");
-    CommonString += TicTacToe_New_Line(" Please select what player you would like to be:     ");
+    std::string CommonString = Get_Game_Display(GameGrid, std::to_string(NumberOfPlayers), "N/A");
+    CommonString += New_Line(" Please select what player you would like to be:     ");
 
     std::string CaseZero = CommonString;
-    CaseZero += TicTacToe_New_Line(BLUE + " > PLAYER X                                          " + WHITE);
-    CaseZero += TicTacToe_New_Line("   PLAYER O                                          ");
-    CaseZero += TicTacToe_Empty_Line();
-    CaseZero += TicTacToe_Empty_Line();
-    CaseZero += TicTacToe_Bottom_Line();
-    CaseZero += TicTacToe_Bottom_Bar();
+    CaseZero += New_Line(BLUE + " > PLAYER X                                          " + WHITE);
+    CaseZero += New_Line("   PLAYER O                                          ");
+    CaseZero += Empty_Line() + Empty_Line() + Bottom_Line() + Bottom_Bar();
 
     std::string CaseOne = CommonString;
-    CaseOne += TicTacToe_New_Line("   PLAYER X                                          ");
-    CaseOne += TicTacToe_New_Line(BLUE + " > PLAYER O                                          " + WHITE);
-    CaseOne += TicTacToe_Empty_Line();
-    CaseOne += TicTacToe_Empty_Line();
-    CaseOne += TicTacToe_Bottom_Line();
-    CaseOne += TicTacToe_Bottom_Bar();
+    CaseOne += New_Line("   PLAYER X                                          ");
+    CaseOne += New_Line(BLUE + " > PLAYER O                                          " + WHITE);
+    CaseOne += Empty_Line() + Empty_Line() + Bottom_Line() + Bottom_Bar();
 
-    while (KeyPress != '\r')
+    int KeyPress = 0, CurrentSelection = 0;
+    while (true)
     {
-        switch (KeyPress)
-        {
-        case 72: // up arrow key
-            if (CurrentSelection == 0)
-                CurrentSelection = 1;
-            else
-                CurrentSelection--;
-            break;
-
-        case 80: // down arrow key
-            if (CurrentSelection == 1)
-                CurrentSelection = 0;
-            else
-                CurrentSelection++;
-            break;
-
-        default:
-            break;
-        }
-
         Clear_Terminal();
 
-        switch (CurrentSelection)
-        {
-        case 0:
+        if (CurrentSelection == 0)
             std::cout << CaseZero;
-            break;
-
-        case 1:
+        else if (CurrentSelection == 1)
             std::cout << CaseOne;
-            break;
-        }
 
         KeyPress = _getch();
+
+        if (KeyPress == '\r')
+            break;
+        else if (KeyPress == 72) // up arrow key
+            (CurrentSelection == 0) ? CurrentSelection = 1 : --CurrentSelection;
+        else if (KeyPress == 80) // down arrow key
+            (CurrentSelection == 1) ? CurrentSelection = 0 : ++CurrentSelection;
+        else if (KeyPress == 'q')
+        {
+            QuitToMainMenu = true;
+            return -1;
+        }
     }
 
-    return CurrentSelection == 0 ? "PLAYER ONE" : "PLAYER TWO";
+    return CurrentSelection == 0 ? 'X' : 'O';
 }
 
-std::string Get_AI_Difficulty(const std::vector<std::vector<std::string>> &TicTacToeGrid,
-                              const unsigned int &NumberOfPlayers)
+std::string Get_AI_Difficulty(const std::vector<std::vector<char>> &GameGrid,
+                              const int &NumberOfPlayers,
+                              bool &QuitToMainMenu)
 {
-    unsigned int CurrentSelection = 0;
-    unsigned char KeyPress = 0;
-
-    std::string CommonString = TicTacToe_Game_Display(TicTacToeGrid, std::to_string(NumberOfPlayers), "N/A");
-    CommonString += TicTacToe_New_Line(" Please select the AI difficulty:                    ");
+    std::string CommonString = Get_Game_Display(GameGrid, std::to_string(NumberOfPlayers), "N/A");
+    CommonString += New_Line(" Please select the AI difficulty:                    ");
 
     std::string CaseZero = CommonString;
-    CaseZero += TicTacToe_New_Line(BLUE + " > EASY                                              " + WHITE);
-    CaseZero += TicTacToe_New_Line("   HARD (Coming Soon!)                               ");
-    CaseZero += TicTacToe_Empty_Line();
-    CaseZero += TicTacToe_Empty_Line();
-    CaseZero += TicTacToe_Bottom_Line();
-    CaseZero += TicTacToe_Bottom_Bar();
+    CaseZero += New_Line(BLUE + " > EASY                                              " + WHITE);
+    CaseZero += New_Line("   HARD (Coming Soon!)                               ");
+    CaseZero += Empty_Line() + Empty_Line() + Bottom_Line() + Bottom_Bar();
 
-    std::string CaseTwo = CommonString;
-    CaseTwo += TicTacToe_New_Line("   EASY                                              ");
-    CaseTwo += TicTacToe_New_Line(BLUE + " > HARD (Coming Soon!)                               " + WHITE);
-    CaseTwo += TicTacToe_Empty_Line();
-    CaseTwo += TicTacToe_Empty_Line();
-    CaseTwo += TicTacToe_Bottom_Line();
-    CaseTwo += TicTacToe_Bottom_Bar();
+    std::string CaseOne = CommonString;
+    CaseOne += New_Line("   EASY                                              ");
+    CaseOne += New_Line(BLUE + " > HARD (Coming Soon!)                               " + WHITE);
+    CaseOne += Empty_Line() + Empty_Line() + Bottom_Line() + Bottom_Bar();
 
-    while (!(KeyPress == '\r' && CurrentSelection == 0))
+    int KeyPress = 0, CurrentSelection = 0;
+    while (true)
     {
-        switch (KeyPress)
-        {
-        case 72: // up arrow key
-            if (CurrentSelection == 0)
-                CurrentSelection = 1;
-            else
-                CurrentSelection--;
-            break;
-
-        case 80: // down arrow key
-            if (CurrentSelection == 1)
-                CurrentSelection = 0;
-            else
-                CurrentSelection++;
-            break;
-
-        default:
-            break;
-        }
-
         Clear_Terminal();
 
-        switch (CurrentSelection)
-        {
-        case 0:
+        if (CurrentSelection == 0)
             std::cout << CaseZero;
-            break;
-
-        case 1:
-            std::cout << CaseTwo;
-            break;
-        }
+        else if (CurrentSelection == 1)
+            std::cout << CaseOne;
 
         KeyPress = _getch();
+
+        if (KeyPress == '\r' && CurrentSelection == 0)
+            break;
+        else if (KeyPress == 72) // up arrow key
+            (CurrentSelection == 0) ? CurrentSelection = 1 : --CurrentSelection;
+        else if (KeyPress == 80) // down arrow key
+            (CurrentSelection == 1) ? CurrentSelection = 0 : ++CurrentSelection;
+        else if (KeyPress == 'q')
+        {
+            QuitToMainMenu = true;
+            return "-1";
+        }
     }
 
     return CurrentSelection == 0 ? "EASY" : "HARD";
 }
 
-std::string TicTacToe_Game_Display(const std::vector<std::vector<std::string>> &TicTacToeGrid,
-                                   const std::string &NumberOfPlayers,
-                                   const std::string &AIDifficulty)
+std::string Get_Game_Display(const std::vector<std::vector<char>> &GameGrid,
+                             const std::string &NumberOfPlayers,
+                             const std::string &AIDifficulty)
 {
-    Clear_Terminal();
-
     std::string Output;
 
     // Top bar
-    Output.insert(Output.size(), WHITE);
-    Output.insert(Output.size(), 1, (char)201);
-    Output.insert(Output.size(), 53, (char)205);
-    Output.insert(Output.size(), 1, (char)187);
-    Output.insert(Output.size(), TicTacToe_New_Line(RED + "                   Terminal-Games                    " + WHITE));
-    Output.insert(Output.size(), TicTacToe_Bottom_Line());
+    Output += WHITE + Top_Line() + New_Line(RED + "                     Tic Tac Toe                     " + WHITE) + Bottom_Line();
 
     // Centre information
-    Output.insert(Output.size(), TicTacToe_Top_Line());
+    Output += Top_Line();
 
     // Line 1
-    Output.insert(Output.size(), "\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.insert(Output.size(), "  " + TicTacToeGrid[0][0] + " ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.insert(Output.size(), " " + TicTacToeGrid[0][1] + " ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.insert(Output.size(), " " + TicTacToeGrid[0][2] + "                                          ");
-    Output.insert(Output.size(), 1, (char)186);
+    Output += New_Line(std::string("  ") + GameGrid[0][0] + " " + char(179) + " " + GameGrid[0][1] + " " + char(179) + " " + GameGrid[0][2] + "                                          ");
 
     // Line 2
-    Output.insert(Output.size(), "\n");
     Output.insert(Output.size(), 1, (char)186);
     Output.insert(Output.size(), " ");
     Output.insert(Output.size(), 3, (char)196);
@@ -338,23 +267,14 @@ std::string TicTacToe_Game_Display(const std::vector<std::vector<std::string>> &
     Output.insert(Output.size(), 1, (char)197);
     Output.insert(Output.size(), 3, (char)196);
     if (NumberOfPlayers == "N/A")
-        Output.insert(Output.size(), "     # of Players = " + NumberOfPlayers + "                  ");
+        Output += "     # of Players = " + NumberOfPlayers + "                  " + (char)186 + "\n";
     else
-        Output.insert(Output.size(), "      # of Players = " + NumberOfPlayers + "                   ");
-    Output.insert(Output.size(), 1, (char)186);
+        Output += "      # of Players = " + NumberOfPlayers + "                   " + (char)186 + "\n";
 
     // Line 3
-    Output.insert(Output.size(), "\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.insert(Output.size(), "  " + TicTacToeGrid[1][0] + " ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.insert(Output.size(), " " + TicTacToeGrid[1][1] + " ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.insert(Output.size(), " " + TicTacToeGrid[1][2] + "                                          ");
-    Output.insert(Output.size(), 1, (char)186);
+    Output += New_Line(std::string("  ") + GameGrid[1][0] + " " + char(179) + " " + GameGrid[1][1] + " " + char(179) + " " + GameGrid[1][2] + "                                          ");
 
     // Line 4
-    Output.insert(Output.size(), "\n");
     Output.insert(Output.size(), 1, (char)186);
     Output.insert(Output.size(), " ");
     Output.insert(Output.size(), 3, (char)196);
@@ -363,270 +283,194 @@ std::string TicTacToe_Game_Display(const std::vector<std::vector<std::string>> &
     Output.insert(Output.size(), 1, (char)197);
     Output.insert(Output.size(), 3, (char)196);
     if (AIDifficulty == "N/A")
-        Output.insert(Output.size(), "     AI Difficulty = " + AIDifficulty + "                 ");
+        Output += "     AI Difficulty = " + AIDifficulty + "                 " + (char)186 + "\n";
     else
-        Output.insert(Output.size(), "    AI Difficulty = " + AIDifficulty + "                 ");
-    Output.insert(Output.size(), 1, (char)186);
+        Output += "    AI Difficulty = " + AIDifficulty + "                 " + (char)186 + "\n";
 
     // Line 5
-    Output.insert(Output.size(), "\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.insert(Output.size(), "  " + TicTacToeGrid[2][0] + " ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.insert(Output.size(), " " + TicTacToeGrid[2][1] + " ");
-    Output.insert(Output.size(), 1, (char)179);
-    Output.insert(Output.size(), " " + TicTacToeGrid[2][2] + "                                          ");
-    Output.insert(Output.size(), 1, (char)186);
+    Output += New_Line(std::string("  ") + GameGrid[2][0] + " " + char(179) + " " + GameGrid[2][1] + " " + char(179) + " " + GameGrid[2][2] + "                                          ");
 
-    Output.insert(Output.size(), TicTacToe_Empty_Line());
+    Output += Empty_Line();
 
     return Output;
 }
 
-std::string TicTacToe_Empty_Line(void)
+std::string New_Line(const std::string &Input)
+{
+    return (char)186 + Input + (char)186 + "\n";
+}
+
+std::string Empty_Line(void)
 {
     std::string Output;
-    Output.insert(Output.size(), "\n");
-    Output.insert(Output.size(), 1, (char)186);
+    Output += (char)186;
     Output.insert(Output.size(), 53, ' ');
-    Output.insert(Output.size(), 1, (char)186);
-
-    return Output;
+    Output += (char)186;
+    return Output + "\n";
 }
 
-std::string TicTacToe_New_Line(const std::string &Input)
+std::string Top_Line(void)
 {
     std::string Output;
-    Output.insert(Output.size(), "\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.insert(Output.size(), Input);
-    Output.insert(Output.size(), 1, (char)186);
-
-    return Output;
-}
-
-std::string TicTacToe_Top_Line(void)
-{
-    std::string Output;
-    Output.insert(Output.size(), "\n");
-    Output.insert(Output.size(), 1, (char)201);
+    Output += (char)201;
     Output.insert(Output.size(), 53, (char)205);
-    Output.insert(Output.size(), 1, (char)187);
-
-    return Output;
+    Output += (char)187;
+    return Output + "\n";
 }
 
-std::string TicTacToe_Bottom_Line(void)
+std::string Bottom_Line(void)
 {
     std::string Output;
-    Output.insert(Output.size(), "\n");
-    Output.insert(Output.size(), 1, (char)200);
+    Output += (char)200;
     Output.insert(Output.size(), 53, (char)205);
-    Output.insert(Output.size(), 1, (char)188);
-
-    return Output;
+    Output += (char)188;
+    return Output + "\n";
 }
 
-std::string TicTacToe_Bottom_Bar(void)
+std::string Bottom_Bar(void)
 {
-    std::string Output;
-    Output += TicTacToe_Top_Line();
-    Output += TicTacToe_New_Line(RED + "                     Tic Tac Toe                     " + WHITE);
-    Output += TicTacToe_Bottom_Line();
-
-    return Output;
+    return Top_Line() + New_Line(RED + "                q = quit to main menu                " + WHITE) + Bottom_Line();
 }
 
-void Get_Next_User_Command(std::vector<std::vector<std::string>> &TicTacToeGrid,
-                           const unsigned int &NumberOfPlayers,
+void Get_Next_User_Command(std::vector<std::vector<char>> &GameGrid,
+                           std::vector<int> &ValidMovesRemaining,
+                           const char &CurrentPlayer,
+                           const int &NumberOfPlayers,
                            const std::string &AIDifficulty,
-                           const std::string &CurrentPlayer,
-                           std::vector<unsigned int> &ValidMovesRemaining,
-                           const HANDLE &ConsoleHandle)
+                           const HANDLE &ConsoleHandle,
+                           CONSOLE_CURSOR_INFO &CursorInfo,
+                           bool &QuitToMainMenu)
 {
+    std::string Output = Get_Game_Display(GameGrid, std::to_string(NumberOfPlayers), AIDifficulty);
+    Output += New_Line(std::string(" Player ") + CurrentPlayer + ", please enter your next command!           ");
+    Output += Empty_Line() + Empty_Line() + Empty_Line() + Empty_Line() + Bottom_Line() + Bottom_Bar();
+
+    Clear_Terminal();
+
+    std::cout << Output;
+
+    CursorInfo.bVisible = TRUE;
+    SetConsoleCursorInfo(ConsoleHandle, &CursorInfo);
+
+    int KeyPress = 0, Row = ValidMovesRemaining[0] / 3, Column = ValidMovesRemaining[0] % 3;
     bool InputInvalid = true;
-    unsigned int UserCommand, Row = ValidMovesRemaining[0] / 3, Column = ValidMovesRemaining[0] % 3;
-    unsigned char KeyPress = 0;
-
-    std::string Output = TicTacToe_Game_Display(TicTacToeGrid, std::to_string(NumberOfPlayers), AIDifficulty);
-
-    if (CurrentPlayer == "PLAYER ONE")
-        Output += TicTacToe_New_Line(" Player X, please enter your next command!           ");
-    else
-        Output += TicTacToe_New_Line(" Player O, please enter your next command!           ");
-
-    Output += TicTacToe_Empty_Line();
-    Output += TicTacToe_Empty_Line();
-    Output += TicTacToe_Empty_Line();
-    Output += TicTacToe_Empty_Line();
-    Output += TicTacToe_Bottom_Line();
-    Output += TicTacToe_Bottom_Bar();
-
     while (InputInvalid)
     {
-        while (KeyPress != '\r')
+        while (true)
         {
-            switch (KeyPress)
-            {
-            case 72: // up arrow key
-                if (Row == 0)
-                    Row = 2;
-                else
-                    Row--;
-                break;
-
-            case 80: // down arrow key
-                if (Row == 2)
-                    Row = 0;
-                else
-                    Row++;
-                break;
-
-            case 75: // left arrow key
-                if (Column == 0)
-                    Column = 2;
-                else
-                    Column--;
-                break;
-
-            case 77: // right arrow key
-                if (Column == 2)
-                    Column = 0;
-                else
-                    Column++;
-                break;
-
-            default:
-                break;
-            }
-
-            Clear_Terminal();
-
-            std::cout << Output;
-
             COORD CursorPosition;
             CursorPosition.X = 3 + Column * 4;
             CursorPosition.Y = 4 + Row * 2;
-
             SetConsoleCursorPosition(ConsoleHandle, CursorPosition);
 
             KeyPress = _getch();
+
+            if (KeyPress == '\r')
+                break;
+            else if (KeyPress == 72) // up arrow key
+                (Row == 0) ? Row = 2 : --Row;
+            else if (KeyPress == 80) // down arrow key
+                (Row == 2) ? Row = 0 : ++Row;
+            else if (KeyPress == 75) // left arrow key
+                (Column == 0) ? Column = 2 : --Column;
+            else if (KeyPress == 77) // right arrow key
+                (Column == 2) ? Column = 0 : ++Column;
+            else if (KeyPress == 'q')
+            {
+                QuitToMainMenu = true;
+                CursorInfo.bVisible = FALSE;
+                SetConsoleCursorInfo(ConsoleHandle, &CursorInfo);
+                return;
+            }
         }
 
-        UserCommand = Row * 3 + Column;
-        auto CommandPosition = std::find(ValidMovesRemaining.begin(), ValidMovesRemaining.end(), UserCommand);
+        auto CommandPosition = std::find(ValidMovesRemaining.begin(), ValidMovesRemaining.end(), Row * 3 + Column);
 
         if (CommandPosition != ValidMovesRemaining.end())
         {
-            InputInvalid = false;
-
-            if (CurrentPlayer == "PLAYER ONE")
-                TicTacToeGrid[Row][Column] = "X";
-            else
-                TicTacToeGrid[Row][Column] = "O";
-
+            GameGrid[Row][Column] = CurrentPlayer;
             ValidMovesRemaining.erase(CommandPosition);
+            InputInvalid = false;
+            continue;
         }
         else
             KeyPress = 0;
     }
+
+    CursorInfo.bVisible = FALSE;
+    SetConsoleCursorInfo(ConsoleHandle, &CursorInfo);
 }
 
-void Get_Next_AI_Command(std::vector<std::vector<std::string>> &TicTacToeGrid,
-                         const unsigned int &NumberOfPlayers,
-                         const std::string &AIDifficulty,
-                         const std::string &CurrentPlayer,
-                         std::vector<unsigned int> &ValidMovesRemaining)
+void Get_Next_AI_Command(std::vector<std::vector<char>> &GameGrid,
+                         std::vector<int> &ValidMovesRemaining,
+                         const char &CurrentPlayer,
+                         const int &NumberOfPlayers,
+                         const std::string &AIDifficulty)
 {
-    unsigned int AICommand, Row, Column;
-
-    AICommand = ValidMovesRemaining[std::rand() % ValidMovesRemaining.size()];
-    auto CommandPosition = std::find(ValidMovesRemaining.begin(), ValidMovesRemaining.end(), AICommand);
-    ValidMovesRemaining.erase(CommandPosition);
-
-    Column = AICommand % 3;
-    Row = AICommand / 3;
-
-    if (CurrentPlayer == "PLAYER ONE")
-        TicTacToeGrid[Row][Column] = "X";
-    else
-        TicTacToeGrid[Row][Column] = "O";
+    int AICommand = ValidMovesRemaining[std::rand() % ValidMovesRemaining.size()];
+    ValidMovesRemaining.erase(std::find(ValidMovesRemaining.begin(), ValidMovesRemaining.end(), AICommand));
+    GameGrid[AICommand / 3][AICommand % 3] = CurrentPlayer;
 }
 
-bool Game_Over(const unsigned int &NumberOfTurns)
+bool Game_Over(const int &NumberOfTurns)
 {
-    if (NumberOfTurns == 9)
-        return true;
-    else
-        return false;
+    return (NumberOfTurns == 9) ? true : false;
 }
 
-bool Winning_Conditions_Met(const std::vector<std::vector<std::string>> &TicTacToeGrid)
+bool Winning_Conditions_Met(const std::vector<std::vector<char>> &GameGrid)
 {
     // Check Horizontals
-    if (TicTacToeGrid[0][0] != " " && TicTacToeGrid[0][0] == TicTacToeGrid[0][1] && TicTacToeGrid[0][1] == TicTacToeGrid[0][2])
+    if (GameGrid[0][0] != ' ' && GameGrid[0][0] == GameGrid[0][1] && GameGrid[0][1] == GameGrid[0][2])
         return true;
 
-    else if (TicTacToeGrid[1][0] != " " && TicTacToeGrid[1][0] == TicTacToeGrid[1][1] && TicTacToeGrid[1][1] == TicTacToeGrid[1][2])
+    else if (GameGrid[1][0] != ' ' && GameGrid[1][0] == GameGrid[1][1] && GameGrid[1][1] == GameGrid[1][2])
         return true;
 
-    else if (TicTacToeGrid[2][0] != " " && TicTacToeGrid[2][0] == TicTacToeGrid[2][1] && TicTacToeGrid[2][1] == TicTacToeGrid[2][2])
+    else if (GameGrid[2][0] != ' ' && GameGrid[2][0] == GameGrid[2][1] && GameGrid[2][1] == GameGrid[2][2])
         return true;
 
     // Check verticals
-    else if (TicTacToeGrid[0][0] != " " && TicTacToeGrid[0][0] == TicTacToeGrid[1][0] && TicTacToeGrid[1][0] == TicTacToeGrid[2][0])
+    else if (GameGrid[0][0] != ' ' && GameGrid[0][0] == GameGrid[1][0] && GameGrid[1][0] == GameGrid[2][0])
         return true;
 
-    else if (TicTacToeGrid[0][1] != " " && TicTacToeGrid[0][1] == TicTacToeGrid[1][1] && TicTacToeGrid[1][1] == TicTacToeGrid[2][1])
+    else if (GameGrid[0][1] != ' ' && GameGrid[0][1] == GameGrid[1][1] && GameGrid[1][1] == GameGrid[2][1])
         return true;
 
-    else if (TicTacToeGrid[0][2] != " " && TicTacToeGrid[0][2] == TicTacToeGrid[1][2] && TicTacToeGrid[1][2] == TicTacToeGrid[2][2])
+    else if (GameGrid[0][2] != ' ' && GameGrid[0][2] == GameGrid[1][2] && GameGrid[1][2] == GameGrid[2][2])
         return true;
 
     // Check diagonals
-    else if (TicTacToeGrid[0][0] != " " && TicTacToeGrid[0][0] == TicTacToeGrid[1][1] && TicTacToeGrid[1][1] == TicTacToeGrid[2][2])
+    else if (GameGrid[0][0] != ' ' && GameGrid[0][0] == GameGrid[1][1] && GameGrid[1][1] == GameGrid[2][2])
         return true;
 
-    else if (TicTacToeGrid[2][0] != " " && TicTacToeGrid[2][0] == TicTacToeGrid[1][1] && TicTacToeGrid[1][1] == TicTacToeGrid[0][2])
+    else if (GameGrid[2][0] != ' ' && GameGrid[2][0] == GameGrid[1][1] && GameGrid[1][1] == GameGrid[0][2])
         return true;
 
     else
         return false;
 }
 
-void Display_Game_Over_Message(const std::vector<std::vector<std::string>> &TicTacToeGrid,
-                               const unsigned int &NumberOfPlayers,
+void Display_Game_Over_Message(const std::vector<std::vector<char>> &GameGrid,
+                               const char &CurrentPlayer,
+                               const int &NumberOfPlayers,
+                               const int &NumberOfTurns,
                                const std::string &AIDifficulty,
-                               const std::string &CurrentPlayer,
-                               const unsigned int &NumberOfTurns,
                                bool &GameIsRunning)
 {
-    std::string Output = TicTacToe_Game_Display(TicTacToeGrid, std::to_string(NumberOfPlayers), AIDifficulty);
-    Output += TicTacToe_New_Line("                      GAME OVER                      ");
-    Output += TicTacToe_Empty_Line();
+    std::string Output = Get_Game_Display(GameGrid, std::to_string(NumberOfPlayers), AIDifficulty);
+    Output += New_Line("                      GAME OVER                      ") + Empty_Line();
 
-    if (Winning_Conditions_Met(TicTacToeGrid))
-    {
-        if (CurrentPlayer == "PLAYER ONE")
-            Output += TicTacToe_New_Line("     Player X has won! The game lasted " + std::to_string(NumberOfTurns) + " turns.      ");
-        else
-            Output += TicTacToe_New_Line("     Player O has won! The game lasted " + std::to_string(NumberOfTurns) + " turns.      ");
-    }
+    if (Winning_Conditions_Met(GameGrid))
+        Output += New_Line(std::string("     Player ") + CurrentPlayer + " has won! The game lasted " + std::to_string(NumberOfTurns) + " turns.      ");
     else
-        Output += TicTacToe_New_Line("       It is a draw! The game lasted " + std::to_string(NumberOfTurns) + " turns.        ");
+        Output += New_Line("       It is a draw! The game lasted " + std::to_string(NumberOfTurns) + " turns.        ");
 
-    Output += TicTacToe_Empty_Line();
-    Output += TicTacToe_New_Line(" Press 'Q' to quit OR any other key to play again... ");
-    Output += TicTacToe_Bottom_Line();
-    Output += TicTacToe_Bottom_Bar();
+    Output += Empty_Line() + New_Line(" Press 'Q' to quit OR any other key to play again... ") + Bottom_Line() + Bottom_Bar();
+
+    Clear_Terminal();
 
     std::cout << Output;
 
-    char temp = _getch();
-
-    if (temp == 'q')
-    {
+    if (_getch() == 'q')
         GameIsRunning = false;
-        Clear_Terminal();
-    }
 }

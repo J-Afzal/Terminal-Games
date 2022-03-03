@@ -9,9 +9,7 @@
  *
  */
 
-#ifndef tictactoe_hpp
-#define tictactoe_hpp
-
+#pragma once
 #include <vector>
 #include <string>
 #include <Windows.h>
@@ -33,113 +31,123 @@ void Play_Tic_Tac_Toe(const HANDLE &ConsoleHandle,
  *
  * @param TicTacToeGrid
  * @param ValidMovesRemaining
- * @param NumberOfPlayers
- * @param UserPlayerChoice
- * @param AIDifficulty
  * @param CurrentPlayer
+ * @param UserPlayerChoice
+ * @param NumberOfPlayers
+ * @param AIDifficulty
+ * @param QuitToMainMenu
  */
-void Setup_Game(std::vector<std::vector<std::string>> &TicTacToeGrid,
-                std::vector<unsigned int> &ValidMovesRemaining,
-                unsigned int &NumberOfPlayers,
-                std::string &UserPlayerChoice,
+void Setup_Game(std::vector<std::vector<char>> &TicTacToeGrid,
+                std::vector<int> &ValidMovesRemaining,
+                char &CurrentPlayer,
+                char &UserPlayerChoice,
+                int &NumberOfPlayers,
                 std::string &AIDifficulty,
-                std::string &CurrentPlayer);
+                bool &QuitToMainMenu);
 
 /**
- * @brief Does what what you think
+ * @brief
  *
  * @param TicTacToeGrid
- * @return unsigned int
+ * @param QuitToMainMenu
+ * @return int
  */
-unsigned int Get_Number_Of_Players(const std::vector<std::vector<std::string>> &TicTacToeGrid);
+int Get_Number_Of_Players(const std::vector<std::vector<char>> &TicTacToeGrid,
+                          bool &QuitToMainMenu);
 
 /**
- * @brief Does what what you think
- *
- * @param TicTacToeGrid
- * @param NumberOfPlayers
- * @return std::string
- */
-std::string Get_User_Player_Choice(const std::vector<std::vector<std::string>> &TicTacToeGrid,
-                                   const unsigned int &NumberOfPlayers);
-
-/**
- * @brief Does what what you think
+ * @brief
  *
  * @param TicTacToeGrid
  * @param NumberOfPlayers
- * @return std::string
+ * @param QuitToMainMenu
+ * @return char
  */
-std::string Get_AI_Difficulty(const std::vector<std::vector<std::string>> &TicTacToeGrid,
-                              const unsigned int &NumberOfPlayers);
+char Get_User_Player_Choice(const std::vector<std::vector<char>> &TicTacToeGrid,
+                            const int &NumberOfPlayers,
+                            bool &QuitToMainMenu);
 
 /**
- * @brief Creates a string that is used to display the game and consists of the top bar
- * which contains the title Terminal_Games, Tic Tac Toe grid and to the right of that,
- * the number of players and the AI difficulty
+ * @brief
+ *
+ * @param TicTacToeGrid
+ * @param NumberOfPlayers
+ * @param QuitToMainMenu
+ * @return std::string
+ */
+std::string Get_AI_Difficulty(const std::vector<std::vector<char>> &TicTacToeGrid,
+                              const int &NumberOfPlayers,
+                              bool &QuitToMainMenu);
+
+/**
+ * @brief Creates a string that contains all the ASCII characters to display the current
+ * state of the game.
  *
  * @param TicTacToeGrid
  * @param NumberOfPlayers
  * @param AIDifficulty
  * @return std::string
  */
-std::string TicTacToe_Game_Display(const std::vector<std::vector<std::string>> &TicTacToeGrid,
-                                   const std::string &NumberOfPlayers,
-                                   const std::string &AIDifficulty);
+std::string Get_Game_Display(const std::vector<std::vector<char>> &TicTacToeGrid,
+                             const std::string &NumberOfPlayers,
+                             const std::string &AIDifficulty);
 
 /**
- * @brief Creates an empty new line for any of the game boxes
- *
- * @return std::string
- */
-std::string TicTacToe_Empty_Line(void);
-
-/**
- * @brief Creates a new line containing text for any of the game boxes
+ * @brief Creates a new line containing text for the Tic Tac Toe game.
  *
  * @param Input
  * @return std::string
  */
-std::string TicTacToe_New_Line(const std::string &Input);
+std::string New_Line(const std::string &Input);
 
 /**
- * @brief Creates the top line of any of the game boxes
+ * @brief Creates an empty line for the Tic Tac Toe game.
  *
  * @return std::string
  */
-std::string TicTacToe_Top_Line(void);
+std::string Empty_Line(void);
 
 /**
- * @brief Creates the bottom line of any of the game boxes
+ * @brief Creates the top line for the Tic Tac Toe game.
  *
  * @return std::string
  */
-std::string TicTacToe_Bottom_Line(void);
+std::string Top_Line(void);
 
 /**
- * @brief Creates the bottom bar which contains the title of the game
+ * @brief Creates the bottom line for the Tic Tac Toe game.
  *
  * @return std::string
  */
-std::string TicTacToe_Bottom_Bar(void);
+std::string Bottom_Line(void);
 
 /**
- * @brief The user is prompted for their next command and, if necessary, repeated until
- * a valid command is given.
+ * @brief Creates the bottom bar for the Tic Tac Toe game.
+ *
+ * @return std::string
+ */
+std::string Bottom_Bar(void);
+
+/**
+ * @brief The user is repeatedly prompted for their next command and until a valid command is given.
  *
  * @param TicTacToeGrid
+ * @param ValidMovesRemaining
+ * @param CurrentPlayer
  * @param NumberOfPlayers
  * @param AIDifficulty
- * @param CurrentPlayer
- * @param ValidMovesRemaining
  * @param ConsoleHandle
+ * @param CursorInfo
+ * @param QuitToMainMenu
  */
-void Get_Next_User_Command(std::vector<std::vector<std::string>> &TicTacToeGrid,
-                           const unsigned int &NumberOfPlayers,
+void Get_Next_User_Command(std::vector<std::vector<char>> &TicTacToeGrid,
+                           std::vector<int> &ValidMovesRemaining,
+                           const char &CurrentPlayer,
+                           const int &NumberOfPlayers,
                            const std::string &AIDifficulty,
-                           const std::string &CurrentPlayer,
-                           std::vector<unsigned int> &ValidMovesRemaining,
-                           const HANDLE &ConsoleHandle);
+                           const HANDLE &ConsoleHandle,
+                           CONSOLE_CURSOR_INFO &CursorInfo,
+                           bool &QuitToMainMenu);
 
 /**
  * @brief If AIDifficulty is set to easy, then a random valid location on the
@@ -147,16 +155,16 @@ void Get_Next_User_Command(std::vector<std::vector<std::string>> &TicTacToeGrid,
  * algorithm is used.
  *
  * @param TicTacToeGrid
+ * @param ValidMovesRemaining
+ * @param CurrentPlayer
  * @param NumberOfPlayers
  * @param AIDifficulty
- * @param CurrentPlayer
- * @param ValidMovesRemaining
  */
-void Get_Next_AI_Command(std::vector<std::vector<std::string>> &TicTacToeGrid,
-                         const unsigned int &NumberOfPlayers,
-                         const std::string &AIDifficulty,
-                         const std::string &CurrentPlayer,
-                         std::vector<unsigned int> &ValidMovesRemaining);
+void Get_Next_AI_Command(std::vector<std::vector<char>> &TicTacToeGrid,
+                         std::vector<int> &ValidMovesRemaining,
+                         const char &CurrentPlayer,
+                         const int &NumberOfPlayers,
+                         const std::string &AIDifficulty);
 
 /**
  * @brief Checks if there are still empty places to play a move
@@ -166,35 +174,31 @@ void Get_Next_AI_Command(std::vector<std::vector<std::string>> &TicTacToeGrid,
  * @return true,if more moves can be played
  * @return false, if no more moves can be played
  */
-bool Game_Over(const unsigned int &NumberOfTurns);
+bool Game_Over(const int &NumberOfTurns);
 
 /**
  * @brief Checks for three in a row X/O on the Tic Tac Toe grid.
  *
  * @param TicTacToeGrid
- * @return true, if three in a row exists
- * @return false, if three in a row does NOT exists
+ * @return true
+ * @return false
  */
-bool Winning_Conditions_Met(const std::vector<std::vector<std::string>> &TicTacToeGrid);
+bool Winning_Conditions_Met(const std::vector<std::vector<char>> &TicTacToeGrid);
 
 /**
- * @brief First calls Display_Game() once more. If winning condition was met, then the winner is the current
- * player is the winner as Toggle_Player() function has not been called since most recent turn and now. If
- * no winner then it is draw. This informations is displayed to the user and _getch() is used to get a key press
- * for what the GameIsRunning should be set to (true = play another game and false = quit game).
+ * @brief The final state of the Tic Tac Toe grid and winner is displayed and
+ * the user is promoted whether they want to restart or quit.
  *
  * @param TicTacToeGrid
- * @param NumberOfPlayers
- * @param AIDifficulty
  * @param CurrentPlayer
+ * @param NumberOfPlayers
  * @param NumberOfTurns
+ * @param AIDifficulty
  * @param GameIsRunning
  */
-void Display_Game_Over_Message(const std::vector<std::vector<std::string>> &TicTacToeGrid,
-                               const unsigned int &NumberOfPlayers,
+void Display_Game_Over_Message(const std::vector<std::vector<char>> &TicTacToeGrid,
+                               const char &CurrentPlayer,
+                               const int &NumberOfPlayers,
+                               const int &NumberOfTurns,
                                const std::string &AIDifficulty,
-                               const std::string &CurrentPlayer,
-                               const unsigned int &NumberOfTurns,
                                bool &GameIsRunning);
-
-#endif
