@@ -36,4 +36,4 @@ void Clear_Terminal(void);
  *
  * @return std::vector<std::string>
  */
-std::vector<std::string> Generate_Word_List(void);
+std::vector<std::string> Return_Word_List(void);

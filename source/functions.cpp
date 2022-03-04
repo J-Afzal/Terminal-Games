@@ -41,7 +41,7 @@ void Clear_Terminal(void)
     SetConsoleCursorPosition(hStdOut, homeCoords);
 }
 
-std::vector<std::string> Generate_Word_List(void)
+std::vector<std::string> Return_Word_List(void)
 {
     std::vector<std::string> WordList = {
         "ABILITY",
