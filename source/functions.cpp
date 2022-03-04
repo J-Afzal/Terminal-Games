@@ -9,77 +9,7 @@
  *
  */
 
-#include <iostream>
 #include "functions.hpp"
-
-std::string Main_Menu(const int &CurrentSelection)
-{
-    std::string Output;
-
-    // Top bar
-    Output += WHITE + Main_Menu_Top_Line() + Main_Menu_New_Line(RED + "        Terminal-Games        " + WHITE) + Main_Menu_Bottom_Line();
-
-    // Centre game list
-    if (CurrentSelection == 0)
-        Output += Main_Menu_Top_Line() + Main_Menu_New_Line(BLUE + "       > Tic Tac Toe          " + WHITE) + Main_Menu_Empty_Line();
-    else
-        Output += Main_Menu_Top_Line() + Main_Menu_New_Line("         Tic Tac Toe          ") + Main_Menu_Empty_Line();
-
-    if (CurrentSelection == 1)
-        Output += Main_Menu_New_Line(BLUE + "         > Hangman            " + WHITE) + Main_Menu_Empty_Line();
-    else
-        Output += Main_Menu_New_Line("           Hangman            ") + Main_Menu_Empty_Line();
-
-    if (CurrentSelection == 2)
-        Output += Main_Menu_New_Line(BLUE + "       > Battleships          " + WHITE) + Main_Menu_Bottom_Line();
-    else
-        Output += Main_Menu_New_Line("         Battleships          ") + Main_Menu_Bottom_Line();
-
-    // Bottom bar
-    Output += Main_Menu_Top_Line() + Main_Menu_New_Line(RED + "           q = quit           " + WHITE) + Main_Menu_Bottom_Line() + RESET;
-
-    return Output;
-}
-
-std::string Main_Menu_New_Line(const std::string &Input)
-{
-    std::string Output;
-    Output.insert(Output.size(), 1, (char)186);
-    Output.insert(Output.size(), Input);
-    Output.insert(Output.size(), 1, (char)186);
-    Output.insert(Output.size(), "\n");
-    return Output;
-}
-
-std::string Main_Menu_Empty_Line(void)
-{
-    std::string Output;
-    Output.insert(Output.size(), 1, (char)186);
-    Output.insert(Output.size(), 30, ' ');
-    Output.insert(Output.size(), 1, (char)186);
-    Output.insert(Output.size(), "\n");
-    return Output;
-}
-
-std::string Main_Menu_Top_Line(void)
-{
-    std::string Output;
-    Output.insert(Output.size(), 1, (char)201);
-    Output.insert(Output.size(), 30, (char)205);
-    Output.insert(Output.size(), 1, (char)187);
-    Output.insert(Output.size(), "\n");
-    return Output;
-}
-
-std::string Main_Menu_Bottom_Line(void)
-{
-    std::string Output;
-    Output.insert(Output.size(), 1, (char)200);
-    Output.insert(Output.size(), 30, (char)205);
-    Output.insert(Output.size(), 1, (char)188);
-    Output.insert(Output.size(), "\n");
-    return Output;
-}
 
 void Clear_Terminal(void)
 {
