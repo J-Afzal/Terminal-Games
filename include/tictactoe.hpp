@@ -23,7 +23,7 @@ namespace TicTacToe
      * @param CursorInfo
      */
     void Play(const HANDLE &ConsoleHandle,
-                          CONSOLE_CURSOR_INFO &CursorInfo);
+              CONSOLE_CURSOR_INFO &CursorInfo);
 
     /**
      * @brief The Tic Tac Toe grid and list of valid moves are created, number of
@@ -32,7 +32,7 @@ namespace TicTacToe
      * for the AI difficulty, and finally the current player is randomly assigned.
      *
      * @param TicTacToeGrid
-     * @param ValidMovesRemaining
+     * @param MovesRemaining
      * @param CurrentPlayer
      * @param UserPlayerChoice
      * @param NumberOfPlayers
@@ -40,7 +40,7 @@ namespace TicTacToe
      * @param QuitToMainMenu
      */
     void Setup_Game(std::vector<std::vector<char>> &TicTacToeGrid,
-                    std::vector<int> &ValidMovesRemaining,
+                    std::vector<int> &MovesRemaining,
                     char &CurrentPlayer,
                     char &UserPlayerChoice,
                     int &NumberOfPlayers,
@@ -134,7 +134,7 @@ namespace TicTacToe
      * @brief The user is repeatedly prompted for their next command and until a valid command is given.
      *
      * @param TicTacToeGrid
-     * @param ValidMovesRemaining
+     * @param MovesRemaining
      * @param CurrentPlayer
      * @param NumberOfPlayers
      * @param AIDifficulty
@@ -143,7 +143,7 @@ namespace TicTacToe
      * @param QuitToMainMenu
      */
     void Get_Next_User_Command(std::vector<std::vector<char>> &TicTacToeGrid,
-                               std::vector<int> &ValidMovesRemaining,
+                               std::vector<int> &MovesRemaining,
                                const char &CurrentPlayer,
                                const int &NumberOfPlayers,
                                const std::string &AIDifficulty,
@@ -157,11 +157,11 @@ namespace TicTacToe
      * algorithm is used.
      *
      * @param GameGrid
-     * @param ValidMovesRemaining
+     * @param MovesRemaining
      * @param CurrentPlayer
      */
     void Get_Next_AI_Command(std::vector<std::vector<char>> &GameGrid,
-                             std::vector<int> &ValidMovesRemaining,
+                             std::vector<int> &MovesRemaining,
                              const char &CurrentPlayer);
 
     /**

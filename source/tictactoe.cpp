@@ -13,7 +13,7 @@
 #include <iomanip>
 #include <algorithm>
 #include <conio.h>
-#include "functions.hpp"
+#include "terminal.hpp"
 #include "tictactoe.hpp"
 
 void TicTacToe::Play(const HANDLE &ConsoleHandle,
@@ -23,25 +23,24 @@ void TicTacToe::Play(const HANDLE &ConsoleHandle,
     while (GameIsRunning)
     {
         std::vector<std::vector<char>> GameGrid;
-        std::vector<int> ValidMovesRemaining;
-        char CurrentPlayer, UserPlayerChoice;
+        std::vector<int> MovesRemaining;
+        char CurrentPlayer = 0, UserPlayerChoice = 0;
         int NumberOfTurns = 0, NumberOfPlayers = 0;
         std::string AIDifficulty = "N/A";
 
-        Setup_Game(GameGrid, ValidMovesRemaining, CurrentPlayer, UserPlayerChoice, NumberOfPlayers, AIDifficulty, QuitToMainMenu);
+        Setup_Game(GameGrid, MovesRemaining, CurrentPlayer, UserPlayerChoice, NumberOfPlayers, AIDifficulty, QuitToMainMenu);
 
         if (QuitToMainMenu)
             break;
 
         while (!Game_Over(NumberOfTurns) && !Winning_Conditions_Met(GameGrid))
         {
-            CurrentPlayer = (CurrentPlayer == 'X') ? 'O' : 'X';
+            CurrentPlayer == 'X' ? CurrentPlayer = 'O' : CurrentPlayer = 'X';
 
-            // Display_Game() called before either user or AI are asked for an input
             if (NumberOfPlayers == 2 || CurrentPlayer == UserPlayerChoice)
-                Get_Next_User_Command(GameGrid, ValidMovesRemaining, CurrentPlayer, NumberOfPlayers, AIDifficulty, ConsoleHandle, CursorInfo, QuitToMainMenu);
+                Get_Next_User_Command(GameGrid, MovesRemaining, CurrentPlayer, NumberOfPlayers, AIDifficulty, ConsoleHandle, CursorInfo, QuitToMainMenu);
             else
-                Get_Next_AI_Command(GameGrid, ValidMovesRemaining, CurrentPlayer);
+                Get_Next_AI_Command(GameGrid, MovesRemaining, CurrentPlayer);
 
             if (QuitToMainMenu)
                 break;
@@ -57,7 +56,7 @@ void TicTacToe::Play(const HANDLE &ConsoleHandle,
 }
 
 void TicTacToe::Setup_Game(std::vector<std::vector<char>> &GameGrid,
-                           std::vector<int> &ValidMovesRemaining,
+                           std::vector<int> &MovesRemaining,
                            char &CurrentPlayer,
                            char &UserPlayerChoice,
                            int &NumberOfPlayers,
@@ -74,7 +73,7 @@ void TicTacToe::Setup_Game(std::vector<std::vector<char>> &GameGrid,
         for (int j = 0; j < 3; j++, GridNumber++)
         {
             GameGrid[i].push_back(' ');
-            ValidMovesRemaining.push_back(GridNumber); // 0-8
+            MovesRemaining.push_back(GridNumber); // 0-8
         }
     }
 
@@ -127,14 +126,12 @@ int TicTacToe::Get_Number_Of_Players(const std::vector<std::vector<char>> &GameG
     int KeyPress = 0, CurrentSelection = 0;
     while (true)
     {
-        Clear_Terminal();
-
         if (CurrentSelection == 0)
-            std::cout << CaseZero;
+            Output_To_Terminal(CaseZero);
         else if (CurrentSelection == 1)
-            std::cout << CaseOne;
+            Output_To_Terminal(CaseOne);
         else if (CurrentSelection == 2)
-            std::cout << CaseTwo;
+            Output_To_Terminal(CaseTwo);
 
         KeyPress = _getch();
 
@@ -174,12 +171,10 @@ char TicTacToe::Get_User_Player_Choice(const std::vector<std::vector<char>> &Gam
     int KeyPress = 0, CurrentSelection = 0;
     while (true)
     {
-        Clear_Terminal();
-
         if (CurrentSelection == 0)
-            std::cout << CaseZero;
+            Output_To_Terminal(CaseZero);
         else if (CurrentSelection == 1)
-            std::cout << CaseOne;
+            Output_To_Terminal(CaseOne);
 
         KeyPress = _getch();
 
@@ -219,12 +214,10 @@ std::string TicTacToe::Get_AI_Difficulty(const std::vector<std::vector<char>> &G
     int KeyPress = 0, CurrentSelection = 0;
     while (true)
     {
-        Clear_Terminal();
-
         if (CurrentSelection == 0)
-            std::cout << CaseZero;
+            Output_To_Terminal(CaseZero);
         else if (CurrentSelection == 1)
-            std::cout << CaseOne;
+            Output_To_Terminal(CaseOne);
 
         KeyPress = _getch();
 
@@ -334,7 +327,7 @@ std::string TicTacToe::Bottom_Bar(void)
 }
 
 void TicTacToe::Get_Next_User_Command(std::vector<std::vector<char>> &GameGrid,
-                                      std::vector<int> &ValidMovesRemaining,
+                                      std::vector<int> &MovesRemaining,
                                       const char &CurrentPlayer,
                                       const int &NumberOfPlayers,
                                       const std::string &AIDifficulty,
@@ -346,16 +339,13 @@ void TicTacToe::Get_Next_User_Command(std::vector<std::vector<char>> &GameGrid,
     Output += New_Line(std::string(" Player ") + CurrentPlayer + ", please enter your next command!           ");
     Output += Empty_Line() + Empty_Line() + Empty_Line() + Empty_Line() + Bottom_Line() + Bottom_Bar();
 
-    Clear_Terminal();
-
-    std::cout << Output;
+    Output_To_Terminal(Output);
 
     CursorInfo.bVisible = TRUE;
     SetConsoleCursorInfo(ConsoleHandle, &CursorInfo);
 
-    int KeyPress = 0, Row = ValidMovesRemaining[0] / 3, Column = ValidMovesRemaining[0] % 3;
-    bool InputInvalid = true;
-    while (InputInvalid)
+    int KeyPress = 0, Row = MovesRemaining[0] / 3, Column = MovesRemaining[0] % 3;
+    while (true)
     {
         while (true)
         {
@@ -385,14 +375,13 @@ void TicTacToe::Get_Next_User_Command(std::vector<std::vector<char>> &GameGrid,
             }
         }
 
-        auto CommandPosition = std::find(ValidMovesRemaining.begin(), ValidMovesRemaining.end(), Row * 3 + Column);
+        auto CommandPosition = std::find(MovesRemaining.begin(), MovesRemaining.end(), Row * 3 + Column);
 
-        if (CommandPosition != ValidMovesRemaining.end())
+        if (CommandPosition != MovesRemaining.end())
         {
             GameGrid[Row][Column] = CurrentPlayer;
-            ValidMovesRemaining.erase(CommandPosition);
-            InputInvalid = false;
-            continue;
+            MovesRemaining.erase(CommandPosition);
+            break;
         }
         else
             KeyPress = 0;
@@ -403,11 +392,11 @@ void TicTacToe::Get_Next_User_Command(std::vector<std::vector<char>> &GameGrid,
 }
 
 void TicTacToe::Get_Next_AI_Command(std::vector<std::vector<char>> &GameGrid,
-                                    std::vector<int> &ValidMovesRemaining,
+                                    std::vector<int> &MovesRemaining,
                                     const char &CurrentPlayer)
 {
-    int AICommand = ValidMovesRemaining[std::rand() % ValidMovesRemaining.size()];
-    ValidMovesRemaining.erase(std::find(ValidMovesRemaining.begin(), ValidMovesRemaining.end(), AICommand));
+    int AICommand = MovesRemaining[std::rand() % MovesRemaining.size()];
+    MovesRemaining.erase(std::find(MovesRemaining.begin(), MovesRemaining.end(), AICommand));
     GameGrid[AICommand / 3][AICommand % 3] = CurrentPlayer;
 }
 
@@ -466,9 +455,7 @@ void TicTacToe::Display_Game_Over_Message(const std::vector<std::vector<char>> &
 
     Output += Empty_Line() + New_Line(" Press 'Q' to quit OR any other key to play again... ") + Bottom_Line() + Bottom_Bar();
 
-    Clear_Terminal();
-
-    std::cout << Output;
+    Output_To_Terminal(Output);
 
     if (_getch() == 'q')
         GameIsRunning = false;
