@@ -29,7 +29,7 @@ namespace Hangman
      * is prompted for the AI difficulty, depending on the previous responses the user
      * or AI is asked for the word to be guessed and finally the current player is randomly assigned.
      *
-     * @param ValidMovesRemaining
+     * @param MovesRemaining
      * @param IncorrectGuesses
      * @param WordToBeGuessed
      * @param CurrentGuessOfWord
@@ -39,7 +39,7 @@ namespace Hangman
      * @param ConsoleHandle
      * @param QuitToMainMenu
      */
-    void Setup_Game(std::vector<char> &ValidMovesRemaining,
+    void Setup_Game(std::vector<char> &MovesRemaining,
                     const std::vector<char> &IncorrectGuesses,
                     std::string &WordToBeGuessed,
                     std::string &CurrentGuessOfWord,
@@ -94,19 +94,19 @@ namespace Hangman
      * @param QuitToMainMenu
      * @return std::string
      */
-    std::string Get_Word_To_Be_Guessed_From_User(const std::vector<char> &IncorrectGuesses,
-                                                 const std::string &AIDifficulty,
-                                                 const int &NumberOfPlayers,
-                                                 const HANDLE &ConsoleHandle,
-                                                 bool &QuitToMainMenu);
+    std::string Get_Word_From_User(const std::vector<char> &IncorrectGuesses,
+                                   const std::string &AIDifficulty,
+                                   const int &NumberOfPlayers,
+                                   const HANDLE &ConsoleHandle,
+                                   bool &QuitToMainMenu);
 
     /**
-     * @brief This function calls Return_Word_List() and then picks a
-     * random word within the list.
+     * @brief A word from list of the ~1,000 most used word in English from:
+     * https://www.ef.co.uk/english-resources/english-vocabulary/top-1000-words/
      *
      * @return std::string
      */
-    std::string Get_Word_To_Be_Guessed_From_AI(void);
+    std::string Get_Random_Word(void);
 
     /**
      * @brief The current hangman state is displayed, and to the right of that,
@@ -169,11 +169,11 @@ namespace Hangman
     /**
      * @brief Checks whether the numbers of errors are ten (final hangman state)
      *
-     * @param NumberOfTurns
+     * @param NumberOfErrors
      * @return true, if number of turns is 10
      * @return false, if number of turns is NOT 10
      */
-    bool Game_Over(const int &NumberOfTurns);
+    bool Game_Over(const int &NumberOfErrors);
 
     /**
      * @brief Checks if CurrentGuessOfWord and WordToBeGuessed are the same.
@@ -191,7 +191,7 @@ namespace Hangman
      * repeated until a valid guess is given (note that only single letter
      * guesses are allowed).
      *
-     * @param ValidMovesRemaining
+     * @param MovesRemaining
      * @param IncorrectGuesses
      * @param WordToBeGuessed
      * @param CurrentGuessOfWord
@@ -201,7 +201,7 @@ namespace Hangman
      * @param ConsoleHandle
      * @param QuitToMainMenu
      */
-    void Get_Next_User_Guess(std::vector<char> &ValidMovesRemaining,
+    void Get_Next_User_Guess(std::vector<char> &MovesRemaining,
                              std::vector<char> &IncorrectGuesses,
                              const std::string &WordToBeGuessed,
                              std::string &CurrentGuessOfWord,
@@ -215,13 +215,13 @@ namespace Hangman
      * @brief If AIDifficulty is set to easy, then a random valid letter is chosen
      * as the guess.
      *
-     * @param ValidMovesRemaining
+     * @param MovesRemaining
      * @param IncorrectGuesses
      * @param WordToBeGuessed
      * @param CurrentGuessOfWord
      * @param NumberOfErrors
      */
-    void Get_Next_AI_Guess(std::vector<char> &ValidMovesRemaining,
+    void Get_Next_AI_Guess(std::vector<char> &MovesRemaining,
                            std::vector<char> &IncorrectGuesses,
                            const std::string &WordToBeGuessed,
                            std::string &CurrentGuessOfWord,
@@ -237,9 +237,9 @@ namespace Hangman
      * @return true, if guess is present in WordToBeGuessed
      * @return false, if guess is NOT present in WordToBeGuessed
      */
-    bool Check_Guess_Against_Word_To_Be_Guessed(const std::string &WordToBeGuessed,
-                                                std::string &CurrentGuessOfWord,
-                                                const char &Guess);
+    bool Check_Guess_And_Update_Current_Guess(const std::string &WordToBeGuessed,
+                                              std::string &CurrentGuessOfWord,
+                                              const char &Guess);
 
     /**
      * @brief If hangman is in its final state, then the winner is the guesser and if
