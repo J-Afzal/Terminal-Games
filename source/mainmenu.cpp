@@ -11,7 +11,7 @@
 
 #include <iostream>
 #include <conio.h>
-#include "functions.hpp"
+#include "terminal.hpp"
 #include "mainmenu.hpp"
 #include "tictactoe.hpp"
 #include "hangman.hpp"
@@ -35,9 +35,7 @@ void MainMenu::Run()
     {
         while (true)
         {
-            Clear_Terminal();
-
-            std::cout << MainMenu::Get_Main_Menu(CurrentSelection);
+            Output_To_Terminal(MainMenu::Get_Main_Menu(CurrentSelection));
 
             KeyPress = _getch();
 
@@ -62,7 +60,7 @@ void MainMenu::Run()
         else if (CurrentSelection == 1)
             Hangman::Play(ConsoleHandle);
         else if (CurrentSelection == 2)
-            Play_Battleships(ConsoleHandle, CursorInfo);
+            Battleships::Play(ConsoleHandle, CursorInfo);
     }
 
     Clear_Terminal();
@@ -99,40 +97,32 @@ std::string MainMenu::Get_Main_Menu(const int &CurrentSelection)
 
 std::string MainMenu::New_Line(const std::string &Input)
 {
-    std::string Output;
-    Output.insert(Output.size(), 1, (char)186);
-    Output.insert(Output.size(), Input);
-    Output.insert(Output.size(), 1, (char)186);
-    Output.insert(Output.size(), "\n");
-    return Output;
+    return (char)186 + Input + (char)186 + "\n";
 }
 
 std::string MainMenu::Empty_Line(void)
 {
     std::string Output;
-    Output.insert(Output.size(), 1, (char)186);
+    Output += (char)186;
     Output.insert(Output.size(), 30, ' ');
-    Output.insert(Output.size(), 1, (char)186);
-    Output.insert(Output.size(), "\n");
-    return Output;
+    Output += (char)186;
+    return Output + "\n";
 }
 
 std::string MainMenu::Top_Line(void)
 {
     std::string Output;
-    Output.insert(Output.size(), 1, (char)201);
+    Output += (char)201;
     Output.insert(Output.size(), 30, (char)205);
-    Output.insert(Output.size(), 1, (char)187);
-    Output.insert(Output.size(), "\n");
-    return Output;
+    Output += (char)187;
+    return Output + "\n";
 }
 
 std::string MainMenu::Bottom_Line(void)
 {
     std::string Output;
-    Output.insert(Output.size(), 1, (char)200);
+    Output += (char)200;
     Output.insert(Output.size(), 30, (char)205);
-    Output.insert(Output.size(), 1, (char)188);
-    Output.insert(Output.size(), "\n");
-    return Output;
+    Output += (char)188;
+    return Output + "\n";
 }
