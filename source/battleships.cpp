@@ -289,7 +289,7 @@ void Battleships::Get_User_Ship_Positions(std::vector<std::vector<char>> &BoardO
                     {
                         TempBoardOne[ShipRows.back()][ShipColumns.back()] = ' ';
 
-                        std::string Output = Get_Game_Display(TempBoardOne, BoardTwo, ShipsRemainingOne, ShipsRemainingTwo, AIDifficulty, std::to_string(NumberOfPlayers), false);
+                        Output = Get_Game_Display(TempBoardOne, BoardTwo, ShipsRemainingOne, ShipsRemainingTwo, AIDifficulty, std::to_string(NumberOfPlayers), false);
                         Output += New_Line(ShipInstructions[i]) + Empty_Line() + Empty_Line() + Empty_Line() + Empty_Line() + Bottom_Line() + Bottom_Bar();
 
                         Output_To_Terminal(Output);
