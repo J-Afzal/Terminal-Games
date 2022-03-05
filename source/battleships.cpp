@@ -41,7 +41,7 @@ void Battleships::Play(const HANDLE &ConsoleHandle,
             if (NumberOfPlayers == 1 && CurrentPlayer == "Player One")
                 Get_Next_User_Command(BoardOne, BoardTwo, ShipsRemainingOne, ShipsRemainingTwo, MovesRemainingOne, CurrentPlayer, AIDifficulty, NumberOfPlayers, previousCommand, ConsoleHandle, CursorInfo, QuitToMainMenu);
             else
-                Get_Next_AI_Command(BoardOne, BoardTwo, ShipsRemainingOne, ShipsRemainingTwo, MovesRemainingOne, MovesRemainingTwo, CurrentPlayer, AIDifficulty, NumberOfPlayers);
+                Get_Next_AI_Command(BoardOne, BoardTwo, ShipsRemainingOne, ShipsRemainingTwo, MovesRemainingOne, MovesRemainingTwo, CurrentPlayer);
 
             if (QuitToMainMenu)
                 break;
@@ -867,9 +867,7 @@ void Battleships::Get_Next_AI_Command(std::vector<std::vector<char>> &BoardOne,
                                       std::map<char, int> &ShipsRemainingTwo,
                                       std::vector<int> &MovesRemainingOne,
                                       std::vector<int> &MovesRemainingTwo,
-                                      const std::string &CurrentPlayer,
-                                      const std::string &AIDifficulty,
-                                      const int &NumberOfPlayers)
+                                      const std::string &CurrentPlayer)
 {
     if (CurrentPlayer == "Player One")
     {

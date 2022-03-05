@@ -237,8 +237,6 @@ namespace Battleships
      * @param MovesRemainingOne
      * @param MovesRemainingTwo
      * @param CurrentPlayer
-     * @param AIDifficulty
-     * @param NumberOfPlayers
      */
     void Get_Next_AI_Command(std::vector<std::vector<char>> &BoardOne,
                              std::vector<std::vector<char>> &BoardTwo,
@@ -246,9 +244,7 @@ namespace Battleships
                              std::map<char, int> &ShipsRemainingTwo,
                              std::vector<int> &MovesRemainingOne,
                              std::vector<int> &MovesRemainingTwo,
-                             const std::string &CurrentPlayer,
-                             const std::string &AIDifficulty,
-                             const int &NumberOfPlayers);
+                             const std::string &CurrentPlayer);
 
     /**
      * @brief Updates either player board with a hit or a miss as
