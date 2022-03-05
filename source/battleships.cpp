@@ -13,1090 +13,930 @@
 #include <iomanip>
 #include <algorithm>
 #include <conio.h>
-#include "functions.hpp"
+#include "terminal.hpp"
 #include "battleships.hpp"
 
-void Play_Battleships(const HANDLE &ConsoleHandle,
-                      CONSOLE_CURSOR_INFO &CursorInfo)
+void Battleships::Play(const HANDLE &ConsoleHandle,
+                       CONSOLE_CURSOR_INFO &CursorInfo)
 {
     bool GameIsRunning = true;
-
+    bool QuitToMainMenu = false;
     while (GameIsRunning)
     {
-        std::vector<std::vector<std::string>> PlayerOneBoard, PlayerTwoBoard;
-        std::vector<unsigned int> PlayerOneValidMovesRemaining, PlayerTwoValidMovesRemaining;
-        std::map<std::string, unsigned int> PlayerOneShipsRemaining, PlayerTwoShipsRemaining;
-        unsigned int NumberOfPlayers, NumberOfTurns = 0;
+        std::vector<std::vector<char>> BoardOne, BoardTwo;
+        std::vector<int> MovesRemainingOne, MovesRemainingTwo;
+        std::map<char, int> ShipsRemainingOne, ShipsRemainingTwo;
         std::string CurrentPlayer, AIDifficulty;
+        int NumberOfPlayers, NumberOfTurns = 0, previousCommand = 0;
 
-        Setup_Game(PlayerOneBoard, PlayerTwoBoard, PlayerOneValidMovesRemaining, PlayerTwoValidMovesRemaining, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, NumberOfPlayers, AIDifficulty, CurrentPlayer, ConsoleHandle);
+        Setup_Game(BoardOne, BoardTwo, ShipsRemainingOne, ShipsRemainingTwo, MovesRemainingOne, MovesRemainingTwo, CurrentPlayer, AIDifficulty, NumberOfPlayers, ConsoleHandle, CursorInfo, QuitToMainMenu);
 
-        while (!Winning_Conditions_Met(PlayerOneBoard, PlayerTwoBoard))
+        if (QuitToMainMenu)
+            break;
+
+        while (!Winning_Conditions_Met(BoardOne, BoardTwo))
         {
-            Toggle_Player(CurrentPlayer);
+            CurrentPlayer == "Player One" ? CurrentPlayer = "Player Two" : CurrentPlayer = "Player One";
 
-            unsigned int Command;
-
-            // Display_Game() called before either user or AI are asked for an input
-            if (NumberOfPlayers == 1 && CurrentPlayer == "PLAYER ONE")
-            {
-                CursorInfo.bVisible = TRUE;
-                SetConsoleCursorInfo(ConsoleHandle, &CursorInfo);
-                Command = Get_Next_User_Command(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, PlayerOneValidMovesRemaining, NumberOfPlayers, AIDifficulty, ConsoleHandle);
-                CursorInfo.bVisible = FALSE;
-                SetConsoleCursorInfo(ConsoleHandle, &CursorInfo);
-            }
+            if (NumberOfPlayers == 1 && CurrentPlayer == "Player One")
+                Get_Next_User_Command(BoardOne, BoardTwo, ShipsRemainingOne, ShipsRemainingTwo, MovesRemainingOne, CurrentPlayer, AIDifficulty, NumberOfPlayers, previousCommand, ConsoleHandle, CursorInfo, QuitToMainMenu);
             else
-                Command = Get_Next_AI_Command(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, PlayerOneValidMovesRemaining, PlayerTwoValidMovesRemaining, NumberOfPlayers, AIDifficulty, CurrentPlayer);
+                Get_Next_AI_Command(BoardOne, BoardTwo, ShipsRemainingOne, ShipsRemainingTwo, MovesRemainingOne, MovesRemainingTwo, CurrentPlayer, AIDifficulty, NumberOfPlayers);
 
-            Execute_Next_Turn(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, CurrentPlayer, Command);
+            if (QuitToMainMenu)
+                break;
 
             NumberOfTurns++;
         }
 
-        Display_Game_Over_Message(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, NumberOfPlayers, AIDifficulty, CurrentPlayer, NumberOfTurns, GameIsRunning);
+        if (QuitToMainMenu)
+            break;
+
+        Display_Game_Over_Message(BoardOne, BoardTwo, ShipsRemainingOne, ShipsRemainingTwo, CurrentPlayer, AIDifficulty, NumberOfPlayers, NumberOfTurns, GameIsRunning);
     }
 }
 
-void Setup_Game(std::vector<std::vector<std::string>> &PlayerOneBoard,
-                std::vector<std::vector<std::string>> &PlayerTwoBoard,
-                std::vector<unsigned int> &PlayerOneValidMovesRemaining,
-                std::vector<unsigned int> &PlayerTwoValidMovesRemaining,
-                std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
-                std::map<std::string, unsigned int> &PlayerTwoShipsRemaining,
-                unsigned int &NumberOfPlayers,
-                std::string &AIDifficulty,
-                std::string &CurrentPlayer,
-                const HANDLE &ConsoleHandle)
+void Battleships::Setup_Game(std::vector<std::vector<char>> &BoardOne,
+                             std::vector<std::vector<char>> &BoardTwo,
+                             std::map<char, int> &ShipsRemainingOne,
+                             std::map<char, int> &ShipsRemainingTwo,
+                             std::vector<int> &MovesRemainingOne,
+                             std::vector<int> &MovesRemainingTwo,
+                             std::string &CurrentPlayer,
+                             std::string &AIDifficulty,
+                             int &NumberOfPlayers,
+                             const HANDLE &ConsoleHandle,
+                             CONSOLE_CURSOR_INFO &CursorInfo,
+                             bool &QuitToMainMenu)
 {
-    for (unsigned int i = 0, GridNumber = 0; i < 10; i++)
+    std::srand(std::time(0));
+
+    for (int i = 0, GridNumber = 0; i < 10; i++)
     {
-        std::vector<std::string> Row;
+        std::vector<char> Row;
+        BoardOne.push_back(Row);
+        BoardTwo.push_back(Row);
 
-        PlayerOneBoard.push_back(Row);
-        PlayerTwoBoard.push_back(Row);
-
-        for (unsigned int j = 0; j < 10; j++, GridNumber++)
+        for (int j = 0; j < 10; j++, GridNumber++)
         {
-            PlayerOneBoard[i].push_back(" ");
-            PlayerTwoBoard[i].push_back(" ");
-            PlayerOneValidMovesRemaining.push_back(GridNumber);
-            PlayerTwoValidMovesRemaining.push_back(GridNumber);
+            BoardOne[i].push_back(' ');
+            BoardTwo[i].push_back(' ');
+            MovesRemainingOne.push_back(GridNumber);
+            MovesRemainingTwo.push_back(GridNumber);
         }
     }
 
-    PlayerOneShipsRemaining["C"] = 5;
-    PlayerOneShipsRemaining["B"] = 4;
-    PlayerOneShipsRemaining["D"] = 3;
-    PlayerOneShipsRemaining["S"] = 3;
-    PlayerOneShipsRemaining["P"] = 2;
+    ShipsRemainingOne['C'] = 5;
+    ShipsRemainingOne['B'] = 4;
+    ShipsRemainingOne['D'] = 3;
+    ShipsRemainingOne['S'] = 3;
+    ShipsRemainingOne['P'] = 2;
 
-    PlayerTwoShipsRemaining["C"] = 5;
-    PlayerTwoShipsRemaining["B"] = 4;
-    PlayerTwoShipsRemaining["D"] = 3;
-    PlayerTwoShipsRemaining["S"] = 3;
-    PlayerTwoShipsRemaining["P"] = 2;
+    ShipsRemainingTwo['C'] = 5;
+    ShipsRemainingTwo['B'] = 4;
+    ShipsRemainingTwo['D'] = 3;
+    ShipsRemainingTwo['S'] = 3;
+    ShipsRemainingTwo['P'] = 2;
 
-    std::srand((unsigned int)std::time(0));
+    NumberOfPlayers = Get_Number_Of_Players(BoardOne, BoardTwo, ShipsRemainingOne, ShipsRemainingTwo, QuitToMainMenu);
+    if (QuitToMainMenu)
+        return;
 
-    NumberOfPlayers = Get_Number_Of_Players(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining);
-
-    AIDifficulty = Get_AI_Difficulty(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, NumberOfPlayers);
+    AIDifficulty = Get_AI_Difficulty(BoardOne, BoardTwo, ShipsRemainingOne, ShipsRemainingTwo, NumberOfPlayers, QuitToMainMenu);
+    if (QuitToMainMenu)
+        return;
 
     if (NumberOfPlayers == 1)
-        Get_User_Ship_Positions(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, NumberOfPlayers, AIDifficulty, ConsoleHandle);
+        Get_User_Ship_Positions(BoardOne, BoardTwo, ShipsRemainingOne, ShipsRemainingTwo, AIDifficulty, NumberOfPlayers, ConsoleHandle, CursorInfo, QuitToMainMenu);
     else
-        Get_AI_Ship_Positions(PlayerOneBoard);
+        Get_AI_Ship_Positions(BoardOne);
+
+    if (QuitToMainMenu)
+        return;
 
     // Player two will always be AI controlled
-    Get_AI_Ship_Positions(PlayerTwoBoard);
+    Get_AI_Ship_Positions(BoardTwo);
 
     if ((std::rand() % 2) == 0)
-        CurrentPlayer = "PLAYER ONE";
+        CurrentPlayer = "Player One";
     else
-        CurrentPlayer = "PLAYER TWO";
+        CurrentPlayer = "Player Two";
 }
 
-unsigned int Get_Number_Of_Players(const std::vector<std::vector<std::string>> &PlayerOneBoard,
-                                   const std::vector<std::vector<std::string>> &PlayerTwoBoard,
-                                   const std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
-                                   const std::map<std::string, unsigned int> &PlayerTwoShipsRemaining)
+int Battleships::Get_Number_Of_Players(const std::vector<std::vector<char>> &BoardOne,
+                                       const std::vector<std::vector<char>> &BoardTwo,
+                                       const std::map<char, int> &ShipsRemainingOne,
+                                       const std::map<char, int> &ShipsRemainingTwo,
+                                       bool &QuitToMainMenu)
 {
-    unsigned int CurrentSelection = 0;
-    unsigned char KeyPress = 0;
-
-    std::string CommonString = Battleships_Game_Display(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, "N/A", "N/A", false);
-    CommonString += Battleships_New_Line(" Please select the number of human players:                                                                                                        ");
+    std::string CommonString = Get_Game_Display(BoardOne, BoardTwo, ShipsRemainingOne, ShipsRemainingTwo, "N/A", "N/A", false);
+    CommonString += New_Line(" Please select the number of human players:                                                                                                        ");
 
     std::string CaseZero = CommonString;
-    CaseZero += Battleships_New_Line(BLUE + " > 0                                                                                                                                               " + WHITE);
-    CaseZero += Battleships_New_Line("   1                                                                                                                                               ");
-    CaseZero += Battleships_Empty_Line();
-    CaseZero += Battleships_Empty_Line();
-    CaseZero += Battleships_Bottom_Line();
-    CaseZero += Battleships_Bottom_Bar();
+    CaseZero += New_Line(BLUE + " > 0                                                                                                                                               " + WHITE);
+    CaseZero += New_Line("   1                                                                                                                                               ");
+    CaseZero += Empty_Line() + Empty_Line() + Bottom_Line() + Bottom_Bar();
 
     std::string CaseOne = CommonString;
-    CaseOne += Battleships_New_Line("   0                                                                                                                                               ");
-    CaseOne += Battleships_New_Line(BLUE + " > 1                                                                                                                                               " + WHITE);
-    CaseOne += Battleships_Empty_Line();
-    CaseOne += Battleships_Empty_Line();
-    CaseOne += Battleships_Bottom_Line();
-    CaseOne += Battleships_Bottom_Bar();
+    CaseOne += New_Line("   0                                                                                                                                               ");
+    CaseOne += New_Line(BLUE + " > 1                                                                                                                                               " + WHITE);
+    CaseOne += Empty_Line() + Empty_Line() + Bottom_Line() + Bottom_Bar();
 
-    while (KeyPress != '\r')
+    int KeyPress = 0, CurrentSelection = 0;
+    while (true)
     {
-        switch (KeyPress)
-        {
-        case 72: // up arrow key
-            if (CurrentSelection == 0)
-                CurrentSelection = 1;
-            else
-                CurrentSelection--;
-            break;
-
-        case 80: // down arrow key
-            if (CurrentSelection == 1)
-                CurrentSelection = 0;
-            else
-                CurrentSelection++;
-            break;
-
-        default:
-            break;
-        }
-
-        Clear_Terminal();
-
-        switch (CurrentSelection)
-        {
-        case 0:
-            std::cout << CaseZero;
-            break;
-
-        case 1:
-            std::cout << CaseOne;
-            break;
-        }
+        if (CurrentSelection == 0)
+            Output_To_Terminal(CaseZero);
+        else if (CurrentSelection == 1)
+            Output_To_Terminal(CaseOne);
 
         KeyPress = _getch();
+
+        if (KeyPress == '\r')
+            break;
+        else if (KeyPress == 72) // up arrow key
+            CurrentSelection == 0 ? CurrentSelection = 1 : --CurrentSelection;
+        else if (KeyPress == 80) // down arrow key
+            CurrentSelection == 1 ? CurrentSelection = 0 : ++CurrentSelection;
+        else if (KeyPress == 'q')
+        {
+            QuitToMainMenu = true;
+            return -1;
+        }
     }
 
     return CurrentSelection;
 }
 
-std::string Get_AI_Difficulty(const std::vector<std::vector<std::string>> &PlayerOneBoard,
-                              const std::vector<std::vector<std::string>> &PlayerTwoBoard,
-                              const std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
-                              const std::map<std::string, unsigned int> &PlayerTwoShipsRemaining,
-                              const unsigned int &NumberOfPlayers)
+std::string Battleships::Get_AI_Difficulty(const std::vector<std::vector<char>> &BoardOne,
+                                           const std::vector<std::vector<char>> &BoardTwo,
+                                           const std::map<char, int> &ShipsRemainingOne,
+                                           const std::map<char, int> &ShipsRemainingTwo,
+                                           const int &NumberOfPlayers,
+                                           bool &QuitToMainMenu)
 {
-    unsigned int CurrentSelection = 0;
-    unsigned char KeyPress = 0;
-
-    std::string CommonString = Battleships_Game_Display(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, std::to_string(NumberOfPlayers), "N/A", false);
-    CommonString += Battleships_New_Line(" Please select the AI difficulty:                                                                                                                  ");
+    std::string CommonString = Get_Game_Display(BoardOne, BoardTwo, ShipsRemainingOne, ShipsRemainingTwo, "N/A", std::to_string(NumberOfPlayers), false);
+    CommonString += New_Line(" Please select the AI difficulty:                                                                                                                  ");
 
     std::string CaseZero = CommonString;
-    CaseZero += Battleships_New_Line(BLUE + " > EASY                                                                                                                                            " + WHITE);
-    CaseZero += Battleships_New_Line("   HARD (Coming Soon!)                                                                                                                             ");
-    CaseZero += Battleships_Empty_Line();
-    CaseZero += Battleships_Empty_Line();
-    CaseZero += Battleships_Bottom_Line();
-    CaseZero += Battleships_Bottom_Bar();
+    CaseZero += New_Line(BLUE + " > EASY                                                                                                                                            " + WHITE);
+    CaseZero += New_Line("   HARD (Coming Soon!)                                                                                                                             ");
+    CaseZero += Empty_Line() + Empty_Line() + Bottom_Line() + Bottom_Bar();
 
     std::string CaseOne = CommonString;
-    CaseOne += Battleships_New_Line("   EASY                                                                                                                                            ");
-    CaseOne += Battleships_New_Line(BLUE + " > HARD (Coming Soon!)                                                                                                                             " + WHITE);
-    CaseOne += Battleships_Empty_Line();
-    CaseOne += Battleships_Empty_Line();
-    CaseOne += Battleships_Bottom_Line();
-    CaseOne += Battleships_Bottom_Bar();
+    CaseOne += New_Line("   EASY                                                                                                                                            ");
+    CaseOne += New_Line(BLUE + " > HARD (Coming Soon!)                                                                                                                             " + WHITE);
+    CaseOne += Empty_Line() + Empty_Line() + Bottom_Line() + Bottom_Bar();
 
-    while (!(KeyPress == '\r' && CurrentSelection == 0))
+    int KeyPress = 0, CurrentSelection = 0;
+    while (true)
     {
-        switch (KeyPress)
-        {
-        case 72: // up arrow key
-            if (CurrentSelection == 0)
-                CurrentSelection = 1;
-            else
-                CurrentSelection--;
-            break;
-
-        case 80: // down arrow key
-            if (CurrentSelection == 1)
-                CurrentSelection = 0;
-            else
-                CurrentSelection++;
-            break;
-
-        default:
-            break;
-        }
-
-        Clear_Terminal();
-
-        switch (CurrentSelection)
-        {
-        case 0:
-            std::cout << CaseZero;
-            break;
-
-        case 1:
-            std::cout << CaseOne;
-            break;
-        }
+        if (CurrentSelection == 0)
+            Output_To_Terminal(CaseZero);
+        else if (CurrentSelection == 1)
+            Output_To_Terminal(CaseOne);
 
         KeyPress = _getch();
+
+        if (KeyPress == '\r' && CurrentSelection == 0)
+            break;
+        else if (KeyPress == 72) // up arrow key
+            CurrentSelection == 0 ? CurrentSelection = 1 : --CurrentSelection;
+        else if (KeyPress == 80) // down arrow key
+            CurrentSelection == 1 ? CurrentSelection = 0 : ++CurrentSelection;
+        else if (KeyPress == 'q')
+        {
+            QuitToMainMenu = true;
+            return "-1";
+        }
     }
 
     return CurrentSelection == 0 ? "EASY" : "HARD";
 }
 
-void Get_User_Ship_Positions(std::vector<std::vector<std::string>> &PlayerOneBoard,
-                             const std::vector<std::vector<std::string>> &PlayerTwoBoard,
-                             const std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
-                             const std::map<std::string, unsigned int> &PlayerTwoShipsRemaining,
-                             const unsigned int &NumberOfPlayers,
-                             const std::string &AIDifficulty,
-                             const HANDLE &ConsoleHandle)
+void Battleships::Get_User_Ship_Positions(std::vector<std::vector<char>> &BoardOne,
+                                          const std::vector<std::vector<char>> &BoardTwo,
+                                          const std::map<char, int> &ShipsRemainingOne,
+                                          const std::map<char, int> &ShipsRemainingTwo,
+                                          const std::string &AIDifficulty,
+                                          const int &NumberOfPlayers,
+                                          const HANDLE &ConsoleHandle,
+                                          CONSOLE_CURSOR_INFO &CursorInfo,
+                                          bool &QuitToMainMenu)
 {
-    std::vector<std::string> ShipCommands = {
-        " Please enter the 5 grid locations for the Carrier:                                                                                                ",
-        " Please enter the 4 grid locations for the Battleship:                                                                                             ",
-        " Please enter the 3 grid locations for the Destroyer:                                                                                              ",
-        " Please enter the 3 grid locations for the Submarine:                                                                                              ",
-        " Please enter the 2 grid locations for the Patrol Boat:                                                                                            "};
-    std::vector<unsigned int> ShipSizes = {5, 4, 3, 3, 2};
-    std::vector<std::string> ShipLetters = {"C", "B", "D", "S", "P"};
-    std::vector<short> ShipCursorPosition = {53, 56, 55, 55, 57};
-    std::vector<unsigned int> ShipPositionRows, ShipPositionColumns;
+    std::vector<std::string> ShipInstructions = {
+        "                                                 Please enter the 5 grid locations for the Carrier                                                 ",
+        "                                               Please enter the 4 grid locations for the Battleship                                                ",
+        "                                                Please enter the 3 grid locations for the Destroyer                                                ",
+        "                                                Please enter the 3 grid locations for the Submarine                                                ",
+        "                                               Please enter the 2 grid locations for the Patrol Boat                                               "};
+    std::vector<char> ShipLetters = {'C', 'B', 'D', 'S', 'P'};
+    std::vector<int> ShipSizes = {5, 4, 3, 3, 2};
+    int lastShipRow = 0, lastShipColumn = 0;
 
-    for (unsigned int i = 0; i < 5; i++)
+    CursorInfo.bVisible = TRUE;
+    SetConsoleCursorInfo(ConsoleHandle, &CursorInfo);
+
+    for (int i = 0; i < 5; i++) // for each ship
     {
-        std::string Output = Battleships_Game_Display(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, std::to_string(NumberOfPlayers), AIDifficulty, false);
-        Output += Battleships_New_Line(ShipCommands[i]);
-        Output += Battleships_Empty_Line();
-        Output += Battleships_Empty_Line();
-        Output += Battleships_Empty_Line();
-        Output += Battleships_Empty_Line();
-        Output += Battleships_Bottom_Line();
-        Output += Battleships_Bottom_Bar();
+        std::vector<std::vector<char>> TempBoardOne = BoardOne;
+        std::vector<int> ShipRows, ShipColumns;
+        std::string shipOrientation = "N/A";
 
-        bool InputInvalid = true;
-        std::string Input;
-
-        while (InputInvalid)
+        for (int j = 0; j < ShipSizes[i]; j++) // for each ship grid locations
         {
-            Clear_Terminal();
+            std::string Output = Get_Game_Display(TempBoardOne, BoardTwo, ShipsRemainingOne, ShipsRemainingTwo, AIDifficulty, std::to_string(NumberOfPlayers), false);
+            Output += New_Line(ShipInstructions[i]) + Empty_Line() + Empty_Line() + Empty_Line() + Empty_Line() + Bottom_Line() + Bottom_Bar();
 
-            std::cout << Output;
+            Output_To_Terminal(Output);
 
-            SetConsoleCursorPosition(ConsoleHandle, {ShipCursorPosition[i], 29});
+            int KeyPress, Row = 0, Column = 0;
 
-            std::getline(std::cin, Input);
+            if (j == 0)
+            {
+                Row = lastShipRow;
+                Column = lastShipColumn;
+            }
+            else
+            {
+                Row = ShipRows.back();
+                Column = ShipColumns.back();
+            }
 
-            if (!Error_Checking_On_User_Ship_Positions(PlayerOneBoard, Input, ShipPositionRows, ShipPositionColumns, ShipSizes[i]))
-                continue;
+            while (true) // while ship grid location incorrect
+            {
 
-            InputInvalid = false;
+                while (true)
+                {
+                    COORD CursorPosition;
+                    CursorPosition.X = 10 + Column * 4;
+                    CursorPosition.Y = 8 + Row * 2;
+                    SetConsoleCursorPosition(ConsoleHandle, CursorPosition);
 
-            Place_Ship(PlayerOneBoard, ShipPositionRows, ShipPositionColumns, ShipLetters[i]);
+                    KeyPress = _getch();
+
+                    if (KeyPress == '\r')
+                        break;
+                    else if (KeyPress == 72) // up arrow key
+                        Row == 0 ? Row = 9 : --Row;
+                    else if (KeyPress == 80) // down arrow key
+                        Row == 9 ? Row = 0 : ++Row;
+                    else if (KeyPress == 75) // left arrow key
+                        Column == 0 ? Column = 9 : --Column;
+                    else if (KeyPress == 77) // right arrow key
+                        Column == 9 ? Column = 0 : ++Column;
+                    else if (KeyPress == 8 && j > 0) // backspace key
+                    {
+                        TempBoardOne[ShipRows.back()][ShipColumns.back()] = ' ';
+
+                        std::string Output = Get_Game_Display(TempBoardOne, BoardTwo, ShipsRemainingOne, ShipsRemainingTwo, AIDifficulty, std::to_string(NumberOfPlayers), false);
+                        Output += New_Line(ShipInstructions[i]) + Empty_Line() + Empty_Line() + Empty_Line() + Empty_Line() + Bottom_Line() + Bottom_Bar();
+
+                        Output_To_Terminal(Output);
+
+                        ShipRows.pop_back();
+                        ShipColumns.pop_back();
+
+                        j--;
+
+                        if (j == 0)
+                        {
+                            Row = lastShipRow;
+                            Column = lastShipColumn;
+                        }
+                        else
+                        {
+                            Row = ShipRows.back();
+                            Column = ShipColumns.back();
+                        }
+                    }
+                    else if (KeyPress == 'q')
+                    {
+                        QuitToMainMenu = true;
+                        CursorInfo.bVisible = FALSE;
+                        SetConsoleCursorInfo(ConsoleHandle, &CursorInfo);
+                        return;
+                    }
+                }
+
+                // Check if grid location is already occupied by another ship
+                if (BoardOne[Row][Column] == ' ')
+                {
+                    if (ShipRows.size() == 0)
+                    {
+                        ShipRows.push_back(Row);
+                        ShipColumns.push_back(Column);
+                        break;
+                    }
+
+                    else
+                    {
+                        bool ColumnsSame = false, RowsSame = false;
+                        if (ShipRows.back() == Row)
+                            RowsSame = true;
+                        if (ShipColumns.back() == Column)
+                            ColumnsSame = true;
+
+                        // check if row or column same/different but both cannot be different or same
+                        if ((RowsSame && ColumnsSame) || (!RowsSame && !ColumnsSame))
+                        {
+                            KeyPress = 0;
+                            continue;
+                        }
+
+                        if (ShipRows.size() == 1)
+                        {
+                            if (RowsSame)
+                                shipOrientation = "HORIZONTAL";
+                            else
+                                shipOrientation = "VERTICAL";
+
+                            ShipRows.push_back(Row);
+                            ShipColumns.push_back(Column);
+                            break;
+                        }
+
+                        else if (RowsSame && (shipOrientation == "HORIZONTAL") && (std::abs(Column - ShipColumns.back()) == 1))
+                        {
+                            // If row same then column must an increment or decrement of previous position if there is one
+                            ShipRows.push_back(Row);
+                            ShipColumns.push_back(Column);
+                            break;
+                        }
+
+                        else if (ColumnsSame && (shipOrientation == "VERTICAL") && (std::abs(Row - ShipRows.back()) == 1))
+                        {
+                            // If column same then row must an increment or decrement of previous position if there is one
+                            ShipRows.push_back(Row);
+                            ShipColumns.push_back(Column);
+                            break;
+                        }
+
+                        else
+                            KeyPress = 0;
+                    }
+                }
+
+                else
+                {
+                    KeyPress = 0;
+                    continue;
+                }
+            }
+
+            TempBoardOne[Row][Column] = 'X';
+
+            if (j == (ShipSizes[i] - 1))
+            {
+                lastShipRow = Row;
+                lastShipColumn = Column;
+            }
+        }
+
+        // Place ship
+        for (unsigned int j = 0; j < ShipRows.size(); j++)
+            BoardOne[ShipRows[j]][ShipColumns[j]] = ShipLetters[i];
+    }
+
+    CursorInfo.bVisible = FALSE;
+    SetConsoleCursorInfo(ConsoleHandle, &CursorInfo);
+}
+
+void Battleships::Get_AI_Ship_Positions(std::vector<std::vector<char>> &AIBoard)
+{
+    std::vector<int> ShipSizes = {5, 4, 3, 3, 2};
+    std::vector<char> ShipLetters = {'C', 'B', 'D', 'S', 'P'};
+
+    for (int i = 0; i < 5; i++)
+    {
+        while (true)
+        {
+            std::vector<int> ShipRows, ShipColumns;
+            int Column, Row;
+
+            // Get a random ship position
+            if ((std::rand() % 2) == 0) // Horizontal
+            {
+                // A max column number exists, as ship is horizontal, which is linked with the size of the ship
+                // with the assumption being this value will be the first and smallest of the positions
+                Column = std::rand() % (11 - ShipSizes[i]);
+
+                Row = std::rand() % 10; // Any row number allowed as ship is horizontal
+
+                // Horizontal positions have a difference in columns of 1
+                for (int j = 0; j < ShipSizes[i]; j++)
+                {
+                    ShipRows.push_back(Row);
+                    ShipColumns.push_back(Column + j);
+                }
+            }
+
+            else // Vertical
+            {
+                Column = std::rand() % 10; // Any column number allowed as ship is vertical
+
+                // A max row number exists, as ship is vertical, which is linked with the size of the ship
+                // with the assumption being this value will be the first and smallest of the positions
+                Row = std::rand() % (11 - ShipSizes[i]);
+
+                // Vertical positions have a difference in rows of 1
+                for (int j = 0; j < ShipSizes[i]; j++)
+                {
+                    ShipRows.push_back(Row + j);
+                    ShipColumns.push_back(Column);
+                }
+            }
+
+            // Check if ship is already located on requested ship position
+            bool NoErrors = true;
+            for (unsigned int j = 0; j < ShipRows.size(); j++)
+                if (AIBoard[ShipRows[j]][ShipColumns[j]] == 'C' ||
+                    AIBoard[ShipRows[j]][ShipColumns[j]] == 'B' ||
+                    AIBoard[ShipRows[j]][ShipColumns[j]] == 'D' ||
+                    AIBoard[ShipRows[j]][ShipColumns[j]] == 'S' ||
+                    AIBoard[ShipRows[j]][ShipColumns[j]] == 'P')
+                    NoErrors = false;
+
+            if (NoErrors) // Place ship
+            {
+                for (unsigned int j = 0; j < ShipRows.size(); j++)
+                    AIBoard[ShipRows[j]][ShipColumns[j]] = ShipLetters[i];
+                break;
+            }
         }
     }
 }
 
-bool Error_Checking_On_User_Ship_Positions(std::vector<std::vector<std::string>> &PlayerOneBoard,
-                                           std::string &Input,
-                                           std::vector<unsigned int> &ShipPositionRows,
-                                           std::vector<unsigned int> &ShipPositionColumns,
-                                           const unsigned int &ShipSize)
+std::string Battleships::Get_Game_Display(const std::vector<std::vector<char>> &BoardOne,
+                                          const std::vector<std::vector<char>> &BoardTwo,
+                                          const std::map<char, int> &ShipsRemainingOne,
+                                          const std::map<char, int> &ShipsRemainingTwo,
+                                          const std::string &AIDifficulty,
+                                          const std::string &NumberOfPlayers,
+                                          const bool &GameOver)
 {
-    Capitalise_Word(Input);
-
-    // Add a space to help with next step
-    if (Input.back() != ' ')
-        Input.push_back(' ');
-
-    // Input separated in to individual co-ordinates
-    std::vector<std::string> IndividualCoordinates;
-    std::string Temp;
-    for (unsigned int i = 0; i < Input.size(); i++)
-    {
-        if (Input[i] == ' ')
-        {
-            IndividualCoordinates.push_back(Temp);
-            Temp.clear();
-        }
-        else
-            Temp.push_back(Input[i]);
-    }
-
-    if (IndividualCoordinates.size() != ShipSize)
-        return false;
-
-    // Check that each co-ordinate is size of two that the first character
-    // is a letter and the second is a number
-    for (unsigned int i = 0; i < IndividualCoordinates.size(); i++)
-    {
-        if (IndividualCoordinates[i].size() != 2)
-            return false;
-        if (IndividualCoordinates[i][0] < 'A' || IndividualCoordinates[i][0] > 'J')
-            return false;
-        if (IndividualCoordinates[i][1] < '0' || IndividualCoordinates[i][1] > '9')
-            return false;
-    }
-
-    // Check whether letters or numbers of all co-ordinates are identical
-    bool LettersIdentical = true, NumbersIdentical = true;
-
-    for (unsigned int i = 1; i < IndividualCoordinates.size(); i++)
-    {
-        if (IndividualCoordinates[i][0] != IndividualCoordinates[0][0])
-            LettersIdentical = false;
-        if (IndividualCoordinates[i][1] != IndividualCoordinates[0][1])
-            NumbersIdentical = false;
-    }
-
-    if (LettersIdentical && !NumbersIdentical) // Vertical
-    {
-        // Check that number is increment by one after each co-ordinate
-        for (unsigned int i = 1; i < IndividualCoordinates.size(); i++)
-            if (IndividualCoordinates[i][1] != (IndividualCoordinates[i - 1][1] + 1))
-                return false;
-    }
-    else if (NumbersIdentical && !LettersIdentical) // Horizontal
-    {
-        // Check that letter is increment by one after each co-ordinate
-        for (unsigned int i = 1; i < IndividualCoordinates.size(); i++)
-            if (IndividualCoordinates[i][0] != (IndividualCoordinates[i - 1][0] + 1))
-                return false;
-    }
-    else // No diagonals allowed
-        return false;
-
-    ShipPositionRows.clear();
-    ShipPositionColumns.clear();
-
-    // Convert A0, B5, etc to row and columns
-    for (unsigned int i = 0; i < IndividualCoordinates.size(); i++)
-    {
-        Temp = IndividualCoordinates[i][1];
-        ShipPositionRows.push_back(std::stoi(Temp, nullptr, 10));
-        Temp = (IndividualCoordinates[i][0] - 17);
-        ShipPositionColumns.push_back(std::stoi(Temp, nullptr, 10));
-    }
-
-    // Check if any of the ship positions are already occupied by another ship
-    for (unsigned int i = 0; i < IndividualCoordinates.size(); i++)
-    {
-        if (PlayerOneBoard[ShipPositionRows[i]][ShipPositionColumns[i]] == "C" ||
-            PlayerOneBoard[ShipPositionRows[i]][ShipPositionColumns[i]] == "B" ||
-            PlayerOneBoard[ShipPositionRows[i]][ShipPositionColumns[i]] == "D" ||
-            PlayerOneBoard[ShipPositionRows[i]][ShipPositionColumns[i]] == "S" ||
-            PlayerOneBoard[ShipPositionRows[i]][ShipPositionColumns[i]] == "P")
-            return false;
-    }
-
-    return true;
-}
-
-void Get_AI_Ship_Positions(std::vector<std::vector<std::string>> &AIBoard)
-{
-    std::vector<unsigned int> ShipSizes = {5, 4, 3, 3, 2};
-    std::vector<std::string> ShipLetters = {"C", "B", "D", "S", "P"};
-    std::vector<unsigned int> ShipPositionRows, ShipPositionColumns;
-
-    for (unsigned int i = 0; i < 5; i++)
-    {
-        bool InputInvalid = true;
-
-        while (InputInvalid)
-        {
-            Generate_AI_Ship_Positions(ShipPositionRows, ShipPositionColumns, ShipSizes[i]);
-
-            if (!Error_Checking_On_AI_Ship_Positions(AIBoard, ShipPositionRows, ShipPositionColumns))
-                continue;
-
-            InputInvalid = false;
-
-            Place_Ship(AIBoard, ShipPositionRows, ShipPositionColumns, ShipLetters[i]);
-        }
-    }
-}
-
-void Generate_AI_Ship_Positions(std::vector<unsigned int> &ShipPositionRows,
-                                std::vector<unsigned int> &ShipPositionColumns,
-                                const unsigned int &ShipSize)
-
-{
-    unsigned int Column, Row;
-    ShipPositionRows.clear();
-    ShipPositionColumns.clear();
-
-    if ((std::rand() % 2) == 0) // Horizontal
-    {
-        // A max column number exists, as ship is horizontal, which is linked with the size of the ship
-        // with the assumption being this value will be the first and smallest of the positions
-        Column = std::rand() % (11 - ShipSize);
-
-        Row = std::rand() % 10; // Any row number allowed as ship is horizontal
-
-        // Horizontal positions have a difference in columns of 1
-        for (unsigned int i = 0; i < ShipSize; i++)
-        {
-            ShipPositionRows.push_back(Row);
-            ShipPositionColumns.push_back(Column + i);
-        }
-    }
-
-    else // Vertical
-    {
-        Column = std::rand() % 10; // Any column number allowed as ship is vertical
-
-        // A max row number exists, as ship is vertical, which is linked with the size of the ship
-        // with the assumption being this value will be the first and smallest of the positions
-        Row = std::rand() % (11 - ShipSize);
-
-        // Vertical positions have a difference in rows of 1
-        for (unsigned int i = 0; i < ShipSize; i++)
-        {
-            ShipPositionRows.push_back(Row + i);
-            ShipPositionColumns.push_back(Column);
-        }
-    }
-}
-
-bool Error_Checking_On_AI_Ship_Positions(const std::vector<std::vector<std::string>> &AIBoard,
-                                         const std::vector<unsigned int> &ShipPositionRows,
-                                         const std::vector<unsigned int> &ShipPositionColumns)
-{
-    for (unsigned int i = 0; i < ShipPositionRows.size(); i++)
-    {
-        if (AIBoard[ShipPositionRows[i]][ShipPositionColumns[i]] == "C" ||
-            AIBoard[ShipPositionRows[i]][ShipPositionColumns[i]] == "B" ||
-            AIBoard[ShipPositionRows[i]][ShipPositionColumns[i]] == "D" ||
-            AIBoard[ShipPositionRows[i]][ShipPositionColumns[i]] == "S" ||
-            AIBoard[ShipPositionRows[i]][ShipPositionColumns[i]] == "P")
-            return false;
-    }
-
-    return true;
-}
-
-void Place_Ship(std::vector<std::vector<std::string>> &anyBoard,
-                const std::vector<unsigned int> &ShipPositionRows,
-                const std::vector<unsigned int> &ShipPositionColumns,
-                const std::string ShipName)
-{
-    for (unsigned int i = 0; i < ShipPositionRows.size(); i++)
-        anyBoard[ShipPositionRows[i]][ShipPositionColumns[i]] = ShipName;
-}
-
-std::string Battleships_Game_Display(const std::vector<std::vector<std::string>> &PlayerOneBoard,
-                                     const std::vector<std::vector<std::string>> &PlayerTwoBoard,
-                                     const std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
-                                     const std::map<std::string, unsigned int> &PlayerTwoShipsRemaining,
-                                     const std::string &NumberOfPlayers,
-                                     const std::string &AIDifficulty,
-                                     const bool &GameOver)
-{
-    Clear_Terminal();
-
     std::string Output;
 
     // Top bar
-    Output.insert(Output.size(), WHITE);
-    Output.insert(Output.size(), 1, (char)201);
-    Output.insert(Output.size(), 147, (char)205);
-    Output.insert(Output.size(), 1, (char)187);
-    Output.insert(Output.size(), Battleships_New_Line(RED + "                                                                  Terminal-Games                                                                   " + WHITE));
-    Output.insert(Output.size(), Battleships_Bottom_Line());
+    Output += WHITE + Top_Line();
+    Output += New_Line(RED + "                                                                    Battleships                                                                    " + WHITE);
+    Output += Bottom_Line();
 
     // Main game box
-    Output.insert(Output.size(), Battleships_Top_Line());
+    Output += Top_Line();
 
-    // Top Row of both boards
-    Output.insert(Output.size(), Battleships_New_Line("                    PLAYER ONE                                                                                       PLAYER TWO                    "));
+    // Top row and letter co-ordinates of both boards
+    Output += New_Line("                    Player One                                                                                       Player Two                    ");
 
-    Output.insert(Output.size(), "\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.insert(Output.size(), "   ");
-    for (unsigned int i = 0; i < 2; i++)
+    Output += (char)186 + std::string("   ");
+    for (int i = 0; i < 2; i++)
     {
-        Output.insert(Output.size(), 1, (char)218);
+        Output += (char)218;
         Output.insert(Output.size(), 3, (char)196);
-        for (unsigned int j = 0; j < 10; j++)
+        for (int j = 0; j < 10; j++)
         {
-            Output.insert(Output.size(), 1, (char)194);
+            Output += (char)194;
             Output.insert(Output.size(), 3, (char)196);
         }
-        Output.insert(Output.size(), 1, (char)191);
+        Output += (char)191;
 
         if (i == 0)
             Output.insert(Output.size(), "                                                   ");
     }
-    Output.insert(Output.size(), "   ");
-    Output.insert(Output.size(), 1, (char)186);
+    Output += std::string("   ") + (char)186 + "\n";
 
-    Output.insert(Output.size(), "\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.insert(Output.size(), "   ");
-    for (unsigned int i = 0; i < 2; i++)
+    Output += (char)186 + std::string("   ");
+    for (int i = 0; i < 2; i++)
     {
-        Output.insert(Output.size(), 1, (char)179);
-        Output.insert(Output.size(), "   ");
-        Output.insert(Output.size(), 1, (char)179);
-        Output.insert(Output.size(), " A ");
-        Output.insert(Output.size(), 1, (char)179);
-        Output.insert(Output.size(), " B ");
-        Output.insert(Output.size(), 1, (char)179);
-        Output.insert(Output.size(), " C ");
-        Output.insert(Output.size(), 1, (char)179);
-        Output.insert(Output.size(), " D ");
-        Output.insert(Output.size(), 1, (char)179);
-        Output.insert(Output.size(), " E ");
-        Output.insert(Output.size(), 1, (char)179);
-        Output.insert(Output.size(), " F ");
-        Output.insert(Output.size(), 1, (char)179);
-        Output.insert(Output.size(), " G ");
-        Output.insert(Output.size(), 1, (char)179);
-        Output.insert(Output.size(), " H ");
-        Output.insert(Output.size(), 1, (char)179);
-        Output.insert(Output.size(), " I ");
-        Output.insert(Output.size(), 1, (char)179);
-        Output.insert(Output.size(), " J ");
-        Output.insert(Output.size(), 1, (char)179);
+        Output += (char)179 + std::string("   ") + (char)179 + " A " + (char)179 + " B " + (char)179 + " C " + (char)179 + " D " + (char)179 + " E " + (char)179 + " F " + (char)179 + " G " + (char)179 + " H " + (char)179 + " I " + (char)179 + " J " + (char)179;
 
         if (i == 0)
-            Output.insert(Output.size(), "                                                   ");
+            Output += "                                                   ";
     }
-    Output.insert(Output.size(), "   ");
-    Output.insert(Output.size(), 1, (char)186);
+    Output += std::string("   ") + (char)186 + "\n";
 
     // Main parts of both boards and centre information
-    for (unsigned int i = 0; i < 10; i++)
+    for (int i = 0; i < 10; i++)
     {
-        // Part 1
-        Output.insert(Output.size(), "\n");
-        Output.insert(Output.size(), 1, (char)186);
-        Output.insert(Output.size(), "   ");
+        // First Line
+        // Left outer box edge
+        Output += (char)186 + std::string("   ");
 
-        // Player One Board horizontal dividers Part 1
-        Output.insert(Output.size(), 1, (char)195);
+        // Player One Board horizontal dividers
+        Output += (char)195;
         Output.insert(Output.size(), 3, (char)196);
-        for (unsigned int j = 0; j < 10; j++)
+        for (int j = 0; j < 10; j++)
         {
-            Output.insert(Output.size(), 1, (char)197);
+            Output += (char)197;
             Output.insert(Output.size(), 3, (char)196);
         }
-        Output.insert(Output.size(), 1, (char)180);
+        Output += (char)180;
 
-        // Centre information Part 1
-        switch (i)
+        // Centre information
+        if (i == 3)
+            Output += "   Carrier                               Carrier   ";
+        else if (i == 5) // Battleship
         {
-        case 3:
-            Output.insert(Output.size(), "   Carrier                               Carrier   ");
-            break;
-
-        case 5: // Battleship
-            Output.insert(Output.size(), "   ");
-            for (unsigned int j = 0; j < 4; j++)
+            Output += "   ";
+            for (int j = 0; j < 4; j++, Output += " ")
             {
-                if (j < PlayerOneShipsRemaining.at("B"))
+                if (j < ShipsRemainingOne.at('B'))
                     Output.insert(Output.size(), 3, (char)178);
                 else
                     Output.insert(Output.size(), 3, (char)176);
-                Output.insert(Output.size(), " ");
             }
-            Output.insert(Output.size(), "              ");
-            for (unsigned int j = 0; j < 4; j++)
+            Output += "              ";
+            for (int j = 0; j < 4; j++, Output += " ")
             {
-                if (j < (4 - PlayerTwoShipsRemaining.at("B")))
+                if (j < (4 - ShipsRemainingTwo.at('B')))
                     Output.insert(Output.size(), 3, (char)176);
                 else
                     Output.insert(Output.size(), 3, (char)178);
-                Output.insert(Output.size(), " ");
             }
-            Output.insert(Output.size(), "  ");
-            break;
-
-        case 6:
-            Output.insert(Output.size(), "   Destroyer                           Destroyer   ");
-            break;
-
-        case 8: // Submarine
-            Output.insert(Output.size(), "   ");
-            for (unsigned int j = 0; j < 3; j++)
-            {
-                if (j < PlayerOneShipsRemaining.at("S"))
-                    Output.insert(Output.size(), 3, (char)178);
-                else
-                    Output.insert(Output.size(), 3, (char)176);
-                Output.insert(Output.size(), " ");
-            }
-            Output.insert(Output.size(), "                      ");
-            for (unsigned int j = 0; j < 3; j++)
-            {
-                if (j < (3 - PlayerTwoShipsRemaining.at("S")))
-                    Output.insert(Output.size(), 3, (char)176);
-                else
-                    Output.insert(Output.size(), 3, (char)178);
-                Output.insert(Output.size(), " ");
-            }
-            Output.insert(Output.size(), "  ");
-            break;
-
-        case 9:
-            Output.insert(Output.size(), "   Patrol Boat                       Patrol Boat   ");
-            break;
-
-        default:
-            Output.insert(Output.size(), "                                                   ");
-            break;
+            Output += "  ";
         }
-
-        // Player Two Board horizontal dividers Part 1
-        Output.insert(Output.size(), 1, (char)195);
-        Output.insert(Output.size(), 3, (char)196);
-        for (unsigned int j = 0; j < 10; j++)
+        else if (i == 6)
+            Output += "   Destroyer                           Destroyer   ";
+        else if (i == 8) // Submarine
         {
-            Output.insert(Output.size(), 1, (char)197);
+            Output += "   ";
+            for (int j = 0; j < 3; j++, Output += " ")
+            {
+                if (j < ShipsRemainingOne.at('S'))
+                    Output.insert(Output.size(), 3, (char)178);
+                else
+                    Output.insert(Output.size(), 3, (char)176);
+            }
+            Output += "                      ";
+            for (int j = 0; j < 3; j++, Output += " ")
+            {
+                if (j < (3 - ShipsRemainingTwo.at('S')))
+                    Output.insert(Output.size(), 3, (char)176);
+                else
+                    Output.insert(Output.size(), 3, (char)178);
+            }
+            Output += "  ";
+        }
+        else if (i == 9)
+            Output += "   Patrol Boat                       Patrol Boat   ";
+        else
+            Output += "                                                   ";
+
+        // Player Two Board horizontal dividers
+        Output += (char)195;
+        Output.insert(Output.size(), 3, (char)196);
+        for (int j = 0; j < 10; j++)
+        {
+            Output += (char)197;
             Output.insert(Output.size(), 3, (char)196);
         }
-        Output.insert(Output.size(), 1, (char)180);
-        Output.insert(Output.size(), "   ");
-        Output.insert(Output.size(), 1, (char)186);
+        Output += (char)180 + std::string("   ") + (char)186 + "\n";
 
-        // Player One Board Part 2
-        Output.insert(Output.size(), "\n");
-        Output.insert(Output.size(), 1, (char)186);
-        Output.insert(Output.size(), "   ");
-        Output.insert(Output.size(), 1, (char)179);
-        Output.insert(Output.size(), " ");
-        Output.insert(Output.size(), 1, i + 48);
-        Output.insert(Output.size(), " ");
-        Output.insert(Output.size(), 1, (char)179);
+        // Second Line
+        // Player one left outer box edge and number co-ord
+        Output += (char)186 + std::string("   ") + (char)179 + " " + std::to_string(i) + " " + (char)179;
 
-        for (unsigned int j = 0; j < 10; j++)
+        // Player One board ships
+        for (int j = 0; j < 10; j++)
         {
-            if (PlayerOneBoard[i][j] == "C" || PlayerOneBoard[i][j] == "B" || PlayerOneBoard[i][j] == "D" || PlayerOneBoard[i][j] == "S" || PlayerOneBoard[i][j] == "P")
+            if (BoardOne[i][j] == 'C' || BoardOne[i][j] == 'B' || BoardOne[i][j] == 'D' || BoardOne[i][j] == 'S' || BoardOne[i][j] == 'P')
                 Output.insert(Output.size(), 3, (char)178);
-            else if (PlayerOneBoard[i][j] == "Hit")
+            else if (BoardOne[i][j] == 'X')
                 Output.insert(Output.size(), 3, (char)176);
-            else if (PlayerOneBoard[i][j] == "Miss")
-            {
-                Output.insert(Output.size(), " ");
-                Output.insert(Output.size(), 1, (char)250);
-                Output.insert(Output.size(), " ");
-            }
+            else if (BoardOne[i][j] == '.')
+                Output += std::string(" ") + (char)250 + " ";
             else
-                Output.insert(Output.size(), "   ");
-            Output.insert(Output.size(), 1, (char)179);
+                Output += "   ";
+            Output += (char)179;
         }
 
-        // Centre Information Part 2
-        switch (i)
+        // Centre Information
+        if (i == 0)
         {
-        case 0:
             if (NumberOfPlayers == "N/A")
-                Output.insert(Output.size(), "                # of Players = " + NumberOfPlayers + "                 ");
+                Output += "                # of Players = " + NumberOfPlayers + "                 ";
             else
-                Output.insert(Output.size(), "                 # of Players = " + NumberOfPlayers + "                  ");
-            break;
-
-        case 1:
-            if (AIDifficulty == "N/A")
-                Output.insert(Output.size(), "                AI Difficulty = " + AIDifficulty + "                ");
-            else
-                Output.insert(Output.size(), "               AI Difficulty = " + AIDifficulty + "                ");
-            break;
-
-        case 3: // Carrier
-            Output.insert(Output.size(), "   ");
-            for (unsigned int j = 0; j < 5; j++)
-            {
-                if (j < PlayerOneShipsRemaining.at("C"))
-                    Output.insert(Output.size(), 3, (char)178);
-                else
-                    Output.insert(Output.size(), 3, (char)176);
-                Output.insert(Output.size(), " ");
-            }
-            Output.insert(Output.size(), "      ");
-            for (unsigned int j = 0; j < 5; j++)
-            {
-                if (j < (5 - PlayerTwoShipsRemaining.at("C")))
-                    Output.insert(Output.size(), 3, (char)176);
-                else
-                    Output.insert(Output.size(), 3, (char)178);
-                Output.insert(Output.size(), " ");
-            }
-            Output.insert(Output.size(), "  ");
-            break;
-
-        case 4:
-            Output.insert(Output.size(), "   Battleship                         Battleship   ");
-            break;
-
-        case 6: // Destroyer
-            Output.insert(Output.size(), "   ");
-            for (unsigned int j = 0; j < 3; j++)
-            {
-                if (j < PlayerOneShipsRemaining.at("D"))
-                    Output.insert(Output.size(), 3, (char)178);
-                else
-                    Output.insert(Output.size(), 3, (char)176);
-                Output.insert(Output.size(), " ");
-            }
-            Output.insert(Output.size(), "                      ");
-            for (unsigned int j = 0; j < 3; j++)
-            {
-                if (j < (3 - PlayerTwoShipsRemaining.at("D")))
-                    Output.insert(Output.size(), 3, (char)176);
-                else
-                    Output.insert(Output.size(), 3, (char)178);
-                Output.insert(Output.size(), " ");
-            }
-            Output.insert(Output.size(), "  ");
-            break;
-
-        case 7:
-            Output.insert(Output.size(), "   Submarine                           Submarine   ");
-            break;
-
-        case 9: // Patrol Boat
-            Output.insert(Output.size(), "   ");
-            for (unsigned int j = 0; j < 2; j++)
-            {
-                if (j < PlayerOneShipsRemaining.at("P"))
-                    Output.insert(Output.size(), 3, (char)178);
-                else
-                    Output.insert(Output.size(), 3, (char)176);
-                Output.insert(Output.size(), " ");
-            }
-            Output.insert(Output.size(), "                              ");
-            for (unsigned int j = 0; j < 2; j++)
-            {
-                if (j < (2 - PlayerTwoShipsRemaining.at("P")))
-                    Output.insert(Output.size(), 3, (char)176);
-                else
-                    Output.insert(Output.size(), 3, (char)178);
-                Output.insert(Output.size(), " ");
-            }
-            Output.insert(Output.size(), "  ");
-            break;
-
-        default:
-            Output.insert(Output.size(), "                                                   ");
-            break;
+                Output += "                 # of Players = " + NumberOfPlayers + "                  ";
         }
-
-        // Player Two Board Part 2
-        Output.insert(Output.size(), 1, (char)179);
-        Output.insert(Output.size(), " ");
-        Output.insert(Output.size(), 1, i + 48);
-        Output.insert(Output.size(), " ");
-        Output.insert(Output.size(), 1, (char)179);
-        for (unsigned int j = 0; j < 10; j++)
+        else if (i == 1)
         {
-            if ((GameOver || NumberOfPlayers == "0") && (PlayerTwoBoard[i][j] == "C" || PlayerTwoBoard[i][j] == "B" || PlayerTwoBoard[i][j] == "D" || PlayerTwoBoard[i][j] == "S" || PlayerTwoBoard[i][j] == "P"))
-                Output.insert(Output.size(), 3, (char)178);
-            else if (PlayerTwoBoard[i][j] == "Hit")
-                Output.insert(Output.size(), 3, (char)176);
-            else if (PlayerTwoBoard[i][j] == "Miss")
-            {
-                Output.insert(Output.size(), " ");
-                Output.insert(Output.size(), 1, (char)250);
-                Output.insert(Output.size(), " ");
-            }
+            if (AIDifficulty == "N/A")
+                Output += "                AI Difficulty = " + AIDifficulty + "                ";
             else
-                Output.insert(Output.size(), "   ");
-            Output.insert(Output.size(), 1, (char)179);
+                Output += "               AI Difficulty = " + AIDifficulty + "                ";
         }
-        Output.insert(Output.size(), "   ");
-        Output.insert(Output.size(), 1, (char)186);
+        else if (i == 3) // Carrier
+        {
+            Output += "   ";
+            for (int j = 0; j < 5; j++, Output += " ")
+            {
+                if (j < ShipsRemainingOne.at('C'))
+                    Output.insert(Output.size(), 3, (char)178);
+                else
+                    Output.insert(Output.size(), 3, (char)176);
+            }
+            Output += "      ";
+            for (int j = 0; j < 5; j++, Output += " ")
+            {
+                if (j < (5 - ShipsRemainingTwo.at('C')))
+                    Output.insert(Output.size(), 3, (char)176);
+                else
+                    Output.insert(Output.size(), 3, (char)178);
+            }
+            Output += "  ";
+        }
+        else if (i == 4)
+            Output += "   Battleship                         Battleship   ";
+        else if (i == 6) // Destroyer
+        {
+            Output += "   ";
+            for (int j = 0; j < 3; j++, Output += " ")
+            {
+                if (j < ShipsRemainingOne.at('D'))
+                    Output.insert(Output.size(), 3, (char)178);
+                else
+                    Output.insert(Output.size(), 3, (char)176);
+            }
+            Output += "                      ";
+            for (int j = 0; j < 3; j++, Output += " ")
+            {
+                if (j < (3 - ShipsRemainingTwo.at('D')))
+                    Output.insert(Output.size(), 3, (char)176);
+                else
+                    Output.insert(Output.size(), 3, (char)178);
+            }
+            Output += "  ";
+        }
+        else if (i == 7)
+            Output += "   Submarine                           Submarine   ";
+        else if (i == 9) // Patrol Boat
+        {
+            Output += "   ";
+            for (int j = 0; j < 2; j++, Output += " ")
+            {
+                if (j < ShipsRemainingOne.at('P'))
+                    Output.insert(Output.size(), 3, (char)178);
+                else
+                    Output.insert(Output.size(), 3, (char)176);
+            }
+            Output += "                              ";
+            for (int j = 0; j < 2; j++, Output += " ")
+            {
+                if (j < (2 - ShipsRemainingTwo.at('P')))
+                    Output.insert(Output.size(), 3, (char)176);
+                else
+                    Output.insert(Output.size(), 3, (char)178);
+            }
+            Output += "  ";
+        }
+        else
+            Output += "                                                   ";
+
+        // Player Two left outer box edge and number co-ord
+        Output += (char)179 + std::string(" ") + std::to_string(i) + " " + (char)179;
+
+        // Player Two board ships
+        for (int j = 0; j < 10; j++)
+        {
+            if ((GameOver || NumberOfPlayers == "0") && (BoardTwo[i][j] == 'C' || BoardTwo[i][j] == 'B' || BoardTwo[i][j] == 'D' || BoardTwo[i][j] == 'S' || BoardTwo[i][j] == 'P'))
+                Output.insert(Output.size(), 3, (char)178);
+            else if (BoardTwo[i][j] == 'X')
+                Output.insert(Output.size(), 3, (char)176);
+            else if (BoardTwo[i][j] == '.')
+                Output += std::string(" ") + (char)250 + " ";
+            else
+                Output += "   ";
+            Output += (char)179;
+        }
+        Output += std::string("   ") + (char)186 + "\n";
     }
 
     // Bottom row of both boards
-    Output.insert(Output.size(), "\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.insert(Output.size(), "   ");
-    for (unsigned int i = 0; i < 2; i++)
+    Output += (char)186 + std::string("   ");
+    for (int i = 0; i < 2; i++)
     {
-        Output.insert(Output.size(), 1, (char)192);
+        Output += (char)192;
         Output.insert(Output.size(), 3, (char)196);
-        for (unsigned int j = 0; j < 10; j++)
+        for (int j = 0; j < 10; j++)
         {
-            Output.insert(Output.size(), 1, (char)193);
+            Output += (char)193;
             Output.insert(Output.size(), 3, (char)196);
         }
-        Output.insert(Output.size(), 1, (char)217);
+        Output += (char)217;
 
         if (i == 0)
-            Output.insert(Output.size(), "                                                   ");
+            Output += "                                                   ";
     }
-    Output.insert(Output.size(), "   ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    Output.insert(Output.size(), Battleships_Empty_Line());
+    Output += std::string("   ") + (char)186 + "\n" + Empty_Line();
 
     return Output;
 }
 
-std::string Battleships_Empty_Line(void)
+std::string Battleships::New_Line(const std::string &Input)
 {
-    std::string Output;
-    Output.insert(Output.size(), "\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.insert(Output.size(), "                                                                                                                                                   ");
-    Output.insert(Output.size(), 1, (char)186);
-
-    return Output;
+    return (char)186 + Input + (char)186 + "\n";
 }
 
-std::string Battleships_New_Line(const std::string &Input)
+std::string Battleships::Empty_Line(void)
 {
     std::string Output;
-    Output.insert(Output.size(), "\n");
-    Output.insert(Output.size(), 1, (char)186);
-    Output.insert(Output.size(), Input);
-    Output.insert(Output.size(), 1, (char)186);
-
-    return Output;
+    Output += (char)186;
+    Output.insert(Output.size(), 147, ' ');
+    Output += (char)186;
+    return Output + "\n";
 }
 
-std::string Battleships_Top_Line(void)
+std::string Battleships::Top_Line(void)
 {
     std::string Output;
-    Output.insert(Output.size(), "\n");
-    Output.insert(Output.size(), 1, (char)201);
+    Output += (char)201;
     Output.insert(Output.size(), 147, (char)205);
-    Output.insert(Output.size(), 1, (char)187);
-
-    return Output;
+    Output += (char)187;
+    return Output + "\n";
 }
 
-std::string Battleships_Bottom_Line(void)
+std::string Battleships::Bottom_Line(void)
 {
     std::string Output;
-    Output.insert(Output.size(), "\n");
-    Output.insert(Output.size(), 1, (char)200);
+    Output += (char)200;
     Output.insert(Output.size(), 147, (char)205);
-    Output.insert(Output.size(), 1, (char)188);
-
-    return Output;
+    Output += (char)188;
+    return Output + "\n";
 }
 
-std::string Battleships_Bottom_Bar(void)
+std::string Battleships::Bottom_Bar(void)
 {
-    std::string Output;
-    Output += Battleships_Top_Line();
-    Output += Battleships_New_Line(RED + "                                                                    Battleships                                                                    " + WHITE);
-    Output += Battleships_Bottom_Line();
-
-    return Output;
+    return Top_Line() + New_Line(RED + "                                                               q = quit to main menu                                                               " + WHITE) + Bottom_Line();
 }
 
-bool Winning_Conditions_Met(const std::vector<std::vector<std::string>> &PlayerOneBoard,
-                            const std::vector<std::vector<std::string>> &PlayerTwoBoard)
+bool Battleships::Winning_Conditions_Met(const std::vector<std::vector<char>> &BoardOne,
+                                         const std::vector<std::vector<char>> &BoardTwo)
 {
     bool PlayerOneShipsPresent = false;
-    for (unsigned int i = 0; i < 10; i++)
-        for (unsigned int j = 0; j < 10; j++)
-            if (PlayerOneBoard[i][j] == "C" || PlayerOneBoard[i][j] == "B" || PlayerOneBoard[i][j] == "D" || PlayerOneBoard[i][j] == "S" || PlayerOneBoard[i][j] == "P")
+    for (int i = 0; i < 10; i++)
+        for (int j = 0; j < 10; j++)
+            if (BoardOne[i][j] == 'C' || BoardOne[i][j] == 'B' || BoardOne[i][j] == 'D' || BoardOne[i][j] == 'S' || BoardOne[i][j] == 'P')
                 PlayerOneShipsPresent = true;
 
     bool PlayerTwoShipsPresent = false;
-    for (unsigned int i = 0; i < 10; i++)
-        for (unsigned int j = 0; j < 10; j++)
-            if (PlayerTwoBoard[i][j] == "C" || PlayerTwoBoard[i][j] == "B" || PlayerTwoBoard[i][j] == "D" || PlayerTwoBoard[i][j] == "S" || PlayerTwoBoard[i][j] == "P")
+    for (int i = 0; i < 10; i++)
+        for (int j = 0; j < 10; j++)
+            if (BoardTwo[i][j] == 'C' || BoardTwo[i][j] == 'B' || BoardTwo[i][j] == 'D' || BoardTwo[i][j] == 'S' || BoardTwo[i][j] == 'P')
                 PlayerTwoShipsPresent = true;
 
-    if (!PlayerOneShipsPresent || !PlayerTwoShipsPresent)
-        return true;
-    else
-        return false;
+    return (!PlayerOneShipsPresent || !PlayerTwoShipsPresent) ? true : false;
 }
 
-unsigned int Get_Next_User_Command(const std::vector<std::vector<std::string>> &PlayerOneBoard,
-                                   const std::vector<std::vector<std::string>> &PlayerTwoBoard,
-                                   const std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
-                                   const std::map<std::string, unsigned int> &PlayerTwoShipsRemaining,
-                                   std::vector<unsigned int> &ValidMovesRemaining,
-                                   const unsigned int &NumberOfPlayers,
-                                   const std::string &AIDifficulty,
-                                   const HANDLE &ConsoleHandle)
+void Battleships::Get_Next_User_Command(std::vector<std::vector<char>> &BoardOne,
+                                        std::vector<std::vector<char>> &BoardTwo,
+                                        std::map<char, int> &ShipsRemainingOne,
+                                        std::map<char, int> &ShipsRemainingTwo,
+                                        std::vector<int> &MovesRemainingOne,
+                                        const std::string &CurrentPlayer,
+                                        const std::string &AIDifficulty,
+                                        const int &NumberOfPlayers,
+                                        int &previousCommand,
+                                        const HANDLE &ConsoleHandle,
+                                        CONSOLE_CURSOR_INFO &CursorInfo,
+                                        bool &QuitToMainMenu)
 {
-    bool InputInvalid = true;
-    unsigned int UserCommand, Row = ValidMovesRemaining[0] / 10, Column = ValidMovesRemaining[0] % 10;
-    unsigned char KeyPress = 0;
+    std::string Output = Get_Game_Display(BoardOne, BoardTwo, ShipsRemainingOne, ShipsRemainingTwo, AIDifficulty, std::to_string(NumberOfPlayers), false);
+    Output += New_Line(" Player One, please enter your next command!                                                                                                       ");
+    Output += Empty_Line() + Empty_Line() + Empty_Line() + Empty_Line() + Bottom_Line() + Bottom_Bar();
 
-    std::string Output = Battleships_Game_Display(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, std::to_string(NumberOfPlayers), AIDifficulty, false);
-    Output += Battleships_New_Line(" Player One, please enter your next command!                                                                                                       ");
-    Output += Battleships_Empty_Line();
-    Output += Battleships_Empty_Line();
-    Output += Battleships_Empty_Line();
-    Output += Battleships_Empty_Line();
-    Output += Battleships_Bottom_Line();
-    Output += Battleships_Bottom_Bar();
+    Output_To_Terminal(Output);
 
-    while (InputInvalid)
+    int KeyPress, Command, Row = previousCommand / 10, Column = previousCommand % 10;
+
+    CursorInfo.bVisible = TRUE;
+    SetConsoleCursorInfo(ConsoleHandle, &CursorInfo);
+
+    while (true)
     {
-        while (KeyPress != '\r')
+        while (true)
         {
-            switch (KeyPress)
-            {
-            case 72: // up arrow key
-                if (Row == 0)
-                    Row = 9;
-                else
-                    Row--;
-                break;
-
-            case 80: // down arrow key
-                if (Row == 9)
-                    Row = 0;
-                else
-                    Row++;
-                break;
-
-            case 75: // left arrow key
-                if (Column == 0)
-                    Column = 9;
-                else
-                    Column--;
-                break;
-
-            case 77: // right arrow key
-                if (Column == 9)
-                    Column = 0;
-                else
-                    Column++;
-                break;
-
-            default:
-                break;
-            }
-
-            Clear_Terminal();
-
-            std::cout << Output;
-
             COORD CursorPosition;
             CursorPosition.X = 106 + Column * 4;
             CursorPosition.Y = 8 + Row * 2;
             SetConsoleCursorPosition(ConsoleHandle, CursorPosition);
 
             KeyPress = _getch();
+
+            if (KeyPress == '\r')
+                break;
+            else if (KeyPress == 72) // up arrow key
+                Row == 0 ? Row = 9 : --Row;
+            else if (KeyPress == 80) // down arrow key
+                Row == 9 ? Row = 0 : ++Row;
+            else if (KeyPress == 75) // left arrow key
+                Column == 0 ? Column = 9 : --Column;
+            else if (KeyPress == 77) // right arrow key
+                Column == 9 ? Column = 0 : ++Column;
+            else if (KeyPress == 'q')
+            {
+                QuitToMainMenu = true;
+                CursorInfo.bVisible = FALSE;
+                SetConsoleCursorInfo(ConsoleHandle, &CursorInfo);
+                return;
+            }
         }
 
-        UserCommand = Row * 10 + Column;
-        auto CommandPosition = std::find(ValidMovesRemaining.begin(), ValidMovesRemaining.end(), UserCommand);
+        Command = Row * 10 + Column;
+        auto CommandPosition = std::find(MovesRemainingOne.begin(), MovesRemainingOne.end(), Command);
 
-        if (CommandPosition != ValidMovesRemaining.end())
+        if (CommandPosition != MovesRemainingOne.end())
         {
-            InputInvalid = false;
-            ValidMovesRemaining.erase(CommandPosition);
+            MovesRemainingOne.erase(CommandPosition);
+            break;
         }
         else
             KeyPress = 0;
     }
 
-    return UserCommand;
+    previousCommand = Command;
+
+    Execute_Next_Turn(BoardOne, BoardTwo, ShipsRemainingOne, ShipsRemainingTwo, CurrentPlayer, Command);
+
+    CursorInfo.bVisible = FALSE;
+    SetConsoleCursorInfo(ConsoleHandle, &CursorInfo);
 }
 
-unsigned int Get_Next_AI_Command(const std::vector<std::vector<std::string>> &PlayerOneBoard,
-                                 const std::vector<std::vector<std::string>> &PlayerTwoBoard,
-                                 const std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
-                                 const std::map<std::string, unsigned int> &PlayerTwoShipsRemaining,
-                                 std::vector<unsigned int> &PlayerOneValidMovesRemaining,
-                                 std::vector<unsigned int> &PlayerTwoValidMovesRemaining,
-                                 const unsigned int &NumberOfPlayers,
-                                 const std::string &AIDifficulty,
-                                 const std::string &CurrentPlayer)
+void Battleships::Get_Next_AI_Command(std::vector<std::vector<char>> &BoardOne,
+                                      std::vector<std::vector<char>> &BoardTwo,
+                                      std::map<char, int> &ShipsRemainingOne,
+                                      std::map<char, int> &ShipsRemainingTwo,
+                                      std::vector<int> &MovesRemainingOne,
+                                      std::vector<int> &MovesRemainingTwo,
+                                      const std::string &CurrentPlayer,
+                                      const std::string &AIDifficulty,
+                                      const int &NumberOfPlayers)
 {
-    std::vector<unsigned int> ValidMovesRemaining;
-
-    if (CurrentPlayer == "PLAYER ONE")
-        ValidMovesRemaining = PlayerOneValidMovesRemaining;
-    else
-        ValidMovesRemaining = PlayerTwoValidMovesRemaining;
-
-    unsigned int AICommand = ValidMovesRemaining[std::rand() % ValidMovesRemaining.size()];
-    auto CommandPosition = std::find(ValidMovesRemaining.begin(), ValidMovesRemaining.end(), AICommand);
-    ValidMovesRemaining.erase(CommandPosition);
-
-    if (CurrentPlayer == "PLAYER ONE")
-        PlayerOneValidMovesRemaining = ValidMovesRemaining;
-    else
-        PlayerTwoValidMovesRemaining = ValidMovesRemaining;
-
-    return AICommand;
-}
-
-void Execute_Next_Turn(std::vector<std::vector<std::string>> &PlayerOneBoard,
-                       std::vector<std::vector<std::string>> &PlayerTwoBoard,
-                       std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
-                       std::map<std::string, unsigned int> &PlayerTwoShipsRemaining,
-                       const std::string &CurrentPlayer,
-                       const unsigned int &Command)
-{
-    unsigned int Row = Command / 10;
-    unsigned int Column = Command % 10;
-
-    if (CurrentPlayer == "PLAYER ONE")
+    if (CurrentPlayer == "Player One")
     {
-        if (PlayerTwoBoard[Row][Column] == "C" || PlayerTwoBoard[Row][Column] == "B" || PlayerTwoBoard[Row][Column] == "D" || PlayerTwoBoard[Row][Column] == "S" || PlayerTwoBoard[Row][Column] == "P")
-        {
-            PlayerTwoShipsRemaining[PlayerTwoBoard[Row][Column]]--;
-            PlayerTwoBoard[Row][Column] = "Hit";
-        }
-        else
-            PlayerTwoBoard[Row][Column] = "Miss";
+        int Command = MovesRemainingOne[std::rand() % MovesRemainingOne.size()];
+        MovesRemainingOne.erase(std::find(MovesRemainingOne.begin(), MovesRemainingOne.end(), Command));
+        Execute_Next_Turn(BoardOne, BoardTwo, ShipsRemainingOne, ShipsRemainingTwo, CurrentPlayer, Command);
     }
 
     else
     {
-        if (PlayerOneBoard[Row][Column] == "C" || PlayerOneBoard[Row][Column] == "B" || PlayerOneBoard[Row][Column] == "D" || PlayerOneBoard[Row][Column] == "S" || PlayerOneBoard[Row][Column] == "P")
-        {
-            PlayerOneShipsRemaining[PlayerOneBoard[Row][Column]]--;
-            PlayerOneBoard[Row][Column] = "Hit";
-        }
-        else
-            PlayerOneBoard[Row][Column] = "Miss";
+        int Command = MovesRemainingTwo[std::rand() % MovesRemainingTwo.size()];
+        MovesRemainingTwo.erase(std::find(MovesRemainingTwo.begin(), MovesRemainingTwo.end(), Command));
+        Execute_Next_Turn(BoardOne, BoardTwo, ShipsRemainingOne, ShipsRemainingTwo, CurrentPlayer, Command);
     }
 }
 
-void Display_Game_Over_Message(const std::vector<std::vector<std::string>> &PlayerOneBoard,
-                               const std::vector<std::vector<std::string>> &PlayerTwoBoard,
-                               const std::map<std::string, unsigned int> &PlayerOneShipsRemaining,
-                               const std::map<std::string, unsigned int> &PlayerTwoShipsRemaining,
-                               const unsigned int &NumberOfPlayers,
-                               const std::string &AIDifficulty,
-                               const std::string &CurrentPlayer,
-                               const unsigned int &NumberOfTurns,
-                               bool &GameIsRunning)
+void Battleships::Execute_Next_Turn(std::vector<std::vector<char>> &BoardOne,
+                                    std::vector<std::vector<char>> &BoardTwo,
+                                    std::map<char, int> &ShipsRemainingOne,
+                                    std::map<char, int> &ShipsRemainingTwo,
+                                    const std::string &CurrentPlayer,
+                                    const int &Command)
 {
-    std::string Output = Battleships_Game_Display(PlayerOneBoard, PlayerTwoBoard, PlayerOneShipsRemaining, PlayerTwoShipsRemaining, std::to_string(NumberOfPlayers), AIDifficulty, true);
-    Output += Battleships_New_Line("                                                                     GAME OVER                                                                     ");
-    Output += Battleships_Empty_Line();
+    int Row = Command / 10;
+    int Column = Command % 10;
 
-    if (CurrentPlayer == "PLAYER ONE")
-        Output += Battleships_New_Line("                                                  Player One has won! The game lasted " + std::to_string(NumberOfTurns) + " turns.                                                   ");
+    if (CurrentPlayer == "Player One")
+    {
+        if (BoardTwo[Row][Column] == 'C' || BoardTwo[Row][Column] == 'B' || BoardTwo[Row][Column] == 'D' || BoardTwo[Row][Column] == 'S' || BoardTwo[Row][Column] == 'P')
+        {
+            ShipsRemainingTwo[BoardTwo[Row][Column]]--;
+            BoardTwo[Row][Column] = 'X';
+        }
+        else
+            BoardTwo[Row][Column] = '.';
+    }
+
     else
-        Output += Battleships_New_Line("                                                  Player Two has won! The game lasted " + std::to_string(NumberOfTurns) + " turns.                                                   ");
+    {
+        if (BoardOne[Row][Column] == 'C' || BoardOne[Row][Column] == 'B' || BoardOne[Row][Column] == 'D' || BoardOne[Row][Column] == 'S' || BoardOne[Row][Column] == 'P')
+        {
+            ShipsRemainingOne[BoardOne[Row][Column]]--;
+            BoardOne[Row][Column] = 'X';
+        }
+        else
+            BoardOne[Row][Column] = '.';
+    }
+}
 
-    Output += Battleships_Empty_Line();
-    Output += Battleships_New_Line("                                                Press 'Q' to quit OR any other key to play again...                                                ");
-    Output += Battleships_Bottom_Line();
-    Output += Battleships_Bottom_Bar();
+void Battleships::Display_Game_Over_Message(const std::vector<std::vector<char>> &BoardOne,
+                                            const std::vector<std::vector<char>> &BoardTwo,
+                                            const std::map<char, int> &ShipsRemainingOne,
+                                            const std::map<char, int> &ShipsRemainingTwo,
+                                            const std::string &CurrentPlayer,
+                                            const std::string &AIDifficulty,
+                                            const int &NumberOfPlayers,
+                                            const int &NumberOfTurns,
+                                            bool &GameIsRunning)
+{
+    std::string Output = Get_Game_Display(BoardOne, BoardTwo, ShipsRemainingOne, ShipsRemainingTwo, AIDifficulty, std::to_string(NumberOfPlayers), true);
+    Output += New_Line("                                                                     GAME OVER                                                                     ") + Empty_Line();
+    Output += New_Line("                                                  " + CurrentPlayer + " has won! The game lasted " + std::to_string(NumberOfTurns) + " turns.                                                   ");
+    Output += Empty_Line() + New_Line("                                                Press 'Q' to quit OR any other key to play again...                                                ");
+    Output += Bottom_Line() + Bottom_Bar();
 
-    std::cout << Output;
+    Output_To_Terminal(Output);
 
     if (_getch() == 'q')
-    {
         GameIsRunning = false;
-        Clear_Terminal();
-    }
 }
