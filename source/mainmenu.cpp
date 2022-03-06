@@ -26,37 +26,33 @@ void MainMenu::Run()
     CONSOLE_CURSOR_INFO CursorInfo;
     CursorInfo.dwSize = 100;
     CursorInfo.bVisible = FALSE;
-
     SetConsoleCursorInfo(ConsoleHandle, &CursorInfo);
 
     int KeyPress = 0, CurrentSelection = 0;
     while (true)
     {
-        while (true)
+        Output_To_Terminal(MainMenu::Get_Main_Menu(CurrentSelection));
+
+        KeyPress = _getch();
+
+        if (KeyPress == '\r')
         {
-            Output_To_Terminal(MainMenu::Get_Main_Menu(CurrentSelection));
-
-            KeyPress = _getch();
-
-            if (KeyPress == '\r')
-                break;
-            else if (KeyPress == 72) // up arrow key
-                CurrentSelection == 0 ? CurrentSelection = 2 : --CurrentSelection;
-            else if (KeyPress == 80) // down arrow key
-                CurrentSelection == 2 ? CurrentSelection = 0 : ++CurrentSelection;
-            else if (KeyPress == 'q')
-            {
-                Clear_Terminal();
-                return;
-            }
+            if (CurrentSelection == 0)
+                TicTacToe::Play(ConsoleHandle, CursorInfo);
+            else if (CurrentSelection == 1)
+                Hangman::Play(ConsoleHandle);
+            else if (CurrentSelection == 2)
+                Battleships::Play(ConsoleHandle, CursorInfo);
         }
-
-        if (CurrentSelection == 0)
-            TicTacToe::Play(ConsoleHandle, CursorInfo);
-        else if (CurrentSelection == 1)
-            Hangman::Play(ConsoleHandle);
-        else if (CurrentSelection == 2)
-            Battleships::Play(ConsoleHandle, CursorInfo);
+        else if (KeyPress == 72) // up arrow key
+            CurrentSelection == 0 ? CurrentSelection = 2 : --CurrentSelection;
+        else if (KeyPress == 80) // down arrow key
+            CurrentSelection == 2 ? CurrentSelection = 0 : ++CurrentSelection;
+        else if (KeyPress == 'q')
+        {
+            Clear_Terminal();
+            return;
+        }
     }
 }
 
