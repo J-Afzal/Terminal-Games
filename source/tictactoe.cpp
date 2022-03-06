@@ -29,7 +29,7 @@ void TicTacToe::Play(const HANDLE &ConsoleHandle, const CONSOLE_CURSOR_INFO &Cur
         {
             GameObject.Toggle_Current_Player();
 
-            if (GameObject.User_Is_Next_Turn())
+            if (GameObject.Next_Turn_Is_User())
             {
                 if (GameObject.Execute_Next_User_Command()) // if true, quit to main menu
                     return;
@@ -219,11 +219,6 @@ bool TicTacToe::Game::Game_Over()
     return Winning_Conditions_Met() || No_Moves_Available() ? true : false;
 }
 
-bool TicTacToe::Game::No_Moves_Available()
-{
-    return m_NumberOfTurns == 9 ? true : false;
-}
-
 bool TicTacToe::Game::Winning_Conditions_Met()
 {
     // Check Horizontals
@@ -256,12 +251,17 @@ bool TicTacToe::Game::Winning_Conditions_Met()
     return m_WinningConditionsMet;
 }
 
+bool TicTacToe::Game::No_Moves_Available()
+{
+    return m_NumberOfTurns == 9 ? true : false;
+}
+
 void TicTacToe::Game::Toggle_Current_Player(void)
 {
     m_CurrentPlayer == 'X' ? m_CurrentPlayer = 'O' : m_CurrentPlayer = 'X';
 }
 
-bool TicTacToe::Game::User_Is_Next_Turn(void)
+bool TicTacToe::Game::Next_Turn_Is_User(void)
 {
     return (m_NumberOfPlayers == 2 || m_CurrentPlayer == m_UserPlayerChoice) ? true : false;
 }

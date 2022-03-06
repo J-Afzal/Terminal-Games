@@ -22,8 +22,7 @@ namespace TicTacToe
      * @param ConsoleHandle
      * @param CursorInfo
      */
-    void Play(const HANDLE &ConsoleHandle,
-              const CONSOLE_CURSOR_INFO &CursorInfo);
+    void Play(const HANDLE &ConsoleHandle, const CONSOLE_CURSOR_INFO &CursorInfo);
 
     /**
      * @brief Game class that contains all the data/functions
@@ -34,6 +33,7 @@ namespace TicTacToe
     {
     public:
         Game(const HANDLE &ConsoleHandle, const CONSOLE_CURSOR_INFO &CursorInfo);
+
         ~Game();
 
         /**
@@ -78,6 +78,14 @@ namespace TicTacToe
         bool Game_Over(void);
 
         /**
+         * @brief
+         *
+         * @return true, if 3 in a row detected
+         * @return false, if 3 in a row NOT detected
+         */
+        bool Winning_Conditions_Met(void);
+
+        /**
          * @brief Checks if there are still empty places to play a move
          * on the Tic Tac Toe grid.
          *
@@ -86,23 +94,15 @@ namespace TicTacToe
          */
         bool No_Moves_Available(void);
 
-        /**
-         * @brief
-         *
-         * @return true, if 3 in a row detected
-         * @return false, if 3 in a row NOT detected
-         */
-        bool Winning_Conditions_Met(void);
-
         void Toggle_Current_Player(void);
 
         /**
          * @brief
          *
          * @return true, if Execute_Next_User_Command()
-         * @return false, Execute_Next_AI_Command()
+         * @return false, if Execute_Next_AI_Command()
          */
-        bool User_Is_Next_Turn(void);
+        bool Next_Turn_Is_User(void);
 
         /**
          * @brief The user is repeatedly prompted for their next
@@ -130,14 +130,6 @@ namespace TicTacToe
          */
         bool Display_Game_Over_Message(void);
 
-        /**
-         * @brief Creates a string that contains all the ASCII characters to
-         * display the current state of the game.
-         *
-         * @return std::string
-         */
-        std::string Get_Game_Display(void);
-
     private:
         std::array<std::array<char, 3>, 3> m_GameGrid;
         std::vector<int> m_MovesRemaining;
@@ -147,6 +139,14 @@ namespace TicTacToe
         bool m_WinningConditionsMet;
         HANDLE m_ConsoleHandle;
         CONSOLE_CURSOR_INFO m_CursorInfo;
+
+        /**
+         * @brief Creates a string that contains all the ASCII characters to
+         * display the current state of the Tic Tac Toe game.
+         *
+         * @return std::string
+         */
+        std::string Get_Game_Display(void);
 
         /**
          * @brief Creates a new line containing text for the Tic Tac Toe game.
