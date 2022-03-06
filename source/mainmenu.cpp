@@ -30,7 +30,6 @@ void MainMenu::Run()
     SetConsoleCursorInfo(ConsoleHandle, &CursorInfo);
 
     int KeyPress = 0, CurrentSelection = 0;
-    bool ProgramIsRunning = true;
     while (true)
     {
         while (true)
@@ -47,13 +46,10 @@ void MainMenu::Run()
                 CurrentSelection == 2 ? CurrentSelection = 0 : ++CurrentSelection;
             else if (KeyPress == 'q')
             {
-                ProgramIsRunning = false;
-                break;
+                Clear_Terminal();
+                return;
             }
         }
-
-        if (!ProgramIsRunning)
-            break;
 
         if (CurrentSelection == 0)
             TicTacToe::Play(ConsoleHandle, CursorInfo);
@@ -62,8 +58,6 @@ void MainMenu::Run()
         else if (CurrentSelection == 2)
             Battleships::Play(ConsoleHandle, CursorInfo);
     }
-
-    Clear_Terminal();
 }
 
 std::string MainMenu::Get_Main_Menu(const int &CurrentSelection)
