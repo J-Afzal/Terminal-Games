@@ -58,7 +58,6 @@ bool Hangman::Game::Setup_Game(void)
     m_NumberOfErrors = 0;
     m_NumberOfTurns = 0;
     m_GameOver = false;
-    m_WinningConditionsMet = false;
     std::srand(std::time(0));
 
     if (Get_Number_Of_Players())
@@ -301,7 +300,6 @@ bool Hangman::Game::Winning_Conditions_Met(void)
         if (m_WordToBeGuessed[i] != m_CurrentGuessOfWord[i])
             return false;
     m_GameOver = true;
-    m_WinningConditionsMet = true;
     return true;
 }
 
