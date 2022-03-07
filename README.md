@@ -12,7 +12,7 @@ This program was developed and tested on the VS Code integrated powershell termi
 
 # Game List
 <p align="center">
-    <img src="screenshots/Main%20Game%20Display.png">
+    <img src="screenshots/main menu.png">
 </p>
 
 # Tic Tac Toe
