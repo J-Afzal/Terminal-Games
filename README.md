@@ -12,20 +12,31 @@ Use the following command in the project root directory to create a project in t
 ```
 cmake -S . -B build
 ```
-
 # Warning
 This program was developed and tested on the Visual Studio Terminal and Visual Studio Code Integrated Powershell Terminal on Windows 10. Due to the use of _getch(), Windows.h, and ANSI colour escape codes this program may not work in other terminal environments.
 
 # Games
+<h3 align="center">
+  Main Menu Scrolling
+</h3>
 <p align="center">
     <img src="screenshots/main menu.gif">
 </p>
+<h3 align="center">
+  Tic Tac Toe Player vs Computer
+</h3>
 <p align="center">
     <img src="screenshots/tic tac toe.gif">
 </p>
+<h3 align="center">
+  Hangman Player vs Player
+</h3>
 <p align="center">
     <img src="screenshots/hangman.gif">
 </p>
+<h3 align="center">
+  Battleships Player vs Computer
+</h3>
 <p align="center">
     <img src="screenshots/battleships.gif">
 </p>
