@@ -14,7 +14,7 @@ cmake -S . -B build
 ```
 
 # Warning
-This program was developed and tested on the VS Code integrated powershell terminal on Windows 10 and so may not work as shown below in other terminals due to the use of _getch(), Windows.h, and ANSI colour escape codes.
+This program was developed and tested on the Visual Studio Terminal and Visual Studio Code Integrated Powershell Terminal on Windows 10. Due to the use of _getch(), Windows.h, and ANSI colour escape codes this program may not work in other terminal environments.
 
 # Game List
 <p align="center">
