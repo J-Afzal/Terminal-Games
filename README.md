@@ -7,6 +7,12 @@
 * For Battleships, selecting ship positions must be done in either an incrementing or decrementing order
 * For Battleships, backspace can be used to undo a ship co-ord selection, but a ship that has been already been placed cannot been undone
 
+# Installing
+Use the following command in the project root directory to create a project in the build folder:
+```
+cmake -S . -B build
+```
+
 # Warning
 This program was developed and tested on the VS Code integrated powershell terminal on Windows 10 and so may not work as shown below in other terminals due to the use of _getch(), Windows.h, and ANSI colour escape codes.
 
