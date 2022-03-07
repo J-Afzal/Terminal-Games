@@ -16,18 +16,26 @@ cmake -S . -B build
 # Warning
 This program was developed and tested on the Visual Studio Terminal and Visual Studio Code Integrated Powershell Terminal on Windows 10. Due to the use of _getch(), Windows.h, and ANSI colour escape codes this program may not work in other terminal environments.
 
-# Game List
+# Games
+<p align="center">
+    <img src="screenshots/main menu.gif">
+</p>
+<p align="center">
+    <img src="screenshots/tic tac toe.gif">
+</p>
+<p align="center">
+    <img src="screenshots/hangman.gif">
+</p>
+<p align="center">
+    <img src="screenshots/battleships.gif">
+</p>
+
+# Main Menu
 <p align="center">
     <img src="screenshots/main menu.png">
 </p>
 
 # Tic Tac Toe
-<h3 align="center">
-  Player vs Computer example
-</h3>
-<p align="center">
-    <img src="screenshots/tic tac toe.gif">
-</p>
 <h3 align="center">
   In Game Screenshot
 </h3>
@@ -43,12 +51,6 @@ This program was developed and tested on the Visual Studio Terminal and Visual S
 
 # Hangman
 <h3 align="center">
-  Player vs Player example
-</h3>
-<p align="center">
-    <img src="screenshots/hangman.gif">
-</p>
-<h3 align="center">
   In Game Screenshot
 </h3>
 <p align="center">
@@ -62,12 +64,6 @@ This program was developed and tested on the Visual Studio Terminal and Visual S
 </p>
 
 # Battleships
-<h3 align="center">
-  Player vs Computer example
-</h3>
-<p align="center">
-    <img src="screenshots/battleships.gif">
-</p>
 <h3 align="center">
   In Game Screenshot
 </h3>
