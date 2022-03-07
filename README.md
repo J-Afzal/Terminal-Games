@@ -63,7 +63,7 @@ This program was developed and tested on the Visual Studio Terminal and Visual S
 
 # Battleships
 <h3 align="center">
-  Player vs Player example
+  Player vs Computer example
 </h3>
 <p align="center">
     <img src="screenshots/battleships.gif">
