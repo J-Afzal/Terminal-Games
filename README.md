@@ -2,7 +2,7 @@
 * For all games, 2 players represent human vs human, 1 player represents a human vs computer, and 0 players represent computer vs computer
 * For all games, easy AI = random command/letter selection
 * For Hangman, the word to be guessed must be 3-14 characters long and contain only letters
-* For Hangman, Only single letter guesses allowed
+* For Hangman, only single letter guesses allowed
 * For Hangman, when guessing a letter, instead of scrolling through letters using the arrow keys, pressing a letter key will skip the current selected guess to that letter (Warning: pressing q will quit the game)
 * For Battleships, selecting ship positions must be done in either an incrementing or decrementing order
 * For Battleships, backspace can be used to undo a ship co-ord selection, but a ship that has been already been placed cannot been undone
