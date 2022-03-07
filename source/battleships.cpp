@@ -100,7 +100,7 @@ bool Battleships::Game::Setup_Game(void)
 
     Get_AI_Ship_Positions(m_BoardTwo);
 
-    std::rand() % 2 == 0 ? m_CurrentPlayer = "PLAYER ONE" : m_CurrentPlayer = "PLAYER TWO";
+    std::rand() % 2 == 0 ? m_CurrentPlayer = "Player One" : m_CurrentPlayer = "Player Two";
 
     return false;
 }
@@ -442,12 +442,12 @@ bool Battleships::Game::Game_Over(void)
 
 void Battleships::Game::Toggle_Current_Player(void)
 {
-    m_CurrentPlayer == "PLAYER ONE" ? m_CurrentPlayer = "PLAYER TWO" : m_CurrentPlayer = "PLAYER ONE";
+    m_CurrentPlayer == "Player One" ? m_CurrentPlayer = "Player Two" : m_CurrentPlayer = "Player One";
 }
 
 bool Battleships::Game::Next_Turn_Is_User(void)
 {
-    return m_NumberOfPlayers == 1 && m_CurrentPlayer == "PLAYER ONE" ? true : false;
+    return m_NumberOfPlayers == 1 && m_CurrentPlayer == "Player One" ? true : false;
 }
 
 bool Battleships::Game::Execute_Next_User_Command(void)
@@ -520,7 +520,7 @@ bool Battleships::Game::Execute_Next_User_Command(void)
 
 void Battleships::Game::Execute_Next_AI_Command(void)
 {
-    if (m_CurrentPlayer == "PLAYER ONE")
+    if (m_CurrentPlayer == "Player One")
     {
         int Command = m_MovesRemainingOne[std::rand() % m_MovesRemainingOne.size()];
         int Row = Command / 10, Column = Command % 10;
