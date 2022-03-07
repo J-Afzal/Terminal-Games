@@ -1,7 +1,7 @@
 /**
  * @file battleships.hpp
  * @author Junaid Afzal
- * @brief Battleship specific functions
+ * @brief Battleship namespace funtions and classes
  * @version 1.0
  * @date 07-11-2021
  *
@@ -24,26 +24,21 @@ namespace Battleships
      * @param ConsoleHandle
      * @param CursorInfo
      */
-    void Play(const HANDLE &ConsoleHandle, CONSOLE_CURSOR_INFO &CursorInfo);
+    void Play(const HANDLE &ConsoleHandle);
 
     /**
-     * @brief Game class that contains all the data/functions
-     * for the Battleships game
+     * @brief Game class that contains all the data/functions for the Battleships game
      *
      */
     class Game
     {
     public:
-        Game(const HANDLE &ConsoleHandle, CONSOLE_CURSOR_INFO &CursorInfo);
+        Game(const HANDLE &ConsoleHandle);
 
         ~Game();
 
         /**
-         * @brief The player boards, valid moves, and remaining ships for each player
-         * are created. Then the number of players is retrieved - two player are not
-         * allowed as impractical to hide player boards from each other while using a
-         * single terminal. Then the AI difficulty and ship positions are retrieved,
-         * and the current player is randomly chosen.
+         * @brief
          *
          * @return true, if quit to main menu
          * @return false, if continue with game
@@ -70,7 +65,7 @@ namespace Battleships
          * @brief The user is prompted to enter sequentially increasing/decreasing co-ordinates
          * for each ship, and repeatedly if needed, until a valid set of co-ordinates are given.
          * After passing the error checks, each set of co-ordinates is used to place a ship
-         * on player one's board (Human player is always player one).
+         * on player one's board (as user is always player one).
          *
          * @return true, if quit to main menu
          * @return false, if continue with game
@@ -85,12 +80,6 @@ namespace Battleships
          */
         void Get_AI_Ship_Positions(std::array<std::array<char, 10>, 10> &AIBoard);
 
-        /**
-         * @brief Checks if there are any ship letters left on the board
-         *
-         * @return true, if no ship letters left on board
-         * @return false, if there are ship letters left on board
-         */
         bool Game_Over(void);
 
         void Toggle_Current_Player(void);
@@ -119,8 +108,8 @@ namespace Battleships
         void Execute_Next_AI_Command(void);
 
         /**
-         * @brief The winner is the current player as player has not been toggled since
-         * most recent turn and now. This informations is displayed to the user.
+         * @brief The final game state is displayed and the user is promoted
+         * whether they want to restart or quit to the main menu.
          *
          * @return true, if quit to main menu
          * @return false, if continue with game
@@ -135,20 +124,17 @@ namespace Battleships
         int m_NumberOfPlayers, m_NumberOfTurns, m_PreviousCommand;
         bool m_GameOver;
         HANDLE m_ConsoleHandle;
-        CONSOLE_CURSOR_INFO m_CursorInfo;
 
         /**
-         * @brief Both player boards are displayed, whilst the number of players, current AI difficulty,
-         * and current state of all ships for both players are displayed in between. If there is only one
-         * player, then only the hits and misses by player one are displayed on player two's board (as
-         * human player is automatically player one).
+         * @brief Creates a string that contains all the ASCII characters to
+         * display the current state of the game.
          *
          * @return std::string
          */
         std::string Get_Game_Display(void);
 
         /**
-         * @brief Creates a new line containing text for Battleships
+         * @brief Creates a new line containing text for Battleships box
          *
          * @param Input
          * @return std::string
@@ -156,28 +142,28 @@ namespace Battleships
         std::string New_Line(const std::string &Input);
 
         /**
-         * @brief Creates an empty new line for Battleships
+         * @brief Creates an empty new line for Battleships box
          *
          * @return std::string
          */
         std::string Empty_Line(void);
 
         /**
-         * @brief Creates the top line for Battleships
+         * @brief Creates the top line for Battleships box
          *
          * @return std::string
          */
         std::string Top_Line(void);
 
         /**
-         * @brief Creates the bottom line for Battleships
+         * @brief Creates the bottom line for Battleships box
          *
          * @return std::string
          */
         std::string Bottom_Line(void);
 
         /**
-         * @brief Creates the bottom bar for Battleships
+         * @brief Creates the bottom bar for Battleships box
          *
          * @return std::string
          */

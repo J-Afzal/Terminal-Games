@@ -15,13 +15,13 @@
 namespace MainMenu
 {
     /**
-     * @brief Main menu game loop
+     * @brief Main menu loop
      *
      */
     void Run(void);
 
     /**
-     * @brief Displays the main menu
+     * @brief Gets the main menu ASCII string
      *
      * @param CurrentSelection
      * @return std::string
@@ -29,7 +29,7 @@ namespace MainMenu
     std::string Get_Main_Menu(const int &CurrentSelection);
 
     /**
-     * @brief Creates a new line containing text for the main menu
+     * @brief Creates a new line containing text for the main menu box
      *
      * @param Input
      * @return std::string
@@ -37,21 +37,21 @@ namespace MainMenu
     std::string New_Line(const std::string &Input);
 
     /**
-     * @brief Creates a new empty line for the main menu
+     * @brief Creates a new empty line for the main menu box
      *
      * @return std::string
      */
     std::string Empty_Line(void);
 
     /**
-     * @brief Creates a top outline for the main menu
+     * @brief Creates a top outline for the main menu box
      *
      * @return std::string
      */
     std::string Top_Line(void);
 
     /**
-     * @brief Creates a bottom outline for the main menu
+     * @brief Creates a bottom outline for the main menu box
      *
      * @return std::string
      */

@@ -1,7 +1,7 @@
 /**
  * @file hangman.hpp
  * @author Junaid Afzal
- * @brief Hangman specific functions
+ * @brief Hangman namespace funtions and classes
  * @version 1.0
  * @date 07-11-2021
  *
@@ -24,8 +24,7 @@ namespace Hangman
     void Play(const HANDLE &ConsoleHandle);
 
     /**
-     * @brief Game class that contains all the data/functions
-     * for the Hangman game
+     * @brief Game class that contains all the data/functions for the Hangman game
      *
      */
     class Game
@@ -36,10 +35,7 @@ namespace Hangman
         ~Game();
 
         /**
-         * @brief The number of players are retrieved, if only one human player is present  they are
-         * asked which player they would like to be, if AI is involved the user is prompted for the
-         * AI difficulty, depending on the previous responses the user or AI is asked for the word to
-         * be guessed and finally the current player is randomly assigned.
+         * @brief
          *
          * @return true, if quit to main menu
          * @return false, if continue with game
@@ -87,24 +83,18 @@ namespace Hangman
          */
         void Get_Random_Word(void);
 
-        /**
-         * @brief
-         *
-         * @return true, if game over
-         * @return false, if game not over
-         */
         bool Game_Over(void);
 
         /**
-         * @brief Checks if m_CurrentGuessOfWord and m_WordToBeGuessed are the same.
+         * @brief
          *
-         * @return true, if are the same
-         * @return false, if are NOT the same
+         * @return true, if m_CurrentGuessOfWord and m_WordToBeGuessed are the same
+         * @return false, if m_CurrentGuessOfWord and m_WordToBeGuessed are NOT the same
          */
         bool Winning_Conditions_Met(void);
 
         /**
-         * @brief Checks whether the numbers of errors are ten (final hangman state).
+         * @brief
          *
          * @return true, if number of turns is 10
          * @return false, if number of turns is NOT 10
@@ -130,16 +120,14 @@ namespace Hangman
         bool Execute_Next_User_Guess(void);
 
         /**
-         * @brief If AIDifficulty is set to easy, then a random valid letter is chosen
-         * as the guess.
+         * @brief If AIDifficulty is set to easy, then a random valid letter is chosen.
          *
          */
         void Execute_Next_AI_Guess(void);
 
         /**
-         * @brief If hangman is in its final state, then the winner is the guesser and if
-         * not then the guesser has lost. This information is then displayed to the user
-         * along with the word that was being guessed.
+         * @brief The final game state is displayed and the user is promoted
+         * whether they want to restart or quit to the main menu.
          *
          * @return true, if quit to main menu
          * @return false, if continue with game
@@ -162,16 +150,15 @@ namespace Hangman
         void Check_Guess_And_Update_Current_Guess(const char &Guess);
 
         /**
-         * @brief The current hangman state is displayed, and to the right of that,
-         * the numebr of players and the AI difficulty is displayed,
-         * and to the right of that, the current incorrect guess are displayed,
+         * @brief Creates a string that contains all the ASCII characters to
+         * display the current state of the game.
          *
          * @return std::string
          */
         std::string Get_Game_Display(void);
 
         /**
-         * @brief Creates a new line containing text for Hangman game
+         * @brief Creates a new line containing text for Hangman game box
          *
          * @param Input
          * @return std::string
@@ -179,28 +166,28 @@ namespace Hangman
         std::string New_Line(const std::string &Input);
 
         /**
-         * @brief Creates an empty new line for Hangman game
+         * @brief Creates an empty new line for Hangman game box
          *
          * @return std::string
          */
         std::string Empty_Line(void);
 
         /**
-         * @brief Creates the top line for Hangman game
+         * @brief Creates the top line for Hangman game box
          *
          * @return std::string
          */
         std::string Top_Line(void);
 
         /**
-         * @brief Creates the bottom line for Hangman game
+         * @brief Creates the bottom line for Hangman game box
          *
          * @return std::string
          */
         std::string Bottom_Line(void);
 
         /**
-         * @brief Creates the bottom bar for Hangman game
+         * @brief Creates the bottom bar for Hangman game box
          *
          * @return std::string
          */

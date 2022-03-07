@@ -16,9 +16,9 @@
 #include "terminal.hpp"
 #include "battleships.hpp"
 
-void Battleships::Play(const HANDLE &ConsoleHandle, CONSOLE_CURSOR_INFO &CursorInfo)
+void Battleships::Play(const HANDLE &ConsoleHandle)
 {
-    Battleships::Game GameObject(ConsoleHandle, CursorInfo);
+    Battleships::Game GameObject(ConsoleHandle);
 
     while (true)
     {
@@ -43,7 +43,7 @@ void Battleships::Play(const HANDLE &ConsoleHandle, CONSOLE_CURSOR_INFO &CursorI
     }
 }
 
-Battleships::Game::Game(const HANDLE &ConsoleHandle, CONSOLE_CURSOR_INFO &CursorInfo) : m_ConsoleHandle(ConsoleHandle), m_CursorInfo(CursorInfo) {}
+Battleships::Game::Game(const HANDLE &ConsoleHandle) : m_ConsoleHandle(ConsoleHandle) {}
 
 Battleships::Game::~Game() {}
 
@@ -195,8 +195,7 @@ bool Battleships::Game::Get_User_Ship_Positions(void)
     std::vector<int> ShipSizes = {5, 4, 3, 3, 2};
     int lastShipRow = 0, lastShipColumn = 0;
 
-    m_CursorInfo.bVisible = TRUE;
-    SetConsoleCursorInfo(m_ConsoleHandle, &m_CursorInfo);
+    Set_Cursor_Visibility(m_ConsoleHandle, true);
 
     for (int i = 0; i < 5; i++) // for each ship
     {
@@ -272,8 +271,7 @@ bool Battleships::Game::Get_User_Ship_Positions(void)
                     }
                     else if (KeyPress == 'q')
                     {
-                        m_CursorInfo.bVisible = FALSE;
-                        SetConsoleCursorInfo(m_ConsoleHandle, &m_CursorInfo);
+                        Set_Cursor_Visibility(m_ConsoleHandle, false);
                         return true;
                     }
                 }
@@ -354,8 +352,7 @@ bool Battleships::Game::Get_User_Ship_Positions(void)
             m_BoardOne[ShipRows[j]][ShipColumns[j]] = ShipLetters[i];
     }
 
-    m_CursorInfo.bVisible = FALSE;
-    SetConsoleCursorInfo(m_ConsoleHandle, &m_CursorInfo);
+    Set_Cursor_Visibility(m_ConsoleHandle, false);
 
     return false;
 }
@@ -463,8 +460,7 @@ bool Battleships::Game::Execute_Next_User_Command(void)
 
     int KeyPress, Command, Row = m_PreviousCommand / 10, Column = m_PreviousCommand % 10;
 
-    m_CursorInfo.bVisible = TRUE;
-    SetConsoleCursorInfo(m_ConsoleHandle, &m_CursorInfo);
+    Set_Cursor_Visibility(m_ConsoleHandle, true);
 
     while (true)
     {
@@ -489,8 +485,7 @@ bool Battleships::Game::Execute_Next_User_Command(void)
                 Column == 9 ? Column = 0 : ++Column;
             else if (KeyPress == 'q')
             {
-                m_CursorInfo.bVisible = FALSE;
-                SetConsoleCursorInfo(m_ConsoleHandle, &m_CursorInfo);
+                Set_Cursor_Visibility(m_ConsoleHandle, false);
                 return true;
             }
         }
@@ -514,8 +509,8 @@ bool Battleships::Game::Execute_Next_User_Command(void)
 
             m_MovesRemainingOne.erase(CommandPosition);
 
-            m_CursorInfo.bVisible = FALSE;
-            SetConsoleCursorInfo(m_ConsoleHandle, &m_CursorInfo);
+            Set_Cursor_Visibility(m_ConsoleHandle, false);
+
             return false;
         }
         else

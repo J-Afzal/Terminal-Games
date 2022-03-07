@@ -20,7 +20,7 @@ void Output_To_Terminal(const std::string &Output)
 
 void Clear_Terminal(void)
 {
-    // Windows API method taken from https://www.cplusplus.com/articles/4z18T05o
+    // Windows API method from https://www.cplusplus.com/articles/4z18T05o
     HANDLE hStdOut;
     CONSOLE_SCREEN_BUFFER_INFO csbi;
     DWORD count;
@@ -48,9 +48,10 @@ void Clear_Terminal(void)
     SetConsoleCursorPosition(hStdOut, homeCoords);
 }
 
-std::string Return_Random_Word(void)
+void Set_Cursor_Visibility(const HANDLE &ConsoleHandle, const bool &Visibility)
 {
-    std::vector<std::string> WordList = {};
-
-    return WordList[std::rand() % WordList.size()];
+    CONSOLE_CURSOR_INFO CursorInfo;
+    CursorInfo.dwSize = 100;
+    CursorInfo.bVisible = Visibility;
+    SetConsoleCursorInfo(ConsoleHandle, &CursorInfo);
 }

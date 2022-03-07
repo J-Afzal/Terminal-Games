@@ -1,7 +1,7 @@
 /**
  * @file tictactoe.hpp
  * @author Junaid Afzal
- * @brief Tic Tac Toe specific functions
+ * @brief Tic Tac Toe namespace funtions and classes
  * @version 1.0
  * @date 07-11-2021
  *
@@ -11,6 +11,7 @@
 
 #pragma once
 #include <array>
+#include <vector>
 #include <string>
 #include <Windows.h>
 
@@ -22,26 +23,24 @@ namespace TicTacToe
      * @param ConsoleHandle
      * @param CursorInfo
      */
-    void Play(const HANDLE &ConsoleHandle, const CONSOLE_CURSOR_INFO &CursorInfo);
+    void Play(const HANDLE &ConsoleHandle);
 
     /**
-     * @brief Game class that contains all the data/functions
-     * for the Tic Tac Toe game
+     * @brief Game class that contains all the data/functions for the Tic Tac Toe game
      *
      */
     class Game
     {
     public:
-        Game(const HANDLE &ConsoleHandle, const CONSOLE_CURSOR_INFO &CursorInfo);
+        Game(const HANDLE &ConsoleHandle);
 
         ~Game();
 
         /**
-         * @brief The Tic Tac Toe grid and list of valid moves are created, number of
-         * players are retrieved, if only one human player is present they are asked
-         * which player they would like to be, if AI is involved the user is prompted
-         * for the AI difficulty, and finally the current player is randomly assigned.
+         * @brief
          *
+         * @return true, if quit to main menu
+         * @return false, if continue with game
          */
         bool Setup_Game(void);
 
@@ -69,12 +68,6 @@ namespace TicTacToe
          */
         bool Get_AI_Difficulty(void);
 
-        /**
-         * @brief
-         *
-         * @return true, if game over
-         * @return false, if game not over
-         */
         bool Game_Over(void);
 
         /**
@@ -114,16 +107,14 @@ namespace TicTacToe
         bool Execute_Next_User_Command(void);
 
         /**
-         * @brief If AIDifficulty is set to easy, then a random valid location on the
-         * Tic Tac Toe grid is chosen. If AIDifficulty is set to hard then the MiniMax()
-         * algorithm is used.
+         * @brief If AIDifficulty is set to easy, then a random valid location is chosen.
          *
          */
         void Execute_Next_AI_Command(void);
 
         /**
-         * @brief The final state of the Tic Tac Toe grid and winner is displayed and
-         * the user is promoted whether they want to restart or quit.
+         * @brief The final game state is displayed and the user is promoted
+         * whether they want to restart or quit to the main menu.
          *
          * @return true, if quit to main menu
          * @return false, if continue with game
@@ -138,11 +129,10 @@ namespace TicTacToe
         char m_CurrentPlayer, m_UserPlayerChoice;
         bool m_WinningConditionsMet;
         HANDLE m_ConsoleHandle;
-        CONSOLE_CURSOR_INFO m_CursorInfo;
 
         /**
          * @brief Creates a string that contains all the ASCII characters to
-         * display the current state of the Tic Tac Toe game.
+         * display the current state of the game.
          *
          * @return std::string
          */

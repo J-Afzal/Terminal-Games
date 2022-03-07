@@ -9,16 +9,15 @@
  *
  */
 
-#include <iostream>
-#include <iomanip>
 #include <algorithm>
+#include <iomanip>
 #include <conio.h>
 #include "terminal.hpp"
 #include "tictactoe.hpp"
 
-void TicTacToe::Play(const HANDLE &ConsoleHandle, const CONSOLE_CURSOR_INFO &CursorInfo)
+void TicTacToe::Play(const HANDLE &ConsoleHandle)
 {
-    TicTacToe::Game GameObject(ConsoleHandle, CursorInfo);
+    TicTacToe::Game GameObject(ConsoleHandle);
 
     while (true)
     {
@@ -43,7 +42,7 @@ void TicTacToe::Play(const HANDLE &ConsoleHandle, const CONSOLE_CURSOR_INFO &Cur
     }
 }
 
-TicTacToe::Game::Game(const HANDLE &ConsoleHandle, const CONSOLE_CURSOR_INFO &CursorInfo) : m_ConsoleHandle(ConsoleHandle), m_CursorInfo(CursorInfo) {}
+TicTacToe::Game::Game(const HANDLE &ConsoleHandle) : m_ConsoleHandle(ConsoleHandle) {}
 
 TicTacToe::Game::~Game() {}
 
@@ -274,8 +273,7 @@ bool TicTacToe::Game::Execute_Next_User_Command(void)
 
     Output_To_Terminal(Output);
 
-    m_CursorInfo.bVisible = TRUE;
-    SetConsoleCursorInfo(m_ConsoleHandle, &m_CursorInfo);
+    Set_Cursor_Visibility(m_ConsoleHandle, true);
 
     int KeyPress = 0, Row = m_MovesRemaining[0] / 3, Column = m_MovesRemaining[0] % 3;
     while (true)
@@ -301,8 +299,7 @@ bool TicTacToe::Game::Execute_Next_User_Command(void)
                 Column == 2 ? Column = 0 : ++Column;
             else if (KeyPress == 'q')
             {
-                m_CursorInfo.bVisible = FALSE;
-                SetConsoleCursorInfo(m_ConsoleHandle, &m_CursorInfo);
+                Set_Cursor_Visibility(m_ConsoleHandle, false);
                 return true;
             }
         }
@@ -319,8 +316,7 @@ bool TicTacToe::Game::Execute_Next_User_Command(void)
             KeyPress = 0;
     }
 
-    m_CursorInfo.bVisible = FALSE;
-    SetConsoleCursorInfo(m_ConsoleHandle, &m_CursorInfo);
+    Set_Cursor_Visibility(m_ConsoleHandle, false);
 
     m_NumberOfTurns++;
 

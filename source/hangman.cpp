@@ -9,9 +9,9 @@
  *
  */
 
-#include <iostream>
-#include <iomanip>
 #include <algorithm>
+#include <iomanip>
+#include <iostream>
 #include <fstream>
 #include <conio.h>
 #include "terminal.hpp"
@@ -23,21 +23,21 @@ void Hangman::Play(const HANDLE &ConsoleHandle)
 
     while (true)
     {
-        if (GameObject.Setup_Game())
+        if (GameObject.Setup_Game()) // if true, quit to main menu
             return;
 
         while (!GameObject.Game_Over())
         {
             if (GameObject.Next_Turn_Is_User())
             {
-                if (GameObject.Execute_Next_User_Guess())
+                if (GameObject.Execute_Next_User_Guess()) // if true, quit to main menu
                     return;
             }
             else
                 GameObject.Execute_Next_AI_Guess();
         }
 
-        if (GameObject.Display_Game_Over_Message())
+        if (GameObject.Display_Game_Over_Message()) // if true, quit to main menu
             return;
     }
 }
@@ -247,12 +247,13 @@ bool Hangman::Game::Get_Word_From_User(void)
 
         std::getline(std::cin, Input);
 
-        if (Input == "q")
+        if (Input == "q") // quit to main menu
             return true;
 
         if (Input.size() < 3 || Input.size() > 14)
             continue;
 
+        // Capitalise word
         for (unsigned int i = 0; i < Input.size(); i++)
             if (Input[i] >= 'a' && Input[i] <= 'z')
                 Input[i] -= 32;
@@ -344,9 +345,9 @@ bool Hangman::Game::Execute_Next_User_Guess(void)
             return true;
         else
         {
-            auto it = std::find(m_MovesRemaining.begin(), m_MovesRemaining.end(), KeyPress - 32);
-            if (it != m_MovesRemaining.end())
-                CurrentSelection = std::distance(m_MovesRemaining.begin(), it);
+            auto Command = std::find(m_MovesRemaining.begin(), m_MovesRemaining.end(), KeyPress - 32);
+            if (Command != m_MovesRemaining.end())
+                CurrentSelection = std::distance(m_MovesRemaining.begin(), Command);
         }
     }
 }

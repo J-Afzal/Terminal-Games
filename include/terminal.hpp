@@ -1,7 +1,7 @@
 /**
  * @file terminal.hpp
  * @author Junaid Afzal
- * @brief Shared terminal functions/constants
+ * @brief Terminal functions and constants
  * @version 1.0
  * @date 07-11-2021
  *
@@ -10,7 +10,6 @@
  */
 
 #pragma once
-#include <vector>
 #include <string>
 #include <Windows.h>
 
@@ -24,7 +23,7 @@ const std::string BLUE = "\x1B[1;34m";
 const std::string RESET = "\x1B[0m";
 
 /**
- * @brief Clears terminal then outputs using std::cout
+ * @brief Clear_Terminal() then std::cout << Output
  *
  * @param Output
  */
@@ -36,3 +35,11 @@ void Output_To_Terminal(const std::string &Output);
  *
  */
 void Clear_Terminal();
+
+/**
+ * @brief A custom wrapper around the Windows.h SetConsoleCursorInfo() function
+ *
+ * @param ConsoleHandle
+ * @param Visibility
+ */
+void Set_Cursor_Visibility(const HANDLE &ConsoleHandle, const bool &Visibility);

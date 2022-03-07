@@ -9,7 +9,6 @@
  *
  */
 
-#include <iostream>
 #include <conio.h>
 #include "terminal.hpp"
 #include "mainmenu.hpp"
@@ -23,10 +22,7 @@ void MainMenu::Run()
     if (ConsoleHandle == INVALID_HANDLE_VALUE)
         exit(1);
 
-    CONSOLE_CURSOR_INFO CursorInfo;
-    CursorInfo.dwSize = 100;
-    CursorInfo.bVisible = FALSE;
-    SetConsoleCursorInfo(ConsoleHandle, &CursorInfo);
+    Set_Cursor_Visibility(ConsoleHandle, false);
 
     int KeyPress = 0, CurrentSelection = 0;
     while (true)
@@ -38,11 +34,11 @@ void MainMenu::Run()
         if (KeyPress == '\r')
         {
             if (CurrentSelection == 0)
-                TicTacToe::Play(ConsoleHandle, CursorInfo);
+                TicTacToe::Play(ConsoleHandle);
             else if (CurrentSelection == 1)
                 Hangman::Play(ConsoleHandle);
             else if (CurrentSelection == 2)
-                Battleships::Play(ConsoleHandle, CursorInfo);
+                Battleships::Play(ConsoleHandle);
         }
         else if (KeyPress == 72) // up arrow key
             CurrentSelection == 0 ? CurrentSelection = 2 : --CurrentSelection;
@@ -51,6 +47,7 @@ void MainMenu::Run()
         else if (KeyPress == 'q')
         {
             Clear_Terminal();
+            Set_Cursor_Visibility(ConsoleHandle, true);
             return;
         }
     }
