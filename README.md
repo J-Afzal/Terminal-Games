@@ -22,34 +22,61 @@ This program was developed and tested on the Visual Studio Terminal and Visual S
 </p>
 
 # Tic Tac Toe
-<p align="center">
-    <img src="screenshots/tic tac toe playing.png">
-</p>
+<h3 align="center">
+  Player vs Computer example
+</h3>
 <p align="center">
     <img src="screenshots/tic tac toe.gif">
 </p>
+<h3 align="center">
+  In Game Screenshot
+</h3>
+<p align="center">
+    <img src="screenshots/tic tac toe playing.png">
+</p>
+<h3 align="center">
+  Game Over Screenshot
+</h3>
 <p align="center">
     <img src="screenshots/tic tac toe game over.png">
 </p>
 
 # Hangman
-<p align="center">
-    <img src="screenshots/hangman playing.png">
-</p>
+<h3 align="center">
+  Player vs Player example
+</h3>
 <p align="center">
     <img src="screenshots/hangman.gif">
 </p>
+<h3 align="center">
+  In Game Screenshot
+</h3>
+<p align="center">
+    <img src="screenshots/hangman playing.png">
+</p>
+<h3 align="center">
+  Game Over Screenshot
+</h3>
 <p align="center">
     <img src="screenshots/hangman game over.png">
 </p>
 
 # Battleships
-<p align="center">
-    <img src="screenshots/battleships playing.png">
-</p>
+<h3 align="center">
+  Player vs Player example
+</h3>
 <p align="center">
     <img src="screenshots/battleships.gif">
 </p>
+<h3 align="center">
+  In Game Screenshot
+</h3>
+<p align="center">
+    <img src="screenshots/battleships playing.png">
+</p>
+<h3 align="center">
+  Game Over Screenshot
+</h3>
 <p align="center">
     <img src="screenshots/battleships game over.png">
 </p>
