@@ -23,6 +23,11 @@ namespace Hangman
      */
     void Play(const HANDLE &ConsoleHandle);
 
+    /**
+     * @brief Game class that contains all the data/functions
+     * for the Hangman game
+     *
+     */
     class Game
     {
     public:

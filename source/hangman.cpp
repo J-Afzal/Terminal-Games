@@ -49,8 +49,8 @@ Hangman::Game::~Game() {}
 bool Hangman::Game::Setup_Game(void)
 {
     m_MovesRemaining.reserve(26);
-    m_IncorrectGuesses.clear();
     m_MovesRemaining = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+    m_IncorrectGuesses.clear();
     m_WordToBeGuessed = "";
     m_CurrentGuessOfWord = "";
     m_AIDifficulty = "N/A";
