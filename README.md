@@ -7,8 +7,8 @@
 * For Battleships, selecting ship positions must be done in either an incrementing or decrementing order
 * For Battleships, backspace can be used to undo a ship co-ord selection, but a ship that has been already been placed cannot been undone
 
-# Installing
-Use the following command in the project root directory to create a project in the build folder:
+# Building
+Use the following CMake command in the project root directory:
 ```
 cmake -S . -B build
 ```
