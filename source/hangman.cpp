@@ -140,7 +140,7 @@ bool Hangman::Game::Get_Number_Of_Players(void)
         if (KeyPress == '\r')
         {
             m_NumberOfPlayers = CurrentSelection;
-            break;
+            return false;
         }
         else if (KeyPress == 72) // up arrow key
             CurrentSelection == 0 ? CurrentSelection = 2 : --CurrentSelection;
@@ -149,8 +149,6 @@ bool Hangman::Game::Get_Number_Of_Players(void)
         else if (KeyPress == 'q')
             return true;
     }
-
-    return false;
 }
 
 bool Hangman::Game::Get_User_Player_Choice(void)
@@ -179,7 +177,10 @@ bool Hangman::Game::Get_User_Player_Choice(void)
         KeyPress = _getch();
 
         if (KeyPress == '\r')
-            return CurrentSelection == 0 ? true : false;
+        {
+            CurrentSelection == 0 ? m_UserIsGuessing = true : m_UserIsGuessing = false;
+            return false;
+        }
         else if (KeyPress == 72) // up arrow key
             CurrentSelection == 0 ? CurrentSelection = 1 : --CurrentSelection;
         else if (KeyPress == 80) // down arrow key
@@ -217,7 +218,7 @@ bool Hangman::Game::Get_AI_Difficulty(void)
         if (KeyPress == '\r' && CurrentSelection == 0)
         {
             CurrentSelection == 0 ? m_AIDifficulty = "EASY" : m_AIDifficulty = "HARD";
-            break;
+            return false;
         }
         else if (KeyPress == 72) // up arrow key
             CurrentSelection == 0 ? CurrentSelection = 1 : --CurrentSelection;
@@ -226,8 +227,6 @@ bool Hangman::Game::Get_AI_Difficulty(void)
         else if (KeyPress == 'q')
             return true;
     }
-
-    return false;
 }
 
 bool Hangman::Game::Get_Word_From_User(void)

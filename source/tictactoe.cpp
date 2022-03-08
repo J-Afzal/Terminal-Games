@@ -120,7 +120,7 @@ bool TicTacToe::Game::Get_Number_Of_Players()
         if (KeyPress == '\r')
         {
             m_NumberOfPlayers = CurrentSelection;
-            break;
+            return false;
         }
         else if (KeyPress == 72) // up arrow key
             CurrentSelection == 0 ? CurrentSelection = 2 : --CurrentSelection;
@@ -129,8 +129,6 @@ bool TicTacToe::Game::Get_Number_Of_Players()
         else if (KeyPress == 'q')
             return true;
     }
-
-    return false;
 }
 
 bool TicTacToe::Game::Get_User_Player_Choice()
@@ -160,7 +158,7 @@ bool TicTacToe::Game::Get_User_Player_Choice()
         if (KeyPress == '\r')
         {
             CurrentSelection == 0 ? m_UserPlayerChoice = 'X' : m_UserPlayerChoice = 'O';
-            break;
+            return false;
         }
         else if (KeyPress == 72) // up arrow key
             CurrentSelection == 0 ? CurrentSelection = 1 : --CurrentSelection;
@@ -169,8 +167,6 @@ bool TicTacToe::Game::Get_User_Player_Choice()
         else if (KeyPress == 'q')
             return true;
     }
-
-    return false;
 }
 
 bool TicTacToe::Game::Get_AI_Difficulty()
@@ -200,7 +196,7 @@ bool TicTacToe::Game::Get_AI_Difficulty()
         if (KeyPress == '\r' && CurrentSelection == 0)
         {
             CurrentSelection == 0 ? m_AIDifficulty = "EASY" : m_AIDifficulty = "HARD";
-            break;
+            return false;
         }
         else if (KeyPress == 72) // up arrow key
             CurrentSelection == 0 ? CurrentSelection = 1 : --CurrentSelection;
@@ -209,8 +205,6 @@ bool TicTacToe::Game::Get_AI_Difficulty()
         else if (KeyPress == 'q')
             return true;
     }
-
-    return false;
 }
 
 bool TicTacToe::Game::Game_Over()
@@ -310,17 +304,13 @@ bool TicTacToe::Game::Execute_Next_User_Command(void)
         {
             m_GameGrid[Row][Column] = m_CurrentPlayer;
             m_MovesRemaining.erase(CommandPosition);
-            break;
+            m_NumberOfTurns++;
+            Set_Cursor_Visibility(m_ConsoleHandle, false);
+            return false;
         }
         else
             KeyPress = 0;
     }
-
-    Set_Cursor_Visibility(m_ConsoleHandle, false);
-
-    m_NumberOfTurns++;
-
-    return false;
 }
 
 void TicTacToe::Game::Execute_Next_AI_Command(void)
