@@ -14,40 +14,14 @@
 #include <algorithm>
 #include <conio.h>
 #include "terminal.hpp"
+#include "game.hpp"
 #include "battleships.hpp"
 
-void Battleships::Play(const HANDLE &ConsoleHandle)
-{
-    Battleships::Game GameObject(ConsoleHandle);
+Battleships::Battleships(const HANDLE &ConsoleHandle) : m_ConsoleHandle(ConsoleHandle) {}
 
-    while (true)
-    {
-        if (GameObject.Setup_Game()) // if true, quit to main menu
-            return;
+Battleships::~Battleships() {}
 
-        while (!GameObject.Game_Over())
-        {
-            GameObject.Toggle_Current_Player();
-
-            if (GameObject.Next_Turn_Is_User())
-            {
-                if (GameObject.Execute_Next_User_Command()) // if true, quit to main menu
-                    return;
-            }
-            else
-                GameObject.Execute_Next_AI_Command();
-        }
-
-        if (GameObject.Display_Game_Over_Message()) // if true, quit to main menu
-            return;
-    }
-}
-
-Battleships::Game::Game(const HANDLE &ConsoleHandle) : m_ConsoleHandle(ConsoleHandle) {}
-
-Battleships::Game::~Game() {}
-
-bool Battleships::Game::Setup_Game(void)
+bool Battleships::Setup_Game(void)
 {
     m_MovesRemainingOne.clear();
     m_MovesRemainingTwo.clear();
@@ -105,28 +79,172 @@ bool Battleships::Game::Setup_Game(void)
     return false;
 }
 
-bool Battleships::Game::Get_Number_Of_Players(void)
+bool Battleships::Game_Over(void)
 {
-    std::string CommonString = Get_Game_Display();
-    CommonString += New_Line(" Please select the number of human players:                                                                                                        ");
+    bool PlayerOneShipsPresent = false;
+    for (int i = 0; i < 10; i++)
+        for (int j = 0; j < 10; j++)
+            if (m_BoardOne[i][j] == 'C' || m_BoardOne[i][j] == 'B' || m_BoardOne[i][j] == 'D' || m_BoardOne[i][j] == 'S' || m_BoardOne[i][j] == 'P')
+                PlayerOneShipsPresent = true;
 
-    std::string CaseZero = CommonString;
-    CaseZero += New_Line(BLUE + " > 0                                                                                                                                               " + WHITE);
-    CaseZero += New_Line("   1                                                                                                                                               ");
-    CaseZero += Empty_Line() + Empty_Line() + Bottom_Line() + Bottom_Bar();
+    bool PlayerTwoShipsPresent = false;
+    for (int i = 0; i < 10; i++)
+        for (int j = 0; j < 10; j++)
+            if (m_BoardTwo[i][j] == 'C' || m_BoardTwo[i][j] == 'B' || m_BoardTwo[i][j] == 'D' || m_BoardTwo[i][j] == 'S' || m_BoardTwo[i][j] == 'P')
+                PlayerTwoShipsPresent = true;
 
-    std::string CaseOne = CommonString;
-    CaseOne += New_Line("   0                                                                                                                                               ");
-    CaseOne += New_Line(BLUE + " > 1                                                                                                                                               " + WHITE);
-    CaseOne += Empty_Line() + Empty_Line() + Bottom_Line() + Bottom_Bar();
+    !PlayerOneShipsPresent || !PlayerTwoShipsPresent ? m_GameOver = true : m_GameOver = false;
+    return m_GameOver;
+}
+
+void Battleships::Toggle_Current_Player(void)
+{
+    m_CurrentPlayer == "Player One" ? m_CurrentPlayer = "Player Two" : m_CurrentPlayer = "Player One";
+}
+
+bool Battleships::Next_Turn_Is_User(void)
+{
+    return m_NumberOfPlayers == 1 && m_CurrentPlayer == "Player One" ? true : false;
+}
+
+bool Battleships::Execute_Next_User_Command(void)
+{
+    std::string Output = Get_Game_Display();
+    Output += New_Line(" Player One, please enter your next command!                                                                                                       ");
+    Output += Empty_Line(m_Width) + Empty_Line(m_Width) + Empty_Line(m_Width) + Empty_Line(m_Width) + Bottom_Line(m_Width);
+    Output += Box(m_Width, "                                                               q = quit to main menu                                                               ");
+
+    Output_To_Terminal(Output);
+
+    int KeyPress, Command, Row = m_PreviousCommand / 10, Column = m_PreviousCommand % 10;
+
+    Set_Cursor_Visibility(m_ConsoleHandle, true);
+
+    while (true)
+    {
+        while (true)
+        {
+            COORD CursorPosition;
+            CursorPosition.X = 106 + Column * 4;
+            CursorPosition.Y = 8 + Row * 2;
+            SetConsoleCursorPosition(m_ConsoleHandle, CursorPosition);
+
+            KeyPress = _getch();
+
+            if (KeyPress == '\r')
+                break;
+            else if (KeyPress == 72) // up arrow key
+                Row == 0 ? Row = 9 : --Row;
+            else if (KeyPress == 80) // down arrow key
+                Row == 9 ? Row = 0 : ++Row;
+            else if (KeyPress == 75) // left arrow key
+                Column == 0 ? Column = 9 : --Column;
+            else if (KeyPress == 77) // right arrow key
+                Column == 9 ? Column = 0 : ++Column;
+            else if (KeyPress == 'q')
+            {
+                Set_Cursor_Visibility(m_ConsoleHandle, false);
+                return true;
+            }
+        }
+
+        Command = Row * 10 + Column;
+        auto CommandPosition = std::find(m_MovesRemainingOne.begin(), m_MovesRemainingOne.end(), Command);
+
+        if (CommandPosition != m_MovesRemainingOne.end())
+        {
+            if (m_BoardTwo[Row][Column] == 'C' || m_BoardTwo[Row][Column] == 'B' || m_BoardTwo[Row][Column] == 'D' || m_BoardTwo[Row][Column] == 'S' || m_BoardTwo[Row][Column] == 'P')
+            {
+                m_ShipsRemainingTwo[m_BoardTwo[Row][Column]]--;
+                m_BoardTwo[Row][Column] = 'X';
+            }
+            else
+                m_BoardTwo[Row][Column] = '.';
+
+            m_PreviousCommand = Command;
+
+            m_NumberOfTurns++;
+
+            m_MovesRemainingOne.erase(CommandPosition);
+
+            Set_Cursor_Visibility(m_ConsoleHandle, false);
+
+            return false;
+        }
+        else
+            KeyPress = 0;
+    }
+}
+
+void Battleships::Execute_Next_AI_Command(void)
+{
+    if (m_CurrentPlayer == "Player One")
+    {
+        int Command = m_MovesRemainingOne[std::rand() % m_MovesRemainingOne.size()];
+        int Row = Command / 10, Column = Command % 10;
+
+        if (m_BoardTwo[Row][Column] == 'C' || m_BoardTwo[Row][Column] == 'B' || m_BoardTwo[Row][Column] == 'D' || m_BoardTwo[Row][Column] == 'S' || m_BoardTwo[Row][Column] == 'P')
+        {
+            m_ShipsRemainingTwo[m_BoardTwo[Row][Column]]--;
+            m_BoardTwo[Row][Column] = 'X';
+        }
+        else
+            m_BoardTwo[Row][Column] = '.';
+
+        m_MovesRemainingOne.erase(std::find(m_MovesRemainingOne.begin(), m_MovesRemainingOne.end(), Command));
+    }
+
+    else
+    {
+        int Command = m_MovesRemainingTwo[std::rand() % m_MovesRemainingTwo.size()];
+        int Row = Command / 10, Column = Command % 10;
+
+        if (m_BoardOne[Row][Column] == 'C' || m_BoardOne[Row][Column] == 'B' || m_BoardOne[Row][Column] == 'D' || m_BoardOne[Row][Column] == 'S' || m_BoardOne[Row][Column] == 'P')
+        {
+            m_ShipsRemainingOne[m_BoardOne[Row][Column]]--;
+            m_BoardOne[Row][Column] = 'X';
+        }
+        else
+            m_BoardOne[Row][Column] = '.';
+
+        m_MovesRemainingTwo.erase(std::find(m_MovesRemainingTwo.begin(), m_MovesRemainingTwo.end(), Command));
+    }
+
+    m_NumberOfTurns++;
+}
+
+bool Battleships::Display_Game_Over_Message(void)
+{
+    std::string Output = Get_Game_Display();
+    Output += New_Line("                                                                     GAME OVER                                                                     ") + Empty_Line(m_Width);
+    Output += New_Line("                                                  " + m_CurrentPlayer + " has won! The game lasted " + std::to_string(m_NumberOfTurns) + " turns.                                                   ");
+    Output += Empty_Line(m_Width) + New_Line("                                                Press 'Q' to quit OR any other key to play again...                                                ") + Bottom_Line(m_Width);
+    Output += Box(m_Width, "                                                               q = quit to main menu                                                               ");
+
+    Output_To_Terminal(Output);
+
+    return _getch() == 'q' ? true : false;
+}
+
+bool Battleships::Get_Number_Of_Players(void)
+{
+    std::array<std::string, 2> Options;
+    std::string GameDisplay = Get_Game_Display() + New_Line(" Please select the number of human players:                                                                                                        ");
+
+    Options[0] = GameDisplay;
+    Options[0] += New_Line(BLUE + " > 0                                                                                                                                               " + WHITE);
+    Options[0] += New_Line("   1                                                                                                                                               ");
+    Options[0] += Empty_Line(m_Width) + Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "                                                               q = quit to main menu                                                               ");
+
+    Options[1] = GameDisplay;
+    Options[1] += New_Line("   0                                                                                                                                               ");
+    Options[1] += New_Line(BLUE + " > 1                                                                                                                                               " + WHITE);
+    Options[1] += Empty_Line(m_Width) + Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "                                                               q = quit to main menu                                                               ");
 
     int KeyPress = 0, CurrentSelection = 0;
     while (true)
     {
-        if (CurrentSelection == 0)
-            Output_To_Terminal(CaseZero);
-        else if (CurrentSelection == 1)
-            Output_To_Terminal(CaseOne);
+        Output_To_Terminal(Options[CurrentSelection]);
 
         KeyPress = _getch();
 
@@ -144,28 +262,25 @@ bool Battleships::Game::Get_Number_Of_Players(void)
     }
 }
 
-bool Battleships::Game::Get_AI_Difficulty(void)
+bool Battleships::Get_AI_Difficulty(void)
 {
-    std::string CommonString = Get_Game_Display();
-    CommonString += New_Line(" Please select the AI difficulty:                                                                                                                  ");
+    std::array<std::string, 2> Options;
+    std::string GameDisplay = Get_Game_Display() + New_Line(" Please select the AI difficulty:                                                                                                                  ");
 
-    std::string CaseZero = CommonString;
-    CaseZero += New_Line(BLUE + " > EASY                                                                                                                                            " + WHITE);
-    CaseZero += New_Line("   HARD (Coming Soon!)                                                                                                                             ");
-    CaseZero += Empty_Line() + Empty_Line() + Bottom_Line() + Bottom_Bar();
+    Options[0] = GameDisplay;
+    Options[0] += New_Line(BLUE + " > EASY                                                                                                                                            " + WHITE);
+    Options[0] += New_Line("   HARD (Coming Soon!)                                                                                                                             ");
+    Options[0] += Empty_Line(m_Width) + Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "                                                               q = quit to main menu                                                               ");
 
-    std::string CaseOne = CommonString;
-    CaseOne += New_Line("   EASY                                                                                                                                            ");
-    CaseOne += New_Line(BLUE + " > HARD (Coming Soon!)                                                                                                                             " + WHITE);
-    CaseOne += Empty_Line() + Empty_Line() + Bottom_Line() + Bottom_Bar();
+    Options[1] = GameDisplay;
+    Options[1] += New_Line("   EASY                                                                                                                                            ");
+    Options[1] += New_Line(BLUE + " > HARD (Coming Soon!)                                                                                                                             " + WHITE);
+    Options[1] += Empty_Line(m_Width) + Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "                                                               q = quit to main menu                                                               ");
 
     int KeyPress = 0, CurrentSelection = 0;
     while (true)
     {
-        if (CurrentSelection == 0)
-            Output_To_Terminal(CaseZero);
-        else if (CurrentSelection == 1)
-            Output_To_Terminal(CaseOne);
+        Output_To_Terminal(Options[CurrentSelection]);
 
         KeyPress = _getch();
 
@@ -183,7 +298,7 @@ bool Battleships::Game::Get_AI_Difficulty(void)
     }
 }
 
-bool Battleships::Game::Get_User_Ship_Positions(void)
+bool Battleships::Get_User_Ship_Positions(void)
 {
     std::vector<std::string> ShipInstructions = {
         "                                                 Please enter the 5 grid locations for the Carrier                                                 ",
@@ -205,7 +320,8 @@ bool Battleships::Game::Get_User_Ship_Positions(void)
         for (int j = 0; j < ShipSizes[i]; j++) // for each ship grid locations
         {
             std::string Output = Get_Game_Display();
-            Output += New_Line(ShipInstructions[i]) + Empty_Line() + Empty_Line() + Empty_Line() + Empty_Line() + Bottom_Line() + Bottom_Bar();
+            Output += New_Line(ShipInstructions[i]) + Empty_Line(m_Width) + Empty_Line(m_Width) + Empty_Line(m_Width) + Empty_Line(m_Width) + Bottom_Line(m_Width);
+            Output += Box(m_Width, "                                                               q = quit to main menu                                                               ");
 
             Output_To_Terminal(Output);
 
@@ -249,7 +365,8 @@ bool Battleships::Game::Get_User_Ship_Positions(void)
                         m_BoardOne[ShipRows.back()][ShipColumns.back()] = ' ';
 
                         Output = Get_Game_Display();
-                        Output += New_Line(ShipInstructions[i]) + Empty_Line() + Empty_Line() + Empty_Line() + Empty_Line() + Bottom_Line() + Bottom_Bar();
+                        Output += New_Line(ShipInstructions[i]) + Empty_Line(m_Width) + Empty_Line(m_Width) + Empty_Line(m_Width) + Empty_Line(m_Width) + Bottom_Line(m_Width);
+                        Output += Box(m_Width, "                                                               q = quit to main menu                                                               ");
 
                         Output_To_Terminal(Output);
 
@@ -357,7 +474,7 @@ bool Battleships::Game::Get_User_Ship_Positions(void)
     return false;
 }
 
-void Battleships::Game::Get_AI_Ship_Positions(std::array<std::array<char, 10>, 10> &AIBoard)
+void Battleships::Get_AI_Ship_Positions(std::array<std::array<char, 10>, 10> &AIBoard)
 {
     std::vector<int> ShipSizes = {5, 4, 3, 3, 2};
     std::vector<char> ShipLetters = {'C', 'B', 'D', 'S', 'P'};
@@ -422,163 +539,13 @@ void Battleships::Game::Get_AI_Ship_Positions(std::array<std::array<char, 10>, 1
     }
 }
 
-bool Battleships::Game::Game_Over(void)
+std::string Battleships::Get_Game_Display(void)
 {
-    bool PlayerOneShipsPresent = false;
-    for (int i = 0; i < 10; i++)
-        for (int j = 0; j < 10; j++)
-            if (m_BoardOne[i][j] == 'C' || m_BoardOne[i][j] == 'B' || m_BoardOne[i][j] == 'D' || m_BoardOne[i][j] == 'S' || m_BoardOne[i][j] == 'P')
-                PlayerOneShipsPresent = true;
-
-    bool PlayerTwoShipsPresent = false;
-    for (int i = 0; i < 10; i++)
-        for (int j = 0; j < 10; j++)
-            if (m_BoardTwo[i][j] == 'C' || m_BoardTwo[i][j] == 'B' || m_BoardTwo[i][j] == 'D' || m_BoardTwo[i][j] == 'S' || m_BoardTwo[i][j] == 'P')
-                PlayerTwoShipsPresent = true;
-
-    !PlayerOneShipsPresent || !PlayerTwoShipsPresent ? m_GameOver = true : m_GameOver = false;
-    return m_GameOver;
-}
-
-void Battleships::Game::Toggle_Current_Player(void)
-{
-    m_CurrentPlayer == "Player One" ? m_CurrentPlayer = "Player Two" : m_CurrentPlayer = "Player One";
-}
-
-bool Battleships::Game::Next_Turn_Is_User(void)
-{
-    return m_NumberOfPlayers == 1 && m_CurrentPlayer == "Player One" ? true : false;
-}
-
-bool Battleships::Game::Execute_Next_User_Command(void)
-{
-    std::string Output = Get_Game_Display();
-    Output += New_Line(" Player One, please enter your next command!                                                                                                       ");
-    Output += Empty_Line() + Empty_Line() + Empty_Line() + Empty_Line() + Bottom_Line() + Bottom_Bar();
-
-    Output_To_Terminal(Output);
-
-    int KeyPress, Command, Row = m_PreviousCommand / 10, Column = m_PreviousCommand % 10;
-
-    Set_Cursor_Visibility(m_ConsoleHandle, true);
-
-    while (true)
-    {
-        while (true)
-        {
-            COORD CursorPosition;
-            CursorPosition.X = 106 + Column * 4;
-            CursorPosition.Y = 8 + Row * 2;
-            SetConsoleCursorPosition(m_ConsoleHandle, CursorPosition);
-
-            KeyPress = _getch();
-
-            if (KeyPress == '\r')
-                break;
-            else if (KeyPress == 72) // up arrow key
-                Row == 0 ? Row = 9 : --Row;
-            else if (KeyPress == 80) // down arrow key
-                Row == 9 ? Row = 0 : ++Row;
-            else if (KeyPress == 75) // left arrow key
-                Column == 0 ? Column = 9 : --Column;
-            else if (KeyPress == 77) // right arrow key
-                Column == 9 ? Column = 0 : ++Column;
-            else if (KeyPress == 'q')
-            {
-                Set_Cursor_Visibility(m_ConsoleHandle, false);
-                return true;
-            }
-        }
-
-        Command = Row * 10 + Column;
-        auto CommandPosition = std::find(m_MovesRemainingOne.begin(), m_MovesRemainingOne.end(), Command);
-
-        if (CommandPosition != m_MovesRemainingOne.end())
-        {
-            if (m_BoardTwo[Row][Column] == 'C' || m_BoardTwo[Row][Column] == 'B' || m_BoardTwo[Row][Column] == 'D' || m_BoardTwo[Row][Column] == 'S' || m_BoardTwo[Row][Column] == 'P')
-            {
-                m_ShipsRemainingTwo[m_BoardTwo[Row][Column]]--;
-                m_BoardTwo[Row][Column] = 'X';
-            }
-            else
-                m_BoardTwo[Row][Column] = '.';
-
-            m_PreviousCommand = Command;
-
-            m_NumberOfTurns++;
-
-            m_MovesRemainingOne.erase(CommandPosition);
-
-            Set_Cursor_Visibility(m_ConsoleHandle, false);
-
-            return false;
-        }
-        else
-            KeyPress = 0;
-    }
-}
-
-void Battleships::Game::Execute_Next_AI_Command(void)
-{
-    if (m_CurrentPlayer == "Player One")
-    {
-        int Command = m_MovesRemainingOne[std::rand() % m_MovesRemainingOne.size()];
-        int Row = Command / 10, Column = Command % 10;
-
-        if (m_BoardTwo[Row][Column] == 'C' || m_BoardTwo[Row][Column] == 'B' || m_BoardTwo[Row][Column] == 'D' || m_BoardTwo[Row][Column] == 'S' || m_BoardTwo[Row][Column] == 'P')
-        {
-            m_ShipsRemainingTwo[m_BoardTwo[Row][Column]]--;
-            m_BoardTwo[Row][Column] = 'X';
-        }
-        else
-            m_BoardTwo[Row][Column] = '.';
-
-        m_MovesRemainingOne.erase(std::find(m_MovesRemainingOne.begin(), m_MovesRemainingOne.end(), Command));
-    }
-
-    else
-    {
-        int Command = m_MovesRemainingTwo[std::rand() % m_MovesRemainingTwo.size()];
-        int Row = Command / 10, Column = Command % 10;
-
-        if (m_BoardOne[Row][Column] == 'C' || m_BoardOne[Row][Column] == 'B' || m_BoardOne[Row][Column] == 'D' || m_BoardOne[Row][Column] == 'S' || m_BoardOne[Row][Column] == 'P')
-        {
-            m_ShipsRemainingOne[m_BoardOne[Row][Column]]--;
-            m_BoardOne[Row][Column] = 'X';
-        }
-        else
-            m_BoardOne[Row][Column] = '.';
-
-        m_MovesRemainingTwo.erase(std::find(m_MovesRemainingTwo.begin(), m_MovesRemainingTwo.end(), Command));
-    }
-
-    m_NumberOfTurns++;
-}
-
-bool Battleships::Game::Display_Game_Over_Message(void)
-{
-    std::string Output = Get_Game_Display();
-    Output += New_Line("                                                                     GAME OVER                                                                     ") + Empty_Line();
-    Output += New_Line("                                                  " + m_CurrentPlayer + " has won! The game lasted " + std::to_string(m_NumberOfTurns) + " turns.                                                   ");
-    Output += Empty_Line() + New_Line("                                                Press 'Q' to quit OR any other key to play again...                                                ");
-    Output += Bottom_Line() + Bottom_Bar();
-
-    Output_To_Terminal(Output);
-
-    return _getch() == 'q' ? true : false;
-}
-
-std::string Battleships::Game::Get_Game_Display(void)
-{
-    std::string Output;
-
     // Top bar
-    Output += WHITE + Top_Line();
-    Output += New_Line(RED + "                                                                    Battleships                                                                    " + WHITE);
-    Output += Bottom_Line();
+    std::string Output = WHITE + Box(m_Width, "                                                                    Battleships                                                                    ");
 
     // Main game box
-    Output += Top_Line();
+    Output += Top_Line(m_Width);
 
     // Top row and letter co-ordinates of both boards
     Output += New_Line("                    Player One                                                                                       Player Two                    ");
@@ -822,44 +789,7 @@ std::string Battleships::Game::Get_Game_Display(void)
         if (i == 0)
             Output += "                                                   ";
     }
-    Output += std::string("   ") + (char)186 + "\n" + Empty_Line();
+    Output += std::string("   ") + (char)186 + "\n" + Empty_Line(147);
 
     return Output;
-}
-
-std::string Battleships::Game::New_Line(const std::string &Input)
-{
-    return (char)186 + Input + (char)186 + "\n";
-}
-
-std::string Battleships::Game::Empty_Line(void)
-{
-    std::string Output;
-    Output += (char)186;
-    Output.insert(Output.size(), 147, ' ');
-    Output += (char)186;
-    return Output + "\n";
-}
-
-std::string Battleships::Game::Top_Line(void)
-{
-    std::string Output;
-    Output += (char)201;
-    Output.insert(Output.size(), 147, (char)205);
-    Output += (char)187;
-    return Output + "\n";
-}
-
-std::string Battleships::Game::Bottom_Line(void)
-{
-    std::string Output;
-    Output += (char)200;
-    Output.insert(Output.size(), 147, (char)205);
-    Output += (char)188;
-    return Output + "\n";
-}
-
-std::string Battleships::Game::Bottom_Bar(void)
-{
-    return Top_Line() + New_Line(RED + "                                                               q = quit to main menu                                                               " + WHITE) + Bottom_Line();
 }

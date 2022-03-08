@@ -12,11 +12,12 @@
 #include <conio.h>
 #include "terminal.hpp"
 #include "mainmenu.hpp"
+#include "game.hpp"
 #include "tictactoe.hpp"
 #include "hangman.hpp"
 #include "battleships.hpp"
 
-void MainMenu::Run()
+void MainMenu::Run(void)
 {
     HANDLE ConsoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
     if (ConsoleHandle == INVALID_HANDLE_VALUE)
@@ -24,21 +25,45 @@ void MainMenu::Run()
 
     Set_Cursor_Visibility(ConsoleHandle, false);
 
+    std::array<std::string, 3> Options;
+
+    Options[0] = WHITE + Box(30, "        Terminal-Games        ") + Top_Line(30);
+    Options[0] += New_Line(BLUE + "       > Tic Tac Toe          " + WHITE) + Empty_Line(30);
+    Options[0] += New_Line("           Hangman            ") + Empty_Line(30);
+    Options[0] += New_Line("         Battleships          ") + Bottom_Line(30);
+    Options[0] += Box(30, "           q = quit           ") + RESET;
+
+    Options[1] = WHITE + Box(30, "        Terminal-Games        ") + Top_Line(30);
+    Options[1] += New_Line("         Tic Tac Toe          ") + Empty_Line(30);
+    Options[1] += New_Line(BLUE + "         > Hangman            " + WHITE) + Empty_Line(30);
+    Options[1] += New_Line("         Battleships          ") + Bottom_Line(30);
+    Options[1] += Box(30, "           q = quit           ") + RESET;
+
+    Options[2] = WHITE + Box(30, "        Terminal-Games        ") + Top_Line(30);
+    Options[2] += New_Line("         Tic Tac Toe          ") + Empty_Line(30);
+    Options[2] += New_Line("           Hangman            ") + Empty_Line(30);
+    Options[2] += New_Line(BLUE + "       > Battleships          " + WHITE) + Bottom_Line(30);
+    Options[2] += Box(30, "           q = quit           ") + RESET;
+
+    TicTacToe TicTacToeObject(ConsoleHandle);
+    Hangman HangmanObject(ConsoleHandle);
+    Battleships BattleshipsObject(ConsoleHandle);
+
     int KeyPress = 0, CurrentSelection = 0;
     while (true)
     {
-        Output_To_Terminal(MainMenu::Get_Main_Menu(CurrentSelection));
+        Output_To_Terminal(Options[CurrentSelection]);
 
         KeyPress = _getch();
 
         if (KeyPress == '\r')
         {
             if (CurrentSelection == 0)
-                TicTacToe::Play(ConsoleHandle);
+                Play(TicTacToeObject);
             else if (CurrentSelection == 1)
-                Hangman::Play(ConsoleHandle);
+                Play(HangmanObject);
             else if (CurrentSelection == 2)
-                Battleships::Play(ConsoleHandle);
+                Play(BattleshipsObject);
         }
         else if (KeyPress == 72) // up arrow key
             CurrentSelection == 0 ? CurrentSelection = 2 : --CurrentSelection;
@@ -51,65 +76,4 @@ void MainMenu::Run()
             return;
         }
     }
-}
-
-std::string MainMenu::Get_Main_Menu(const int &CurrentSelection)
-{
-    std::string Output;
-
-    // Top bar
-    Output += WHITE + Top_Line() + New_Line(RED + "        Terminal-Games        " + WHITE) + Bottom_Line();
-
-    // Centre game list
-    if (CurrentSelection == 0)
-        Output += Top_Line() + New_Line(BLUE + "       > Tic Tac Toe          " + WHITE) + Empty_Line();
-    else
-        Output += Top_Line() + New_Line("         Tic Tac Toe          ") + Empty_Line();
-
-    if (CurrentSelection == 1)
-        Output += New_Line(BLUE + "         > Hangman            " + WHITE) + Empty_Line();
-    else
-        Output += New_Line("           Hangman            ") + Empty_Line();
-
-    if (CurrentSelection == 2)
-        Output += New_Line(BLUE + "       > Battleships          " + WHITE) + Bottom_Line();
-    else
-        Output += New_Line("         Battleships          ") + Bottom_Line();
-
-    // Bottom bar
-    Output += Top_Line() + New_Line(RED + "           q = quit           " + WHITE) + Bottom_Line() + RESET;
-
-    return Output;
-}
-
-std::string MainMenu::New_Line(const std::string &Input)
-{
-    return (char)186 + Input + (char)186 + "\n";
-}
-
-std::string MainMenu::Empty_Line(void)
-{
-    std::string Output;
-    Output += (char)186;
-    Output.insert(Output.size(), 30, ' ');
-    Output += (char)186;
-    return Output + "\n";
-}
-
-std::string MainMenu::Top_Line(void)
-{
-    std::string Output;
-    Output += (char)201;
-    Output.insert(Output.size(), 30, (char)205);
-    Output += (char)187;
-    return Output + "\n";
-}
-
-std::string MainMenu::Bottom_Line(void)
-{
-    std::string Output;
-    Output += (char)200;
-    Output.insert(Output.size(), 30, (char)205);
-    Output += (char)188;
-    return Output + "\n";
 }

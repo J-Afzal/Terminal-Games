@@ -55,3 +55,40 @@ void Set_Cursor_Visibility(const HANDLE &ConsoleHandle, const bool &Visibility)
     CursorInfo.bVisible = Visibility;
     SetConsoleCursorInfo(ConsoleHandle, &CursorInfo);
 }
+
+std::string New_Line(const std::string &Input)
+{
+    return (char)186 + Input + (char)186 + "\n";
+}
+
+std::string Empty_Line(const int &Width)
+{
+    std::string Output;
+    Output += (char)186;
+    Output.insert(Output.size(), Width, ' ');
+    Output += (char)186;
+    return Output + "\n";
+}
+
+std::string Top_Line(const int &Width)
+{
+    std::string Output;
+    Output += (char)201;
+    Output.insert(Output.size(), Width, (char)205);
+    Output += (char)187;
+    return Output + "\n";
+}
+
+std::string Bottom_Line(const int &Width)
+{
+    std::string Output;
+    Output += (char)200;
+    Output.insert(Output.size(), Width, (char)205);
+    Output += (char)188;
+    return Output + "\n";
+}
+
+std::string Box(const int &Width, const std::string &Input)
+{
+    return Top_Line(Width) + New_Line(RED + Input + WHITE) + Bottom_Line(Width);
+}
