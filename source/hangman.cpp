@@ -114,7 +114,7 @@ bool Hangman::Execute_Next_User_Command(void)
 
         KeyPress = _getch();
 
-        if (KeyPress == '\r')
+        if (KeyPress == '\r') // enter key
         {
             Check_Guess_And_Update_Current_Guess(m_MovesRemaining[CurrentSelection]);
             return false;
@@ -171,19 +171,19 @@ bool Hangman::Get_Number_Of_Players(void)
     Options[0] += New_Line(BLUE + " > 0                                                          " + WHITE);
     Options[0] += New_Line("   1                                                          ");
     Options[0] += New_Line("   2                                                          ");
-    Options[0] += Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "q = quit to main menu");
+    Options[0] += Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "                    q = quit to main menu                     ");
 
     Options[1] = GameDisplay + New_Line(" Please select the number of human players:                   ");
     Options[1] += New_Line("   0                                                          ");
     Options[1] += New_Line(BLUE + " > 1                                                          " + WHITE);
     Options[1] += New_Line("   2                                                          ");
-    Options[1] += Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "q = quit to main menu");
+    Options[1] += Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "                    q = quit to main menu                     ");
 
     Options[2] = GameDisplay + New_Line(" Please select the number of human players:                   ");
     Options[2] += New_Line("   0                                                          ");
     Options[2] += New_Line("   1                                                          ");
     Options[2] += New_Line(BLUE + " > 2                                                          " + WHITE);
-    Options[2] += Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "q = quit to main menu");
+    Options[2] += Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "                    q = quit to main menu                     ");
 
     int KeyPress = 0, CurrentSelection = 0;
     while (true)
@@ -192,7 +192,7 @@ bool Hangman::Get_Number_Of_Players(void)
 
         KeyPress = _getch();
 
-        if (KeyPress == '\r')
+        if (KeyPress == '\r') // enter key
         {
             m_NumberOfPlayers = CurrentSelection;
             return false;
@@ -214,12 +214,12 @@ bool Hangman::Get_User_Player_Choice(void)
     Options[0] = GameDisplay;
     Options[0] += New_Line(BLUE + " > GUESSER                                                    " + WHITE);
     Options[0] += New_Line("   WORD SETTER                                                ");
-    Options[0] += Empty_Line(m_Width) + Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "q = quit to main menu");
+    Options[0] += Empty_Line(m_Width) + Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "                    q = quit to main menu                     ");
 
     Options[1] = GameDisplay;
     Options[1] += New_Line("   GUESSER                                                    ");
     Options[1] += New_Line(BLUE + " > WORD SETTER                                                " + WHITE);
-    Options[1] += Empty_Line(m_Width) + Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "q = quit to main menu");
+    Options[1] += Empty_Line(m_Width) + Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "                    q = quit to main menu                     ");
 
     int KeyPress = 0, CurrentSelection = 0;
     while (true)
@@ -228,7 +228,7 @@ bool Hangman::Get_User_Player_Choice(void)
 
         KeyPress = _getch();
 
-        if (KeyPress == '\r')
+        if (KeyPress == '\r') // enter key
         {
             CurrentSelection == 0 ? m_UserIsGuessing = true : m_UserIsGuessing = false;
             return false;
@@ -250,12 +250,12 @@ bool Hangman::Get_AI_Difficulty(void)
     Options[0] = GameDisplay;
     Options[0] += New_Line(BLUE + " > EASY                                                       " + WHITE);
     Options[0] += New_Line("   HARD (Coming Soon!)                                        ");
-    Options[0] += Empty_Line(m_Width) + Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "q = quit to main menu");
+    Options[0] += Empty_Line(m_Width) + Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "                    q = quit to main menu                     ");
 
     Options[1] = GameDisplay;
     Options[1] += New_Line("   EASY                                                       ");
     Options[1] += New_Line(BLUE + " > HARD (Coming Soon!)                                        " + WHITE);
-    Options[1] += Empty_Line(m_Width) + Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "q = quit to main menu");
+    Options[1] += Empty_Line(m_Width) + Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "                    q = quit to main menu                     ");
 
     int KeyPress = 0, CurrentSelection = 0;
     while (true)

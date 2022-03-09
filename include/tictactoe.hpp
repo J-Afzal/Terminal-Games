@@ -14,12 +14,13 @@
 #include <vector>
 #include <string>
 #include <Windows.h>
+#include "game.hpp"
 
 /**
  * @brief Contains all the data/functions for the Tic Tac Toe game
  *
  */
-class TicTacToe
+class TicTacToe : public Game
 {
 public:
     TicTacToe(const HANDLE &ConsoleHandle);

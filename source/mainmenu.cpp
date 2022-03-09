@@ -9,10 +9,11 @@
  *
  */
 
+#include <memory>
 #include <conio.h>
 #include "terminal.hpp"
 #include "mainmenu.hpp"
-#include "play.hpp"
+#include "game.hpp"
 #include "tictactoe.hpp"
 #include "hangman.hpp"
 #include "battleships.hpp"
@@ -26,7 +27,6 @@ void MainMenu::Run(void)
     Set_Cursor_Visibility(ConsoleHandle, false);
 
     std::array<std::string, 3> Options;
-
     Options[0] = WHITE + Box(30, "        Terminal-Games        ") + Top_Line(30);
     Options[0] += New_Line(BLUE + "       > Tic Tac Toe          " + WHITE) + Empty_Line(30);
     Options[0] += New_Line("           Hangman            ") + Empty_Line(30);
@@ -45,9 +45,10 @@ void MainMenu::Run(void)
     Options[2] += New_Line(BLUE + "       > Battleships          " + WHITE) + Bottom_Line(30);
     Options[2] += Box(30, "           q = quit           ") + RESET;
 
-    TicTacToe TicTacToeObject(ConsoleHandle);
-    Hangman HangmanObject(ConsoleHandle);
-    Battleships BattleshipsObject(ConsoleHandle);
+    std::array<std::unique_ptr<Game>, 3> Games;
+    Games[0] = std::make_unique<TicTacToe>(TicTacToe(ConsoleHandle));
+    Games[1] = std::make_unique<Hangman>(Hangman(ConsoleHandle));
+    Games[2] = std::make_unique<Battleships>(Battleships(ConsoleHandle));
 
     int KeyPress = 0, CurrentSelection = 0;
     while (true)
@@ -56,15 +57,8 @@ void MainMenu::Run(void)
 
         KeyPress = _getch();
 
-        if (KeyPress == '\r')
-        {
-            if (CurrentSelection == 0)
-                Play(TicTacToeObject);
-            else if (CurrentSelection == 1)
-                Play(HangmanObject);
-            else if (CurrentSelection == 2)
-                Play(BattleshipsObject);
-        }
+        if (KeyPress == '\r') // enter key
+            Games[CurrentSelection]->Play();
         else if (KeyPress == 72) // up arrow key
             CurrentSelection == 0 ? CurrentSelection = 2 : --CurrentSelection;
         else if (KeyPress == 80) // down arrow key

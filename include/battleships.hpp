@@ -15,12 +15,13 @@
 #include <map>
 #include <string>
 #include <Windows.h>
+#include "game.hpp"
 
 /**
  * @brief Contains all the data/functions for the Battleships game
  *
  */
-class Battleships
+class Battleships : public Game
 {
 public:
     Battleships(const HANDLE &ConsoleHandle);

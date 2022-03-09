@@ -13,12 +13,13 @@
 #include <vector>
 #include <string>
 #include <Windows.h>
+#include "game.hpp"
 
 /**
  * @brief Contains all the data/functions for the Hangman game
  *
  */
-class Hangman
+class Hangman : public Game
 {
 public:
     Hangman(const HANDLE &ConsoleHandle);

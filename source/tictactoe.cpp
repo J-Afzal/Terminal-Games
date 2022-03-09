@@ -120,7 +120,7 @@ bool TicTacToe::Execute_Next_User_Command(void)
 
             KeyPress = _getch();
 
-            if (KeyPress == '\r')
+            if (KeyPress == '\r') // enter key
                 break;
             else if (KeyPress == 72) // up arrow key
                 Row == 0 ? Row = 2 : --Row;
@@ -186,19 +186,19 @@ bool TicTacToe::Get_Number_Of_Players(void)
     Options[0] += New_Line(BLUE + " > 0                                                 " + WHITE);
     Options[0] += New_Line("   1                                                 ");
     Options[0] += New_Line("   2                                                 ");
-    Options[0] += Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "                    q = quit to main menu                     ");
+    Options[0] += Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "                q = quit to main menu                ");
 
     Options[1] = GameDisplay;
     Options[1] += New_Line("   0                                                 ");
     Options[1] += New_Line(BLUE + " > 1                                                 " + WHITE);
     Options[1] += New_Line("   2                                                 ");
-    Options[1] += Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "                    q = quit to main menu                     ");
+    Options[1] += Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "                q = quit to main menu                ");
 
     Options[2] = GameDisplay;
     Options[2] += New_Line("   0                                                 ");
     Options[2] += New_Line("   1                                                 ");
     Options[2] += New_Line(BLUE + " > 2                                                 " + WHITE);
-    Options[2] += Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "                    q = quit to main menu                     ");
+    Options[2] += Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "                q = quit to main menu                ");
 
     int KeyPress = 0, CurrentSelection = 0;
     while (true)
@@ -207,7 +207,7 @@ bool TicTacToe::Get_Number_Of_Players(void)
 
         KeyPress = _getch();
 
-        if (KeyPress == '\r')
+        if (KeyPress == '\r') // enter key
         {
             m_NumberOfPlayers = CurrentSelection;
             return false;
@@ -225,17 +225,16 @@ bool TicTacToe::Get_User_Player_Choice(void)
 {
     std::array<std::string, 3> Options;
     std::string GameDisplay = Get_Game_Display() + New_Line(" Please select the number of human players:          ");
-    ;
 
     Options[0] = GameDisplay;
     Options[0] += New_Line(BLUE + " > PLAYER X                                          " + WHITE);
     Options[0] += New_Line("   PLAYER O                                          ");
-    Options[0] += Empty_Line(m_Width) + Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "                    q = quit to main menu                     ");
+    Options[0] += Empty_Line(m_Width) + Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "                q = quit to main menu                ");
 
     Options[1] = GameDisplay;
     Options[1] += New_Line("   PLAYER X                                          ");
     Options[1] += New_Line(BLUE + " > PLAYER O                                          " + WHITE);
-    Options[1] += Empty_Line(m_Width) + Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "                    q = quit to main menu                     ");
+    Options[1] += Empty_Line(m_Width) + Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "                q = quit to main menu                ");
 
     int KeyPress = 0, CurrentSelection = 0;
     while (true)
@@ -244,7 +243,7 @@ bool TicTacToe::Get_User_Player_Choice(void)
 
         KeyPress = _getch();
 
-        if (KeyPress == '\r')
+        if (KeyPress == '\r') // enter key
         {
             CurrentSelection == 0 ? m_UserPlayerChoice = 'X' : m_UserPlayerChoice = 'O';
             return false;
@@ -266,12 +265,12 @@ bool TicTacToe::Get_AI_Difficulty(void)
     Options[0] = GameDisplay;
     Options[0] += New_Line(BLUE + " > EASY                                              " + WHITE);
     Options[0] += New_Line("   HARD (Coming Soon!)                               ");
-    Options[0] += Empty_Line(m_Width) + Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "                    q = quit to main menu                     ");
+    Options[0] += Empty_Line(m_Width) + Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "                q = quit to main menu                ");
 
     Options[1] = GameDisplay;
     Options[1] += New_Line("   EASY                                              ");
     Options[1] += New_Line(BLUE + " > HARD (Coming Soon!)                               " + WHITE);
-    Options[1] += Empty_Line(m_Width) + Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "                    q = quit to main menu                     ");
+    Options[1] += Empty_Line(m_Width) + Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "                q = quit to main menu                ");
 
     int KeyPress = 0, CurrentSelection = 0;
     while (true)

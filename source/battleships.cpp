@@ -130,7 +130,7 @@ bool Battleships::Execute_Next_User_Command(void)
 
             KeyPress = _getch();
 
-            if (KeyPress == '\r')
+            if (KeyPress == '\r') // enter key
                 break;
             else if (KeyPress == 72) // up arrow key
                 Row == 0 ? Row = 9 : --Row;
@@ -247,7 +247,7 @@ bool Battleships::Get_Number_Of_Players(void)
 
         KeyPress = _getch();
 
-        if (KeyPress == '\r')
+        if (KeyPress == '\r') // enter key
         {
             m_NumberOfPlayers = CurrentSelection;
             return false;
@@ -349,7 +349,7 @@ bool Battleships::Get_User_Ship_Positions(void)
 
                     KeyPress = _getch();
 
-                    if (KeyPress == '\r')
+                    if (KeyPress == '\r') // enter key
                         break;
                     else if (KeyPress == 72) // up arrow key
                         Row == 0 ? Row = 9 : --Row;
