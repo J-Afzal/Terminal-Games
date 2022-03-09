@@ -14,7 +14,6 @@
 #include <algorithm>
 #include <conio.h>
 #include "terminal.hpp"
-#include "game.hpp"
 #include "battleships.hpp"
 
 Battleships::Battleships(const HANDLE &ConsoleHandle) : m_ConsoleHandle(ConsoleHandle) {}
