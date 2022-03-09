@@ -12,7 +12,7 @@
 #include <conio.h>
 #include "terminal.hpp"
 #include "mainmenu.hpp"
-#include "game.hpp"
+#include "play.hpp"
 #include "tictactoe.hpp"
 #include "hangman.hpp"
 #include "battleships.hpp"
