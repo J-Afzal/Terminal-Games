@@ -1,7 +1,7 @@
 /**
- * @file game.hpp
+ * @file play.hpp
  * @author Junaid Afzal
- * @brief Templated game functions
+ * @brief Templated play function
  * @version 1.0
  * @date 08-03-2022
  *
