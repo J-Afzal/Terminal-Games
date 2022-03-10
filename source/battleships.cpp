@@ -92,8 +92,7 @@ bool Battleships::Game_Over(void)
             if (m_BoardTwo[i][j] == 'C' || m_BoardTwo[i][j] == 'B' || m_BoardTwo[i][j] == 'D' || m_BoardTwo[i][j] == 'S' || m_BoardTwo[i][j] == 'P')
                 PlayerTwoShipsPresent = true;
 
-    !PlayerOneShipsPresent || !PlayerTwoShipsPresent ? m_GameOver = true : m_GameOver = false;
-    return m_GameOver;
+    return !(PlayerOneShipsPresent && PlayerTwoShipsPresent) ? (m_GameOver = true) : (m_GameOver = false);
 }
 
 void Battleships::Toggle_Current_Player(void)
@@ -314,7 +313,7 @@ bool Battleships::Get_User_Ship_Positions(void)
     for (int i = 0; i < 5; i++) // for each ship
     {
         std::vector<int> ShipRows, ShipColumns;
-        std::string shipOrientation = "N/A";
+        std::string ShipOrientation = "N/A";
 
         for (int j = 0; j < ShipSizes[i]; j++) // for each ship grid locations
         {
@@ -420,16 +419,16 @@ bool Battleships::Get_User_Ship_Positions(void)
                         if (ShipRows.size() == 1)
                         {
                             if (RowsSame)
-                                shipOrientation = "HORIZONTAL";
+                                ShipOrientation = "HORIZONTAL";
                             else
-                                shipOrientation = "VERTICAL";
+                                ShipOrientation = "VERTICAL";
 
                             ShipRows.push_back(Row);
                             ShipColumns.push_back(Column);
                             break;
                         }
 
-                        else if (RowsSame && (shipOrientation == "HORIZONTAL") && (std::abs(Column - ShipColumns.back()) == 1))
+                        else if (RowsSame && (ShipOrientation == "HORIZONTAL") && (std::abs(Column - ShipColumns.back()) == 1))
                         {
                             // If row same then column must an increment or decrement of previous position if there is one
                             ShipRows.push_back(Row);
@@ -437,7 +436,7 @@ bool Battleships::Get_User_Ship_Positions(void)
                             break;
                         }
 
-                        else if (ColumnsSame && (shipOrientation == "VERTICAL") && (std::abs(Row - ShipRows.back()) == 1))
+                        else if (ColumnsSame && (ShipOrientation == "VERTICAL") && (std::abs(Row - ShipRows.back()) == 1))
                         {
                             // If column same then row must an increment or decrement of previous position if there is one
                             ShipRows.push_back(Row);

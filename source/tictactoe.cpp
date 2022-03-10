@@ -95,7 +95,7 @@ void TicTacToe::Toggle_Current_Player(void)
 
 bool TicTacToe::Next_Turn_Is_User(void)
 {
-    return (m_NumberOfPlayers == 2 || m_CurrentPlayer == m_UserPlayerChoice) ? true : false;
+    return m_NumberOfPlayers == 2 || m_CurrentPlayer == m_UserPlayerChoice ? true : false;
 }
 
 bool TicTacToe::Execute_Next_User_Command(void)
@@ -155,8 +155,8 @@ bool TicTacToe::Execute_Next_User_Command(void)
 void TicTacToe::Execute_Next_AI_Command(void)
 {
     int AICommand = m_MovesRemaining[std::rand() % m_MovesRemaining.size()];
-    m_MovesRemaining.erase(std::find(m_MovesRemaining.begin(), m_MovesRemaining.end(), AICommand));
     m_GameGrid[AICommand / 3][AICommand % 3] = m_CurrentPlayer;
+    m_MovesRemaining.erase(std::find(m_MovesRemaining.begin(), m_MovesRemaining.end(), AICommand));
     m_NumberOfTurns++;
 }
 

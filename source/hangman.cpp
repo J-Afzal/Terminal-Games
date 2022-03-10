@@ -337,6 +337,8 @@ void Hangman::Get_Random_Word(void)
     }
     else
         m_WordToBeGuessed = "ERROR";
+
+    Words.close();
 }
 
 void Hangman::Check_Guess_And_Update_Current_Guess(const char &Guess)
@@ -355,9 +357,8 @@ void Hangman::Check_Guess_And_Update_Current_Guess(const char &Guess)
         m_NumberOfErrors++;
     }
 
-    m_NumberOfTurns++;
-
     m_MovesRemaining.erase(std::find(m_MovesRemaining.begin(), m_MovesRemaining.end(), Guess));
+    m_NumberOfTurns++;
 }
 
 std::string Hangman::Get_Game_Display(void)
