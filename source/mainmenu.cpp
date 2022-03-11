@@ -9,8 +9,8 @@
  *
  */
 
-#include <memory>
 #include <conio.h>
+#include <memory>
 #include "terminal.hpp"
 #include "mainmenu.hpp"
 #include "game.hpp"
@@ -18,13 +18,18 @@
 #include "hangman.hpp"
 #include "battleships.hpp"
 
-void MainMenu::Run(void)
+void MainMenu::Run()
 {
     HANDLE ConsoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
     if (ConsoleHandle == INVALID_HANDLE_VALUE)
         exit(1);
 
     Set_Cursor_Visibility(ConsoleHandle, false);
+
+    // ANSI escape codes for bold text colours
+    const std::string WHITE = "\x1B[1;37m";
+    const std::string BLUE = "\x1B[1;34m";
+    const std::string RESET = "\x1B[0m";
 
     std::array<std::string, 3> Options;
     Options[0] = WHITE + Box(30, "        Terminal-Games        ") + Top_Line(30);
@@ -50,7 +55,7 @@ void MainMenu::Run(void)
     Games[1] = std::make_unique<Hangman>(Hangman(ConsoleHandle));
     Games[2] = std::make_unique<Battleships>(Battleships(ConsoleHandle));
 
-    int KeyPress = 0, CurrentSelection = 0;
+    int KeyPress, CurrentSelection = 0;
     while (true)
     {
         Output_To_Terminal(Options[CurrentSelection]);

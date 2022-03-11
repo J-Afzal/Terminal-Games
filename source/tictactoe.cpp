@@ -10,16 +10,16 @@
  */
 
 #include <algorithm>
-#include <iomanip>
+#include <chrono>
 #include <conio.h>
 #include "terminal.hpp"
 #include "tictactoe.hpp"
 
 TicTacToe::TicTacToe(const HANDLE &ConsoleHandle) : m_ConsoleHandle(ConsoleHandle) {}
 
-TicTacToe::~TicTacToe() {}
+TicTacToe::~TicTacToe() = default;
 
-bool TicTacToe::Setup_Game(void)
+bool TicTacToe::Setup_Game()
 {
     m_MovesRemaining.clear();
     m_AIDifficulty = "N/A";
@@ -27,7 +27,7 @@ bool TicTacToe::Setup_Game(void)
     m_NumberOfPlayers = -1;
     m_UserPlayerChoice = -1;
     m_WinningConditionsMet = false;
-    std::srand(std::time(0));
+    m_RandomGenerator.seed(std::chrono::system_clock::now().time_since_epoch().count());
 
     for (int i = 0, GridNumber = 0; i < 3; i++)
     {
@@ -51,7 +51,7 @@ bool TicTacToe::Setup_Game(void)
         if (Get_AI_Difficulty()) // if true, quit to main menu
             return true;
 
-    std::rand() % 2 == 0 ? m_CurrentPlayer = 'X' : m_CurrentPlayer = 'O';
+    m_RandomGenerator() % 2 == 0 ? m_CurrentPlayer = 'X' : m_CurrentPlayer = 'O';
 
     return false;
 }
@@ -59,46 +59,35 @@ bool TicTacToe::Setup_Game(void)
 bool TicTacToe::Game_Over()
 {
     // Check Horizontals
-    if (m_GameGrid[0][0] != ' ' && m_GameGrid[0][0] == m_GameGrid[0][1] && m_GameGrid[0][1] == m_GameGrid[0][2])
-        return m_WinningConditionsMet = true;
-
-    else if (m_GameGrid[1][0] != ' ' && m_GameGrid[1][0] == m_GameGrid[1][1] && m_GameGrid[1][1] == m_GameGrid[1][2])
-        return m_WinningConditionsMet = true;
-
-    else if (m_GameGrid[2][0] != ' ' && m_GameGrid[2][0] == m_GameGrid[2][1] && m_GameGrid[2][1] == m_GameGrid[2][2])
-        return m_WinningConditionsMet = true;
+    if ((m_GameGrid[0][0] != ' ' && m_GameGrid[0][0] == m_GameGrid[0][1] && m_GameGrid[0][1] == m_GameGrid[0][2])
+     || (m_GameGrid[1][0] != ' ' && m_GameGrid[1][0] == m_GameGrid[1][1] && m_GameGrid[1][1] == m_GameGrid[1][2])
+     || (m_GameGrid[2][0] != ' ' && m_GameGrid[2][0] == m_GameGrid[2][1] && m_GameGrid[2][1] == m_GameGrid[2][2])
 
     // Check verticals
-    else if (m_GameGrid[0][0] != ' ' && m_GameGrid[0][0] == m_GameGrid[1][0] && m_GameGrid[1][0] == m_GameGrid[2][0])
-        return m_WinningConditionsMet = true;
-
-    else if (m_GameGrid[0][1] != ' ' && m_GameGrid[0][1] == m_GameGrid[1][1] && m_GameGrid[1][1] == m_GameGrid[2][1])
-        return m_WinningConditionsMet = true;
-
-    else if (m_GameGrid[0][2] != ' ' && m_GameGrid[0][2] == m_GameGrid[1][2] && m_GameGrid[1][2] == m_GameGrid[2][2])
-        return m_WinningConditionsMet = true;
+     || (m_GameGrid[0][0] != ' ' && m_GameGrid[0][0] == m_GameGrid[1][0] && m_GameGrid[1][0] == m_GameGrid[2][0])
+     || (m_GameGrid[0][1] != ' ' && m_GameGrid[0][1] == m_GameGrid[1][1] && m_GameGrid[1][1] == m_GameGrid[2][1])
+     || (m_GameGrid[0][2] != ' ' && m_GameGrid[0][2] == m_GameGrid[1][2] && m_GameGrid[1][2] == m_GameGrid[2][2])
 
     // Check diagonals
-    else if (m_GameGrid[0][0] != ' ' && m_GameGrid[0][0] == m_GameGrid[1][1] && m_GameGrid[1][1] == m_GameGrid[2][2])
+     || (m_GameGrid[0][0] != ' ' && m_GameGrid[0][0] == m_GameGrid[1][1] && m_GameGrid[1][1] == m_GameGrid[2][2])
+     || (m_GameGrid[2][0] != ' ' && m_GameGrid[2][0] == m_GameGrid[1][1] && m_GameGrid[1][1] == m_GameGrid[0][2]))
         return m_WinningConditionsMet = true;
 
-    else if (m_GameGrid[2][0] != ' ' && m_GameGrid[2][0] == m_GameGrid[1][1] && m_GameGrid[1][1] == m_GameGrid[0][2])
-        return m_WinningConditionsMet = true;
-
-    return m_NumberOfTurns == 9 ? true : false;
+    else
+        return m_NumberOfTurns == 9;
 }
 
-void TicTacToe::Toggle_Current_Player(void)
+void TicTacToe::Toggle_Current_Player()
 {
     m_CurrentPlayer == 'X' ? m_CurrentPlayer = 'O' : m_CurrentPlayer = 'X';
 }
 
-bool TicTacToe::Next_Turn_Is_User(void)
+bool TicTacToe::Next_Turn_Is_User()
 {
-    return m_NumberOfPlayers == 2 || m_CurrentPlayer == m_UserPlayerChoice ? true : false;
+    return m_NumberOfPlayers == 2 || m_CurrentPlayer == m_UserPlayerChoice;
 }
 
-bool TicTacToe::Execute_Next_User_Command(void)
+bool TicTacToe::Execute_Next_User_Command()
 {
     std::string Output = Get_Game_Display();
     Output += New_Line(std::string(" Player ") + m_CurrentPlayer + ", please enter your next command!           ");
@@ -108,7 +97,8 @@ bool TicTacToe::Execute_Next_User_Command(void)
 
     Set_Cursor_Visibility(m_ConsoleHandle, true);
 
-    int KeyPress = 0, Row = m_MovesRemaining[0] / 3, Column = m_MovesRemaining[0] % 3;
+    int KeyPress, Row = m_MovesRemaining[0] / 3, Column = m_MovesRemaining[0] % 3;
+
     while (true)
     {
         while (true)
@@ -147,20 +137,18 @@ bool TicTacToe::Execute_Next_User_Command(void)
             Set_Cursor_Visibility(m_ConsoleHandle, false);
             return false;
         }
-        else
-            KeyPress = 0;
     }
 }
 
-void TicTacToe::Execute_Next_AI_Command(void)
+void TicTacToe::Execute_Next_AI_Command()
 {
-    int AICommand = m_MovesRemaining[std::rand() % m_MovesRemaining.size()];
+    int AICommand = m_MovesRemaining[m_RandomGenerator() % m_MovesRemaining.size()];
     m_GameGrid[AICommand / 3][AICommand % 3] = m_CurrentPlayer;
     m_MovesRemaining.erase(std::find(m_MovesRemaining.begin(), m_MovesRemaining.end(), AICommand));
     m_NumberOfTurns++;
 }
 
-bool TicTacToe::Display_Game_Over_Message(void)
+bool TicTacToe::Display_Game_Over_Message()
 {
     std::string Output = Get_Game_Display();
     Output += New_Line("                      GAME OVER                      ") + Empty_Line(m_Width);
@@ -174,10 +162,10 @@ bool TicTacToe::Display_Game_Over_Message(void)
 
     Output_To_Terminal(Output);
 
-    return _getch() == 'q' ? true : false;
+    return _getch() == 'q';
 }
 
-bool TicTacToe::Get_Number_Of_Players(void)
+bool TicTacToe::Get_Number_Of_Players()
 {
     std::array<std::string, 3> Options;
     std::string GameDisplay = Get_Game_Display() + New_Line(" Please select the number of human players:          ");
@@ -200,7 +188,7 @@ bool TicTacToe::Get_Number_Of_Players(void)
     Options[2] += New_Line(BLUE + " > 2                                                 " + WHITE);
     Options[2] += Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "                q = quit to main menu                ");
 
-    int KeyPress = 0, CurrentSelection = 0;
+    int KeyPress, CurrentSelection = 0;
     while (true)
     {
         Output_To_Terminal(Options[CurrentSelection]);
@@ -221,7 +209,7 @@ bool TicTacToe::Get_Number_Of_Players(void)
     }
 }
 
-bool TicTacToe::Get_User_Player_Choice(void)
+bool TicTacToe::Get_User_Player_Choice()
 {
     std::array<std::string, 3> Options;
     std::string GameDisplay = Get_Game_Display() + New_Line(" Please select the number of human players:          ");
@@ -236,7 +224,7 @@ bool TicTacToe::Get_User_Player_Choice(void)
     Options[1] += New_Line(BLUE + " > PLAYER O                                          " + WHITE);
     Options[1] += Empty_Line(m_Width) + Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "                q = quit to main menu                ");
 
-    int KeyPress = 0, CurrentSelection = 0;
+    int KeyPress, CurrentSelection = 0;
     while (true)
     {
         Output_To_Terminal(Options[CurrentSelection]);
@@ -257,7 +245,7 @@ bool TicTacToe::Get_User_Player_Choice(void)
     }
 }
 
-bool TicTacToe::Get_AI_Difficulty(void)
+bool TicTacToe::Get_AI_Difficulty()
 {
     std::array<std::string, 2> Options;
     std::string GameDisplay = Get_Game_Display() + New_Line(" Please select the AI difficulty:                    ");
@@ -272,7 +260,7 @@ bool TicTacToe::Get_AI_Difficulty(void)
     Options[1] += New_Line(BLUE + " > HARD (Coming Soon!)                               " + WHITE);
     Options[1] += Empty_Line(m_Width) + Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "                q = quit to main menu                ");
 
-    int KeyPress = 0, CurrentSelection = 0;
+    int KeyPress, CurrentSelection = 0;
     while (true)
     {
         Output_To_Terminal(Options[CurrentSelection]);
@@ -281,7 +269,8 @@ bool TicTacToe::Get_AI_Difficulty(void)
 
         if (KeyPress == '\r' && CurrentSelection == 0)
         {
-            CurrentSelection == 0 ? m_AIDifficulty = "EASY" : m_AIDifficulty = "HARD";
+            //CurrentSelection == 0 ? m_AIDifficulty = "EASY" : m_AIDifficulty = "HARD";
+            m_AIDifficulty = "EASY";
             return false;
         }
         else if (KeyPress == 72) // up arrow key
@@ -293,7 +282,7 @@ bool TicTacToe::Get_AI_Difficulty(void)
     }
 }
 
-std::string TicTacToe::Get_Game_Display(void)
+std::string TicTacToe::Get_Game_Display()
 {
     // Top bar
     std::string Output = WHITE + Box(m_Width, "                     Tic Tac Toe                     ");

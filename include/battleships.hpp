@@ -1,7 +1,7 @@
 /**
  * @file battleships.hpp
  * @author Junaid Afzal
- * @brief Battleship namespace funtions and classes
+ * @brief Battleship namespace functions and classes
  * @version 1.0
  * @date 07-11-2021
  *
@@ -11,9 +11,9 @@
 
 #pragma once
 #include <array>
-#include <vector>
 #include <map>
 #include <string>
+#include <vector>
 #include <Windows.h>
 #include "game.hpp"
 
@@ -24,7 +24,7 @@
 class Battleships : public Game
 {
 public:
-    Battleships(const HANDLE &ConsoleHandle);
+    explicit Battleships(const HANDLE &ConsoleHandle);
 
     ~Battleships();
 
@@ -34,11 +34,11 @@ public:
      * @return true, if quit to main menu
      * @return false, if continue with game
      */
-    bool Setup_Game(void);
+    bool Setup_Game() override;
 
-    bool Game_Over(void);
+    bool Game_Over() override;
 
-    void Toggle_Current_Player(void);
+    void Toggle_Current_Player() override;
 
     /**
      * @brief
@@ -46,7 +46,7 @@ public:
      * @return true, if Execute_Next_User_Command()
      * @return false, if Execute_Next_AI_Command()
      */
-    bool Next_Turn_Is_User(void);
+    bool Next_Turn_Is_User() override;
 
     /**
      * @brief The user is prompted for their next command and, if necessary,
@@ -55,13 +55,13 @@ public:
      * @return true, if quit to main menu
      * @return false, if continue with game
      */
-    bool Execute_Next_User_Command(void);
+    bool Execute_Next_User_Command() override;
 
     /**
      * @brief If AIDifficulty is set to easy, then a random valid command is chosen.
      *
      */
-    void Execute_Next_AI_Command(void);
+    void Execute_Next_AI_Command() override;
 
     /**
      * @brief The final game state is displayed and the user is promoted
@@ -70,17 +70,20 @@ public:
      * @return true, if quit to main menu
      * @return false, if continue with game
      */
-    bool Display_Game_Over_Message(void);
+    bool Display_Game_Over_Message() override;
 
 private:
-    std::array<std::array<char, 10>, 10> m_BoardOne, m_BoardTwo;
+    std::array<std::array<char, 10>, 10> m_BoardOne{}, m_BoardTwo{};
     std::vector<int> m_MovesRemainingOne, m_MovesRemainingTwo;
     std::map<char, int> m_ShipsRemainingOne, m_ShipsRemainingTwo;
     std::string m_CurrentPlayer, m_AIDifficulty;
-    int m_NumberOfPlayers, m_NumberOfTurns, m_PreviousCommand;
-    bool m_GameOver;
+    int m_NumberOfPlayers{}, m_NumberOfTurns{}, m_PreviousCommand{};
+    bool m_GameOver{};
     HANDLE m_ConsoleHandle;
     const int m_Width = 147;
+    // ANSI escape codes for bold text colours
+    const std::string WHITE = "\x1B[1;37m";
+    const std::string BLUE = "\x1B[1;34m";
 
     /**
      * @brief
@@ -88,7 +91,7 @@ private:
      * @return true, if quit to main menu
      * @return false, if continue with game
      */
-    bool Get_Number_Of_Players(void);
+    bool Get_Number_Of_Players();
 
     /**
      * @brief
@@ -96,7 +99,7 @@ private:
      * @return true, if quit to main menu
      * @return false, if continue with game
      */
-    bool Get_AI_Difficulty(void);
+    bool Get_AI_Difficulty();
 
     /**
      * @brief The user is prompted to enter sequentially increasing/decreasing co-ordinates
@@ -107,7 +110,7 @@ private:
      * @return true, if quit to main menu
      * @return false, if continue with game
      */
-    bool Get_User_Ship_Positions(void);
+    bool Get_User_Ship_Positions();
 
     /**
      * @brief The AI randomly picks the ship positions, performs error
@@ -123,5 +126,5 @@ private:
      *
      * @return std::string
      */
-    std::string Get_Game_Display(void);
+    std::string Get_Game_Display();
 };

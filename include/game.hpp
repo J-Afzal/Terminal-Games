@@ -10,6 +10,7 @@
  */
 
 #pragma once
+#include <random>
 
 /**
  * @brief Abstract game object in which all sub objects
@@ -20,25 +21,25 @@
 class Game
 {
 public:
-    virtual bool Setup_Game(void) = 0;
+    virtual bool Setup_Game() = 0;
 
-    virtual bool Game_Over(void) = 0;
+    virtual bool Game_Over() = 0;
 
-    virtual void Toggle_Current_Player(void) = 0;
+    virtual void Toggle_Current_Player() = 0;
 
-    virtual bool Next_Turn_Is_User(void) = 0;
+    virtual bool Next_Turn_Is_User() = 0;
 
-    virtual bool Execute_Next_User_Command(void) = 0;
+    virtual bool Execute_Next_User_Command() = 0;
 
-    virtual void Execute_Next_AI_Command(void) = 0;
+    virtual void Execute_Next_AI_Command() = 0;
 
-    virtual bool Display_Game_Over_Message(void) = 0;
+    virtual bool Display_Game_Over_Message() = 0;
 
     /**
      * @brief Basic game loop for all games
      *
      */
-    void Play(void)
+    void Play()
     {
         while (true)
         {
@@ -62,4 +63,7 @@ public:
                 return;
         }
     }
+
+    // Random number generator
+    std::default_random_engine m_RandomGenerator;
 };

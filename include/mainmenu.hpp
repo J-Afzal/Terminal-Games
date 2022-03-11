@@ -17,5 +17,5 @@ namespace MainMenu
      * @brief Main menu loop
      *
      */
-    void Run(void);
+    void Run();
 }

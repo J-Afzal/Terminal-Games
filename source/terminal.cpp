@@ -18,11 +18,11 @@ void Output_To_Terminal(const std::string &Output)
     std::cout << Output;
 }
 
-void Clear_Terminal(void)
+void Clear_Terminal()
 {
     // Windows API method from https://www.cplusplus.com/articles/4z18T05o
     HANDLE hStdOut;
-    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    CONSOLE_SCREEN_BUFFER_INFO consoleScreenBufferInfo;
     DWORD count;
     DWORD cellCount;
     COORD homeCoords = {0, 0};
@@ -32,16 +32,16 @@ void Clear_Terminal(void)
         exit(1);
 
     // Get the number of cells in the current buffer
-    if (!GetConsoleScreenBufferInfo(hStdOut, &csbi))
+    if (!GetConsoleScreenBufferInfo(hStdOut, &consoleScreenBufferInfo))
         exit(2);
-    cellCount = csbi.dwSize.X * csbi.dwSize.Y;
+    cellCount = consoleScreenBufferInfo.dwSize.X * consoleScreenBufferInfo.dwSize.Y;
 
     // Fill the entire buffer with spaces
     if (!FillConsoleOutputCharacter(hStdOut, (TCHAR)' ', cellCount, homeCoords, &count))
         exit(3);
 
     // Fill the entire buffer with the current colors and attributes
-    if (!FillConsoleOutputAttribute(hStdOut, csbi.wAttributes, cellCount, homeCoords, &count))
+    if (!FillConsoleOutputAttribute(hStdOut, consoleScreenBufferInfo.wAttributes, cellCount, homeCoords, &count))
         exit(4);
 
     // Move the cursor home
@@ -90,5 +90,5 @@ std::string Bottom_Line(const int &Width)
 
 std::string Box(const int &Width, const std::string &Input)
 {
-    return Top_Line(Width) + New_Line(RED + Input + WHITE) + Bottom_Line(Width);
+    return Top_Line(Width) + New_Line("\x1B[1;31m" + Input + "\x1B[1;37m") + Bottom_Line(Width); // red + input + white
 }

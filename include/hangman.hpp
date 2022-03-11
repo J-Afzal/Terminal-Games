@@ -1,7 +1,7 @@
 /**
  * @file hangman.hpp
  * @author Junaid Afzal
- * @brief Hangman namespace funtions and classes
+ * @brief Hangman namespace functions and classes
  * @version 1.0
  * @date 07-11-2021
  *
@@ -10,8 +10,8 @@
  */
 
 #pragma once
-#include <vector>
 #include <string>
+#include <vector>
 #include <Windows.h>
 #include "game.hpp"
 
@@ -22,7 +22,7 @@
 class Hangman : public Game
 {
 public:
-    Hangman(const HANDLE &ConsoleHandle);
+    explicit Hangman(const HANDLE &ConsoleHandle);
 
     ~Hangman();
 
@@ -32,11 +32,11 @@ public:
      * @return true, if quit to main menu
      * @return false, if continue with game
      */
-    bool Setup_Game(void);
+    bool Setup_Game() override;
 
-    bool Game_Over(void);
+    bool Game_Over() override;
 
-    void Toggle_Current_Player(void);
+    void Toggle_Current_Player() override;
 
     /**
      * @brief
@@ -44,7 +44,7 @@ public:
      * @return true, if Execute_Next_User_Command()
      * @return false, if Execute_Next_AI_Command()
      */
-    bool Next_Turn_Is_User(void);
+    bool Next_Turn_Is_User() override;
 
     /**
      * @brief The user is prompted for their next guess and, if necessary,
@@ -54,13 +54,13 @@ public:
      * @return true, if quit to main menu
      * @return false, if continue with game
      */
-    bool Execute_Next_User_Command(void);
+    bool Execute_Next_User_Command() override;
 
     /**
      * @brief If AIDifficulty is set to easy, then a random valid letter is chosen.
      *
      */
-    void Execute_Next_AI_Command(void);
+    void Execute_Next_AI_Command() override;
 
     /**
      * @brief The final game state is displayed and the user is promoted
@@ -69,15 +69,18 @@ public:
      * @return true, if quit to main menu
      * @return false, if continue with game
      */
-    bool Display_Game_Over_Message(void);
+    bool Display_Game_Over_Message() override;
 
 private:
     std::vector<char> m_MovesRemaining, m_IncorrectGuesses;
     std::string m_WordToBeGuessed, m_CurrentGuessOfWord, m_AIDifficulty;
-    int m_NumberOfPlayers, m_NumberOfErrors, m_NumberOfTurns;
-    bool m_GameOver, m_WinningConditionsMet, m_UserIsGuessing;
+    int m_NumberOfPlayers{}, m_NumberOfErrors{}, m_NumberOfTurns{};
+    bool m_GameOver{}, m_UserIsGuessing{};
     HANDLE m_ConsoleHandle;
     const int m_Width = 62;
+    // ANSI escape codes for bold text colours
+    const std::string WHITE = "\x1B[1;37m";
+    const std::string BLUE = "\x1B[1;34m";
 
     /**
      * @brief
@@ -85,7 +88,7 @@ private:
      * @return true, if quit to main menu
      * @return false, if continue with game
      */
-    bool Get_Number_Of_Players(void);
+    bool Get_Number_Of_Players();
 
     /**
      * @brief
@@ -93,7 +96,7 @@ private:
      * @return true, if quit to main menu
      * @return false, if continue with game
      */
-    bool Get_User_Player_Choice(void);
+    bool Get_User_Player_Choice();
 
     /**
      * @brief
@@ -101,7 +104,7 @@ private:
      * @return true, if quit to main menu
      * @return false, if continue with game
      */
-    bool Get_AI_Difficulty(void);
+    bool Get_AI_Difficulty();
 
     /**
      * @brief The user is prompted for the word to be guessed, and if necessary,
@@ -110,7 +113,7 @@ private:
      * @return true, if quit to main menu
      * @return false, if continue with game
      */
-    bool Get_Word_From_User(void);
+    bool Get_Word_From_User();
 
     /**
      * @brief A word from list of the ~1,000 most used word in English from:
@@ -118,7 +121,7 @@ private:
      *
      * @return std::string
      */
-    void Get_Random_Word(void);
+    void Get_Random_Word();
 
     /**
      * @brief updates the CurrentGuessOfWord with all occurrences of the guess,
@@ -134,5 +137,5 @@ private:
      *
      * @return std::string
      */
-    std::string Get_Game_Display(void);
+    std::string Get_Game_Display();
 };

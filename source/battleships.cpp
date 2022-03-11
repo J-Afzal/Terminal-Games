@@ -1,7 +1,7 @@
 /**
  * @file battleships.cpp
  * @author Junaid Afzal
- * @brief Implementation of battlships.hpp
+ * @brief Implementation of battleships.hpp
  * @version 1.0
  * @date 07-11-2021
  *
@@ -9,18 +9,18 @@
  *
  */
 
-#include <iostream>
-#include <iomanip>
 #include <algorithm>
+#include <chrono>
 #include <conio.h>
+#include <iostream>
 #include "terminal.hpp"
 #include "battleships.hpp"
 
 Battleships::Battleships(const HANDLE &ConsoleHandle) : m_ConsoleHandle(ConsoleHandle) {}
 
-Battleships::~Battleships() {}
+Battleships::~Battleships() = default;
 
-bool Battleships::Setup_Game(void)
+bool Battleships::Setup_Game()
 {
     m_MovesRemainingOne.clear();
     m_MovesRemainingTwo.clear();
@@ -55,7 +55,7 @@ bool Battleships::Setup_Game(void)
     m_NumberOfTurns = 0;
     m_PreviousCommand = 0;
     m_GameOver = false;
-    std::srand(std::time(0));
+    m_RandomGenerator.seed(std::chrono::system_clock::now().time_since_epoch().count());
 
     if (Get_Number_Of_Players())
         return true;
@@ -73,12 +73,12 @@ bool Battleships::Setup_Game(void)
 
     Get_AI_Ship_Positions(m_BoardTwo);
 
-    std::rand() % 2 == 0 ? m_CurrentPlayer = "Player One" : m_CurrentPlayer = "Player Two";
+    m_RandomGenerator() % 2 == 0 ? m_CurrentPlayer = "Player One" : m_CurrentPlayer = "Player Two";
 
     return false;
 }
 
-bool Battleships::Game_Over(void)
+bool Battleships::Game_Over()
 {
     bool PlayerOneShipsPresent = false;
     for (int i = 0; i < 10; i++)
@@ -95,17 +95,17 @@ bool Battleships::Game_Over(void)
     return !(PlayerOneShipsPresent && PlayerTwoShipsPresent) ? (m_GameOver = true) : (m_GameOver = false);
 }
 
-void Battleships::Toggle_Current_Player(void)
+void Battleships::Toggle_Current_Player()
 {
     m_CurrentPlayer == "Player One" ? m_CurrentPlayer = "Player Two" : m_CurrentPlayer = "Player One";
 }
 
-bool Battleships::Next_Turn_Is_User(void)
+bool Battleships::Next_Turn_Is_User()
 {
-    return m_NumberOfPlayers == 1 && m_CurrentPlayer == "Player One" ? true : false;
+    return m_NumberOfPlayers == 1 && m_CurrentPlayer == "Player One";
 }
 
-bool Battleships::Execute_Next_User_Command(void)
+bool Battleships::Execute_Next_User_Command()
 {
     std::string Output = Get_Game_Display();
     Output += New_Line(" Player One, please enter your next command!                                                                                                       ");
@@ -169,16 +169,14 @@ bool Battleships::Execute_Next_User_Command(void)
 
             return false;
         }
-        else
-            KeyPress = 0;
     }
 }
 
-void Battleships::Execute_Next_AI_Command(void)
+void Battleships::Execute_Next_AI_Command()
 {
     if (m_CurrentPlayer == "Player One")
     {
-        int Command = m_MovesRemainingOne[std::rand() % m_MovesRemainingOne.size()];
+        int Command = m_MovesRemainingOne[m_RandomGenerator() % m_MovesRemainingOne.size()];
         int Row = Command / 10, Column = Command % 10;
 
         if (m_BoardTwo[Row][Column] == 'C' || m_BoardTwo[Row][Column] == 'B' || m_BoardTwo[Row][Column] == 'D' || m_BoardTwo[Row][Column] == 'S' || m_BoardTwo[Row][Column] == 'P')
@@ -194,7 +192,7 @@ void Battleships::Execute_Next_AI_Command(void)
 
     else
     {
-        int Command = m_MovesRemainingTwo[std::rand() % m_MovesRemainingTwo.size()];
+        int Command = m_MovesRemainingTwo[m_RandomGenerator() % m_MovesRemainingTwo.size()];
         int Row = Command / 10, Column = Command % 10;
 
         if (m_BoardOne[Row][Column] == 'C' || m_BoardOne[Row][Column] == 'B' || m_BoardOne[Row][Column] == 'D' || m_BoardOne[Row][Column] == 'S' || m_BoardOne[Row][Column] == 'P')
@@ -211,7 +209,7 @@ void Battleships::Execute_Next_AI_Command(void)
     m_NumberOfTurns++;
 }
 
-bool Battleships::Display_Game_Over_Message(void)
+bool Battleships::Display_Game_Over_Message()
 {
     std::string Output = Get_Game_Display();
     Output += New_Line("                                                                     GAME OVER                                                                     ") + Empty_Line(m_Width);
@@ -221,10 +219,10 @@ bool Battleships::Display_Game_Over_Message(void)
 
     Output_To_Terminal(Output);
 
-    return _getch() == 'q' ? true : false;
+    return _getch() == 'q';
 }
 
-bool Battleships::Get_Number_Of_Players(void)
+bool Battleships::Get_Number_Of_Players()
 {
     std::array<std::string, 2> Options;
     std::string GameDisplay = Get_Game_Display() + New_Line(" Please select the number of human players:                                                                                                        ");
@@ -260,7 +258,7 @@ bool Battleships::Get_Number_Of_Players(void)
     }
 }
 
-bool Battleships::Get_AI_Difficulty(void)
+bool Battleships::Get_AI_Difficulty()
 {
     std::array<std::string, 2> Options;
     std::string GameDisplay = Get_Game_Display() + New_Line(" Please select the AI difficulty:                                                                                                                  ");
@@ -296,16 +294,16 @@ bool Battleships::Get_AI_Difficulty(void)
     }
 }
 
-bool Battleships::Get_User_Ship_Positions(void)
+bool Battleships::Get_User_Ship_Positions()
 {
-    std::vector<std::string> ShipInstructions = {
+    std::array<std::string, 5> ShipInstructions = {
         "                                                 Please enter the 5 grid locations for the Carrier                                                 ",
         "                                               Please enter the 4 grid locations for the Battleship                                                ",
         "                                                Please enter the 3 grid locations for the Destroyer                                                ",
         "                                                Please enter the 3 grid locations for the Submarine                                                ",
         "                                               Please enter the 2 grid locations for the Patrol Boat                                               "};
-    std::vector<char> ShipLetters = {'C', 'B', 'D', 'S', 'P'};
-    std::vector<int> ShipSizes = {5, 4, 3, 3, 2};
+    std::array<char, 5> ShipLetters = {'C', 'B', 'D', 'S', 'P'};
+    std::array<int, 5> ShipSizes = {5, 4, 3, 3, 2};
     int lastShipRow = 0, lastShipColumn = 0;
 
     Set_Cursor_Visibility(m_ConsoleHandle, true);
@@ -323,7 +321,7 @@ bool Battleships::Get_User_Ship_Positions(void)
 
             Output_To_Terminal(Output);
 
-            int KeyPress = 0, Row = 0, Column = 0;
+            int KeyPress, Row, Column;
 
             if (j == 0)
             {
@@ -394,7 +392,7 @@ bool Battleships::Get_User_Ship_Positions(void)
                 // Check if grid location is already occupied by another ship
                 if (m_BoardOne[Row][Column] == ' ')
                 {
-                    if (ShipRows.size() == 0)
+                    if (ShipRows.empty())
                     {
                         ShipRows.push_back(Row);
                         ShipColumns.push_back(Column);
@@ -411,10 +409,7 @@ bool Battleships::Get_User_Ship_Positions(void)
 
                         // check if row or column same/different but both cannot be different or same
                         if ((RowsSame && ColumnsSame) || (!RowsSame && !ColumnsSame))
-                        {
-                            KeyPress = 0;
                             continue;
-                        }
 
                         if (ShipRows.size() == 1)
                         {
@@ -428,29 +423,15 @@ bool Battleships::Get_User_Ship_Positions(void)
                             break;
                         }
 
-                        else if (RowsSame && (ShipOrientation == "HORIZONTAL") && (std::abs(Column - ShipColumns.back()) == 1))
+                        else if (((RowsSame && (ShipOrientation == "HORIZONTAL") && (std::abs(Column - ShipColumns.back()) == 1)) || (ColumnsSame && (ShipOrientation == "VERTICAL") && (std::abs(Row - ShipRows.back()) == 1))))
                         {
-                            // If row same then column must an increment or decrement of previous position if there is one
+                            // If row or column same then column must an increment or decrement of previous position if there is one
                             ShipRows.push_back(Row);
                             ShipColumns.push_back(Column);
                             break;
                         }
-
-                        else if (ColumnsSame && (ShipOrientation == "VERTICAL") && (std::abs(Row - ShipRows.back()) == 1))
-                        {
-                            // If column same then row must an increment or decrement of previous position if there is one
-                            ShipRows.push_back(Row);
-                            ShipColumns.push_back(Column);
-                            break;
-                        }
-
-                        else
-                            KeyPress = 0;
                     }
                 }
-
-                else
-                    KeyPress = 0;
             }
 
             m_BoardOne[Row][Column] = 'X';
@@ -474,24 +455,24 @@ bool Battleships::Get_User_Ship_Positions(void)
 
 void Battleships::Get_AI_Ship_Positions(std::array<std::array<char, 10>, 10> &AIBoard)
 {
-    std::vector<int> ShipSizes = {5, 4, 3, 3, 2};
-    std::vector<char> ShipLetters = {'C', 'B', 'D', 'S', 'P'};
+    std::array<int, 5> ShipSizes = {5, 4, 3, 3, 2};
+    std::array<char, 5> ShipLetters = {'C', 'B', 'D', 'S', 'P'};
 
     for (int i = 0; i < 5; i++)
     {
         while (true)
         {
-            std::vector<int> ShipRows, ShipColumns;
-            int Row, Column;
+            std::vector<unsigned int> ShipRows, ShipColumns;
+            unsigned int Row, Column;
 
             // Get a random ship position
-            if ((std::rand() % 2) == 0) // Horizontal
+            if ((m_RandomGenerator() % 2) == 0) // Horizontal
             {
                 // A max column number exists, as ship is horizontal, which is linked with the size of the ship
                 // with the assumption being this value will be the first and smallest of the positions
-                Column = std::rand() % (11 - ShipSizes[i]);
+                Column = m_RandomGenerator() % (11 - ShipSizes[i]);
 
-                Row = std::rand() % 10; // Any row number allowed as ship is horizontal
+                Row = m_RandomGenerator() % 10; // Any row number allowed as ship is horizontal
 
                 // Horizontal positions have a difference in columns of 1
                 for (int j = 0; j < ShipSizes[i]; j++)
@@ -503,11 +484,11 @@ void Battleships::Get_AI_Ship_Positions(std::array<std::array<char, 10>, 10> &AI
 
             else // Vertical
             {
-                Column = std::rand() % 10; // Any column number allowed as ship is vertical
+                Column = m_RandomGenerator() % 10; // Any column number allowed as ship is vertical
 
                 // A max row number exists, as ship is vertical, which is linked with the size of the ship
                 // with the assumption being this value will be the first and smallest of the positions
-                Row = std::rand() % (11 - ShipSizes[i]);
+                Row = m_RandomGenerator() % (11 - ShipSizes[i]);
 
                 // Vertical positions have a difference in rows of 1
                 for (int j = 0; j < ShipSizes[i]; j++)
@@ -537,7 +518,7 @@ void Battleships::Get_AI_Ship_Positions(std::array<std::array<char, 10>, 10> &AI
     }
 }
 
-std::string Battleships::Get_Game_Display(void)
+std::string Battleships::Get_Game_Display()
 {
     // Top bar
     std::string Output = WHITE + Box(m_Width, "                                                                    Battleships                                                                    ");

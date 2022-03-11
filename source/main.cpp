@@ -1,6 +1,6 @@
 #include "mainmenu.hpp"
 
-int main(void)
+int main()
 {
     MainMenu::Run();
 }
