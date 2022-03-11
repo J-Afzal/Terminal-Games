@@ -11,17 +11,17 @@
 
 #pragma once
 #include <array>
-#include <map>
 #include <string>
+#include <unordered_map>
 #include <vector>
 #include <Windows.h>
 #include "game.hpp"
 
-/**
- * @brief Contains all the data/functions for the Battleships game
- *
- */
-class Battleships : public Game
+    /**
+     * @brief Contains all the data/functions for the Battleships game
+     *
+     */
+    class Battleships : public Game
 {
 public:
     explicit Battleships(const HANDLE &ConsoleHandle);
@@ -75,7 +75,7 @@ public:
 private:
     std::array<std::array<char, 10>, 10> m_BoardOne{}, m_BoardTwo{};
     std::vector<int> m_MovesRemainingOne, m_MovesRemainingTwo;
-    std::map<char, int> m_ShipsRemainingOne, m_ShipsRemainingTwo;
+    std::unordered_map<char, int> m_ShipsRemainingOne, m_ShipsRemainingTwo;
     std::string m_CurrentPlayer, m_AIDifficulty;
     int m_NumberOfPlayers{}, m_NumberOfTurns{}, m_PreviousCommand{};
     bool m_GameOver{};
