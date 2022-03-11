@@ -1,5 +1,5 @@
 /**
- * @file play.hpp
+ * @file game.hpp
  * @author Junaid Afzal
  * @brief Templated play function
  * @version 1.0
