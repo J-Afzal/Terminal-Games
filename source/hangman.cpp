@@ -34,7 +34,7 @@ bool Hangman::Setup_Game()
     m_NumberOfErrors = 0;
     m_NumberOfTurns = 0;
     m_GameOver = false;
-    m_RandomGenerator.seed(std::chrono::system_clock::now().time_since_epoch().count());
+    m_RandomNumberGenerator.seed(std::chrono::system_clock::now().time_since_epoch().count());
 
     if (Get_Number_Of_Players())
         return true;
@@ -138,7 +138,7 @@ bool Hangman::Execute_Next_User_Command()
 
 void Hangman::Execute_Next_AI_Command()
 {
-    Check_Guess_And_Update_Current_Guess(m_MovesRemaining[m_RandomGenerator() % m_MovesRemaining.size()]);
+    Check_Guess_And_Update_Current_Guess(m_MovesRemaining[m_RandomNumberGenerator() % m_MovesRemaining.size()]);
 }
 
 bool Hangman::Display_Game_Over_Message()
@@ -187,7 +187,7 @@ bool Hangman::Get_Number_Of_Players()
     Options[2] += New_Line(BLUE + " > 2                                                          " + WHITE);
     Options[2] += Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "                    q = quit to main menu                     ");
 
-    int KeyPress = 0, CurrentSelection = 0;
+    int KeyPress, CurrentSelection = 0;
     while (true)
     {
         Output_To_Terminal(Options[CurrentSelection]);
@@ -223,7 +223,7 @@ bool Hangman::Get_User_Player_Choice()
     Options[1] += New_Line(BLUE + " > WORD SETTER                                                " + WHITE);
     Options[1] += Empty_Line(m_Width) + Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "                    q = quit to main menu                     ");
 
-    int KeyPress = 0, CurrentSelection = 0;
+    int KeyPress, CurrentSelection = 0;
     while (true)
     {
         Output_To_Terminal(Options[CurrentSelection]);
@@ -259,7 +259,7 @@ bool Hangman::Get_AI_Difficulty()
     Options[1] += New_Line(BLUE + " > HARD (Coming Soon!)                                        " + WHITE);
     Options[1] += Empty_Line(m_Width) + Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "                    q = quit to main menu                     ");
 
-    int KeyPress = 0, CurrentSelection = 0;
+    int KeyPress, CurrentSelection = 0;
     while (true)
     {
         Output_To_Terminal(Options[CurrentSelection]);
@@ -331,7 +331,7 @@ void Hangman::Get_Random_Word()
     std::ifstream Words("../resources/words.txt");
     if (Words.is_open())
     {
-        unsigned int RandomLineNumber = m_RandomGenerator() % 972;
+        unsigned int RandomLineNumber = m_RandomNumberGenerator() % 972;
         std::string Word;
         for (unsigned int i = 0; i < RandomLineNumber - 1; i++)
             std::getline(Words, Word);

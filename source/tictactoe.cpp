@@ -27,7 +27,7 @@ bool TicTacToe::Setup_Game()
     m_NumberOfPlayers = -1;
     m_UserPlayerChoice = -1;
     m_WinningConditionsMet = false;
-    m_RandomGenerator.seed(std::chrono::system_clock::now().time_since_epoch().count());
+    m_RandomNumberGenerator.seed(std::chrono::system_clock::now().time_since_epoch().count());
 
     for (int i = 0, GridNumber = 0; i < 3; i++)
     {
@@ -51,7 +51,7 @@ bool TicTacToe::Setup_Game()
         if (Get_AI_Difficulty()) // if true, quit to main menu
             return true;
 
-    m_RandomGenerator() % 2 == 0 ? m_CurrentPlayer = 'X' : m_CurrentPlayer = 'O';
+    m_RandomNumberGenerator() % 2 == 0 ? m_CurrentPlayer = 'X' : m_CurrentPlayer = 'O';
 
     return false;
 }
@@ -142,7 +142,7 @@ bool TicTacToe::Execute_Next_User_Command()
 
 void TicTacToe::Execute_Next_AI_Command()
 {
-    int AICommand = m_MovesRemaining[m_RandomGenerator() % m_MovesRemaining.size()];
+    int AICommand = m_MovesRemaining[m_RandomNumberGenerator() % m_MovesRemaining.size()];
     m_GameGrid[AICommand / 3][AICommand % 3] = m_CurrentPlayer;
     m_MovesRemaining.erase(std::find(m_MovesRemaining.begin(), m_MovesRemaining.end(), AICommand));
     m_NumberOfTurns++;

@@ -55,7 +55,7 @@ bool Battleships::Setup_Game()
     m_NumberOfTurns = 0;
     m_PreviousCommand = 0;
     m_GameOver = false;
-    m_RandomGenerator.seed(std::chrono::system_clock::now().time_since_epoch().count());
+    m_RandomNumberGenerator.seed(std::chrono::system_clock::now().time_since_epoch().count());
 
     if (Get_Number_Of_Players())
         return true;
@@ -73,7 +73,7 @@ bool Battleships::Setup_Game()
 
     Get_AI_Ship_Positions(m_BoardTwo);
 
-    m_RandomGenerator() % 2 == 0 ? m_CurrentPlayer = "Player One" : m_CurrentPlayer = "Player Two";
+    m_RandomNumberGenerator() % 2 == 0 ? m_CurrentPlayer = "Player One" : m_CurrentPlayer = "Player Two";
 
     return false;
 }
@@ -176,7 +176,7 @@ void Battleships::Execute_Next_AI_Command()
 {
     if (m_CurrentPlayer == "Player One")
     {
-        int Command = m_MovesRemainingOne[m_RandomGenerator() % m_MovesRemainingOne.size()];
+        int Command = m_MovesRemainingOne[m_RandomNumberGenerator() % m_MovesRemainingOne.size()];
         int Row = Command / 10, Column = Command % 10;
 
         if (m_BoardTwo[Row][Column] == 'C' || m_BoardTwo[Row][Column] == 'B' || m_BoardTwo[Row][Column] == 'D' || m_BoardTwo[Row][Column] == 'S' || m_BoardTwo[Row][Column] == 'P')
@@ -192,7 +192,7 @@ void Battleships::Execute_Next_AI_Command()
 
     else
     {
-        int Command = m_MovesRemainingTwo[m_RandomGenerator() % m_MovesRemainingTwo.size()];
+        int Command = m_MovesRemainingTwo[m_RandomNumberGenerator() % m_MovesRemainingTwo.size()];
         int Row = Command / 10, Column = Command % 10;
 
         if (m_BoardOne[Row][Column] == 'C' || m_BoardOne[Row][Column] == 'B' || m_BoardOne[Row][Column] == 'D' || m_BoardOne[Row][Column] == 'S' || m_BoardOne[Row][Column] == 'P')
@@ -466,13 +466,13 @@ void Battleships::Get_AI_Ship_Positions(std::array<std::array<char, 10>, 10> &AI
             unsigned int Row, Column;
 
             // Get a random ship position
-            if ((m_RandomGenerator() % 2) == 0) // Horizontal
+            if ((m_RandomNumberGenerator() % 2) == 0) // Horizontal
             {
                 // A max column number exists, as ship is horizontal, which is linked with the size of the ship
                 // with the assumption being this value will be the first and smallest of the positions
-                Column = m_RandomGenerator() % (11 - ShipSizes[i]);
+                Column = m_RandomNumberGenerator() % (11 - ShipSizes[i]);
 
-                Row = m_RandomGenerator() % 10; // Any row number allowed as ship is horizontal
+                Row = m_RandomNumberGenerator() % 10; // Any row number allowed as ship is horizontal
 
                 // Horizontal positions have a difference in columns of 1
                 for (int j = 0; j < ShipSizes[i]; j++)
@@ -484,11 +484,11 @@ void Battleships::Get_AI_Ship_Positions(std::array<std::array<char, 10>, 10> &AI
 
             else // Vertical
             {
-                Column = m_RandomGenerator() % 10; // Any column number allowed as ship is vertical
+                Column = m_RandomNumberGenerator() % 10; // Any column number allowed as ship is vertical
 
                 // A max row number exists, as ship is vertical, which is linked with the size of the ship
                 // with the assumption being this value will be the first and smallest of the positions
-                Row = m_RandomGenerator() % (11 - ShipSizes[i]);
+                Row = m_RandomNumberGenerator() % (11 - ShipSizes[i]);
 
                 // Vertical positions have a difference in rows of 1
                 for (int j = 0; j < ShipSizes[i]; j++)

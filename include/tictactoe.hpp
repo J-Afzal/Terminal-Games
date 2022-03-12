@@ -81,9 +81,7 @@ private:
     bool m_WinningConditionsMet{};
     HANDLE m_ConsoleHandle;
     const int m_Width = 53;
-    // ANSI escape codes for bold text colours
-    const std::string WHITE = "\x1B[1;37m";
-    const std::string BLUE = "\x1B[1;34m";
+    const std::string WHITE = "\x1B[1;37m", BLUE = "\x1B[1;34m"; // ANSI escape codes for bold text colours
 
     /**
      * @brief

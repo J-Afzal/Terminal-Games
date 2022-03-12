@@ -64,6 +64,5 @@ public:
         }
     }
 
-    // Random number generator
-    std::default_random_engine m_RandomGenerator;
+    std::default_random_engine m_RandomNumberGenerator;
 };
