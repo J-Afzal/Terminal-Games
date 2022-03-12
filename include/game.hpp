@@ -21,6 +21,8 @@
 class Game
 {
 public:
+    virtual ~Game(){};
+
     virtual bool Setup_Game() = 0;
 
     virtual bool Game_Over() = 0;
