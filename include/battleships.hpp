@@ -10,18 +10,13 @@
  */
 
 #pragma once
-#include <array>
-#include <string>
-#include <unordered_map>
-#include <vector>
-#include <Windows.h>
 #include "game.hpp"
 
-    /**
-     * @brief Contains all the data/functions for the Battleships game
-     *
-     */
-    class Battleships : public Game
+/**
+ * @brief Contains all the data/functions for the Battleships game
+ *
+ */
+class Battleships : public Game
 {
 public:
     explicit Battleships(const HANDLE &ConsoleHandle);

@@ -10,8 +10,7 @@
  */
 
 #pragma once
-#include <string>
-#include <Windows.h>
+#include "pch.hpp"
 
 /**
  * @brief Clear_Terminal() then std::cout << Output

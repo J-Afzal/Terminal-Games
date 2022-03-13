@@ -9,7 +9,6 @@
  *
  */
 
-#include <iostream>
 #include "terminal.hpp"
 
 void Output_To_Terminal(const std::string &Output)

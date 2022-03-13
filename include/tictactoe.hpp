@@ -10,10 +10,6 @@
  */
 
 #pragma once
-#include <array>
-#include <string>
-#include <vector>
-#include <Windows.h>
 #include "game.hpp"
 
 /**

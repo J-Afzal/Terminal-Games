@@ -9,10 +9,6 @@
  *
  */
 
-#include <algorithm>
-#include <chrono>
-#include <conio.h>
-#include <iostream>
 #include "terminal.hpp"
 #include "battleships.hpp"
 

@@ -9,8 +9,6 @@
  *
  */
 
-#include <conio.h>
-#include <memory>
 #include "terminal.hpp"
 #include "mainmenu.hpp"
 #include "game.hpp"

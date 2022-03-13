@@ -9,12 +9,6 @@
  *
  */
 
-#include <algorithm>
-#include <array>
-#include <chrono>
-#include <conio.h>
-#include <fstream>
-#include <iostream>
 #include "terminal.hpp"
 #include "hangman.hpp"
 
