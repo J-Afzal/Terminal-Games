@@ -1,17 +1,24 @@
 # About
-* For all games, 2 players represent human vs human, 1 player represents a human vs computer, and 0 players represent computer vs computer
-* For all games, easy AI = random command/letter selection
-* For Hangman, the word to be guessed must be 3-14 characters long and contain only letters
-* For Hangman, only single letter guesses allowed
-* For Hangman, when guessing a letter, instead of scrolling through letters using the arrow keys, pressing a letter key will skip the current selected guess to that letter (Warning: pressing q will quit the game)
-* For Battleships, selecting ship positions must be done in either an incrementing or decrementing order
-* For Battleships, backspace can be used to undo a ship co-ord selection, but a ship that has been already been placed cannot been undone
+Simple games that run in the terminal
+
+# Info
+* For all games:
+  * 2 players = human vs human, 1 player = a human vs computer, and 0 players = computer vs computer
+  * Easy AI = random command/letter/move selection by computer
+* For Hangman:
+  * The word to be guessed must be 3-14 characters long and contain only letters
+  * Only single letter guesses allowed
+  * When guessing a letter, instead of scrolling through letters using the arrow keys, pressing a letter key will skip the current selected guess to that letter (please note that pressing q here will quit the game)
+* For Battleships:
+  * Selecting ship positions must be done in either an incrementing or decrementing order
+  * Backspace can be used to undo a ship co-ord selection, but a ship that has been already been placed cannot been undone
 
 # Building
 Use the following CMake command in the project root directory:
 ```
 cmake -S . -B build
 ```
+
 # Warning
 This program was developed and tested on the Visual Studio Terminal and Visual Studio Code Integrated Powershell Terminal on Windows 10. Due to the use of _getch(), Windows.h, and ANSI colour escape codes this program may not work in other terminal environments.
 
