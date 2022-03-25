@@ -21,7 +21,7 @@ class Battleships : public Game
 public:
     explicit Battleships(const HANDLE &ConsoleHandle);
 
-    ~Battleships();
+    ~Battleships() override;
 
     /**
      * @brief

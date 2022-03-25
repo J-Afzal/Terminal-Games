@@ -21,7 +21,7 @@ class Hangman : public Game
 public:
     explicit Hangman(const HANDLE &ConsoleHandle);
 
-    ~Hangman();
+    ~Hangman() override;
 
     /**
      * @brief

@@ -21,7 +21,7 @@ class TicTacToe : public Game
 public:
     explicit TicTacToe(const HANDLE &ConsoleHandle);
 
-    ~TicTacToe();
+    ~TicTacToe() override;
 
     /**
      * @brief

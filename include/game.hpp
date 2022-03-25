@@ -21,7 +21,7 @@
 class Game
 {
 public:
-    virtual ~Game(){};
+    virtual ~Game() = default;
 
     virtual bool Setup_Game() = 0;
 
@@ -66,5 +66,6 @@ public:
         }
     }
 
+protected:
     std::default_random_engine m_RandomNumberGenerator;
 };
