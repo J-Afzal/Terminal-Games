@@ -13,11 +13,12 @@ Simple games that run in the terminal
   * Selecting ship positions must be done in either an incrementing or decrementing order
   * Backspace can be used to undo a ship co-ord selection, but a ship that has been already been placed cannot been undone
 
-# Building
+# Building [![Windows Build](https://github.com/J-Afzal/Terminal-Games/actions/workflows/cmake.yml/badge.svg)](https://github.com/J-Afzal/Terminal-Games/actions/workflows/cmake.yml)
 Use the following CMake command in the project root directory:
 ```
 cmake -S . -B build
 ```
+
 
 # Warning
 This program was developed and tested on the Visual Studio Terminal and Visual Studio Code Integrated Powershell Terminal on Windows 10. Due to the use of _getch(), Windows.h, and ANSI colour escape codes this program may not work in other terminal environments.
