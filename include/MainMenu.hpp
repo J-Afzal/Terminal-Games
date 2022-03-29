@@ -1,5 +1,5 @@
 /**
- * @file mainmenu.hpp
+ * @file MainMenu.hpp
  * @author Junaid Afzal
  * @brief Main menu functions
  * @version 1.0
@@ -13,9 +13,5 @@
 
 namespace MainMenu
 {
-    /**
-     * @brief Main menu loop
-     *
-     */
     void Run();
 }

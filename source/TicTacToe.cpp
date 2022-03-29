@@ -1,7 +1,7 @@
 /**
- * @file tictactoe.cpp
+ * @file TicTacToe.cpp
  * @author Junaid Afzal
- * @brief Implementation of tictactoe.hpp
+ * @brief Implementation of TicTacToe.hpp
  * @version 1.0
  * @date 07-11-2021
  *
@@ -9,14 +9,17 @@
  *
  */
 
-#include "terminal.hpp"
-#include "tictactoe.hpp"
+#include "Terminal.hpp"
+#include "QuitToMainMenu.hpp"
+#include "TicTacToe.hpp"
 
-TicTacToe::TicTacToe(const HANDLE &ConsoleHandle) : m_ConsoleHandle(ConsoleHandle) {}
+TicTacToe::TicTacToe(const HANDLE &ConsoleHandle)
+{
+    m_Terminal.Set(ConsoleHandle, 53, "Tic Tac Toe", "q = quit to main menu");
+    m_RandomNumberGenerator.seed(std::chrono::system_clock::now().time_since_epoch().count());
+}
 
-TicTacToe::~TicTacToe() = default;
-
-bool TicTacToe::Setup_Game()
+void TicTacToe::Setup_Game()
 {
     m_MovesRemaining.clear();
     m_AIDifficulty = "N/A";
@@ -24,7 +27,6 @@ bool TicTacToe::Setup_Game()
     m_NumberOfPlayers = -1;
     m_UserPlayerChoice = -1;
     m_WinningConditionsMet = false;
-    m_RandomNumberGenerator.seed(std::chrono::system_clock::now().time_since_epoch().count());
 
     for (int i = 0, GridNumber = 0; i < 3; i++)
     {
@@ -35,22 +37,17 @@ bool TicTacToe::Setup_Game()
         }
     }
 
-    if (Get_Number_Of_Players()) // if true, quit to main menu
-        return true;
+    Get_Number_Of_Players();
 
     // If only one human user, then ask them which player they want to be (X or O)
     if (m_NumberOfPlayers == 1)
-        if (Get_User_Player_Choice()) // if true, quit to main menu
-            return true;
+        Get_User_Player_Choice();
 
     // If AI involved get AI difficulty
     if (m_NumberOfPlayers < 2)
-        if (Get_AI_Difficulty()) // if true, quit to main menu
-            return true;
+        Get_AI_Difficulty();
 
     m_RandomNumberGenerator() % 2 == 0 ? m_CurrentPlayer = 'X' : m_CurrentPlayer = 'O';
-
-    return false;
 }
 
 bool TicTacToe::Game_Over()
@@ -84,15 +81,15 @@ bool TicTacToe::Next_Turn_Is_User()
     return m_NumberOfPlayers == 2 || m_CurrentPlayer == m_UserPlayerChoice;
 }
 
-bool TicTacToe::Execute_Next_User_Command()
+void TicTacToe::Execute_Next_User_Command()
 {
     std::string Output = Get_Game_Display();
-    Output += New_Line(std::string(" Player ") + m_CurrentPlayer + ", please enter your next command!           ");
-    Output += Empty_Line(m_Width) + Empty_Line(m_Width) + Empty_Line(m_Width) + Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "                q = quit to main menu                ");
+    Output += m_Terminal.New_Line(std::string(" Player ") + m_CurrentPlayer + ", please enter your next command!           ");
+    Output += m_Terminal.Empty_Line() + m_Terminal.Empty_Line() + m_Terminal.Empty_Line() + m_Terminal.Empty_Line() + m_Terminal.Bottom_Line() + m_Terminal.Bottom_Box();
 
-    Output_To_Terminal(Output);
+    Terminal::Output_To_Terminal(Output);
 
-    Set_Cursor_Visibility(m_ConsoleHandle, true);
+    m_Terminal.Set_Cursor_Visibility(true);
 
     int KeyPress, Row = m_MovesRemaining[0] / 3, Column = m_MovesRemaining[0] % 3;
 
@@ -100,10 +97,7 @@ bool TicTacToe::Execute_Next_User_Command()
     {
         while (true)
         {
-            COORD CursorPosition;
-            CursorPosition.X = 3 + Column * 4;
-            CursorPosition.Y = 4 + Row * 2;
-            SetConsoleCursorPosition(m_ConsoleHandle, CursorPosition);
+            m_Terminal.Set_Cursor_Position(3 + Column * 4, 4 + Row * 2);
 
             KeyPress = _getch();
 
@@ -119,8 +113,8 @@ bool TicTacToe::Execute_Next_User_Command()
                 Column == 2 ? Column = 0 : ++Column;
             else if (KeyPress == 'q')
             {
-                Set_Cursor_Visibility(m_ConsoleHandle, false);
-                return true;
+                m_Terminal.Set_Cursor_Visibility(false);
+                throw QuitToMainMenu();
             }
         }
 
@@ -131,8 +125,8 @@ bool TicTacToe::Execute_Next_User_Command()
             m_GameGrid[Row][Column] = m_CurrentPlayer;
             m_MovesRemaining.erase(CommandPosition);
             m_NumberOfTurns++;
-            Set_Cursor_Visibility(m_ConsoleHandle, false);
-            return false;
+            m_Terminal.Set_Cursor_Visibility(false);
+            return;
         }
     }
 }
@@ -145,122 +139,122 @@ void TicTacToe::Execute_Next_AI_Command()
     m_NumberOfTurns++;
 }
 
-bool TicTacToe::Display_Game_Over_Message()
+void TicTacToe::Display_Game_Over_Message()
 {
-    std::string Output = Get_Game_Display();
-    Output += New_Line("                      GAME OVER                      ") + Empty_Line(m_Width);
+    std::string Output = Get_Game_Display() + m_Terminal.New_Line_Centered("GAME OVER") + m_Terminal.Empty_Line();
 
     if (m_WinningConditionsMet)
-        Output += New_Line(std::string("     Player ") + m_CurrentPlayer + " has won! The game lasted " + std::to_string(m_NumberOfTurns) + " turns.      ");
+        Output += m_Terminal.New_Line_Centered(std::string("Player ") + m_CurrentPlayer + " has won! The game lasted " + std::to_string(m_NumberOfTurns) + " turns.");
     else
-        Output += New_Line("       It is a draw! The game lasted " + std::to_string(m_NumberOfTurns) + " turns.        ");
+        Output += m_Terminal.New_Line_Centered("It is a draw! The game lasted " + std::to_string(m_NumberOfTurns) + " turns.");
 
-    Output += Empty_Line(m_Width) + New_Line(" Press 'Q' to quit OR any other key to play again... ") + Bottom_Line(m_Width) + Box(m_Width, "                q = quit to main menu                ");
+    Output += m_Terminal.Empty_Line() + m_Terminal.New_Line_Centered("Press 'Q' to quit OR any other key to play again...") + m_Terminal.Bottom_Line() + m_Terminal.Bottom_Box();
 
-    Output_To_Terminal(Output);
+    Terminal::Output_To_Terminal(Output);
 
-    return _getch() == 'q';
+    if (_getch() == 'q')
+        throw QuitToMainMenu();
 }
 
-bool TicTacToe::Get_Number_Of_Players()
+void TicTacToe::Get_Number_Of_Players()
 {
     std::array<std::string, 3> Options;
-    std::string GameDisplay = Get_Game_Display() + New_Line(" Please select the number of human players:          ");
+    std::string GameDisplay = Get_Game_Display() + m_Terminal.New_Line(" Please select the number of human players:          ");
 
     Options[0] = GameDisplay;
-    Options[0] += New_Line(BLUE + " > 0                                                 " + WHITE);
-    Options[0] += New_Line("   1                                                 ");
-    Options[0] += New_Line("   2                                                 ");
-    Options[0] += Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "                q = quit to main menu                ");
+    Options[0] += m_Terminal.New_Line(" > 0                                                 ", "BLUE");
+    Options[0] += m_Terminal.New_Line("   1                                                 ");
+    Options[0] += m_Terminal.New_Line("   2                                                 ");
+    Options[0] += m_Terminal.Empty_Line() + m_Terminal.Bottom_Line() + m_Terminal.Bottom_Box();
 
     Options[1] = GameDisplay;
-    Options[1] += New_Line("   0                                                 ");
-    Options[1] += New_Line(BLUE + " > 1                                                 " + WHITE);
-    Options[1] += New_Line("   2                                                 ");
-    Options[1] += Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "                q = quit to main menu                ");
+    Options[1] += m_Terminal.New_Line("   0                                                 ");
+    Options[1] += m_Terminal.New_Line(" > 1                                                 ", "BLUE");
+    Options[1] += m_Terminal.New_Line("   2                                                 ");
+    Options[1] += m_Terminal.Empty_Line() + m_Terminal.Bottom_Line() + m_Terminal.Bottom_Box();
 
     Options[2] = GameDisplay;
-    Options[2] += New_Line("   0                                                 ");
-    Options[2] += New_Line("   1                                                 ");
-    Options[2] += New_Line(BLUE + " > 2                                                 " + WHITE);
-    Options[2] += Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "                q = quit to main menu                ");
+    Options[2] += m_Terminal.New_Line("   0                                                 ");
+    Options[2] += m_Terminal.New_Line("   1                                                 ");
+    Options[2] += m_Terminal.New_Line(" > 2                                                 ", "BLUE");
+    Options[2] += m_Terminal.Empty_Line() + m_Terminal.Bottom_Line() + m_Terminal.Bottom_Box();
 
     int KeyPress, CurrentSelection = 0;
     while (true)
     {
-        Output_To_Terminal(Options[CurrentSelection]);
+        Terminal::Output_To_Terminal(Options[CurrentSelection]);
 
         KeyPress = _getch();
 
         if (KeyPress == '\r') // enter key
         {
             m_NumberOfPlayers = CurrentSelection;
-            return false;
+            return;
         }
         else if (KeyPress == 72) // up arrow key
             CurrentSelection == 0 ? CurrentSelection = 2 : --CurrentSelection;
         else if (KeyPress == 80) // down arrow key
             CurrentSelection == 2 ? CurrentSelection = 0 : ++CurrentSelection;
         else if (KeyPress == 'q')
-            return true;
+            throw QuitToMainMenu();
     }
 }
 
-bool TicTacToe::Get_User_Player_Choice()
+void TicTacToe::Get_User_Player_Choice()
 {
     std::array<std::string, 3> Options;
-    std::string GameDisplay = Get_Game_Display() + New_Line(" Please select the number of human players:          ");
+    std::string GameDisplay = Get_Game_Display() + m_Terminal.New_Line(" Please select the number of human players:          ");
 
     Options[0] = GameDisplay;
-    Options[0] += New_Line(BLUE + " > PLAYER X                                          " + WHITE);
-    Options[0] += New_Line("   PLAYER O                                          ");
-    Options[0] += Empty_Line(m_Width) + Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "                q = quit to main menu                ");
+    Options[0] += m_Terminal.New_Line(" > PLAYER X                                          ", "BLUE");
+    Options[0] += m_Terminal.New_Line("   PLAYER O                                          ");
+    Options[0] += m_Terminal.Empty_Line() + m_Terminal.Empty_Line() + m_Terminal.Bottom_Line() + m_Terminal.Bottom_Box();
 
     Options[1] = GameDisplay;
-    Options[1] += New_Line("   PLAYER X                                          ");
-    Options[1] += New_Line(BLUE + " > PLAYER O                                          " + WHITE);
-    Options[1] += Empty_Line(m_Width) + Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "                q = quit to main menu                ");
+    Options[1] += m_Terminal.New_Line("   PLAYER X                                          ");
+    Options[1] += m_Terminal.New_Line(" > PLAYER O                                          ", "BLUE");
+    Options[1] += m_Terminal.Empty_Line() + m_Terminal.Empty_Line() + m_Terminal.Bottom_Line() + m_Terminal.Bottom_Box();
 
     int KeyPress, CurrentSelection = 0;
     while (true)
     {
-        Output_To_Terminal(Options[CurrentSelection]);
+        Terminal::Output_To_Terminal(Options[CurrentSelection]);
 
         KeyPress = _getch();
 
         if (KeyPress == '\r') // enter key
         {
             CurrentSelection == 0 ? m_UserPlayerChoice = 'X' : m_UserPlayerChoice = 'O';
-            return false;
+            return;
         }
         else if (KeyPress == 72) // up arrow key
             CurrentSelection == 0 ? CurrentSelection = 1 : --CurrentSelection;
         else if (KeyPress == 80) // down arrow key
             CurrentSelection == 1 ? CurrentSelection = 0 : ++CurrentSelection;
         else if (KeyPress == 'q')
-            return true;
+            throw QuitToMainMenu();
     }
 }
 
-bool TicTacToe::Get_AI_Difficulty()
+void TicTacToe::Get_AI_Difficulty()
 {
     std::array<std::string, 2> Options;
-    std::string GameDisplay = Get_Game_Display() + New_Line(" Please select the AI difficulty:                    ");
+    std::string GameDisplay = Get_Game_Display() + m_Terminal.New_Line(" Please select the AI difficulty:                    ");
 
     Options[0] = GameDisplay;
-    Options[0] += New_Line(BLUE + " > EASY                                              " + WHITE);
-    Options[0] += New_Line("   HARD (Coming Soon!)                               ");
-    Options[0] += Empty_Line(m_Width) + Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "                q = quit to main menu                ");
+    Options[0] += m_Terminal.New_Line(" > EASY                                              ", "BLUE");
+    Options[0] += m_Terminal.New_Line("   HARD (Coming Soon!)                               ");
+    Options[0] += m_Terminal.Empty_Line() + m_Terminal.Empty_Line() + m_Terminal.Bottom_Line() + m_Terminal.Bottom_Box();
 
     Options[1] = GameDisplay;
-    Options[1] += New_Line("   EASY                                              ");
-    Options[1] += New_Line(BLUE + " > HARD (Coming Soon!)                               " + WHITE);
-    Options[1] += Empty_Line(m_Width) + Empty_Line(m_Width) + Bottom_Line(m_Width) + Box(m_Width, "                q = quit to main menu                ");
+    Options[1] += m_Terminal.New_Line("   EASY                                              ");
+    Options[1] += m_Terminal.New_Line(" > HARD (Coming Soon!)                               ", "BLUE");
+    Options[1] += m_Terminal.Empty_Line() + m_Terminal.Empty_Line() + m_Terminal.Bottom_Line() + m_Terminal.Bottom_Box();
 
     int KeyPress, CurrentSelection = 0;
     while (true)
     {
-        Output_To_Terminal(Options[CurrentSelection]);
+        Terminal::Output_To_Terminal(Options[CurrentSelection]);
 
         KeyPress = _getch();
 
@@ -268,27 +262,27 @@ bool TicTacToe::Get_AI_Difficulty()
         {
             // CurrentSelection == 0 ? m_AIDifficulty = "EASY" : m_AIDifficulty = "HARD";
             m_AIDifficulty = "EASY";
-            return false;
+            return;
         }
         else if (KeyPress == 72) // up arrow key
             CurrentSelection == 0 ? CurrentSelection = 1 : --CurrentSelection;
         else if (KeyPress == 80) // down arrow key
             CurrentSelection == 1 ? CurrentSelection = 0 : ++CurrentSelection;
         else if (KeyPress == 'q')
-            return true;
+            throw QuitToMainMenu();
     }
 }
 
 std::string TicTacToe::Get_Game_Display()
 {
     // Top bar
-    std::string Output = WHITE + Box(m_Width, "                     Tic Tac Toe                     ");
+    std::string Output = m_Terminal.Top_Box();
 
     // Centre information
-    Output += Top_Line(m_Width);
+    Output += m_Terminal.Top_Line();
 
     // Line 1
-    Output += New_Line(std::string("  ") + m_GameGrid[0][0] + " " + char(179) + " " + m_GameGrid[0][1] + " " + char(179) + " " + m_GameGrid[0][2] + "                                          ");
+    Output += m_Terminal.New_Line(std::string("  ") + m_GameGrid[0][0] + " " + char(179) + " " + m_GameGrid[0][1] + " " + char(179) + " " + m_GameGrid[0][2] + "                                          ");
 
     // Line 2
     Output.insert(Output.size(), 1, (char)186);
@@ -304,7 +298,7 @@ std::string TicTacToe::Get_Game_Display()
         Output += "      # of Players = " + std::to_string(m_NumberOfPlayers) + "                   " + (char)186 + "\n";
 
     // Line 3
-    Output += New_Line(std::string("  ") + m_GameGrid[1][0] + " " + char(179) + " " + m_GameGrid[1][1] + " " + char(179) + " " + m_GameGrid[1][2] + "                                          ");
+    Output += m_Terminal.New_Line(std::string("  ") + m_GameGrid[1][0] + " " + char(179) + " " + m_GameGrid[1][1] + " " + char(179) + " " + m_GameGrid[1][2] + "                                          ");
 
     // Line 4
     Output.insert(Output.size(), 1, (char)186);
@@ -320,7 +314,7 @@ std::string TicTacToe::Get_Game_Display()
         Output += "    AI Difficulty = " + m_AIDifficulty + "                 " + (char)186 + "\n";
 
     // Line 5
-    Output += New_Line(std::string("  ") + m_GameGrid[2][0] + " " + char(179) + " " + m_GameGrid[2][1] + " " + char(179) + " " + m_GameGrid[2][2] + "                                          ");
+    Output += m_Terminal.New_Line(std::string("  ") + m_GameGrid[2][0] + " " + char(179) + " " + m_GameGrid[2][1] + " " + char(179) + " " + m_GameGrid[2][2] + "                                          ");
 
-    return Output += Empty_Line(m_Width);
+    return Output += m_Terminal.Empty_Line();
 }
