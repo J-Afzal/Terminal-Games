@@ -15,7 +15,7 @@
 class Hangman : public Game
 {
 public:
-    explicit Hangman(const HANDLE &ConsoleHandle);
+    explicit Hangman();
 
     ~Hangman() override = default;
 
@@ -50,11 +50,9 @@ public:
 
 private:
     std::vector<char> m_MovesRemaining, m_IncorrectGuesses;
-    std::string m_WordToBeGuessed, m_CurrentGuessOfWord, m_AIDifficulty;
-    int m_NumberOfPlayers{}, m_NumberOfErrors{}, m_NumberOfTurns{};
+    std::string m_WordToBeGuessed, m_CurrentGuessOfWord;
+    int m_NumberOfErrors{};
     bool m_GameOver{}, m_UserIsGuessing{};
-    std::default_random_engine m_RandomNumberGenerator;
-    Terminal m_Terminal;
 
     void Get_Number_Of_Players();
 
@@ -72,7 +70,7 @@ private:
      * @return std::string containing a word from list of the ~1,000 most used word in English from:
      * https://www.ef.co.uk/english-resources/english-vocabulary/top-1000-words/
      */
-    void Get_Random_Word();
+    void Get_Word_From_AI();
 
     /**
      * @brief updates the CurrentGuessOfWord with all occurrences of the guess,
