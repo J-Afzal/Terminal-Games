@@ -10,8 +10,12 @@
  */
 
 #pragma once
+#include "Terminal.hpp"
+#include "Game.hpp"
 
 namespace MainMenu
 {
     void Run();
+
+    void Setup(Terminal &Terminal, std::vector<std::string> &OptionMenus, std::vector<int> &Options, std::array<std::unique_ptr<Game>, 3> &Games);
 }
