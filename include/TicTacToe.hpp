@@ -15,7 +15,7 @@
 class TicTacToe : public Game
 {
 public:
-    explicit TicTacToe(const HANDLE &ConsoleHandle);
+    explicit TicTacToe();
 
     ~TicTacToe() override = default;
 
@@ -50,12 +50,8 @@ public:
 private:
     std::array<std::array<char, 3>, 3> m_GameGrid{};
     std::vector<int> m_MovesRemaining;
-    std::string m_AIDifficulty;
-    int m_NumberOfTurns{}, m_NumberOfPlayers{};
     char m_CurrentPlayer{}, m_UserPlayerChoice{};
     bool m_WinningConditionsMet{};
-    std::default_random_engine m_RandomNumberGenerator;
-    Terminal m_Terminal;
 
     void Get_Number_Of_Players();
 
