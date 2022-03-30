@@ -21,7 +21,7 @@ cmake -S . -B build
 
 
 # Warning
-This program was developed and tested on the Visual Studio Terminal and Visual Studio Code Integrated Powershell Terminal on Windows. Due to the use of _getch(), Windows.h, and ANSI colour escape codes this program may not work in other terminal environments.
+Due to the use of ```_getch()```, ```Windows.h```, and ANSI colour escape codes, this program may not work in terminal environments that are not the Visual Studio Terminal or Visual Studio Code Integrated Powershell Terminal on Windows.
 
 # Main Menu
 <p align="center"> <img src="screenshots/MainMenu.png" width=400> </p>
