@@ -11,13 +11,17 @@
 
 #include "Terminal.hpp"
 
-Terminal::Terminal(const HANDLE &ConsoleHandle, const int &GameWidth, const std::string &TopTitle, const std::string &BottomTitle)
+Terminal::Terminal(const int &GameWidth, const std::string &TopTitle, const std::string &BottomTitle)
 {
-    Set(ConsoleHandle, GameWidth, TopTitle, BottomTitle);
+    Set(GameWidth, TopTitle, BottomTitle);
 }
 
-void Terminal::Set(const HANDLE &ConsoleHandle, const int &GameWidth, const std::string &TopTitle, const std::string &BottomTitle)
+void Terminal::Set(const int &GameWidth, const std::string &TopTitle, const std::string &BottomTitle)
 {
+    HANDLE ConsoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+    if (ConsoleHandle == INVALID_HANDLE_VALUE)
+        exit(1);
+
     m_ConsoleHandle = ConsoleHandle;
     m_CursorInfo.dwSize = 100;
     Set_Cursor_Visibility(false);
@@ -25,6 +29,12 @@ void Terminal::Set(const HANDLE &ConsoleHandle, const int &GameWidth, const std:
     m_GameWidth = GameWidth;
     m_TopTitle = TopTitle;
     m_BottomTitle = BottomTitle;
+}
+
+
+int Terminal::Get_Key_Pressed()
+{
+    return _getch();
 }
 
 void Terminal::Clear_Terminal()
@@ -74,6 +84,12 @@ void Terminal::Set_Cursor_Position(const int &X, const int &Y)
     m_CursorPosition.X = X;
     m_CursorPosition.Y = Y;
     SetConsoleCursorPosition(m_ConsoleHandle, m_CursorPosition);
+}
+
+void Terminal::Quit()
+{
+    Terminal::Clear_Terminal();
+    Set_Cursor_Visibility(true);
 }
 
 std::string Terminal::New_Line(const std::string &Input, const std::string &Colour) const

@@ -17,11 +17,13 @@ class Terminal
 public:
     Terminal() = default;
 
-    Terminal(const HANDLE &ConsoleHandle, const int &GameWidth, const std::string &TopTitle, const std::string &BottomTitle);
+    Terminal(const int &GameWidth, const std::string &TopTitle, const std::string &BottomTitle);
 
     ~Terminal() = default;
 
-    void Set(const HANDLE &ConsoleHandle, const int &GameWidth, const std::string &TopTitle, const std::string &BottomTitle);
+    void Set(const int &GameWidth, const std::string &TopTitle, const std::string &BottomTitle);
+
+    static int Get_Key_Pressed();
 
     /**
      * @brief A Windows specific method to clear the contents of
@@ -43,6 +45,8 @@ public:
      * @brief Wrapper for Windows.h SetConsoleCursorPosition()
      */
     void Set_Cursor_Position(const int &X, const int &Y);
+
+    void Quit();
 
     /**
      * @return std::string containing a new line text for a generic box
