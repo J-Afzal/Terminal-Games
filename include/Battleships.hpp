@@ -15,7 +15,7 @@
 class Battleships : public Game
 {
 public:
-    explicit Battleships(const HANDLE &ConsoleHandle);
+    explicit Battleships();
 
     ~Battleships() override = default;
 
@@ -51,11 +51,9 @@ private:
     std::array<std::array<char, 10>, 10> m_BoardOne{}, m_BoardTwo{};
     std::vector<int> m_MovesRemainingOne, m_MovesRemainingTwo;
     std::unordered_map<char, int> m_ShipsRemainingOne, m_ShipsRemainingTwo;
-    std::string m_CurrentPlayer, m_AIDifficulty;
-    int m_NumberOfPlayers{}, m_NumberOfTurns{}, m_PreviousCommand{};
+    std::string m_CurrentPlayer;
+    int m_PreviousCommand{};
     bool m_GameOver{};
-    std::default_random_engine m_RandomNumberGenerator;
-    Terminal m_Terminal;
 
     void Get_Number_Of_Players();
 
