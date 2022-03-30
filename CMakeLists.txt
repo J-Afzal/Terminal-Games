@@ -12,10 +12,10 @@ add_executable(Terminal-Games
         include/MainMenu.hpp
         source/MainMenu.cpp
         include/Game.hpp
-        include/QuitToMainMenu.hpp
         include/TicTacToe.hpp
         source/TicTacToe.cpp
         include/Hangman.hpp
         source/Hangman.cpp
         include/Battleships.hpp
-        source/Battleships.cpp)
+        source/Battleships.cpp
+        include/Quit.hpp)

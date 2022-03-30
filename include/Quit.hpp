@@ -1,5 +1,5 @@
 /**
- * @file QuitToMainMenu.hpp
+ * @file Quit.hpp
  * @author Junaid Afzal
  * @brief Custom exception to return to the main menu
  * @version 1.0
@@ -11,11 +11,9 @@
 
 #pragma once
 
-#include <exception>
-
-class QuitToMainMenu : public std::exception
+class Quit : public std::exception
 {
-    const char *what() const noexcept override
+    const char* what() const noexcept override
     {
         return "User requested to quit to the main menu";
     }
