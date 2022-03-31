@@ -23,7 +23,7 @@ void TicTacToe::Setup_Game()
     m_AIDifficulty = "N/A ";
     m_NumberOfPlayers = "N/A";
     m_NumberOfTurns = 0;
-    m_UserPlayerChoice = -1;
+    m_UserPlayerChoice = ' ';
     m_WinningConditionsMet = false;
 
     for (int i = 0, GridNumber = 0; i < 3; i++)
@@ -42,7 +42,7 @@ void TicTacToe::Setup_Game()
         Get_User_Player_Choice();
 
     // If AI involved get AI difficulty
-    if (m_NumberOfPlayers == "0  " || m_NumberOfPlayers == "1  ")
+    if (m_NumberOfPlayers != "2  ") // i.e. = 0 or = 1
         Get_AI_Difficulty();
 
     m_RandomNumberGenerator() % 2 == 0 ? m_CurrentPlayer = 'X' : m_CurrentPlayer = 'O';
