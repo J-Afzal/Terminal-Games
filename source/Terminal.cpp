@@ -31,7 +31,6 @@ void Terminal::Set(const int &GameWidth, const std::string &TopTitle, const std:
     m_BottomTitle = BottomTitle;
 }
 
-
 int Terminal::Get_Key_Pressed()
 {
     return _getch();
