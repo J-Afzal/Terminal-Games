@@ -1,19 +1,20 @@
 #pragma once
 
-// std
+/** std */
 #include <algorithm>
 #include <chrono>
 #include <iostream>
 #include <fstream>
 #include <memory>
 #include <random>
+#include <regex>
 
-// data types
+/** data containers */
 #include <array>
 #include <unordered_map>
 #include <string>
 #include <vector>
 
-// windows api
+/** windows */
 #include <conio.h>
 #include <Windows.h>
