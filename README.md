@@ -3,15 +3,15 @@ Simple games that run in the terminal
 
 # Info
 * For all games:
-  * 2 players = human vs human, 1 player = a human vs computer, and 0 players = computer vs computer
+  * 2 players = human vs human, 1 player = human vs computer, and 0 players = computer vs computer
   * Easy AI = random command/letter/move selection by computer
 * For Hangman:
   * The word to be guessed must be 3-14 characters long and contain only letters
   * Only single letter guesses allowed
-  * When guessing a letter, instead of scrolling through letters using the arrow keys, pressing a letter key will skip the current selected guess to that letter (please note that pressing q here will quit the game)
+  * When guessing a letter, you can use the arrow keys to scroll through letters or press a letter key to skip to that letter (please note that pressing q here will quit the game)
 * For Battleships:
-  * Selecting ship positions must be done in either an incrementing or decrementing order
-  * Backspace can be used to undo a ship co-ord selection, but a ship that has been already been placed cannot been undone
+  * Selecting ship positions must be done in either an incrementing or decrementing order with respect to co-ordinates
+  * Backspace can be used to undo a ship co-ord selection, but a ship that has been already been placed cannot be undone
 
 # Building [![Windows CMake Build](https://github.com/J-Afzal/Terminal-Games/actions/workflows/cmake.yml/badge.svg)](https://github.com/J-Afzal/Terminal-Games/actions/workflows/cmake.yml)
 Use the following CMake command in the project root directory:
