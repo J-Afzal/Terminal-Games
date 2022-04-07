@@ -11,7 +11,7 @@
 
 #pragma once
 #include "pch.hpp"
-#include "Game.hpp"
+#include "games/Game.hpp"
 
 namespace MainMenu
 {

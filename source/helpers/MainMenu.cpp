@@ -9,10 +9,10 @@
  *
  */
 
-#include "MainMenu.hpp"
-#include "TicTacToe.hpp"
-#include "Hangman.hpp"
-#include "Battleships.hpp"
+#include "helpers/MainMenu.hpp"
+#include "games/TicTacToe.hpp"
+#include "games/Hangman.hpp"
+#include "games/Battleships.hpp"
 
 void MainMenu::Run()
 {
