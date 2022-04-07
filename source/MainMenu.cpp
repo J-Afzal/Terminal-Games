@@ -16,48 +16,70 @@
 
 void MainMenu::Run()
 {
-    Terminal Terminal(30, "Terminal-Games", "q = quit");
-    std::vector<std::string> OptionMenus(3);
-    std::vector<int> Options(3);
+    Terminal Terminal;
+    std::vector<std::string> Menus(3);
     std::array<std::unique_ptr<Game>, 3> Games;
-
-    MainMenu::Setup(Terminal, OptionMenus, Options, Games);
-
     int CurrentSelection;
+
+    MainMenu::Setup(Menus, Games);
+
+    /**
+     * A custom exception is used as it can be allowed to propagate up the call stack until it
+     * returns back to this while loop, thus simplifying the code. Exceptions are only thrown in
+     * functions that accept user input.
+     *
+     * The alternative to exceptions would have been to continually return booleans until the code
+     * returns to the while loop. A simplified call stack shows why this would get messy.
+     *
+     * - Games[CurrentSelection]->Play()()
+     *     - Setup_Game()
+     *         - Get_Number_Of_Players()
+     *             - Terminal::Get_User_Menu_Choice() -> User requests a return to the main menu at this function
+     */
     while (true)
     {
-        try { CurrentSelection = Game::Get_User_Option_Choice(OptionMenus, Options); }
-        catch (Quit& e) { Terminal.Quit(); return; }
+        try { CurrentSelection = Terminal::Get_User_Menu_Choice(Menus); }
+        catch (Exceptions::Quit &e) { Terminal.Quit(); return; }
 
         try { Games[CurrentSelection]->Play(); }
-        catch (Quit& ignored) { }
+        catch (Exceptions::Quit &ignored) { }
     }
 }
 
-void MainMenu::Setup(Terminal &Terminal, std::vector<std::string> &OptionMenus, std::vector<int> &Options, std::array<std::unique_ptr<Game>, 3> &Games)
+void MainMenu::Setup(std::vector<std::string> &Menus, std::array<std::unique_ptr<Game>, 3> &Games)
 {
-    OptionMenus[0] = Terminal.Top_Box() + Terminal.Top_Line();
-    OptionMenus[0] += Terminal.New_Line("       > Tic Tac Toe          ", "BLUE") + Terminal.Empty_Line();
-    OptionMenus[0] += Terminal.New_Line("           Hangman            ") + Terminal.Empty_Line();
-    OptionMenus[0] += Terminal.New_Line("         Battleships          ");
-    OptionMenus[0] += Terminal.Bottom_Line() + Terminal.Bottom_Box();
+    StringBuilder StringBuilder;
+    StringBuilder.Set(30, "Terminal-Games", "q = quit");
 
-    OptionMenus[1] = Terminal.Top_Box() + Terminal.Top_Line();
-    OptionMenus[1] += Terminal.New_Line("         Tic Tac Toe          ") + Terminal.Empty_Line();
-    OptionMenus[1] += Terminal.New_Line("         > Hangman            ", "BLUE") + Terminal.Empty_Line();
-    OptionMenus[1] += Terminal.New_Line("         Battleships          ");
-    OptionMenus[1] += Terminal.Bottom_Line() + Terminal.Bottom_Box();
+    /**
+     * The only difference between the three std::strings in Menus is which game is selected using '>' and coloured blue.
+     */
+    Menus[0] = StringBuilder.Top_Box() + StringBuilder.Top_Line();
+    Menus[0] += StringBuilder.New_Line("       > Tic Tac Toe          ", "BLUE") + StringBuilder.Empty_Line();
+    Menus[0] += StringBuilder.New_Line("           Hangman            ") + StringBuilder.Empty_Line();
+    Menus[0] += StringBuilder.New_Line("         Battleships          ");
+    Menus[0] += StringBuilder.Bottom_Line() + StringBuilder.Bottom_Box();
 
-    OptionMenus[2] = Terminal.Top_Box() + Terminal.Top_Line();
-    OptionMenus[2] += Terminal.New_Line("         Tic Tac Toe          ") + Terminal.Empty_Line();
-    OptionMenus[2] += Terminal.New_Line("           Hangman            ") + Terminal.Empty_Line();
-    OptionMenus[2] += Terminal.New_Line("       > Battleships          ", "BLUE");
-    OptionMenus[2] += Terminal.Bottom_Line() + Terminal.Bottom_Box();
+    Menus[1] = StringBuilder.Top_Box() + StringBuilder.Top_Line();
+    Menus[1] += StringBuilder.New_Line("         Tic Tac Toe          ") + StringBuilder.Empty_Line();
+    Menus[1] += StringBuilder.New_Line("         > Hangman            ", "BLUE") + StringBuilder.Empty_Line();
+    Menus[1] += StringBuilder.New_Line("         Battleships          ");
+    Menus[1] += StringBuilder.Bottom_Line() + StringBuilder.Bottom_Box();
 
-    Options[0] = 0;
-    Options[1] = 1;
-    Options[2] = 2;
+    Menus[2] = StringBuilder.Top_Box() + StringBuilder.Top_Line();
+    Menus[2] += StringBuilder.New_Line("         Tic Tac Toe          ") + StringBuilder.Empty_Line();
+    Menus[2] += StringBuilder.New_Line("           Hangman            ") + StringBuilder.Empty_Line();
+    Menus[2] += StringBuilder.New_Line("       > Battleships          ", "BLUE");
+    Menus[2] += StringBuilder.Bottom_Line() + StringBuilder.Bottom_Box();
 
+    /**
+     * All game objects derive from Game and inherit a pure virtual Play() function. This allows for runtime
+     * polymorphism to be utilised by storing all games in single Game array and invoking the Play() function
+     * on any of the games depending on what game currently selected.
+     *
+     * Note that the index of a game in the Games array and the index of a menu string that the game
+     * is selected in the Menus array are the same.
+     */
     Games[0] = std::make_unique<TicTacToe>(TicTacToe());
     Games[1] = std::make_unique<Hangman>(Hangman());
     Games[2] = std::make_unique<Battleships>(Battleships());
