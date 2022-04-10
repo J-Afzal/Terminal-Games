@@ -12,7 +12,7 @@
 
 #pragma once
 #include "pch.hpp"
-#include "exceptions/Quit.hpp"
+#include "helpers/Exceptions.hpp"
 #include "helpers/Terminal.hpp"
 
 class Game

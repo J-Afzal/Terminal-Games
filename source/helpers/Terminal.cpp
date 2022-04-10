@@ -10,7 +10,7 @@
  */
 
 #include "helpers/Terminal.hpp"
-#include "exceptions/Quit.hpp"
+#include "helpers/Exceptions.hpp"
 
 Terminal::Terminal()
 {
