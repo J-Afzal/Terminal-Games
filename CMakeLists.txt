@@ -11,7 +11,6 @@ add_executable(Terminal-Games
         include/pch.hpp
         include/helpers/MainMenu.hpp
         source/helpers/MainMenu.cpp
-        include/helpers/Exceptions.hpp
         include/helpers/StringBuilder.hpp
         source/helpers/StringBuilder.cpp
         include/helpers/Terminal.hpp
@@ -22,4 +21,5 @@ add_executable(Terminal-Games
         include/games/Hangman.hpp
         source/games/Hangman.cpp
         include/games/Battleships.hpp
-        source/games/Battleships.cpp)
+        source/games/Battleships.cpp
+        include/helpers/Exceptions.hpp)
