@@ -1,7 +1,5 @@
 # About
 Simple games that run in the terminal
-
-# Info
 * For all games:
   * 2 players = human vs human, 1 player = human vs computer, and 0 players = computer vs computer
   * Easy AI = random command/letter/move selection by computer
@@ -18,7 +16,6 @@ Use the following CMake command in the project root directory:
 ```
 cmake -S . -B build
 ```
-
 
 # Warning
 Due to the use of ```_getch()```, ```Windows.h```, and ANSI colour escape codes, this program may not work in terminal environments that are not the Visual Studio Terminal or Visual Studio Code Integrated Powershell Terminal on Windows.
