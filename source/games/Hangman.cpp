@@ -170,11 +170,13 @@ void Hangman::Get_Word_From_AI()
             std::getline(Words, Word);
         std::getline(Words, Word);
         m_WordToBeGuessed = Word;
+        Words.close();
     }
     else
-        m_WordToBeGuessed = "ERROR";
-
-    Words.close();
+    {
+        Words.close();
+        throw Exceptions::HangmanWordsFileNotFound();
+    }
 }
 
 bool Hangman::Game_Over()

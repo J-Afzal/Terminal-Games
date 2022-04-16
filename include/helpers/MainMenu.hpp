@@ -13,9 +13,20 @@
 #include "pch.hpp"
 #include "games/Game.hpp"
 
-namespace MainMenu
+class MainMenu
 {
+public:
+    MainMenu() = default;
+
+    ~MainMenu() = default;
+
     void Run();
 
-    void Setup(std::vector<std::string> &Menus, std::array<std::unique_ptr<Game>, 3> &Games);
-}
+private:
+    Terminal m_Terminal;
+    std::vector<std::string> m_Menus;
+    std::array<std::unique_ptr<Game>, 3> m_Games;
+    int m_CurrentSelection{};
+
+    void Setup();
+};

@@ -46,25 +46,25 @@ private:
     /**
      * Example of what each function automates:
      *
-     * ╔═════════════════════════════════════════════════════╗   <- Top_Line()             <-
-     * ║                     Tic Tac Toe                     ║   <- New_Line_Centered()    <- Top_Box()
-     * ╚═════════════════════════════════════════════════════╝   <- Bottom_Line()          <-
+     * ╔═════════════════════════════════════════════════════╗   <- Top_Line()                          <-
+     * ║                     Tic Tac Toe                     ║   <- New_Line_Centered("Tic Tac Toe")    <- Top_Box()
+     * ╚═════════════════════════════════════════════════════╝   <- Bottom_Line()                       <-
      * ╔═════════════════════════════════════════════════════╗   <- Top_Line()
      * ║  O │ O │ X                                          ║
      * ║ ───┼───┼───      # of Players = 0                   ║
      * ║  O │ X │ O                                          ║
-     * ║ ───┼───┼───     AI Difficulty = EASY                ║   <- New_Line()
+     * ║ ───┼───┼───     AI Difficulty = EASY                ║   <- New_Line_Left_Justified(" ───┼───┼───     AI Difficulty = EASY")
      * ║  O │ X │ X                                          ║
      * ║                                                     ║   <- Empty_Line()
-     * ║                      GAME OVER                      ║   <- New_Line_Centered()
+     * ║                      GAME OVER                      ║   <- New_Line_Centered("GAME OVER")
      * ║                                                     ║
-     * ║     Player O has won! The game lasted 9 turns.      ║
+     * ║     Player O has won! The game lasted 9 turns.      ║   <- New_Line("     Player O has won! The game lasted 9 turns.      ")
      * ║                                                     ║
      * ║     Press 'Q' to quit OR Enter to play again...     ║
      * ╚═════════════════════════════════════════════════════╝   <- Bottom_Line()
-     * ╔═════════════════════════════════════════════════════╗   <- Top_Line()             <-
-     * ║                q = quit to main menu                ║   <- New_Line_Centered()    <- Bottom_Box()
-     * ╚═════════════════════════════════════════════════════╝   <- Bottom_Line()          <-
+     * ╔═════════════════════════════════════════════════════╗   <- Top_Line()                                    <-
+     * ║                q = quit to main menu                ║   <- New_Line_Centered("q = quit to main menu")    <- Bottom_Box()
+     * ╚═════════════════════════════════════════════════════╝   <- Bottom_Line()                                 <-
      *
      * ^-----------------------------------------------------^
      *                      = Game_Width

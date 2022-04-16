@@ -2,5 +2,6 @@
 
 int main()
 {
-    MainMenu::Run();
+    MainMenu MainMenu;
+    MainMenu.Run();
 }

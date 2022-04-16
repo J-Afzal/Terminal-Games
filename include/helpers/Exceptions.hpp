@@ -15,4 +15,6 @@
 namespace Exceptions
 {
     class Quit : public std::exception {};
+
+    class HangmanWordsFileNotFound : public std::exception {};
 }
