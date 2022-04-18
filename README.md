@@ -11,7 +11,7 @@ Simple games that run in the terminal
   * Selecting ship positions must be done in either an incrementing or decrementing order with respect to co-ordinates
   * Backspace can be used to undo a ship co-ord selection, but a ship that has been already been placed cannot be undone
 
-# Building [![Windows CMake Build](https://github.com/J-Afzal/Terminal-Games/actions/workflows/cmake.yml/badge.svg)](https://github.com/J-Afzal/Terminal-Games/actions/workflows/cmake.yml)
+# Building [![Build With CMake](https://github.com/J-Afzal/Terminal-Games/actions/workflows/cmake.yml/badge.svg)](https://github.com/J-Afzal/Terminal-Games/actions/workflows/cmake.yml)
 Use the following CMake command in the project root directory:
 ```
 cmake -S . -B build
