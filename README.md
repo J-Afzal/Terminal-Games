@@ -1,12 +1,5 @@
-<p align="center"> <img src="screenshots/mainmenu/MainMenu.gif" width=400> </p>
-<p align="center"> <img src="screenshots/tictactoe/TicTacToe.gif" width=400> <img src="screenshots/hangman/Hangman.gif" width=400> </p>
+<p align="center"> <img src="screenshots/tictactoe/TicTacToe.gif" width=450> <img src="screenshots/hangman/Hangman.gif" width=450> </p>
 <p align="center"> <img src="screenshots/battleships/Battleships.gif"> </p>
-
-# Screenshots
-<p align="center"> <img src="screenshots/mainmenu/MainMenu.png" width=400> </p>
-<p align="center"> <img src="screenshots/tictactoe/TicTacToePaying.png" width=400> <img src="screenshots/tictactoe/TicTacToeGameOver.png" width=400> </p>
-<p align="center"> <img src="screenshots/hangman/HangmanPlaying.png" width=400> <img src="screenshots/hangman/HangmanGameOver.png" width=400> </p>
-<p align="center"> <img src="screenshots/battleships/BattleshipsPlaying.png" width=400> <img src="screenshots/battleships/BattleshipsGameOver.png" width=400> </p>
 
 # About
 Simple games that run in the terminal
