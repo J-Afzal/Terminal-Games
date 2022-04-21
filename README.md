@@ -1,4 +1,4 @@
-<p align="center"> <img src="screenshots/tictactoe/TicTacToe.gif" width=450> <img src="screenshots/hangman/Hangman.gif" width=450> </p>
+<p align="center"> <img src="screenshots/tictactoe/TicTacToe.gif" width=400> <img src="screenshots/hangman/Hangman.gif" width=400> </p>
 <p align="center"> <img src="screenshots/battleships/Battleships.gif"> </p>
 
 # About
