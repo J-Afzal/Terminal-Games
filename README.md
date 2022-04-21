@@ -2,7 +2,7 @@
 <p align="center"> <img src="screenshots/battleships/Battleships.gif"> </p>
 
 # About
-Simple games that run in the terminal
+Simple games that run in the terminal. The software is run by instantiating the MainMenu class and then calling it's Run() method.
 * For all games:
   * 2 players = human vs human, 1 player = human vs computer, and 0 players = computer vs computer
   * Easy AI = random command/letter/move selection by computer
