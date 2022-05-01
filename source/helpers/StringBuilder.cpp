@@ -22,12 +22,14 @@ std::string StringBuilder::New_Line(const std::string &Input, const std::string 
 {
     std::string Output;
     Output += (char)186;
-    if (Colour == "RED")
+
+    if (Colour == "WHITE")
+        Output += Input;
+    else if (Colour == "RED")
         Output += m_RED + Input + m_WHITE;
     else if (Colour == "BLUE")
         Output += m_BLUE + Input + m_WHITE;
-    else
-        Output += Input;
+
     return Output + (char)186 + "\n";
 }
 
@@ -76,10 +78,10 @@ std::string StringBuilder::Bottom_Line() const
 
 std::string StringBuilder::Top_Box() const
 {
-    return m_WHITE + Top_Line() + New_Line_Centered(m_TopTitle, "RED") + Bottom_Line(); // red + input + white
+    return m_WHITE + Top_Line() + New_Line_Centered(m_TopTitle, "RED") + Bottom_Line();
 }
 
 std::string StringBuilder::Bottom_Box() const
 {
-    return Top_Line() + New_Line_Centered(m_BottomTitle, "RED") + Bottom_Line() + m_RESET; // red + input + white
+    return Top_Line() + New_Line_Centered(m_BottomTitle, "RED") + Bottom_Line() + m_RESET;
 }

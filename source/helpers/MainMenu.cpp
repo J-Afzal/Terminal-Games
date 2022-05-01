@@ -35,7 +35,7 @@ void MainMenu::Run()
     while (true)
     {
         try { m_CurrentSelection = Terminal::Get_User_Menu_Choice(m_Menus); }
-        catch (Exceptions::Quit &e) { m_Terminal.Quit(); return; }
+        catch (Exceptions::Quit &e) { return; }
 
         try { m_Games[m_CurrentSelection]->Play(); }
         catch (Exceptions::Quit &ignored) { }

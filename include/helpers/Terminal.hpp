@@ -18,7 +18,7 @@ class Terminal
 public:
     Terminal();
 
-    ~Terminal() = default;
+    ~Terminal();
 
     /**
      * @brief Gets the user's choice of selection for a particular menu
@@ -53,11 +53,6 @@ public:
      * @brief Wrapper for Windows.h SetConsoleCursorPosition()
      */
     void Set_Cursor_Position(const int &X, const int &Y);
-
-    /**
-     * @brief Clear_Terminal() then Set_Cursor_Visibility(true)
-     */
-    void Quit();
 
 private:
     HANDLE m_ConsoleHandle{};

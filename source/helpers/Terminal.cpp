@@ -24,6 +24,12 @@ Terminal::Terminal()
     Set_Cursor_Position(0,0);
 }
 
+Terminal::~Terminal()
+{
+    Terminal::Clear_Terminal();
+    Set_Cursor_Visibility(true);
+}
+
 int Terminal::Get_User_Menu_Choice(const std::vector<std::string> &Menus)
 {
     int KeyPress, CurrentSelection = 0;
@@ -96,10 +102,4 @@ void Terminal::Set_Cursor_Position(const int &X, const int &Y)
     m_CursorPosition.X = X;
     m_CursorPosition.Y = Y;
     SetConsoleCursorPosition(m_ConsoleHandle, m_CursorPosition);
-}
-
-void Terminal::Quit()
-{
-    Terminal::Clear_Terminal();
-    Set_Cursor_Visibility(true);
 }

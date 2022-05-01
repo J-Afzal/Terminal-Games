@@ -65,10 +65,12 @@ private:
      * ╔═════════════════════════════════════════════════════╗   <- Top_Line()                                    <-
      * ║                q = quit to main menu                ║   <- New_Line_Centered("q = quit to main menu")    <- Bottom_Box()
      * ╚═════════════════════════════════════════════════════╝   <- Bottom_Line()                                 <-
+     *  ^---------------------------------------------------^
+     *                    = GameWidth = 53
      *
-     * ^-----------------------------------------------------^
-     *                      = Game_Width
-     *
-     * In this example m_TopTitle = "Tic Tac Toe" and m_BottomTitle = "q = quit to main menu"
+     * In this example:
+     *      m_GameWidth = 53
+     *      m_TopTitle = "Tic Tac Toe"
+     *      m_BottomTitle = "q = quit to main menu"
      */
 };
