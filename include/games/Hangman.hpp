@@ -2,7 +2,7 @@
  * @file Hangman.hpp
  * @author Junaid Afzal
  * @brief The game object that runs Hangman
- * using the inherited Play() function
+ * and is run using the inherited Play() function
  * @version 1.0
  * @date 07-11-2021
  *

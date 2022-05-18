@@ -72,13 +72,13 @@ void Battleships::Get_Number_Of_Players()
     std::string GameDisplay = Get_Game_Display() + m_StringBuilder.New_Line_Left_Justified(" Please select the number of human players:");
 
     Menus[0] = GameDisplay;
-    Menus[0] += m_StringBuilder.New_Line_Left_Justified(" > 0", "BLUE");
+    Menus[0] += m_StringBuilder.New_Line_Left_Justified(" > 0", Colours::BLUE);
     Menus[0] += m_StringBuilder.New_Line_Left_Justified("   1");
     Menus[0] += m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
 
     Menus[1] = GameDisplay;
     Menus[1] += m_StringBuilder.New_Line_Left_Justified("   0");
-    Menus[1] += m_StringBuilder.New_Line_Left_Justified(" > 1", "BLUE");
+    Menus[1] += m_StringBuilder.New_Line_Left_Justified(" > 1", Colours::BLUE);
     Menus[1] += m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
 
     m_NumberOfPlayers = std::to_string(Terminal::Get_User_Menu_Choice(Menus)) + "  ";
@@ -90,13 +90,13 @@ void Battleships::Get_AI_Difficulty()
     std::string GameDisplay = Get_Game_Display() + m_StringBuilder.New_Line_Left_Justified(" Please select the AI difficulty:");
 
     Menus[0] = GameDisplay;
-    Menus[0] += m_StringBuilder.New_Line_Left_Justified(" > EASY", "BLUE");
+    Menus[0] += m_StringBuilder.New_Line_Left_Justified(" > EASY", Colours::BLUE);
     Menus[0] += m_StringBuilder.New_Line_Left_Justified("   HARD (Coming Soon!)");
     Menus[0] += m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
 
     Menus[1] = GameDisplay;
     Menus[1] += m_StringBuilder.New_Line_Left_Justified("   EASY");
-    Menus[1] += m_StringBuilder.New_Line_Left_Justified(" > HARD (Coming Soon!)", "BLUE");
+    Menus[1] += m_StringBuilder.New_Line_Left_Justified(" > HARD (Coming Soon!)", Colours::BLUE);
     Menus[1] += m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
 
     Terminal::Get_User_Menu_Choice(Menus) == 0 ? m_AIDifficulty = "EASY" : m_AIDifficulty = "HARD";

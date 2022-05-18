@@ -53,21 +53,21 @@ void TicTacToe::Get_Number_Of_Players()
     std::string GameDisplay = Get_Game_Display() + m_StringBuilder.New_Line_Left_Justified(" Please select the number of human players:");
 
     Menus[0] = GameDisplay;
-    Menus[0] += m_StringBuilder.New_Line_Left_Justified(" > 0", "BLUE");
+    Menus[0] += m_StringBuilder.New_Line_Left_Justified(" > 0", Colours::BLUE);
     Menus[0] += m_StringBuilder.New_Line_Left_Justified("   1");
     Menus[0] += m_StringBuilder.New_Line_Left_Justified("   2");
     Menus[0] += m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
 
     Menus[1] = GameDisplay;
     Menus[1] += m_StringBuilder.New_Line_Left_Justified("   0");
-    Menus[1] += m_StringBuilder.New_Line_Left_Justified(" > 1", "BLUE");
+    Menus[1] += m_StringBuilder.New_Line_Left_Justified(" > 1", Colours::BLUE);
     Menus[1] += m_StringBuilder.New_Line_Left_Justified("   2");
     Menus[1] += m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
 
     Menus[2] = GameDisplay;
     Menus[2] += m_StringBuilder.New_Line_Left_Justified("   0");
     Menus[2] += m_StringBuilder.New_Line_Left_Justified("   1");
-    Menus[2] += m_StringBuilder.New_Line_Left_Justified(" > 2", "BLUE");
+    Menus[2] += m_StringBuilder.New_Line_Left_Justified(" > 2", Colours::BLUE);
     Menus[2] += m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
 
     m_NumberOfPlayers = std::to_string(Terminal::Get_User_Menu_Choice(Menus)) + "  ";
@@ -79,13 +79,13 @@ void TicTacToe::Get_User_Player_Choice()
     std::string GameDisplay = Get_Game_Display() + m_StringBuilder.New_Line_Left_Justified(" Please select the player you would like to be:");
 
     Menus[0] = GameDisplay;
-    Menus[0] += m_StringBuilder.New_Line_Left_Justified(" > PLAYER X", "BLUE");
+    Menus[0] += m_StringBuilder.New_Line_Left_Justified(" > PLAYER X", Colours::BLUE);
     Menus[0] += m_StringBuilder.New_Line_Left_Justified("   PLAYER O");
     Menus[0] += m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
 
     Menus[1] = GameDisplay;
     Menus[1] += m_StringBuilder.New_Line_Left_Justified("   PLAYER X");
-    Menus[1] += m_StringBuilder.New_Line_Left_Justified(" > PLAYER O", "BLUE");
+    Menus[1] += m_StringBuilder.New_Line_Left_Justified(" > PLAYER O", Colours::BLUE);
     Menus[1] += m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
 
     Terminal::Get_User_Menu_Choice(Menus) == 0 ? m_UserPlayerChoice = 'X' : m_UserPlayerChoice = 'O';
@@ -97,13 +97,13 @@ void TicTacToe::Get_AI_Difficulty()
     std::string GameDisplay = Get_Game_Display() + m_StringBuilder.New_Line_Left_Justified(" Please select the AI difficulty:");
 
     Menus[0] = GameDisplay;
-    Menus[0] += m_StringBuilder.New_Line_Left_Justified(" > EASY", "BLUE");
+    Menus[0] += m_StringBuilder.New_Line_Left_Justified(" > EASY", Colours::BLUE);
     Menus[0] += m_StringBuilder.New_Line_Left_Justified("   HARD (Coming Soon!)");
     Menus[0] += m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
 
     Menus[1] = GameDisplay;
     Menus[1] += m_StringBuilder.New_Line_Left_Justified("   EASY");
-    Menus[1] += m_StringBuilder.New_Line_Left_Justified(" > HARD (Coming Soon!)", "BLUE");
+    Menus[1] += m_StringBuilder.New_Line_Left_Justified(" > HARD (Coming Soon!)", Colours::BLUE);
     Menus[1] += m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
 
     Terminal::Get_User_Menu_Choice(Menus) == 0 ? m_AIDifficulty = "EASY" : m_AIDifficulty = "HARD";
@@ -111,7 +111,7 @@ void TicTacToe::Get_AI_Difficulty()
 
 bool TicTacToe::Game_Over()
 {
-    // Check Horizontals
+    // Check horizontals
     if ((m_GameGrid[0][0] != ' ' && m_GameGrid[0][0] == m_GameGrid[0][1] && m_GameGrid[0][1] == m_GameGrid[0][2]) ||
         (m_GameGrid[1][0] != ' ' && m_GameGrid[1][0] == m_GameGrid[1][1] && m_GameGrid[1][1] == m_GameGrid[1][2]) ||
         (m_GameGrid[2][0] != ' ' && m_GameGrid[2][0] == m_GameGrid[2][1] && m_GameGrid[2][1] == m_GameGrid[2][2]) ||
@@ -137,6 +137,11 @@ void TicTacToe::Toggle_Current_Player()
 
 bool TicTacToe::Next_Turn_Is_User()
 {
+    /**
+     * If it is two player game then next turn will always be the user's turn, if not then
+     * check if the current player is the same as the user's choice. For a zero player game
+     * m_UserPlayerChoice = ' ' and so this will always return false.
+     */
     return m_NumberOfPlayers == "2  " || m_CurrentPlayer == m_UserPlayerChoice;
 }
 
@@ -145,7 +150,6 @@ void TicTacToe::Execute_Next_User_Command()
     std::string Output = Get_Game_Display();
     Output += m_StringBuilder.New_Line_Left_Justified(std::string(" Player ") + m_CurrentPlayer + ", please enter your next command!");
     Output += m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
-
     Terminal::Output_To_Terminal(Output);
 
     m_Terminal.Set_Cursor_Visibility(true);

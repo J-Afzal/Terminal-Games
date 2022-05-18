@@ -1,8 +1,7 @@
 /**
  * @file Quit.hpp
  * @author Junaid Afzal
- * @brief A custom exception that allows for returning to
- * the main menu when many functions deep in a call stack
+ * @brief Custom exceptions
  * @version 1.0
  * @date 29-03-2022
  *

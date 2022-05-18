@@ -15,11 +15,11 @@ add_executable(Terminal-Games
         source/helpers/StringBuilder.cpp
         include/helpers/Terminal.hpp
         source/helpers/Terminal.cpp
+        include/helpers/Exceptions.hpp
         include/games/Game.hpp
         include/games/TicTacToe.hpp
         source/games/TicTacToe.cpp
         include/games/Hangman.hpp
         source/games/Hangman.cpp
         include/games/Battleships.hpp
-        source/games/Battleships.cpp
-        include/helpers/Exceptions.hpp)
+        source/games/Battleships.cpp)

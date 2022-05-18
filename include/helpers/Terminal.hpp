@@ -21,16 +21,21 @@ public:
     ~Terminal();
 
     /**
-     * @brief Gets the user's choice of selection for a particular menu
-     * @param Menus is an array of ASCII strings that represent
-     * different selections being made in the same menu
-     * @return The index of Menus that is currently selected
+     * @brief Gets the user's choice of selection for a particular menu.
+     * @param Menus is an array of ASCII strings that are outputted to the console. The only
+     * difference between each string is the currently selected menu option.
+     * @return The index of Menus that is currently selected.
      */
     static int Get_User_Menu_Choice(const std::vector<std::string> &Menus);
 
     /**
-     * @brief A Windows specific method to clear the contents of
-     * the terminal from: https://www.cplusplus.com/articles/4z18T05o
+     * @brief Wrapper for Windows.h _getch()
+     */
+    static int Get_Key_Pressed();
+
+    /**
+     * @brief Uses Windows.h to clear the contents of the terminal
+     * and was taken from: https://www.cplusplus.com/articles/4z18T05o
      */
     static void Clear_Terminal();
 
@@ -38,11 +43,6 @@ public:
      * @brief Clear_Terminal() then std::cout << Output
      */
     static void Output_To_Terminal(const std::string &Output);
-
-    /**
-     * @brief Wrapper for Windows.h _getch()
-     */
-    static int Get_Key_Pressed();
 
     /**
      * @brief Wrapper for Windows.h SetConsoleCursorInfo()

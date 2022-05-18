@@ -18,22 +18,22 @@ void StringBuilder::Set(const int &GameWidth, const std::string &TopTitle, const
     m_BottomTitle = BottomTitle;
 }
 
-std::string StringBuilder::New_Line(const std::string &Input, const std::string &Colour) const
+std::string StringBuilder::New_Line(const std::string &Input, const Colours &Colour) const
 {
     std::string Output;
     Output += (char)186;
 
-    if (Colour == "WHITE")
+    if (Colour == Colours::WHITE)
         Output += Input;
-    else if (Colour == "RED")
+    else if (Colour == Colours::RED)
         Output += m_RED + Input + m_WHITE;
-    else if (Colour == "BLUE")
+    else if (Colour == Colours::BLUE)
         Output += m_BLUE + Input + m_WHITE;
 
     return Output + (char)186 + "\n";
 }
 
-std::string StringBuilder::New_Line_Centered(const std::string &Input, const std::string &Colour) const
+std::string StringBuilder::New_Line_Centered(const std::string &Input, const Colours &Colour) const
 {
     std::string Output;
     Output.insert(Output.size(), floor((m_GameWidth-(double)Input.size())/2), ' ');
@@ -42,7 +42,7 @@ std::string StringBuilder::New_Line_Centered(const std::string &Input, const std
     return New_Line(Output, Colour);
 }
 
-std::string StringBuilder::New_Line_Left_Justified(const std::string &Input, const std::string &Colour) const
+std::string StringBuilder::New_Line_Left_Justified(const std::string &Input, const Colours &Colour) const
 {
     std::string Output = Input;
     Output.insert(Output.size(), m_GameWidth-Input.size(), ' ');
@@ -78,10 +78,10 @@ std::string StringBuilder::Bottom_Line() const
 
 std::string StringBuilder::Top_Box() const
 {
-    return m_WHITE + Top_Line() + New_Line_Centered(m_TopTitle, "RED") + Bottom_Line();
+    return m_WHITE + Top_Line() + New_Line_Centered(m_TopTitle, Colours::RED) + Bottom_Line();
 }
 
 std::string StringBuilder::Bottom_Box() const
 {
-    return Top_Line() + New_Line_Centered(m_BottomTitle, "RED") + Bottom_Line() + m_RESET;
+    return Top_Line() + New_Line_Centered(m_BottomTitle, Colours::RED) + Bottom_Line() + m_RESET;
 }

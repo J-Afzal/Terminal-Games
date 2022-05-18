@@ -2,7 +2,7 @@
 <p align="center"> <img src="screenshots/battleships/Battleships.gif"> </p>
 
 # About
-Simple games that run in the terminal. The software is run by instantiating the ```MainMenu``` class and then calling its ```Run()``` method.
+Simple games that run in the terminal. The project is run by instantiating the `MainMenu` class and then calling its `Run()` method.
 * For all games:
   * All menu and board navigation is done through the arrow keys
   * 2 players = human vs human, 1 player = human vs computer, and 0 players = computer vs computer
@@ -22,4 +22,4 @@ cmake -S . -B build
 ```
 
 # Warning
-Due to the use of ```Windows.h``` and ANSI colour escape codes, this project only works on Windows using either the Visual Studio Terminal or the Visual Studio Code Integrated Powershell Terminal.
+Due to the use of `Windows.h` and ANSI colour escape codes, this project only works on Windows using either the Visual Studio Terminal or the Visual Studio Code Integrated Powershell Terminal.

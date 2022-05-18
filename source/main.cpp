@@ -1,7 +1,8 @@
 /**
  * @file main.cpp
  * @author Junaid Afzal
- * @brief Executes the main menu
+ * @brief Simple games that run in the terminal. The project is run by
+ * instantiating the MainMenu class and then calling its Run() method.
  * @version 1.0
  * @date 21-04-2022
  *

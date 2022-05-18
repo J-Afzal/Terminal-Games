@@ -1,8 +1,8 @@
 /**
  * @file Game.hpp
  * @author Junaid Afzal
- * @brief The base class for all game object with it's sole purpose being to allow for
- * runtime polymorphism in the MainMenu::Run() function using the pure virtual Play() function
+ * @brief This is the base class for all game objects which contains the
+ * final Play() function interface and implementation using pure virtual functions
  * @version 1.0
  * @date 08-03-2022
  *
