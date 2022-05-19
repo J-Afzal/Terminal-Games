@@ -175,7 +175,8 @@ void Hangman::Get_Word_From_AI()
     else
     {
         Words.close();
-        throw Exceptions::HangmanWordsFileNotFound();
+        std::cout << "\nERROR: Words.txt file cannot be found\n";
+        throw Exceptions::Quit();
     }
 }
 
