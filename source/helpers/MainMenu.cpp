@@ -49,9 +49,9 @@ MainMenu::MainMenu()
      *
      * Note that the index of a game in m_Games and the index of the corresponding m_Menus string are the same.
      */
-    m_Games[0] = std::make_unique<TicTacToe>(TicTacToe());
-    m_Games[1] = std::make_unique<Hangman>(Hangman());
-    m_Games[2] = std::make_unique<Battleships>(Battleships());
+    m_Games[0] = std::make_unique<TicTacToe>();
+    m_Games[1] = std::make_unique<Hangman>();
+    m_Games[2] = std::make_unique<Battleships>();
 }
 
 void MainMenu::Run()
