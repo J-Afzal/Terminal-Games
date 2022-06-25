@@ -4,9 +4,9 @@
 # About
 Simple games that run in the terminal. The project is run by instantiating the `MainMenu` class and then calling its `Run()` method.
 * For all games:
-  * All menu and board navigation is done through the arrow keys
-  * 2 players = human vs human, 1 player = human vs computer, and 0 players = computer vs computer
-  * Easy AI = Random command/letter/move selection by computer (Hard AI has not been implemented yet)
+  * All menus can be navigated using the arrow keys
+  * 2 players = user vs user, 1 player = user vs computer, and 0 players = computer vs computer
+  * AI = Random command/letter/move selection by computer
 * For Hangman:
   * The word to be guessed must be 3-14 characters long and contain only letters
   * Guesses can only be a single letter at a time

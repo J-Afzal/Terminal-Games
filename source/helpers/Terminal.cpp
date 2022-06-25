@@ -15,10 +15,13 @@
 Terminal::Terminal()
 {
     HANDLE ConsoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-    if (ConsoleHandle == INVALID_HANDLE_VALUE)
+    HANDLE InputBufferHandle = GetStdHandle(STD_INPUT_HANDLE);
+
+    if (ConsoleHandle == INVALID_HANDLE_VALUE || InputBufferHandle == INVALID_HANDLE_VALUE)
         exit(1);
 
     m_ConsoleHandle = ConsoleHandle;
+    m_BufferHandle = InputBufferHandle;
     m_CursorInfo.dwSize = 100;
     Set_Cursor_Visibility(false);
     Set_Cursor_Position(0,0);
@@ -37,7 +40,7 @@ int Terminal::Get_User_Menu_Choice(const std::vector<std::string> &Menus)
     {
         Terminal::Output_To_Terminal(Menus[CurrentSelection]);
 
-        KeyPress = Terminal::Get_Key_Pressed();
+        KeyPress = Get_Key_Pressed();
 
         if (KeyPress == '\r')
             return CurrentSelection;
@@ -52,6 +55,7 @@ int Terminal::Get_User_Menu_Choice(const std::vector<std::string> &Menus)
 
 int Terminal::Get_Key_Pressed()
 {
+    FlushConsoleInputBuffer(m_BufferHandle);
     return _getch();
 }
 

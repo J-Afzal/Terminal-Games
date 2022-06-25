@@ -24,7 +24,7 @@ void Hangman::Setup_Game()
     m_IncorrectGuesses.clear();
     m_WordToBeGuessed = "";
     m_CurrentGuessOfWord = "";
-    m_AIDifficulty = "N/A ";
+    m_AIDifficulty = "EASY";
     m_NumberOfPlayers = "N/A";
     m_NumberOfErrors = 0;
     m_NumberOfTurns = 0;
@@ -35,14 +35,14 @@ void Hangman::Setup_Game()
     if (m_NumberOfPlayers == "0  ")
     {
         m_UserIsWordGuesser = false;
-        Get_AI_Difficulty();
+        Get_AI_Speed();
         Get_Word_From_AI();
     }
 
     else if (m_NumberOfPlayers == "1  ")
     {
         Get_User_Player_Choice();
-        Get_AI_Difficulty();
+        Get_AI_Speed();
 
         if (!m_UserIsWordGuesser)
             Get_Word_From_User();
@@ -63,7 +63,7 @@ void Hangman::Setup_Game()
 void Hangman::Get_Number_Of_Players()
 {
     std::vector<std::string> Menus(3);
-    std::string GameDisplay = Get_Game_Display() + m_StringBuilder.New_Line_Left_Justified(" Please select the number of human players:");
+    std::string GameDisplay = Get_Game_Display() + m_StringBuilder.New_Line_Left_Justified(" Please select the number of players:");
 
     Menus[0] = GameDisplay;
     Menus[0] += m_StringBuilder.New_Line_Left_Justified(" > 0", Colours::BLUE);
@@ -83,13 +83,13 @@ void Hangman::Get_Number_Of_Players()
     Menus[2] += m_StringBuilder.New_Line_Left_Justified(" > 2", Colours::BLUE);
     Menus[2] += m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
 
-    m_NumberOfPlayers = std::to_string(Terminal::Get_User_Menu_Choice(Menus)) + "  ";
+    m_NumberOfPlayers = std::to_string(m_Terminal.Get_User_Menu_Choice(Menus)) + "  ";
 }
 
 void Hangman::Get_User_Player_Choice()
 {
     std::vector<std::string> Menus(2);
-    std::string GameDisplay = Get_Game_Display() + m_StringBuilder.New_Line_Left_Justified(" Please select what player you would like to be:              ");
+    std::string GameDisplay = Get_Game_Display() + m_StringBuilder.New_Line_Left_Justified(" Please select what player you would like to be:");
 
     Menus[0] = GameDisplay;
     Menus[0] += m_StringBuilder.New_Line_Left_Justified(" > GUESSER", Colours::BLUE);
@@ -101,25 +101,33 @@ void Hangman::Get_User_Player_Choice()
     Menus[1] += m_StringBuilder.New_Line_Left_Justified(" > WORD SETTER", Colours::BLUE);
     Menus[1] += m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
 
-    Terminal::Get_User_Menu_Choice(Menus) == 0 ? m_UserIsWordGuesser = true : m_UserIsWordGuesser = false;
+    m_Terminal.Get_User_Menu_Choice(Menus) == 0 ? m_UserIsWordGuesser = true : m_UserIsWordGuesser = false;
 }
 
-void Hangman::Get_AI_Difficulty()
+void Hangman::Get_AI_Speed()
 {
-    std::vector<std::string> Menus(2);
-    std::string GameDisplay = Get_Game_Display() + m_StringBuilder.New_Line_Left_Justified(" Please select the AI difficulty:                             ");
+    std::vector<std::string> Menus(3);
+    std::string GameDisplay = Get_Game_Display() + m_StringBuilder.New_Line_Left_Justified(" Please select the AI speed:");
 
     Menus[0] = GameDisplay;
-    Menus[0] += m_StringBuilder.New_Line_Left_Justified(" > EASY", Colours::BLUE);
-    Menus[0] += m_StringBuilder.New_Line_Left_Justified("   HARD (Coming Soon!)");
-    Menus[0] += m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
+    Menus[0] += m_StringBuilder.New_Line_Left_Justified(" > INSTANT", Colours::BLUE);
+    Menus[0] += m_StringBuilder.New_Line_Left_Justified("   FAST");
+    Menus[0] += m_StringBuilder.New_Line_Left_Justified("   SLOW");
+    Menus[0] += m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
 
     Menus[1] = GameDisplay;
-    Menus[1] += m_StringBuilder.New_Line_Left_Justified("   EASY");
-    Menus[1] += m_StringBuilder.New_Line_Left_Justified(" > HARD (Coming Soon!)", Colours::BLUE);
-    Menus[1] += m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
+    Menus[1] += m_StringBuilder.New_Line_Left_Justified("   INSTANT");
+    Menus[1] += m_StringBuilder.New_Line_Left_Justified(" > FAST", Colours::BLUE);
+    Menus[1] += m_StringBuilder.New_Line_Left_Justified("   SLOW");
+    Menus[1] += m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
 
-    Terminal::Get_User_Menu_Choice(Menus) == 0 ? m_AIDifficulty = "EASY" : m_AIDifficulty = "HARD";
+    Menus[2] = GameDisplay;
+    Menus[2] += m_StringBuilder.New_Line_Left_Justified("   INSTANT");
+    Menus[2] += m_StringBuilder.New_Line_Left_Justified("   FAST");
+    Menus[2] += m_StringBuilder.New_Line_Left_Justified(" > SLOW", Colours::BLUE);
+    Menus[2] += m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
+
+    m_AISpeed = m_Terminal.Get_User_Menu_Choice(Menus);
 }
 
 void Hangman::Get_Word_From_User()
@@ -132,7 +140,7 @@ void Hangman::Get_Word_From_User()
     std::string Input;
     while (true)
     {
-        Terminal::Output_To_Terminal(Output + "\x1B[1;37m");
+        m_Terminal.Output_To_Terminal(Output + "\x1B[1;37m");
 
         m_Terminal.Set_Cursor_Position(39, 13);
 
@@ -183,13 +191,17 @@ void Hangman::Get_Word_From_AI()
 bool Hangman::Game_Over()
 {
     if (m_NumberOfErrors == 10)
-        return m_GameOver = true;
+    {
+        m_GameOver = true;
+        return m_GameOver;
+    }
 
     for (unsigned int i = 0; i < m_WordToBeGuessed.size(); i++)
         if (m_WordToBeGuessed[i] != m_CurrentGuessOfWord[i])
             return false;
 
-    return m_GameOver = true;
+    m_GameOver = true;
+    return m_GameOver;
 }
 
 void Hangman::Toggle_Current_Player() {}
@@ -209,13 +221,13 @@ void Hangman::Execute_Next_User_Command()
     int KeyPress, CurrentSelection = 0;
     while (true)
     {
-        Terminal::Output_To_Terminal(Output);
+        m_Terminal.Output_To_Terminal(Output);
 
         m_Terminal.Set_Cursor_Position(41, 13);
 
         std::cout << std::string("\x1B[1;34m") + m_MovesRemaining[CurrentSelection] + "\x1B[1;37m"; // Make it blue
 
-        KeyPress = Terminal::Get_Key_Pressed();
+        KeyPress = m_Terminal.Get_Key_Pressed();
 
         if (KeyPress == '\r') // enter key
         {
@@ -239,6 +251,14 @@ void Hangman::Execute_Next_User_Command()
 
 void Hangman::Execute_Next_AI_Command()
 {
+    if (m_AISpeed != 0)
+    {
+        std::string Output = Get_Game_Display();
+        Output += m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
+        m_Terminal.Output_To_Terminal(Output);
+        std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::seconds(m_AISpeed));
+    }
+
     Check_Guess_And_Update_Current_Guess(m_MovesRemaining[m_RandomNumberGenerator() % m_MovesRemaining.size()]);
 }
 

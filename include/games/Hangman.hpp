@@ -25,10 +25,9 @@ private:
     std::default_random_engine m_RandomNumberGenerator;
     std::vector<char> m_MovesRemaining, m_IncorrectGuesses;
     std::string m_WordToBeGuessed, m_CurrentGuessOfWord;
-    std::string m_AIDifficulty, m_NumberOfPlayers;
-    int m_NumberOfTurns{}, m_NumberOfErrors{};
+    std::string m_NumberOfPlayers, m_AIDifficulty;
+    int m_NumberOfTurns{}, m_NumberOfErrors{}, m_AISpeed{};
     bool m_GameOver{}, m_UserIsWordGuesser{};
-    Terminal m_Terminal;
     StringBuilder m_StringBuilder;
 
     void Setup_Game() override;
@@ -37,7 +36,7 @@ private:
 
     void Get_User_Player_Choice();
 
-    void Get_AI_Difficulty();
+    void Get_AI_Speed();
 
     void Get_Word_From_User();
 

@@ -36,11 +36,14 @@ public:
                     Execute_Next_AI_Command();
             }
 
-            Terminal::Output_To_Terminal(Get_Game_Over_Message());
-            if (Terminal::Get_Key_Pressed() == 'q')
+            m_Terminal.Output_To_Terminal(Get_Game_Over_Message());
+            if (m_Terminal.Get_Key_Pressed() == 'q')
                 throw Exceptions::Quit();
         }
     }
+
+protected:
+    Terminal m_Terminal;
 
 private:
     virtual void Setup_Game() = 0;

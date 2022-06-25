@@ -45,7 +45,7 @@ std::string StringBuilder::New_Line_Centered(const std::string &Input, const Col
 std::string StringBuilder::New_Line_Left_Justified(const std::string &Input, const Colours &Colour) const
 {
     std::string Output = Input;
-    Output.insert(Output.size(), m_GameWidth-Input.size(), ' ');
+    Output.insert(Output.size(), m_GameWidth - Output.size(), ' ');
     return New_Line(Output, Colour);
 }
 

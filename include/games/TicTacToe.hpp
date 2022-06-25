@@ -25,11 +25,10 @@ private:
     std::default_random_engine m_RandomNumberGenerator;
     std::array<std::array<char, 3>, 3> m_GameGrid{};
     std::vector<int> m_MovesRemaining;
-    std::string m_AIDifficulty, m_NumberOfPlayers;
+    std::string m_NumberOfPlayers, m_AIDifficulty;
     char m_CurrentPlayer{}, m_UserPlayerChoice{};
-    int m_NumberOfTurns{};
+    int m_NumberOfTurns{}, m_AISpeed{};
     bool m_WinningConditionsMet{};
-    Terminal m_Terminal;
     StringBuilder m_StringBuilder;
 
     void Setup_Game() override;
@@ -38,7 +37,7 @@ private:
 
     void Get_User_Player_Choice();
 
-    void Get_AI_Difficulty();
+    void Get_AI_Speed();
 
     bool Game_Over() override;
 

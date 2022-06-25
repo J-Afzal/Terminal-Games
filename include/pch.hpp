@@ -8,6 +8,7 @@
 #include <memory>
 #include <random>
 #include <regex>
+#include <thread>
 
 /** data containers */
 #include <array>

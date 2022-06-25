@@ -26,17 +26,16 @@ private:
     std::array<std::array<char, 10>, 10> m_BoardOne{}, m_BoardTwo{};
     std::vector<int> m_MovesRemainingOne, m_MovesRemainingTwo;
     std::unordered_map<char, int> m_ShipsRemainingOne, m_ShipsRemainingTwo;
-    std::string m_AIDifficulty, m_NumberOfPlayers, m_CurrentPlayer;
-    int m_NumberOfTurns{}, m_PreviousCommand{};
+    std::string m_NumberOfPlayers, m_AIDifficulty, m_CurrentPlayer;
+    int m_NumberOfTurns{}, m_PreviousCommand{}, m_AISpeed{};
     bool m_GameOver{};
-    Terminal m_Terminal;
     StringBuilder m_StringBuilder;
 
     void Setup_Game() override;
 
     void Get_Number_Of_Players();
 
-    void Get_AI_Difficulty();
+    void Get_AI_Speed();
 
     void Get_User_Ship_Positions();
 
