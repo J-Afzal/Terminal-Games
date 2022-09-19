@@ -42,9 +42,12 @@ void TicTacToe::Setup_Game()
     if (m_NumberOfPlayers == "1  ")
         Get_User_Player_Choice();
 
-    // If AI involved get AI difficulty
+    // If AI involved get AI difficulty and speed
     if (m_NumberOfPlayers != "2  ") // i.e. = 0 or = 1
+    {
+        Get_AI_Difficulty();
         Get_AI_Speed();
+    }
 }
 
 void TicTacToe::Get_Number_Of_Players()
@@ -89,6 +92,24 @@ void TicTacToe::Get_User_Player_Choice()
     Menus[1] += m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
 
     m_Terminal.Get_User_Menu_Choice(Menus) == 0 ? m_UserPlayerChoice = 'X' : m_UserPlayerChoice = 'O';
+}
+
+void TicTacToe::Get_AI_Difficulty()
+{
+    std::vector<std::string> Menus(2);
+    std::string GameDisplay = Get_Game_Display() + m_StringBuilder.New_Line_Left_Justified(" Please select the AI difficulty:");
+
+    Menus[0] = GameDisplay;
+    Menus[0] += m_StringBuilder.New_Line_Left_Justified(" > EASY", Colours::BLUE);
+    Menus[0] += m_StringBuilder.New_Line_Left_Justified("   HARD");
+    Menus[0] += m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
+
+    Menus[1] = GameDisplay;
+    Menus[1] += m_StringBuilder.New_Line_Left_Justified("   EASY");
+    Menus[1] += m_StringBuilder.New_Line_Left_Justified(" > HARD", Colours::BLUE);
+    Menus[1] += m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
+
+    m_Terminal.Get_User_Menu_Choice(Menus) == 0 ? m_AIDifficulty = "EASY" : m_AIDifficulty = "HARD";
 }
 
 void TicTacToe::Get_AI_Speed()
@@ -210,14 +231,18 @@ void TicTacToe::Execute_Next_AI_Command()
     if (m_AISpeed != 0)
     {
         std::string Output = Get_Game_Display();
-        Output += m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
+        Output += m_StringBuilder.New_Line_Left_Justified(" The AI is executing their next move!") + m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
         m_Terminal.Output_To_Terminal(Output);
         std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::seconds(m_AISpeed));
     }
 
-    int AICommand = m_MovesRemaining[m_RandomNumberGenerator() % m_MovesRemaining.size()];
-    m_GameGrid[AICommand / 3][AICommand % 3] = m_CurrentPlayer;
-    m_MovesRemaining.erase(std::find(m_MovesRemaining.begin(), m_MovesRemaining.end(), AICommand));
+    if (m_AIDifficulty == "EASY")
+        m_AICommand = m_MovesRemaining[m_RandomNumberGenerator() % m_MovesRemaining.size()];
+    else
+        m_AICommand = m_MovesRemaining[m_RandomNumberGenerator() % m_MovesRemaining.size()];
+
+    m_GameGrid[m_AICommand / 3][m_AICommand % 3] = m_CurrentPlayer;
+    m_MovesRemaining.erase(std::find(m_MovesRemaining.begin(), m_MovesRemaining.end(), m_AICommand));
     m_NumberOfTurns++;
 }
 

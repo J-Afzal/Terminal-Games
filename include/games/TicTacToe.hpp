@@ -27,7 +27,7 @@ private:
     std::vector<int> m_MovesRemaining;
     std::string m_NumberOfPlayers, m_AIDifficulty;
     char m_CurrentPlayer{}, m_UserPlayerChoice{};
-    int m_NumberOfTurns{}, m_AISpeed{};
+    int m_NumberOfTurns{}, m_AISpeed{}, m_AICommand{};
     bool m_WinningConditionsMet{};
     StringBuilder m_StringBuilder;
 
@@ -36,6 +36,8 @@ private:
     void Get_Number_Of_Players();
 
     void Get_User_Player_Choice();
+
+    void Get_AI_Difficulty();
 
     void Get_AI_Speed();
 
