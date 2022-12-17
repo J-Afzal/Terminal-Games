@@ -1,5 +1,8 @@
-<p align="center"> <img src="screenshots/tictactoe/TicTacToe.gif" width=400> <img src="screenshots/hangman/Hangman.gif" width=400> </p>
-<p align="center"> <img src="screenshots/battleships/Battleships.gif"> </p>
+<div>
+  <img src="screenshots/tictactoe/TicTacToe.gif" width=800 alt="TicTacToe gif">
+  <img src="screenshots/hangman/Hangman.gif" width=800 alt="Hangman gif">
+  <img src="screenshots/battleships/Battleships.gif" alt="Battleships gif">
+</div>
 
 # About
 Simple games that run in the terminal. The project is run by instantiating the `MainMenu` class and then calling its `Run()` method.
