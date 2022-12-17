@@ -30,11 +30,11 @@ Due to the use of `Windows.h` and ANSI colour escape codes, this project has onl
 
 ## Main Menu GIF
 
-![MainMenu GIF](screenshots/MainMenu.gif "MainMenu GIF")
+![Main Menu GIF](screenshots/MainMenu.gif "Main Menu GIF")
 
 ## Tic Tac Toe GIF
 
-![TicTacToe GIF](screenshots/TicTacToe.gif "TicTacToe GIF")
+![Tic Tac Toe GIF](screenshots/TicTacToe.gif "Tic Tac Toe GIF")
 
 ## Hangman GIF
 
