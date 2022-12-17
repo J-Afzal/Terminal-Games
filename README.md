@@ -1,10 +1,5 @@
 # Terminal Games
 
-![MainMenu GIF](screenshots/MainMenu.gif "MainMenu GIF")
-![TicTacToe GIF](screenshots/TicTacToe.gif "TicTacToe GIF")
-![Hangman GIF](screenshots/Hangman.gif "Hangman GIF")
-![Battleships GIF](screenshots/Battleships.gif "Battleships GIF")
-
 ## About
 
 Simple games that run in the terminal. The project is run by instantiating the `MainMenu` class, optionally passing a bool to enable or disable ASCII only mode, and then calling its `Run()` method.
@@ -32,3 +27,19 @@ cmake -S . -B build
 ## Warning
 
 Due to the use of `Windows.h` and ANSI colour escape codes, this project has only been tested on Windows using either the Visual Studio Terminal or the Visual Studio Code Integrated Powershell Terminal.
+
+## Main Menu GIF
+
+![MainMenu GIF](screenshots/MainMenu.gif "MainMenu GIF")
+
+## Tic Tac Toe GIF
+
+![TicTacToe GIF](screenshots/TicTacToe.gif "TicTacToe GIF")
+
+## Hangman GIF
+
+![Hangman GIF](screenshots/Hangman.gif "Hangman GIF")
+
+## Battleships GIF
+
+![Battleships GIF](screenshots/Battleships.gif "Battleships GIF")
