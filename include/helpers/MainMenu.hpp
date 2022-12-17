@@ -19,10 +19,18 @@
 class MainMenu
 {
 public:
-    MainMenu();
+    /**
+     * @brief Construct a new Main Menu object
+     * @param ASCIIOnly determines whether to use ANSI escapes codes (false)
+     * or just ASCII characters (true)
+     */
+    explicit MainMenu(const bool &ASCIIOnly = false);
 
     ~MainMenu() = default;
 
+    /**
+     * @brief Kick off the MainMenu orchestration while loop
+     */
     void Run();
 
 private:

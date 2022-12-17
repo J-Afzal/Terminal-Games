@@ -11,17 +11,17 @@
 
 #include "games/TicTacToe.hpp"
 
-TicTacToe::TicTacToe()
+TicTacToe::TicTacToe(const bool& ASCIIOnly)
 {
-    m_StringBuilder.Set(53, "Tic Tac Toe", "q = quit to main menu");
+    m_StringBuilder.Set(ASCIIOnly, 53, "Tic Tac Toe", "q = quit to main menu");
     m_RandomNumberGenerator.seed(std::chrono::system_clock::now().time_since_epoch().count());
 }
 
 void TicTacToe::Setup_Game()
 {
     m_MovesRemaining.clear();
-    m_AIDifficulty = "EASY";
     m_NumberOfPlayers = "N/A";
+    m_AISpeedName = "N/A";
     m_NumberOfTurns = 0;
     m_UserPlayerChoice = ' ';
     m_WinningConditionsMet = false;
@@ -44,10 +44,7 @@ void TicTacToe::Setup_Game()
 
     // If AI involved get AI difficulty and speed
     if (m_NumberOfPlayers != "2  ") // i.e. = 0 or = 1
-    {
-        Get_AI_Difficulty();
         Get_AI_Speed();
-    }
 }
 
 void TicTacToe::Get_Number_Of_Players()
@@ -94,24 +91,6 @@ void TicTacToe::Get_User_Player_Choice()
     m_Terminal.Get_User_Menu_Choice(Menus) == 0 ? m_UserPlayerChoice = 'X' : m_UserPlayerChoice = 'O';
 }
 
-void TicTacToe::Get_AI_Difficulty()
-{
-    std::vector<std::string> Menus(2);
-    std::string GameDisplay = Get_Game_Display() + m_StringBuilder.New_Line_Left_Justified(" Please select the AI difficulty:");
-
-    Menus[0] = GameDisplay;
-    Menus[0] += m_StringBuilder.New_Line_Left_Justified(" > EASY", Colours::BLUE);
-    Menus[0] += m_StringBuilder.New_Line_Left_Justified("   HARD");
-    Menus[0] += m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
-
-    Menus[1] = GameDisplay;
-    Menus[1] += m_StringBuilder.New_Line_Left_Justified("   EASY");
-    Menus[1] += m_StringBuilder.New_Line_Left_Justified(" > HARD", Colours::BLUE);
-    Menus[1] += m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
-
-    m_Terminal.Get_User_Menu_Choice(Menus) == 0 ? m_AIDifficulty = "EASY" : m_AIDifficulty = "HARD";
-}
-
 void TicTacToe::Get_AI_Speed()
 {
     std::vector<std::string> Menus(3);
@@ -136,6 +115,13 @@ void TicTacToe::Get_AI_Speed()
     Menus[2] += m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
 
     m_AISpeed = m_Terminal.Get_User_Menu_Choice(Menus);
+
+    if (m_AISpeed == 0)
+        m_AISpeedName = "INSTANT";
+    else if (m_AISpeed == 1)
+        m_AISpeedName = "FAST";
+    else // == 2
+        m_AISpeedName = "SLOW";
 }
 
 bool TicTacToe::Game_Over()
@@ -236,10 +222,7 @@ void TicTacToe::Execute_Next_AI_Command()
         std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::seconds(m_AISpeed));
     }
 
-    if (m_AIDifficulty == "EASY")
-        m_AICommand = m_MovesRemaining[m_RandomNumberGenerator() % m_MovesRemaining.size()];
-    else
-        m_AICommand = m_MovesRemaining[m_RandomNumberGenerator() % m_MovesRemaining.size()];
+    m_AICommand = m_MovesRemaining[m_RandomNumberGenerator() % m_MovesRemaining.size()];
 
     m_GameGrid[m_AICommand / 3][m_AICommand % 3] = m_CurrentPlayer;
     m_MovesRemaining.erase(std::find(m_MovesRemaining.begin(), m_MovesRemaining.end(), m_AICommand));
@@ -248,14 +231,18 @@ void TicTacToe::Execute_Next_AI_Command()
 
 std::string TicTacToe::Get_Game_Over_Message()
 {
-    std::string Output = Get_Game_Display() + m_StringBuilder.New_Line_Centered("GAME OVER") + m_StringBuilder.Empty_Line();
+    std::string Output = Get_Game_Display() + m_StringBuilder.New_Line_Centred("GAME OVER") + m_StringBuilder.Empty_Line();
 
     if (m_WinningConditionsMet)
-        Output += m_StringBuilder.New_Line_Centered(std::string("Player ") + m_CurrentPlayer + " has won! The game lasted " + std::to_string(m_NumberOfTurns) + " turns.");
+        Output += m_StringBuilder.New_Line_Centred(
+                std::string("Player ") + m_CurrentPlayer + " has won! The game lasted " +
+                std::to_string(m_NumberOfTurns) + " turns.");
     else
-        Output += m_StringBuilder.New_Line_Centered("It is a draw! The game lasted " + std::to_string(m_NumberOfTurns) + " turns.");
+        Output += m_StringBuilder.New_Line_Centred(
+                "It is a draw! The game lasted " + std::to_string(m_NumberOfTurns) + " turns.");
 
-    Output += m_StringBuilder.Empty_Line() + m_StringBuilder.New_Line_Centered("Press 'Q' to quit OR Enter to play again...") + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
+    Output += m_StringBuilder.Empty_Line() +
+            m_StringBuilder.New_Line_Centred("Press 'Q' to quit OR Enter to play again...") + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
 
     return Output;
 }
@@ -266,15 +253,15 @@ std::string TicTacToe::Get_Game_Display()
 
     Output += m_StringBuilder.Top_Line();
 
-    Output += m_StringBuilder.New_Line(std::string("  ") + m_GameGrid[0][0] + " " + char(179) + " " + m_GameGrid[0][1] + " " + char(179) + " " + m_GameGrid[0][2] + "                                          ");
+    Output += m_StringBuilder.New_Line_Left_Justified(std::string("  ") + m_GameGrid[0][0] + " " + char(179) + " " + m_GameGrid[0][1] + " " + char(179) + " " + m_GameGrid[0][2]);
 
-    Output += m_StringBuilder.New_Line(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)197 + (char)196 + (char)196 + (char)196 + char(197) + (char)196 + (char)196 + (char)196 + "      # of Players = " + m_NumberOfPlayers + "                 ");
+    Output += m_StringBuilder.New_Line_Left_Justified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)197 + (char)196 + (char)196 + (char)196 + char(197) + (char)196 + (char)196 + (char)196 + "    # of Players = " + m_NumberOfPlayers);
 
-    Output += m_StringBuilder.New_Line(std::string("  ") + m_GameGrid[1][0] + " " + char(179) + " " + m_GameGrid[1][1] + " " + char(179) + " " + m_GameGrid[1][2] + "                                          ");
+    Output += m_StringBuilder.New_Line_Left_Justified(std::string("  ") + m_GameGrid[1][0] + " " + char(179) + " " + m_GameGrid[1][1] + " " + char(179) + " " + m_GameGrid[1][2]);
 
-    Output += m_StringBuilder.New_Line(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)197 + (char)196 + (char)196 + (char)196 + char(197) + (char)196 + (char)196 + (char)196 + "     AI Difficulty = " + m_AIDifficulty + "                ");
+    Output += m_StringBuilder.New_Line_Left_Justified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)197 + (char)196 + (char)196 + (char)196 + char(197) + (char)196 + (char)196 + (char)196 + "    AI Speed = " + m_AISpeedName);
 
-    Output += m_StringBuilder.New_Line(std::string("  ") + m_GameGrid[2][0] + " " + char(179) + " " + m_GameGrid[2][1] + " " + char(179) + " " + m_GameGrid[2][2] + "                                          ");
+    Output += m_StringBuilder.New_Line_Left_Justified(std::string("  ") + m_GameGrid[2][0] + " " + char(179) + " " + m_GameGrid[2][1] + " " + char(179) + " " + m_GameGrid[2][2]);
 
     return Output += m_StringBuilder.Empty_Line();
 }

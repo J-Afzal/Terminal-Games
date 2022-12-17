@@ -12,25 +12,32 @@
 
 #pragma once
 #include "Game.hpp"
-#include "helpers/StringBuilder.hpp"
 
 class Hangman : public Game
 {
 public:
-    explicit Hangman();
+    /**
+     * @brief Construct a new Hangman object
+     * @param ASCIIOnly determines whether to use ANSI escapes codes (false)
+     * or just ASCII characters (true)
+     */
+    explicit Hangman(const bool& ASCIIOnly);
 
     ~Hangman() override = default;
 
 private:
     std::default_random_engine m_RandomNumberGenerator;
+    std::vector<std::string> m_WordList;
     std::vector<char> m_MovesRemaining, m_IncorrectGuesses;
     std::string m_WordToBeGuessed, m_CurrentGuessOfWord;
-    std::string m_NumberOfPlayers, m_AIDifficulty;
+    std::string m_NumberOfPlayers, m_AISpeedName;
     int m_NumberOfTurns{}, m_NumberOfErrors{}, m_AISpeed{};
+    char m_AICommand{};
     bool m_GameOver{}, m_UserIsWordGuesser{};
-    StringBuilder m_StringBuilder;
 
     void Setup_Game() override;
+
+    void Load_Word_List();
 
     void Get_Number_Of_Players();
 

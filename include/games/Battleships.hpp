@@ -12,12 +12,16 @@
 
 #pragma once
 #include "Game.hpp"
-#include "helpers/StringBuilder.hpp"
 
 class Battleships : public Game
 {
 public:
-    explicit Battleships();
+    /**
+     * @brief Construct a new Battleships object
+     * @param ASCIIOnly determines whether to use ANSI escapes codes (false)
+     * or just ASCII characters (true)
+     */
+    explicit Battleships(const bool& ASCIIOnly);
 
     ~Battleships() override = default;
 
@@ -26,10 +30,9 @@ private:
     std::array<std::array<char, 10>, 10> m_BoardOne{}, m_BoardTwo{};
     std::vector<int> m_MovesRemainingOne, m_MovesRemainingTwo;
     std::unordered_map<char, int> m_ShipsRemainingOne, m_ShipsRemainingTwo;
-    std::string m_NumberOfPlayers, m_AIDifficulty, m_CurrentPlayer;
-    int m_NumberOfTurns{}, m_PreviousCommand{}, m_AISpeed{};
+    std::string m_NumberOfPlayers, m_AISpeedName, m_CurrentPlayer;
+    int m_NumberOfTurns{}, m_PreviousCommand{}, m_AISpeed{}, m_AICommand{};
     bool m_GameOver{};
-    StringBuilder m_StringBuilder;
 
     void Setup_Game() override;
 
@@ -50,6 +53,11 @@ private:
     void Execute_Next_User_Command() override;
 
     void Execute_Next_AI_Command() override;
+
+    void Execute_Command(std::array<std::array<char, 10>, 10> &OpponentBoard,
+                         std::unordered_map<char, int> &OpponentShipsRemaining,
+                         std::vector<int> &MovesRemaining,
+                         const int &AICommand);
 
     std::string Get_Game_Over_Message() override;
 

@@ -14,6 +14,7 @@
 #include "pch.hpp"
 #include "helpers/Exceptions.hpp"
 #include "helpers/Terminal.hpp"
+#include "helpers/StringBuilder.hpp"
 
 class Game
 {
@@ -44,6 +45,7 @@ public:
 
 protected:
     Terminal m_Terminal;
+    StringBuilder m_StringBuilder;
 
 private:
     virtual void Setup_Game() = 0;

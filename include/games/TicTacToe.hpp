@@ -12,12 +12,16 @@
 
 #pragma once
 #include "Game.hpp"
-#include "helpers/StringBuilder.hpp"
 
 class TicTacToe : public Game
 {
 public:
-    explicit TicTacToe();
+    /**
+     * @brief Construct a new Tic Tac Toe object
+     * @param ASCIIOnly determines whether to use ANSI escapes codes (false)
+     * or just ASCII characters (true)
+     */
+    explicit TicTacToe(const bool& ASCIIOnly);
 
     ~TicTacToe() override = default;
 
@@ -25,19 +29,16 @@ private:
     std::default_random_engine m_RandomNumberGenerator;
     std::array<std::array<char, 3>, 3> m_GameGrid{};
     std::vector<int> m_MovesRemaining;
-    std::string m_NumberOfPlayers, m_AIDifficulty;
+    std::string m_NumberOfPlayers, m_AISpeedName;
     char m_CurrentPlayer{}, m_UserPlayerChoice{};
     int m_NumberOfTurns{}, m_AISpeed{}, m_AICommand{};
     bool m_WinningConditionsMet{};
-    StringBuilder m_StringBuilder;
 
     void Setup_Game() override;
 
     void Get_Number_Of_Players();
 
     void Get_User_Player_Choice();
-
-    void Get_AI_Difficulty();
 
     void Get_AI_Speed();
 

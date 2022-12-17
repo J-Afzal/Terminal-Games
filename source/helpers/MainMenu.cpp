@@ -14,10 +14,9 @@
 #include "games/Hangman.hpp"
 #include "games/Battleships.hpp"
 
-MainMenu::MainMenu()
+MainMenu::MainMenu(const bool& ASCIIOnly)
 {
-    StringBuilder StringBuilder;
-    StringBuilder.Set(30, "Terminal-Games", "q = quit");
+    StringBuilder StringBuilder(ASCIIOnly, 30, "Terminal-Games", "q = quit");
 
     /**
      * The only difference between the three std::strings in m_Menus is the game that is selected using '>' and coloured blue.
@@ -49,9 +48,9 @@ MainMenu::MainMenu()
      *
      * Note that the index of a game in m_Games and the index of the corresponding m_Menus string are the same.
      */
-    m_Games[0] = std::make_unique<TicTacToe>();
-    m_Games[1] = std::make_unique<Hangman>();
-    m_Games[2] = std::make_unique<Battleships>();
+    m_Games[0] = std::make_unique<TicTacToe>(ASCIIOnly);
+    m_Games[1] = std::make_unique<Hangman>(ASCIIOnly);
+    m_Games[2] = std::make_unique<Battleships>(ASCIIOnly);
 }
 
 void MainMenu::Run()
