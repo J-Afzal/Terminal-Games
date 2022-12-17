@@ -112,9 +112,15 @@ void Battleships::Get_AI_Speed()
     if (m_AISpeed == 0)
         m_AISpeedName = "INSTANT";
     else if (m_AISpeed == 1)
+    {
+        m_AISpeed = 100;
         m_AISpeedName = "FAST   ";
+    }
     else // == 2
+    {
+        m_AISpeed = 1000;
         m_AISpeedName = "SLOW   ";
+    }
 }
 
 void Battleships::Get_User_Ship_Positions()
@@ -142,7 +148,8 @@ void Battleships::Get_User_Ship_Positions()
     for (int i = 0; i < 5; i++) // for each ship
     {
         std::vector<int> ShipRows, ShipColumns;
-        std::string ShipOrientation = "N/A";
+        bool ShipOrientationHorizontal = false;
+        bool ShipOrientationVertical = false;
 
         for (int j = 0; j < ShipSizes[i]; j++) // for each ship grid locations
         {
@@ -197,6 +204,13 @@ void Battleships::Get_User_Ship_Positions()
 
                         j--;
 
+                        // Reset ship orientation
+                        if (j == 1)
+                        {
+                            ShipOrientationHorizontal = false;
+                            ShipOrientationVertical = false;
+                        }
+
                         // If all ship locations cleared cursor will be placed at previous ship last location as ShipRows/ShipColumns is now empty
                         if (j == 0)
                         {
@@ -238,24 +252,38 @@ void Battleships::Get_User_Ship_Positions()
                         if ((RowsSame && ColumnsSame) || (!RowsSame && !ColumnsSame))
                             continue;
 
-                        if (ShipRows.size() == 1)
+                        if (RowsSame && (std::abs(Column - ShipColumns.back()) == 1))
                         {
-                            if (RowsSame)
-                                ShipOrientation = "HORIZONTAL";
-                            else
-                                ShipOrientation = "VERTICAL";
-
-                            ShipRows.push_back(Row);
-                            ShipColumns.push_back(Column);
-                            break; // And go to "Place ship" code below and then go to next j iteration
+                            if (ShipRows.size() == 1)
+                            {
+                                ShipOrientationHorizontal = true;
+                                ShipRows.push_back(Row);
+                                ShipColumns.push_back(Column);
+                                break; // And go to "Place ship" code below and then go to next j iteration
+                            }
+                            else if (ShipOrientationHorizontal)
+                            {
+                                ShipRows.push_back(Row);
+                                ShipColumns.push_back(Column);
+                                break; // And go to "Place ship" code below and then go to next j iteration
+                            }
                         }
 
-                        else if (((RowsSame && (ShipOrientation == "HORIZONTAL") && (std::abs(Column - ShipColumns.back()) == 1)) || (ColumnsSame && (ShipOrientation == "VERTICAL") && (std::abs(Row - ShipRows.back()) == 1))))
+                        else if (ColumnsSame && (std::abs(Row - ShipRows.back()) == 1))
                         {
-                            // If row or column same then column must an increment or decrement of previous position if there is one
-                            ShipRows.push_back(Row);
-                            ShipColumns.push_back(Column);
-                            break; // And go to "Place ship" code below and then go to next j iteration
+                            if (ShipRows.size() == 1)
+                            {
+                                ShipOrientationVertical = true;
+                                ShipRows.push_back(Row);
+                                ShipColumns.push_back(Column);
+                                break; // And go to "Place ship" code below and then go to next j iteration
+                            }
+                            else if (ShipOrientationVertical)
+                            {
+                                ShipRows.push_back(Row);
+                                ShipColumns.push_back(Column);
+                                break; // And go to "Place ship" code below and then go to next j iteration
+                            }
                         }
                     }
                 }
@@ -433,7 +461,7 @@ void Battleships::Execute_Next_AI_Command()
         std::string Output = Get_Game_Display();
         Output += m_StringBuilder.New_Line_Left_Justified(" The AI is executing their next move!") + m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
         m_Terminal.Output_To_Terminal(Output);
-        std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::seconds(m_AISpeed));
+        std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::milliseconds(m_AISpeed));
     }
 
     if (m_CurrentPlayer == "Player One")
@@ -451,9 +479,9 @@ void Battleships::Execute_Next_AI_Command()
 void Battleships::Execute_Command(std::array<std::array<char, 10>, 10> &OpponentBoard,
                                   std::unordered_map<char, int> &OpponentShipsRemaining,
                                   std::vector<int> &MovesRemaining,
-                                  const int &AICommand)
+                                  const int &Command)
 {
-    int Row = m_AICommand / 10, Column = m_AICommand % 10;
+    int Row = Command / 10, Column = Command % 10;
 
     if (OpponentBoard[Row][Column] == 'C' || OpponentBoard[Row][Column] == 'B' || OpponentBoard[Row][Column] == 'D' || OpponentBoard[Row][Column] == 'S' || OpponentBoard[Row][Column] == 'P')
     {
@@ -463,7 +491,7 @@ void Battleships::Execute_Command(std::array<std::array<char, 10>, 10> &Opponent
     else
         OpponentBoard[Row][Column] = '.';
 
-    MovesRemaining.erase(std::find(MovesRemaining.begin(), MovesRemaining.end(), AICommand));
+    MovesRemaining.erase(std::find(MovesRemaining.begin(), MovesRemaining.end(), Command));
 
     m_NumberOfTurns++;
 }
