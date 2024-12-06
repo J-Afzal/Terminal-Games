@@ -11,6 +11,8 @@
 
 #pragma once
 
+#include <thread>
+
 namespace Exceptions
 {
     class Quit : public std::exception {};

@@ -11,6 +11,11 @@
  */
 
 #pragma once
+
+#include <random>
+#include <string>
+#include <vector>
+
 #include "Game.hpp"
 
 class Hangman : public Game

@@ -11,10 +11,10 @@
  */
 
 #pragma once
-#include "pch.hpp"
+
 #include "helpers/Exceptions.hpp"
-#include "helpers/Terminal.hpp"
 #include "helpers/StringBuilder.hpp"
+#include "helpers/Terminal.hpp"
 
 class Game
 {

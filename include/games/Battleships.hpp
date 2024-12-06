@@ -11,6 +11,13 @@
  */
 
 #pragma once
+
+#include <array>
+#include <random>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
 #include "Game.hpp"
 
 class Battleships : public Game

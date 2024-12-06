@@ -13,7 +13,10 @@
  */
 
 #pragma once
-#include "pch.hpp"
+
+#include <array>
+#include <vector>
+
 #include "games/Game.hpp"
 
 class MainMenu

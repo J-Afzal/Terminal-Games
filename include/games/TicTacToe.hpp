@@ -11,6 +11,12 @@
  */
 
 #pragma once
+
+#include <array>
+#include <random>
+#include <string>
+#include <vector>
+
 #include "Game.hpp"
 
 class TicTacToe : public Game

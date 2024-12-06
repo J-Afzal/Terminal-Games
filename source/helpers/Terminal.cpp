@@ -9,8 +9,12 @@
  *
  */
 
-#include "helpers/Terminal.hpp"
+#include <iostream>
+#include <string>
+#include <conio.h>
+
 #include "helpers/Exceptions.hpp"
+#include "helpers/Terminal.hpp"
 
 Terminal::Terminal()
 {

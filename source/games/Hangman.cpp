@@ -9,6 +9,10 @@
  *
  */
 
+#include <iostream>
+#include <fstream>
+#include <regex>
+
 #include "games/Hangman.hpp"
 
 Hangman::Hangman(const bool& ASCIIOnly)

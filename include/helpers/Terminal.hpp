@@ -11,7 +11,9 @@
  */
 
 #pragma once
-#include "pch.hpp"
+
+#include <vector>
+#include <Windows.h>
 
 class Terminal
 {

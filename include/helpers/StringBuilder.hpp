@@ -10,7 +10,8 @@
  */
 
 #pragma once
-#include "pch.hpp"
+
+#include <string>
 
 enum class Colours { WHITE, RED, BLUE };
 

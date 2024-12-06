@@ -8,7 +8,6 @@ include_directories(include)
 
 add_executable(Terminal-Games
         source/main.cpp
-        include/pch.hpp
         include/helpers/MainMenu.hpp
         source/helpers/MainMenu.cpp
         include/helpers/StringBuilder.hpp
