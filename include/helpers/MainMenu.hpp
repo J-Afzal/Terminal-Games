@@ -39,6 +39,6 @@ public:
 private:
     std::array<std::unique_ptr<Game>, 3> m_Games;
     std::vector<std::string> m_Menus;
-    int m_CurrentSelection{};
+    int m_CurrentSelection;
     Terminal m_Terminal;
 };

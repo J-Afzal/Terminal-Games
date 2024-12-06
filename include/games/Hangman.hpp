@@ -36,9 +36,9 @@ private:
     std::vector<char> m_MovesRemaining, m_IncorrectGuesses;
     std::string m_WordToBeGuessed, m_CurrentGuessOfWord;
     std::string m_NumberOfPlayers, m_AISpeedName;
-    int m_NumberOfTurns{}, m_NumberOfErrors{}, m_AISpeed{};
-    char m_AICommand{};
-    bool m_GameOver{}, m_UserIsWordGuesser{};
+    int m_NumberOfTurns, m_NumberOfErrors, m_AISpeed;
+    char m_AICommand;
+    bool m_GameOver, m_UserIsWordGuesser;
 
     void Setup_Game() override;
 

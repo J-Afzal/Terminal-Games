@@ -57,7 +57,7 @@ public:
     void Set_Cursor_Position(const int &X, const int &Y);
 
 private:
-    HANDLE m_ConsoleHandle{}, m_BufferHandle{};
-    CONSOLE_CURSOR_INFO m_CursorInfo{};
-    COORD m_CursorPosition{};
+    HANDLE m_ConsoleHandle, m_BufferHandle;
+    CONSOLE_CURSOR_INFO m_CursorInfo;
+    COORD m_CursorPosition;
 };

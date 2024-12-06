@@ -33,12 +33,12 @@ public:
 
 private:
     std::default_random_engine m_RandomNumberGenerator;
-    std::array<std::array<char, 3>, 3> m_GameGrid{};
+    std::array<std::array<char, 3>, 3> m_GameGrid;
     std::vector<int> m_MovesRemaining;
     std::string m_NumberOfPlayers, m_AISpeedName;
-    char m_CurrentPlayer{}, m_UserPlayerChoice{};
-    int m_NumberOfTurns{}, m_AISpeed{}, m_AICommand{};
-    bool m_WinningConditionsMet{};
+    char m_CurrentPlayer, m_UserPlayerChoice;
+    int m_NumberOfTurns, m_AISpeed, m_AICommand;
+    bool m_WinningConditionsMet;
 
     void Setup_Game() override;
 

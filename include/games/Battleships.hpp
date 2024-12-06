@@ -34,12 +34,12 @@ public:
 
 private:
     std::default_random_engine m_RandomNumberGenerator;
-    std::array<std::array<char, 10>, 10> m_BoardOne{}, m_BoardTwo{};
+    std::array<std::array<char, 10>, 10> m_BoardOne, m_BoardTwo;
     std::vector<int> m_MovesRemainingOne, m_MovesRemainingTwo;
     std::unordered_map<char, int> m_ShipsRemainingOne, m_ShipsRemainingTwo;
     std::string m_NumberOfPlayers, m_AISpeedName, m_CurrentPlayer;
-    int m_NumberOfTurns{}, m_PreviousCommand{}, m_AISpeed{}, m_AICommand{};
-    bool m_GameOver{};
+    int m_NumberOfTurns, m_PreviousCommand, m_AISpeed, m_AICommand;
+    bool m_GameOver;
 
     void Setup_Game() override;
 
