@@ -11,16 +11,16 @@
 
 #include "helpers/StringBuilder.hpp"
 
-StringBuilder::StringBuilder(const bool& ASCIIOnly, const uint32_t& GameWidth, const std::string& TopTitle, const std::string& BottomTitle)
+StringBuilder::StringBuilder(const std::string& TopTitle, const std::string& BottomTitle, const uint32_t& GameWidth, const bool& ASCIIOnly)
 {
-    this->Set(ASCIIOnly, GameWidth, TopTitle, BottomTitle);
+    this->Set(TopTitle, BottomTitle, GameWidth, ASCIIOnly);
 }
 
-void StringBuilder::Set(const bool& ASCIIOnly, const uint32_t& GameWidth, const std::string& TopTitle, const std::string& BottomTitle)
+void StringBuilder::Set(const std::string& TopTitle, const std::string& BottomTitle, const uint32_t& GameWidth, const bool& ASCIIOnly)
 {
-    m_GameWidth = GameWidth;
     m_TopTitle = TopTitle;
     m_BottomTitle = BottomTitle;
+    m_GameWidth = GameWidth;
 
     if (ASCIIOnly) // Remove ANSI escape codes
         m_WHITE = m_RED = m_BLUE =  m_RESET = "";

@@ -20,11 +20,11 @@ class StringBuilder
 public:
     StringBuilder() = default;
 
-    StringBuilder(const bool& ASCIIOnly, const uint32_t& GameWidth, const std::string& TopTitle, const std::string& BottomTitle);
+    StringBuilder(const std::string& TopTitle, const std::string& BottomTitle, const uint32_t& GameWidth, const bool& ASCIIOnly);
 
     ~StringBuilder() = default;
 
-    void Set(const bool& ASCIIOnly, const uint32_t& GameWidth, const std::string& TopTitle, const std::string& BottomTitle);
+    void Set(const std::string& TopTitle, const std::string& BottomTitle, const uint32_t& GameWidth, const bool& ASCIIOnly);
 
     std::string New_Line(const std::string& Input, const Colours& Colour = Colours::WHITE) const;
 

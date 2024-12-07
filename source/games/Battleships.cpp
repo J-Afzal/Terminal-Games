@@ -13,7 +13,7 @@
 
 Battleships::Battleships(const bool& ASCIIOnly)
 {
-    m_StringBuilder.Set(ASCIIOnly, 147, "Battleships", "q = quit to main menu");
+    m_StringBuilder.Set("Battleships", "q = quit to main menu", 147, ASCIIOnly);
     m_RandomNumberGenerator.seed(std::chrono::system_clock::now().time_since_epoch().count());
 }
 

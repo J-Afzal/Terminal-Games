@@ -16,7 +16,7 @@
 
 MainMenu::MainMenu(const bool& ASCIIOnly)
 {
-    StringBuilder StringBuilder(ASCIIOnly, 30, "Terminal-Games", "q = quit");
+    StringBuilder StringBuilder("Terminal-Games", "q = quit", 30, ASCIIOnly);
 
     /**
      * The only difference between the three std::strings in m_Menus is the game that is selected using '>' and coloured blue.

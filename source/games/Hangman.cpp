@@ -17,7 +17,7 @@
 
 Hangman::Hangman(const bool& ASCIIOnly)
 {
-    m_StringBuilder.Set(ASCIIOnly, 62, "Hangman", "q = quit to main menu");
+    m_StringBuilder.Set("Hangman", "q = quit to main menu", 62, ASCIIOnly);
     m_RandomNumberGenerator.seed(std::chrono::system_clock::now().time_since_epoch().count());
 }
 

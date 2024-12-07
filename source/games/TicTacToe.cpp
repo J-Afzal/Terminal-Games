@@ -13,7 +13,7 @@
 
 TicTacToe::TicTacToe(const bool& ASCIIOnly)
 {
-    m_StringBuilder.Set(ASCIIOnly, 53, "Tic Tac Toe", "q = quit to main menu");
+    m_StringBuilder.Set("Tic Tac Toe", "q = quit to main menu", 53, ASCIIOnly);
     m_RandomNumberGenerator.seed(std::chrono::system_clock::now().time_since_epoch().count());
 }
 
