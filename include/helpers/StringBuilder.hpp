@@ -59,21 +59,21 @@ public:
      *
      */
 
-    [[nodiscard]] std::string New_Line(const std::string& Input, const Colours& Colour = Colours::WHITE) const;
+    std::string New_Line(const std::string& Input, const Colours& Colour = Colours::WHITE) const;
 
-    [[nodiscard]] std::string New_Line_Centred(const std::string& Input, const Colours& Colour = Colours::WHITE) const;
+    std::string New_Line_Centred(const std::string& Input, const Colours& Colour = Colours::WHITE) const;
 
-    [[nodiscard]] std::string New_Line_Left_Justified(const std::string& Input, const Colours& Colour = Colours::WHITE) const;
+    std::string New_Line_Left_Justified(const std::string& Input, const Colours& Colour = Colours::WHITE) const;
 
-    [[nodiscard]] std::string Empty_Line() const;
+    std::string Empty_Line() const;
 
-    [[nodiscard]] std::string Top_Line() const;
+    std::string Top_Line() const;
 
-    [[nodiscard]] std::string Bottom_Line() const;
+    std::string Bottom_Line() const;
 
-    [[nodiscard]] std::string Top_Box() const;
+    std::string Top_Box() const;
 
-    [[nodiscard]] std::string Bottom_Box() const;
+    std::string Bottom_Box() const;
 
 private:
     std::string m_TopTitle, m_BottomTitle;
