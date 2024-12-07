@@ -65,6 +65,6 @@ void MainMenu::Run()
         catch (Exceptions::Quit& e) { return; }
 
         try { m_Games[m_CurrentSelection]->Play(); }
-        catch (Exceptions::Quit& e) { }
+        catch (Exceptions::Quit& e) { continue; }
     }
 }
