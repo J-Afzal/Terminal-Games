@@ -64,7 +64,7 @@ private:
 
     void Execute_Next_AI_Command() override;
 
-    void Check_Guess_And_Update_Current_Guess(const char &Guess);
+    void Check_Guess_And_Update_Current_Guess(const char& Guess);
 
     std::string Get_Game_Over_Message() override;
 

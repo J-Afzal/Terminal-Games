@@ -27,7 +27,7 @@ public:
      * @param ASCIIOnly determines whether to use ANSI escapes codes (false)
      * or just ASCII characters (true)
      */
-    explicit MainMenu(const bool &ASCIIOnly = false);
+    explicit MainMenu(const bool& ASCIIOnly = false);
 
     ~MainMenu() = default;
 

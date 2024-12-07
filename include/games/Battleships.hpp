@@ -49,7 +49,7 @@ private:
 
     void Get_User_Ship_Positions();
 
-    void Get_AI_Ship_Positions(std::array<std::array<char, 10>, 10> &AIBoard);
+    void Get_AI_Ship_Positions(std::array<std::array<char, 10>, 10>& AIBoard);
 
     bool Game_Over() override;
 
@@ -61,10 +61,10 @@ private:
 
     void Execute_Next_AI_Command() override;
 
-    void Execute_Command(std::array<std::array<char, 10>, 10> &OpponentBoard,
-                         std::unordered_map<char, uint32_t> &OpponentShipsRemaining,
-                         std::vector<uint32_t> &MovesRemaining,
-                         const uint32_t&AICommand);
+    void Execute_Command(std::array<std::array<char, 10>, 10>& OpponentBoard,
+                         std::unordered_map<char, uint32_t>& OpponentShipsRemaining,
+                         std::vector<uint32_t>& MovesRemaining,
+                         const uint32_t& AICommand);
 
     std::string Get_Game_Over_Message() override;
 

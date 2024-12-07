@@ -62,9 +62,9 @@ void MainMenu::Run()
     while (true)
     {
         try { m_CurrentSelection = m_Terminal.Get_User_Menu_Choice(m_Menus); }
-        catch (Exceptions::Quit &e) { return; }
+        catch (Exceptions::Quit& e) { return; }
 
         try { m_Games[m_CurrentSelection]->Play(); }
-        catch (Exceptions::Quit &ignored) { }
+        catch (Exceptions::Quit& e) { }
     }
 }

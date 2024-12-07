@@ -11,12 +11,12 @@
 
 #include "helpers/StringBuilder.hpp"
 
-StringBuilder::StringBuilder(const bool& ASCIIOnly, const uint32_t &GameWidth, const std::string &TopTitle, const std::string &BottomTitle)
+StringBuilder::StringBuilder(const bool& ASCIIOnly, const uint32_t& GameWidth, const std::string& TopTitle, const std::string& BottomTitle)
 {
     this->Set(ASCIIOnly, GameWidth, TopTitle, BottomTitle);
 }
 
-void StringBuilder::Set(const bool& ASCIIOnly, const uint32_t &GameWidth, const std::string &TopTitle, const std::string &BottomTitle)
+void StringBuilder::Set(const bool& ASCIIOnly, const uint32_t& GameWidth, const std::string& TopTitle, const std::string& BottomTitle)
 {
     m_GameWidth = GameWidth;
     m_TopTitle = TopTitle;
@@ -26,7 +26,7 @@ void StringBuilder::Set(const bool& ASCIIOnly, const uint32_t &GameWidth, const 
         m_WHITE = m_RED = m_BLUE =  m_RESET = "";
 }
 
-std::string StringBuilder::New_Line(const std::string &Input, const Colours &Colour) const
+std::string StringBuilder::New_Line(const std::string& Input, const Colours& Colour) const
 {
     std::string Output;
     Output += (char)186;
@@ -41,7 +41,7 @@ std::string StringBuilder::New_Line(const std::string &Input, const Colours &Col
     return Output + (char)186 + "\n";
 }
 
-std::string StringBuilder::New_Line_Centred(const std::string &Input, const Colours &Colour) const
+std::string StringBuilder::New_Line_Centred(const std::string& Input, const Colours& Colour) const
 {
     std::string Output;
     Output.insert(Output.size(), floor((m_GameWidth-(double)Input.size())/2), ' ');
@@ -50,7 +50,7 @@ std::string StringBuilder::New_Line_Centred(const std::string &Input, const Colo
     return New_Line(Output, Colour);
 }
 
-std::string StringBuilder::New_Line_Left_Justified(const std::string &Input, const Colours &Colour) const
+std::string StringBuilder::New_Line_Left_Justified(const std::string& Input, const Colours& Colour) const
 {
     std::string Output = Input;
     Output.insert(Output.size(), m_GameWidth - Output.size(), ' ');

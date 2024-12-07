@@ -20,11 +20,11 @@ class StringBuilder
 public:
     StringBuilder() = default;
 
-    StringBuilder(const bool& ASCIIOnly, const uint32_t &GameWidth, const std::string &TopTitle, const std::string &BottomTitle);
+    StringBuilder(const bool& ASCIIOnly, const uint32_t& GameWidth, const std::string& TopTitle, const std::string& BottomTitle);
 
     ~StringBuilder() = default;
 
-    void Set(const bool& ASCIIOnly, const uint32_t &GameWidth, const std::string &TopTitle, const std::string &BottomTitle);
+    void Set(const bool& ASCIIOnly, const uint32_t& GameWidth, const std::string& TopTitle, const std::string& BottomTitle);
 
     /**
      * @brief See below for a visual example of what each function abstracts away:
@@ -59,11 +59,11 @@ public:
      *
      */
 
-    [[nodiscard]] std::string New_Line(const std::string &Input, const Colours &Colour = Colours::WHITE) const;
+    [[nodiscard]] std::string New_Line(const std::string& Input, const Colours& Colour = Colours::WHITE) const;
 
-    [[nodiscard]] std::string New_Line_Centred(const std::string &Input, const Colours &Colour = Colours::WHITE) const;
+    [[nodiscard]] std::string New_Line_Centred(const std::string& Input, const Colours& Colour = Colours::WHITE) const;
 
-    [[nodiscard]] std::string New_Line_Left_Justified(const std::string &Input, const Colours &Colour = Colours::WHITE) const;
+    [[nodiscard]] std::string New_Line_Left_Justified(const std::string& Input, const Colours& Colour = Colours::WHITE) const;
 
     [[nodiscard]] std::string Empty_Line() const;
 

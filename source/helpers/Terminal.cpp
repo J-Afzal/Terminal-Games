@@ -37,7 +37,7 @@ Terminal::~Terminal()
     Set_Cursor_Visibility(true);
 }
 
-uint32_t Terminal::Get_User_Menu_Choice(const std::vector<std::string> &Menus)
+uint32_t Terminal::Get_User_Menu_Choice(const std::vector<std::string>& Menus)
 {
     uint32_t KeyPress, CurrentSelection = 0;
     while (true)
@@ -93,19 +93,19 @@ void Terminal::Clear_Terminal()
     SetConsoleCursorPosition(hStdOut, homeCoords);
 }
 
-void Terminal::Output_To_Terminal(const std::string &Output)
+void Terminal::Output_To_Terminal(const std::string& Output)
 {
     Clear_Terminal();
     std::cout << Output;
 }
 
-void Terminal::Set_Cursor_Visibility(const bool &CursorVisibility)
+void Terminal::Set_Cursor_Visibility(const bool& CursorVisibility)
 {
     m_CursorInfo.bVisible = CursorVisibility;
     SetConsoleCursorInfo(m_ConsoleHandle, &m_CursorInfo);
 }
 
-void Terminal::Set_Cursor_Position(const uint32_t &X, const uint32_t &Y)
+void Terminal::Set_Cursor_Position(const uint32_t& X, const uint32_t& Y)
 {
     m_CursorPosition.X = X;
     m_CursorPosition.Y = Y;

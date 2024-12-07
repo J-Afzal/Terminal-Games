@@ -280,7 +280,7 @@ void Hangman::Execute_Next_AI_Command()
     Check_Guess_And_Update_Current_Guess(m_AICommand);
 }
 
-void Hangman::Check_Guess_And_Update_Current_Guess(const char &Guess)
+void Hangman::Check_Guess_And_Update_Current_Guess(const char& Guess)
 {
     bool IsGuessCorrect = false;
     for (uint32_t i = 0; i < m_WordToBeGuessed.size(); i++)

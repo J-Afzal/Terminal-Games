@@ -306,7 +306,7 @@ void Battleships::Get_User_Ship_Positions()
     m_Terminal.Set_Cursor_Visibility(false);
 }
 
-void Battleships::Get_AI_Ship_Positions(std::array<std::array<char, 10>, 10> &AIBoard)
+void Battleships::Get_AI_Ship_Positions(std::array<std::array<char, 10>, 10>& AIBoard)
 {
     std::array<uint32_t, 5> ShipSizes = {5, 4, 3, 3, 2};
     std::array<char, 5> ShipLetters = {'C', 'B', 'D', 'S', 'P'};
@@ -476,10 +476,10 @@ void Battleships::Execute_Next_AI_Command()
     }
 }
 
-void Battleships::Execute_Command(std::array<std::array<char, 10>, 10> &OpponentBoard,
-                                  std::unordered_map<char, uint32_t> &OpponentShipsRemaining,
-                                  std::vector<uint32_t> &MovesRemaining,
-                                  const uint32_t &Command)
+void Battleships::Execute_Command(std::array<std::array<char, 10>, 10>& OpponentBoard,
+                                  std::unordered_map<char, uint32_t>& OpponentShipsRemaining,
+                                  std::vector<uint32_t>& MovesRemaining,
+                                  const uint32_t& Command)
 {
     uint32_t Row = Command / 10, Column = Command % 10;
 
