@@ -26,6 +26,22 @@ public:
 
     void Set(const bool& ASCIIOnly, const uint32_t& GameWidth, const std::string& TopTitle, const std::string& BottomTitle);
 
+    std::string New_Line(const std::string& Input, const Colours& Colour = Colours::WHITE) const;
+
+    std::string New_Line_Centred(const std::string& Input, const Colours& Colour = Colours::WHITE) const;
+
+    std::string New_Line_Left_Justified(const std::string& Input, const Colours& Colour = Colours::WHITE) const;
+
+    std::string Empty_Line() const;
+
+    std::string Top_Line() const;
+
+    std::string Bottom_Line() const;
+
+    std::string Top_Box() const;
+
+    std::string Bottom_Box() const;
+
     /**
      * @brief See below for a visual example of what each function abstracts away:
      *
@@ -58,23 +74,7 @@ public:
      *      m_GameWidth = 53
      *
      */
-
-    std::string New_Line(const std::string& Input, const Colours& Colour = Colours::WHITE) const;
-
-    std::string New_Line_Centred(const std::string& Input, const Colours& Colour = Colours::WHITE) const;
-
-    std::string New_Line_Left_Justified(const std::string& Input, const Colours& Colour = Colours::WHITE) const;
-
-    std::string Empty_Line() const;
-
-    std::string Top_Line() const;
-
-    std::string Bottom_Line() const;
-
-    std::string Top_Box() const;
-
-    std::string Bottom_Box() const;
-
+        
 private:
     std::string m_WHITE = "\x1B[1;37m", m_RED = "\x1B[1;31m", m_BLUE = "\x1B[1;34m", m_RESET = "\x1B[0m"; // ANSI escape codes
     std::string m_TopTitle, m_BottomTitle;
