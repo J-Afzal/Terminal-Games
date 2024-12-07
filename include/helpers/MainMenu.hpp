@@ -37,8 +37,8 @@ public:
     void Run();
 
 private:
+    Terminal m_Terminal;
     std::array<std::unique_ptr<Game>, 3> m_Games;
     std::vector<std::string> m_Menus;
-    int m_CurrentSelection;
-    Terminal m_Terminal;
+    uint32_t m_CurrentSelection;
 };

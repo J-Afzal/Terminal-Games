@@ -76,7 +76,7 @@ public:
     std::string Bottom_Box() const;
 
 private:
-    std::string m_TopTitle, m_BottomTitle;
     std::string m_WHITE = "\x1B[1;37m", m_RED = "\x1B[1;31m", m_BLUE = "\x1B[1;34m", m_RESET = "\x1B[0m"; // ANSI escape codes
+    std::string m_TopTitle, m_BottomTitle;
     uint32_t m_GameWidth;
 };

@@ -36,8 +36,8 @@ private:
     std::array<std::array<char, 3>, 3> m_GameGrid;
     std::vector<uint32_t> m_MovesRemaining;
     std::string m_NumberOfPlayers, m_AISpeedName;
-    char m_CurrentPlayer, m_UserPlayerChoice;
     uint32_t m_NumberOfTurns, m_AISpeed, m_AICommand;
+    char m_CurrentPlayer, m_UserPlayerChoice;
     bool m_WinningConditionsMet;
 
     void Setup_Game() override;

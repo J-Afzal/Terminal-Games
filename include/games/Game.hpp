@@ -44,8 +44,8 @@ public:
     }
 
 protected:
-    Terminal m_Terminal;
     StringBuilder m_StringBuilder;
+    Terminal m_Terminal;
 
 private:
     virtual void Setup_Game() = 0;
