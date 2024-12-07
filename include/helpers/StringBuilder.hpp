@@ -22,8 +22,6 @@ public:
 
     StringBuilder(const std::string& TopTitle, const std::string& BottomTitle, const uint32_t& GameWidth, const bool& ASCIIOnly);
 
-    ~StringBuilder() = default;
-
     void Set(const std::string& TopTitle, const std::string& BottomTitle, const uint32_t& GameWidth, const bool& ASCIIOnly);
 
     std::string New_Line(const std::string& Input, const Colours& Colour = Colours::WHITE) const;

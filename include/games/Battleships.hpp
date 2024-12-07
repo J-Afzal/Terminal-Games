@@ -30,8 +30,6 @@ public:
      */
     explicit Battleships(const bool& ASCIIOnly);
 
-    ~Battleships() override = default;
-
 private:
     std::default_random_engine m_RandomNumberGenerator;
     std::array<std::array<char, 10>, 10> m_BoardOne, m_BoardTwo;

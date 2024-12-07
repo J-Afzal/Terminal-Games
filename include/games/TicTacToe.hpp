@@ -29,8 +29,6 @@ public:
      */
     explicit TicTacToe(const bool& ASCIIOnly);
 
-    ~TicTacToe() override = default;
-
 private:
     std::default_random_engine m_RandomNumberGenerator;
     std::array<std::array<char, 3>, 3> m_GameGrid;

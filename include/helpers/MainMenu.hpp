@@ -29,8 +29,6 @@ public:
      */
     explicit MainMenu(const bool& ASCIIOnly = false);
 
-    ~MainMenu() = default;
-
     /**
      * @brief Kick off the MainMenu orchestration while loop
      */

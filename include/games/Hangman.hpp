@@ -28,8 +28,6 @@ public:
      */
     explicit Hangman(const bool& ASCIIOnly);
 
-    ~Hangman() override = default;
-
 private:
     std::default_random_engine m_RandomNumberGenerator;
     std::vector<std::string> m_WordList;

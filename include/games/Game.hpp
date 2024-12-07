@@ -19,8 +19,6 @@
 class Game
 {
 public:
-    virtual ~Game() = default;
-
     virtual void Play() final
     {
         while (true)
