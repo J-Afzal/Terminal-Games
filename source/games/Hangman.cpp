@@ -61,7 +61,7 @@ void Hangman::Setup_Game()
         Get_Word_From_User();
     }
 
-    for (unsigned int i = 0; i < m_WordToBeGuessed.size(); i++)
+    for (uint32_t i = 0; i < m_WordToBeGuessed.size(); i++)
         m_CurrentGuessOfWord.push_back('_');
 }
 
@@ -212,7 +212,7 @@ bool Hangman::Game_Over()
         return m_GameOver;
     }
 
-    for (unsigned int i = 0; i < m_WordToBeGuessed.size(); i++)
+    for (uint32_t i = 0; i < m_WordToBeGuessed.size(); i++)
         if (m_WordToBeGuessed[i] != m_CurrentGuessOfWord[i])
             return false;
 
@@ -234,7 +234,7 @@ void Hangman::Execute_Next_User_Command()
     Output += m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line();
     Output += m_StringBuilder.Bottom_Box();
 
-    int KeyPress, CurrentSelection = 0;
+    uint32_t KeyPress, CurrentSelection = 0;
     while (true)
     {
         m_Terminal.Output_To_Terminal(Output);
@@ -251,9 +251,9 @@ void Hangman::Execute_Next_User_Command()
             return;
         }
         else if (KeyPress == 72) // up arrow key
-            CurrentSelection == 0 ? CurrentSelection = (int)m_MovesRemaining.size() - 1 : --CurrentSelection;
+            CurrentSelection == 0 ? CurrentSelection = (uint32_t)m_MovesRemaining.size() - 1 : --CurrentSelection;
         else if (KeyPress == 80) // down arrow key
-            CurrentSelection == int(m_MovesRemaining.size() - 1) ? CurrentSelection = 0 : ++CurrentSelection;
+            CurrentSelection == uint32_t(m_MovesRemaining.size() - 1) ? CurrentSelection = 0 : ++CurrentSelection;
         else if (KeyPress == 'q')
             throw Exceptions::Quit();
         else
@@ -283,7 +283,7 @@ void Hangman::Execute_Next_AI_Command()
 void Hangman::Check_Guess_And_Update_Current_Guess(const char &Guess)
 {
     bool IsGuessCorrect = false;
-    for (unsigned int i = 0; i < m_WordToBeGuessed.size(); i++)
+    for (uint32_t i = 0; i < m_WordToBeGuessed.size(); i++)
         if (m_WordToBeGuessed[i] == Guess)
         {
             IsGuessCorrect = true;

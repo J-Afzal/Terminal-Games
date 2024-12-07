@@ -20,11 +20,11 @@ class StringBuilder
 public:
     StringBuilder() = default;
 
-    StringBuilder(const bool& ASCIIOnly, const int &GameWidth, const std::string &TopTitle, const std::string &BottomTitle);
+    StringBuilder(const bool& ASCIIOnly, const uint32_t &GameWidth, const std::string &TopTitle, const std::string &BottomTitle);
 
     ~StringBuilder() = default;
 
-    void Set(const bool& ASCIIOnly, const int &GameWidth, const std::string &TopTitle, const std::string &BottomTitle);
+    void Set(const bool& ASCIIOnly, const uint32_t &GameWidth, const std::string &TopTitle, const std::string &BottomTitle);
 
     /**
      * @brief See below for a visual example of what each function abstracts away:
@@ -78,5 +78,5 @@ public:
 private:
     std::string m_TopTitle, m_BottomTitle;
     std::string m_WHITE = "\x1B[1;37m", m_RED = "\x1B[1;31m", m_BLUE = "\x1B[1;34m", m_RESET = "\x1B[0m"; // ANSI escape codes
-    int m_GameWidth;
+    uint32_t m_GameWidth;
 };

@@ -27,9 +27,9 @@ void TicTacToe::Setup_Game()
     m_WinningConditionsMet = false;
     m_RandomNumberGenerator() % 2 == 0 ? m_CurrentPlayer = 'X' : m_CurrentPlayer = 'O';
 
-    for (int i = 0, GridNumber = 0; i < 3; i++)
+    for (uint32_t i = 0, GridNumber = 0; i < 3; i++)
     {
-        for (int j = 0; j < 3; j++, GridNumber++)
+        for (uint32_t j = 0; j < 3; j++, GridNumber++)
         {
             m_GameGrid[i][j] = ' ';
             m_MovesRemaining.push_back(GridNumber); // 0-8
@@ -172,7 +172,7 @@ void TicTacToe::Execute_Next_User_Command()
 
     m_Terminal.Set_Cursor_Visibility(true);
 
-    int KeyPress, Row = m_MovesRemaining[0] / 3, Column = m_MovesRemaining[0] % 3;
+    uint32_t KeyPress, Row = m_MovesRemaining[0] / 3, Column = m_MovesRemaining[0] % 3;
 
     while (true)
     {

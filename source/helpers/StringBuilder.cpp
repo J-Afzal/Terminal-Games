@@ -11,12 +11,12 @@
 
 #include "helpers/StringBuilder.hpp"
 
-StringBuilder::StringBuilder(const bool& ASCIIOnly, const int &GameWidth, const std::string &TopTitle, const std::string &BottomTitle)
+StringBuilder::StringBuilder(const bool& ASCIIOnly, const uint32_t &GameWidth, const std::string &TopTitle, const std::string &BottomTitle)
 {
     this->Set(ASCIIOnly, GameWidth, TopTitle, BottomTitle);
 }
 
-void StringBuilder::Set(const bool& ASCIIOnly, const int &GameWidth, const std::string &TopTitle, const std::string &BottomTitle)
+void StringBuilder::Set(const bool& ASCIIOnly, const uint32_t &GameWidth, const std::string &TopTitle, const std::string &BottomTitle)
 {
     m_GameWidth = GameWidth;
     m_TopTitle = TopTitle;

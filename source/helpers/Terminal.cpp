@@ -37,9 +37,9 @@ Terminal::~Terminal()
     Set_Cursor_Visibility(true);
 }
 
-int Terminal::Get_User_Menu_Choice(const std::vector<std::string> &Menus)
+uint32_t Terminal::Get_User_Menu_Choice(const std::vector<std::string> &Menus)
 {
-    int KeyPress, CurrentSelection = 0;
+    uint32_t KeyPress, CurrentSelection = 0;
     while (true)
     {
         Terminal::Output_To_Terminal(Menus[CurrentSelection]);
@@ -49,15 +49,15 @@ int Terminal::Get_User_Menu_Choice(const std::vector<std::string> &Menus)
         if (KeyPress == '\r')
             return CurrentSelection;
         else if (KeyPress == 72) // up arrow key
-            CurrentSelection == 0 ? CurrentSelection = (int)(Menus.size() - 1) : --CurrentSelection;
+            CurrentSelection == 0 ? CurrentSelection = (uint32_t)(Menus.size() - 1) : --CurrentSelection;
         else if (KeyPress == 80) // down arrow key
-            CurrentSelection == (int)(Menus.size() - 1) ? CurrentSelection = 0 : ++CurrentSelection;
+            CurrentSelection == (uint32_t)(Menus.size() - 1) ? CurrentSelection = 0 : ++CurrentSelection;
         else if (KeyPress == 'q')
             throw Exceptions::Quit();
     }
 }
 
-int Terminal::Get_Key_Pressed()
+uint32_t Terminal::Get_Key_Pressed()
 {
     FlushConsoleInputBuffer(m_BufferHandle);
     return _getch();
@@ -105,7 +105,7 @@ void Terminal::Set_Cursor_Visibility(const bool &CursorVisibility)
     SetConsoleCursorInfo(m_ConsoleHandle, &m_CursorInfo);
 }
 
-void Terminal::Set_Cursor_Position(const int &X, const int &Y)
+void Terminal::Set_Cursor_Position(const uint32_t &X, const uint32_t &Y)
 {
     m_CursorPosition.X = X;
     m_CursorPosition.Y = Y;
