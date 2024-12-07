@@ -28,23 +28,23 @@ public:
      * difference between each string is the currently selected menu option.
      * @return The index of Menus that is currently selected.
      */
-    uint32_t Get_User_Menu_Choice(const std::vector<std::string>& Menus);
+    uint32_t Get_User_Menu_Choice(const std::vector<std::string>& Menus) const;
 
     /**
      * @brief Wrapper for Windows.h FlushConsoleInputBuffer() and _getch()
      */
-    uint32_t Get_Key_Pressed();
+    uint32_t Get_Key_Pressed() const;
 
     /**
      * @brief Uses Windows.h to clear the contents of the terminal
      * and was taken from: https://www.cplusplus.com/articles/4z18T05o
      */
-    void Clear_Terminal();
+    void Clear_Terminal() const;
 
     /**
      * @brief Clear_Terminal() then std::cout << Output
      */
-    void Output_To_Terminal(const std::string& Output);
+    void Output_To_Terminal(const std::string& Output) const;
 
     /**
      * @brief Wrapper for Windows.h SetConsoleCursorInfo()

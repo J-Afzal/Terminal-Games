@@ -153,7 +153,7 @@ void TicTacToe::Toggle_Current_Player()
     m_CurrentPlayer == 'X' ? m_CurrentPlayer = 'O' : m_CurrentPlayer = 'X';
 }
 
-bool TicTacToe::Next_Turn_Is_User()
+bool TicTacToe::Next_Turn_Is_User() const
 {
     /**
      * If it is two player game then next turn will always be the user's turn, if not then
@@ -229,7 +229,7 @@ void TicTacToe::Execute_Next_AI_Command()
     m_NumberOfTurns++;
 }
 
-std::string TicTacToe::Get_Game_Over_Message()
+std::string TicTacToe::Get_Game_Over_Message() const
 {
     std::string Output = Get_Game_Display() + m_StringBuilder.New_Line_Centred("GAME OVER") + m_StringBuilder.Empty_Line();
 
@@ -247,7 +247,7 @@ std::string TicTacToe::Get_Game_Over_Message()
     return Output;
 }
 
-std::string TicTacToe::Get_Game_Display()
+std::string TicTacToe::Get_Game_Display() const
 {
     std::string Output = m_StringBuilder.Top_Box();
 

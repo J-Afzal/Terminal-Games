@@ -395,7 +395,7 @@ void Battleships::Toggle_Current_Player()
     m_CurrentPlayer == "Player One" ? m_CurrentPlayer = "Player Two" : m_CurrentPlayer = "Player One";
 }
 
-bool Battleships::Next_Turn_Is_User()
+bool Battleships::Next_Turn_Is_User() const
 {
     return m_NumberOfPlayers == "1  " && m_CurrentPlayer == "Player One";
 }
@@ -496,7 +496,7 @@ void Battleships::Execute_Command(std::array<std::array<char, 10>, 10>& Opponent
     m_NumberOfTurns++;
 }
 
-std::string Battleships::Get_Game_Over_Message()
+std::string Battleships::Get_Game_Over_Message() const
 {
     std::string Output = Get_Game_Display();
     Output += m_StringBuilder.New_Line_Centred("GAME OVER") + m_StringBuilder.Empty_Line();
@@ -509,7 +509,7 @@ std::string Battleships::Get_Game_Over_Message()
     return Output;
 }
 
-std::string Battleships::Get_Game_Display()
+std::string Battleships::Get_Game_Display() const
 {
     // Top bar
     std::string Output = m_StringBuilder.Top_Box();

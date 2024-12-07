@@ -37,7 +37,7 @@ Terminal::~Terminal()
     Set_Cursor_Visibility(true);
 }
 
-uint32_t Terminal::Get_User_Menu_Choice(const std::vector<std::string>& Menus)
+uint32_t Terminal::Get_User_Menu_Choice(const std::vector<std::string>& Menus) const
 {
     uint32_t KeyPress, CurrentSelection = 0;
     while (true)
@@ -57,13 +57,13 @@ uint32_t Terminal::Get_User_Menu_Choice(const std::vector<std::string>& Menus)
     }
 }
 
-uint32_t Terminal::Get_Key_Pressed()
+uint32_t Terminal::Get_Key_Pressed() const
 {
     FlushConsoleInputBuffer(m_BufferHandle);
     return _getch();
 }
 
-void Terminal::Clear_Terminal()
+void Terminal::Clear_Terminal() const
 {
     // Windows API method from https://www.cplusplus.com/articles/4z18T05o
     HANDLE hStdOut;
@@ -93,7 +93,7 @@ void Terminal::Clear_Terminal()
     SetConsoleCursorPosition(hStdOut, homeCoords);
 }
 
-void Terminal::Output_To_Terminal(const std::string& Output)
+void Terminal::Output_To_Terminal(const std::string& Output) const
 {
     Clear_Terminal();
     std::cout << Output;

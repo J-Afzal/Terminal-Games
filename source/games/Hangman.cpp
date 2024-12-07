@@ -222,7 +222,7 @@ bool Hangman::Game_Over()
 
 void Hangman::Toggle_Current_Player() {}
 
-bool Hangman::Next_Turn_Is_User()
+bool Hangman::Next_Turn_Is_User() const
 {
     return m_UserIsWordGuesser;
 }
@@ -300,7 +300,7 @@ void Hangman::Check_Guess_And_Update_Current_Guess(const char& Guess)
     m_NumberOfTurns++;
 }
 
-std::string Hangman::Get_Game_Over_Message()
+std::string Hangman::Get_Game_Over_Message() const
 {
     std::string Output = Get_Game_Display() + m_StringBuilder.New_Line_Centred("GAME OVER") + m_StringBuilder.Empty_Line();
 
@@ -317,7 +317,7 @@ std::string Hangman::Get_Game_Over_Message()
     return Output;
 }
 
-std::string Hangman::Get_Game_Display()
+std::string Hangman::Get_Game_Display() const
 {
     // Top bar
     std::string Output = m_StringBuilder.Top_Box();

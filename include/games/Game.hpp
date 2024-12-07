@@ -54,11 +54,11 @@ private:
 
     virtual void Toggle_Current_Player() = 0;
 
-    virtual bool Next_Turn_Is_User() = 0;
+    virtual bool Next_Turn_Is_User() const = 0;
 
     virtual void Execute_Next_User_Command() = 0;
 
     virtual void Execute_Next_AI_Command() = 0;
 
-    virtual std::string Get_Game_Over_Message() = 0;
+    virtual std::string Get_Game_Over_Message() const = 0;
 };

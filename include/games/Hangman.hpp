@@ -58,7 +58,7 @@ private:
 
     void Toggle_Current_Player() override;
 
-    bool Next_Turn_Is_User() override;
+    bool Next_Turn_Is_User() const override;
 
     void Execute_Next_User_Command() override;
 
@@ -66,7 +66,7 @@ private:
 
     void Check_Guess_And_Update_Current_Guess(const char& Guess);
 
-    std::string Get_Game_Over_Message() override;
+    std::string Get_Game_Over_Message() const override;
 
-    std::string Get_Game_Display();
+    std::string Get_Game_Display() const;
 };
