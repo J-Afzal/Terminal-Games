@@ -18,9 +18,9 @@ enum class Colours { WHITE, RED, BLUE };
 class StringBuilder
 {
 public:
-    StringBuilder() = default;
+    explicit StringBuilder() = default;
 
-    StringBuilder(const std::string& TopTitle, const std::string& BottomTitle, const uint32_t& GameWidth, const bool& ASCIIOnly);
+    explicit StringBuilder(const std::string& TopTitle, const std::string& BottomTitle, const uint32_t& GameWidth, const bool& ASCIIOnly);
 
     void Set(const std::string& TopTitle, const std::string& BottomTitle, const uint32_t& GameWidth, const bool& ASCIIOnly);
 

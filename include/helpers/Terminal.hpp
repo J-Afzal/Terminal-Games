@@ -18,7 +18,7 @@
 class Terminal
 {
 public:
-    Terminal();
+    explicit Terminal();
 
     ~Terminal();
 
