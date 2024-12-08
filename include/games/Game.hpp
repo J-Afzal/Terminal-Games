@@ -1,64 +1,56 @@
-/**
- * @file Game.hpp
- * @author Junaid Afzal
- * @brief This is the base class for all game objects which contains the
- * final Play() function interface and implementation using pure virtual functions
- * @version 1.0
- * @date 08-03-2022
- *
- * @copyright Copyright (c) 2022
- *
- */
-
 #pragma once
-#include "pch.hpp"
-#include "helpers/Exceptions.hpp"
-#include "helpers/Terminal.hpp"
-#include "helpers/StringBuilder.hpp"
 
+#include "helpers/Exceptions.hpp"
+#include "helpers/StringBuilder.hpp"
+#include "helpers/Terminal.hpp"
+
+/**
+ * @brief Base class for all games.
+ */
 class Game
 {
 public:
-    virtual ~Game() = default;
-
+    /**
+     * @brief Contains the main game loop.
+     */
     virtual void Play() final
     {
         while (true)
         {
-            Setup_Game();
+            SetupGame();
 
-            while (!Game_Over())
+            while (!IsGameOver())
             {
-                Toggle_Current_Player();
+                ToggleCurrentPlayer();
 
-                if (Next_Turn_Is_User())
-                    Execute_Next_User_Command();
+                if (IsNextTurnUser())
+                    ExecuteCommandUser();
                 else
-                    Execute_Next_AI_Command();
+                    ExecuteCommandAI();
             }
 
-            m_Terminal.Output_To_Terminal(Get_Game_Over_Message());
-            if (m_Terminal.Get_Key_Pressed() == 'q')
+            m_terminal.PrintOutput(GetGameOverMessage());
+            if (m_terminal.GetNextKeyPress() == 'q')
                 throw Exceptions::Quit();
         }
     }
 
 protected:
-    Terminal m_Terminal;
-    StringBuilder m_StringBuilder;
+    StringBuilder m_stringBuilder;
+    Terminal m_terminal;
 
 private:
-    virtual void Setup_Game() = 0;
+    virtual void SetupGame() = 0;
 
-    virtual bool Game_Over() = 0;
+    virtual bool IsGameOver() = 0;
 
-    virtual void Toggle_Current_Player() = 0;
+    virtual void ToggleCurrentPlayer() = 0;
 
-    virtual bool Next_Turn_Is_User() = 0;
+    virtual bool IsNextTurnUser() const = 0;
 
-    virtual void Execute_Next_User_Command() = 0;
+    virtual void ExecuteCommandUser() = 0;
 
-    virtual void Execute_Next_AI_Command() = 0;
+    virtual void ExecuteCommandAI() = 0;
 
-    virtual std::string Get_Game_Over_Message() = 0;
+    virtual std::string GetGameOverMessage() const = 0;
 };

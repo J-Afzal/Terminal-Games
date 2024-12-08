@@ -11,22 +11,22 @@
 
 #include "helpers/StringBuilder.hpp"
 
-StringBuilder::StringBuilder(const bool& ASCIIOnly, const int &GameWidth, const std::string &TopTitle, const std::string &BottomTitle)
+StringBuilder::StringBuilder(const std::string& topTitle, const std::string& bottomTitle, const uint32_t& gameWidth, const bool& outputIsOnlyASCII)
 {
-    this->Set(ASCIIOnly, GameWidth, TopTitle, BottomTitle);
+    this->SetProperties(topTitle, bottomTitle, gameWidth, outputIsOnlyASCII);
 }
 
-void StringBuilder::Set(const bool& ASCIIOnly, const int &GameWidth, const std::string &TopTitle, const std::string &BottomTitle)
+void StringBuilder::SetProperties(const std::string& topTitle, const std::string& bottomTitle, const uint32_t& gameWidth, const bool& outputIsOnlyASCII)
 {
-    m_GameWidth = GameWidth;
-    m_TopTitle = TopTitle;
-    m_BottomTitle = BottomTitle;
+    m_topTitle = topTitle;
+    m_bottomTitle = bottomTitle;
+    m_displayWidth = gameWidth;
 
-    if (ASCIIOnly) // Remove ANSI escape codes
+    if (outputIsOnlyASCII) // Remove ANSI escape codes
         m_WHITE = m_RED = m_BLUE =  m_RESET = "";
 }
 
-std::string StringBuilder::New_Line(const std::string &Input, const Colours &Colour) const
+std::string StringBuilder::AddNewLine(const std::string& Input, const Colours& Colour) const
 {
     std::string Output;
     Output += (char)186;
@@ -41,55 +41,55 @@ std::string StringBuilder::New_Line(const std::string &Input, const Colours &Col
     return Output + (char)186 + "\n";
 }
 
-std::string StringBuilder::New_Line_Centred(const std::string &Input, const Colours &Colour) const
+std::string StringBuilder::AddNewLineCentred(const std::string& Input, const Colours& Colour) const
 {
     std::string Output;
-    Output.insert(Output.size(), floor((m_GameWidth-(double)Input.size())/2), ' ');
+    Output.insert(Output.size(), ceil((m_displayWidth-(double)Input.size())/2), ' ');
     Output += Input;
-    Output.insert(Output.size(), ceil((m_GameWidth-(double)Input.size())/2), ' ');
-    return New_Line(Output, Colour);
+    Output.insert(Output.size(), floor((m_displayWidth-(double)Input.size())/2), ' ');
+    return AddNewLine(Output, Colour);
 }
 
-std::string StringBuilder::New_Line_Left_Justified(const std::string &Input, const Colours &Colour) const
+std::string StringBuilder::AddNewLineLeftJustified(const std::string& Input, const Colours& Colour) const
 {
     std::string Output = Input;
-    Output.insert(Output.size(), m_GameWidth - Output.size(), ' ');
-    return New_Line(Output, Colour);
+    Output.insert(Output.size(), m_displayWidth - Output.size(), ' ');
+    return AddNewLine(Output, Colour);
 }
 
-std::string StringBuilder::Empty_Line() const
+std::string StringBuilder::AddEmptyLine() const
 {
     std::string Output;
     Output += (char)186;
-    Output.insert(Output.size(), m_GameWidth, ' ');
+    Output.insert(Output.size(), m_displayWidth, ' ');
     Output += (char)186;
     return Output + "\n";
 }
 
-std::string StringBuilder::Top_Line() const
+std::string StringBuilder::AddTopLine() const
 {
     std::string Output;
     Output += (char)201;
-    Output.insert(Output.size(), m_GameWidth, (char)205);
+    Output.insert(Output.size(), m_displayWidth, (char)205);
     Output += (char)187;
     return Output + "\n";
 }
 
-std::string StringBuilder::Bottom_Line() const
+std::string StringBuilder::AddBottomLine() const
 {
     std::string Output;
     Output += (char)200;
-    Output.insert(Output.size(), m_GameWidth, (char)205);
+    Output.insert(Output.size(), m_displayWidth, (char)205);
     Output += (char)188;
     return Output + "\n";
 }
 
-std::string StringBuilder::Top_Box() const
+std::string StringBuilder::AddTopBox() const
 {
-    return m_WHITE + Top_Line() + New_Line_Centred(m_TopTitle, Colours::RED) + Bottom_Line();
+    return m_WHITE + AddTopLine() + AddNewLineCentred(m_topTitle, Colours::RED) + AddBottomLine();
 }
 
-std::string StringBuilder::Bottom_Box() const
+std::string StringBuilder::AddBottomBox() const
 {
-    return Top_Line() + New_Line_Centred(m_BottomTitle, Colours::RED) + Bottom_Line() + m_RESET;
+    return AddTopLine() + AddNewLineCentred(m_bottomTitle, Colours::RED) + AddBottomLine() + m_RESET;
 }

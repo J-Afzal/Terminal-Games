@@ -9,72 +9,74 @@
  *
  */
 
+#include <iostream>
+#include <fstream>
+#include <regex>
+
 #include "games/Hangman.hpp"
 
-Hangman::Hangman(const bool& ASCIIOnly)
+Hangman::Hangman(const bool& outputIsOnlyASCII)
 {
-    m_StringBuilder.Set(ASCIIOnly, 62, "Hangman", "q = quit to main menu");
-    m_RandomNumberGenerator.seed(std::chrono::system_clock::now().time_since_epoch().count());
+    m_stringBuilder.SetProperties("Hangman", "q = quit to main menu", 62, outputIsOnlyASCII);
+    m_randomNumberGenerator.seed(std::chrono::system_clock::now().time_since_epoch().count());
 }
 
-void Hangman::Setup_Game()
+void Hangman::SetupGame()
 {
-    m_MovesRemaining.reserve(26);
-    m_MovesRemaining = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
-    m_IncorrectGuesses.clear();
-    m_WordToBeGuessed = "";
-    m_CurrentGuessOfWord = "";
-    m_NumberOfPlayers = "N/A";
-    m_AISpeedName = "N/A";
-    m_NumberOfErrors = 0;
-    m_NumberOfTurns = 0;
-    m_GameOver = false;
-    Load_Word_List();
+    m_movesRemaining.reserve(26);
+    m_movesRemaining = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+    m_incorrectGuesses.clear();
+    m_wordToBeGuessed = "";
+    m_currentGuessOfWord = "";
+    m_PlayerCount = "N/A";
+    m_speedNameAI = "N/A";
+    m_errorCount = 0;
+    m_turnCount = 0;
+    m_hasWinner = false;
+    LoadWords();
 
-    Get_Number_Of_Players();
+    GetPlayerCount();
 
-    if (m_NumberOfPlayers == "0  ")
+    if (m_PlayerCount == "0  ")
     {
-        m_UserIsWordGuesser = false;
-        Get_AI_Speed();
-        Get_Word_From_AI();
+        m_userIsGuesser = false;
+        GetAISpeed();
+        GetWordFromAI();
     }
 
-    else if (m_NumberOfPlayers == "1  ")
+    else if (m_PlayerCount == "1  ")
     {
-        Get_User_Player_Choice();
-        Get_AI_Speed();
+        GetPlayerChoiceFromUser();
+        GetAISpeed();
 
-        if (!m_UserIsWordGuesser)
-            Get_Word_From_User();
+        if (!m_userIsGuesser)
+            GetWordFromUser();
         else
-            Get_Word_From_AI();
+            GetWordFromAI();
     }
 
-    else if (m_NumberOfPlayers == "2  ")
+    else if (m_PlayerCount == "2  ")
     {
-        m_UserIsWordGuesser = true;
-        Get_Word_From_User();
+        m_userIsGuesser = true;
+        GetWordFromUser();
     }
 
-    for (unsigned int i = 0; i < m_WordToBeGuessed.size(); i++)
-        m_CurrentGuessOfWord.push_back('_');
+    for (uint32_t i = 0; i < m_wordToBeGuessed.size(); i++)
+        m_currentGuessOfWord.push_back('_');
 }
 
-void Hangman::Load_Word_List()
+void Hangman::LoadWords()
 {
-    /**
-     * Words.txt contains a list of the ~1,000 most used word in English from:
-     * https://www.ef.co.uk/english-resources/english-vocabulary/top-1000-words/
-     */
+    // Words.txt contains a list of the ~1,000 most used word in English from:
+    // See: https://www.ef.co.uk/english-resources/english-vocabulary/top-1000-words/
     std::ifstream WordsFile("../resources/Words.txt");
     if (WordsFile.is_open())
     {
-        m_WordList.clear();
+        m_words.clear();
 
         std::string Word;
         while(std::getline(WordsFile, Word))
-            m_WordList.push_back(Word);
+            m_words.push_back(Word);
 
         WordsFile.close();
     }
@@ -85,96 +87,96 @@ void Hangman::Load_Word_List()
     }
 }
 
-void Hangman::Get_Number_Of_Players()
+void Hangman::GetPlayerCount()
 {
     std::vector<std::string> Menus(3);
-    std::string GameDisplay = Get_Game_Display() + m_StringBuilder.New_Line_Left_Justified(" Please select the number of players:");
+    std::string GameDisplay = GetGameDisplay() + m_stringBuilder.AddNewLineLeftJustified(" Please select the number of players:");
 
     Menus[0] = GameDisplay;
-    Menus[0] += m_StringBuilder.New_Line_Left_Justified(" > 0", Colours::BLUE);
-    Menus[0] += m_StringBuilder.New_Line_Left_Justified("   1");
-    Menus[0] += m_StringBuilder.New_Line_Left_Justified("   2");
-    Menus[0] += m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
+    Menus[0] += m_stringBuilder.AddNewLineLeftJustified(" > 0", Colours::BLUE);
+    Menus[0] += m_stringBuilder.AddNewLineLeftJustified("   1");
+    Menus[0] += m_stringBuilder.AddNewLineLeftJustified("   2");
+    Menus[0] += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
 
     Menus[1] = GameDisplay;
-    Menus[1] += m_StringBuilder.New_Line_Left_Justified("   0");
-    Menus[1] += m_StringBuilder.New_Line_Left_Justified(" > 1", Colours::BLUE);
-    Menus[1] += m_StringBuilder.New_Line_Left_Justified("   2");
-    Menus[1] += m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
+    Menus[1] += m_stringBuilder.AddNewLineLeftJustified("   0");
+    Menus[1] += m_stringBuilder.AddNewLineLeftJustified(" > 1", Colours::BLUE);
+    Menus[1] += m_stringBuilder.AddNewLineLeftJustified("   2");
+    Menus[1] += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
 
     Menus[2] = GameDisplay;
-    Menus[2] += m_StringBuilder.New_Line_Left_Justified("   0");
-    Menus[2] += m_StringBuilder.New_Line_Left_Justified("   1");
-    Menus[2] += m_StringBuilder.New_Line_Left_Justified(" > 2", Colours::BLUE);
-    Menus[2] += m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
+    Menus[2] += m_stringBuilder.AddNewLineLeftJustified("   0");
+    Menus[2] += m_stringBuilder.AddNewLineLeftJustified("   1");
+    Menus[2] += m_stringBuilder.AddNewLineLeftJustified(" > 2", Colours::BLUE);
+    Menus[2] += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
 
-    m_NumberOfPlayers = std::to_string(m_Terminal.Get_User_Menu_Choice(Menus)) + "  ";
+    m_PlayerCount = std::to_string(m_terminal.GetUserChoiceFromMenus(Menus)) + "  ";
 }
 
-void Hangman::Get_User_Player_Choice()
+void Hangman::GetPlayerChoiceFromUser()
 {
     std::vector<std::string> Menus(2);
-    std::string GameDisplay = Get_Game_Display() + m_StringBuilder.New_Line_Left_Justified(" Please select what player you would like to be:");
+    std::string GameDisplay = GetGameDisplay() + m_stringBuilder.AddNewLineLeftJustified(" Please select what player you would like to be:");
 
     Menus[0] = GameDisplay;
-    Menus[0] += m_StringBuilder.New_Line_Left_Justified(" > GUESSER", Colours::BLUE);
-    Menus[0] += m_StringBuilder.New_Line_Left_Justified("   WORD SETTER");
-    Menus[0] += m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
+    Menus[0] += m_stringBuilder.AddNewLineLeftJustified(" > GUESSER", Colours::BLUE);
+    Menus[0] += m_stringBuilder.AddNewLineLeftJustified("   WORD SETTER");
+    Menus[0] += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
 
     Menus[1] = GameDisplay;
-    Menus[1] += m_StringBuilder.New_Line_Left_Justified("   GUESSER");
-    Menus[1] += m_StringBuilder.New_Line_Left_Justified(" > WORD SETTER", Colours::BLUE);
-    Menus[1] += m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
+    Menus[1] += m_stringBuilder.AddNewLineLeftJustified("   GUESSER");
+    Menus[1] += m_stringBuilder.AddNewLineLeftJustified(" > WORD SETTER", Colours::BLUE);
+    Menus[1] += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
 
-    m_Terminal.Get_User_Menu_Choice(Menus) == 0 ? m_UserIsWordGuesser = true : m_UserIsWordGuesser = false;
+    m_terminal.GetUserChoiceFromMenus(Menus) == 0 ? m_userIsGuesser = true : m_userIsGuesser = false;
 }
 
-void Hangman::Get_AI_Speed()
+void Hangman::GetAISpeed()
 {
     std::vector<std::string> Menus(3);
-    std::string GameDisplay = Get_Game_Display() + m_StringBuilder.New_Line_Left_Justified(" Please select the AI speed:");
+    std::string GameDisplay = GetGameDisplay() + m_stringBuilder.AddNewLineLeftJustified(" Please select the AI speed:");
 
     Menus[0] = GameDisplay;
-    Menus[0] += m_StringBuilder.New_Line_Left_Justified(" > INSTANT", Colours::BLUE);
-    Menus[0] += m_StringBuilder.New_Line_Left_Justified("   FAST");
-    Menus[0] += m_StringBuilder.New_Line_Left_Justified("   SLOW");
-    Menus[0] += m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
+    Menus[0] += m_stringBuilder.AddNewLineLeftJustified(" > INSTANT", Colours::BLUE);
+    Menus[0] += m_stringBuilder.AddNewLineLeftJustified("   FAST");
+    Menus[0] += m_stringBuilder.AddNewLineLeftJustified("   SLOW");
+    Menus[0] += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
 
     Menus[1] = GameDisplay;
-    Menus[1] += m_StringBuilder.New_Line_Left_Justified("   INSTANT");
-    Menus[1] += m_StringBuilder.New_Line_Left_Justified(" > FAST", Colours::BLUE);
-    Menus[1] += m_StringBuilder.New_Line_Left_Justified("   SLOW");
-    Menus[1] += m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
+    Menus[1] += m_stringBuilder.AddNewLineLeftJustified("   INSTANT");
+    Menus[1] += m_stringBuilder.AddNewLineLeftJustified(" > FAST", Colours::BLUE);
+    Menus[1] += m_stringBuilder.AddNewLineLeftJustified("   SLOW");
+    Menus[1] += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
 
     Menus[2] = GameDisplay;
-    Menus[2] += m_StringBuilder.New_Line_Left_Justified("   INSTANT");
-    Menus[2] += m_StringBuilder.New_Line_Left_Justified("   FAST");
-    Menus[2] += m_StringBuilder.New_Line_Left_Justified(" > SLOW", Colours::BLUE);
-    Menus[2] += m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
+    Menus[2] += m_stringBuilder.AddNewLineLeftJustified("   INSTANT");
+    Menus[2] += m_stringBuilder.AddNewLineLeftJustified("   FAST");
+    Menus[2] += m_stringBuilder.AddNewLineLeftJustified(" > SLOW", Colours::BLUE);
+    Menus[2] += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
 
-    m_AISpeed = m_Terminal.Get_User_Menu_Choice(Menus);
+    m_speedAI = m_terminal.GetUserChoiceFromMenus(Menus);
 
-    if (m_AISpeed == 0)
-        m_AISpeedName = "INSTANT";
-    else if (m_AISpeed == 1)
-        m_AISpeedName = "FAST";
+    if (m_speedAI == 0)
+        m_speedNameAI = "INSTANT";
+    else if (m_speedAI == 1)
+        m_speedNameAI = "FAST";
     else // == 2
-        m_AISpeedName = "SLOW";
+        m_speedNameAI = "SLOW";
 }
 
-void Hangman::Get_Word_From_User()
+void Hangman::GetWordFromUser()
 {
-    std::string Output = Get_Game_Display();
-    Output += m_StringBuilder.New_Line_Left_Justified(" Please enter the word to be guessed:");
-    Output += m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line();
-    Output += m_StringBuilder.Bottom_Box();
+    std::string Output = GetGameDisplay();
+    Output += m_stringBuilder.AddNewLineLeftJustified(" Please enter the word to be guessed:");
+    Output += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine();
+    Output += m_stringBuilder.AddBottomBox();
 
     std::string Input;
     while (true)
     {
-        m_Terminal.Output_To_Terminal(Output + "\x1B[1;37m");
+        m_terminal.PrintOutput(Output + "\x1B[1;37m");
 
-        m_Terminal.Set_Cursor_Position(39, 13);
+        m_terminal.SetCursorPosition(39, 13);
 
         std::getline(std::cin, Input);
 
@@ -189,176 +191,176 @@ void Hangman::Get_Word_From_User()
 
         if (std::regex_match(Input, std::regex("^[A-Za-z]+$")))
         {
-            m_WordToBeGuessed = Input;
+            m_wordToBeGuessed = Input;
             return;
         }
     }
 }
 
-void Hangman::Get_Word_From_AI()
+void Hangman::GetWordFromAI()
 {
-    m_WordToBeGuessed = m_WordList[m_RandomNumberGenerator() % m_WordList.size()];
+    m_wordToBeGuessed = m_words[m_randomNumberGenerator() % m_words.size()];
 }
 
-bool Hangman::Game_Over()
+bool Hangman::IsGameOver()
 {
-    if (m_NumberOfErrors == 10)
+    if (m_errorCount == 10)
     {
-        m_GameOver = true;
-        return m_GameOver;
+        m_hasWinner = true;
+        return m_hasWinner;
     }
 
-    for (unsigned int i = 0; i < m_WordToBeGuessed.size(); i++)
-        if (m_WordToBeGuessed[i] != m_CurrentGuessOfWord[i])
+    for (uint32_t i = 0; i < m_wordToBeGuessed.size(); i++)
+        if (m_wordToBeGuessed[i] != m_currentGuessOfWord[i])
             return false;
 
-    m_GameOver = true;
-    return m_GameOver;
+    m_hasWinner = true;
+    return m_hasWinner;
 }
 
-void Hangman::Toggle_Current_Player() {}
+void Hangman::ToggleCurrentPlayer() {}
 
-bool Hangman::Next_Turn_Is_User()
+bool Hangman::IsNextTurnUser() const
 {
-    return m_UserIsWordGuesser;
+    return m_userIsGuesser;
 }
 
-void Hangman::Execute_Next_User_Command()
+void Hangman::ExecuteCommandUser()
 {
-    std::string Output = Get_Game_Display(), CurrentLetter;
-    Output += m_StringBuilder.New_Line_Left_Justified(" Guesser, please enter your next guess:");
-    Output += m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line();
-    Output += m_StringBuilder.Bottom_Box();
+    std::string Output = GetGameDisplay(), CurrentLetter;
+    Output += m_stringBuilder.AddNewLineLeftJustified(" Guesser, please enter your next guess:");
+    Output += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine();
+    Output += m_stringBuilder.AddBottomBox();
 
-    int KeyPress, CurrentSelection = 0;
+    uint32_t KeyPress, CurrentSelection = 0;
     while (true)
     {
-        m_Terminal.Output_To_Terminal(Output);
+        m_terminal.PrintOutput(Output);
 
-        m_Terminal.Set_Cursor_Position(41, 13);
+        m_terminal.SetCursorPosition(41, 13);
 
-        std::cout << std::string("\x1B[1;34m") + m_MovesRemaining[CurrentSelection] + "\x1B[1;37m"; // Make it blue
+        std::cout << std::string("\x1B[1;34m") + m_movesRemaining[CurrentSelection] + "\x1B[1;37m"; // Make it blue
 
-        KeyPress = m_Terminal.Get_Key_Pressed();
+        KeyPress = m_terminal.GetNextKeyPress();
 
         if (KeyPress == '\r') // enter key
         {
-            Check_Guess_And_Update_Current_Guess(m_MovesRemaining[CurrentSelection]);
+            CheckGuessAndUpdateCurrentGuess(m_movesRemaining[CurrentSelection]);
             return;
         }
         else if (KeyPress == 72) // up arrow key
-            CurrentSelection == 0 ? CurrentSelection = (int)m_MovesRemaining.size() - 1 : --CurrentSelection;
+            CurrentSelection == 0 ? CurrentSelection = (uint32_t)m_movesRemaining.size() - 1 : --CurrentSelection;
         else if (KeyPress == 80) // down arrow key
-            CurrentSelection == int(m_MovesRemaining.size() - 1) ? CurrentSelection = 0 : ++CurrentSelection;
+            CurrentSelection == uint32_t(m_movesRemaining.size() - 1) ? CurrentSelection = 0 : ++CurrentSelection;
         else if (KeyPress == 'q')
             throw Exceptions::Quit();
         else
         {
-            auto Command = std::find(m_MovesRemaining.begin(), m_MovesRemaining.end(), KeyPress - 32);
-            if (Command != m_MovesRemaining.end())
-                CurrentSelection = (int)std::distance(m_MovesRemaining.begin(), Command);
+            auto Command = std::find(m_movesRemaining.begin(), m_movesRemaining.end(), KeyPress - 32);
+            if (Command != m_movesRemaining.end())
+                CurrentSelection = (int)std::distance(m_movesRemaining.begin(), Command);
         }
     }
 }
 
-void Hangman::Execute_Next_AI_Command()
+void Hangman::ExecuteCommandAI()
 {
-    if (m_AISpeed != 0)
+    if (m_speedAI != 0)
     {
-        std::string Output = Get_Game_Display();
-        Output += m_StringBuilder.New_Line_Left_Justified(" The AI is executing their next move!") + m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
-        m_Terminal.Output_To_Terminal(Output);
-        std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::seconds(m_AISpeed));
+        std::string Output = GetGameDisplay();
+        Output += m_stringBuilder.AddNewLineLeftJustified(" The AI is executing their next move!") + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
+        m_terminal.PrintOutput(Output);
+        std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::seconds(m_speedAI));
     }
 
-    m_AICommand = m_MovesRemaining[m_RandomNumberGenerator() % m_MovesRemaining.size()];
+    m_commandAI = m_movesRemaining[m_randomNumberGenerator() % m_movesRemaining.size()];
 
-    Check_Guess_And_Update_Current_Guess(m_AICommand);
+    CheckGuessAndUpdateCurrentGuess(m_commandAI);
 }
 
-void Hangman::Check_Guess_And_Update_Current_Guess(const char &Guess)
+void Hangman::CheckGuessAndUpdateCurrentGuess(const char& Guess)
 {
     bool IsGuessCorrect = false;
-    for (unsigned int i = 0; i < m_WordToBeGuessed.size(); i++)
-        if (m_WordToBeGuessed[i] == Guess)
+    for (uint32_t i = 0; i < m_wordToBeGuessed.size(); i++)
+        if (m_wordToBeGuessed[i] == Guess)
         {
             IsGuessCorrect = true;
-            m_CurrentGuessOfWord[i] = Guess;
+            m_currentGuessOfWord[i] = Guess;
         }
 
     if (!IsGuessCorrect)
     {
-        m_IncorrectGuesses.push_back(Guess);
-        m_NumberOfErrors++;
+        m_incorrectGuesses.push_back(Guess);
+        m_errorCount++;
     }
 
-    m_MovesRemaining.erase(std::find(m_MovesRemaining.begin(), m_MovesRemaining.end(), Guess));
-    m_NumberOfTurns++;
+    m_movesRemaining.erase(std::find(m_movesRemaining.begin(), m_movesRemaining.end(), Guess));
+    m_turnCount++;
 }
 
-std::string Hangman::Get_Game_Over_Message()
+std::string Hangman::GetGameOverMessage() const
 {
-    std::string Output = Get_Game_Display() + m_StringBuilder.New_Line_Centred("GAME OVER") + m_StringBuilder.Empty_Line();
+    std::string Output = GetGameDisplay() + m_stringBuilder.AddNewLineCentred("GAME OVER") + m_stringBuilder.AddEmptyLine();
 
-    if (m_NumberOfErrors == 10)
-        Output += m_StringBuilder.New_Line_Centred(
-                "The word setter has won! The game lasted " + std::to_string(m_NumberOfTurns) + " turns!");
+    if (m_errorCount == 10)
+        Output += m_stringBuilder.AddNewLineCentred(
+                "The word setter has won! The game lasted " + std::to_string(m_turnCount) + " turns!");
     else
-        Output += m_StringBuilder.New_Line_Centred(
-                "The guesser has won! The game lasted " + std::to_string(m_NumberOfTurns) + " turns.");
+        Output += m_stringBuilder.AddNewLineCentred(
+                "The guesser has won! The game lasted " + std::to_string(m_turnCount) + " turns.");
 
-    Output += m_StringBuilder.Empty_Line() +
-            m_StringBuilder.New_Line_Centred("Press 'Q' to quit OR Enter to play again...") + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
+    Output += m_stringBuilder.AddEmptyLine() +
+            m_stringBuilder.AddNewLineCentred("Press 'Q' to quit OR Enter to play again...") + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
 
     return Output;
 }
 
-std::string Hangman::Get_Game_Display()
+std::string Hangman::GetGameDisplay() const
 {
     // Top bar
-    std::string Output = m_StringBuilder.Top_Box();
+    std::string Output = m_stringBuilder.AddTopBox();
 
-    Output += m_StringBuilder.Top_Line();
+    Output += m_stringBuilder.AddTopLine();
 
     // Hangman State
-    if (m_NumberOfErrors == 0)
-        Output += m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.New_Line_Left_Justified("                   # of Players = " + m_NumberOfPlayers) + m_StringBuilder.Empty_Line() + m_StringBuilder.New_Line_Left_Justified("                   AI Speed = " + m_AISpeedName) + m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line();
-    else if (m_NumberOfErrors == 1)
-        Output += m_StringBuilder.Empty_Line() + m_StringBuilder.New_Line_Left_Justified("                                          Incorrect Guesses") + m_StringBuilder.New_Line_Left_Justified("                   # of Players = " + m_NumberOfPlayers) + m_StringBuilder.New_Line_Left_Justified(std::string("                                          ") + m_IncorrectGuesses[0]) + m_StringBuilder.New_Line_Left_Justified("                   AI Speed = " + m_AISpeedName) + m_StringBuilder.Empty_Line() + m_StringBuilder.New_Line_Left_Justified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196);
-    else if (m_NumberOfErrors == 2)
-        Output += m_StringBuilder.Empty_Line() + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179 + "                                    Incorrect Guesses") + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179 + "             # of Players = " + m_NumberOfPlayers) + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179 + "                                    " + m_IncorrectGuesses[0] + "   " + m_IncorrectGuesses[1]) + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179 + "             AI Speed = " + m_AISpeedName) + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179) + m_StringBuilder.New_Line_Left_Justified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)196 + (char)193 + (char)196 + (char)196 + (char)196 + (char)196);
-    else if (m_NumberOfErrors == 3)
-        Output += m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)218 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196) + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179 + "                                    Incorrect Guesses") + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179 + "             # of Players = " + m_NumberOfPlayers) + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179 + "                                    " + m_IncorrectGuesses[0] + "   " + m_IncorrectGuesses[1] + "   " + m_IncorrectGuesses[2]) + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179 + "             AI Speed = " + m_AISpeedName) + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179) + m_StringBuilder.New_Line_Left_Justified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)196 + (char)193 + (char)196 + (char)196 + (char)196 + (char)196);
-    else if (m_NumberOfErrors == 4)
-        Output += m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)218 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)191) + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179 + "       " + (char)179 + "                            Incorrect Guesses") + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179 + "             # of Players = " + m_NumberOfPlayers) + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179 + "                                    " + m_IncorrectGuesses[0] + "   " + m_IncorrectGuesses[1] + "   " + m_IncorrectGuesses[2] + "   " + m_IncorrectGuesses[3]) + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179 + "             AI Speed = " + m_AISpeedName) + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179) + m_StringBuilder.New_Line_Left_Justified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)196 + (char)193 + (char)196 + (char)196 + (char)196 + (char)196);
-    else if (m_NumberOfErrors == 5)
-        Output += m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)218 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)191) + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179 + "       " + (char)179 + "                            Incorrect Guesses") + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179 + "       O     # of Players = " + m_NumberOfPlayers) + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179 + "                                    " + m_IncorrectGuesses[0] + "   " + m_IncorrectGuesses[1] + "   " + m_IncorrectGuesses[2] + "   " + m_IncorrectGuesses[3] + "   " + m_IncorrectGuesses[4]) + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179 + "             AI Speed = " + m_AISpeedName + "                       ") + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179) + m_StringBuilder.New_Line_Left_Justified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)196 + (char)193 + (char)196 + (char)196 + (char)196 + (char)196);
-    else if (m_NumberOfErrors == 6)
-        Output += m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)218 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)191) + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179 + "       " + (char)179 + "                            Incorrect Guesses") + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179 + "       O     # of Players = " + m_NumberOfPlayers) + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179 + "       " + (char)179 + "                            " + m_IncorrectGuesses[0] + "   " + m_IncorrectGuesses[1] + "   " + m_IncorrectGuesses[2] + "   " + m_IncorrectGuesses[3] + "   " + m_IncorrectGuesses[4]) + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179 + "             AI Speed = " + m_AISpeedName) + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179 + "                                    " + m_IncorrectGuesses[5]) + m_StringBuilder.New_Line_Left_Justified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)196 + (char)193 + (char)196 + (char)196 + (char)196 + (char)196);
-    else if (m_NumberOfErrors == 7)
-        Output += m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)218 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)191) + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179 + "       " + (char)179 + "                            Incorrect Guesses") + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179 + "       O     # of Players = " + m_NumberOfPlayers) + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179 + "       " + (char)179 + "                            " + m_IncorrectGuesses[0] + "   " + m_IncorrectGuesses[1] + "   " + m_IncorrectGuesses[2] + "   " + m_IncorrectGuesses[3] + "   " + m_IncorrectGuesses[4]) + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179 + "      /      AI Speed = " + m_AISpeedName) + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179 + "                                    " + m_IncorrectGuesses[5] + "   " + m_IncorrectGuesses[6]) + m_StringBuilder.New_Line_Left_Justified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)196 + (char)193 + (char)196 + (char)196 + (char)196 + (char)196);
-    else if (m_NumberOfErrors == 8)
-        Output += m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)218 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)191) + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179 + "       " + (char)179 + "                            Incorrect Guesses") + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179 + "       O     # of Players = " + m_NumberOfPlayers) + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179 + "       " + (char)179 + "                            " + m_IncorrectGuesses[0] + "   " + m_IncorrectGuesses[1] + "   " + m_IncorrectGuesses[2] + "   " + m_IncorrectGuesses[3] + "   " + m_IncorrectGuesses[4]) + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179 + "      / \\    AI Speed = " + m_AISpeedName) + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179 + "                                    " + m_IncorrectGuesses[5] + "   " + m_IncorrectGuesses[6] + "   " + m_IncorrectGuesses[7]) + m_StringBuilder.New_Line_Left_Justified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)196 + (char)193 + (char)196 + (char)196 + (char)196 + (char)196);
-    else if (m_NumberOfErrors == 9)
-        Output += m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)218 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)191) + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179 + "       " + (char)179 + "                            Incorrect Guesses") + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179 + "       O     # of Players = " + m_NumberOfPlayers) + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179 + "      /" + (char)179 + "                            " + m_IncorrectGuesses[0] + "   " + m_IncorrectGuesses[1] + "   " + m_IncorrectGuesses[2] + "   " + m_IncorrectGuesses[3] + "   " + m_IncorrectGuesses[4]) + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179 + "      / \\    AI Speed = " + m_AISpeedName) + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179 + "                                    " + m_IncorrectGuesses[5] + "   " + m_IncorrectGuesses[6] + "   " + m_IncorrectGuesses[7] + "   " + m_IncorrectGuesses[8]) + m_StringBuilder.New_Line_Left_Justified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)196 + (char)193 + (char)196 + (char)196 + (char)196 + (char)196);
-    else if (m_NumberOfErrors == 10)
-        Output += m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)218 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)191) + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179 + "       " + (char)179 + "                            Incorrect Guesses") + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179 + "       O     # of Players = " + m_NumberOfPlayers) + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179 + "      /" + (char)179 + "\\                           " + m_IncorrectGuesses[0] + "   " + m_IncorrectGuesses[1] + "   " + m_IncorrectGuesses[2] + "   " + m_IncorrectGuesses[3] + "   " + m_IncorrectGuesses[4]) + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179 + "      / \\    AI Speed = " + m_AISpeedName) + m_StringBuilder.New_Line_Left_Justified(std::string("     ") + (char)179 + "                                    " + m_IncorrectGuesses[5] + "   " + m_IncorrectGuesses[6] + "   " + m_IncorrectGuesses[7] + "   " + m_IncorrectGuesses[8] + "   " + m_IncorrectGuesses[9]) + m_StringBuilder.New_Line_Left_Justified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)196 + (char)193 + (char)196 + (char)196 + (char)196 + (char)196);
+    if (m_errorCount == 0)
+        Output += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddNewLineLeftJustified("                   # of Players = " + m_PlayerCount) + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddNewLineLeftJustified("                   AI Speed = " + m_speedNameAI) + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine();
+    else if (m_errorCount == 1)
+        Output += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddNewLineLeftJustified("                                          Incorrect Guesses") + m_stringBuilder.AddNewLineLeftJustified("                   # of Players = " + m_PlayerCount) + m_stringBuilder.AddNewLineLeftJustified(std::string("                                          ") + m_incorrectGuesses[0]) + m_stringBuilder.AddNewLineLeftJustified("                   AI Speed = " + m_speedNameAI) + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddNewLineLeftJustified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196);
+    else if (m_errorCount == 2)
+        Output += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179 + "                                    Incorrect Guesses") + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179 + "             # of Players = " + m_PlayerCount) + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179 + "                                    " + m_incorrectGuesses[0] + "   " + m_incorrectGuesses[1]) + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179 + "             AI Speed = " + m_speedNameAI) + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179) + m_stringBuilder.AddNewLineLeftJustified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)196 + (char)193 + (char)196 + (char)196 + (char)196 + (char)196);
+    else if (m_errorCount == 3)
+        Output += m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)218 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196) + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179 + "                                    Incorrect Guesses") + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179 + "             # of Players = " + m_PlayerCount) + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179 + "                                    " + m_incorrectGuesses[0] + "   " + m_incorrectGuesses[1] + "   " + m_incorrectGuesses[2]) + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179 + "             AI Speed = " + m_speedNameAI) + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179) + m_stringBuilder.AddNewLineLeftJustified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)196 + (char)193 + (char)196 + (char)196 + (char)196 + (char)196);
+    else if (m_errorCount == 4)
+        Output += m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)218 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)191) + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179 + "       " + (char)179 + "                            Incorrect Guesses") + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179 + "             # of Players = " + m_PlayerCount) + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179 + "                                    " + m_incorrectGuesses[0] + "   " + m_incorrectGuesses[1] + "   " + m_incorrectGuesses[2] + "   " + m_incorrectGuesses[3]) + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179 + "             AI Speed = " + m_speedNameAI) + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179) + m_stringBuilder.AddNewLineLeftJustified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)196 + (char)193 + (char)196 + (char)196 + (char)196 + (char)196);
+    else if (m_errorCount == 5)
+        Output += m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)218 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)191) + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179 + "       " + (char)179 + "                            Incorrect Guesses") + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179 + "       O     # of Players = " + m_PlayerCount) + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179 + "                                    " + m_incorrectGuesses[0] + "   " + m_incorrectGuesses[1] + "   " + m_incorrectGuesses[2] + "   " + m_incorrectGuesses[3] + "   " + m_incorrectGuesses[4]) + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179 + "             AI Speed = " + m_speedNameAI + "                       ") + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179) + m_stringBuilder.AddNewLineLeftJustified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)196 + (char)193 + (char)196 + (char)196 + (char)196 + (char)196);
+    else if (m_errorCount == 6)
+        Output += m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)218 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)191) + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179 + "       " + (char)179 + "                            Incorrect Guesses") + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179 + "       O     # of Players = " + m_PlayerCount) + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179 + "       " + (char)179 + "                            " + m_incorrectGuesses[0] + "   " + m_incorrectGuesses[1] + "   " + m_incorrectGuesses[2] + "   " + m_incorrectGuesses[3] + "   " + m_incorrectGuesses[4]) + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179 + "             AI Speed = " + m_speedNameAI) + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179 + "                                    " + m_incorrectGuesses[5]) + m_stringBuilder.AddNewLineLeftJustified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)196 + (char)193 + (char)196 + (char)196 + (char)196 + (char)196);
+    else if (m_errorCount == 7)
+        Output += m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)218 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)191) + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179 + "       " + (char)179 + "                            Incorrect Guesses") + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179 + "       O     # of Players = " + m_PlayerCount) + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179 + "       " + (char)179 + "                            " + m_incorrectGuesses[0] + "   " + m_incorrectGuesses[1] + "   " + m_incorrectGuesses[2] + "   " + m_incorrectGuesses[3] + "   " + m_incorrectGuesses[4]) + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179 + "      /      AI Speed = " + m_speedNameAI) + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179 + "                                    " + m_incorrectGuesses[5] + "   " + m_incorrectGuesses[6]) + m_stringBuilder.AddNewLineLeftJustified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)196 + (char)193 + (char)196 + (char)196 + (char)196 + (char)196);
+    else if (m_errorCount == 8)
+        Output += m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)218 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)191) + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179 + "       " + (char)179 + "                            Incorrect Guesses") + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179 + "       O     # of Players = " + m_PlayerCount) + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179 + "       " + (char)179 + "                            " + m_incorrectGuesses[0] + "   " + m_incorrectGuesses[1] + "   " + m_incorrectGuesses[2] + "   " + m_incorrectGuesses[3] + "   " + m_incorrectGuesses[4]) + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179 + "      / \\    AI Speed = " + m_speedNameAI) + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179 + "                                    " + m_incorrectGuesses[5] + "   " + m_incorrectGuesses[6] + "   " + m_incorrectGuesses[7]) + m_stringBuilder.AddNewLineLeftJustified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)196 + (char)193 + (char)196 + (char)196 + (char)196 + (char)196);
+    else if (m_errorCount == 9)
+        Output += m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)218 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)191) + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179 + "       " + (char)179 + "                            Incorrect Guesses") + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179 + "       O     # of Players = " + m_PlayerCount) + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179 + "      /" + (char)179 + "                            " + m_incorrectGuesses[0] + "   " + m_incorrectGuesses[1] + "   " + m_incorrectGuesses[2] + "   " + m_incorrectGuesses[3] + "   " + m_incorrectGuesses[4]) + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179 + "      / \\    AI Speed = " + m_speedNameAI) + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179 + "                                    " + m_incorrectGuesses[5] + "   " + m_incorrectGuesses[6] + "   " + m_incorrectGuesses[7] + "   " + m_incorrectGuesses[8]) + m_stringBuilder.AddNewLineLeftJustified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)196 + (char)193 + (char)196 + (char)196 + (char)196 + (char)196);
+    else if (m_errorCount == 10)
+        Output += m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)218 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)191) + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179 + "       " + (char)179 + "                            Incorrect Guesses") + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179 + "       O     # of Players = " + m_PlayerCount) + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179 + "      /" + (char)179 + "\\                           " + m_incorrectGuesses[0] + "   " + m_incorrectGuesses[1] + "   " + m_incorrectGuesses[2] + "   " + m_incorrectGuesses[3] + "   " + m_incorrectGuesses[4]) + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179 + "      / \\    AI Speed = " + m_speedNameAI) + m_stringBuilder.AddNewLineLeftJustified(std::string("     ") + (char)179 + "                                    " + m_incorrectGuesses[5] + "   " + m_incorrectGuesses[6] + "   " + m_incorrectGuesses[7] + "   " + m_incorrectGuesses[8] + "   " + m_incorrectGuesses[9]) + m_stringBuilder.AddNewLineLeftJustified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)196 + (char)193 + (char)196 + (char)196 + (char)196 + (char)196);
 
     // Word to be guessed, and thus current guess of word, are limited to a size in between 3 and 14
     Output += (char)186;
 
-    for (char i : m_CurrentGuessOfWord)
+    for (char i : m_currentGuessOfWord)
         Output += std::string(" ") + i;
 
-    if (m_GameOver && m_NumberOfErrors == 10) // show what the word to be guessed was
+    if (m_hasWinner && m_errorCount == 10) // show what the word to be guessed was
     {
-        Output += "   (The word was " + m_WordToBeGuessed + ")";
-        Output.insert(Output.size(), (62 - 18 - m_WordToBeGuessed.size() * 3), ' ');
+        Output += "   (The word was " + m_wordToBeGuessed + ")";
+        Output.insert(Output.size(), (62 - 18 - m_wordToBeGuessed.size() * 3), ' ');
     }
     else // do not show it
-        Output.insert(Output.size(), (62 - m_WordToBeGuessed.size() * 2), ' ');
+        Output.insert(Output.size(), (62 - m_wordToBeGuessed.size() * 2), ' ');
 
     Output += (char)186;
 
-    return Output + "\n" + m_StringBuilder.Empty_Line();
+    return Output + "\n" + m_stringBuilder.AddEmptyLine();
 }

@@ -11,176 +11,174 @@
 
 #include "games/TicTacToe.hpp"
 
-TicTacToe::TicTacToe(const bool& ASCIIOnly)
+TicTacToe::TicTacToe(const bool& outputIsOnlyASCII)
 {
-    m_StringBuilder.Set(ASCIIOnly, 53, "Tic Tac Toe", "q = quit to main menu");
-    m_RandomNumberGenerator.seed(std::chrono::system_clock::now().time_since_epoch().count());
+    m_stringBuilder.SetProperties("Tic Tac Toe", "q = quit to main menu", 53, outputIsOnlyASCII);
+    m_randomNumberGenerator.seed(std::chrono::system_clock::now().time_since_epoch().count());
 }
 
-void TicTacToe::Setup_Game()
+void TicTacToe::SetupGame()
 {
-    m_MovesRemaining.clear();
-    m_NumberOfPlayers = "N/A";
-    m_AISpeedName = "N/A";
-    m_NumberOfTurns = 0;
-    m_UserPlayerChoice = ' ';
-    m_WinningConditionsMet = false;
-    m_RandomNumberGenerator() % 2 == 0 ? m_CurrentPlayer = 'X' : m_CurrentPlayer = 'O';
+    m_movesRemaining.clear();
+    m_playerCount = "N/A";
+    m_speedNameAI = "N/A";
+    m_turnCount = 0;
+    m_playerChoiceUser = ' ';
+    m_hasWinner = false;
+    m_randomNumberGenerator() % 2 == 0 ? m_currentPlayer = 'X' : m_currentPlayer = 'O';
 
-    for (int i = 0, GridNumber = 0; i < 3; i++)
+    for (uint32_t i = 0, GridNumber = 0; i < 3; i++)
     {
-        for (int j = 0; j < 3; j++, GridNumber++)
+        for (uint32_t j = 0; j < 3; j++, GridNumber++)
         {
-            m_GameGrid[i][j] = ' ';
-            m_MovesRemaining.push_back(GridNumber); // 0-8
+            m_gameGrid[i][j] = ' ';
+            m_movesRemaining.push_back(GridNumber); // 0-8
         }
     }
 
-    Get_Number_Of_Players();
+    GetPlayerCount();
 
     // If only one human user, then ask them which player they want to be (X or O)
-    if (m_NumberOfPlayers == "1  ")
-        Get_User_Player_Choice();
+    if (m_playerCount == "1  ")
+        GetPlayerChoiceFromUser();
 
     // If AI involved get AI difficulty and speed
-    if (m_NumberOfPlayers != "2  ") // i.e. = 0 or = 1
-        Get_AI_Speed();
+    if (m_playerCount != "2  ") // i.e. = 0 or = 1
+        GetAISpeed();
 }
 
-void TicTacToe::Get_Number_Of_Players()
+void TicTacToe::GetPlayerCount()
 {
     std::vector<std::string> Menus(3);
-    std::string GameDisplay = Get_Game_Display() + m_StringBuilder.New_Line_Left_Justified(" Please select the number of players:");
+    std::string GameDisplay = GetGameDisplay() + m_stringBuilder.AddNewLineLeftJustified(" Please select the number of players:");
 
     Menus[0] = GameDisplay;
-    Menus[0] += m_StringBuilder.New_Line_Left_Justified(" > 0", Colours::BLUE);
-    Menus[0] += m_StringBuilder.New_Line_Left_Justified("   1");
-    Menus[0] += m_StringBuilder.New_Line_Left_Justified("   2");
-    Menus[0] += m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
+    Menus[0] += m_stringBuilder.AddNewLineLeftJustified(" > 0", Colours::BLUE);
+    Menus[0] += m_stringBuilder.AddNewLineLeftJustified("   1");
+    Menus[0] += m_stringBuilder.AddNewLineLeftJustified("   2");
+    Menus[0] += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
 
     Menus[1] = GameDisplay;
-    Menus[1] += m_StringBuilder.New_Line_Left_Justified("   0");
-    Menus[1] += m_StringBuilder.New_Line_Left_Justified(" > 1", Colours::BLUE);
-    Menus[1] += m_StringBuilder.New_Line_Left_Justified("   2");
-    Menus[1] += m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
+    Menus[1] += m_stringBuilder.AddNewLineLeftJustified("   0");
+    Menus[1] += m_stringBuilder.AddNewLineLeftJustified(" > 1", Colours::BLUE);
+    Menus[1] += m_stringBuilder.AddNewLineLeftJustified("   2");
+    Menus[1] += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
 
     Menus[2] = GameDisplay;
-    Menus[2] += m_StringBuilder.New_Line_Left_Justified("   0");
-    Menus[2] += m_StringBuilder.New_Line_Left_Justified("   1");
-    Menus[2] += m_StringBuilder.New_Line_Left_Justified(" > 2", Colours::BLUE);
-    Menus[2] += m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
+    Menus[2] += m_stringBuilder.AddNewLineLeftJustified("   0");
+    Menus[2] += m_stringBuilder.AddNewLineLeftJustified("   1");
+    Menus[2] += m_stringBuilder.AddNewLineLeftJustified(" > 2", Colours::BLUE);
+    Menus[2] += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
 
-    m_NumberOfPlayers = std::to_string(m_Terminal.Get_User_Menu_Choice(Menus)) + "  ";
+    m_playerCount = std::to_string(m_terminal.GetUserChoiceFromMenus(Menus)) + "  ";
 }
 
-void TicTacToe::Get_User_Player_Choice()
+void TicTacToe::GetPlayerChoiceFromUser()
 {
     std::vector<std::string> Menus(2);
-    std::string GameDisplay = Get_Game_Display() + m_StringBuilder.New_Line_Left_Justified(" Please select the player you would like to be:");
+    std::string GameDisplay = GetGameDisplay() + m_stringBuilder.AddNewLineLeftJustified(" Please select the player you would like to be:");
 
     Menus[0] = GameDisplay;
-    Menus[0] += m_StringBuilder.New_Line_Left_Justified(" > PLAYER X", Colours::BLUE);
-    Menus[0] += m_StringBuilder.New_Line_Left_Justified("   PLAYER O");
-    Menus[0] += m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
+    Menus[0] += m_stringBuilder.AddNewLineLeftJustified(" > PLAYER X", Colours::BLUE);
+    Menus[0] += m_stringBuilder.AddNewLineLeftJustified("   PLAYER O");
+    Menus[0] += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
 
     Menus[1] = GameDisplay;
-    Menus[1] += m_StringBuilder.New_Line_Left_Justified("   PLAYER X");
-    Menus[1] += m_StringBuilder.New_Line_Left_Justified(" > PLAYER O", Colours::BLUE);
-    Menus[1] += m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
+    Menus[1] += m_stringBuilder.AddNewLineLeftJustified("   PLAYER X");
+    Menus[1] += m_stringBuilder.AddNewLineLeftJustified(" > PLAYER O", Colours::BLUE);
+    Menus[1] += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
 
-    m_Terminal.Get_User_Menu_Choice(Menus) == 0 ? m_UserPlayerChoice = 'X' : m_UserPlayerChoice = 'O';
+    m_terminal.GetUserChoiceFromMenus(Menus) == 0 ? m_playerChoiceUser = 'X' : m_playerChoiceUser = 'O';
 }
 
-void TicTacToe::Get_AI_Speed()
+void TicTacToe::GetAISpeed()
 {
     std::vector<std::string> Menus(3);
-    std::string GameDisplay = Get_Game_Display() + m_StringBuilder.New_Line_Left_Justified(" Please select the AI speed:");
+    std::string GameDisplay = GetGameDisplay() + m_stringBuilder.AddNewLineLeftJustified(" Please select the AI speed:");
 
     Menus[0] = GameDisplay;
-    Menus[0] += m_StringBuilder.New_Line_Left_Justified(" > INSTANT", Colours::BLUE);
-    Menus[0] += m_StringBuilder.New_Line_Left_Justified("   FAST");
-    Menus[0] += m_StringBuilder.New_Line_Left_Justified("   SLOW");
-    Menus[0] += m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
+    Menus[0] += m_stringBuilder.AddNewLineLeftJustified(" > INSTANT", Colours::BLUE);
+    Menus[0] += m_stringBuilder.AddNewLineLeftJustified("   FAST");
+    Menus[0] += m_stringBuilder.AddNewLineLeftJustified("   SLOW");
+    Menus[0] += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
 
     Menus[1] = GameDisplay;
-    Menus[1] += m_StringBuilder.New_Line_Left_Justified("   INSTANT");
-    Menus[1] += m_StringBuilder.New_Line_Left_Justified(" > FAST", Colours::BLUE);
-    Menus[1] += m_StringBuilder.New_Line_Left_Justified("   SLOW");
-    Menus[1] += m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
+    Menus[1] += m_stringBuilder.AddNewLineLeftJustified("   INSTANT");
+    Menus[1] += m_stringBuilder.AddNewLineLeftJustified(" > FAST", Colours::BLUE);
+    Menus[1] += m_stringBuilder.AddNewLineLeftJustified("   SLOW");
+    Menus[1] += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
 
     Menus[2] = GameDisplay;
-    Menus[2] += m_StringBuilder.New_Line_Left_Justified("   INSTANT");
-    Menus[2] += m_StringBuilder.New_Line_Left_Justified("   FAST");
-    Menus[2] += m_StringBuilder.New_Line_Left_Justified(" > SLOW", Colours::BLUE);
-    Menus[2] += m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
+    Menus[2] += m_stringBuilder.AddNewLineLeftJustified("   INSTANT");
+    Menus[2] += m_stringBuilder.AddNewLineLeftJustified("   FAST");
+    Menus[2] += m_stringBuilder.AddNewLineLeftJustified(" > SLOW", Colours::BLUE);
+    Menus[2] += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
 
-    m_AISpeed = m_Terminal.Get_User_Menu_Choice(Menus);
+    m_speedAI = m_terminal.GetUserChoiceFromMenus(Menus);
 
-    if (m_AISpeed == 0)
-        m_AISpeedName = "INSTANT";
-    else if (m_AISpeed == 1)
-        m_AISpeedName = "FAST";
+    if (m_speedAI == 0)
+        m_speedNameAI = "INSTANT";
+    else if (m_speedAI == 1)
+        m_speedNameAI = "FAST";
     else // == 2
-        m_AISpeedName = "SLOW";
+        m_speedNameAI = "SLOW";
 }
 
-bool TicTacToe::Game_Over()
+bool TicTacToe::IsGameOver()
 {
     // Check horizontals
-    if ((m_GameGrid[0][0] != ' ' && m_GameGrid[0][0] == m_GameGrid[0][1] && m_GameGrid[0][1] == m_GameGrid[0][2]) ||
-        (m_GameGrid[1][0] != ' ' && m_GameGrid[1][0] == m_GameGrid[1][1] && m_GameGrid[1][1] == m_GameGrid[1][2]) ||
-        (m_GameGrid[2][0] != ' ' && m_GameGrid[2][0] == m_GameGrid[2][1] && m_GameGrid[2][1] == m_GameGrid[2][2]) ||
+    if ((m_gameGrid[0][0] != ' ' && m_gameGrid[0][0] == m_gameGrid[0][1] && m_gameGrid[0][1] == m_gameGrid[0][2]) ||
+        (m_gameGrid[1][0] != ' ' && m_gameGrid[1][0] == m_gameGrid[1][1] && m_gameGrid[1][1] == m_gameGrid[1][2]) ||
+        (m_gameGrid[2][0] != ' ' && m_gameGrid[2][0] == m_gameGrid[2][1] && m_gameGrid[2][1] == m_gameGrid[2][2]) ||
 
         // Check verticals
-        (m_GameGrid[0][0] != ' ' && m_GameGrid[0][0] == m_GameGrid[1][0] && m_GameGrid[1][0] == m_GameGrid[2][0]) ||
-        (m_GameGrid[0][1] != ' ' && m_GameGrid[0][1] == m_GameGrid[1][1] && m_GameGrid[1][1] == m_GameGrid[2][1]) ||
-        (m_GameGrid[0][2] != ' ' && m_GameGrid[0][2] == m_GameGrid[1][2] && m_GameGrid[1][2] == m_GameGrid[2][2]) ||
+        (m_gameGrid[0][0] != ' ' && m_gameGrid[0][0] == m_gameGrid[1][0] && m_gameGrid[1][0] == m_gameGrid[2][0]) ||
+        (m_gameGrid[0][1] != ' ' && m_gameGrid[0][1] == m_gameGrid[1][1] && m_gameGrid[1][1] == m_gameGrid[2][1]) ||
+        (m_gameGrid[0][2] != ' ' && m_gameGrid[0][2] == m_gameGrid[1][2] && m_gameGrid[1][2] == m_gameGrid[2][2]) ||
 
         // Check diagonals
-        (m_GameGrid[0][0] != ' ' && m_GameGrid[0][0] == m_GameGrid[1][1] && m_GameGrid[1][1] == m_GameGrid[2][2]) ||
-        (m_GameGrid[2][0] != ' ' && m_GameGrid[2][0] == m_GameGrid[1][1] && m_GameGrid[1][1] == m_GameGrid[0][2]))
+        (m_gameGrid[0][0] != ' ' && m_gameGrid[0][0] == m_gameGrid[1][1] && m_gameGrid[1][1] == m_gameGrid[2][2]) ||
+        (m_gameGrid[2][0] != ' ' && m_gameGrid[2][0] == m_gameGrid[1][1] && m_gameGrid[1][1] == m_gameGrid[0][2]))
     {
-        m_WinningConditionsMet = true;
-        return m_WinningConditionsMet;
+        m_hasWinner = true;
+        return m_hasWinner;
     }
 
     else
-        return m_NumberOfTurns == 9;
+        return m_turnCount == 9;
 }
 
-void TicTacToe::Toggle_Current_Player()
+void TicTacToe::ToggleCurrentPlayer()
 {
-    m_CurrentPlayer == 'X' ? m_CurrentPlayer = 'O' : m_CurrentPlayer = 'X';
+    m_currentPlayer == 'X' ? m_currentPlayer = 'O' : m_currentPlayer = 'X';
 }
 
-bool TicTacToe::Next_Turn_Is_User()
+bool TicTacToe::IsNextTurnUser() const
 {
-    /**
-     * If it is two player game then next turn will always be the user's turn, if not then
-     * check if the current player is the same as the user's choice. For a zero player game
-     * m_UserPlayerChoice = ' ' and so this will always return false.
-     */
-    return m_NumberOfPlayers == "2  " || m_CurrentPlayer == m_UserPlayerChoice;
+    // If it is two player game then next turn will always be the user's turn, if not then
+    // check if the current player is the same as the user's choice. For a zero player game
+    // m_UserPlayerChoice = ' ' and so this will always return false.
+    return m_playerCount == "2  " || m_currentPlayer == m_playerChoiceUser;
 }
 
-void TicTacToe::Execute_Next_User_Command()
+void TicTacToe::ExecuteCommandUser()
 {
-    std::string Output = Get_Game_Display();
-    Output += m_StringBuilder.New_Line_Left_Justified(std::string(" Player ") + m_CurrentPlayer + ", please enter your next command!");
-    Output += m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
-    m_Terminal.Output_To_Terminal(Output);
+    std::string Output = GetGameDisplay();
+    Output += m_stringBuilder.AddNewLineLeftJustified(std::string(" Player ") + m_currentPlayer + ", please enter your next command!");
+    Output += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
+    m_terminal.PrintOutput(Output);
 
-    m_Terminal.Set_Cursor_Visibility(true);
+    m_terminal.SetCursorVisibility(true);
 
-    int KeyPress, Row = m_MovesRemaining[0] / 3, Column = m_MovesRemaining[0] % 3;
+    uint32_t KeyPress, Row = m_movesRemaining[0] / 3, Column = m_movesRemaining[0] % 3;
 
     while (true)
     {
         while (true)
         {
-            m_Terminal.Set_Cursor_Position(3 + Column * 4, 4 + Row * 2);
+            m_terminal.SetCursorPosition(3 + Column * 4, 4 + Row * 2);
 
-            KeyPress = m_Terminal.Get_Key_Pressed();
+            KeyPress = m_terminal.GetNextKeyPress();
 
             if (KeyPress == '\r') // enter key
                 break;
@@ -194,74 +192,74 @@ void TicTacToe::Execute_Next_User_Command()
                 Column == 2 ? Column = 0 : ++Column;
             else if (KeyPress == 'q')
             {
-                m_Terminal.Set_Cursor_Visibility(false);
+                m_terminal.SetCursorVisibility(false);
                 throw Exceptions::Quit();
             }
         }
 
-        auto CommandPosition = std::find(m_MovesRemaining.begin(), m_MovesRemaining.end(), Row * 3 + Column);
+        auto CommandPosition = std::find(m_movesRemaining.begin(), m_movesRemaining.end(), Row * 3 + Column);
 
-        if (CommandPosition != m_MovesRemaining.end())
+        if (CommandPosition != m_movesRemaining.end())
         {
-            m_GameGrid[Row][Column] = m_CurrentPlayer;
-            m_MovesRemaining.erase(CommandPosition);
-            m_NumberOfTurns++;
-            m_Terminal.Set_Cursor_Visibility(false);
+            m_gameGrid[Row][Column] = m_currentPlayer;
+            m_movesRemaining.erase(CommandPosition);
+            m_turnCount++;
+            m_terminal.SetCursorVisibility(false);
             return;
         }
     }
 }
 
-void TicTacToe::Execute_Next_AI_Command()
+void TicTacToe::ExecuteCommandAI()
 {
-    if (m_AISpeed != 0)
+    if (m_speedAI != 0)
     {
-        std::string Output = Get_Game_Display();
-        Output += m_StringBuilder.New_Line_Left_Justified(" The AI is executing their next move!") + m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
-        m_Terminal.Output_To_Terminal(Output);
-        std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::seconds(m_AISpeed));
+        std::string Output = GetGameDisplay();
+        Output += m_stringBuilder.AddNewLineLeftJustified(" The AI is executing their next move!") + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
+        m_terminal.PrintOutput(Output);
+        std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::seconds(m_speedAI));
     }
 
-    m_AICommand = m_MovesRemaining[m_RandomNumberGenerator() % m_MovesRemaining.size()];
+    m_commandAI = m_movesRemaining[m_randomNumberGenerator() % m_movesRemaining.size()];
 
-    m_GameGrid[m_AICommand / 3][m_AICommand % 3] = m_CurrentPlayer;
-    m_MovesRemaining.erase(std::find(m_MovesRemaining.begin(), m_MovesRemaining.end(), m_AICommand));
-    m_NumberOfTurns++;
+    m_gameGrid[m_commandAI / 3][m_commandAI % 3] = m_currentPlayer;
+    m_movesRemaining.erase(std::find(m_movesRemaining.begin(), m_movesRemaining.end(), m_commandAI));
+    m_turnCount++;
 }
 
-std::string TicTacToe::Get_Game_Over_Message()
+std::string TicTacToe::GetGameOverMessage() const
 {
-    std::string Output = Get_Game_Display() + m_StringBuilder.New_Line_Centred("GAME OVER") + m_StringBuilder.Empty_Line();
+    std::string Output = GetGameDisplay() + m_stringBuilder.AddNewLineCentred("GAME OVER") + m_stringBuilder.AddEmptyLine();
 
-    if (m_WinningConditionsMet)
-        Output += m_StringBuilder.New_Line_Centred(
-                std::string("Player ") + m_CurrentPlayer + " has won! The game lasted " +
-                std::to_string(m_NumberOfTurns) + " turns.");
+    if (m_hasWinner)
+        Output += m_stringBuilder.AddNewLineCentred(
+                std::string("Player ") + m_currentPlayer + " has won! The game lasted " +
+                std::to_string(m_turnCount) + " turns.");
     else
-        Output += m_StringBuilder.New_Line_Centred(
-                "It is a draw! The game lasted " + std::to_string(m_NumberOfTurns) + " turns.");
+        Output += m_stringBuilder.AddNewLineCentred(
+                "It is a draw! The game lasted " + std::to_string(m_turnCount) + " turns.");
 
-    Output += m_StringBuilder.Empty_Line() +
-            m_StringBuilder.New_Line_Centred("Press 'Q' to quit OR Enter to play again...") + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
+    Output += m_stringBuilder.AddEmptyLine() +
+            m_stringBuilder.AddNewLineCentred("Press 'Q' to quit OR Enter to play again...") + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
 
     return Output;
 }
 
-std::string TicTacToe::Get_Game_Display()
+std::string TicTacToe::GetGameDisplay() const
 {
-    std::string Output = m_StringBuilder.Top_Box();
+    std::string Output = m_stringBuilder.AddTopBox();
 
-    Output += m_StringBuilder.Top_Line();
+    Output += m_stringBuilder.AddTopLine();
 
-    Output += m_StringBuilder.New_Line_Left_Justified(std::string("  ") + m_GameGrid[0][0] + " " + char(179) + " " + m_GameGrid[0][1] + " " + char(179) + " " + m_GameGrid[0][2]);
+    Output += m_stringBuilder.AddNewLineLeftJustified(std::string("  ") + m_gameGrid[0][0] + " " + char(179) + " " + m_gameGrid[0][1] + " " + char(179) + " " + m_gameGrid[0][2]);
 
-    Output += m_StringBuilder.New_Line_Left_Justified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)197 + (char)196 + (char)196 + (char)196 + char(197) + (char)196 + (char)196 + (char)196 + "    # of Players = " + m_NumberOfPlayers);
+    Output += m_stringBuilder.AddNewLineLeftJustified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)197 + (char)196 + (char)196 + (char)196 + char(197) + (char)196 + (char)196 + (char)196 + "    # of Players = " + m_playerCount);
 
-    Output += m_StringBuilder.New_Line_Left_Justified(std::string("  ") + m_GameGrid[1][0] + " " + char(179) + " " + m_GameGrid[1][1] + " " + char(179) + " " + m_GameGrid[1][2]);
+    Output += m_stringBuilder.AddNewLineLeftJustified(std::string("  ") + m_gameGrid[1][0] + " " + char(179) + " " + m_gameGrid[1][1] + " " + char(179) + " " + m_gameGrid[1][2]);
 
-    Output += m_StringBuilder.New_Line_Left_Justified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)197 + (char)196 + (char)196 + (char)196 + char(197) + (char)196 + (char)196 + (char)196 + "    AI Speed = " + m_AISpeedName);
+    Output += m_stringBuilder.AddNewLineLeftJustified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)197 + (char)196 + (char)196 + (char)196 + char(197) + (char)196 + (char)196 + (char)196 + "    AI Speed = " + m_speedNameAI);
 
-    Output += m_StringBuilder.New_Line_Left_Justified(std::string("  ") + m_GameGrid[2][0] + " " + char(179) + " " + m_GameGrid[2][1] + " " + char(179) + " " + m_GameGrid[2][2]);
+    Output += m_stringBuilder.AddNewLineLeftJustified(std::string("  ") + m_gameGrid[2][0] + " " + char(179) + " " + m_gameGrid[2][1] + " " + char(179) + " " + m_gameGrid[2][2]);
 
-    return Output += m_StringBuilder.Empty_Line();
+    return Output += m_stringBuilder.AddEmptyLine();
 }

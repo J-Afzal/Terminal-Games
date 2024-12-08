@@ -1,67 +1,56 @@
-/**
- * @file Hangman.hpp
- * @author Junaid Afzal
- * @brief The game object that runs Hangman
- * and is run using the inherited Play() function
- * @version 1.0
- * @date 07-11-2021
- *
- * @copyright Copyright (c) 2021
- *
- */
-
 #pragma once
+
+#include <random>
+
 #include "Game.hpp"
 
 class Hangman : public Game
 {
 public:
     /**
-     * @brief Construct a new Hangman object
-     * @param ASCIIOnly determines whether to use ANSI escapes codes (false)
-     * or just ASCII characters (true)
+     * @brief Construct a new Hangman object.
+     *
+     * @param outputIsOnlyASCII Whether to use only ASCII characters (true)
+     * or also use ANSI escapes codes (false).
      */
-    explicit Hangman(const bool& ASCIIOnly);
-
-    ~Hangman() override = default;
+    explicit Hangman(const bool& outputIsOnlyASCII);
 
 private:
-    std::default_random_engine m_RandomNumberGenerator;
-    std::vector<std::string> m_WordList;
-    std::vector<char> m_MovesRemaining, m_IncorrectGuesses;
-    std::string m_WordToBeGuessed, m_CurrentGuessOfWord;
-    std::string m_NumberOfPlayers, m_AISpeedName;
-    int m_NumberOfTurns{}, m_NumberOfErrors{}, m_AISpeed{};
-    char m_AICommand{};
-    bool m_GameOver{}, m_UserIsWordGuesser{};
+    std::default_random_engine m_randomNumberGenerator;
+    std::vector<std::string> m_words;
+    std::vector<char> m_movesRemaining, m_incorrectGuesses;
+    std::string m_wordToBeGuessed, m_currentGuessOfWord, m_PlayerCount, m_speedNameAI;
+    uint32_t m_turnCount, m_errorCount, m_speedAI;
+    char m_commandAI;
+    bool m_hasWinner, m_userIsGuesser;
 
-    void Setup_Game() override;
+    void SetupGame() override;
 
-    void Load_Word_List();
+    void LoadWords();
 
-    void Get_Number_Of_Players();
+    void GetPlayerCount();
 
-    void Get_User_Player_Choice();
+    void GetPlayerChoiceFromUser();
 
-    void Get_AI_Speed();
+    void GetAISpeed();
 
-    void Get_Word_From_User();
+    void GetWordFromUser();
 
-    void Get_Word_From_AI();
+    void GetWordFromAI();
 
-    bool Game_Over() override;
+    bool IsGameOver() override;
 
-    void Toggle_Current_Player() override;
+    void ToggleCurrentPlayer() override;
 
-    bool Next_Turn_Is_User() override;
+    bool IsNextTurnUser() const override;
 
-    void Execute_Next_User_Command() override;
+    void ExecuteCommandUser() override;
 
-    void Execute_Next_AI_Command() override;
+    void ExecuteCommandAI() override;
 
-    void Check_Guess_And_Update_Current_Guess(const char &Guess);
+    void CheckGuessAndUpdateCurrentGuess(const char& Guess);
 
-    std::string Get_Game_Over_Message() override;
+    std::string GetGameOverMessage() const override;
 
-    std::string Get_Game_Display();
+    std::string GetGameDisplay() const;
 };

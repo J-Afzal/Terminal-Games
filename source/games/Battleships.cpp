@@ -11,20 +11,20 @@
 
 #include "games/Battleships.hpp"
 
-Battleships::Battleships(const bool& ASCIIOnly)
+Battleships::Battleships(const bool& outputIsOnlyASCII)
 {
-    m_StringBuilder.Set(ASCIIOnly, 147, "Battleships", "q = quit to main menu");
+    m_stringBuilder.SetProperties("Battleships", "q = quit to main menu", 147, outputIsOnlyASCII);
     m_RandomNumberGenerator.seed(std::chrono::system_clock::now().time_since_epoch().count());
 }
 
-void Battleships::Setup_Game()
+void Battleships::SetupGame()
 {
     m_MovesRemainingOne.clear();
     m_MovesRemainingTwo.clear();
 
-    for (int i = 0, GridNumber = 0; i < 10; i++)
+    for (uint32_t i = 0, GridNumber = 0; i < 10; i++)
     {
-        for (int j = 0; j < 10; j++, GridNumber++)
+        for (uint32_t j = 0; j < 10; j++, GridNumber++)
         {
             m_BoardOne[i][j] = ' ';
             m_BoardTwo[i][j] = ' ';
@@ -54,60 +54,60 @@ void Battleships::Setup_Game()
     m_GameOver = false;
     m_RandomNumberGenerator() % 2 == 0 ? m_CurrentPlayer = "Player One" : m_CurrentPlayer = "Player Two";
 
-    Get_Number_Of_Players();
+    GetPlayerCount();
 
-    Get_AI_Speed();
+    GetAISpeed();
 
     if (m_NumberOfPlayers == "1  ")
-        Get_User_Ship_Positions();
+        GetUserShipPositions();
     else
-        Get_AI_Ship_Positions(m_BoardOne);
+        GetAIShipPositions(m_BoardOne);
 
-    Get_AI_Ship_Positions(m_BoardTwo);
+    GetAIShipPositions(m_BoardTwo);
 }
 
-void Battleships::Get_Number_Of_Players()
+void Battleships::GetPlayerCount()
 {
     std::vector<std::string> Menus(2);
-    std::string GameDisplay = Get_Game_Display() + m_StringBuilder.New_Line_Left_Justified(" Please select the number of players:");
+    std::string GameDisplay = GetGameDisplay() + m_stringBuilder.AddNewLineLeftJustified(" Please select the number of players:");
 
     Menus[0] = GameDisplay;
-    Menus[0] += m_StringBuilder.New_Line_Left_Justified(" > 0", Colours::BLUE);
-    Menus[0] += m_StringBuilder.New_Line_Left_Justified("   1");
-    Menus[0] += m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
+    Menus[0] += m_stringBuilder.AddNewLineLeftJustified(" > 0", Colours::BLUE);
+    Menus[0] += m_stringBuilder.AddNewLineLeftJustified("   1");
+    Menus[0] += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
 
     Menus[1] = GameDisplay;
-    Menus[1] += m_StringBuilder.New_Line_Left_Justified("   0");
-    Menus[1] += m_StringBuilder.New_Line_Left_Justified(" > 1", Colours::BLUE);
-    Menus[1] += m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
+    Menus[1] += m_stringBuilder.AddNewLineLeftJustified("   0");
+    Menus[1] += m_stringBuilder.AddNewLineLeftJustified(" > 1", Colours::BLUE);
+    Menus[1] += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
 
-    m_NumberOfPlayers = std::to_string(m_Terminal.Get_User_Menu_Choice(Menus)) + "  ";
+    m_NumberOfPlayers = std::to_string(m_terminal.GetUserChoiceFromMenus(Menus)) + "  ";
 }
 
-void Battleships::Get_AI_Speed()
+void Battleships::GetAISpeed()
 {
     std::vector<std::string> Menus(3);
-    std::string GameDisplay = Get_Game_Display() + m_StringBuilder.New_Line_Left_Justified(" Please select the AI difficulty:");
+    std::string GameDisplay = GetGameDisplay() + m_stringBuilder.AddNewLineLeftJustified(" Please select the AI difficulty:");
 
     Menus[0] = GameDisplay;
-    Menus[0] += m_StringBuilder.New_Line_Left_Justified(" > INSTANT", Colours::BLUE);
-    Menus[0] += m_StringBuilder.New_Line_Left_Justified("   FAST");
-    Menus[0] += m_StringBuilder.New_Line_Left_Justified("   SLOW");
-    Menus[0] += m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
+    Menus[0] += m_stringBuilder.AddNewLineLeftJustified(" > INSTANT", Colours::BLUE);
+    Menus[0] += m_stringBuilder.AddNewLineLeftJustified("   FAST");
+    Menus[0] += m_stringBuilder.AddNewLineLeftJustified("   SLOW");
+    Menus[0] += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
 
     Menus[1] = GameDisplay;
-    Menus[1] += m_StringBuilder.New_Line_Left_Justified("   INSTANT");
-    Menus[1] += m_StringBuilder.New_Line_Left_Justified(" > FAST", Colours::BLUE);
-    Menus[1] += m_StringBuilder.New_Line_Left_Justified("   SLOW");
-    Menus[1] += m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
+    Menus[1] += m_stringBuilder.AddNewLineLeftJustified("   INSTANT");
+    Menus[1] += m_stringBuilder.AddNewLineLeftJustified(" > FAST", Colours::BLUE);
+    Menus[1] += m_stringBuilder.AddNewLineLeftJustified("   SLOW");
+    Menus[1] += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
 
     Menus[2] = GameDisplay;
-    Menus[2] += m_StringBuilder.New_Line_Left_Justified("   INSTANT");
-    Menus[2] += m_StringBuilder.New_Line_Left_Justified("   FAST");
-    Menus[2] += m_StringBuilder.New_Line_Left_Justified(" > SLOW", Colours::BLUE);
-    Menus[2] += m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
+    Menus[2] += m_stringBuilder.AddNewLineLeftJustified("   INSTANT");
+    Menus[2] += m_stringBuilder.AddNewLineLeftJustified("   FAST");
+    Menus[2] += m_stringBuilder.AddNewLineLeftJustified(" > SLOW", Colours::BLUE);
+    Menus[2] += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
 
-    m_AISpeed = m_Terminal.Get_User_Menu_Choice(Menus);
+    m_AISpeed = m_terminal.GetUserChoiceFromMenus(Menus);
 
     if (m_AISpeed == 0)
         m_AISpeedName = "INSTANT";
@@ -123,14 +123,12 @@ void Battleships::Get_AI_Speed()
     }
 }
 
-void Battleships::Get_User_Ship_Positions()
+void Battleships::GetUserShipPositions()
 {
-    /**
-     * @brief The user is prompted to enter sequentially increasing or decreasing co-ordinates
-     * for each ship, and repeatedly if needed, until a valid set of co-ordinates are given.
-     * After passing the error checks, each set of co-ordinates is used to place a ship
-     * on player one's board (as user is always player one).
-     */
+    // The user is prompted to enter sequentially increasing or decreasing co-ordinates
+    // for each ship, and repeatedly if needed, until a valid set of co-ordinates are given.
+    // After passing the error checks, each set of co-ordinates is used to place a ship
+    // on player one's board (as user is always player one).
 
     std::array<std::string, 5> ShipInstructions = {
             "Please enter the 5 grid locations for the Carrier",
@@ -140,26 +138,26 @@ void Battleships::Get_User_Ship_Positions()
             "Please enter the 2 grid locations for the Patrol Boat"
     };
     std::array<char, 5> ShipLetters = {'C', 'B', 'D', 'S', 'P'};
-    std::array<int, 5> ShipSizes = {5, 4, 3, 3, 2};
-    int lastShipRow = 0, lastShipColumn = 0;
+    std::array<uint32_t, 5> ShipSizes = {5, 4, 3, 3, 2};
+    uint32_t lastShipRow = 0, lastShipColumn = 0;
 
-    m_Terminal.Set_Cursor_Visibility(true);
+    m_terminal.SetCursorVisibility(true);
 
-    for (int i = 0; i < 5; i++) // for each ship
+    for (uint32_t i = 0; i < 5; i++) // for each ship
     {
-        std::vector<int> ShipRows, ShipColumns;
+        std::vector<uint32_t> ShipRows, ShipColumns;
         bool ShipOrientationHorizontal = false;
         bool ShipOrientationVertical = false;
 
-        for (int j = 0; j < ShipSizes[i]; j++) // for each ship grid locations
+        for (uint32_t j = 0; j < ShipSizes[i]; j++) // for each ship grid locations
         {
-            std::string Output = Get_Game_Display() + m_StringBuilder.New_Line_Centred(ShipInstructions[i]);
-            Output += m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line();
-            Output += m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
+            std::string Output = GetGameDisplay() + m_stringBuilder.AddNewLineCentred(ShipInstructions[i]);
+            Output += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine();
+            Output += m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
 
-            m_Terminal.Output_To_Terminal(Output);
+            m_terminal.PrintOutput(Output);
 
-            int KeyPress, Row, Column;
+            uint32_t KeyPress, Row, Column;
 
             if (j == 0)
             {
@@ -176,9 +174,9 @@ void Battleships::Get_User_Ship_Positions()
             {
                 while (true) // enter not pressed
                 {
-                    m_Terminal.Set_Cursor_Position(10 + Column * 4, 8 + Row * 2);
+                    m_terminal.SetCursorPosition(10 + Column * 4, 8 + Row * 2);
 
-                    KeyPress = m_Terminal.Get_Key_Pressed();
+                    KeyPress = m_terminal.GetNextKeyPress();
 
                     if (KeyPress == '\r') // enter key
                         break;
@@ -194,10 +192,10 @@ void Battleships::Get_User_Ship_Positions()
                     {
                         m_BoardOne[ShipRows.back()][ShipColumns.back()] = ' ';
 
-                        Output = Get_Game_Display();
-                        Output += m_StringBuilder.New_Line_Centred(ShipInstructions[i]) + m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line();
-                        Output += m_StringBuilder.Bottom_Box();
-                        m_Terminal.Output_To_Terminal(Output);
+                        Output = GetGameDisplay();
+                        Output += m_stringBuilder.AddNewLineCentred(ShipInstructions[i]) + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine();
+                        Output += m_stringBuilder.AddBottomBox();
+                        m_terminal.PrintOutput(Output);
 
                         ShipRows.pop_back();
                         ShipColumns.pop_back();
@@ -225,7 +223,7 @@ void Battleships::Get_User_Ship_Positions()
                     }
                     else if (KeyPress == 'q')
                     {
-                        m_Terminal.Set_Cursor_Visibility(false);
+                        m_terminal.SetCursorVisibility(false);
                         throw Exceptions::Quit();
                     }
                 }
@@ -252,7 +250,7 @@ void Battleships::Get_User_Ship_Positions()
                         if ((RowsSame && ColumnsSame) || (!RowsSame && !ColumnsSame))
                             continue;
 
-                        if (RowsSame && (std::abs(Column - ShipColumns.back()) == 1))
+                        if (RowsSame && (std::abs((int)Column - (int)ShipColumns.back()) == 1))
                         {
                             if (ShipRows.size() == 1)
                             {
@@ -269,7 +267,7 @@ void Battleships::Get_User_Ship_Positions()
                             }
                         }
 
-                        else if (ColumnsSame && (std::abs(Row - ShipRows.back()) == 1))
+                        else if (ColumnsSame && (std::abs((int)Row - (int)ShipRows.back()) == 1))
                         {
                             if (ShipRows.size() == 1)
                             {
@@ -299,24 +297,24 @@ void Battleships::Get_User_Ship_Positions()
         }
 
         // All grid location received and are valid, so place ship
-        for (unsigned int j = 0; j < ShipRows.size(); j++)
+        for (uint32_t j = 0; j < ShipRows.size(); j++)
             m_BoardOne[ShipRows[j]][ShipColumns[j]] = ShipLetters[i];
     }
 
-    m_Terminal.Set_Cursor_Visibility(false);
+    m_terminal.SetCursorVisibility(false);
 }
 
-void Battleships::Get_AI_Ship_Positions(std::array<std::array<char, 10>, 10> &AIBoard)
+void Battleships::GetAIShipPositions(std::array<std::array<char, 10>, 10>& AIBoard)
 {
-    std::array<int, 5> ShipSizes = {5, 4, 3, 3, 2};
+    std::array<uint32_t, 5> ShipSizes = {5, 4, 3, 3, 2};
     std::array<char, 5> ShipLetters = {'C', 'B', 'D', 'S', 'P'};
 
-    for (int i = 0; i < 5; i++)
+    for (uint32_t i = 0; i < 5; i++)
     {
         while (true)
         {
-            std::vector<unsigned int> ShipRows, ShipColumns;
-            unsigned int Row, Column;
+            std::vector<uint32_t> ShipRows, ShipColumns;
+            uint32_t Row, Column;
 
             // Get a random ship position
             if ((m_RandomNumberGenerator() % 2) == 0) // Horizontal
@@ -328,7 +326,7 @@ void Battleships::Get_AI_Ship_Positions(std::array<std::array<char, 10>, 10> &AI
                 Row = m_RandomNumberGenerator() % 10; // Any row number allowed as ship is horizontal
 
                 // Horizontal positions have a difference in columns of 1
-                for (int j = 0; j < ShipSizes[i]; j++)
+                for (uint32_t j = 0; j < ShipSizes[i]; j++)
                 {
                     ShipRows.push_back(Row);
                     ShipColumns.push_back(Column + j);
@@ -344,7 +342,7 @@ void Battleships::Get_AI_Ship_Positions(std::array<std::array<char, 10>, 10> &AI
                 Row = m_RandomNumberGenerator() % (11 - ShipSizes[i]);
 
                 // Vertical positions have a difference in rows of 1
-                for (int j = 0; j < ShipSizes[i]; j++)
+                for (uint32_t j = 0; j < ShipSizes[i]; j++)
                 {
                     ShipRows.push_back(Row + j);
                     ShipColumns.push_back(Column);
@@ -353,7 +351,7 @@ void Battleships::Get_AI_Ship_Positions(std::array<std::array<char, 10>, 10> &AI
 
             // Check if ship is already located on requested ship position
             bool Errors = false;
-            for (unsigned int j = 0; j < ShipRows.size(); j++)
+            for (uint32_t j = 0; j < ShipRows.size(); j++)
                 if (AIBoard[ShipRows[j]][ShipColumns[j]] == 'C' ||
                     AIBoard[ShipRows[j]][ShipColumns[j]] == 'B' ||
                     AIBoard[ShipRows[j]][ShipColumns[j]] == 'D' ||
@@ -363,7 +361,7 @@ void Battleships::Get_AI_Ship_Positions(std::array<std::array<char, 10>, 10> &AI
 
             if (!Errors) // Place ship
             {
-                for (unsigned int j = 0; j < ShipRows.size(); j++)
+                for (uint32_t j = 0; j < ShipRows.size(); j++)
                     AIBoard[ShipRows[j]][ShipColumns[j]] = ShipLetters[i];
                 break;
             }
@@ -371,17 +369,17 @@ void Battleships::Get_AI_Ship_Positions(std::array<std::array<char, 10>, 10> &AI
     }
 }
 
-bool Battleships::Game_Over()
+bool Battleships::IsGameOver()
 {
     bool PlayerOneShipsPresent = false;
-    for (int i = 0; i < 10; i++)
-        for (int j = 0; j < 10; j++)
+    for (uint32_t i = 0; i < 10; i++)
+        for (uint32_t j = 0; j < 10; j++)
             if (m_BoardOne[i][j] == 'C' || m_BoardOne[i][j] == 'B' || m_BoardOne[i][j] == 'D' || m_BoardOne[i][j] == 'S' || m_BoardOne[i][j] == 'P')
                 PlayerOneShipsPresent = true;
 
     bool PlayerTwoShipsPresent = false;
-    for (int i = 0; i < 10; i++)
-        for (int j = 0; j < 10; j++)
+    for (uint32_t i = 0; i < 10; i++)
+        for (uint32_t j = 0; j < 10; j++)
             if (m_BoardTwo[i][j] == 'C' || m_BoardTwo[i][j] == 'B' || m_BoardTwo[i][j] == 'D' || m_BoardTwo[i][j] == 'S' || m_BoardTwo[i][j] == 'P')
                 PlayerTwoShipsPresent = true;
 
@@ -390,36 +388,36 @@ bool Battleships::Game_Over()
     return m_GameOver;
 }
 
-void Battleships::Toggle_Current_Player()
+void Battleships::ToggleCurrentPlayer()
 {
     m_CurrentPlayer == "Player One" ? m_CurrentPlayer = "Player Two" : m_CurrentPlayer = "Player One";
 }
 
-bool Battleships::Next_Turn_Is_User()
+bool Battleships::IsNextTurnUser() const
 {
     return m_NumberOfPlayers == "1  " && m_CurrentPlayer == "Player One";
 }
 
-void Battleships::Execute_Next_User_Command()
+void Battleships::ExecuteCommandUser()
 {
-    std::string Output = Get_Game_Display();
-    Output += m_StringBuilder.New_Line_Left_Justified(" Player One, please enter your next command!");
-    Output += m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line();
-    Output += m_StringBuilder.Bottom_Box();
+    std::string Output = GetGameDisplay();
+    Output += m_stringBuilder.AddNewLineLeftJustified(" Player One, please enter your next command!");
+    Output += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine();
+    Output += m_stringBuilder.AddBottomBox();
 
-    m_Terminal.Output_To_Terminal(Output);
+    m_terminal.PrintOutput(Output);
 
-    int KeyPress, Command, Row = m_PreviousCommand / 10, Column = m_PreviousCommand % 10;
+    uint32_t KeyPress, Command, Row = m_PreviousCommand / 10, Column = m_PreviousCommand % 10;
 
-    m_Terminal.Set_Cursor_Visibility(true);
+    m_terminal.SetCursorVisibility(true);
 
     while (true)
     {
         while (true)
         {
-            m_Terminal.Set_Cursor_Position(106 + Column * 4, 8 + Row * 2);
+            m_terminal.SetCursorPosition(106 + Column * 4, 8 + Row * 2);
 
-            KeyPress = m_Terminal.Get_Key_Pressed();
+            KeyPress = m_terminal.GetNextKeyPress();
 
             if (KeyPress == '\r') // enter key
                 break;
@@ -433,7 +431,7 @@ void Battleships::Execute_Next_User_Command()
                 Column == 9 ? Column = 0 : ++Column;
             else if (KeyPress == 'q')
             {
-                m_Terminal.Set_Cursor_Visibility(false);
+                m_terminal.SetCursorVisibility(false);
                 throw Exceptions::Quit();
             }
         }
@@ -443,45 +441,45 @@ void Battleships::Execute_Next_User_Command()
 
         if (CommandPosition != m_MovesRemainingOne.end())
         {
-            Execute_Command(m_BoardTwo, m_ShipsRemainingTwo, m_MovesRemainingOne, Command);
+            ExecuteCommand(m_BoardTwo, m_ShipsRemainingTwo, m_MovesRemainingOne, Command);
 
             m_PreviousCommand = Command;
 
-            m_Terminal.Set_Cursor_Visibility(false);
+            m_terminal.SetCursorVisibility(false);
 
             return;
         }
     }
 }
 
-void Battleships::Execute_Next_AI_Command()
+void Battleships::ExecuteCommandAI()
 {
     if (m_AISpeed != 0)
     {
-        std::string Output = Get_Game_Display();
-        Output += m_StringBuilder.New_Line_Left_Justified(" The AI is executing their next move!") + m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Empty_Line() + m_StringBuilder.Bottom_Line() + m_StringBuilder.Bottom_Box();
-        m_Terminal.Output_To_Terminal(Output);
+        std::string Output = GetGameDisplay();
+        Output += m_stringBuilder.AddNewLineLeftJustified(" The AI is executing their next move!") + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
+        m_terminal.PrintOutput(Output);
         std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::milliseconds(m_AISpeed));
     }
 
     if (m_CurrentPlayer == "Player One")
     {
         m_AICommand = m_MovesRemainingOne[m_RandomNumberGenerator() % m_MovesRemainingOne.size()];
-        Execute_Command(m_BoardTwo, m_ShipsRemainingTwo, m_MovesRemainingOne, m_AICommand);
+        ExecuteCommand(m_BoardTwo, m_ShipsRemainingTwo, m_MovesRemainingOne, m_AICommand);
     }
     else
     {
         m_AICommand = m_MovesRemainingTwo[m_RandomNumberGenerator() % m_MovesRemainingTwo.size()];
-        Execute_Command(m_BoardOne, m_ShipsRemainingOne, m_MovesRemainingTwo, m_AICommand);
+        ExecuteCommand(m_BoardOne, m_ShipsRemainingOne, m_MovesRemainingTwo, m_AICommand);
     }
 }
 
-void Battleships::Execute_Command(std::array<std::array<char, 10>, 10> &OpponentBoard,
-                                  std::unordered_map<char, int> &OpponentShipsRemaining,
-                                  std::vector<int> &MovesRemaining,
-                                  const int &Command)
+void Battleships::ExecuteCommand(std::array<std::array<char, 10>, 10>& OpponentBoard,
+                                  std::unordered_map<char, uint32_t>& OpponentShipsRemaining,
+                                  std::vector<uint32_t>& MovesRemaining,
+                                  const uint32_t& Command)
 {
-    int Row = Command / 10, Column = Command % 10;
+    uint32_t Row = Command / 10, Column = Command % 10;
 
     if (OpponentBoard[Row][Column] == 'C' || OpponentBoard[Row][Column] == 'B' || OpponentBoard[Row][Column] == 'D' || OpponentBoard[Row][Column] == 'S' || OpponentBoard[Row][Column] == 'P')
     {
@@ -496,36 +494,36 @@ void Battleships::Execute_Command(std::array<std::array<char, 10>, 10> &Opponent
     m_NumberOfTurns++;
 }
 
-std::string Battleships::Get_Game_Over_Message()
+std::string Battleships::GetGameOverMessage() const
 {
-    std::string Output = Get_Game_Display();
-    Output += m_StringBuilder.New_Line_Centred("GAME OVER") + m_StringBuilder.Empty_Line();
-    Output += m_StringBuilder.New_Line_Centred(
+    std::string Output = GetGameDisplay();
+    Output += m_stringBuilder.AddNewLineCentred("GAME OVER") + m_stringBuilder.AddEmptyLine();
+    Output += m_stringBuilder.AddNewLineCentred(
             m_CurrentPlayer + " has won! The game lasted " + std::to_string(m_NumberOfTurns) + " turns.");
-    Output += m_StringBuilder.Empty_Line() +
-            m_StringBuilder.New_Line_Centred("Press 'Q' to quit OR Enter to play again...") + m_StringBuilder.Bottom_Line();
-    Output += m_StringBuilder.Bottom_Box();
+    Output += m_stringBuilder.AddEmptyLine() +
+            m_stringBuilder.AddNewLineCentred("Press 'Q' to quit OR Enter to play again...") + m_stringBuilder.AddBottomLine();
+    Output += m_stringBuilder.AddBottomBox();
 
     return Output;
 }
 
-std::string Battleships::Get_Game_Display()
+std::string Battleships::GetGameDisplay() const
 {
     // Top bar
-    std::string Output = m_StringBuilder.Top_Box();
+    std::string Output = m_stringBuilder.AddTopBox();
 
     // Main game box
-    Output += m_StringBuilder.Top_Line();
+    Output += m_stringBuilder.AddTopLine();
 
     // Top row and letter co-ordinates of both boards
-    Output += m_StringBuilder.New_Line_Left_Justified("                    Player One                                                                                       Player Two");
+    Output += m_stringBuilder.AddNewLineLeftJustified("                    Player One                                                                                       Player Two");
 
     Output += (char)186 + std::string("   ");
-    for (int i = 0; i < 2; i++)
+    for (uint32_t i = 0; i < 2; i++)
     {
         Output += (char)218;
         Output.insert(Output.size(), 3, (char)196);
-        for (int j = 0; j < 10; j++)
+        for (uint32_t j = 0; j < 10; j++)
         {
             Output += (char)194;
             Output.insert(Output.size(), 3, (char)196);
@@ -538,7 +536,7 @@ std::string Battleships::Get_Game_Display()
     Output += std::string("   ") + (char)186 + "\n";
 
     Output += (char)186 + std::string("   ");
-    for (int i = 0; i < 2; i++)
+    for (uint32_t i = 0; i < 2; i++)
     {
         Output += (char)179 + std::string("   ") + (char)179 + " A " + (char)179 + " B " + (char)179 + " C " + (char)179 + " D " + (char)179 + " E " + (char)179 + " F " + (char)179 + " G " + (char)179 + " H " + (char)179 + " I " + (char)179 + " J " + (char)179;
 
@@ -548,7 +546,7 @@ std::string Battleships::Get_Game_Display()
     Output += std::string("   ") + (char)186 + "\n";
 
     // Main parts of both boards and centre information
-    for (int i = 0; i < 10; i++)
+    for (uint32_t i = 0; i < 10; i++)
     {
         // First Line
         // Left outer box edge
@@ -557,7 +555,7 @@ std::string Battleships::Get_Game_Display()
         // Player One Board horizontal dividers
         Output += (char)195;
         Output.insert(Output.size(), 3, (char)196);
-        for (int j = 0; j < 10; j++)
+        for (uint32_t j = 0; j < 10; j++)
         {
             Output += (char)197;
             Output.insert(Output.size(), 3, (char)196);
@@ -570,7 +568,7 @@ std::string Battleships::Get_Game_Display()
         else if (i == 5) // Battleship
         {
             Output += "   ";
-            for (int j = 0; j < 4; j++, Output += " ")
+            for (uint32_t j = 0; j < 4; j++, Output += " ")
             {
                 if (j < m_ShipsRemainingOne.at('B'))
                     Output.insert(Output.size(), 3, (char)178);
@@ -578,7 +576,7 @@ std::string Battleships::Get_Game_Display()
                     Output.insert(Output.size(), 3, (char)176);
             }
             Output += "              ";
-            for (int j = 0; j < 4; j++, Output += " ")
+            for (uint32_t j = 0; j < 4; j++, Output += " ")
             {
                 if (j < (4 - m_ShipsRemainingTwo.at('B')))
                     Output.insert(Output.size(), 3, (char)176);
@@ -592,7 +590,7 @@ std::string Battleships::Get_Game_Display()
         else if (i == 8) // Submarine
         {
             Output += "   ";
-            for (int j = 0; j < 3; j++, Output += " ")
+            for (uint32_t j = 0; j < 3; j++, Output += " ")
             {
                 if (j < m_ShipsRemainingOne.at('S'))
                     Output.insert(Output.size(), 3, (char)178);
@@ -600,7 +598,7 @@ std::string Battleships::Get_Game_Display()
                     Output.insert(Output.size(), 3, (char)176);
             }
             Output += "                      ";
-            for (int j = 0; j < 3; j++, Output += " ")
+            for (uint32_t j = 0; j < 3; j++, Output += " ")
             {
                 if (j < (3 - m_ShipsRemainingTwo.at('S')))
                     Output.insert(Output.size(), 3, (char)176);
@@ -617,7 +615,7 @@ std::string Battleships::Get_Game_Display()
         // Player Two Board horizontal dividers
         Output += (char)195;
         Output.insert(Output.size(), 3, (char)196);
-        for (int j = 0; j < 10; j++)
+        for (uint32_t j = 0; j < 10; j++)
         {
             Output += (char)197;
             Output.insert(Output.size(), 3, (char)196);
@@ -629,7 +627,7 @@ std::string Battleships::Get_Game_Display()
         Output += (char)186 + std::string("   ") + (char)179 + " " + std::to_string(i) + " " + (char)179;
 
         // Player One board ships
-        for (int j = 0; j < 10; j++)
+        for (uint32_t j = 0; j < 10; j++)
         {
             if (m_BoardOne[i][j] == 'C' || m_BoardOne[i][j] == 'B' || m_BoardOne[i][j] == 'D' || m_BoardOne[i][j] == 'S' || m_BoardOne[i][j] == 'P')
                 Output.insert(Output.size(), 3, (char)178);
@@ -650,7 +648,7 @@ std::string Battleships::Get_Game_Display()
         else if (i == 3) // Carrier
         {
             Output += "   ";
-            for (int j = 0; j < 5; j++, Output += " ")
+            for (uint32_t j = 0; j < 5; j++, Output += " ")
             {
                 if (j < m_ShipsRemainingOne.at('C'))
                     Output.insert(Output.size(), 3, (char)178);
@@ -658,7 +656,7 @@ std::string Battleships::Get_Game_Display()
                     Output.insert(Output.size(), 3, (char)176);
             }
             Output += "      ";
-            for (int j = 0; j < 5; j++, Output += " ")
+            for (uint32_t j = 0; j < 5; j++, Output += " ")
             {
                 if (j < (5 - m_ShipsRemainingTwo.at('C')))
                     Output.insert(Output.size(), 3, (char)176);
@@ -672,7 +670,7 @@ std::string Battleships::Get_Game_Display()
         else if (i == 6) // Destroyer
         {
             Output += "   ";
-            for (int j = 0; j < 3; j++, Output += " ")
+            for (uint32_t j = 0; j < 3; j++, Output += " ")
             {
                 if (j < m_ShipsRemainingOne.at('D'))
                     Output.insert(Output.size(), 3, (char)178);
@@ -680,7 +678,7 @@ std::string Battleships::Get_Game_Display()
                     Output.insert(Output.size(), 3, (char)176);
             }
             Output += "                      ";
-            for (int j = 0; j < 3; j++, Output += " ")
+            for (uint32_t j = 0; j < 3; j++, Output += " ")
             {
                 if (j < (3 - m_ShipsRemainingTwo.at('D')))
                     Output.insert(Output.size(), 3, (char)176);
@@ -694,7 +692,7 @@ std::string Battleships::Get_Game_Display()
         else if (i == 9) // Patrol Boat
         {
             Output += "   ";
-            for (int j = 0; j < 2; j++, Output += " ")
+            for (uint32_t j = 0; j < 2; j++, Output += " ")
             {
                 if (j < m_ShipsRemainingOne.at('P'))
                     Output.insert(Output.size(), 3, (char)178);
@@ -702,7 +700,7 @@ std::string Battleships::Get_Game_Display()
                     Output.insert(Output.size(), 3, (char)176);
             }
             Output += "                              ";
-            for (int j = 0; j < 2; j++, Output += " ")
+            for (uint32_t j = 0; j < 2; j++, Output += " ")
             {
                 if (j < (2 - m_ShipsRemainingTwo.at('P')))
                     Output.insert(Output.size(), 3, (char)176);
@@ -718,7 +716,7 @@ std::string Battleships::Get_Game_Display()
         Output += (char)179 + std::string(" ") + std::to_string(i) + " " + (char)179;
 
         // Player Two board ships
-        for (int j = 0; j < 10; j++)
+        for (uint32_t j = 0; j < 10; j++)
         {
             if ((m_GameOver || m_NumberOfPlayers == "0  ") && (m_BoardTwo[i][j] == 'C' || m_BoardTwo[i][j] == 'B' || m_BoardTwo[i][j] == 'D' || m_BoardTwo[i][j] == 'S' || m_BoardTwo[i][j] == 'P'))
                 Output.insert(Output.size(), 3, (char)178);
@@ -735,11 +733,11 @@ std::string Battleships::Get_Game_Display()
 
     // Bottom row of both boards
     Output += (char)186 + std::string("   ");
-    for (int i = 0; i < 2; i++)
+    for (uint32_t i = 0; i < 2; i++)
     {
         Output += (char)192;
         Output.insert(Output.size(), 3, (char)196);
-        for (int j = 0; j < 10; j++)
+        for (uint32_t j = 0; j < 10; j++)
         {
             Output += (char)193;
             Output.insert(Output.size(), 3, (char)196);
@@ -750,7 +748,7 @@ std::string Battleships::Get_Game_Display()
             Output += "                                                   ";
     }
 
-    Output += std::string("   ") + (char)186 + "\n" + m_StringBuilder.Empty_Line();
+    Output += std::string("   ") + (char)186 + "\n" + m_stringBuilder.AddEmptyLine();
 
     return Output;
 }

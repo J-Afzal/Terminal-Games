@@ -1,16 +1,9 @@
-/**
- * @file Terminal.cpp
- * @author Junaid Afzal
- * @brief Implementation of Terminal.hpp
- * @version 1.0
- * @date 07-11-2021
- *
- * @copyright Copyright (c) 2021
- *
- */
+#include <conio.h>
+#include <iostream>
+#include <string>
 
-#include "helpers/Terminal.hpp"
 #include "helpers/Exceptions.hpp"
+#include "helpers/Terminal.hpp"
 
 Terminal::Terminal()
 {
@@ -20,46 +13,46 @@ Terminal::Terminal()
     if (ConsoleHandle == INVALID_HANDLE_VALUE || InputBufferHandle == INVALID_HANDLE_VALUE)
         exit(1);
 
-    m_ConsoleHandle = ConsoleHandle;
-    m_BufferHandle = InputBufferHandle;
-    m_CursorInfo.dwSize = 100;
-    Set_Cursor_Visibility(false);
-    Set_Cursor_Position(0,0);
+    m_consoleHandle = ConsoleHandle;
+    m_bufferHandle = InputBufferHandle;
+    m_cursorInfo.dwSize = 100;
+    SetCursorVisibility(false);
+    SetCursorPosition(0,0);
 }
 
 Terminal::~Terminal()
 {
-    Terminal::Clear_Terminal();
-    Set_Cursor_Visibility(true);
+    Clear();
+    SetCursorVisibility(true);
 }
 
-int Terminal::Get_User_Menu_Choice(const std::vector<std::string> &Menus)
+uint32_t Terminal::GetUserChoiceFromMenus(const std::vector<std::string>& menus) const
 {
-    int KeyPress, CurrentSelection = 0;
+    uint32_t KeyPress, CurrentSelection = 0;
     while (true)
     {
-        Terminal::Output_To_Terminal(Menus[CurrentSelection]);
+        PrintOutput(menus[CurrentSelection]);
 
-        KeyPress = Get_Key_Pressed();
+        KeyPress = GetNextKeyPress();
 
         if (KeyPress == '\r')
             return CurrentSelection;
         else if (KeyPress == 72) // up arrow key
-            CurrentSelection == 0 ? CurrentSelection = (int)(Menus.size() - 1) : --CurrentSelection;
+            CurrentSelection == 0 ? CurrentSelection = (uint32_t)(menus.size() - 1) : --CurrentSelection;
         else if (KeyPress == 80) // down arrow key
-            CurrentSelection == (int)(Menus.size() - 1) ? CurrentSelection = 0 : ++CurrentSelection;
+            CurrentSelection == (uint32_t)(menus.size() - 1) ? CurrentSelection = 0 : ++CurrentSelection;
         else if (KeyPress == 'q')
             throw Exceptions::Quit();
     }
 }
 
-int Terminal::Get_Key_Pressed()
+uint32_t Terminal::GetNextKeyPress() const
 {
-    FlushConsoleInputBuffer(m_BufferHandle);
+    FlushConsoleInputBuffer(m_bufferHandle);
     return _getch();
 }
 
-void Terminal::Clear_Terminal()
+void Terminal::Clear() const
 {
     // Windows API method from https://www.cplusplus.com/articles/4z18T05o
     HANDLE hStdOut;
@@ -89,21 +82,21 @@ void Terminal::Clear_Terminal()
     SetConsoleCursorPosition(hStdOut, homeCoords);
 }
 
-void Terminal::Output_To_Terminal(const std::string &Output)
+void Terminal::PrintOutput(const std::string& Output) const
 {
-    Clear_Terminal();
+    Clear();
     std::cout << Output;
 }
 
-void Terminal::Set_Cursor_Visibility(const bool &CursorVisibility)
+void Terminal::SetCursorVisibility(const bool& cursorVisibility)
 {
-    m_CursorInfo.bVisible = CursorVisibility;
-    SetConsoleCursorInfo(m_ConsoleHandle, &m_CursorInfo);
+    m_cursorInfo.bVisible = cursorVisibility;
+    SetConsoleCursorInfo(m_consoleHandle, &m_cursorInfo);
 }
 
-void Terminal::Set_Cursor_Position(const int &X, const int &Y)
+void Terminal::SetCursorPosition(const uint32_t& x, const uint32_t& y)
 {
-    m_CursorPosition.X = X;
-    m_CursorPosition.Y = Y;
-    SetConsoleCursorPosition(m_ConsoleHandle, m_CursorPosition);
+    m_cursorPosition.X = x;
+    m_cursorPosition.Y = y;
+    SetConsoleCursorPosition(m_consoleHandle, m_cursorPosition);
 }
