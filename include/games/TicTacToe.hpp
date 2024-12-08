@@ -24,39 +24,39 @@ class TicTacToe : public Game
 public:
     /**
      * @brief Construct a new Tic Tac Toe object
-     * @param ASCIIOnly determines whether to use ANSI escapes codes (false)
+     * @param outputIsOnlyASCII determines whether to use ANSI escapes codes (false)
      * or just ASCII characters (true)
      */
-    explicit TicTacToe(const bool& ASCIIOnly);
+    explicit TicTacToe(const bool& outputIsOnlyASCII);
 
 private:
-    std::default_random_engine m_RandomNumberGenerator;
-    std::array<std::array<char, 3>, 3> m_GameGrid;
-    std::vector<uint32_t> m_MovesRemaining;
-    std::string m_NumberOfPlayers, m_AISpeedName;
-    uint32_t m_NumberOfTurns, m_AISpeed, m_AICommand;
-    char m_CurrentPlayer, m_UserPlayerChoice;
-    bool m_WinningConditionsMet;
+    std::default_random_engine m_randomNumberGenerator;
+    std::array<std::array<char, 3>, 3> m_gameGrid;
+    std::vector<uint32_t> m_movesRemaining;
+    std::string m_playerCount, m_speedNameAI;
+    uint32_t m_turnCount, m_speedAI, m_commandAI;
+    char m_currentPlayer, m_playerChoiceUser;
+    bool m_hasWinner;
 
-    void Setup_Game() override;
+    void SetupGame() override;
 
-    void Get_Number_Of_Players();
+    void GetPlayerCount();
 
-    void Get_User_Player_Choice();
+    void GetPlayerChoiceFromUser();
 
-    void Get_AI_Speed();
+    void GetAISpeed();
 
-    bool Game_Over() override;
+    bool IsGameOver() override;
 
-    void Toggle_Current_Player() override;
+    void ToggleCurrentPlayer() override;
 
-    bool Next_Turn_Is_User() const override;
+    bool IsNextTurnUser() const override;
 
-    void Execute_Next_User_Command() override;
+    void ExecuteCommandUser() override;
 
-    void Execute_Next_AI_Command() override;
+    void ExecuteCommandAI() override;
 
-    std::string Get_Game_Over_Message() const override;
+    std::string GetGameOverMessage() const override;
 
-    std::string Get_Game_Display() const;
+    std::string GetGameDisplay() const;
 };

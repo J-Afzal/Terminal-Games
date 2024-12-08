@@ -25,10 +25,10 @@ class Battleships : public Game
 public:
     /**
      * @brief Construct a new Battleships object
-     * @param ASCIIOnly determines whether to use ANSI escapes codes (false)
+     * @param outputIsOnlyASCII determines whether to use ANSI escapes codes (false)
      * or just ASCII characters (true)
      */
-    explicit Battleships(const bool& ASCIIOnly);
+    explicit Battleships(const bool& outputIsOnlyASCII);
 
 private:
     std::default_random_engine m_RandomNumberGenerator;
@@ -39,32 +39,32 @@ private:
     uint32_t m_NumberOfTurns, m_PreviousCommand, m_AISpeed, m_AICommand;
     bool m_GameOver;
 
-    void Setup_Game() override;
+    void SetupGame() override;
 
-    void Get_Number_Of_Players();
+    void GetPlayerCount();
 
-    void Get_AI_Speed();
+    void GetAISpeed();
 
-    void Get_User_Ship_Positions();
+    void GetUserShipPositions();
 
-    void Get_AI_Ship_Positions(std::array<std::array<char, 10>, 10>& AIBoard);
+    void GetAIShipPositions(std::array<std::array<char, 10>, 10>& AIBoard);
 
-    bool Game_Over() override;
+    bool IsGameOver() override;
 
-    void Toggle_Current_Player() override;
+    void ToggleCurrentPlayer() override;
 
-    bool Next_Turn_Is_User() const override;
+    bool IsNextTurnUser() const override;
 
-    void Execute_Next_User_Command() override;
+    void ExecuteCommandUser() override;
 
-    void Execute_Next_AI_Command() override;
+    void ExecuteCommandAI() override;
 
-    void Execute_Command(std::array<std::array<char, 10>, 10>& OpponentBoard,
+    void ExecuteCommand(std::array<std::array<char, 10>, 10>& OpponentBoard,
                          std::unordered_map<char, uint32_t>& OpponentShipsRemaining,
                          std::vector<uint32_t>& MovesRemaining,
                          const uint32_t& AICommand);
 
-    std::string Get_Game_Over_Message() const override;
+    std::string GetGameOverMessage() const override;
 
-    std::string Get_Game_Display() const;
+    std::string GetGameDisplay() const;
 };

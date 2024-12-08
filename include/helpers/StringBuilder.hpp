@@ -20,61 +20,61 @@ class StringBuilder
 public:
     explicit StringBuilder() = default;
 
-    explicit StringBuilder(const std::string& TopTitle, const std::string& BottomTitle, const uint32_t& GameWidth, const bool& ASCIIOnly);
+    explicit StringBuilder(const std::string& topTitle, const std::string& bottomTitle, const uint32_t& gameWidth, const bool& outputIsOnlyASCII);
 
-    void Set(const std::string& TopTitle, const std::string& BottomTitle, const uint32_t& GameWidth, const bool& ASCIIOnly);
+    void SetProperties(const std::string& topTitle, const std::string& bottomTitle, const uint32_t& gameWidth, const bool& outputIsOnlyASCII);
 
-    std::string New_Line(const std::string& Input, const Colours& Colour = Colours::WHITE) const;
+    std::string AddNewLine(const std::string& input, const Colours& colour = Colours::WHITE) const;
 
-    std::string New_Line_Centred(const std::string& Input, const Colours& Colour = Colours::WHITE) const;
+    std::string AddNewLineCentred(const std::string& input, const Colours& colour = Colours::WHITE) const;
 
-    std::string New_Line_Left_Justified(const std::string& Input, const Colours& Colour = Colours::WHITE) const;
+    std::string AddNewLineLeftJustified(const std::string& input, const Colours& colour = Colours::WHITE) const;
 
-    std::string Empty_Line() const;
+    std::string AddEmptyLine() const;
 
-    std::string Top_Line() const;
+    std::string AddTopLine() const;
 
-    std::string Bottom_Line() const;
+    std::string AddBottomLine() const;
 
-    std::string Top_Box() const;
+    std::string AddTopBox() const;
 
-    std::string Bottom_Box() const;
+    std::string AddBottomBox() const;
 
     /**
      * @brief See below for a visual example of what each function abstracts away:
      *
-     * ╔═════════════════════════════════════════════════════╗   <- Top_Line()                          <-
-     * ║                     Tic Tac Toe                     ║   <- New_Line_Centred("Tic Tac Toe")    <- Top_Box()
-     * ╚═════════════════════════════════════════════════════╝   <- Bottom_Line()                       <-
-     * ╔═════════════════════════════════════════════════════╗   <- Top_Line()
+     * ╔═════════════════════════════════════════════════════╗   <- AddTopLine()                        <-
+     * ║                     Tic Tac Toe                     ║   <- AddNewLineCentred("Tic Tac Toe")    <- AddTopBox()
+     * ╚═════════════════════════════════════════════════════╝   <- AddBottomLine()                     <-
+     * ╔═════════════════════════════════════════════════════╗   <- AddTopLine()
      * ║  O │ O │ X                                          ║
      * ║ ───┼───┼───      # of Players = 0                   ║
      * ║  O │ X │ O                                          ║
-     * ║ ───┼───┼───     AI Difficulty = EASY                ║   <- New_Line_Left_Justified(" ───┼───┼───     AI Difficulty = EASY")
+     * ║ ───┼───┼───     AI Difficulty = EASY                ║   <- AddNewLineLeftJustified(" ───┼───┼───     AI Difficulty = EASY")
      * ║  O │ X │ X                                          ║
-     * ║                                                     ║   <- Empty_Line()
-     * ║                      GAME OVER                      ║   <- New_Line_Centred("GAME OVER")
+     * ║                                                     ║   <- AddEmptyLine()
+     * ║                      GAME OVER                      ║   <- AddNewLineCentred("GAME OVER")
      * ║                                                     ║
-     * ║     Player O has won! The game lasted 9 turns.      ║   <- New_Line("     Player O has won! The game lasted 9 turns.      ")
+     * ║     Player O has won! The game lasted 9 turns.      ║   <- AddNewLine("     Player O has won! The game lasted 9 turns.      ")
      * ║                                                     ║
      * ║     Press 'Q' to quit OR Enter to play again...     ║
-     * ╚═════════════════════════════════════════════════════╝   <- Bottom_Line()
-     * ╔═════════════════════════════════════════════════════╗   <- Top_Line()                                    <-
-     * ║                q = quit to main menu                ║   <- New_Line_Centred("q = quit to main menu")    <- Bottom_Box()
-     * ╚═════════════════════════════════════════════════════╝   <- Bottom_Line()                                 <-
+     * ╚═════════════════════════════════════════════════════╝   <- AddBottomLine()
+     * ╔═════════════════════════════════════════════════════╗   <- AddTopLine()                                  <-
+     * ║                q = quit to main menu                ║   <- AddNewLineCentred("q = quit to main menu")    <- AddBottomBox()
+     * ╚═════════════════════════════════════════════════════╝   <- AddBottomLine()                               <-
      *
      *  ^---------------------------------------------------^
      *                    = GameWidth = 53
      *
      * In this example:
-     *      m_TopTitle = "Tic Tac Toe"
-     *      m_BottomTitle = "q = quit to main menu"
-     *      m_GameWidth = 53
+     *      m_topTitle = "Tic Tac Toe"
+     *      m_bottomTitle = "q = quit to main menu"
+     *      m_gameWidth = 53
      *
      */
         
 private:
     std::string m_WHITE = "\x1B[1;37m", m_RED = "\x1B[1;31m", m_BLUE = "\x1B[1;34m", m_RESET = "\x1B[0m"; // ANSI escape codes
-    std::string m_TopTitle, m_BottomTitle;
-    uint32_t m_GameWidth;
+    std::string m_topTitle, m_bottomTitle;
+    uint32_t m_gameWidth;
 };

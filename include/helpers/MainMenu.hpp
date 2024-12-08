@@ -24,10 +24,10 @@ class MainMenu
 public:
     /**
      * @brief Construct a new Main Menu object
-     * @param ASCIIOnly determines whether to use ANSI escapes codes (false)
+     * @param outputIsOnlyASCII determines whether to use ANSI escapes codes (false)
      * or just ASCII characters (true)
      */
-    explicit MainMenu(const bool& ASCIIOnly = false);
+    explicit MainMenu(const bool& outputIsOnlyASCII = false);
 
     /**
      * @brief Kick off the MainMenu orchestration while loop
@@ -35,8 +35,8 @@ public:
     void Run();
 
 private:
-    Terminal m_Terminal;
-    std::array<std::unique_ptr<Game>, 3> m_Games;
-    std::vector<std::string> m_Menus;
-    uint32_t m_CurrentSelection;
+    Terminal m_terminal;
+    std::array<std::unique_ptr<Game>, 3> m_games;
+    std::vector<std::string> m_menus;
+    uint32_t m_currentSelection;
 };

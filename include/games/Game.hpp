@@ -23,40 +23,40 @@ public:
     {
         while (true)
         {
-            Setup_Game();
+            SetupGame();
 
-            while (!Game_Over())
+            while (!IsGameOver())
             {
-                Toggle_Current_Player();
+                ToggleCurrentPlayer();
 
-                if (Next_Turn_Is_User())
-                    Execute_Next_User_Command();
+                if (IsNextTurnUser())
+                    ExecuteCommandUser();
                 else
-                    Execute_Next_AI_Command();
+                    ExecuteCommandAI();
             }
 
-            m_Terminal.Output_To_Terminal(Get_Game_Over_Message());
-            if (m_Terminal.Get_Key_Pressed() == 'q')
+            m_terminal.OutputToTerminal(GetGameOverMessage());
+            if (m_terminal.GetNextKeyPress() == 'q')
                 throw Exceptions::Quit();
         }
     }
 
 protected:
-    StringBuilder m_StringBuilder;
-    Terminal m_Terminal;
+    StringBuilder m_stringBuilder;
+    Terminal m_terminal;
 
 private:
-    virtual void Setup_Game() = 0;
+    virtual void SetupGame() = 0;
 
-    virtual bool Game_Over() = 0;
+    virtual bool IsGameOver() = 0;
 
-    virtual void Toggle_Current_Player() = 0;
+    virtual void ToggleCurrentPlayer() = 0;
 
-    virtual bool Next_Turn_Is_User() const = 0;
+    virtual bool IsNextTurnUser() const = 0;
 
-    virtual void Execute_Next_User_Command() = 0;
+    virtual void ExecuteCommandUser() = 0;
 
-    virtual void Execute_Next_AI_Command() = 0;
+    virtual void ExecuteCommandAI() = 0;
 
-    virtual std::string Get_Game_Over_Message() const = 0;
+    virtual std::string GetGameOverMessage() const = 0;
 };

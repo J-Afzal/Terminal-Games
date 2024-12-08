@@ -24,40 +24,40 @@ public:
 
     /**
      * @brief Gets the user's choice of selection for a particular menu.
-     * @param Menus is an array of ASCII strings that are outputted to the console. The only
+     * @param menus is an array of ASCII strings that are outputted to the console. The only
      * difference between each string is the currently selected menu option.
-     * @return The index of Menus that is currently selected.
+     * @return The index of menus that is currently selected.
      */
-    uint32_t Get_User_Menu_Choice(const std::vector<std::string>& Menus) const;
+    uint32_t GetUserChoiceFromMenus(const std::vector<std::string>& menus) const;
 
     /**
      * @brief Wrapper for Windows.h FlushConsoleInputBuffer() and _getch()
      */
-    uint32_t Get_Key_Pressed() const;
+    uint32_t GetNextKeyPress() const;
 
     /**
      * @brief Uses Windows.h to clear the contents of the terminal
      * and was taken from: https://www.cplusplus.com/articles/4z18T05o
      */
-    void Clear_Terminal() const;
+    void ClearTerminal() const;
 
     /**
-     * @brief Clear_Terminal() then std::cout << Output
+     * @brief ClearTerminal() then std::cout << Output
      */
-    void Output_To_Terminal(const std::string& Output) const;
+    void OutputToTerminal(const std::string& output) const;
 
     /**
      * @brief Wrapper for Windows.h SetConsoleCursorInfo()
      */
-    void Set_Cursor_Visibility(const bool& Visibility);
+    void SetCursorVisibility(const bool& visibility);
 
     /**
      * @brief Wrapper for Windows.h SetConsoleCursorPosition()
      */
-    void Set_Cursor_Position(const uint32_t& X, const uint32_t& Y);
+    void SetCursorPosition(const uint32_t& x, const uint32_t& y);
 
 private:
-    COORD m_CursorPosition;
-    CONSOLE_CURSOR_INFO m_CursorInfo;
-    HANDLE m_ConsoleHandle, m_BufferHandle;
+    COORD m_cursorPosition;
+    CONSOLE_CURSOR_INFO m_cursorInfo;
+    HANDLE m_consoleHandle, m_bufferHandle;
 };
