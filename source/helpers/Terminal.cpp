@@ -5,28 +5,7 @@
 #include "helpers/Exceptions.hpp"
 #include "helpers/Terminal.hpp"
 
-Terminal::Terminal()
-{
-    HANDLE ConsoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-    HANDLE InputBufferHandle = GetStdHandle(STD_INPUT_HANDLE);
-
-    if (ConsoleHandle == INVALID_HANDLE_VALUE || InputBufferHandle == INVALID_HANDLE_VALUE)
-        exit(1);
-
-    m_consoleHandle = ConsoleHandle;
-    m_bufferHandle = InputBufferHandle;
-    m_cursorInfo.dwSize = 100;
-    SetCursorVisibility(false);
-    SetCursorPosition(0,0);
-}
-
-Terminal::~Terminal()
-{
-    Clear();
-    SetCursorVisibility(true);
-}
-
-uint32_t Terminal::GetUserChoiceFromMenus(const std::vector<std::string>& menus) const
+uint32_t Terminal::GetUserChoiceFromMainMenus(const std::vector<std::string>& menus)
 {
     uint32_t KeyPress, CurrentSelection = 0;
     while (true)
@@ -42,19 +21,39 @@ uint32_t Terminal::GetUserChoiceFromMenus(const std::vector<std::string>& menus)
         else if (KeyPress == 80) // down arrow key
             CurrentSelection == (uint32_t)(menus.size() - 1) ? CurrentSelection = 0 : ++CurrentSelection;
         else if (KeyPress == 'q')
-            throw Exceptions::Quit();
+            throw Exceptions::QuitProgram();
     }
 }
 
-uint32_t Terminal::GetNextKeyPress() const
+uint32_t Terminal::GetUserChoiceFromGameMenus(const std::vector<std::string>& menus)
 {
-    FlushConsoleInputBuffer(m_bufferHandle);
+    uint32_t KeyPress, CurrentSelection = 0;
+    while (true)
+    {
+        PrintOutput(menus[CurrentSelection]);
+
+        KeyPress = GetNextKeyPress();
+
+        if (KeyPress == '\r')
+            return CurrentSelection;
+        else if (KeyPress == 72) // up arrow key
+            CurrentSelection == 0 ? CurrentSelection = (uint32_t)(menus.size() - 1) : --CurrentSelection;
+        else if (KeyPress == 80) // down arrow key
+            CurrentSelection == (uint32_t)(menus.size() - 1) ? CurrentSelection = 0 : ++CurrentSelection;
+        else if (KeyPress == 'q')
+            throw Exceptions::QuitGame();
+    }
+}
+
+uint32_t Terminal::GetNextKeyPress()
+{
+    FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE));
     return _getch();
 }
 
-void Terminal::Clear() const
+void Terminal::Clear()
 {
-    // Windows API method from https://www.cplusplus.com/articles/4z18T05o
+    // Windows API method taken from https://www.cplusplus.com/articles/4z18T05o
     HANDLE hStdOut;
     CONSOLE_SCREEN_BUFFER_INFO consoleScreenBufferInfo;
     DWORD count;
@@ -82,21 +81,24 @@ void Terminal::Clear() const
     SetConsoleCursorPosition(hStdOut, homeCoords);
 }
 
-void Terminal::PrintOutput(const std::string& Output) const
+void Terminal::PrintOutput(const std::string& output)
 {
     Clear();
-    std::cout << Output;
+    std::cout << output;
 }
 
 void Terminal::SetCursorVisibility(const bool& cursorVisibility)
 {
-    m_cursorInfo.bVisible = cursorVisibility;
-    SetConsoleCursorInfo(m_consoleHandle, &m_cursorInfo);
+    CONSOLE_CURSOR_INFO cursorInfo;
+    cursorInfo.dwSize = 100;
+    cursorInfo.bVisible = cursorVisibility;
+    SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursorInfo);
 }
 
 void Terminal::SetCursorPosition(const uint32_t& x, const uint32_t& y)
 {
-    m_cursorPosition.X = x;
-    m_cursorPosition.Y = y;
-    SetConsoleCursorPosition(m_consoleHandle, m_cursorPosition);
+    COORD cursorPosition;
+    cursorPosition.X = x;
+    cursorPosition.Y = y;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), cursorPosition);
 }

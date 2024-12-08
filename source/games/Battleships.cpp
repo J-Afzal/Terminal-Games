@@ -81,7 +81,7 @@ void Battleships::GetPlayerCount()
     Menus[1] += m_stringBuilder.AddNewLineLeftJustified(" > 1", Colours::BLUE);
     Menus[1] += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
 
-    m_NumberOfPlayers = std::to_string(m_terminal.GetUserChoiceFromMenus(Menus)) + "  ";
+    m_NumberOfPlayers = std::to_string(Terminal::GetUserChoiceFromGameMenus(Menus)) + "  ";
 }
 
 void Battleships::GetAISpeed()
@@ -107,7 +107,7 @@ void Battleships::GetAISpeed()
     Menus[2] += m_stringBuilder.AddNewLineLeftJustified(" > SLOW", Colours::BLUE);
     Menus[2] += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
 
-    m_AISpeed = m_terminal.GetUserChoiceFromMenus(Menus);
+    m_AISpeed = Terminal::GetUserChoiceFromGameMenus(Menus);
 
     if (m_AISpeed == 0)
         m_AISpeedName = "INSTANT";
@@ -141,7 +141,7 @@ void Battleships::GetUserShipPositions()
     std::array<uint32_t, 5> ShipSizes = {5, 4, 3, 3, 2};
     uint32_t lastShipRow = 0, lastShipColumn = 0;
 
-    m_terminal.SetCursorVisibility(true);
+    Terminal::SetCursorVisibility(true);
 
     for (uint32_t i = 0; i < 5; i++) // for each ship
     {
@@ -155,7 +155,7 @@ void Battleships::GetUserShipPositions()
             Output += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine();
             Output += m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
 
-            m_terminal.PrintOutput(Output);
+            Terminal::PrintOutput(Output);
 
             uint32_t KeyPress, Row, Column;
 
@@ -174,9 +174,9 @@ void Battleships::GetUserShipPositions()
             {
                 while (true) // enter not pressed
                 {
-                    m_terminal.SetCursorPosition(10 + Column * 4, 8 + Row * 2);
+                    Terminal::SetCursorPosition(10 + Column * 4, 8 + Row * 2);
 
-                    KeyPress = m_terminal.GetNextKeyPress();
+                    KeyPress = Terminal::GetNextKeyPress();
 
                     if (KeyPress == '\r') // enter key
                         break;
@@ -195,7 +195,7 @@ void Battleships::GetUserShipPositions()
                         Output = GetGameDisplay();
                         Output += m_stringBuilder.AddNewLineCentred(ShipInstructions[i]) + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine();
                         Output += m_stringBuilder.AddBottomBox();
-                        m_terminal.PrintOutput(Output);
+                        Terminal::PrintOutput(Output);
 
                         ShipRows.pop_back();
                         ShipColumns.pop_back();
@@ -223,8 +223,8 @@ void Battleships::GetUserShipPositions()
                     }
                     else if (KeyPress == 'q')
                     {
-                        m_terminal.SetCursorVisibility(false);
-                        throw Exceptions::Quit();
+                        Terminal::SetCursorVisibility(false);
+                        throw Exceptions::QuitGame();
                     }
                 }
 
@@ -301,7 +301,7 @@ void Battleships::GetUserShipPositions()
             m_BoardOne[ShipRows[j]][ShipColumns[j]] = ShipLetters[i];
     }
 
-    m_terminal.SetCursorVisibility(false);
+    Terminal::SetCursorVisibility(false);
 }
 
 void Battleships::GetAIShipPositions(std::array<std::array<char, 10>, 10>& AIBoard)
@@ -405,19 +405,19 @@ void Battleships::ExecuteCommandUser()
     Output += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine();
     Output += m_stringBuilder.AddBottomBox();
 
-    m_terminal.PrintOutput(Output);
+    Terminal::PrintOutput(Output);
 
     uint32_t KeyPress, Command, Row = m_PreviousCommand / 10, Column = m_PreviousCommand % 10;
 
-    m_terminal.SetCursorVisibility(true);
+    Terminal::SetCursorVisibility(true);
 
     while (true)
     {
         while (true)
         {
-            m_terminal.SetCursorPosition(106 + Column * 4, 8 + Row * 2);
+            Terminal::SetCursorPosition(106 + Column * 4, 8 + Row * 2);
 
-            KeyPress = m_terminal.GetNextKeyPress();
+            KeyPress = Terminal::GetNextKeyPress();
 
             if (KeyPress == '\r') // enter key
                 break;
@@ -431,8 +431,8 @@ void Battleships::ExecuteCommandUser()
                 Column == 9 ? Column = 0 : ++Column;
             else if (KeyPress == 'q')
             {
-                m_terminal.SetCursorVisibility(false);
-                throw Exceptions::Quit();
+                Terminal::SetCursorVisibility(false);
+                throw Exceptions::QuitGame();
             }
         }
 
@@ -445,7 +445,7 @@ void Battleships::ExecuteCommandUser()
 
             m_PreviousCommand = Command;
 
-            m_terminal.SetCursorVisibility(false);
+            Terminal::SetCursorVisibility(false);
 
             return;
         }
@@ -458,7 +458,7 @@ void Battleships::ExecuteCommandAI()
     {
         std::string Output = GetGameDisplay();
         Output += m_stringBuilder.AddNewLineLeftJustified(" The AI is executing their next move!") + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
-        m_terminal.PrintOutput(Output);
+        Terminal::PrintOutput(Output);
         std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::milliseconds(m_AISpeed));
     }
 

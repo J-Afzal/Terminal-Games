@@ -29,15 +29,14 @@ public:
                     ExecuteCommandAI();
             }
 
-            m_terminal.PrintOutput(GetGameOverMessage());
-            if (m_terminal.GetNextKeyPress() == 'q')
-                throw Exceptions::Quit();
+            Terminal::PrintOutput(GetGameOverMessage());
+            if (Terminal::GetNextKeyPress() == 'q')
+                throw Exceptions::QuitGame();
         }
     }
 
 protected:
     StringBuilder m_stringBuilder;
-    Terminal m_terminal;
 
 private:
     virtual void SetupGame() = 0;

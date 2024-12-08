@@ -1,7 +1,6 @@
 #pragma once
 
 #include <array>
-#include <vector>
 
 #include "games/Game.hpp"
 
@@ -12,11 +11,16 @@ class MainMenu
 {
 public:
     /**
-     * @brief Construct a new Main Menu object
+     * @brief Construct a new MainMenu object
      * @param outputIsOnlyASCII Whether to use only ASCII characters (true) 
      * or also use ANSI escapes codes (false).
      */
     explicit MainMenu(const bool& outputIsOnlyASCII = false);
+
+    /**
+     * @brief Destruct a MainMenu object.
+     */
+    ~MainMenu();
 
     /**
      * @brief Orchestration function for Terminal-Games.
@@ -24,8 +28,6 @@ public:
     void Run();
 
 private:
-    Terminal m_terminal;
-    std::array<std::unique_ptr<Game>, 3> m_games;
-    std::vector<std::string> m_menus;
-    uint32_t m_currentSelection;
+    std::vector<std::unique_ptr<Game>> m_games;
+    std::vector<std::string> m_mainMenus;
 };
