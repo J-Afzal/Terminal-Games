@@ -1,22 +1,8 @@
-/**
- * @file Battleships.hpp
- * @author Junaid Afzal
- * @brief The game object that runs Battleships
- * and is run using the inherited Play() function
- * @version 1.0
- * @date 07-11-2021
- *
- * @copyright Copyright (c) 2021
- *
- */
-
 #pragma once
 
 #include <array>
 #include <random>
-#include <string>
 #include <unordered_map>
-#include <vector>
 
 #include "Game.hpp"
 
@@ -24,9 +10,10 @@ class Battleships : public Game
 {
 public:
     /**
-     * @brief Construct a new Battleships object
-     * @param outputIsOnlyASCII determines whether to use ANSI escapes codes (false)
-     * or just ASCII characters (true)
+     * @brief Construct a new Battleships object.
+     *
+     * @param outputIsOnlyASCII Whether to use only ASCII characters (true)
+     * or also use ANSI escapes codes (false).
      */
     explicit Battleships(const bool& outputIsOnlyASCII);
 
@@ -59,10 +46,12 @@ private:
 
     void ExecuteCommandAI() override;
 
-    void ExecuteCommand(std::array<std::array<char, 10>, 10>& OpponentBoard,
-                         std::unordered_map<char, uint32_t>& OpponentShipsRemaining,
-                         std::vector<uint32_t>& MovesRemaining,
-                         const uint32_t& AICommand);
+    void ExecuteCommand(
+        std::array<std::array<char, 10>, 10>& OpponentBoard,
+        std::unordered_map<char, uint32_t>& OpponentShipsRemaining,
+        std::vector<uint32_t>& MovesRemaining,
+        const uint32_t& AICommand
+    );
 
     std::string GetGameOverMessage() const override;
 

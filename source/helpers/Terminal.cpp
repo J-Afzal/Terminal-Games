@@ -1,17 +1,6 @@
-/**
- * @file Terminal.cpp
- * @author Junaid Afzal
- * @brief Implementation of Terminal.hpp
- * @version 1.0
- * @date 07-11-2021
- *
- * @copyright Copyright (c) 2021
- *
- */
-
+#include <conio.h>
 #include <iostream>
 #include <string>
-#include <conio.h>
 
 #include "helpers/Exceptions.hpp"
 #include "helpers/Terminal.hpp"
@@ -33,7 +22,7 @@ Terminal::Terminal()
 
 Terminal::~Terminal()
 {
-    Terminal::ClearTerminal();
+    Clear();
     SetCursorVisibility(true);
 }
 
@@ -42,7 +31,7 @@ uint32_t Terminal::GetUserChoiceFromMenus(const std::vector<std::string>& menus)
     uint32_t KeyPress, CurrentSelection = 0;
     while (true)
     {
-        Terminal::OutputToTerminal(menus[CurrentSelection]);
+        PrintOutput(menus[CurrentSelection]);
 
         KeyPress = GetNextKeyPress();
 
@@ -63,7 +52,7 @@ uint32_t Terminal::GetNextKeyPress() const
     return _getch();
 }
 
-void Terminal::ClearTerminal() const
+void Terminal::Clear() const
 {
     // Windows API method from https://www.cplusplus.com/articles/4z18T05o
     HANDLE hStdOut;
@@ -93,9 +82,9 @@ void Terminal::ClearTerminal() const
     SetConsoleCursorPosition(hStdOut, homeCoords);
 }
 
-void Terminal::OutputToTerminal(const std::string& Output) const
+void Terminal::PrintOutput(const std::string& Output) const
 {
-    ClearTerminal();
+    Clear();
     std::cout << Output;
 }
 

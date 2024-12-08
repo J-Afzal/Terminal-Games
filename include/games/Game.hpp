@@ -1,24 +1,18 @@
-/**
- * @file Game.hpp
- * @author Junaid Afzal
- * @brief This is the base class for all game objects which contains the
- * final Play() function interface and implementation using pure virtual functions
- * @version 1.0
- * @date 08-03-2022
- *
- * @copyright Copyright (c) 2022
- *
- */
-
 #pragma once
 
 #include "helpers/Exceptions.hpp"
 #include "helpers/StringBuilder.hpp"
 #include "helpers/Terminal.hpp"
 
+/**
+ * @brief Base class for all games.
+ */
 class Game
 {
 public:
+    /**
+     * @brief Contains the main game loop.
+     */
     virtual void Play() final
     {
         while (true)
@@ -35,7 +29,7 @@ public:
                     ExecuteCommandAI();
             }
 
-            m_terminal.OutputToTerminal(GetGameOverMessage());
+            m_terminal.PrintOutput(GetGameOverMessage());
             if (m_terminal.GetNextKeyPress() == 'q')
                 throw Exceptions::Quit();
         }

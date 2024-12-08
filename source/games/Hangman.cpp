@@ -67,10 +67,8 @@ void Hangman::SetupGame()
 
 void Hangman::LoadWords()
 {
-    /**
-     * Words.txt contains a list of the ~1,000 most used word in English from:
-     * https://www.ef.co.uk/english-resources/english-vocabulary/top-1000-words/
-     */
+    // Words.txt contains a list of the ~1,000 most used word in English from:
+    // See: https://www.ef.co.uk/english-resources/english-vocabulary/top-1000-words/
     std::ifstream WordsFile("../resources/Words.txt");
     if (WordsFile.is_open())
     {
@@ -176,7 +174,7 @@ void Hangman::GetWordFromUser()
     std::string Input;
     while (true)
     {
-        m_terminal.OutputToTerminal(Output + "\x1B[1;37m");
+        m_terminal.PrintOutput(Output + "\x1B[1;37m");
 
         m_terminal.SetCursorPosition(39, 13);
 
@@ -237,7 +235,7 @@ void Hangman::ExecuteCommandUser()
     uint32_t KeyPress, CurrentSelection = 0;
     while (true)
     {
-        m_terminal.OutputToTerminal(Output);
+        m_terminal.PrintOutput(Output);
 
         m_terminal.SetCursorPosition(41, 13);
 
@@ -271,7 +269,7 @@ void Hangman::ExecuteCommandAI()
     {
         std::string Output = GetGameDisplay();
         Output += m_stringBuilder.AddNewLineLeftJustified(" The AI is executing their next move!") + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
-        m_terminal.OutputToTerminal(Output);
+        m_terminal.PrintOutput(Output);
         std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::seconds(m_speedAI));
     }
 

@@ -155,11 +155,9 @@ void TicTacToe::ToggleCurrentPlayer()
 
 bool TicTacToe::IsNextTurnUser() const
 {
-    /**
-     * If it is two player game then next turn will always be the user's turn, if not then
-     * check if the current player is the same as the user's choice. For a zero player game
-     * m_UserPlayerChoice = ' ' and so this will always return false.
-     */
+    // If it is two player game then next turn will always be the user's turn, if not then
+    // check if the current player is the same as the user's choice. For a zero player game
+    // m_UserPlayerChoice = ' ' and so this will always return false.
     return m_playerCount == "2  " || m_currentPlayer == m_playerChoiceUser;
 }
 
@@ -168,7 +166,7 @@ void TicTacToe::ExecuteCommandUser()
     std::string Output = GetGameDisplay();
     Output += m_stringBuilder.AddNewLineLeftJustified(std::string(" Player ") + m_currentPlayer + ", please enter your next command!");
     Output += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
-    m_terminal.OutputToTerminal(Output);
+    m_terminal.PrintOutput(Output);
 
     m_terminal.SetCursorVisibility(true);
 
@@ -218,7 +216,7 @@ void TicTacToe::ExecuteCommandAI()
     {
         std::string Output = GetGameDisplay();
         Output += m_stringBuilder.AddNewLineLeftJustified(" The AI is executing their next move!") + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
-        m_terminal.OutputToTerminal(Output);
+        m_terminal.PrintOutput(Output);
         std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::seconds(m_speedAI));
     }
 

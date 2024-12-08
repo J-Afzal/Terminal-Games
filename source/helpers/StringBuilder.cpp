@@ -20,7 +20,7 @@ void StringBuilder::SetProperties(const std::string& topTitle, const std::string
 {
     m_topTitle = topTitle;
     m_bottomTitle = bottomTitle;
-    m_gameWidth = gameWidth;
+    m_displayWidth = gameWidth;
 
     if (outputIsOnlyASCII) // Remove ANSI escape codes
         m_WHITE = m_RED = m_BLUE =  m_RESET = "";
@@ -44,16 +44,16 @@ std::string StringBuilder::AddNewLine(const std::string& Input, const Colours& C
 std::string StringBuilder::AddNewLineCentred(const std::string& Input, const Colours& Colour) const
 {
     std::string Output;
-    Output.insert(Output.size(), floor((m_gameWidth-(double)Input.size())/2), ' ');
+    Output.insert(Output.size(), ceil((m_displayWidth-(double)Input.size())/2), ' ');
     Output += Input;
-    Output.insert(Output.size(), ceil((m_gameWidth-(double)Input.size())/2), ' ');
+    Output.insert(Output.size(), floor((m_displayWidth-(double)Input.size())/2), ' ');
     return AddNewLine(Output, Colour);
 }
 
 std::string StringBuilder::AddNewLineLeftJustified(const std::string& Input, const Colours& Colour) const
 {
     std::string Output = Input;
-    Output.insert(Output.size(), m_gameWidth - Output.size(), ' ');
+    Output.insert(Output.size(), m_displayWidth - Output.size(), ' ');
     return AddNewLine(Output, Colour);
 }
 
@@ -61,7 +61,7 @@ std::string StringBuilder::AddEmptyLine() const
 {
     std::string Output;
     Output += (char)186;
-    Output.insert(Output.size(), m_gameWidth, ' ');
+    Output.insert(Output.size(), m_displayWidth, ' ');
     Output += (char)186;
     return Output + "\n";
 }
@@ -70,7 +70,7 @@ std::string StringBuilder::AddTopLine() const
 {
     std::string Output;
     Output += (char)201;
-    Output.insert(Output.size(), m_gameWidth, (char)205);
+    Output.insert(Output.size(), m_displayWidth, (char)205);
     Output += (char)187;
     return Output + "\n";
 }
@@ -79,7 +79,7 @@ std::string StringBuilder::AddBottomLine() const
 {
     std::string Output;
     Output += (char)200;
-    Output.insert(Output.size(), m_gameWidth, (char)205);
+    Output.insert(Output.size(), m_displayWidth, (char)205);
     Output += (char)188;
     return Output + "\n";
 }

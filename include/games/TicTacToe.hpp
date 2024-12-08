@@ -1,21 +1,7 @@
-/**
- * @file TicTacToe.hpp
- * @author Junaid Afzal
- * @brief The game object that runs Tic Tac Toe
- * and is run using the inherited Play() function
- * @version 1.0
- * @date 07-11-2021
- *
- * @copyright Copyright (c) 2021
- *
- */
-
 #pragma once
 
 #include <array>
 #include <random>
-#include <string>
-#include <vector>
 
 #include "Game.hpp"
 
@@ -23,9 +9,10 @@ class TicTacToe : public Game
 {
 public:
     /**
-     * @brief Construct a new Tic Tac Toe object
-     * @param outputIsOnlyASCII determines whether to use ANSI escapes codes (false)
-     * or just ASCII characters (true)
+     * @brief Construct a new Tic Tac Toe object.
+     *
+     * @param outputIsOnlyASCII Whether to use only ASCII characters (true)
+     * or also use ANSI escapes codes (false).
      */
     explicit TicTacToe(const bool& outputIsOnlyASCII);
 

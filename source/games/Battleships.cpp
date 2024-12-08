@@ -125,12 +125,10 @@ void Battleships::GetAISpeed()
 
 void Battleships::GetUserShipPositions()
 {
-    /**
-     * @brief The user is prompted to enter sequentially increasing or decreasing co-ordinates
-     * for each ship, and repeatedly if needed, until a valid set of co-ordinates are given.
-     * After passing the error checks, each set of co-ordinates is used to place a ship
-     * on player one's board (as user is always player one).
-     */
+    // The user is prompted to enter sequentially increasing or decreasing co-ordinates
+    // for each ship, and repeatedly if needed, until a valid set of co-ordinates are given.
+    // After passing the error checks, each set of co-ordinates is used to place a ship
+    // on player one's board (as user is always player one).
 
     std::array<std::string, 5> ShipInstructions = {
             "Please enter the 5 grid locations for the Carrier",
@@ -157,7 +155,7 @@ void Battleships::GetUserShipPositions()
             Output += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine();
             Output += m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
 
-            m_terminal.OutputToTerminal(Output);
+            m_terminal.PrintOutput(Output);
 
             uint32_t KeyPress, Row, Column;
 
@@ -197,7 +195,7 @@ void Battleships::GetUserShipPositions()
                         Output = GetGameDisplay();
                         Output += m_stringBuilder.AddNewLineCentred(ShipInstructions[i]) + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine();
                         Output += m_stringBuilder.AddBottomBox();
-                        m_terminal.OutputToTerminal(Output);
+                        m_terminal.PrintOutput(Output);
 
                         ShipRows.pop_back();
                         ShipColumns.pop_back();
@@ -407,7 +405,7 @@ void Battleships::ExecuteCommandUser()
     Output += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine();
     Output += m_stringBuilder.AddBottomBox();
 
-    m_terminal.OutputToTerminal(Output);
+    m_terminal.PrintOutput(Output);
 
     uint32_t KeyPress, Command, Row = m_PreviousCommand / 10, Column = m_PreviousCommand % 10;
 
@@ -460,7 +458,7 @@ void Battleships::ExecuteCommandAI()
     {
         std::string Output = GetGameDisplay();
         Output += m_stringBuilder.AddNewLineLeftJustified(" The AI is executing their next move!") + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
-        m_terminal.OutputToTerminal(Output);
+        m_terminal.PrintOutput(Output);
         std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::milliseconds(m_AISpeed));
     }
 
