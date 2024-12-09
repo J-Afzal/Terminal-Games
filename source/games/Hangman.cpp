@@ -83,7 +83,7 @@ void Hangman::LoadWords()
     else
     {
         WordsFile.close();
-        throw Exceptions::Quit();
+        throw Exceptions::HangmanWordsNotFound();
     }
 }
 
@@ -110,7 +110,7 @@ void Hangman::GetPlayerCount()
     Menus[2] += m_stringBuilder.AddNewLineLeftJustified(" > 2", Colours::BLUE);
     Menus[2] += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
 
-    m_PlayerCount = std::to_string(m_terminal.GetUserChoiceFromMenus(Menus)) + "  ";
+    m_PlayerCount = std::to_string(Terminal::GetUserChoiceFromGameMenus(Menus)) + "  ";
 }
 
 void Hangman::GetPlayerChoiceFromUser()
@@ -128,7 +128,7 @@ void Hangman::GetPlayerChoiceFromUser()
     Menus[1] += m_stringBuilder.AddNewLineLeftJustified(" > WORD SETTER", Colours::BLUE);
     Menus[1] += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
 
-    m_terminal.GetUserChoiceFromMenus(Menus) == 0 ? m_userIsGuesser = true : m_userIsGuesser = false;
+    Terminal::GetUserChoiceFromGameMenus(Menus) == 0 ? m_userIsGuesser = true : m_userIsGuesser = false;
 }
 
 void Hangman::GetAISpeed()
@@ -154,7 +154,7 @@ void Hangman::GetAISpeed()
     Menus[2] += m_stringBuilder.AddNewLineLeftJustified(" > SLOW", Colours::BLUE);
     Menus[2] += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
 
-    m_speedAI = m_terminal.GetUserChoiceFromMenus(Menus);
+    m_speedAI = Terminal::GetUserChoiceFromGameMenus(Menus);
 
     if (m_speedAI == 0)
         m_speedNameAI = "INSTANT";
@@ -174,14 +174,14 @@ void Hangman::GetWordFromUser()
     std::string Input;
     while (true)
     {
-        m_terminal.PrintOutput(Output + "\x1B[1;37m");
+        Terminal::PrintOutput(Output + "\x1B[1;37m");
 
-        m_terminal.SetCursorPosition(39, 13);
+        Terminal::SetCursorPosition(39, 13);
 
         std::getline(std::cin, Input);
 
         if (Input == "q")
-            throw Exceptions::Quit();
+            throw Exceptions::QuitGame();
 
         if (Input.size() < 3 || Input.size() > 14)
             continue;
@@ -235,13 +235,13 @@ void Hangman::ExecuteCommandUser()
     uint32_t KeyPress, CurrentSelection = 0;
     while (true)
     {
-        m_terminal.PrintOutput(Output);
+        Terminal::PrintOutput(Output);
 
-        m_terminal.SetCursorPosition(41, 13);
+        Terminal::SetCursorPosition(41, 13);
 
         std::cout << std::string("\x1B[1;34m") + m_movesRemaining[CurrentSelection] + "\x1B[1;37m"; // Make it blue
 
-        KeyPress = m_terminal.GetNextKeyPress();
+        KeyPress = Terminal::GetNextKeyPress();
 
         if (KeyPress == '\r') // enter key
         {
@@ -253,7 +253,7 @@ void Hangman::ExecuteCommandUser()
         else if (KeyPress == 80) // down arrow key
             CurrentSelection == uint32_t(m_movesRemaining.size() - 1) ? CurrentSelection = 0 : ++CurrentSelection;
         else if (KeyPress == 'q')
-            throw Exceptions::Quit();
+            throw Exceptions::QuitGame();
         else
         {
             auto Command = std::find(m_movesRemaining.begin(), m_movesRemaining.end(), KeyPress - 32);
@@ -269,7 +269,7 @@ void Hangman::ExecuteCommandAI()
     {
         std::string Output = GetGameDisplay();
         Output += m_stringBuilder.AddNewLineLeftJustified(" The AI is executing their next move!") + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
-        m_terminal.PrintOutput(Output);
+        Terminal::PrintOutput(Output);
         std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::seconds(m_speedAI));
     }
 

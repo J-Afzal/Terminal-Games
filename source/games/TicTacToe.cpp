@@ -70,7 +70,7 @@ void TicTacToe::GetPlayerCount()
     Menus[2] += m_stringBuilder.AddNewLineLeftJustified(" > 2", Colours::BLUE);
     Menus[2] += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
 
-    m_playerCount = std::to_string(m_terminal.GetUserChoiceFromMenus(Menus)) + "  ";
+    m_playerCount = std::to_string(Terminal::GetUserChoiceFromGameMenus(Menus)) + "  ";
 }
 
 void TicTacToe::GetPlayerChoiceFromUser()
@@ -88,7 +88,7 @@ void TicTacToe::GetPlayerChoiceFromUser()
     Menus[1] += m_stringBuilder.AddNewLineLeftJustified(" > PLAYER O", Colours::BLUE);
     Menus[1] += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
 
-    m_terminal.GetUserChoiceFromMenus(Menus) == 0 ? m_playerChoiceUser = 'X' : m_playerChoiceUser = 'O';
+    Terminal::GetUserChoiceFromGameMenus(Menus) == 0 ? m_playerChoiceUser = 'X' : m_playerChoiceUser = 'O';
 }
 
 void TicTacToe::GetAISpeed()
@@ -114,7 +114,7 @@ void TicTacToe::GetAISpeed()
     Menus[2] += m_stringBuilder.AddNewLineLeftJustified(" > SLOW", Colours::BLUE);
     Menus[2] += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
 
-    m_speedAI = m_terminal.GetUserChoiceFromMenus(Menus);
+    m_speedAI = Terminal::GetUserChoiceFromGameMenus(Menus);
 
     if (m_speedAI == 0)
         m_speedNameAI = "INSTANT";
@@ -166,9 +166,9 @@ void TicTacToe::ExecuteCommandUser()
     std::string Output = GetGameDisplay();
     Output += m_stringBuilder.AddNewLineLeftJustified(std::string(" Player ") + m_currentPlayer + ", please enter your next command!");
     Output += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
-    m_terminal.PrintOutput(Output);
+    Terminal::PrintOutput(Output);
 
-    m_terminal.SetCursorVisibility(true);
+    Terminal::SetCursorVisibility(true);
 
     uint32_t KeyPress, Row = m_movesRemaining[0] / 3, Column = m_movesRemaining[0] % 3;
 
@@ -176,9 +176,9 @@ void TicTacToe::ExecuteCommandUser()
     {
         while (true)
         {
-            m_terminal.SetCursorPosition(3 + Column * 4, 4 + Row * 2);
+            Terminal::SetCursorPosition(3 + Column * 4, 4 + Row * 2);
 
-            KeyPress = m_terminal.GetNextKeyPress();
+            KeyPress = Terminal::GetNextKeyPress();
 
             if (KeyPress == '\r') // enter key
                 break;
@@ -192,8 +192,8 @@ void TicTacToe::ExecuteCommandUser()
                 Column == 2 ? Column = 0 : ++Column;
             else if (KeyPress == 'q')
             {
-                m_terminal.SetCursorVisibility(false);
-                throw Exceptions::Quit();
+                Terminal::SetCursorVisibility(false);
+                throw Exceptions::QuitGame();
             }
         }
 
@@ -204,7 +204,7 @@ void TicTacToe::ExecuteCommandUser()
             m_gameGrid[Row][Column] = m_currentPlayer;
             m_movesRemaining.erase(CommandPosition);
             m_turnCount++;
-            m_terminal.SetCursorVisibility(false);
+            Terminal::SetCursorVisibility(false);
             return;
         }
     }
@@ -216,7 +216,7 @@ void TicTacToe::ExecuteCommandAI()
     {
         std::string Output = GetGameDisplay();
         Output += m_stringBuilder.AddNewLineLeftJustified(" The AI is executing their next move!") + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
-        m_terminal.PrintOutput(Output);
+        Terminal::PrintOutput(Output);
         std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::seconds(m_speedAI));
     }
 
