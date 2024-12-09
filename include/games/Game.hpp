@@ -21,22 +21,17 @@ public:
 
             while (!IsGameOver())
             {
-                ToggleCurrentPlayer();
-
-                if (IsNextTurnUser())
-                    ExecuteCommandUser();
+                if (IsNextTurnUsers())
+                    ExecuteUserCommand();
                 else
-                    ExecuteCommandAI();
+                    ExecuteAICommand();
+
+                ToggleCurrentPlayer();
             }
 
-            Terminal::PrintOutput(GetGameOverMessage());
-            if (Terminal::GetNextKeyPress() == 'q')
-                throw Exceptions::QuitGame();
+            GameOver();
         }
     }
-
-protected:
-    StringBuilder m_stringBuilder;
 
 private:
     virtual void SetupGame() = 0;
@@ -45,11 +40,11 @@ private:
 
     virtual void ToggleCurrentPlayer() = 0;
 
-    virtual bool IsNextTurnUser() const = 0;
+    virtual bool IsNextTurnUsers() = 0;
 
-    virtual void ExecuteCommandUser() = 0;
+    virtual void ExecuteUserCommand() = 0;
 
-    virtual void ExecuteCommandAI() = 0;
+    virtual void ExecuteAICommand() = 0;
 
-    virtual std::string GetGameOverMessage() const = 0;
+    virtual void GameOver() = 0;
 };

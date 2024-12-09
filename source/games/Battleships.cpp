@@ -393,12 +393,12 @@ void Battleships::ToggleCurrentPlayer()
     m_CurrentPlayer == "Player One" ? m_CurrentPlayer = "Player Two" : m_CurrentPlayer = "Player One";
 }
 
-bool Battleships::IsNextTurnUser() const
+bool Battleships::IsNextTurnUsers()
 {
     return m_NumberOfPlayers == "1  " && m_CurrentPlayer == "Player One";
 }
 
-void Battleships::ExecuteCommandUser()
+void Battleships::ExecuteUserCommand()
 {
     std::string Output = GetGameDisplay();
     Output += m_stringBuilder.AddNewLineLeftJustified(" Player One, please enter your next command!");
@@ -452,7 +452,7 @@ void Battleships::ExecuteCommandUser()
     }
 }
 
-void Battleships::ExecuteCommandAI()
+void Battleships::ExecuteAICommand()
 {
     if (m_AISpeed != 0)
     {
@@ -494,8 +494,10 @@ void Battleships::ExecuteCommand(std::array<std::array<char, 10>, 10>& OpponentB
     m_NumberOfTurns++;
 }
 
-std::string Battleships::GetGameOverMessage() const
+void Battleships::GameOver()
 {
+    ToggleCurrentPlayer(); // To set player who ended the game as m_currentPlayer.
+
     std::string Output = GetGameDisplay();
     Output += m_stringBuilder.AddNewLineCentred("GAME OVER") + m_stringBuilder.AddEmptyLine();
     Output += m_stringBuilder.AddNewLineCentred(
@@ -504,7 +506,10 @@ std::string Battleships::GetGameOverMessage() const
             m_stringBuilder.AddNewLineCentred("Press 'Q' to quit OR Enter to play again...") + m_stringBuilder.AddBottomLine();
     Output += m_stringBuilder.AddBottomBox();
 
-    return Output;
+    Terminal::PrintOutput(Output);
+
+    if (Terminal::GetNextKeyPress() == 'q')
+        throw Exceptions::QuitGame();
 }
 
 std::string Battleships::GetGameDisplay() const

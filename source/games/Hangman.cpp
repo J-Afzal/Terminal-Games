@@ -220,12 +220,12 @@ bool Hangman::IsGameOver()
 
 void Hangman::ToggleCurrentPlayer() {}
 
-bool Hangman::IsNextTurnUser() const
+bool Hangman::IsNextTurnUsers()
 {
     return m_userIsGuesser;
 }
 
-void Hangman::ExecuteCommandUser()
+void Hangman::ExecuteUserCommand()
 {
     std::string Output = GetGameDisplay(), CurrentLetter;
     Output += m_stringBuilder.AddNewLineLeftJustified(" Guesser, please enter your next guess:");
@@ -263,7 +263,7 @@ void Hangman::ExecuteCommandUser()
     }
 }
 
-void Hangman::ExecuteCommandAI()
+void Hangman::ExecuteAICommand()
 {
     if (m_speedAI != 0)
     {
@@ -298,8 +298,10 @@ void Hangman::CheckGuessAndUpdateCurrentGuess(const char& Guess)
     m_turnCount++;
 }
 
-std::string Hangman::GetGameOverMessage() const
+void Hangman::GameOver()
 {
+    ToggleCurrentPlayer(); // To set player who ended the game as m_currentPlayer.
+
     std::string Output = GetGameDisplay() + m_stringBuilder.AddNewLineCentred("GAME OVER") + m_stringBuilder.AddEmptyLine();
 
     if (m_errorCount == 10)
@@ -312,7 +314,10 @@ std::string Hangman::GetGameOverMessage() const
     Output += m_stringBuilder.AddEmptyLine() +
             m_stringBuilder.AddNewLineCentred("Press 'Q' to quit OR Enter to play again...") + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
 
-    return Output;
+    Terminal::PrintOutput(Output);
+
+    if (Terminal::GetNextKeyPress() == 'q')
+        throw Exceptions::QuitGame();
 }
 
 std::string Hangman::GetGameDisplay() const

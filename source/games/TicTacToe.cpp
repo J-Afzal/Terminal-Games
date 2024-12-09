@@ -153,7 +153,7 @@ void TicTacToe::ToggleCurrentPlayer()
     m_currentPlayer == 'X' ? m_currentPlayer = 'O' : m_currentPlayer = 'X';
 }
 
-bool TicTacToe::IsNextTurnUser() const
+bool TicTacToe::IsNextTurnUsers()
 {
     // If it is two player game then next turn will always be the user's turn, if not then
     // check if the current player is the same as the user's choice. For a zero player game
@@ -161,7 +161,7 @@ bool TicTacToe::IsNextTurnUser() const
     return m_playerCount == "2  " || m_currentPlayer == m_playerChoiceUser;
 }
 
-void TicTacToe::ExecuteCommandUser()
+void TicTacToe::ExecuteUserCommand()
 {
     std::string Output = GetGameDisplay();
     Output += m_stringBuilder.AddNewLineLeftJustified(std::string(" Player ") + m_currentPlayer + ", please enter your next command!");
@@ -210,7 +210,7 @@ void TicTacToe::ExecuteCommandUser()
     }
 }
 
-void TicTacToe::ExecuteCommandAI()
+void TicTacToe::ExecuteAICommand()
 {
     if (m_speedAI != 0)
     {
@@ -227,22 +227,23 @@ void TicTacToe::ExecuteCommandAI()
     m_turnCount++;
 }
 
-std::string TicTacToe::GetGameOverMessage() const
+void TicTacToe::GameOver()
 {
+    ToggleCurrentPlayer(); // To set player who ended the game as m_currentPlayer.
+
     std::string Output = GetGameDisplay() + m_stringBuilder.AddNewLineCentred("GAME OVER") + m_stringBuilder.AddEmptyLine();
 
     if (m_hasWinner)
-        Output += m_stringBuilder.AddNewLineCentred(
-                std::string("Player ") + m_currentPlayer + " has won! The game lasted " +
-                std::to_string(m_turnCount) + " turns.");
+        Output += m_stringBuilder.AddNewLineCentred(std::string("Player ") + m_currentPlayer + " has won! The game lasted " + std::to_string(m_turnCount) + " turns.");
     else
-        Output += m_stringBuilder.AddNewLineCentred(
-                "It is a draw! The game lasted " + std::to_string(m_turnCount) + " turns.");
+        Output += m_stringBuilder.AddNewLineCentred("It is a draw! The game lasted " + std::to_string(m_turnCount) + " turns.");
 
-    Output += m_stringBuilder.AddEmptyLine() +
-            m_stringBuilder.AddNewLineCentred("Press 'Q' to quit OR Enter to play again...") + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
+    Output += m_stringBuilder.AddEmptyLine() + m_stringBuilder.AddNewLineCentred("Press 'Q' to quit OR Enter to play again...") + m_stringBuilder.AddBottomLine() + m_stringBuilder.AddBottomBox();
 
-    return Output;
+    Terminal::PrintOutput(Output);
+
+    if (Terminal::GetNextKeyPress() == 'q')
+        throw Exceptions::QuitGame();
 }
 
 std::string TicTacToe::GetGameDisplay() const

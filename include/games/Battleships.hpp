@@ -18,6 +18,7 @@ public:
     explicit Battleships(const bool& outputIsOnlyASCII);
 
 private:
+    StringBuilder m_stringBuilder;
     std::default_random_engine m_RandomNumberGenerator;
     std::array<std::array<char, 10>, 10> m_BoardOne, m_BoardTwo;
     std::vector<uint32_t> m_MovesRemainingOne, m_MovesRemainingTwo;
@@ -40,11 +41,11 @@ private:
 
     void ToggleCurrentPlayer() override;
 
-    bool IsNextTurnUser() const override;
+    bool IsNextTurnUsers() override;
 
-    void ExecuteCommandUser() override;
+    void ExecuteUserCommand() override;
 
-    void ExecuteCommandAI() override;
+    void ExecuteAICommand() override;
 
     void ExecuteCommand(
         std::array<std::array<char, 10>, 10>& OpponentBoard,
@@ -53,7 +54,7 @@ private:
         const uint32_t& AICommand
     );
 
-    std::string GetGameOverMessage() const override;
+    void GameOver() override;
 
     std::string GetGameDisplay() const;
 };
