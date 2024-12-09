@@ -16,6 +16,7 @@ public:
     explicit Hangman(const bool& outputIsOnlyASCII);
 
 private:
+    StringBuilder m_stringBuilder;
     std::default_random_engine m_randomNumberGenerator;
     std::vector<std::string> m_words;
     std::vector<char> m_movesRemaining, m_incorrectGuesses;
@@ -42,15 +43,15 @@ private:
 
     void ToggleCurrentPlayer() override;
 
-    bool IsNextTurnUser() const override;
+    bool IsNextTurnUsers() override;
 
-    void ExecuteCommandUser() override;
+    void ExecuteUserCommand() override;
 
-    void ExecuteCommandAI() override;
+    void ExecuteAICommand() override;
 
     void CheckGuessAndUpdateCurrentGuess(const char& Guess);
 
-    std::string GetGameOverMessage() const override;
+    void GameOver() override;
 
     std::string GetGameDisplay() const;
 };

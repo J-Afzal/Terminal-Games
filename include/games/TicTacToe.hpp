@@ -17,6 +17,7 @@ public:
     explicit TicTacToe(const bool& outputIsOnlyASCII);
 
 private:
+    StringBuilder m_stringBuilder;
     std::default_random_engine m_randomNumberGenerator;
     std::array<std::array<char, 3>, 3> m_gameGrid;
     std::vector<uint32_t> m_movesRemaining;
@@ -37,13 +38,13 @@ private:
 
     void ToggleCurrentPlayer() override;
 
-    bool IsNextTurnUser() const override;
+    bool IsNextTurnUsers() override;
 
-    void ExecuteCommandUser() override;
+    void ExecuteUserCommand() override;
 
-    void ExecuteCommandAI() override;
+    void ExecuteAICommand() override;
 
-    std::string GetGameOverMessage() const override;
+    void GameOver() override;
 
     std::string GetGameDisplay() const;
 };
