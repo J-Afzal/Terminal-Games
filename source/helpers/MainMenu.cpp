@@ -1,4 +1,8 @@
+#include <cstdlib>
+#include <iostream>
 #include <memory>
+#include <string>
+#include <vector>
 
 #include "games/Battleships.hpp"
 #include "games/Hangman.hpp"
@@ -8,10 +12,9 @@
 #include "helpers/PageBuilder.hpp"
 #include "helpers/Terminal.hpp"
 
-MainMenu::MainMenu(const bool& outputIsOnlyASCII)
+MainMenu::MainMenu(int argc, char* argv[])
 {
-    Terminal::SetCursorVisibility(false);
-    Terminal::SetCursorPosition(0, 0);
+    const bool outputIsOnlyASCII = ParseCommandLineArguments(std::vector<std::string>(argv, argv + argc));
 
     PageBuilder PageBuilder(Pages::MAINMENU, outputIsOnlyASCII);
     m_mainMenus = PageBuilder.GetGameSelectionMainMenuPages({"Tic Tac Toe", "Hangman", "Battleships"});
@@ -21,6 +24,9 @@ MainMenu::MainMenu(const bool& outputIsOnlyASCII)
     m_games.push_back(std::make_unique<TicTacToe>(outputIsOnlyASCII));
     m_games.push_back(std::make_unique<Hangman>(outputIsOnlyASCII));
     m_games.push_back(std::make_unique<Battleships>(outputIsOnlyASCII));
+
+    Terminal::SetCursorVisibility(false);
+    Terminal::SetCursorPosition(0, 0);
 }
 
 MainMenu::~MainMenu()
@@ -42,3 +48,16 @@ void MainMenu::Run()
         catch (Exceptions::QuitGame& e) { continue; }
     }
 }
+
+bool MainMenu::ParseCommandLineArguments(const std::vector<std::string>& cliArgs) const
+{
+    if (cliArgs.size() == 1) // Default if no CLI args given.
+        return false;
+    
+    if (cliArgs.size() == 2 && (cliArgs[0] == "--a" || cliArgs[0] == "--ascii-only"))
+        return true;
+
+    std::cout << "\nUsage: Terminal-Games [--a --ascii-only]\n\nOptions:\n\t--a --ascii-only\tOnly use ASCII characters." << std::endl;
+    exit(1);
+}
+ 

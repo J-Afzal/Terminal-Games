@@ -13,10 +13,18 @@ class MainMenu
 {
 public:
     /**
-     * @brief Construct a new MainMenu object.
-     * @param outputIsOnlyASCII Whether to use only ASCII characters (true) or to also use ANSI escapes codes (false).
+     * @brief Construct a new MainMenu object which accepts command line arguements to specify whether to use only 
+     * ASCII characters:
+     * 
+     * Usage: Terminal-Games [--a --ascii-only]
+     *
+     * Options:
+     *         --a --ascii-only        Only use ASCII characters.
+     * 
+     * @param argc Number of command line arguments.
+     * @param argv Command line arguments.
      */
-    explicit MainMenu(const bool& outputIsOnlyASCII = false);
+    explicit MainMenu(int argc, char* argv[]);
 
     /**
      * @brief Destruct a MainMenu object.
@@ -29,6 +37,9 @@ public:
     void Run();
 
 private:
+
+    bool ParseCommandLineArguments(const std::vector<std::string>& cliArgs) const;
+
     std::vector<std::unique_ptr<Game>> m_games;
     std::vector<std::string> m_mainMenus;
 };
