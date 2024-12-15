@@ -1,4 +1,8 @@
+#include <cstdlib>
+#include <iostream>
 #include <memory>
+#include <string>
+#include <vector>
 
 #include "games/Battleships.hpp"
 #include "games/Hangman.hpp"
@@ -8,19 +12,26 @@
 #include "helpers/PageBuilder.hpp"
 #include "helpers/Terminal.hpp"
 
-MainMenu::MainMenu(const bool& outputIsOnlyASCII)
+MainMenu::MainMenu(int argc, char* argv[]) 
+{ 
+    m_outputIsOnlyASCII = ParseCommandLineArguments(std::vector<std::string>(argv, argv + argc)); 
+}
+
+MainMenu::MainMenu(const bool& outputIsOnlyASCII) 
+{ 
+    m_outputIsOnlyASCII = outputIsOnlyASCII; 
+}
+
+bool MainMenu::ParseCommandLineArguments(const std::vector<std::string>& cliArgs) const
 {
-    Terminal::SetCursorVisibility(false);
-    Terminal::SetCursorPosition(0, 0);
+    if (cliArgs.size() == 1) // Default if no CLI args given.
+        return false;
 
-    PageBuilder PageBuilder(Pages::MAINMENU, outputIsOnlyASCII);
-    m_mainMenus = PageBuilder.GetGameSelectionMainMenuPages({"Tic Tac Toe", "Hangman", "Battleships"});
+    if (cliArgs.size() == 2 && (cliArgs[0] == "--a" || cliArgs[0] == "--ascii-only"))
+        return true;
 
-    // The index of games in m_Games should match the index of the string in m_mainMenus which has the game selected,
-    // which is defined by the order of the input array to the previous line.
-    m_games.push_back(std::make_unique<TicTacToe>(outputIsOnlyASCII));
-    m_games.push_back(std::make_unique<Hangman>(outputIsOnlyASCII));
-    m_games.push_back(std::make_unique<Battleships>(outputIsOnlyASCII));
+    std::cout << "\nUsage: Terminal-Games [--a --ascii-only]\n\nOptions:\n\t--a --ascii-only\tOnly use ASCII characters." << std::endl;
+    exit(1);
 }
 
 MainMenu::~MainMenu()
@@ -32,6 +43,18 @@ MainMenu::~MainMenu()
 
 void MainMenu::Run()
 {
+    PageBuilder PageBuilder(Pages::MAINMENU, m_outputIsOnlyASCII);
+    m_mainMenus = PageBuilder.GetGameSelectionMainMenuPages({ "Tic Tac Toe", "Hangman", "Battleships" });
+
+    // The index of games in m_Games should match the index of the string in m_mainMenus which has the game selected,
+    // which is defined by the order of the input array to the previous line.
+    m_games.push_back(std::make_unique<TicTacToe>(m_outputIsOnlyASCII));
+    m_games.push_back(std::make_unique<Hangman>(m_outputIsOnlyASCII));
+    m_games.push_back(std::make_unique<Battleships>(m_outputIsOnlyASCII));
+
+    Terminal::SetCursorVisibility(false);
+    Terminal::SetCursorPosition(0, 0);
+
     // Custom exceptions are used to return exit the games and the main menu.
     while (true)
     {
@@ -42,3 +65,6 @@ void MainMenu::Run()
         catch (Exceptions::QuitGame& e) { continue; }
     }
 }
+
+
+ 

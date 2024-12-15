@@ -1,7 +1,8 @@
 #include "helpers/MainMenu.hpp"
 
-int main()
-{
-    MainMenu MainMenu;
+int main(int argc, char* argv[])
+{    
+   
+    MainMenu MainMenu(argc, argv);
     MainMenu.Run();
 }
