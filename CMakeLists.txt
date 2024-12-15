@@ -11,8 +11,8 @@ add_executable(Terminal-Games
         include/helpers/Exceptions.hpp
         include/helpers/MainMenu.hpp
         source/helpers/MainMenu.cpp
-        include/helpers/StringBuilder.hpp
-        source/helpers/StringBuilder.cpp
+        include/helpers/PageBuilder.hpp
+        source/helpers/PageBuilder.cpp
         include/helpers/Terminal.hpp
         source/helpers/Terminal.cpp
         include/games/Game.hpp

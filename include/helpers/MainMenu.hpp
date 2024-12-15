@@ -1,6 +1,8 @@
 #pragma once
 
-#include <array>
+#include <memory>
+#include <string>
+#include <vector>
 
 #include "games/Game.hpp"
 
@@ -11,9 +13,8 @@ class MainMenu
 {
 public:
     /**
-     * @brief Construct a new MainMenu object
-     * @param outputIsOnlyASCII Whether to use only ASCII characters (true) 
-     * or also use ANSI escapes codes (false).
+     * @brief Construct a new MainMenu object.
+     * @param outputIsOnlyASCII Whether to use only ASCII characters (true) or to also use ANSI escapes codes (false).
      */
     explicit MainMenu(const bool& outputIsOnlyASCII = false);
 

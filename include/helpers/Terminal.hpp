@@ -1,7 +1,8 @@
 #pragma once
 
+#include <cstdint>
+#include <string>
 #include <vector>
-#include <Windows.h>
 
 /**
  * @brief Handles all terminal related tasks such as getting user input,
@@ -35,11 +36,11 @@ public:
     static uint32_t GetUserChoiceFromGameMenus(const std::vector<std::string>& menus);
 
     /**
-     * @brief Wrapper for Windows.h FlushConsoleInputBuffer() and _getch()
+     * @brief Clears and then prints to the terminal.
      *
-     * @return uint32_t The key which was pressed represented as an integer.
+     * @param output The string to output to the terminal.
      */
-    static uint32_t GetNextKeyPress();
+    static void PrintOutput(const std::string& output);
 
     /**
      * @brief Clears the terminal.
@@ -48,11 +49,11 @@ public:
     static void Clear();
 
     /**
-     * @brief Clears and then prints to the terminal.
+     * @brief Wrapper for Windows.h FlushConsoleInputBuffer() and _getch()
      *
-     * @param output The string to output to the terminal.
+     * @return uint32_t The key which was pressed represented as an integer.
      */
-    static void PrintOutput(const std::string& output);
+    static uint32_t GetNextKeyPress();
 
     /**
      * @brief Wrapper for Windows.h SetConsoleCursorInfo()
