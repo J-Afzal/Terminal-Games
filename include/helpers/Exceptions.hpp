@@ -1,13 +1,13 @@
 #pragma once
 
-#include <thread>
+#include <exception>
 
 namespace Exceptions
 {
     /**
-     * @brief Used to quit the program.
+     * @brief Used to quit the main menu.
      */
-    class QuitProgram : public std::exception {};
+    class QuitMainMenu : public std::exception {};
 
     /**
      * @brief Used to quit a game.
@@ -15,8 +15,12 @@ namespace Exceptions
     class QuitGame : public std::exception {};
 
     /**
-     * @brief Used when the words.txt file for the hangman game is not found.
+     * @brief Used when the hangman game words.txt file is not found.
      */
     class HangmanWordsNotFound : public std::exception {};
 
+    /**
+     * @brief Used for functionality that has not been implemented.
+     */
+    class NotImplementedError : public std::exception {};
 }
