@@ -1,0 +1,18 @@
+# Auto detect text files and perform LF normalization
+*          text=auto
+
+# C++
+*.cpp   text diff=cpp
+*.hpp   text diff=cpp
+
+# Documents
+*.md       text diff=markdown
+*.txt      text
+LICENSE    text
+
+# Graphics
+*.gif      binary
+
+# Serialisation
+*.json     text
+*.yml      text

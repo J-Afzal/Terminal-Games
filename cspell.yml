@@ -1,0 +1,11 @@
+version: "0.2"
+language: en-gb
+ignorePaths:
+    - LICENSE
+    - build/
+words:
+    - ctest
+    - msvc
+    - TICTACTOE
+ignoreWords:
+    - DCMAKE
