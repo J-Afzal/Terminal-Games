@@ -5,7 +5,9 @@ ignorePaths:
     - build/
 words:
     - ctest
-    - msvc
-    - TICTACTOE
+    - endgroup
+    - markdownlint
 ignoreWords:
     - DCMAKE
+    - msvc
+    - TICTACTOE

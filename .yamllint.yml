@@ -5,3 +5,7 @@ rules:
         max: 128
     indentation:
         spaces: 4
+    document-start:
+        present: false
+    document-end:
+        present: false

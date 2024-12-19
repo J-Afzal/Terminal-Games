@@ -7,7 +7,7 @@ int main(int argc, char* argv[])
     MainMenu.Run();
 }
 
-// TODO
+// TODO // cspell:disable
 //
 // YAML linting, JSON linting, powershell linting, gitattributes script checker,
 //
