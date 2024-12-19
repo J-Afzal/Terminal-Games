@@ -36,13 +36,13 @@ jobs:
             - name: Run cspell
               if: success() || failure()
               run: |
-                nmp install cspell@8.17.0
+                npm install -g cspell@8.17.0
                 cspell .
 
             - name: Run markdownlint
               if: success() || failure()
               run: |
-                npm install markdownlint-cli@0.43.0
+                npm install -g markdownlint-cli@0.43.0
                 markdownlint-cli .
 
             - name: Run yamllint
