@@ -1,8 +1,8 @@
 version: "0.2"
 language: en-gb
 ignorePaths:
-    - LICENSE
-    - build/
+- LICENSE
+- build/
 words:
     - ctest
     - endgroup
@@ -10,4 +10,4 @@ words:
 ignoreWords:
     - DCMAKE
     - msvc
-    - TICTACTOE
+    - TICTACTOE         
