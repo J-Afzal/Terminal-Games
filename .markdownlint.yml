@@ -1,2 +1,4 @@
-line-length:
-    line_length: 120
+MD007:
+    indent: 4
+MD013:
+    line_length: 128
