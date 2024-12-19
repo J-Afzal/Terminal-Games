@@ -43,7 +43,7 @@ jobs:
               if: success() || failure()
               run: |
                 npm install -g markdownlint-cli@0.43.0
-                markdownlint-cli .
+                markdownlint .
 
             - name: Run yamllint
               if: success() || failure()
