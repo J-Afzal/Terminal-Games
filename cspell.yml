@@ -1,5 +1,7 @@
 version: "0.2"
 language: en-gb
+ignorePaths:
+  - LICENSE
 words:
     - ctest
     - endgroup
