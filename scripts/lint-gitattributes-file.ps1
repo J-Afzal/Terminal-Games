@@ -27,14 +27,20 @@ foreach ($line in $gitattributesFileContents) {
     if ($null -eq $lineBeforeAndIncludingComment) {
         Write-Output "##[debug]Current line is code: '$line'"
 
-        if (-not ( # Second repetition of each condition is to account for files without file extensions
+        if (-not (
                 $line -Match "^\* +text=auto$" -or
-                $line -Match "^\*\.[a-z]+ +binary$" -or
-                $line -Match "^[a-z]+ +binary$" -or
-                $line -Match "^\*\.[a-z]+ +text$" -or
-                $line -Match "^[a-z]+ +text$" -or
-                $line -Match "^\*\.[a-z]+ +text +diff=[a-z]+$" -or
-                $line -Match "^[a-z]+ +text +diff=[a-z]+$"
+                # File extensions with or without * wildcard
+                $line -Match "^\*?\.[a-z0-9]+ +binary$" -or
+                $line -Match "^\*?\.[a-z0-9]+ +text$" -or
+                $line -Match "^\*?\.[a-z0-9]+ +text +diff=[a-z]+$" -or
+                $line -Match "^\*?\.[a-z0-9]+ +text +eol=[a-z]+$" -or
+                $line -Match "^\*?\.[a-z0-9]+ +text +eol=[a-z]+ +diff=[a-z]+$" -or
+                # Files
+                $line -Match "^[a-z0-9]+ +binary$" -or
+                $line -Match "^[a-z0-9]+ +text$" -or
+                $line -Match "^[a-z0-9]+ +text +diff=[a-z]+$" -or
+                $line -Match "^[a-z0-9]+ +text +eol=[a-z]+$" -or
+                $line -Match "^[a-z0-9]+ +text +eol=[a-z]+ +diff=[a-z]+$"
             )) {
             $linesNotMatchingCodeStandards += $line
         }

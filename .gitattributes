@@ -1,21 +1,27 @@
 # Auto detect text files and perform LF normalization
 *               text=auto
 
-# Git files
-*.gitattributes text
-*.gitignore     text
-
 # C++
-*.cpp           text        diff=cpp
-*.hpp           text        diff=cpp
+*.cpp           text    diff=cpp
+*.hpp           text    diff=cpp
+
+# Config
+.gitattributes  text
+.gitignore      text
+.prettierignore text
 
 # Documents
-*.md            text        diff=markdown
+*.md            text    diff=markdown
 *.txt           text
 LICENSE         text
 
+
 # Graphics
 *.gif           binary
+
+# Scripts
+# These are explicitly windows files and should use crlf
+*.ps1           text    eol=crlf
 
 # Serialisation
 *.json          text
