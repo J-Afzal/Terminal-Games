@@ -61,4 +61,4 @@ jobs:
               if: success() || failure()
               shell: pwsh
               run: |
-                Invoke-ScriptAnalyzer -Path . -Recurse
+                Invoke-ScriptAnalyzer -Path . -Recurse -Severity Information

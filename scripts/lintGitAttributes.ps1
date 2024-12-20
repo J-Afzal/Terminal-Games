@@ -1,23 +1,23 @@
 $ErrorActionPreference = "Stop"
 
-Write-Host "##[group]Linting .gitattributes file"
+Write-Output "##[group]Linting .gitattributes file"
 
-Write-Host "##[debug]Retrieving contents of .gitattributes..."
+Write-Output "##[debug]Retrieving contents of .gitattributes..."
 
 $gitattributesFileContents = @(Get-Content -Path ./.gitattributes)
 
-Write-Host "##[debug]Finished retrieving the contents .gitattributes:"
+Write-Output "##[debug]Finished retrieving the contents .gitattributes:"
 
 $gitattributesFileContentsWithoutComments = @()
 $linesNotMatchingCodeStandards = @()
 $linesNotMatchingCommentStandards = @()
 
-Write-Host "##[debug]Starting .gitattributes validation..."
+Write-Output "##[debug]Starting .gitattributes validation..."
 
 foreach ($line in $gitattributesFileContents) {
 
     if ($line -eq "") {
-        Write-Host "##[debug]Current line is blank: '$line'"
+        Write-Output "##[debug]Current line is blank: '$line'"
         continue
     }
 
@@ -25,7 +25,7 @@ foreach ($line in $gitattributesFileContents) {
     $lineBeforeAndIncludingComment = $line | Select-String -Pattern ".*#"
 
     if ($null -eq $lineBeforeAndIncludingComment) {
-        Write-Host "##[debug]Current line is code: '$line'"
+        Write-Output "##[debug]Current line is code: '$line'"
 
         if (-not ( # Second repetition of each condition is to account for files without file extensions
                 $line -Match "^\* +text=auto$" -or
@@ -47,15 +47,15 @@ foreach ($line in $gitattributesFileContents) {
     }
 
     if ($lineBeforeAndIncludingComment.matches.value.Length -eq 1) {
-        Write-Host "##[debug]Current line is comment: '$line'"
+        Write-Output "##[debug]Current line is comment: '$line'"
         continue
     }
 
-    Write-Host "##[debug]Current line is a mixture of comment and code: '$line'"
+    Write-Output "##[debug]Current line is a mixture of comment and code: '$line'"
     $linesNotMatchingCommentStandards += $line
 }
 
-Write-Host "##[debug]Finished .gitattributes validation."
+Write-Output "##[debug]Finished .gitattributes validation."
 
 $errors = @()
 
@@ -75,21 +75,21 @@ if ($errors.Length -gt 0) {
     $errors | Out-String | Write-Error
 }
 
-Write-Host "##[debug]Retrieving all unique file extensions and unique files without a file extension..."
+Write-Output "##[debug]Retrieving all unique file extensions and unique files without a file extension..."
 
 $gitTrackedFiles = git ls-files -c | Split-Path -Leaf
 $uniqueGitTrackedFileExtensions = $gitTrackedFiles | ForEach-Object { if ($_.Split(".").Length -gt 1) { ".$($_.Split(".")[-1])" } } | Sort-Object | Select-Object -Unique
 $uniqueGitTrackedFilesWithoutExtensions = $gitTrackedFiles | ForEach-Object { if ($_.Split(".").Length -eq 1) { $_ } } | Sort-Object | Select-Object -Unique
 
-Write-Host "##[debug]Retrieved unique file extensions:"
-$uniqueGitTrackedFileExtensions | ForEach-Object { "##[debug]$_" } | Write-Host
-Write-Host "##[debug]Retrieved unique files without a file extension:"
-$uniqueGitTrackedFilesWithoutExtensions | ForEach-Object { "##[debug]$_" } | Write-Host
+Write-Output "##[debug]Retrieved unique file extensions:"
+$uniqueGitTrackedFileExtensions | ForEach-Object { "##[debug]$_" } | Write-Output
+Write-Output "##[debug]Retrieved unique files without a file extension:"
+$uniqueGitTrackedFilesWithoutExtensions | ForEach-Object { "##[debug]$_" } | Write-Output
 
 $fileExtensionsMissingGitattributes = @()
 $linesForDuplicateEntries = @()
 
-Write-Host "##[debug]Checking all unique file extensions have a .gitattributes entry:"
+Write-Output "##[debug]Checking all unique file extensions have a .gitattributes entry:"
 
 foreach ($fileExtension in $uniqueGitTrackedFileExtensions) {
 
@@ -98,7 +98,7 @@ foreach ($fileExtension in $uniqueGitTrackedFileExtensions) {
     foreach ($line in $gitattributesFileContentsWithoutComments) {
 
         if ($line -Match "\$fileExtension" ) {
-            Write-Host "##[debug]$fileExtension entry found: '$line'"
+            Write-Output "##[debug]$fileExtension entry found: '$line'"
 
             if ($foundMatch) {
                 $linesForDuplicateEntries += $line
@@ -113,9 +113,9 @@ foreach ($fileExtension in $uniqueGitTrackedFileExtensions) {
     }
 }
 
-Write-Host "##[debug]Finished checking that all unique file extensions have a .gitattributes entry."
+Write-Output "##[debug]Finished checking that all unique file extensions have a .gitattributes entry."
 
-Write-Host "##[debug]Checking all unique files without a file extension have a .gitattributes entry:"
+Write-Output "##[debug]Checking all unique files without a file extension have a .gitattributes entry:"
 
 foreach ($fileName in $uniqueGitTrackedFilesWithoutExtensions) {
 
@@ -124,7 +124,7 @@ foreach ($fileName in $uniqueGitTrackedFilesWithoutExtensions) {
     foreach ($line in $gitattributesFileContentsWithoutComments) {
 
         if ($line -Match $fileName ) {
-            Write-Host "##[debug]$fileName entry found: '$line'"
+            Write-Output "##[debug]$fileName entry found: '$line'"
 
             if ($foundMatch) {
                 $linesForDuplicateEntries += $line
@@ -140,7 +140,7 @@ foreach ($fileName in $uniqueGitTrackedFilesWithoutExtensions) {
 }
 
 
-Write-Host "##[debug]Finished checking that all unique files without a file extension have a .gitattributes entry."
+Write-Output "##[debug]Finished checking that all unique files without a file extension have a .gitattributes entry."
 
 $errors = @()
 
@@ -161,7 +161,7 @@ if ($errors.Length -gt 0) {
 }
 
 else {
-    Write-Host "##[debug]The .gitattributes file conforms to standards."
+    Write-Output "##[debug]The .gitattributes file conforms to standards."
 }
 
-Write-Host "##[endgroup]"
+Write-Output "##[endgroup]"
