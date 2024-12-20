@@ -67,5 +67,5 @@ jobs:
               if: success() || failure()
               shell: pwsh
               run: |
-                Import-Module ./scripts/Linters.psd1
+                Import-Module ${{ github.workspace }}/scripts/Linters.psd1
                 Test-GitattributesFile -Verbose
