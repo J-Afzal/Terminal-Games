@@ -62,3 +62,9 @@ jobs:
               shell: pwsh
               run: |
                 Invoke-ScriptAnalyzer -Path . -Recurse -Severity Information
+
+            - name: Run PSScriptAnalyzer (for PowerShell linting)
+              if: success() || failure()
+              shell: pwsh
+              run: |
+                ./scripts/lint-gitattributes-file.ps1
