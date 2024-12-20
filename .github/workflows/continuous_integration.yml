@@ -3,26 +3,69 @@ name: Continuous Integration
 run-name: CI - ${{ github.run_number }} - ${{ github.head_ref }}
 
 on:
-  pull_request:
-    branches: 
-      - master
+    pull_request:
+        branches:
+            - master
 
 jobs:
-  build:
-    strategy:
-      matrix:
-        os:
-          # - macos-latest
-          # - ubuntu-latest
-          - windows-latest
+    build:
+        strategy:
+            matrix:
+                os:
+                    # - macos-latest
+                    # - ubuntu-latest
+                    - windows-latest
 
-    runs-on: ${{ matrix.os }}
+        runs-on: ${{ matrix.os }}
 
-    steps:
-      - uses: actions/checkout@v4
+        steps:
+            - uses: actions/checkout@v4
 
-      - name: Configure CMake
-        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=Release
+            - name: Configure CMake
+              run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=Release
 
-      - name: Build Project
-        run: cmake --build ${{github.workspace}}/build --config Release     
+            - name: Build Project
+              run: cmake --build ${{github.workspace}}/build --config Release
+
+    linting:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Run cspell
+              if: success() || failure()
+              run: |
+                npm install -g cspell@8.17.0
+                cspell .
+
+            - name: Run markdownlint
+              if: success() || failure()
+              run: |
+                npm install -g markdownlint-cli@0.43.0
+                markdownlint .
+
+            - name: Run yamllint
+              if: success() || failure()
+              run: |
+                pip install --user yamllint==1.35.1
+                yamllint .
+
+            - name: Run prettier (for JSON linting)
+              if: success() || failure()
+              run: |
+                npm install -g prettier@3.4.2
+                prettier . --check
+
+            - name: Run PSScriptAnalyzer (for PowerShell linting)
+              if: success() || failure()
+              shell: pwsh
+              run: |
+                Invoke-ScriptAnalyzer -Path . -Recurse -Severity Information
+
+            - name: Run gitattributes linter
+              if: success() || failure()
+              shell: pwsh
+              run: |
+                Import-Module ${{ github.workspace }}/scripts/Linters.psd1
+                Test-GitattributesFile -Verbose

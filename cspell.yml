@@ -1,0 +1,15 @@
+version: "0.2"
+language: en-gb
+ignorePaths:
+    - LICENSE
+words:
+    - ctest
+    - endgroup
+    - Linters
+    - markdownlint
+    - pwsh
+ignoreWords:
+    - Analyzer
+    - DCMAKE
+    - msvc
+    - TICTACTOE

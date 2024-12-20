@@ -165,12 +165,12 @@ private:
     std::string GetEmptyLine() const;
 
     /**
-     * @brief Creates a new line on a page with the input text is automatically centered. If the spacing on the sides
+     * @brief Creates a new line on a page with the input text is automatically centred. If the spacing on the sides
      * is unequal, the left side will always have the higher amount of spacing.
      *
      * @param input The text to display on the new line.
      * @param colour The colour of the input text.
-     * @return std::string A new line with the input text centered.
+     * @return std::string A new line with the input text centred.
      * @warning The message will be truncated if it is too long to be contained within a single line on the page.
      */
     std::string GetNewLineCentred(const std::string& input, const Colours& colour = Colours::WHITE, const std::string& selector = "") const;
