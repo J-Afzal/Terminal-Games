@@ -67,4 +67,4 @@ jobs:
               if: success() || failure()
               shell: pwsh
               run: |
-                ./scripts/lint-gitattributes-file.ps1
+                ./scripts/lint-gitattributes-file.ps1 -Verbose
