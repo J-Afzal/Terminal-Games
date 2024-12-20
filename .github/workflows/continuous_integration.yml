@@ -55,4 +55,4 @@ jobs:
               if: success() || failure()
               run: |
                 npm install -g prettier@3.4.2
-                prettier .
+                prettier . --check
