@@ -56,3 +56,9 @@ jobs:
               run: |
                 npm install -g prettier@3.4.2
                 prettier . --check
+
+            - name: Run PSScriptAnalyzer (for PowerShell linting)
+              if: success() || failure()
+              shell: pwsh
+              run: |
+                Invoke-ScriptAnalyzer -Path . -Recurse

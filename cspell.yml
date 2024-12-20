@@ -6,7 +6,9 @@ words:
     - ctest
     - endgroup
     - markdownlint
+    - pwsh
 ignoreWords:
+    - Analyzer
     - DCMAKE
     - msvc
     - TICTACTOE
