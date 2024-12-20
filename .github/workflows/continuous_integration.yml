@@ -68,4 +68,4 @@ jobs:
               shell: pwsh
               run: |
                 Import-Module ./scripts/Linters.psd1
-                Test-Gitattributes-File -Verbose
+                Test-GitattributesFile -Verbose
