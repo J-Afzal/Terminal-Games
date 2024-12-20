@@ -5,6 +5,7 @@ ignorePaths:
 words:
     - ctest
     - endgroup
+    - Linters
     - markdownlint
     - pwsh
 ignoreWords:

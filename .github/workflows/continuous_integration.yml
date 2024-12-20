@@ -63,8 +63,9 @@ jobs:
               run: |
                 Invoke-ScriptAnalyzer -Path . -Recurse -Severity Information
 
-            - name: Run gitattributes linter script
+            - name: Run gitattributes linter
               if: success() || failure()
               shell: pwsh
               run: |
-                ./scripts/lint-gitattributes-file.ps1 -Verbose
+                Import-Module ./scripts/Linters.psd1
+                Lint-Gitattributes-File -Verbose
