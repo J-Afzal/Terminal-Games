@@ -2,8 +2,8 @@
 *               text=auto
 
 # C++
-*.cpp           text    diff=cpp eoool=lf
-*.hpp           text    diff=cpp # asdasd
+*.cpp           text    diff=cpp
+*.hpp           text    diff=cpp
 
 # Config
 .gitattributes  text
