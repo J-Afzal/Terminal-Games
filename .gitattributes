@@ -25,6 +25,5 @@ LICENSE         text
 *.psm1           text    eol=crlf
 
 # Serialisation
-# *.json          text
-*.yml           text
+*.json          text
 *.yml           text
