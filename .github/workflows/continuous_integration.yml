@@ -73,12 +73,19 @@ jobs:
             - name: Run clang-tidy
               if: success() || failure()
               shell: pwsh
-                # git clone https://github.com/llvm/llvm-project.git
-                # cd llvm-project
-                # cmake -B build -S llvm -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang-tools-extra"
-                # cmake --build build --target clang-tidy --config Release
-                # ./build/Release/clang-tidy
+              # git clone https://github.com/llvm/llvm-project.git
+              # cd llvm-project
+              # cmake -B build -S llvm -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang-t
+              # ools-extra"
+              # cmake --build build --target clang-tidy --config Release
+              # ./build/Release/clang-tidy
+              #
+              # git ls-files -c | ForEach-Object { if ($_.Split(".")[-1] -In ("cpp", "hpp")) { $_ } } | clang-tidy -checks=*
               run: |
                 sudo apt-get install clang-tidy
 
-                git ls-files -c | ForEach-Object { if ($_.Split(".")[-1] -In ("cpp", "hpp")) { $_ } } | clang-tidy -checks=*
+                clang-tidy --version
+
+                clang-tidy --dump-config
+
+                clang-tidy ./source/main.cpp -checks=*
