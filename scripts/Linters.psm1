@@ -23,7 +23,7 @@ function Test-GitattributesFile {
     [CmdletBinding()]
     param()
 
-    Write-Output "Running Test-GitattributesFile..."
+    Write-Output "##[group]Running Test-GitattributesFile..."
 
     Write-Output "##[section]Retrieving contents of .gitattributes..."
 
