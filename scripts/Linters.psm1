@@ -195,6 +195,7 @@ function Test-GitattributesFile {
 
     Write-Output "##[endgroup]"
 
+    
     Write-Host "##[group]Beginning of a group"
     Write-Host "##[warning]Warning message"
     Write-Host "##[error]Error message"
