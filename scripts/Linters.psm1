@@ -23,7 +23,7 @@ function Test-GitattributesFile {
     [CmdletBinding()]
     param()
 
-    Write-Output "##[group]Linting .gitattributes file"
+    Write-Output "Running Test-GitattributesFile..."
 
     Write-Output "##[section]Retrieving contents of .gitattributes..."
 
@@ -123,7 +123,7 @@ function Test-GitattributesFile {
         foreach ($line in $gitattributesFileContentsWithoutComments) {
 
             if ($line -Match "\$fileExtension" ) {
-                Write-Verbose "##[debug]$fileExtension entry found: '$line'"
+                Write-Verbose "##[debug]$fileExtension entry found in: '$line'"
 
                 if ($foundMatch) {
                     $linesForDuplicateEntries += $line
@@ -149,7 +149,7 @@ function Test-GitattributesFile {
         foreach ($line in $gitattributesFileContentsWithoutComments) {
 
             if ($line -Match $fileName ) {
-                Write-Verbose "##[debug]$fileName entry found: '$line'"
+                Write-Verbose "##[debug]$fileName entry found in: '$line'"
 
                 if ($foundMatch) {
                     $linesForDuplicateEntries += $line
@@ -184,7 +184,7 @@ function Test-GitattributesFile {
     }
 
     else {
-        Write-Output "##[section]The .gitattributes file conforms to standards."
+        Write-Output "##[section].gitattributes conforms to standards."
     }
 
     Write-Output "##[endgroup]"
