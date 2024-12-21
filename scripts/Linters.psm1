@@ -29,13 +29,13 @@ function Test-GitattributesFile {
 
     $gitattributesFileContents = @(Get-Content -Path ./.gitattributes)
 
-    Write-Verbose "##[debug]Finished retrieving the contents .gitattributes:"
+    Write-Information "##[debug]Finished retrieving the contents .gitattributes:"
 
     $gitattributesFileContentsWithoutComments = @()
     $linesNotMatchingCodeStandards = @()
     $linesNotMatchingCommentStandards = @()
 
-    Write-Verbose "##[debug]Starting .gitattributes validation..."
+    Write-Information "Starting .gitattributes validation..."
 
     foreach ($line in $gitattributesFileContents) {
 
@@ -84,7 +84,7 @@ function Test-GitattributesFile {
         $linesNotMatchingCommentStandards += $line
     }
 
-    Write-Verbose "##[debug]Finished .gitattributes validation."
+    Write-Host "##[debug]Finished .gitattributes validation."
 
     $errors = @()
 
@@ -104,15 +104,15 @@ function Test-GitattributesFile {
         $errors | Out-String | Write-Error
     }
 
-    Write-Verbose "##[debug]Retrieving all unique file extensions and unique files without a file extension..."
+    Write-Host "Retrieving all unique file extensions and unique files without a file extension..."
 
     $gitTrackedFiles = git ls-files -c | Split-Path -Leaf
     $uniqueGitTrackedFileExtensions = $gitTrackedFiles | ForEach-Object { if ($_.Split(".").Length -gt 1) { ".$($_.Split(".")[-1])" } } | Sort-Object | Select-Object -Unique
     $uniqueGitTrackedFilesWithoutExtensions = $gitTrackedFiles | ForEach-Object { if ($_.Split(".").Length -eq 1) { $_ } } | Sort-Object | Select-Object -Unique
 
-    Write-Verbose "##[debug]Retrieved unique file extensions:"
+    Write-Debug "##[debug]Retrieved unique file extensions:"
     $uniqueGitTrackedFileExtensions | ForEach-Object { "##[debug]$_" } | Write-Verbose
-    Write-Verbose "##[debug]Retrieved unique files without a file extension:"
+    Write-Debug "Retrieved unique files without a file extension:"
     $uniqueGitTrackedFilesWithoutExtensions | ForEach-Object { "##[debug]$_" } | Write-Verbose
 
     $fileExtensionsMissingGitattributes = @()
@@ -142,9 +142,9 @@ function Test-GitattributesFile {
         }
     }
 
-    Write-Verbose "##[debug]Finished checking that all unique file extensions have a .gitattributes entry."
+    Write-Output "##[debug]Finished checking that all unique file extensions have a .gitattributes entry."
 
-    Write-Verbose "##[debug]Checking all unique files without a file extension have a .gitattributes entry:"
+    Write-Output "Checking all unique files without a file extension have a .gitattributes entry:"
 
     foreach ($fileName in $uniqueGitTrackedFilesWithoutExtensions) {
 
