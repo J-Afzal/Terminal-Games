@@ -25,7 +25,7 @@ function Test-GitattributesFile {
 
     Write-Verbose "##[group]Linting .gitattributes file"
 
-    Write-Verbose "##[debug]Retrieving contents of .gitattributes..."
+    Write-Verbose "Retrieving contents of .gitattributes..."
 
     $gitattributesFileContents = @(Get-Content -Path ./.gitattributes)
 
