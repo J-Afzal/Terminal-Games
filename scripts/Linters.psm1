@@ -87,12 +87,12 @@ function Test-GitattributesFile {
     Write-Verbose "##[debug]Finished .gitattributes validation."
 
     if ($linesNotMatchingCodeStandards.Length -gt 0) {
-        Write-Output "##[error]Standards require the below lines to be one of: '* text=auto', '[FILE]/[FILE EXTENSION] binary', '[FILE]/[FILE EXTENSION] text', '[FILE]/[FILE EXTENSION] text eol=[TEXT]', '[FILE]/[FILE EXTENSION] text diff=[TEXT]', '[FILE]/[FILE EXTENSION] text eol=[TEXT] diff=[TEXT]'"
+        Write-Output "##[error]Standards require the below lines to be one of: '* text=auto', '[FILE]/[FILE EXTENSION] binary', '[FILE]/[FILE EXTENSION] text', '[FILE]/[FILE EXTENSION] text eol=[TEXT]', '[FILE]/[FILE EXTENSION] text diff=[TEXT]' or '[FILE]/[FILE EXTENSION] text eol=[TEXT] diff=[TEXT]'"
         $linesNotMatchingCodeStandards | ForEach-Object { "##[error]'$_'" } | Write-Output
     }
 
     if ($linesNotMatchingCommentStandards.Length -gt 0) {
-        Write-Output "##[error]Standards require the following lines to be either blank, entirely comment or entirely non-comment:"
+        Write-Output "##[error]Standards require the below lines to be one of: blank, entirely comment or entirely non-comment:"
         $linesNotMatchingCommentStandards | ForEach-Object { "##[error]'$_'" } | Write-Output
     }
 
