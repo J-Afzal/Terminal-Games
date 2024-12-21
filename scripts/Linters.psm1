@@ -23,9 +23,9 @@ function Test-GitattributesFile {
     [CmdletBinding()]
     param()
 
-    Write-Verbose "##[group]Linting .gitattributes file"
+    Write-Output "##[group]Linting .gitattributes file"
 
-    Write-Verbose "##[section]Retrieving contents of .gitattributes..."
+    Write-Output "##[section]Retrieving contents of .gitattributes..."
 
     $gitattributesFileContents = @(Get-Content -Path ./.gitattributes)
 
@@ -35,7 +35,7 @@ function Test-GitattributesFile {
     $linesNotMatchingCodeStandards = @()
     $linesNotMatchingCommentStandards = @()
 
-    Write-Verbose "##[section]Starting .gitattributes validation..."
+    Write-Output "##[section]Starting .gitattributes validation..."
 
     foreach ($line in $gitattributesFileContents) {
 
@@ -87,20 +87,20 @@ function Test-GitattributesFile {
     Write-Verbose "##[debug]Finished .gitattributes validation."
 
     if ($linesNotMatchingCodeStandards.Length -gt 0) {
-        Write-Verbose "##[error]Standards only allow the following gitattributes: '* text=auto', '[FILE]/[FILE EXTENSION] binary', '[FILE]/[FILE EXTENSION] text', '[FILE]/[FILE EXTENSION] text eol=[TEXT]', '[FILE]/[FILE EXTENSION] text diff=[TEXT]', '[FILE]/[FILE EXTENSION] text eol=[TEXT] diff=[TEXT]'"
-        $linesNotMatchingCodeStandards | ForEach-Object { "##[error]'$_'" } | Write-Verbose
+        Write-Output "##[error]Standards only allow the following gitattributes: '* text=auto', '[FILE]/[FILE EXTENSION] binary', '[FILE]/[FILE EXTENSION] text', '[FILE]/[FILE EXTENSION] text eol=[TEXT]', '[FILE]/[FILE EXTENSION] text diff=[TEXT]', '[FILE]/[FILE EXTENSION] text eol=[TEXT] diff=[TEXT]'"
+        $linesNotMatchingCodeStandards | ForEach-Object { "##[error]'$_'" } | Write-Output
     }
 
     if ($linesNotMatchingCommentStandards.Length -gt 0) {
-        Write-Verbose "##[error]Standards only allow lines to be blank, entirely comment or entirely non-comment."
-        $linesNotMatchingCommentStandards | ForEach-Object { "##[error]'$_'" } | Write-Verbose
+        Write-Output "##[error]Standards only allow lines to be blank, entirely comment or entirely non-comment."
+        $linesNotMatchingCommentStandards | ForEach-Object { "##[error]'$_'" } | Write-Output
     }
 
     if (($linesNotMatchingCodeStandards.Length -gt 0) -or ($linesNotMatchingCommentStandards.Length -gt 0)) {
         Write-Error "##[error]Please resolve the above errors!"
     }
 
-    Write-Verbose "##[section]Retrieving all unique file extensions and unique files without a file extension..."
+    Write-Output "##[section]Retrieving all unique file extensions and unique files without a file extension..."
 
     $gitTrackedFiles = git ls-files -c | Split-Path -Leaf
     $uniqueGitTrackedFileExtensions = $gitTrackedFiles | ForEach-Object { if ($_.Split(".").Length -gt 1) { ".$($_.Split(".")[-1])" } } | Sort-Object | Select-Object -Unique
@@ -114,7 +114,7 @@ function Test-GitattributesFile {
     $fileExtensionsMissingGitattributes = @()
     $linesForDuplicateEntries = @()
 
-    Write-Verbose "##[section]Checking all unique file extensions have a .gitattributes entry:"
+    Write-Output "##[section]Checking all unique file extensions have a .gitattributes entry:"
 
     foreach ($fileExtension in $uniqueGitTrackedFileExtensions) {
 
@@ -140,7 +140,7 @@ function Test-GitattributesFile {
 
     Write-Verbose "##[debug]Finished checking that all unique file extensions have a .gitattributes entry."
 
-    Write-Verbose "##[section]Checking all unique files without a file extension have a .gitattributes entry:"
+    Write-Output "##[section]Checking all unique files without a file extension have a .gitattributes entry:"
 
     foreach ($fileName in $uniqueGitTrackedFilesWithoutExtensions) {
 
@@ -170,15 +170,15 @@ function Test-GitattributesFile {
     $errors = @()
 
     if ($fileExtensionsMissingGitattributes.Length -gt 0) {
-        Write-Verbose "##[error]Standards require all file extensions (and files without a file extension) to have an explicit entry in .gitattributes."
-        Write-Verbose "##[error]The following file extensions (and files without a file extension) do not conform to the above standards:"
-        $fileExtensionsMissingGitattributes | ForEach-Object { "##[error]'$_'" } | Write-Verbose
+        Write-Output "##[error]Standards require all file extensions (and files without a file extension) to have an explicit entry in .gitattributes."
+        Write-Output "##[error]The following file extensions (and files without a file extension) do not conform to the above standards:"
+        $fileExtensionsMissingGitattributes | ForEach-Object { "##[error]'$_'" } | Write-Output
     }
 
     if ($linesForDuplicateEntries.Length -gt 0) {
-        Write-Verbose "##[error]Standards do not allow multiple entries for file extensions (and files without a file extension) within .gitattributes."
-        Write-Verbose "##[error]The following lines do not conform to the above standards:"
-        $linesForDuplicateEntries | ForEach-Object { "##[error]'$_'" } | Write-Verbose
+        Write-Output "##[error]Standards do not allow multiple entries for file extensions (and files without a file extension) within .gitattributes."
+        Write-Output "##[error]The following lines do not conform to the above standards:"
+        $linesForDuplicateEntries | ForEach-Object { "##[error]'$_'" } | Write-Output
     }
 
     if (($fileExtensionsMissingGitattributes.Length -gt 0) -or ($linesForDuplicateEntries.Length -gt 0)) {
@@ -186,8 +186,8 @@ function Test-GitattributesFile {
     }
 
     else {
-        Write-Verbose "##[section]The .gitattributes file conforms to standards."
+        Write-Output "##[section]The .gitattributes file conforms to standards."
     }
 
-    Write-Verbose "##[endgroup]"
+    Write-Output "##[endgroup]"
 }
