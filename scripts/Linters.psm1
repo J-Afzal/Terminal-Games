@@ -53,17 +53,17 @@ function Test-GitattributesFile {
             if (-not (
                     $line -Match "^\* +text=auto$" -or
                     # File extensions with or without * wildcard
-                    $line -Match "^\*?\.[a-z0-9]+ +binary$" -or
-                    $line -Match "^\*?\.[a-z0-9]+ +text$" -or
-                    $line -Match "^\*?\.[a-z0-9]+ +text +eol=[a-z]+$" -or
-                    $line -Match "^\*?\.[a-z0-9]+ +text +diff=[a-z]+$" -or
-                    $line -Match "^\*?\.[a-z0-9]+ +text +eol=[a-z]+ +diff=[a-z]+$" -or
+                    $line -Match "^\*?\.[a-z0-9-]+ +binary$" -or
+                    $line -Match "^\*?\.[a-z0-9-]+ +text$" -or
+                    $line -Match "^\*?\.[a-z0-9-]+ +text +eol=[a-z]+$" -or
+                    $line -Match "^\*?\.[a-z0-9-]+ +text +diff=[a-z]+$" -or
+                    $line -Match "^\*?\.[a-z0-9-]+ +text +eol=[a-z]+ +diff=[a-z]+$" -or
                     # Files
-                    $line -Match "^[a-z0-9]+ +binary$" -or
-                    $line -Match "^[a-z0-9]+ +text$" -or
-                    $line -Match "^[a-z0-9]+ +text +eol=[a-z]+$" -or
-                    $line -Match "^[a-z0-9]+ +text +diff=[a-z]+$" -or
-                    $line -Match "^[a-z0-9]+ +text +eol=[a-z]+ +diff=[a-z]+$"
+                    $line -Match "^[a-z0-9-]+ +binary$" -or
+                    $line -Match "^[a-z0-9-]+ +text$" -or
+                    $line -Match "^[a-z0-9-]+ +text +eol=[a-z]+$" -or
+                    $line -Match "^[a-z0-9-]+ +text +diff=[a-z]+$" -or
+                    $line -Match "^[a-z0-9-]+ +text +eol=[a-z]+ +diff=[a-z]+$"
                 )) {
                 $linesNotMatchingCodeStandards += $line
             }
