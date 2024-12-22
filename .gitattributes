@@ -6,6 +6,7 @@
 *.hpp           text    diff=cpp
 
 # Config
+.clang-tidy     text
 .gitattributes  text
 .gitignore      text
 .prettierignore text

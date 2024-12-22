@@ -2,6 +2,6 @@ FormatStyle: "LLVM"
 Checks: "*"
 WarningsAsErrors: "*"
 HeaderFileExtensions:
-  - "hpp"
+    - "hpp"
 ImplementationFileExtensions:
-  - "cpp"
+    - "cpp"
