@@ -18,7 +18,7 @@ $ErrorActionPreference = "Stop"
     Test-GitattributesFile -Verbose
 #>
 
-function Test-GitattributesFile {
+function Test-GitAttributesFile {
 
     [CmdletBinding()]
     param()

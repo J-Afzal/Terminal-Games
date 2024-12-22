@@ -33,27 +33,25 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
+            - name: Install dev dependencies
+              run: npm install
+
             - name: Run cspell
-              if: success() || failure()
-              run: |
-                npm install -g cspell@8.17.0
-                cspell .
+              run: npx cspell .
 
             - name: Run prettier (for JSON linting)
               if: success() || failure()
-              run: |
-                npm install -g prettier@3.4.2
-                prettier . --check
+              run: npx prettier . --check
 
             - name: Run PSScriptAnalyzer (for PowerShell linting)
               if: success() || failure()
               shell: pwsh
-              run: |
-                Invoke-ScriptAnalyzer -Path . -Recurse -Severity Information
+              run: Invoke-ScriptAnalyzer -Path . -Recurse -Severity Information
 
             - name: Run gitattributes linter
               if: success() || failure()
               shell: pwsh
               run: |
-                Import-Module ./scripts/Linters.psm1
-                Test-GitattributesFile -Verbose
+                  Import-Module ./scripts/Linters.psm1
+
+                  Test-GitAttributesFile -Verbose
