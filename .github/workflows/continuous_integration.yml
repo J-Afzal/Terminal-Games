@@ -84,8 +84,11 @@ jobs:
               run: |
                 sudo apt-get install clang-tidy
 
+                Write-Host "---------VERSION---------"
                 clang-tidy --version
 
+                Write-Host "---------DUMP CONFIG---------"
                 clang-tidy --dump-config
 
+                Write-Host "---------CHECK---------"
                 clang-tidy ./source/main.cpp -checks=*
