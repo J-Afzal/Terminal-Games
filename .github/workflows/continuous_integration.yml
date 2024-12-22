@@ -69,26 +69,3 @@ jobs:
               run: |
                 Import-Module ./scripts/Linters.psm1
                 Test-GitattributesFile -Verbose
-
-            - name: Run clang-tidy
-              if: success() || failure()
-              shell: pwsh
-              # git clone https://github.com/llvm/llvm-project.git
-              # cd llvm-project
-              # cmake -B build -S llvm -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang-t
-              # ools-extra"
-              # cmake --build build --target clang-tidy --config Release
-              # ./build/Release/clang-tidy
-              #
-              # git ls-files -c | ForEach-Object { if ($_.Split(".")[-1] -In ("cpp", "hpp")) { $_ } } | clang-tidy -checks=*
-              run: |
-                sudo apt-get install clang-tidy
-
-                Write-Host "---------VERSION---------"
-                clang-tidy --version
-
-                Write-Host "---------DUMP CONFIG---------"
-                clang-tidy --dump-config
-
-                Write-Host "---------CHECK---------"
-                clang-tidy ./source/main.cpp -checks=*

@@ -12,14 +12,14 @@
 #include "helpers/PageBuilder.hpp"
 #include "helpers/Terminal.hpp"
 
-MainMenu::MainMenu(int argc, char* argv[]) 
-{ 
-    m_outputIsOnlyASCII = ParseCommandLineArguments(std::vector<std::string>(argv, argv + argc)); 
+MainMenu::MainMenu(int argc, char* argv[])
+{
+    m_outputIsOnlyASCII = ParseCommandLineArguments(std::vector<std::string>(argv, argv + argc));
 }
 
-MainMenu::MainMenu(const bool& outputIsOnlyASCII) 
-{ 
-    m_outputIsOnlyASCII = outputIsOnlyASCII; 
+MainMenu::MainMenu(const bool& outputIsOnlyASCII)
+{
+    m_outputIsOnlyASCII = outputIsOnlyASCII;
 }
 
 bool MainMenu::ParseCommandLineArguments(const std::vector<std::string>& cliArgs) const
@@ -65,6 +65,3 @@ void MainMenu::Run()
         catch (Exceptions::QuitGame& e) { continue; }
     }
 }
-
-
- 
