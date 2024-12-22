@@ -13,7 +13,7 @@ enable or disable ASCII only mode, and then calling its `Run()` method.
     - The word to be guessed must be 3-14 characters long and contain only letters
     - Guesses can only be a single letter at a time
     - When guessing, you can use the up/down arrow keys to scroll through the available letters or press a letter key to
-    select it (please note that pressing q here will quit to the main menu)
+      select it (please note that pressing q here will quit to the main menu)
 - For Battleships:
     - Selecting ship positions must be done in either an incrementing or decrementing order with respect to the co-ordinates
     - Backspace can be used to undo a ship co-ordinate selection for a ship that has not been placed on the board
