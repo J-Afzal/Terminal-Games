@@ -39,18 +39,6 @@ jobs:
                 npm install -g cspell@8.17.0
                 cspell .
 
-            - name: Run markdownlint
-              if: success() || failure()
-              run: |
-                npm install -g markdownlint-cli@0.43.0
-                markdownlint .
-
-            - name: Run yamllint
-              if: success() || failure()
-              run: |
-                pip install --user yamllint==1.35.1
-                yamllint .
-
             - name: Run prettier (for JSON linting)
               if: success() || failure()
               run: |

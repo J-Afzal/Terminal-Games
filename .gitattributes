@@ -16,7 +16,6 @@
 *.txt           text
 LICENSE         text
 
-
 # Graphics
 *.gif           binary
 
