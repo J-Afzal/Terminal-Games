@@ -2,6 +2,67 @@ $ErrorActionPreference = "Stop"
 
 <#
     .SYNOPSIS
+    Runs clang-tidy against all git-tracked C++ files (*.cpp and *.hpp).
+
+    .DESCRIPTION
+    Runs clang-tidy against all git-tracked C++ files (*.cpp and *.hpp). CMake must be configured in the ./build/ directory
+    from the root as 'compile_commands.json' file is used by clang-tidy.
+
+    .INPUTS
+    None.
+
+    .OUTPUTS
+    None.
+
+    .EXAMPLE
+    Import-Module Linters.psm1
+    Test-TerminalGamesCode -Verbose
+#>
+
+function Test-TerminalGamesCode {
+
+    [CmdletBinding()]
+    param()
+
+    Write-Output "##[group]Running Test-TerminalGamesCode..."
+
+    Write-Output "##[section]Retrieving all files to analyse..."
+
+    $allFilesToTest = git ls-files -c | ForEach-Object { if ($_.Split(".")[-1] -In ("cpp", "hpp")) { "./$_" } }
+
+    Write-Output "##[debug]Retrieved all files to analyse:"
+    $allFilesToTest | ForEach-Object { "##[debug]'$_'" } | Write-Output
+
+    Write-Output "##[endgroup]"
+
+    $filesWithErrors = @()
+
+
+    foreach ($file in $allFilesToTest) {
+
+        Write-Output "##[group]Running Test-TerminalGamesCode against '$file'..."
+
+        $ErrorActionPreference = "Continue"
+
+        (clang-tidy $file -p ./build 2>&1) | ForEach-Object { "##[debug]$_" } | Write-Output
+
+        $ErrorActionPreference = "Stop"
+
+        if ($LASTEXITCODE -eq 1) {
+            $filesWithErrors += $file
+        }
+
+        Write-Output "##[endgroup]"
+
+    }
+
+    if ($filesWithErrors.Count -gt 0) {
+        Write-Error "##[error]Please resolve the above errors!"
+    }
+}
+
+<#
+    .SYNOPSIS
     Lints the .gitattributes file.
 
     .DESCRIPTION
@@ -14,7 +75,7 @@ $ErrorActionPreference = "Stop"
     None.
 
     .EXAMPLE
-    Import-Module Linters.psd1
+    Import-Module Linters.psm1
     Test-GitattributesFile -Verbose
 #>
 

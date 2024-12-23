@@ -27,8 +27,9 @@ jobs:
             - name: Run clang-tidy
               shell: pwsh
               run: |
-                $allFilesToLint = git ls-files -c | ForEach-Object { if ($_.Split(".")[-1] -In ("cpp", "hpp")) { $_ } }
-                foreach ($file in $allFilesToLint) { clang-tidy $file -p ./build }
+                  Import-Module ./scripts/Linters.psm1
+
+                  Test-TerminalGamesCode -Verbose
 
             - name: Build Project
               run: cmake --build ${{github.workspace}}/build --config Release
