@@ -26,9 +26,19 @@ jobs:
             - name: Configure CMake
               run: cmake -S . -B ./build -G "Ninja" -D "CMAKE_BUILD_TYPE=Release"
 
+            - name: Install ninja/clang/clang-tidy (macOS)
+              if: runner.os == macOS
+              run: |
+                  brew install llvm
+                  ln -s "$(brew --prefix llvm)/bin/clang-tidy" "/usr/local/bin/clang-tidy"
+
             - name: Run clang-tidy
               shell: pwsh
               run: |
+                  cd ./build
+                  ls
+                  cd ..
+
                   clang --version
                   clang-tidy --version
 
