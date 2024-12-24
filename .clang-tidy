@@ -1,5 +1,5 @@
 FormatStyle: "LLVM"
-Checks: "*"
+Checks: "*, -altera-struct-pack-align, -altera-id-dependent-backward-branch, -altera-unroll-loops, -boost-use-ranges, -llvmlibc-callee-namespace, -llvm-header-guard, -llvmlibc-implementation-in-namespace, -llvmlibc-inline-function-decl, -llvmlibc-restrict-system-libc-headers, -modernize-use-nodiscard, -modernize-use-trailing-return-type"
 WarningsAsErrors: "*"
 HeaderFileExtensions:
     - "hpp"
