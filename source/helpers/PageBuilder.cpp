@@ -189,6 +189,35 @@ namespace TerminalGames
         return output + GetBottomLine() + g_RESET_ANSI_COLOUR_ESCAPE_CODE;
     }
 
+    std::string PageBuilder::GetRemainingEmptyLines(const std::string &commonTopString, const std::string &commonBottomString) const
+    {
+        const int32_t remainingLineCount = static_cast<int32_t>(m_displayHeight) - ImplementStdCount(commonTopString.begin(), commonTopString.end(), '\n') - ImplementStdCount(commonBottomString.begin(), commonBottomString.end(), '\n');
+        const uint32_t emptyLinesToAddCount = remainingLineCount < 0 ? 0 : remainingLineCount;
+
+        std::string output;
+        for (uint32_t i = 0; i < emptyLinesToAddCount; i++)
+        {
+            output += GetEmptyLine();
+        }
+
+        return output;
+    }
+
+    int32_t PageBuilder::ImplementStdCount(const std::string::const_iterator &begin, const std::string::const_iterator &end, const char &character)
+    {
+        int32_t count = 0;
+
+        for (auto i = begin; i < end; i++)
+        {
+            if (*i == character)
+            {
+                ++count;
+            }
+        }
+
+        return count;
+    }
+
     std::vector<std::string> PageBuilder::GetGameSelectionMainMenuPages(const std::vector<std::string> &gameNames) const
     {
         const std::string commonTopString = GetTopBox() + GetTopLine();
@@ -723,35 +752,6 @@ namespace TerminalGames
         Output += std::string("   ") + (char)186 + "\n";
 
         return Output;
-    }
-
-    std::string PageBuilder::GetRemainingEmptyLines(const std::string &commonTopString, const std::string &commonBottomString) const
-    {
-        const int32_t remainingLineCount = m_displayHeight - ImplementStdCount(commonTopString.begin(), commonTopString.end(), '\n') - ImplementStdCount(commonBottomString.begin(), commonBottomString.end(), '\n');
-        const uint32_t emptyLinesToAddCount = remainingLineCount < 0 ? 0 : remainingLineCount;
-
-        std::string output;
-        for (uint32_t i = 0; i < emptyLinesToAddCount; i++)
-            output += GetEmptyLine();
-
-        return output;
-    }
-
-    int32_t ImplementStdCount(const std::string::const_iterator& begin, const std::string::const_iterator& end, const char& character)
-    {
-        // Dirty hack to get the CI to work as std::count fails with GNU 12.2.0
-
-        int32_t count = 0;
-
-        for (auto i = begin; i < end; i++)
-        {
-            if (*i == '\n')
-            {
-                ++count;
-            }
-        }
-
-        return count;
     }
 
     // NOLINTEND
