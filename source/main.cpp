@@ -1,7 +1,10 @@
+#include <string>
+#include <vector>
+
 #include "helpers/MainMenu.hpp"
 
 int main(int argc, char* argv[])
 {
-    MainMenu MainMenu(argc, argv);
+    TerminalGames::MainMenu MainMenu(std::vector<std::string>(argv, argv + argc)); // NOLINT(fuchsia-default-arguments-calls)
     MainMenu.Run();
 }
