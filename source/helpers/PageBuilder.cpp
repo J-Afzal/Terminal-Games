@@ -1,25 +1,30 @@
 #include <array>
 #include <cmath>
+#include <cstddef>
 #include <cstdint>
 #include <string>
 #include <unordered_map>
 #include <vector>
 
+
+#include "helpers/Constants.hpp"
 #include "helpers/Exceptions.hpp"
 #include "helpers/PageBuilder.hpp"
 
 namespace TerminalGames
 {
-    PageBuilder::PageBuilder()
-    {
-        m_displayWidth = 0;
-        m_displayHeight = 0;
-        m_onlyUseASCII = false;
-        m_topTitle = "";
-        m_currentPage = Pages::DEFAULT;
-    }
+    PageBuilder::PageBuilder() :
+        m_displayWidth(0),
+        m_displayHeight(0),
+        m_onlyUseASCII(false),
+        m_currentPage(Pages::DEFAULT)
+    {}
 
-    PageBuilder::PageBuilder(const Pages &page, const bool &onlyUseASCII)
+    PageBuilder::PageBuilder(const Pages &page, const bool &onlyUseASCII):
+        m_displayWidth(0),
+        m_displayHeight(0),
+        m_onlyUseASCII(false),
+        m_currentPage(Pages::DEFAULT)
     {
         this->SetProperties(page, onlyUseASCII);
     }
@@ -62,14 +67,22 @@ namespace TerminalGames
 
     std::string PageBuilder::AddColour(const std::string &input, const Colours &colour) const
     {
-        if (m_onlyUseASCII || colour == Colours::WHITE) // Text is already set to white.
+        if (m_onlyUseASCII)
+        {
             return input;
+        }
 
         if (colour == Colours::RED)
+        {
             return g_RED_ANSI_COLOUR_ESCAPE_CODE + input + g_WHITE_ANSI_COLOUR_ESCAPE_CODE;
+        }
 
         if (colour == Colours::BLUE)
+        {
             return g_BLUE_ANSI_COLOUR_ESCAPE_CODE + input + g_WHITE_ANSI_COLOUR_ESCAPE_CODE;
+        }
+
+        return input; // Text is already white
     }
 
     std::string PageBuilder::GetEmptyLine() const
@@ -84,10 +97,14 @@ namespace TerminalGames
 
     std::string PageBuilder::GetNewLineCentred(const std::string &input, const Colours &colour, const std::string &selector) const
     {
+        static const double divisor = 2;
+
         // Pad between input and selector if the selector has been set.
         std::string selectorPadded;
-        if (selector != "")
+        if (!selector.empty())
+        {
             selectorPadded = selector + " ";
+        }
 
         // +/- 2 = padding on either side (2) of input.
         const std::string inputTrimmed = ((input.size() + selector.size() + 2) > m_displayWidth) ? input.substr(0, m_displayWidth - selector.size() - 2) : input;
@@ -95,10 +112,10 @@ namespace TerminalGames
         std::string output;
         output += g_VERTICAL_LINE;
 
-        // If selector has not been set then selectorPadded will have no effect on code.
-        output.insert(output.size(), ceil((m_displayWidth - inputTrimmed.size()) / 2.0) - selectorPadded.size(), ' ');
+        // If selector has not been set then selectorPadded will just be a single space character.
+        output.insert(output.size(), static_cast<size_t>(ceil(static_cast<double>(m_displayWidth - inputTrimmed.size()) / divisor) - static_cast<double>(selectorPadded.size())), ' ');
         output += AddColour(selectorPadded + inputTrimmed, colour);
-        output.insert(output.size(), floor((m_displayWidth - inputTrimmed.size()) / 2.0), ' ');
+        output.insert(output.size(), static_cast<size_t>(floor(static_cast<double>(m_displayWidth - inputTrimmed.size()) / divisor)), ' ');
 
         return output + g_VERTICAL_LINE + "\n";
     }
@@ -107,11 +124,13 @@ namespace TerminalGames
     {
         // Pad due to left justification.
         std::string selectorPadded = " ";
-        if (selector != "")
+        if (!selector.empty())
+        {
             selectorPadded += selector + " ";
+        }
 
         // +/- 2 = padding on either side (2) of input.
-        const std::string inputTrimmed = ((input.size() + selector.size() + 2) > m_displayWidth) ? input.substr(0, m_displayWidth - selector.size() - 2) : input;
+        const std::string inputTrimmed = ((input.size() + selectorPadded.size()) > m_displayWidth) ? input.substr(0, m_displayWidth - selectorPadded.size()) : input;
 
         std::string output;
         output += g_VERTICAL_LINE;
@@ -178,7 +197,7 @@ namespace TerminalGames
         const std::string commonTopString = GetTopBox() + GetTopLine();
         const std::string commonBottomString = GetBottomLine() + GetBottomBox();
 
-        std::vector<std::string> output(gameNames.size());
+        std::vector<std::string> output(gameNames.size()); // NOLINT(fuchsia-default-arguments-calls)
 
         // Construct a page for each game selected.
         for (uint32_t i = 0; i < output.size(); i++)
@@ -188,15 +207,23 @@ namespace TerminalGames
             for (uint32_t j = 0; j < gameNames.size(); j++)
             {
                 if (i == j)
+                {
                     currentTopString += GetNewLineCentred(gameNames[j], Colours::BLUE, g_SELECTOR);
+                }
+
                 else
+                {
                     currentTopString += GetNewLineCentred(gameNames[j], Colours::WHITE, "");
+                }
 
                 if (j != gameNames.size() - 1) // Don't add extra line on the last game option.
+                {
                     currentTopString += GetEmptyLine();
+                }
             }
 
-            output[i] = currentTopString + GetRemainingEmptyLines(currentTopString, commonBottomString) + commonBottomString;
+            output[i] = currentTopString;
+            output[i] += GetRemainingEmptyLines(currentTopString, commonBottomString) + commonBottomString;
         }
 
         return output;
@@ -207,7 +234,7 @@ namespace TerminalGames
         const std::string commonTopString = GetTopBox() + GetTopLine() + GetGeneralGameSubPage(gameInfo) + GetEmptyLine() + GetNewLineLeftJustified(message, Colours::WHITE, "");
         const std::string commonBottomString = GetBottomLine() + GetBottomBox();
 
-        std::vector<std::string> output(options.size());
+        std::vector<std::string> output(options.size()); // NOLINT(fuchsia-default-arguments-calls)
 
         // Construct a page for each option selected.
         for (uint32_t i = 0; i < output.size(); i++)
@@ -217,13 +244,19 @@ namespace TerminalGames
             for (uint32_t j = 0; j < options.size(); j++)
             {
                 if (i == j)
+                {
                     currentTopString += GetNewLineLeftJustified(options[j], Colours::BLUE, g_SELECTOR);
+                }
+
                 else
+                {
                     // + 1 to match above statement which will have an extra pad between option and selector
                     currentTopString += GetNewLineLeftJustified(std::string(g_SELECTOR.size() + 1, ' ') + options[j], Colours::WHITE, "");
+                }
             }
 
-            output[i] = currentTopString + GetRemainingEmptyLines(currentTopString, commonBottomString) + commonBottomString;
+            output[i] = currentTopString;
+            output[i] += GetRemainingEmptyLines(currentTopString, commonBottomString) + commonBottomString;
         }
 
         return output;
@@ -234,16 +267,14 @@ namespace TerminalGames
         switch (m_currentPage)
         {
         case Pages::TICTACTOE:
-            return GetOptionSelectionPages(gameInfo, "Please select the number of players:", {"0", "1", "2"});
-
         case Pages::HANGMAN:
-            return GetOptionSelectionPages(gameInfo, "Please select the number of players:", {"0", "1", "2"});
+            return GetOptionSelectionPages(gameInfo, "Please select the number of players:", {"0", "1", "2"}); // NOLINT(fuchsia-default-arguments-calls)
 
         case Pages::BATTLESHIPS:
-            return GetOptionSelectionPages(gameInfo, "Please select the number of players:", {"0", "1"});
+            return GetOptionSelectionPages(gameInfo, "Please select the number of players:", {"0", "1"}); // NOLINT(fuchsia-default-arguments-calls)
 
         default:
-            return {"The 'GetPlayerCountOptionSelectionGameDisplays' function does not support the current page type."};
+            return {"The 'GetPlayerCountOptionSelectionGameDisplays' function does not support the current page type."}; // NOLINT(fuchsia-default-arguments-calls)
         }
     }
 
@@ -252,13 +283,13 @@ namespace TerminalGames
         switch (m_currentPage)
         {
         case Pages::TICTACTOE:
-            return GetOptionSelectionPages(gameInfo, "Please select the player you would like to be:", {"PLAYER X", "PLAYER O"});
+            return GetOptionSelectionPages(gameInfo, "Please select the player you would like to be:", {"PLAYER X", "PLAYER O"}); // NOLINT(fuchsia-default-arguments-calls)
 
         case Pages::HANGMAN:
-            return GetOptionSelectionPages(gameInfo, "Please select the player you would like to be:", {"GUESSER", "WORD SETTER"});
+            return GetOptionSelectionPages(gameInfo, "Please select the player you would like to be:", {"GUESSER", "WORD SETTER"}); // NOLINT(fuchsia-default-arguments-calls)
 
         default:
-            return {"The 'GetUserPlayerChoiceOptionSelectionGameDisplays' function does not support the current page type."};
+            return {"The 'GetUserPlayerChoiceOptionSelectionGameDisplays' function does not support the current page type."}; // NOLINT(fuchsia-default-arguments-calls)
         }
     }
 
@@ -269,10 +300,10 @@ namespace TerminalGames
         case Pages::TICTACTOE:
         case Pages::HANGMAN:
         case Pages::BATTLESHIPS:
-            return GetOptionSelectionPages(gameInfo, "Please select the AI speed:", {"INSTANT", "FAST", "SLOW"});
+            return GetOptionSelectionPages(gameInfo, "Please select the AI speed:", {"INSTANT", "FAST", "SLOW"}); // NOLINT(fuchsia-default-arguments-calls)
 
         default:
-            return {"The 'GetAISpeedOptionSelectionGameDisplays' function does not support the current page type."};
+            return {"The 'GetAISpeedOptionSelectionGameDisplays' function does not support the current page type."}; // NOLINT(fuchsia-default-arguments-calls)
         }
     }
 
@@ -298,7 +329,7 @@ namespace TerminalGames
             return GetPageWithMessage(gameInfo, gameInfo.battleshipsStruct.currentPlayer + ", please enter your next command!");
 
         default:
-            return {"The 'GetUserCommandGameDisplay' function does not support the current page type."};
+            return "The 'GetUserCommandGameDisplay' function does not support the current page type.";
         }
     }
 
@@ -312,7 +343,7 @@ namespace TerminalGames
             return GetPageWithMessage(gameInfo, "The AI is executing their next move!");
 
         default:
-            return {"The 'GetAISpeedOptionSelectionGameDisplays' function does not support the current page type."};
+            return "The 'GetAISpeedOptionSelectionGameDisplays' function does not support the current page type.";
         }
     }
 
@@ -325,16 +356,28 @@ namespace TerminalGames
         {
         case Pages::TICTACTOE:
             if (gameInfo.ticTacToeStruct.hasWinner) // This game can be drawn unlike the others.
+            {
                 topString += GetNewLineCentred(gameInfo.ticTacToeStruct.currentPlayer + " has won! The game lasted " + std::to_string(gameInfo.ticTacToeStruct.turnCount) + " turns.", Colours::WHITE, "");
+            }
+
             else
+            {
                 topString += GetNewLineCentred("The game is a draw! The game lasted " + std::to_string(gameInfo.ticTacToeStruct.turnCount) + " turns.", Colours::WHITE, "");
+            }
+
             break;
 
         case Pages::HANGMAN:
-            if (gameInfo.hangmanStruct.errorCount == 10)
+            if (gameInfo.hangmanStruct.errorCount == g_HANGMAN_MAXIMUM_ERROR_COUNT)
+            {
                 topString += GetNewLineCentred("The word setter has won! The game lasted " + std::to_string(gameInfo.hangmanStruct.turnCount) + " turns!", Colours::WHITE, "");
+            }
+
             else
+            {
                 topString += GetNewLineCentred("The guesser has won! The game lasted " + std::to_string(gameInfo.hangmanStruct.turnCount) + " turns.", Colours::WHITE, "");
+            }
+
             break;
 
         case Pages::BATTLESHIPS:
@@ -342,7 +385,7 @@ namespace TerminalGames
             break;
 
         default:
-            return {"The 'GetGameOverGameDisplay' function does not support the current page type."};
+            return "The 'GetGameOverGameDisplay' function does not support the current page type.";
         }
 
         return topString + GetRemainingEmptyLines(topString, bottomString) + bottomString;
@@ -362,10 +405,11 @@ namespace TerminalGames
             return GetBattleshipsSubPage(gameInfo);
 
         default:
-            return {"The 'GetGeneralGameDisplay' function does not support the current page type."};
+            return "The 'GetGeneralGameDisplay' function does not support the current page type.";
         }
     }
 
+    // NOLINTBEGIN
     std::string PageBuilder::GetTicTacToeSubPage(const GameInfo &gameInfo) const
     {
         const std::array<std::array<char, 3>, 3> gameGrid = gameInfo.ticTacToeStruct.gameGrid;
@@ -695,4 +739,6 @@ namespace TerminalGames
 
         return output;
     }
+
+    // NOLINTEND
 } // namespace TerminalGames
