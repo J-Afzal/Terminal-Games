@@ -6,56 +6,86 @@
 
 #include "games/Game.hpp"
 
-/**
- * @brief Orchestration class for Terminal-Games.
- */
-class MainMenu
+namespace TerminalGames
 {
-public:
     /**
-     * @brief Construct a new MainMenu object (CLI). Below are the expected arguments.
-     * 
-     * Usage: Terminal-Games [--a --ascii-only]
-     *
-     * Options:
-     *         --a --ascii-only        Only use ASCII characters.
-     * 
-     * @param argc Number of command line arguments.
-     * @param argv Command line arguments.
+     * @brief Orchestration class for Terminal-Games.
      */
-    explicit MainMenu(int argc, char* argv[]);
+    class MainMenu
+    {
+    public:
+        /**
+         * @brief Disable constructing a new Main Menu object with no arguments.
+         */
+        explicit MainMenu() = delete;
 
-    /**
-    * @brief Construct a new MainMenu object.
-    * 
-    * @param outputIsOnlyASCII Whether to use only ASCII characters (true) or to also use ANSI escapes codes (false).
-    */
-    explicit MainMenu(const bool& outputIsOnlyASCII = false);
+        /**
+         * @brief Construct a new MainMenu object (for CLI use).
+         *
+         * @param commandLineArguments List of all command line arguments
+         */
+        explicit MainMenu(const std::vector<std::string> &commandLineArguments);
 
-    /**
-     * @brief Destruct a MainMenu object.
-     */
-    ~MainMenu();
+        /**
+         * @brief Construct a new MainMenu object.
+         *
+         * @param onlyUseASCII Whether to use only ASCII characters (true) or to also use ANSI escapes codes (false).
+         */
+        explicit MainMenu(const bool &onlyUseASCII);
 
-    /**
-     * @brief Orchestration function for Terminal-Games.
-     */
-    void Run();
+        /**
+         * @brief Disable constructing a new MainMenu object using copy constructor.
+         *
+         * @param mainMenu The MainMenu to copy.
+         */
+        MainMenu(const MainMenu &mainMenu) = delete;
 
-private:
-    /**
-     * @brief Parses the passed in command line arguments. Below are the expected arguments.
-     *
-     * Usage: Terminal-Games [--a --ascii-only]
-     *
-     * Options:
-     *         --a --ascii-only        Only use ASCII characters.
-     *
-     * @param commandLineArguments List of all command line arguments
-     */
-    bool ParseCommandLineArguments(const std::vector<std::string>& commandLineArguments) const;
+        /**
+         * @brief Disable constructing a new MainMenu object using move constructor.
+         *
+         * @param mainMenu The MainMenu to copy.
+         */
+        MainMenu(const MainMenu &&mainMenu) = delete;
 
-    std::vector<std::unique_ptr<Game>> m_games;
-    std::vector<std::string> m_mainMenus;
-    bool m_outputIsOnlyASCII;
-};
+        /**
+         * @brief Disable constructing a new MainMenu object using copy assignment operator.
+         *
+         * @param mainMenu The MainMenu to copy.
+         */
+        MainMenu &operator=(const MainMenu &mainMenu) = delete;
+
+        /**
+         * @brief Disable constructing a new MainMenu object using move assignment operator.
+         *
+         * @param mainMenu The MainMenu to copy.
+         */
+        MainMenu &operator=(const MainMenu &&mainMenu) = delete;
+
+        /**
+         * @brief Destruct a MainMenu object.
+         */
+        ~MainMenu();
+
+        /**
+         * @brief Orchestration function for Terminal-Games.
+         */
+        void Run();
+
+    private:
+        /**
+         * @brief Parses the passed in command line arguments.
+         *
+         * Usage: Terminal-Games [--a --ascii-only]
+         *
+         * Options:
+         *         --a --ascii-only        Only use ASCII characters.
+         *
+         * @param commandLineArguments List of all command line arguments
+         */
+        static bool ParseCommandLineArguments(const std::vector<std::string> &commandLineArguments);
+
+        std::vector<std::unique_ptr<Game>> m_games;
+        std::vector<std::string> m_mainMenus;
+        bool m_onlyUseASCII;
+    };
+} // namespace TerminalGames

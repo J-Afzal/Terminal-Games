@@ -1,104 +1,214 @@
+// NOLINTBEGIN(misc-include-cleaner)
 #include <cstdint>
+#include <cstdlib>
 #include <iostream>
 #include <string>
 #include <vector>
 
+#ifdef _WIN32
 #include "conio.h"
 #include "Windows.h"
+#endif
 
+#include "helpers/Constants.hpp"
 #include "helpers/Exceptions.hpp"
 #include "helpers/Terminal.hpp"
 
-uint32_t Terminal::GetUserChoiceFromMainMenus(const std::vector<std::string>& menus)
+namespace TerminalGames
 {
-    uint32_t KeyPress, CurrentSelection = 0;
-    while (true)
+    uint32_t Terminal::GetUserChoiceFromMainMenus(const std::vector<std::string> &menus)
     {
-        PrintOutput(menus[CurrentSelection]);
+        uint32_t keyPress = 0;
+        uint32_t currentSelection = 0;
 
-        KeyPress = GetNextKeyPress();
+        while (true)
+        {
+            PrintOutput(menus[currentSelection]);
 
-        if (KeyPress == '\r')
-            return CurrentSelection;
-        else if (KeyPress == 72) // up arrow key
-            CurrentSelection == 0 ? CurrentSelection = (menus.size() - 1) : --CurrentSelection;
-        else if (KeyPress == 80) // down arrow key
-            CurrentSelection == (menus.size() - 1) ? CurrentSelection = 0 : ++CurrentSelection;
-        else if (KeyPress == 'q')
-            throw Exceptions::QuitMainMenu();
+            keyPress = GetNextKeyPress();
+
+            if (keyPress == g_QUIT_KEY)
+            {
+                throw Exceptions::QuitMainMenu();
+            }
+
+            if (keyPress == g_ENTER_KEY)
+            {
+                return currentSelection;
+            }
+
+            if (keyPress == g_UP_ARROW_KEY)
+            {
+                currentSelection == 0 ? currentSelection = (menus.size() - 1) : --currentSelection;
+            }
+
+            else if (keyPress == g_DOWN_ARROW_KEY)
+            {
+                currentSelection == (menus.size() - 1) ? currentSelection = 0 : ++currentSelection;
+            }
+        }
     }
-}
 
-uint32_t Terminal::GetUserChoiceFromGameMenus(const std::vector<std::string>& menus)
-{
-    uint32_t KeyPress, CurrentSelection = 0;
-    while (true)
+    uint32_t Terminal::GetUserChoiceFromGameMenus(const std::vector<std::string> &menus)
     {
-        PrintOutput(menus[CurrentSelection]);
+        uint32_t keyPress = 0;
+        uint32_t currentSelection = 0;
 
-        KeyPress = GetNextKeyPress();
+        while (true)
+        {
+            PrintOutput(menus[currentSelection]);
 
-        if (KeyPress == '\r')
-            return CurrentSelection;
-        else if (KeyPress == 72) // up arrow key
-            CurrentSelection == 0 ? CurrentSelection = (menus.size() - 1) : --CurrentSelection;
-        else if (KeyPress == 80) // down arrow key
-            CurrentSelection == (menus.size() - 1) ? CurrentSelection = 0 : ++CurrentSelection;
-        else if (KeyPress == 'q')
-            throw Exceptions::QuitGame();
+            keyPress = GetNextKeyPress();
+
+            if (keyPress == g_QUIT_KEY)
+            {
+                throw Exceptions::QuitGame();
+            }
+
+            if (keyPress == g_ENTER_KEY)
+            {
+                return currentSelection;
+            }
+
+            if (keyPress == g_UP_ARROW_KEY)
+            {
+                currentSelection == 0 ? currentSelection = (menus.size() - 1) : --currentSelection;
+            }
+
+            else if (keyPress == g_DOWN_ARROW_KEY)
+            {
+                currentSelection == (menus.size() - 1) ? currentSelection = 0 : ++currentSelection;
+            }
+        }
     }
-}
 
-void Terminal::PrintOutput(const std::string& output)
-{
-    Clear();
-    std::cout << output;
-}
+    // NOLINTBEGIN (bugprone-easily-swappable-parameters)
+    std::tuple<uint32_t, uint32_t> Terminal::GetUserCommandFromGameGrid(
+        const uint32_t &startingRow,
+        const uint32_t &startingColumn,
+        const uint32_t &maxRow,
+        const uint32_t &maxColumn,
+        const uint32_t &gridLeftPad,
+        const uint32_t &gridTopPad,
+        const uint32_t &gridElementWidth,
+        const uint32_t &gridElementHeight)
+    // NOLINTEND (bugprone-easily-swappable-parameters)
+    {
+        Terminal::SetCursorVisibility(true);
 
-void Terminal::Clear()
-{
-    // Windows API method taken from https://www.cplusplus.com/articles/4z18T05o
-    HANDLE hStdOut;
-    CONSOLE_SCREEN_BUFFER_INFO consoleScreenBufferInfo;
-    DWORD count;
-    DWORD cellCount;
-    COORD homeCoords = { 0, 0 };
+        uint32_t keyPress = 0;
+        uint32_t row = startingRow;
+        uint32_t column = startingColumn;
 
-    hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-    if (hStdOut == INVALID_HANDLE_VALUE)
-        exit(1);
+        while (true)
+        {
+            Terminal::SetCursorPosition(static_cast<int16_t>(gridLeftPad + (column * gridElementWidth)), static_cast<int16_t>(gridTopPad + (row * gridElementHeight)));
 
-    // Get the number of cells in the current buffer
-    if (!GetConsoleScreenBufferInfo(hStdOut, &consoleScreenBufferInfo))
-        exit(2);
-    cellCount = consoleScreenBufferInfo.dwSize.X * consoleScreenBufferInfo.dwSize.Y;
+            keyPress = Terminal::GetNextKeyPress();
 
-    // Fill the entire buffer with spaces
-    if (!FillConsoleOutputCharacter(hStdOut, (TCHAR)' ', cellCount, homeCoords, &count))
-        exit(3);
+            if (keyPress == g_QUIT_KEY)
+            {
+                Terminal::SetCursorVisibility(false);
+                throw Exceptions::QuitGame();
+            }
 
-    // Fill the entire buffer with the current colors and attributes
-    if (!FillConsoleOutputAttribute(hStdOut, consoleScreenBufferInfo.wAttributes, cellCount, homeCoords, &count))
-        exit(4);
+            if (keyPress == g_ENTER_KEY)
+            {
+                Terminal::SetCursorVisibility(false);
+                return {row, column};
+            }
 
-    // Move the cursor home
-    SetConsoleCursorPosition(hStdOut, homeCoords);
-}
+            if (keyPress == g_UP_ARROW_KEY)
+            {
+                row == 0 ? row = maxRow : --row;
+            }
 
-uint32_t Terminal::GetNextKeyPress()
-{
-    FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE));
-    return _getch();
-}
+            else if (keyPress == g_DOWN_ARROW_KEY)
+            {
+                row == maxRow ? row = 0 : ++row;
+            }
 
-void Terminal::SetCursorVisibility(const bool& cursorVisibility)
-{
-    CONSOLE_CURSOR_INFO cursorInfo(100, cursorVisibility);
-    SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursorInfo);
-}
+            else if (keyPress == g_LEFT_ARROW_KEY)
+            {
+                column == 0 ? column = maxColumn : --column;
+            }
 
-void Terminal::SetCursorPosition(const uint32_t& x, const uint32_t& y)
-{
-    COORD cursorPosition(x, y);
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), cursorPosition);
-}
+            else if (keyPress == g_RIGHT_ARROW_KEY)
+            {
+                column == maxColumn ? column = 0 : ++column;
+            }
+        }
+    }
+
+    void Terminal::PrintOutput(const std::string &output)
+    {
+        Clear();
+        std::cout << output;
+    }
+
+    void Terminal::Clear()
+    {
+#ifdef _WIN32
+        // Windows API method taken from https://www.cplusplus.com/articles/4z18T05o
+        const COORD homeCoords = {0, 0};
+        CONSOLE_SCREEN_BUFFER_INFO consoleScreenBufferInfo;
+        DWORD count = 0;
+        DWORD cellCount = 0;
+
+        HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+        if (hStdOut == INVALID_HANDLE_VALUE)
+        {
+            std::exit(1); // NOLINT(concurrency-mt-unsafe)
+        }
+
+        // Get the number of cells in the current buffer
+        if (!static_cast<bool>(GetConsoleScreenBufferInfo(hStdOut, &consoleScreenBufferInfo)))
+        {
+            std::exit(2); // NOLINT(concurrency-mt-unsafe)
+        }
+        cellCount = consoleScreenBufferInfo.dwSize.X * consoleScreenBufferInfo.dwSize.Y;
+
+        // Fill the entire buffer with spaces
+        if (!FillConsoleOutputCharacter(hStdOut, ' ', cellCount, homeCoords, &count))
+        {
+            std::exit(3); // NOLINT(concurrency-mt-unsafe)
+        }
+
+        // Fill the entire buffer with the current colors and attributes
+        if (!static_cast<bool>(FillConsoleOutputAttribute(hStdOut, consoleScreenBufferInfo.wAttributes, cellCount, homeCoords, &count)))
+        {
+            std::exit(4); // NOLINT(concurrency-mt-unsafe)
+        }
+
+        // Move the cursor home
+        SetConsoleCursorPosition(hStdOut, homeCoords);
+#endif
+    }
+
+    uint32_t Terminal::GetNextKeyPress()
+    {
+#ifdef _WIN32
+        FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE));
+        return _getch();
+#else
+        return 0;
+#endif
+    }
+
+    void Terminal::SetCursorVisibility(const bool &cursorVisibility)
+    {
+#ifdef _WIN32
+        const CONSOLE_CURSOR_INFO cursorInfo(g_CURSOR_WIDTH_PERCENTAGE, static_cast<int>(cursorVisibility));
+        SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursorInfo);
+#endif
+    }
+
+    void Terminal::SetCursorPosition(const int16_t &xCoord, const int16_t &yCoord)
+    {
+#ifdef _WIN32
+        const COORD cursorPosition(xCoord, yCoord);
+        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), cursorPosition);
+#endif
+    }
+} // namespace TerminalGames
+// NOLINTEND(misc-include-cleaner)

@@ -3,26 +3,55 @@ name: Continuous Integration
 run-name: CI - ${{ github.run_number }} - ${{ github.head_ref }}
 
 on:
-  pull_request:
-    branches: 
-      - master
+    pull_request:
+        branches:
+            - master
 
 jobs:
-  build:
-    strategy:
-      matrix:
-        os:
-          # - macos-latest
-          # - ubuntu-latest
-          - windows-latest
+    build:
+        strategy:
+            matrix:
+                os:
+                    - macos-latest
+                    #- ubuntu-latest
+                    - windows-latest
 
-    runs-on: ${{ matrix.os }}
+        runs-on: ${{ matrix.os }}
 
-    steps:
-      - uses: actions/checkout@v4
+        steps:
+            - uses: actions/checkout@v4
 
-      - name: Configure CMake
-        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=Release
+            - name: Configure CMake
+              run: cmake -S . -B ./build -D "CMAKE_BUILD_TYPE=Release"
 
-      - name: Build Project
-        run: cmake --build ${{github.workspace}}/build --config Release     
+            - name: Build Project
+              run: cmake --build ./build --config Release
+
+    linting:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Install dev dependencies
+              run: npm install
+
+            - name: Run cspell
+              run: npx cspell .
+
+            - name: Run prettier (for JSON linting)
+              if: success() || failure()
+              run: npx prettier . --check
+
+            - name: Run PSScriptAnalyzer (for PowerShell linting)
+              if: success() || failure()
+              shell: pwsh
+              run: Invoke-ScriptAnalyzer -Path . -Recurse -Severity Information
+
+            - name: Run gitattributes linter
+              if: success() || failure()
+              shell: pwsh
+              run: |
+                  Import-Module ./scripts/Linters.psm1
+
+                  Test-GitAttributesFile -Verbose

@@ -1,0 +1,21 @@
+version: "0.2"
+language: en-gb
+ignorePaths:
+    - build/
+    - LICENSE
+words:
+    - bugprone
+    - endgroup
+    - linters
+    - pwsh
+ignoreWords:
+    - altera
+    - analyzer
+    - ctest
+    - hicpp
+    - lastexitcode
+    - libc
+    - llvmlibc
+    - msvc
+    - nodiscard
+    - tictactoe
