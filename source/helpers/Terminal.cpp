@@ -5,8 +5,10 @@
 #include <string>
 #include <vector>
 
+#ifdef _WIN32
 #include "conio.h"
 #include "Windows.h"
+#endif
 
 #include "helpers/Constants.hpp"
 #include "helpers/Exceptions.hpp"
@@ -146,6 +148,7 @@ namespace TerminalGames
 
     void Terminal::Clear()
     {
+#ifdef _WIN32
         // Windows API method taken from https://www.cplusplus.com/articles/4z18T05o
         const COORD homeCoords = {0, 0};
         CONSOLE_SCREEN_BUFFER_INFO consoleScreenBufferInfo;
@@ -179,24 +182,33 @@ namespace TerminalGames
 
         // Move the cursor home
         SetConsoleCursorPosition(hStdOut, homeCoords);
+#endif
     }
 
     uint32_t Terminal::GetNextKeyPress()
     {
+#ifdef _WIN32
         FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE));
         return _getch();
+#else
+        return 0;
+#endif
     }
 
     void Terminal::SetCursorVisibility(const bool &cursorVisibility)
     {
+#ifdef _WIN32
         const CONSOLE_CURSOR_INFO cursorInfo(g_CURSOR_WIDTH_PERCENTAGE, static_cast<int>(cursorVisibility));
         SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursorInfo);
+#endif
     }
 
     void Terminal::SetCursorPosition(const int16_t &xCoord, const int16_t &yCoord)
     {
+#ifdef _WIN32
         const COORD cursorPosition(xCoord, yCoord);
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), cursorPosition);
+#endif
     }
 } // namespace TerminalGames
 // NOLINTEND(misc-include-cleaner)
