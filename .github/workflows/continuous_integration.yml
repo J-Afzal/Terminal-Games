@@ -23,7 +23,7 @@ jobs:
 
             - name: Configure CMake
               run: |
-                  cmake -E capabilities
+                  clang --version
                   cmake -S . -B ./build -G "Ninja" -DCMAKE_BUILD_TYPE=Release
 
             - name: Run clang-tidy
