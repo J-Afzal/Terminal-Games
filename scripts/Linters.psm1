@@ -57,7 +57,14 @@ function Test-TerminalGamesCode {
     }
 
     if ($filesWithErrors.Count -gt 0) {
+        Write-Output "##[debug]The following files do not conform to standards:"
+        $filesWithErrors | ForEach-Object { "##[debug]$_" } | Write-Output
         Write-Error "##[error]Please resolve the above errors!"
+    }
+
+    else
+    {
+        Write-Output "##[section]Terminal Games code conforms to standards."
     }
 }
 
@@ -227,8 +234,6 @@ function Test-GitAttributesFile {
 
 
     Write-Verbose "##[debug]Finished checking that all unique files without a file extension have a .gitattributes entry."
-
-    $errors = @()
 
     if ($fileExtensionsMissingGitattributes.Length -gt 0) {
         Write-Output "##[error]Standards require the following file extensions (and files without a file extension) to have an explicit entry in .gitattributes:"
