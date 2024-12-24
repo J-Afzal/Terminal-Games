@@ -29,6 +29,9 @@ jobs:
             - name: Run clang-tidy
               shell: pwsh
               run: |
+                  clang --version
+                  clang-tidy --version
+
                   Import-Module ./scripts/Linters.psm1
 
                   Test-TerminalGamesCode -Verbose
