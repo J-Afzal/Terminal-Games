@@ -2,7 +2,7 @@
 
 #include <exception>
 
-namespace Exceptions
+namespace TerminalGames::Exceptions
 {
     /**
      * @brief Used to quit the main menu.
@@ -23,4 +23,5 @@ namespace Exceptions
      * @brief Used for functionality that has not been implemented.
      */
     class NotImplementedError : public std::exception {};
-}
+
+} // namespace TerminalGames::Exceptions
