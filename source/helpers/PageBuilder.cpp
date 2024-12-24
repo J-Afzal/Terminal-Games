@@ -279,7 +279,7 @@ namespace TerminalGames
     std::string PageBuilder::GetPageWithMessage(const GameInfo &gameInfo, const std::string &message) const
     {
         const std::string commonTopString = GetTopBox() + GetTopLine() + GetGeneralGameSubPage(gameInfo) + GetEmptyLine() + GetNewLineLeftJustified(message, Colours::WHITE, "");
-        const std::string commonBottomString = GetBottomLine() + GetTopBox();
+        const std::string commonBottomString = GetBottomLine() + GetBottomBox();
 
         return commonTopString + GetRemainingEmptyLines(commonTopString, commonBottomString) + commonBottomString;
     }
