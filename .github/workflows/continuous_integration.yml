@@ -21,18 +21,11 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
-            - uses: msys2/setup-msys2@v2
-              with:
-                  update: true
-                  install: >-
-                      mingw-w64-x86_64-ninja
-
-            - name: Put MSYS2_MinGW64 on PATH
-              run: echo "D:/a/_temp/msys64/mingw64/bin" >> $GITHUB_PATH
+            - uses: lukka/get-cmake@latest
 
             - name: Configure CMake
               run: |
-                  cmake -S . -B ./build -G "Ninja" -DCMAKE_BUILD_TYPE=Release
+                  cmake -S . -B ./build -G "Ninja" -D "CMAKE_BUILD_TYPE=Release"
 
             - name: Run clang-tidy
               shell: pwsh

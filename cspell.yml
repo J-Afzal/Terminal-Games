@@ -12,7 +12,6 @@ ignoreWords:
     - altera
     - analyzer
     - ctest
-    - dcmake
     - hicpp
     - lastexitcode
     - libc
