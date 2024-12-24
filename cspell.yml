@@ -3,13 +3,13 @@ language: en-gb
 ignorePaths:
     - LICENSE
 words:
-    - ctest
     - endgroup
     - Linters
-    - markdownlint
     - pwsh
 ignoreWords:
     - Analyzer
+    - ctest
     - DCMAKE
     - msvc
     - TICTACTOE
+    - LASTEXITCODE
