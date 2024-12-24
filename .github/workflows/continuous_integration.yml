@@ -21,11 +21,10 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
-            # - uses: lukka/get-cmake@latest
+            - uses: lukka/get-cmake@latest
 
             - name: Configure CMake
-              run: |
-                  cmake -S . -B ./build -D "CMAKE_BUILD_TYPE=Release"
+              run: cmake -S . -B ./build -G "Ninja" -D "CMAKE_BUILD_TYPE=Release"
 
             - name: Run clang-tidy
               shell: pwsh
