@@ -191,7 +191,7 @@ namespace TerminalGames
 
     std::string PageBuilder::GetRemainingEmptyLines(const std::string &commonTopString, const std::string &commonBottomString) const
     {
-        const int32_t remainingLineCount = static_cast<int32_t>(m_displayHeight) - ImplementStdCount(commonTopString.begin(), commonTopString.end(), '\n') - ImplementStdCount(commonBottomString.begin(), commonBottomString.end(), '\n');
+        const int32_t remainingLineCount = static_cast<int32_t>(m_displayHeight) - std::count(commonTopString.begin(), commonTopString.end(), '\n') - std::count(commonBottomString.begin(), commonBottomString.end(), '\n');
         const uint32_t emptyLinesToAddCount = remainingLineCount < 0 ? 0 : remainingLineCount;
 
         std::string output;

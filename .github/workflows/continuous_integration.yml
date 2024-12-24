@@ -25,7 +25,7 @@ jobs:
 
             - name: Configure CMake
               run: |
-                  cmake -S . -B ./build -G "Ninja" -D "CMAKE_BUILD_TYPE=Release"
+                  cmake -S . -B ./build -D "CMAKE_BUILD_TYPE=Release"
 
             - name: Run clang-tidy
               shell: pwsh
