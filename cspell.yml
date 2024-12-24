@@ -1,15 +1,22 @@
 version: "0.2"
 language: en-gb
 ignorePaths:
+    - build/
     - LICENSE
 words:
+    - bugprone
     - endgroup
-    - Linters
+    - linters
     - pwsh
 ignoreWords:
-    - Analyzer
+    - altera
+    - analyzer
     - ctest
-    - DCMAKE
+    - dcmake
+    - hicpp
+    - lastexitcode
+    - libc
+    - llvmlibc
     - msvc
-    - TICTACTOE
-    - LASTEXITCODE
+    - nodiscard
+    - tictactoe

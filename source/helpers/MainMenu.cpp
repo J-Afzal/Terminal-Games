@@ -18,7 +18,7 @@ namespace TerminalGames
 
     MainMenu::MainMenu(const bool &onlyUseASCII) : m_onlyUseASCII(onlyUseASCII) {}
 
-    bool MainMenu::ParseCommandLineArguments(const std::vector<std::string>& commandLineArguments)
+    bool MainMenu::ParseCommandLineArguments(const std::vector<std::string> &commandLineArguments)
     {
         if (commandLineArguments.size() == 1) // Default if no CLI args given.
         {

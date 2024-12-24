@@ -24,42 +24,42 @@ namespace TerminalGames
          *
          * @param commandLineArguments List of all command line arguments
          */
-        explicit MainMenu(const std::vector<std::string>& commandLineArguments);
+        explicit MainMenu(const std::vector<std::string> &commandLineArguments);
 
         /**
          * @brief Construct a new MainMenu object.
          *
          * @param onlyUseASCII Whether to use only ASCII characters (true) or to also use ANSI escapes codes (false).
          */
-        explicit MainMenu(const bool& onlyUseASCII);
+        explicit MainMenu(const bool &onlyUseASCII);
 
         /**
          * @brief Disable constructing a new MainMenu object using copy constructor.
          *
          * @param mainMenu The MainMenu to copy.
          */
-        MainMenu(const MainMenu& mainMenu) = delete;
+        MainMenu(const MainMenu &mainMenu) = delete;
 
         /**
          * @brief Disable constructing a new MainMenu object using move constructor.
          *
          * @param mainMenu The MainMenu to copy.
          */
-        MainMenu(const MainMenu&& mainMenu) = delete;
+        MainMenu(const MainMenu &&mainMenu) = delete;
 
         /**
          * @brief Disable constructing a new MainMenu object using copy assignment operator.
          *
          * @param mainMenu The MainMenu to copy.
          */
-        MainMenu &operator=(const MainMenu& mainMenu) = delete;
+        MainMenu &operator=(const MainMenu &mainMenu) = delete;
 
         /**
          * @brief Disable constructing a new MainMenu object using move assignment operator.
          *
          * @param mainMenu The MainMenu to copy.
          */
-        MainMenu &operator=(const MainMenu&& mainMenu) = delete;
+        MainMenu &operator=(const MainMenu &&mainMenu) = delete;
 
         /**
          * @brief Destruct a MainMenu object.
@@ -82,7 +82,7 @@ namespace TerminalGames
          *
          * @param commandLineArguments List of all command line arguments
          */
-        static bool ParseCommandLineArguments(const std::vector<std::string>& commandLineArguments);
+        static bool ParseCommandLineArguments(const std::vector<std::string> &commandLineArguments);
 
         std::vector<std::unique_ptr<Game>> m_games;
         std::vector<std::string> m_mainMenus;

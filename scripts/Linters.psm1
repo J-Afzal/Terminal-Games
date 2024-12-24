@@ -30,8 +30,8 @@ function Test-TerminalGamesCode {
 
     $allFilesToTest = git ls-files -c | ForEach-Object { if ($_.Split(".")[-1] -In ("cpp", "hpp")) { "./$_" } }
 
-    Write-Output "##[debug]Retrieved all files to analyse:"
-    $allFilesToTest | ForEach-Object { "##[debug]'$_'" } | Write-Output
+    Write-Verbose "##[debug]Retrieved all files to analyse:"
+    $allFilesToTest | ForEach-Object { "##[debug]'$_'" } | Write-Verbose
 
     Write-Output "##[endgroup]"
 
@@ -44,7 +44,7 @@ function Test-TerminalGamesCode {
 
         $ErrorActionPreference = "Continue"
 
-        (clang-tidy $file -p ./build 2>&1) | ForEach-Object { "##[debug]$_" } | Write-Output
+        (clang-tidy $file -p ./build 2>&1) | ForEach-Object { "##[debug]$_" } | Write-Verbose
 
         $ErrorActionPreference = "Stop"
 
@@ -57,8 +57,8 @@ function Test-TerminalGamesCode {
     }
 
     if ($filesWithErrors.Count -gt 0) {
-        Write-Output "##[debug]The following files do not conform to standards:"
-        $filesWithErrors | ForEach-Object { "##[debug]$_" } | Write-Output
+        Write-Verbose "##[debug]The following files do not conform to standards:"
+        $filesWithErrors | ForEach-Object { "##[debug]$_" } | Write-Verbose
         Write-Error "##[error]Please resolve the above errors!"
     }
 

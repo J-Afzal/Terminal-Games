@@ -70,14 +70,13 @@ namespace TerminalGames
     void Hangman::UpdateGameInfo()
     {
         m_gameInfo.hangmanStruct = {
-            .incorrectGuesses=m_incorrectGuesses,
-            .currentGuessOfWord=m_currentGuessOfWord,
-            .wordToBeGuessed=m_wordToBeGuessed,
-            .playerCount=m_playerCount,
-            .AISpeedName=m_AISpeedName,
-            .errorCount=m_errorCount,
-            .turnCount=m_turnCount
-        };
+            .incorrectGuesses = m_incorrectGuesses,
+            .currentGuessOfWord = m_currentGuessOfWord,
+            .wordToBeGuessed = m_wordToBeGuessed,
+            .playerCount = m_playerCount,
+            .AISpeedName = m_AISpeedName,
+            .errorCount = m_errorCount,
+            .turnCount = m_turnCount};
     }
 
     void Hangman::GetUserOptions()

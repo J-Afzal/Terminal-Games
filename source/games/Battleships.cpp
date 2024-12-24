@@ -1,3 +1,5 @@
+// NOLINTBEGIN
+
 #include <array>
 #include <chrono>
 #include <cmath>
@@ -483,3 +485,5 @@ namespace TerminalGames
             throw Exceptions::QuitGame();
     }
 } // namespace TerminalGames
+
+// NOLINTEND

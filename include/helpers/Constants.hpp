@@ -74,7 +74,6 @@ namespace TerminalGames
     static constexpr uint32_t g_HANGMAN_MAXIMUM_WORD_LENGTH = 14;
     static constexpr uint32_t g_HANGMAN_MAXIMUM_ERROR_COUNT = 10;
 
-
     /**
      * @brief Battleships
      */

@@ -28,7 +28,7 @@ namespace TerminalGames
         GameInfo m_gameInfo;
         std::default_random_engine m_randomNumberGenerator;
         std::array<std::array<char, g_TICTACTOE_BOARD_WIDTH>, g_TICTACTOE_BOARD_HEIGHT> m_gameGrid;
-        std::vector<std::tuple<uint32_t,uint32_t>> m_movesRemaining;
+        std::vector<std::tuple<uint32_t, uint32_t>> m_movesRemaining;
         std::string m_currentPlayer, m_playerCount, m_userPlayerChoice, m_AISpeedName;
         uint32_t m_turnCount, m_AISpeed;
         bool m_hasWinner;
@@ -91,18 +91,18 @@ namespace TerminalGames
         void ExecuteAICommand() override;
 
         /**
-         * @brief
+         * @brief Checks whether the command is valid.
          *
-         * @param command
-         * @return true
-         * @return false
+         * @param command The command in the form of <row, column>.
+         * @return true If the command is valid.
+         * @return false If the command is not valid.
          */
         bool ValidateCommand(const std::tuple<uint32_t, uint32_t> &command);
 
         /**
-         * @brief
+         * @brief Executes the command against the game grid.
          *
-         * @param command
+         * @param command The command in the form of <row, column>.
          */
         void ExecuteGeneralCommand(const std::tuple<uint32_t, uint32_t> &command);
 

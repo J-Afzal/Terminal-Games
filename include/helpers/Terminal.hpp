@@ -39,17 +39,18 @@ namespace TerminalGames
         static uint32_t GetUserChoiceFromGameMenus(const std::vector<std::string> &menus);
 
         /**
-         * @brief Get the User Command From Game Grid object
+         * @brief Gets a user command based on the currently displayed game grid. Most of the parameters are to enable the
+         * correct alignment of the cursor for different game grid sizes.
          *
-         * @param startingRow
-         * @param startingColumn
-         * @param maxRow
-         * @param maxColumn
-         * @param gridLeftPad
-         * @param gridTopPad
-         * @param gridElementWidth
-         * @param gridElementHeight
-         * @return std::tuple<uint32_t, uint32_t>
+         * @param startingRow The initial row to place the cursor.
+         * @param startingColumn The initial column to place the cursor.
+         * @param maxRow The maximum number of rows to limit the cursor.
+         * @param maxColumn The maximum number of columns to limit the cursor.
+         * @param gridLeftPad The amount of padding between the left edge of the terminal and game grid.
+         * @param gridTopPad The amount of padding between the top edge of the terminal and game grid.
+         * @param gridElementWidth The number of characters wide for a specific grid element in the game grid.
+         * @param gridElementHeight The number of characters tall for a specific grid element in the game grid.
+         * @return std::tuple<uint32_t, uint32_t> The user command from the user in the for <row, column>.
          */
         static std::tuple<uint32_t, uint32_t> GetUserCommandFromGameGrid(
             const uint32_t &startingRow,

@@ -6,25 +6,22 @@
 #include <unordered_map>
 #include <vector>
 
-
 #include "helpers/Constants.hpp"
 #include "helpers/Exceptions.hpp"
 #include "helpers/PageBuilder.hpp"
 
 namespace TerminalGames
 {
-    PageBuilder::PageBuilder() :
-        m_displayWidth(0),
-        m_displayHeight(0),
-        m_onlyUseASCII(false),
-        m_currentPage(Pages::DEFAULT)
+    PageBuilder::PageBuilder() : m_displayWidth(0),
+                                 m_displayHeight(0),
+                                 m_onlyUseASCII(false),
+                                 m_currentPage(Pages::DEFAULT)
     {}
 
-    PageBuilder::PageBuilder(const Pages &page, const bool &onlyUseASCII):
-        m_displayWidth(0),
-        m_displayHeight(0),
-        m_onlyUseASCII(false),
-        m_currentPage(Pages::DEFAULT)
+    PageBuilder::PageBuilder(const Pages &page, const bool &onlyUseASCII) : m_displayWidth(0),
+                                                                            m_displayHeight(0),
+                                                                            m_onlyUseASCII(false),
+                                                                            m_currentPage(Pages::DEFAULT)
     {
         this->SetProperties(page, onlyUseASCII);
     }

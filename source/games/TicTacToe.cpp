@@ -43,13 +43,12 @@ namespace TerminalGames
     void TicTacToe::UpdateGameInfo()
     {
         m_gameInfo.ticTacToeStruct = {
-            .gameGrid=m_gameGrid,
-            .currentPlayer=m_currentPlayer,
-            .playerCount=m_playerCount,
-            .AISpeedName=m_AISpeedName,
-            .turnCount=m_turnCount,
-            .hasWinner=m_hasWinner
-        };
+            .gameGrid = m_gameGrid,
+            .currentPlayer = m_currentPlayer,
+            .playerCount = m_playerCount,
+            .AISpeedName = m_AISpeedName,
+            .turnCount = m_turnCount,
+            .hasWinner = m_hasWinner};
     }
 
     void TicTacToe::GetUserOptions()
@@ -174,14 +173,14 @@ namespace TerminalGames
         }
     }
 
-    bool TicTacToe::ValidateCommand(const std::tuple<uint32_t, uint32_t>& command)
+    bool TicTacToe::ValidateCommand(const std::tuple<uint32_t, uint32_t> &command)
     {
         const auto commandPosition = std::ranges::find(m_movesRemaining.begin(), m_movesRemaining.end(), command, {});
 
         return commandPosition != m_movesRemaining.end();
     }
 
-    void TicTacToe::ExecuteGeneralCommand(const std::tuple<uint32_t, uint32_t>& command)
+    void TicTacToe::ExecuteGeneralCommand(const std::tuple<uint32_t, uint32_t> &command)
     {
         const auto commandPosition = std::ranges::find(m_movesRemaining.begin(), m_movesRemaining.end(), command, {});
 
