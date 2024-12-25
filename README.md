@@ -1,48 +1,134 @@
 # Terminal Games
 
-## About
+Simple games that run in the terminal.
 
-Simple games that run in the terminal. The project is run by instantiating the `MainMenu` class, optionally passing a bool to
-enable or disable ASCII only mode, and then calling its `Run()` method.
+[![Continuous Integration](https://github.com/J-Afzal/Terminal-Games/actions/workflows/continuous_integration.yml/badge.svg)](https://github.com/J-Afzal/Terminal-Games/actions/workflows/continuous_integration.yml)
 
-- For all games:
-    - All menus can be navigated using the arrow keys
-    - 2 players = user vs user, 1 player = user vs computer, and 0 players = computer vs computer
-    - AI = Random command/letter/move selection by computer
-- For Hangman:
-    - The word to be guessed must be 3-14 characters long and contain only letters
-    - Guesses can only be a single letter at a time
-    - When guessing, you can use the up/down arrow keys to scroll through the available letters or press a letter key to
-      select it (please note that pressing q here will quit to the main menu)
-- For Battleships:
-    - Selecting ship positions must be done in either an incrementing or decrementing order with respect to the co-ordinates
-    - Backspace can be used to undo a ship co-ordinate selection for a ship that has not been placed on the board
+## Getting Started
 
-## Building [![CMake](https://github.com/J-Afzal/Terminal-Games/workflows/CMake/badge.svg)](https://github.com/J-Afzal/Terminal-Games/actions/workflows/cmake.yml)
-
-Use the following CMake command in the project root directory:
+CMake can be used to build the project:
 
 ```cmd
-cmake -S . -B build
+git clone https://github.com/J-Afzal/Terminal-Games.git
+cd Terminal-Games
+cmake -S . -B ./build -D "CMAKE_BUILD_TYPE=Release"
+cmake --build ./build --config Release
 ```
 
-## Warning
+The executable can be called from the command line:
 
-Due to the use of `Windows.h` and ANSI colour escape codes, this project has only been tested on Windows using either the
-Visual Studio Terminal or the Visual Studio Code Integrated PowerShell Terminal.
+```cmd
+./build/terminal-games
+```
 
-## Main Menu GIF
+Here are the full list of options:
 
-![Main Menu GIF](screenshots/MainMenu.gif "Main Menu GIF")
+```cmd
+Usage: terminal-games [options]
 
-## Tic Tac Toe GIF
+OPTIONS:
 
-![Tic Tac Toe GIF](screenshots/TicTacToe.gif "Tic Tac Toe GIF")
+Generic Options:
 
-## Hangman GIF
+  --help            Display available options.
 
-![Hangman GIF](screenshots/Hangman.gif "Hangman GIF")
+terminal-games options:
 
-## Battleships GIF
+  --a --ascii-only  Only use ASCII characters (this removes all colour).
+```
 
-![Battleships GIF](screenshots/Battleships.gif "Battleships GIF")
+## General Information
+
+**Feature:** Pressing the `q` key on most screens within `terminal-games` will quit to the main menu if within a game and quit
+the program if within the main menu.
+
+![Main Menu](./resources/screenshots/mainmenu.png =600x "Main Menu")
+
+### Tic Tac Toe
+
+**Supports:** 2 players (user vs user), 1 player (user vs computer) and 0 players (computer vs computer).
+
+**Features:** The arrow keys can be used to navigate the board.
+
+**Note:** The computer's choices are random.
+
+![Tic Tac Toe](./resources/screenshots/tictactoe.png =600x "Tic Tac Toe")
+
+### Hangman
+
+**Supports:** 2 players (user vs user), 1 player (user vs computer) and 0 players (computer vs computer).
+
+**Constraints:** The word to be guessed must be 3-14 characters long and contain only letters. Only a single letter can be
+guessed at a time.
+
+**Features:** When guessing, you can use the up/down arrow keys to scroll through the available letters or press a letter key to
+select it (please note that pressing q here will quit to the main menu).
+
+**Note:** The computer's choices are random when selecting a letter to guess and when selecting a word to be guessed (from the
+`./resources/words.txt` file).
+
+![Hangman](./resources/screenshots/hangman.png =600x "Hangman")
+
+### Battleships
+
+**Supports:** 1 player (user vs computer) and 0 players (computer vs computer).
+
+**Features:** The arrow keys can be used to navigate the board. Selecting ship positions can be done in either an incrementing
+or decrementing order with respect to the co-ordinates. Backspace can be used to undo a ship co-ordinate selection for a ship
+that has not been completely placed on the board.
+
+**Note:** The computer's choices are random for both selecting where to place ships and where to attack.
+
+![Battleships](./resources/screenshots/battleships.png =600x "Battleships")
+
+## Development Setup
+
+For development a few extra tools are needed.
+
+### Node
+
+Install the Node (>= v22.12.0) dependencies to run the `cspell` and `prettier` linters:
+
+```cmd
+npm install
+cspell .
+prettier . --check
+```
+
+### PowerShell
+
+Install PowerShell to run the ScriptAnalyzer and custom scripts:
+
+```ps1
+Invoke-ScriptAnalyzer -Path . -Recurse -Severity Information
+
+Import-Module ./scripts/Linters.psm1
+Test-GitAttributesFile -Verbose
+```
+
+### Clang
+
+Install `clang` and `clang-tidy` (>= version 19.1.6). On windows you can download and run the `LLVM-19.1.6-win64.exe` binary
+from the [LLVM release page](https://github.com/llvm/llvm-project/releases/tag/llvmorg-19.1.6).
+
+```cmd
+clang-tidy [file] -p ./build
+```
+
+Or you can use the custom linter script to run `clang-tidy` against the entire repository:
+
+```ps1
+Import-Module ./scripts/Linters.psm1
+Test-TerminalGamesCode -Verbose
+```
+
+:warning:
+CMake must be configured using a generator that creates a `compile_commands.json` file in the build directory before running
+`clang-tidy` (e.g. `-G "Ninja"`, `-G "NMake Makefiles"`, etc)
+:warning:
+
+### IDE
+
+On Windows, Visual Studio 2022 can be used by opening the folder as a CMake project and Visual Studio Code can be used by
+opening the folder through the `Developer PowerShell for VS` (otherwise you may see errors around cl.exe not being found).
+
