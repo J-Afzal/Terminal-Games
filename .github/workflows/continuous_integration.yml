@@ -27,7 +27,7 @@ jobs:
                   if ("${{ matrix.os }}" -eq "macos-latest")
                   {
                       cmake --version
-                      ninja --version
+                      # ninja --version
                       clang --version
                       # clang-tidy --version
 
