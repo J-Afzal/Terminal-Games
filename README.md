@@ -42,7 +42,7 @@ terminal-games options:
 **Feature:** Pressing the `q` key on most screens within `terminal-games` will quit to the main menu if within a game and quit
 the program if within the main menu.
 
-![Main Menu](./resources/screenshots/mainmenu.png =600x "Main Menu")
+![Main Menu](./resources/screenshots/mainmenu.png "Main Menu")
 
 ### Tic Tac Toe
 
@@ -52,7 +52,7 @@ the program if within the main menu.
 
 **Note:** The computer's choices are random.
 
-![Tic Tac Toe](./resources/screenshots/tictactoe.png =600x "Tic Tac Toe")
+![Tic Tac Toe](./resources/screenshots/tictactoe.png "Tic Tac Toe")
 
 ### Hangman
 
@@ -67,7 +67,7 @@ select it (please note that pressing q here will quit to the main menu).
 **Note:** The computer's choices are random when selecting a letter to guess and when selecting a word to be guessed (from the
 `./resources/words.txt` file).
 
-![Hangman](./resources/screenshots/hangman.png =600x "Hangman")
+![Hangman](./resources/screenshots/hangman.png "Hangman")
 
 ### Battleships
 
@@ -79,7 +79,7 @@ that has not been completely placed on the board.
 
 **Note:** The computer's choices are random for both selecting where to place ships and where to attack.
 
-![Battleships](./resources/screenshots/battleships.png =600x "Battleships")
+![Battleships](./resources/screenshots/battleships.png "Battleships")
 
 ## Development Setup
 
