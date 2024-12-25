@@ -1,6 +1,4 @@
 // NOLINTBEGIN
-#pragma once
-
 #include <array>
 #include <chrono>
 #include <cmath>
@@ -421,7 +419,7 @@ namespace TerminalGames
             }
 
             command = row * 10 + Column;
-            auto CommandPosition = std::ranges::find(m_movesRemainingOne.begin(), m_movesRemainingOne.end(), command);
+            auto CommandPosition = ImplementStdRangesFind(m_movesRemainingOne.begin(), m_movesRemainingOne.end(), command);
 
             if (CommandPosition != m_movesRemainingOne.end())
             {
@@ -472,7 +470,7 @@ namespace TerminalGames
         else
             opponentBoard[row][column] = '.';
 
-        commandsRemaining.erase(std::ranges::find(commandsRemaining.begin(), commandsRemaining.end(), command));
+        commandsRemaining.erase(ImplementStdRangesFind(commandsRemaining.begin(), commandsRemaining.end(), command));
 
         m_turnCount++;
     }

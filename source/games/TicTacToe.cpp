@@ -175,14 +175,14 @@ namespace TerminalGames
 
     bool TicTacToe::ValidateCommand(const std::tuple<uint32_t, uint32_t> &command)
     {
-        const auto commandPosition = std::ranges::find(m_movesRemaining.begin(), m_movesRemaining.end(), command, {});
+        const auto commandPosition = ImplementStdRangesFind(m_movesRemaining.begin(), m_movesRemaining.end(), command);
 
         return commandPosition != m_movesRemaining.end();
     }
 
     void TicTacToe::ExecuteGeneralCommand(const std::tuple<uint32_t, uint32_t> &command)
     {
-        const auto commandPosition = std::ranges::find(m_movesRemaining.begin(), m_movesRemaining.end(), command, {});
+        const auto commandPosition = ImplementStdRangesFind(m_movesRemaining.begin(), m_movesRemaining.end(), command);
 
         m_gameGrid[std::get<0>(command)][std::get<1>(command)] = m_currentPlayer.back(); // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
         m_movesRemaining.erase(commandPosition);

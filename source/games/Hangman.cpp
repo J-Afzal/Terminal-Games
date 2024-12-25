@@ -256,7 +256,7 @@ namespace TerminalGames
 
             else
             {
-                auto Command = std::ranges::find(m_movesRemaining.begin(), m_movesRemaining.end(), KeyPress - 32, {}); // NOLINT(cppcoreguidelines-avoid-magic-numbers, readability-magic-numbers)
+                auto Command = ImplementStdRangesFind(m_movesRemaining.begin(), m_movesRemaining.end(), KeyPress - 32); // NOLINT(cppcoreguidelines-avoid-magic-numbers, readability-magic-numbers)
 
                 if (Command != m_movesRemaining.end())
                 {
@@ -297,7 +297,7 @@ namespace TerminalGames
             m_errorCount++;
         }
 
-        m_movesRemaining.erase(std::ranges::find(m_movesRemaining.begin(), m_movesRemaining.end(), guess, {}));
+        m_movesRemaining.erase(ImplementStdRangesFind(m_movesRemaining.begin(), m_movesRemaining.end(), guess));
         m_turnCount++;
     }
 
