@@ -119,7 +119,7 @@ function Test-GitAttributesFile {
             Write-Verbose "##[debug]Current line is code: '$line'"
 
             if (-not (
-                    $line -Match "^\* +text=auto$" -or
+                    $line -Match "^\* +text=auto +eol=lf$" -or
                     # File extensions with or without * wildcard
                     $line -Match "^\*?\.[a-z0-9-]+ +binary$" -or
                     $line -Match "^\*?\.[a-z0-9-]+ +text$" -or
