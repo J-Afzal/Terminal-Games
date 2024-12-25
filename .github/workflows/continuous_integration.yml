@@ -12,23 +12,50 @@ jobs:
         strategy:
             matrix:
                 os:
-                    # - macos-latest
-                    - ubuntu-latest
-                    - windows-latest
+                    - macos-latest
+                    # - ubuntu-latest
+                    # - windows-latest
 
         runs-on: ${{ matrix.os }}
 
         steps:
             - uses: actions/checkout@v4
 
+            - name: Install build dependencies
+              shell: pwsh
+              run: |
+                  if (${{ matrix.os }} -eq "macos-latest")
+                  {
+                      cmake --version
+                      ninja --version
+                      clang --version
+                      # clang-tidy --version
+
+                      brew install cmake@3.31.3
+                      brew install ninja@1.12.1
+
+                      cmake --version
+                      ninja --version
+                      clang --version
+                      # clang-tidy --version
+                  }
+
+                  if (${{ matrix.os }} -eq "ubuntu-latest")
+                  {
+
+                  }
+
+                  if (${{ matrix.os }} -eq "windows-latest")
+                  {
+
+                  }
+
             - name: Configure CMake
-              run: cmake -S . -B ./build -D "CMAKE_BUILD_TYPE=Release"
+              run: cmake -S . -B ./build -G "Ninja" -D "CMAKE_BUILD_TYPE=Release"
 
             - name: Run clang-tidy
               shell: pwsh
               run: |
-                  clang-tidy --version
-
                   Import-Module ./scripts/Linters.psm1
 
                   Test-TerminalGamesCode -Verbose
@@ -49,7 +76,7 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
-            - name: Install dev dependencies
+            - name: Install linting dependencies
               run: npm install
 
             - name: Run cspell
