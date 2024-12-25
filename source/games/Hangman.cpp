@@ -11,9 +11,9 @@
 #include <thread>
 #include <vector>
 
+#include "Constants.hpp"
+#include "Exceptions.hpp"
 #include "games/Hangman.hpp"
-#include "helpers/Constants.hpp"
-#include "helpers/Exceptions.hpp"
 #include "helpers/PageBuilder.hpp"
 #include "helpers/Terminal.hpp"
 
@@ -42,9 +42,9 @@ namespace TerminalGames
 
     void Hangman::LoadWords()
     {
-        // Words.txt contains a list of the ~1,000 most used words in English from:
+        // words.txt contains a list of the ~1,000 most used words in English from:
         // See: https://www.ef.co.uk/english-resources/english-vocabulary/top-1000-words/
-        std::ifstream WordsFile("../resources/Words.txt"); // NOLINT(fuchsia-default-arguments-calls)
+        std::ifstream WordsFile("../resources/words.txt"); // NOLINT(fuchsia-default-arguments-calls)
 
         if (WordsFile.is_open())
         {

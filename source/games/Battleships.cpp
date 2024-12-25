@@ -10,9 +10,9 @@
 #include <unordered_map>
 #include <vector>
 
+#include "Constants.hpp"
+#include "Exceptions.hpp"
 #include "games/Battleships.hpp"
-#include "helpers/Constants.hpp"
-#include "helpers/Exceptions.hpp"
 #include "helpers/PageBuilder.hpp"
 #include "helpers/Terminal.hpp"
 
