@@ -27,12 +27,10 @@ jobs:
                   if ("${{ matrix.os }}" -eq "macos-latest")
                   {
                       cmake --version
-                      # ninja --version
                       clang --version
-                      # clang-tidy --version
 
-                      brew install cmake@3.31.3
-                      brew install ninja@1.12.1
+                      brew install cmake
+                      brew install ninja
 
                       cmake --version
                       ninja --version
