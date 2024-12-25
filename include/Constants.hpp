@@ -111,7 +111,7 @@ namespace TerminalGames
         return count;
     }
 
-    std::string ImplementStdFormat(const std::string &stringToFormat, const uint32_t &varToInsert)
+    static std::string ImplementStdFormat(const std::string &stringToFormat, const uint32_t &varToInsert)
     {
         // std::format("Please enter the {} grid locations for the Carrier", g_BATTLESHIPS_CARRIER_SIZE),
         return "";// Temp measure

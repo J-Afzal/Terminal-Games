@@ -1,4 +1,5 @@
 // NOLINTBEGIN
+#pragma once
 
 #include <array>
 #include <chrono>
