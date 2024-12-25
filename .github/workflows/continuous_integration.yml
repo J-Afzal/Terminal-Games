@@ -42,6 +42,23 @@ jobs:
               if: success() || failure()
               run: npx prettier . --check
 
+
+
+            - name: Show diff
+              run: |
+                  npx prettier . --write
+                  git diff -- . ':(exclude)package-lock.json' ':(exclude)package.json' > diff.txt
+                  npm install -g diff2html-cli
+                  diff2html -i file -s side -F diff.html -- diff.txt
+
+            - name: Upload html diff
+              uses: actions/upload-artifact@v4
+              with:
+                  name: HTML Diff
+                  path: diff.html
+                  retention-days: 3
+
+
             - name: Run PSScriptAnalyzer (for PowerShell linting)
               if: success() || failure()
               shell: pwsh
