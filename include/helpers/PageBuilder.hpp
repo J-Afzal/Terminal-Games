@@ -6,7 +6,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include "helpers/Constants.hpp"
+#include "Constants.hpp"
 
 namespace TerminalGames
 {

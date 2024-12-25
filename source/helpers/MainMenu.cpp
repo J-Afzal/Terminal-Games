@@ -4,10 +4,10 @@
 #include <string>
 #include <vector>
 
+#include "Exceptions.hpp"
 #include "games/Battleships.hpp"
 #include "games/Hangman.hpp"
 #include "games/TicTacToe.hpp"
-#include "helpers/Exceptions.hpp"
 #include "helpers/MainMenu.hpp"
 #include "helpers/PageBuilder.hpp"
 #include "helpers/Terminal.hpp"
@@ -20,18 +20,27 @@ namespace TerminalGames
 
     bool MainMenu::ParseCommandLineArguments(const std::vector<std::string> &commandLineArguments)
     {
-        if (commandLineArguments.size() == 1) // Default if no CLI args given.
+        for (std::string argument : commandLineArguments)
         {
-            return false;
+            if (argument == "--a" || argument == "--ascii-only")
+            {
+                return true;
+            }
+
+            if (argument == "--help")
+            {
+                std::string helpMessage = "\nUsage: terminal-games [options]";
+                helpMessage += "\n\nOPTIONS:";
+                helpMessage += "\n\nGeneric Options:";
+                helpMessage += "\n\n  --help            Display available options.";
+                helpMessage += "\n\nterminal-games options:";
+                helpMessage += "\n\n  --a --ascii-only  Only use ASCII characters (this removes all colour).\n\n";
+                std::cout << helpMessage;
+                exit(1); // NOLINT(concurrency-mt-unsafe)
+            }
         }
 
-        if (commandLineArguments.size() == 2 && (commandLineArguments[0] == "--a" || commandLineArguments[0] == "--ascii-only"))
-        {
-            return true;
-        }
-
-        std::cout << "\nUsage: Terminal-Games [--a --ascii-only]\n\nOptions:\n\t--a --ascii-only\tOnly use ASCII characters.\n";
-        exit(1); // NOLINT(concurrency-mt-unsafe)
+        return false;
     }
 
     MainMenu::~MainMenu()

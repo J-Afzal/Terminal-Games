@@ -6,9 +6,9 @@
 #include <tuple>
 #include <vector>
 
+#include "Constants.hpp"
+#include "Exceptions.hpp"
 #include "games/TicTacToe.hpp"
-#include "helpers/Constants.hpp"
-#include "helpers/Exceptions.hpp"
 #include "helpers/PageBuilder.hpp"
 #include "helpers/Terminal.hpp"
 

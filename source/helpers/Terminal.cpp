@@ -10,8 +10,8 @@
 #include "Windows.h"
 #endif
 
-#include "helpers/Constants.hpp"
-#include "helpers/Exceptions.hpp"
+#include "Constants.hpp"
+#include "Exceptions.hpp"
 #include "helpers/Terminal.hpp"
 
 namespace TerminalGames

@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-#include "Game.hpp"
+#include "games/Game.hpp"
 #include "helpers/PageBuilder.hpp"
 
 namespace TerminalGames

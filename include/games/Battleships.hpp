@@ -7,8 +7,8 @@
 #include <unordered_map>
 #include <vector>
 
-#include "Game.hpp"
-#include "helpers/Constants.hpp"
+#include "Constants.hpp"
+#include "games/Game.hpp"
 #include "helpers/PageBuilder.hpp"
 
 namespace TerminalGames

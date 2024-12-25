@@ -7,12 +7,12 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include_directories(./include)
 
-add_executable(Terminal-Games
+add_executable(terminal-games
     ./source/main.cpp
-    ./include/helpers/Exceptions.hpp
+    ./include/Constants.hpp
+    ./include/Exceptions.hpp
     ./include/helpers/MainMenu.hpp
     ./source/helpers/MainMenu.cpp
-    ./include/helpers/Constants.hpp
     ./include/helpers/PageBuilder.hpp
     ./source/helpers/PageBuilder.cpp
     ./include/helpers/Terminal.hpp
