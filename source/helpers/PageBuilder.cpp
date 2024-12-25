@@ -191,7 +191,7 @@ namespace TerminalGames
 
     std::string PageBuilder::GetRemainingEmptyLines(const std::string &commonTopString, const std::string &commonBottomString) const
     {
-        const int32_t remainingLineCount = static_cast<int32_t>(m_displayHeight) - std::count(commonTopString.begin(), commonTopString.end(), '\n') - std::count(commonBottomString.begin(), commonBottomString.end(), '\n');
+        const int32_t remainingLineCount = static_cast<int32_t>(m_displayHeight) - TerminalGames::ImplementStdCount(commonTopString.begin(), commonTopString.end(), '\n') - TerminalGames::ImplementStdCount(commonBottomString.begin(), commonBottomString.end(), '\n');
         const uint32_t emptyLinesToAddCount = remainingLineCount < 0 ? 0 : remainingLineCount;
 
         std::string output;
@@ -201,21 +201,6 @@ namespace TerminalGames
         }
 
         return output;
-    }
-
-    int32_t PageBuilder::ImplementStdCount(const std::string::const_iterator &begin, const std::string::const_iterator &end, const char &character)
-    {
-        int32_t count = 0;
-
-        for (auto i = begin; i < end; i++)
-        {
-            if (*i == character)
-            {
-                ++count;
-            }
-        }
-
-        return count;
     }
 
     std::vector<std::string> PageBuilder::GetGameSelectionMainMenuPages(const std::vector<std::string> &gameNames) const

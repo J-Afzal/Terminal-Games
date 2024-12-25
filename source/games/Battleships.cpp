@@ -4,7 +4,6 @@
 #include <chrono>
 #include <cmath>
 #include <cstdint>
-#include <format>
 #include <string>
 #include <thread>
 #include <unordered_map>
@@ -122,11 +121,11 @@ namespace TerminalGames
         // on player one's board (as user is always player one).
 
         std::array<std::string, g_BATTLESHIPS_SHIP_COUNT> shipInstructions = {
-            std::format("Please enter the {} grid locations for the Carrier", g_BATTLESHIPS_CARRIER_SIZE),
-            std::format("Please enter the {} grid locations for the Battleship", g_BATTLESHIPS_BATTLESHIP_SIZE),
-            std::format("Please enter the {} grid locations for the Destroyer", g_BATTLESHIPS_DESTROYER_SIZE),
-            std::format("Please enter the {} grid locations for the Submarine", g_BATTLESHIPS_SUBMARINE_SIZE),
-            std::format("Please enter the {} grid locations for the Patrol Boat", g_BATTLESHIPS_PATROL_BOAT_SIZE)};
+            TerminalGames::ImplementStdFormat("Please enter the {} grid locations for the Carrier", g_BATTLESHIPS_CARRIER_SIZE),
+            TerminalGames::ImplementStdFormat("Please enter the {} grid locations for the Battleship", g_BATTLESHIPS_BATTLESHIP_SIZE),
+            TerminalGames::ImplementStdFormat("Please enter the {} grid locations for the Destroyer", g_BATTLESHIPS_DESTROYER_SIZE),
+            TerminalGames::ImplementStdFormat("Please enter the {} grid locations for the Submarine", g_BATTLESHIPS_SUBMARINE_SIZE),
+            TerminalGames::ImplementStdFormat("Please enter the {} grid locations for the Patrol Boat", g_BATTLESHIPS_PATROL_BOAT_SIZE)};
         std::array<std::string, g_BATTLESHIPS_SHIP_COUNT> shipLetters = {g_BATTLESHIPS_CARRIER_NAME, g_BATTLESHIPS_BATTLESHIP_NAME, g_BATTLESHIPS_DESTROYER_NAME, g_BATTLESHIPS_SUBMARINE_NAME, g_BATTLESHIPS_PATROL_BOAT_NAME};
         std::array<uint32_t, g_BATTLESHIPS_SHIP_COUNT> shipSizes = {g_BATTLESHIPS_CARRIER_SIZE, g_BATTLESHIPS_BATTLESHIP_SIZE, g_BATTLESHIPS_DESTROYER_SIZE, g_BATTLESHIPS_SUBMARINE_SIZE, g_BATTLESHIPS_PATROL_BOAT_SIZE};
         uint32_t lastShipRow = 0;

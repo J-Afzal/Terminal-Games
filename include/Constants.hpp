@@ -90,5 +90,31 @@ namespace TerminalGames
     static constexpr uint32_t g_BATTLESHIPS_DESTROYER_SIZE = 3;
     static constexpr uint32_t g_BATTLESHIPS_SUBMARINE_SIZE = 3;
     static constexpr uint32_t g_BATTLESHIPS_PATROL_BOAT_SIZE = 2;
+
+    /**
+     * @brief Functions which are not supported by some compilers so are crudely implemented here for the project specific use
+     * case.
+     */
+    // std::count fails with GNU 12.2.0 so this function implements it.
+    static int32_t ImplementStdCount(const std::string::const_iterator &begin, const std::string::const_iterator &end, const char &character)
+    {
+        int32_t count = 0;
+
+        for (auto i = begin; i < end; i++)
+        {
+            if (*i == character)
+            {
+                ++count;
+            }
+        }
+
+        return count;
+    }
+
+    std::string ImplementStdFormat(const std::string &stringToFormat, const uint32_t &varToInsert)
+    {
+        // std::format("Please enter the {} grid locations for the Carrier", g_BATTLESHIPS_CARRIER_SIZE),
+        return "";// Temp measure
+    }
 } // namespace TerminalGames
 // NOLINTEND(fuchsia-statically-constructed-objects, cert-err58-cpp)

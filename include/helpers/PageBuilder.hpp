@@ -235,11 +235,6 @@ namespace TerminalGames
         std::string GetRemainingEmptyLines(const std::string &topString, const std::string &bottomString) const;
 
         /**
-         * @brief Dirty hack to get the CI to work as std::count fails with GNU 12.2.0
-         */
-        static int32_t ImplementStdCount(const std::string::const_iterator &begin, const std::string::const_iterator &end, const char &character);
-
-        /**
          * @brief Creates pages for displaying option selection screens for the given options.
          *
          * @param gameInfo Information on the current state of the current game.
