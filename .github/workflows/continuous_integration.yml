@@ -24,6 +24,13 @@ jobs:
             - name: Configure CMake
               run: cmake -S . -B ./build -D "CMAKE_BUILD_TYPE=Release"
 
+            - name: Run clang-tidy
+              shell: pwsh
+              run: |
+                  Import-Module ./scripts/Linters.psm1
+
+                  Test-TerminalGamesCode -Verbose
+
             - name: Build Project
               run: cmake --build ./build --config Release
 
