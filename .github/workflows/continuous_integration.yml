@@ -24,7 +24,7 @@ jobs:
             - name: Install build dependencies
               shell: pwsh
               run: |
-                  if (${{ matrix.os }} -eq "macos-latest")
+                  if ("${{ matrix.os }}" -eq "macos-latest")
                   {
                       cmake --version
                       ninja --version
@@ -40,12 +40,12 @@ jobs:
                       # clang-tidy --version
                   }
 
-                  if (${{ matrix.os }} -eq "ubuntu-latest")
+                  if ("${{ matrix.os }}" -eq "ubuntu-latest")
                   {
 
                   }
 
-                  if (${{ matrix.os }} -eq "windows-latest")
+                  if ("${{ matrix.os }}" -eq "windows-latest")
                   {
 
                   }
