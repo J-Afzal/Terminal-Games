@@ -1,9 +1,9 @@
 # Auto detect text files and perform LF normalization
-*               text=auto
+*               text=auto   eol=lf
 
 # C++
-*.cpp           text    diff=cpp
-*.hpp           text    diff=cpp
+*.cpp           text        diff=cpp
+*.hpp           text        diff=cpp
 
 # Config
 .clang-tidy     text
@@ -12,7 +12,7 @@
 .prettierignore text
 
 # Documents
-*.md            text    diff=markdown
+*.md            text        diff=markdown
 *.txt           text
 LICENSE         text
 
@@ -21,8 +21,8 @@ LICENSE         text
 
 # Scripts
 # These are explicitly windows files and should use crlf
-*.psd1           text    eol=crlf
-*.psm1           text    eol=crlf
+*.psd1           text       eol=crlf
+*.psm1           text       eol=crlf
 
 # Serialisation
 *.json          text
