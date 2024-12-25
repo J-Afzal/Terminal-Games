@@ -13,13 +13,20 @@ jobs:
             matrix:
                 os:
                     - macos-latest
-                    - ubuntu-24.04 # TODO: Change to latest by 17th Jan 2025
+                    - ubuntu-latest
                     - windows-latest
 
         runs-on: ${{ matrix.os }}
 
         steps:
             - uses: actions/checkout@v4
+
+            - name: Install gcc-14 on Ubuntu
+              if: matrix.configurations.os == "ubuntu-latest"
+              run: |
+                sudo apt install gcc-14 g++-14
+                sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 100 --slave /usr/bin/g++ g++ /usr/bin/g++-14 --slave /usr/bin/gcov gcov /usr/bin/gcov-14
+                sudo update-alternatives --set gcc /usr/bin/gcc-14
 
             - name: Configure CMake
               run: cmake -S . -B ./build -D "CMAKE_BUILD_TYPE=Release"

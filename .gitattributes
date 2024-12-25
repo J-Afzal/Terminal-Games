@@ -17,7 +17,7 @@
 LICENSE         text
 
 # Graphics
-*.gif           binary
+*.png           binary
 
 # Scripts
 # These are explicitly windows files and should use crlf
