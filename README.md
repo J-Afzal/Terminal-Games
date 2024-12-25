@@ -131,4 +131,3 @@ CMake must be configured using a generator that creates a `compile_commands.json
 
 On Windows, Visual Studio 2022 can be used by opening the folder as a CMake project and Visual Studio Code can be used by
 opening the folder through the `Developer PowerShell for VS` (otherwise you may see errors around cl.exe not being found).
-
