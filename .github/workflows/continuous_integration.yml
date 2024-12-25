@@ -48,7 +48,7 @@ jobs:
                   npx prettier . --write
                   git diff -- . ':(exclude)package-lock.json' ':(exclude)package.json' > diff.txt
                   npm install -g diff2html-cli
-                  diff2html-s side -F diff.html
+                  diff2html -s side -F diff.html
 
             - name: Upload html diff
               if: success() || failure()
