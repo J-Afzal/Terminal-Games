@@ -20,7 +20,7 @@ namespace TerminalGames
 
     bool MainMenu::ParseCommandLineArguments(const std::vector<std::string> &commandLineArguments)
     {
-        for (std::string argument : commandLineArguments)
+        for (const std::string &argument : commandLineArguments)
         {
             if (argument == "--a" || argument == "--ascii-only")
             {
