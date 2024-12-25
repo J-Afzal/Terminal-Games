@@ -37,7 +37,6 @@ function Test-TerminalGamesCode {
 
     $filesWithErrors = @()
 
-
     foreach ($file in $allFilesToTest) {
 
         Write-Output "##[group]Running Test-TerminalGamesCode against '$file'..."
