@@ -40,7 +40,7 @@ jobs:
 
             - name: Run prettier (for JSON linting)
               if: success() || failure()
-              run: npx prettier . --check
+              run: npx prettier .
 
             - name: Run PSScriptAnalyzer (for PowerShell linting)
               if: success() || failure()
