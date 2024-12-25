@@ -122,10 +122,8 @@ Import-Module ./scripts/Linters.psm1
 Test-TerminalGamesCode -Verbose
 ```
 
-:warning:
-CMake must be configured using a generator that creates a `compile_commands.json` file in the build directory before running
-`clang-tidy` (e.g. `-G "Ninja"`, `-G "NMake Makefiles"`, etc)
-:warning:
+:warning: CMake must be configured using a generator that creates a `compile_commands.json` file in the build directory before running
+`clang-tidy` (e.g. `-G "Ninja"`, `-G "NMake Makefiles"`, etc) :warning:
 
 ### IDE
 
