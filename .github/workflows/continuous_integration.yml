@@ -27,6 +27,10 @@ jobs:
                   if [ "${{ matrix.os }}" = "macos-latest" ]
                   then
                       brew install ninja
+                      brew install llvm
+                      export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+                      ln -s "/usr/local/opt/llvm/bin/clang-tidy" "/usr/local/bin/clang-tidy"
+                      ln -s "/usr/local/opt/llvm/bin/clang-format" "/usr/local/bin/clang-format"
                   fi
 
                   if [ "${{ matrix.os }}" = "ubuntu-latest" ]
@@ -38,10 +42,7 @@ jobs:
               run: cmake -S . -B ./build -G "Ninja"
 
             - name: Run clang-tidy and clang-format
-              shell: pwsh
-              run: |
-                  Import-Module ./scripts/Linters.psm1
-                  Test-TerminalGamesCode -Verbose
+              run: pwsh -command "Import-Module ./scripts/Linters.psm1; Test-TerminalGamesCode -Verbose"
 
             - name: Build Project
               run: cmake --build ./build --config Release
