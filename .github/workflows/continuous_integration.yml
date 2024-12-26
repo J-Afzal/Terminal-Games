@@ -13,8 +13,8 @@ jobs:
             matrix:
                 os:
                     # - macos-latest
-                    - ubuntu-latest
-                    # - windows-latest
+                    # - ubuntu-latest
+                    - windows-latest
 
         runs-on: ${{ matrix.os }}
 
@@ -39,21 +39,23 @@ jobs:
                       sudo apt install ninja-build
                   fi
 
-                  if [ "${{ matrix.os }}" = "windows-latest" ]
-                  then
-                      choco install cmake --version 3.31.3 -y
-                      choco install ninja --version 1.12.1 -y
-                      choco install llvm --version 19.1.5 -y
+                  # if [ "${{ matrix.os }}" = "windows-latest" ]
+                  # then
+                  #     choco upgrade chocolatey -y
+                  #     choco upgrade all -y
+                  #     choco install cmake --version 3.31.3 -y
+                  #     choco install ninja --version 1.12.1 -y
+                  #     choco install llvm --version 19.1.5 -y
 
-                      cmake --version
-                      ninja --version
-                      clang --version
-                      clang-format --version
-                      clang-tidy --version
-                  fi
+                  #     cmake --version
+                  #     ninja --version
+                  #     clang --version
+                  #     clang-format --version
+                  #     clang-tidy --version
+                  # fi
 
             - name: Configure CMake
-              run: cmake -S . -B ./build -G "Ninja" -D "CMAKE_CXX_COMPILER=clang++"
+              run: cmake -S . -B ./build -G "Ninja"
 
             - name: Run clang-tidy and clang-format
               run: |
