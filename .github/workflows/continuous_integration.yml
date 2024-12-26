@@ -28,7 +28,7 @@ jobs:
                   then
                       brew install ninja
                       brew install llvm
-                      echo 'export PATH="/opt/homebrew/opt/llvm/bin:$PATH"' >> /Users/runner/.bash_profile
+                      echo 'export PATH="/opt/homebrew/opt/llvm/bin:$PATH"' >> /etc/bash.bashrc
                   fi
 
                   if [ "${{ matrix.os }}" = "ubuntu-latest" ]
@@ -40,6 +40,7 @@ jobs:
               run: cmake -S . -B ./build -G "Ninja"
 
             - name: Run clang-tidy and clang-format
+              shell: bash
               run: pwsh -command "Import-Module ./scripts/Linters.psm1; Test-TerminalGamesCode -Verbose"
 
             - name: Build Project
