@@ -25,9 +25,9 @@ jobs:
               run: |
                   if [ "${{ matrix.os }}" = "macos-latest" ]
                   then
-                      brew install cmake@3.31.3
-                      brew install ninja@1.12.1
-                      brew install llvm@19.1.5
+                      brew install cmake
+                      brew install ninja
+                      brew install llvm
 
                       export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
                       ln -s "/usr/local/opt/llvm/bin/clang-format" "/usr/local/bin/clang-format"
