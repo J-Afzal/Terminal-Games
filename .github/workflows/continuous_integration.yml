@@ -33,19 +33,13 @@ jobs:
 
                   if [ "${{ matrix.os }}" = "ubuntu-latest" ]
                   then
-                      sudo apt-get update
-                      sudo apt-get upgrade
+                      # sudo apt-get update
+                      # sudo apt-get upgrade
 
-                      sudo apt install ninja-build
-                      sudo apt install clang
-                      sudo apt install clang-format
-                      sudo apt install clang-tidy
-
-                      cmake --version
-                      ninja --version
-                      clang --version
-                      clang-format --version
-                      clang-tidy --version
+                      # sudo apt install ninja-build
+                      # sudo apt install clang
+                      # sudo apt install clang-format
+                      # sudo apt install clang-tidy
                   fi
 
                   if [ "${{ matrix.os }}" = "windows-latest" ]
