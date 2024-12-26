@@ -26,16 +26,14 @@ jobs:
               run: |
                   if ("${{ matrix.os }}" -eq "macos-latest")
                   {
-                      cmake --version
-                      clang --version
-
                       brew install cmake
                       brew install ninja
+                      brew install llvm@19
 
                       cmake --version
                       ninja --version
                       clang --version
-                      # clang-tidy --version
+                      clang-tidy --version
                   }
 
                   if ("${{ matrix.os }}" -eq "ubuntu-latest")
