@@ -25,16 +25,21 @@ jobs:
               run: |
                   if [ "${{ matrix.os }}" = "macos-latest" ]
                   then
+                      brew update
+                      brew upgrade
+
                       brew install ninja
                   fi
 
                   if [ "${{ matrix.os }}" = "ubuntu-latest" ]
                   then
-                      sudo apt install cmake
+                      sudo apt-get update
+                      sudo apt-get upgrade
+
                       sudo apt install ninja-build
-                      sudo apt install clang-19
-                      sudo apt install clang-format-19
-                      sudo apt install clang-tidy-19
+                      sudo apt install clang
+                      sudo apt install clang-format
+                      sudo apt install clang-tidy
 
                       cmake --version
                       ninja --version
