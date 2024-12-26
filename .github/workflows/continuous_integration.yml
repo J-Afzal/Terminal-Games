@@ -62,12 +62,8 @@ jobs:
             - name: Run clang-tidy and clang-format
               run: |
                   brew install llvm
-                  export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
                   ln -s "/usr/local/opt/llvm/bin/clang-tidy" "/usr/local/bin/clang-tidy"
                   ln -s "/usr/local/opt/llvm/bin/clang-format" "/usr/local/bin/clang-format"
-
-                  clang-tidy --version
-                  clang-tidy ./source/main.cpp -p ./build
 
                   pwsh -command "Import-Module ./scripts/Linters.psm1; Test-TerminalGamesCode -Verbose"
 
