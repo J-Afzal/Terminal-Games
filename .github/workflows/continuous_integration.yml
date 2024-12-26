@@ -27,6 +27,7 @@ jobs:
                   if [ "${{ matrix.os }}" = "macos-latest" ]
                   then
                       brew install ninja
+                      brew install llvm
                   fi
 
                   if [ "${{ matrix.os }}" = "ubuntu-latest" ]
