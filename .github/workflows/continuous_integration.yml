@@ -25,12 +25,7 @@ jobs:
               run: |
                   if [ "${{ matrix.os }}" = "macos-latest" ]
                   then
-                      brew install cmake
-                      # brew install ninja
-                      # brew install llvm
-
-                      # ln -s "/usr/local/opt/llvm/bin/clang-format" "/usr/local/bin/clang-format"
-                      # ln -s "/usr/local/opt/llvm/bin/clang-tidy" "/usr/local/bin/clang-tidy"
+                      brew install ninja
                   fi
 
                   if [ "${{ matrix.os }}" = "ubuntu-latest" ]
@@ -67,7 +62,6 @@ jobs:
             - name: Run clang-tidy
               shell: pwsh
               run: |
-                  brew install llvm
                   export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
                   ln -s "/usr/local/opt/llvm/bin/clang-tidy" "/usr/local/bin/clang-tidy"
                   ln -s "/usr/local/opt/llvm/bin/clang-format" "/usr/local/bin/clang-format"
