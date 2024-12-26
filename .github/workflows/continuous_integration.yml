@@ -28,6 +28,7 @@ jobs:
                   then
                       brew install ninja
                       brew install llvm
+                      export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
                   fi
 
                   if [ "${{ matrix.os }}" = "ubuntu-latest" ]
@@ -42,7 +43,6 @@ jobs:
               run: |
                   if [ "${{ matrix.os }}" = "macos-latest" ]
                   then
-                      export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
                       ln -s "/usr/local/opt/llvm/bin/clang-tidy" "/usr/local/bin/clang-tidy"
                       ln -s "/usr/local/opt/llvm/bin/clang-format" "/usr/local/bin/clang-format"
                   fi
