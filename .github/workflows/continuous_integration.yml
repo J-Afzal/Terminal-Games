@@ -12,9 +12,9 @@ jobs:
         strategy:
             matrix:
                 os:
-                    - macos-latest
+                    # - macos-latest
                     # - ubuntu-latest
-                    # - windows-latest
+                    - windows-latest
 
         runs-on: ${{ matrix.os }}
 
@@ -28,7 +28,6 @@ jobs:
                   then
                       brew install ninja
                       brew install llvm
-                      sudo echo 'export PATH="/opt/homebrew/opt/llvm/bin:$PATH"' >> /etc/bash.bashrc
                   fi
 
                   if [ "${{ matrix.os }}" = "ubuntu-latest" ]
@@ -41,7 +40,13 @@ jobs:
 
             - name: Run clang-tidy and clang-format
               shell: bash
-              run: pwsh -command "Import-Module ./scripts/Linters.psm1; Test-TerminalGamesCode -Verbose"
+              run: |
+                  if [ "${{ matrix.os }}" = "macos-latest" ]
+                  then
+                      export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+                  fi
+
+                  pwsh -command "Import-Module ./scripts/Linters.psm1; Test-TerminalGamesCode -Verbose"
 
             - name: Build Project
               run: cmake --build ./build --config Release
