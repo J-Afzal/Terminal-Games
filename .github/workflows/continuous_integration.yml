@@ -28,7 +28,7 @@ jobs:
                   then
                       brew install ninja
                       brew install llvm
-                      echo 'export PATH="/opt/homebrew/opt/llvm/bin:$PATH"' >> /etc/bash.bashrc
+                      sudo echo 'export PATH="/opt/homebrew/opt/llvm/bin:$PATH"' >> /etc/bash.bashrc
                   fi
 
                   if [ "${{ matrix.os }}" = "ubuntu-latest" ]
