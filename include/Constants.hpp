@@ -92,11 +92,11 @@ namespace TerminalGames
     static constexpr uint32_t g_BATTLESHIPS_PATROL_BOAT_SIZE = 2;
 
     /**
-     * @brief Functions which are not supported by some compilers so are crudely implemented here for the project specific use
-     * case. Usually because the function call fails with GNU 12.2.0.
+     * @brief Functions which are not supported by some compilers so are crudely implemented here for the project's specific use
+     * case. Usually because the function call fails with GNU 12.2.0 within the CI pipeline.
      */
 
-    // Should work for all containers
+    // Should work for all std containers
     template <typename T, typename U>
     static T ImplementStdRangesFind(const T &begin, const T &end, const U &value)
     {
@@ -107,9 +107,11 @@ namespace TerminalGames
                 return i;
             }
         }
+
+        return end;
     }
 
-    // Should work for all containers
+    // Should work for all std containers
     template <typename T, typename U>
     static int32_t ImplementStdCount(const T &begin, const T &end, const U &value)
     {
@@ -129,8 +131,8 @@ namespace TerminalGames
     // Only works for single instance of {} in stringToFormat
     static std::string ImplementStdFormat(const std::string &stringToFormat, const uint32_t &varToInsert)
     {
-        const std::string beforeString = stringToFormat.substr(0, stringToFormat.find("{}")); // NOLINT(fuchsia-default-arguments-calls)
-        const std::string afterString = stringToFormat.substr(stringToFormat.find("{}") + 2, stringToFormat.size() - stringToFormat.find("{}")); // NOLINT(fuchsia-default-arguments-calls)
+        const std::string beforeString = stringToFormat.substr(0, stringToFormat.find("{}"));
+        const std::string afterString = stringToFormat.substr(stringToFormat.find("{}") + 2, stringToFormat.size() - stringToFormat.find("{}"));
 
         return beforeString + std::to_string(varToInsert) + afterString;
     }
