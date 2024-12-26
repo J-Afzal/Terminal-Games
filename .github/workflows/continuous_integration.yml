@@ -39,23 +39,23 @@ jobs:
                       clang-tidy --version
                   }
 
-                  if ("${{ matrix.os }}" -eq "ubuntu-latest")
-                  {
-                      sudo apt install cmake
-                      sudo apt install ninja-build
-                      sudo apt install clang-19
-                      sudo apt install clang-tidy-19
+                  # if ("${{ matrix.os }}" -eq "ubuntu-latest")
+                  # {
+                  #     sudo apt install cmake
+                  #     sudo apt install ninja-build
+                  #     sudo apt install clang-19
+                  #     sudo apt install clang-tidy-19
 
-                      cmake --version
-                      ninja --version
-                      clang --version
-                      clang-tidy --version
-                  }
+                  #     cmake --version
+                  #     ninja --version
+                  #     clang --version
+                  #     clang-tidy --version
+                  # }
 
-                  if ("${{ matrix.os }}" -eq "windows-latest")
-                  {
+                  # if ("${{ matrix.os }}" -eq "windows-latest")
+                  # {
 
-                  }
+                  # }
 
             - name: Configure CMake
               run: cmake -S . -B ./build -G "Ninja" -D "CMAKE_BUILD_TYPE=Release" # TODO: Edit this to use clang???
