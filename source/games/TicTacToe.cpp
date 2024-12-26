@@ -160,7 +160,7 @@ namespace TerminalGames
         if (m_AISpeed != 0)
         {
             Terminal::PrintOutput(m_pageBuilder.GetAICommandPage(m_gameInfo));
-            std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::seconds(m_AISpeed));
+            std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::seconds(m_AISpeed)); // NOLINT(fuchsia-default-arguments-calls)
         }
 
         const std::tuple<uint32_t, uint32_t> selectedCommand = m_movesRemaining[m_randomNumberGenerator() % m_movesRemaining.size()];
@@ -184,7 +184,7 @@ namespace TerminalGames
         const auto commandPosition = ImplementStdRangesFind(m_movesRemaining.begin(), m_movesRemaining.end(), command);
 
         m_gameGrid[std::get<0>(command)][std::get<1>(command)] = m_currentPlayer.back(); // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
-        m_movesRemaining.erase(commandPosition);
+        m_movesRemaining.erase(commandPosition); // NOLINT(fuchsia-default-arguments-calls)
         m_turnCount++;
         Terminal::SetCursorVisibility(false);
     }
