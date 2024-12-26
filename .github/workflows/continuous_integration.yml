@@ -29,7 +29,7 @@ jobs:
                       brew install cmake
                       brew install ninja
                       brew install llvm@19
-                      export PATH="/opt/homebrew/opt/llvm/bin:$PATH
+                      export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
                       ln -s "/usr/local/opt/llvm/bin/clang-format" "/usr/local/bin/clang-format"
                       ln -s "/usr/local/opt/llvm/bin/clang-tidy" "/usr/local/bin/clang-tidy"
 
@@ -37,6 +37,24 @@ jobs:
                       ninja --version
                       clang --version
                       clang-tidy --version
+                  }
+
+                  if ("${{ matrix.os }}" -eq "ubuntu-latest")
+                  {
+                      sudo apt install cmake
+                      sudo apt install ninja-build
+                      sudo apt install clang-19
+                      sudo apt install clang-tidy-19
+
+                      cmake --version
+                      ninja --version
+                      clang --version
+                      clang-tidy --version
+                  }
+
+                  if ("${{ matrix.os }}" -eq "windows-latest")
+                  {
+
                   }
 
             - name: Configure CMake
