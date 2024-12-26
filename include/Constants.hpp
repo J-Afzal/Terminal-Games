@@ -96,14 +96,28 @@ namespace TerminalGames
      * case. Usually because the function call fails with GNU 12.2.0.
      */
 
-    // Only works for strings
-    static int32_t ImplementStdCount(const std::string::const_iterator &begin, const std::string::const_iterator &end, const char &character)
+    // Should work for all containers
+    template <typename T, typename U>
+    static T ImplementStdRangesFind(const T &begin, const T &end, const U &value)
+    {
+        for (T i = begin; i < end; i++)
+        {
+            if (*i == value)
+            {
+                return i;
+            }
+        }
+    }
+
+    // Should work for all containers
+    template <typename T, typename U>
+    static int32_t ImplementStdCount(const T &begin, const T &end, const U &value)
     {
         int32_t count = 0;
 
-        for (auto i = begin; i < end; i++)
+        for (T i = begin; i < end; i++)
         {
-            if (*i == character)
+            if (*i == value)
             {
                 ++count;
             }
@@ -112,20 +126,13 @@ namespace TerminalGames
         return count;
     }
 
-    // Only works for single instance of {} in string
+    // Only works for single instance of {} in stringToFormat
     static std::string ImplementStdFormat(const std::string &stringToFormat, const uint32_t &varToInsert)
     {
         const std::string beforeString = stringToFormat.substr(0, stringToFormat.find("{}")); // NOLINT(fuchsia-default-arguments-calls)
         const std::string afterString = stringToFormat.substr(stringToFormat.find("{}") + 2, stringToFormat.size() - stringToFormat.find("{}")); // NOLINT(fuchsia-default-arguments-calls)
 
         return beforeString + std::to_string(varToInsert) + afterString;
-    }
-
-    // Should work for all containers
-    template <typename T, typename U>
-    static T ImplementStdRangesFind(const T &begin, const T &end, const U &value)
-    {
-        return std::find(begin, end, value);
     }
 } // namespace TerminalGames
 // NOLINTEND(fuchsia-statically-constructed-objects, cert-err58-cpp)
