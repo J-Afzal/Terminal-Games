@@ -39,7 +39,7 @@ function Test-TerminalGamesCode {
 
     foreach ($file in $allFilesToTest) {
 
-        Write-Output "##[group]Running Test-TerminalGamesCode against '$file'..."
+        Write-Output "##[section]Running Test-TerminalGamesCode against '$file'..."
 
         $ErrorActionPreference = "Continue"
 
@@ -50,8 +50,6 @@ function Test-TerminalGamesCode {
         if ($LASTEXITCODE -eq 1) {
             $filesWithErrors += $file
         }
-
-        Write-Output "##[endgroup]"
 
     }
 

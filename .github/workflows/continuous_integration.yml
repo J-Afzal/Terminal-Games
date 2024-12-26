@@ -56,37 +56,37 @@ jobs:
             - name: Build Project
               run: cmake --build ./build --config Release
 
-    # linting:
-    #     strategy:
-    #         matrix:
-    #             os:
-    #                 - macos-latest
-    #                 - ubuntu-latest
-    #                 - windows-latest
+    linting:
+        strategy:
+            matrix:
+                os:
+                    - macos-latest
+                    - ubuntu-latest
+                    - windows-latest
 
-    #     runs-on: ${{ matrix.os }}
+        runs-on: ${{ matrix.os }}
 
-    #     steps:
-    #         - uses: actions/checkout@v4
+        steps:
+            - uses: actions/checkout@v4
 
-    #         - name: Install linting dependencies
-    #           run: npm install
+            - name: Install linting dependencies
+              run: npm install
 
-    #         - name: Run cspell
-    #           run: npx cspell .
+            - name: Run cspell
+              run: npx cspell .
 
-    #         - name: Run prettier (for JSON linting)
-    #           if: success() || failure()
-    #           run: npx prettier . --check
+            - name: Run prettier (for JSON linting)
+              if: success() || failure()
+              run: npx prettier . --check
 
-    #         - name: Run PSScriptAnalyzer (for PowerShell linting)
-    #           if: success() || failure()
-    #           shell: pwsh
-    #           run: Invoke-ScriptAnalyzer -Path . -Recurse -Severity Information
+            - name: Run PSScriptAnalyzer (for PowerShell linting)
+              if: success() || failure()
+              shell: pwsh
+              run: Invoke-ScriptAnalyzer -Path . -Recurse -Severity Information
 
-    #         - name: Run gitattributes linter
-    #           if: success() || failure()
-    #           shell: pwsh
-    #           run: |
-    #               Import-Module ./scripts/Linters.psm1
-    #               Test-GitAttributesFile -Verbose
+            - name: Run gitattributes linter
+              if: success() || failure()
+              shell: pwsh
+              run: |
+                  Import-Module ./scripts/Linters.psm1
+                  Test-GitAttributesFile -Verbose
