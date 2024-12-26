@@ -53,7 +53,7 @@ namespace TerminalGames
     void MainMenu::Run()
     {
         const PageBuilder PageBuilder(Pages::MAINMENU, m_onlyUseASCII);
-        const std::vector<std::string> menus({"Tic Tac Toe", "Hangman", "Battleships"}); // NOLINT(fuchsia-default-arguments-calls)
+        const std::vector<std::string> menus({"Tic Tac Toe", "Hangman", "Battleships"});
         m_mainMenus = PageBuilder.GetGameSelectionMainMenuPages(menus);
 
         // The index of games in m_Games should match the index of the string in m_mainMenus which has the game selected.

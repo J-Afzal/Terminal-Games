@@ -44,7 +44,7 @@ namespace TerminalGames
     {
         // words.txt contains a list of the ~1,000 most used words in English from:
         // See: https://www.ef.co.uk/english-resources/english-vocabulary/top-1000-words/
-        std::ifstream WordsFile("../resources/words.txt"); // NOLINT(fuchsia-default-arguments-calls)
+        std::ifstream WordsFile("../resources/words.txt");
 
         if (WordsFile.is_open())
         {
@@ -178,7 +178,7 @@ namespace TerminalGames
             // Capitalise word
             std::ranges::transform(input.begin(), input.end(), input.begin(), ::toupper, {});
 
-            if (std::regex_match(input, std::regex("^[A-Za-z]+$"))) // NOLINT(fuchsia-default-arguments-calls)
+            if (std::regex_match(input, std::regex("^[A-Za-z]+$")))
             {
                 m_wordToBeGuessed = input;
                 return;
@@ -271,7 +271,7 @@ namespace TerminalGames
         if (m_AISpeed != 0)
         {
             Terminal::PrintOutput(m_pageBuilder.GetAICommandPage(m_gameInfo));
-            std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::seconds(m_AISpeed)); // NOLINT(fuchsia-default-arguments-calls)
+            std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::seconds(m_AISpeed));
         }
 
         m_AICommand = m_movesRemaining[m_randomNumberGenerator() % m_movesRemaining.size()];
@@ -297,7 +297,7 @@ namespace TerminalGames
             m_errorCount++;
         }
 
-        m_movesRemaining.erase(ImplementStdRangesFind(m_movesRemaining.begin(), m_movesRemaining.end(), guess)); // NOLINT(fuchsia-default-arguments-calls)
+        m_movesRemaining.erase(ImplementStdRangesFind(m_movesRemaining.begin(), m_movesRemaining.end(), guess));
         m_turnCount++;
     }
 

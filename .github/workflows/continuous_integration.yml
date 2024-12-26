@@ -34,29 +34,10 @@ jobs:
 
                   if [ "${{ matrix.os }}" = "ubuntu-24.04" ]
                   then
-                      echo "-------------"
-                      clang-tidy --version
-                      echo "-------------"
-                      clang-format --version
-                      echo "-------------"
-
                       sudo apt-get update
                       sudo apt-get upgrade
 
-                      echo "-------------"
-                      clang-tidy --version
-                      echo "-------------"
-                      clang-format --version
-                      echo "-------------"
-
                       sudo apt-get install ninja-build
-                      sudo apt-get install clang-tidy clang-format
-
-                      echo "-------------"
-                      clang-tidy --version
-                      echo "-------------"
-                      clang-format --version
-                      echo "-------------"
                   fi
 
             - name: Configure CMake
@@ -65,12 +46,6 @@ jobs:
             - name: Run clang-tidy and clang-format
               shell: pwsh
               run: |
-                  Write-Host "-------------"
-                  clang-tidy --version
-                  Write-Host "-------------"
-                  clang-format --version
-                  Write-Host "-------------"
-
                   Import-Module ./scripts/Linters.psm1
                   Test-TerminalGamesCode -Verbose
 

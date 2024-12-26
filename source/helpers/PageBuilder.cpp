@@ -208,7 +208,7 @@ namespace TerminalGames
         const std::string commonTopString = GetTopBox() + GetTopLine();
         const std::string commonBottomString = GetBottomLine() + GetBottomBox();
 
-        std::vector<std::string> output(gameNames.size()); // NOLINT(fuchsia-default-arguments-calls)
+        std::vector<std::string> output(gameNames.size());
 
         // Construct a page for each game selected.
         for (uint32_t i = 0; i < output.size(); i++)
@@ -245,7 +245,7 @@ namespace TerminalGames
         const std::string commonTopString = GetTopBox() + GetTopLine() + GetGeneralGameSubPage(gameInfo) + GetEmptyLine() + GetNewLineLeftJustified(message, Colours::WHITE, "");
         const std::string commonBottomString = GetBottomLine() + GetBottomBox();
 
-        std::vector<std::string> output(options.size()); // NOLINT(fuchsia-default-arguments-calls)
+        std::vector<std::string> output(options.size());
 
         // Construct a page for each option selected.
         for (uint32_t i = 0; i < output.size(); i++)
@@ -279,13 +279,13 @@ namespace TerminalGames
         {
         case Pages::TICTACTOE:
         case Pages::HANGMAN:
-            return GetOptionSelectionPages(gameInfo, "Please select the number of players:", {"0", "1", "2"}); // NOLINT(fuchsia-default-arguments-calls)
+            return GetOptionSelectionPages(gameInfo, "Please select the number of players:", {"0", "1", "2"});
 
         case Pages::BATTLESHIPS:
-            return GetOptionSelectionPages(gameInfo, "Please select the number of players:", {"0", "1"}); // NOLINT(fuchsia-default-arguments-calls)
+            return GetOptionSelectionPages(gameInfo, "Please select the number of players:", {"0", "1"});
 
         default:
-            return {"The 'GetPlayerCountOptionSelectionGameDisplays' function does not support the current page type."}; // NOLINT(fuchsia-default-arguments-calls)
+            return {"The 'GetPlayerCountOptionSelectionGameDisplays' function does not support the current page type."};
         }
     }
 
@@ -294,13 +294,13 @@ namespace TerminalGames
         switch (m_currentPage)
         {
         case Pages::TICTACTOE:
-            return GetOptionSelectionPages(gameInfo, "Please select the player you would like to be:", {"PLAYER X", "PLAYER O"}); // NOLINT(fuchsia-default-arguments-calls)
+            return GetOptionSelectionPages(gameInfo, "Please select the player you would like to be:", {"PLAYER X", "PLAYER O"});
 
         case Pages::HANGMAN:
-            return GetOptionSelectionPages(gameInfo, "Please select the player you would like to be:", {"GUESSER", "WORD SETTER"}); // NOLINT(fuchsia-default-arguments-calls)
+            return GetOptionSelectionPages(gameInfo, "Please select the player you would like to be:", {"GUESSER", "WORD SETTER"});
 
         default:
-            return {"The 'GetUserPlayerChoiceOptionSelectionGameDisplays' function does not support the current page type."}; // NOLINT(fuchsia-default-arguments-calls)
+            return {"The 'GetUserPlayerChoiceOptionSelectionGameDisplays' function does not support the current page type."};
         }
     }
 
@@ -311,10 +311,10 @@ namespace TerminalGames
         case Pages::TICTACTOE:
         case Pages::HANGMAN:
         case Pages::BATTLESHIPS:
-            return GetOptionSelectionPages(gameInfo, "Please select the AI speed:", {"INSTANT", "FAST", "SLOW"}); // NOLINT(fuchsia-default-arguments-calls)
+            return GetOptionSelectionPages(gameInfo, "Please select the AI speed:", {"INSTANT", "FAST", "SLOW"});
 
         default:
-            return {"The 'GetAISpeedOptionSelectionGameDisplays' function does not support the current page type."}; // NOLINT(fuchsia-default-arguments-calls)
+            return {"The 'GetAISpeedOptionSelectionGameDisplays' function does not support the current page type."};
         }
     }
 
