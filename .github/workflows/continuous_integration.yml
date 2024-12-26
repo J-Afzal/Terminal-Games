@@ -38,6 +38,7 @@ jobs:
                       clang --version
                       clang-format --version
                       clang-tidy --version
+                  fi
 
                   if [ "${{ matrix.os }}" = "ubuntu-latest" ]
                   then
@@ -52,6 +53,7 @@ jobs:
                       clang --version
                       clang-format --version
                       clang-tidy --version
+                  fi
 
                   if [ "${{ matrix.os }}" = "windows-latest" ]
                   then
@@ -64,6 +66,7 @@ jobs:
                       clang --version
                       clang-format --version
                       clang-tidy --version
+                  fi
 
             - name: Configure CMake
               run: cmake -S . -B ./build -G "Ninja" -D "CMAKE_BUILD_TYPE=Release" # TODO: Edit this to use clang???
