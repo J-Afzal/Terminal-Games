@@ -25,9 +25,10 @@ jobs:
               run: |
                   if [ "${{ matrix.os }}" = "macos-latest" ]
                   then
-                      brew install cmake
-                      brew install ninja
-                      brew install llvm@19
+                      brew install cmake@3.31.3
+                      brew install ninja@1.12.1
+                      brew install llvm@19.1.5
+
                       export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
                       ln -s "/usr/local/opt/llvm/bin/clang-format" "/usr/local/bin/clang-format"
                       ln -s "/usr/local/opt/llvm/bin/clang-tidy" "/usr/local/bin/clang-tidy"
@@ -35,6 +36,7 @@ jobs:
                       cmake --version
                       ninja --version
                       clang --version
+                      clang-format --version
                       clang-tidy --version
 
                   if [ "${{ matrix.os }}" = "ubuntu-latest" ]
@@ -42,16 +44,26 @@ jobs:
                       sudo apt install cmake
                       sudo apt install ninja-build
                       sudo apt install clang-19
+                      sudo apt install clang-format-19
                       sudo apt install clang-tidy-19
 
                       cmake --version
                       ninja --version
                       clang --version
+                      clang-format --version
                       clang-tidy --version
-
 
                   if [ "${{ matrix.os }}" = "windows-latest" ]
                   then
+                      choco install cmake --version 3.31.3 -y
+                      choco install ninja --version 1.12.1 -y
+                      choco install llvm --version 19.1.5 -y
+
+                      cmake --version
+                      ninja --version
+                      clang --version
+                      clang-format --version
+                      clang-tidy --version
 
             - name: Configure CMake
               run: cmake -S . -B ./build -G "Ninja" -D "CMAKE_BUILD_TYPE=Release" # TODO: Edit this to use clang???
