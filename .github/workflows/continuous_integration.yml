@@ -13,7 +13,7 @@ jobs:
             matrix:
                 os:
                     # - macos-latest
-                    - ubuntu-24.04
+                    - ubuntu-latest
                     # - windows-latest
 
         runs-on: ${{ matrix.os }}
@@ -26,17 +26,11 @@ jobs:
               run: |
                   if [ "${{ matrix.os }}" = "macos-latest" ]
                   then
-                      brew update
-                      brew upgrade
-
                       brew install ninja
                   fi
 
                   if [ "${{ matrix.os }}" = "ubuntu-24.04" ]
                   then
-                      sudo apt-get update
-                      sudo apt-get upgrade
-
                       sudo apt-get install ninja-build
                   fi
 
