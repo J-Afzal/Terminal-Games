@@ -28,7 +28,6 @@ jobs:
                   then
                       brew install ninja
                       brew install llvm
-                      export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
                   fi
 
                   if [ "${{ matrix.os }}" = "ubuntu-latest" ]
@@ -43,8 +42,7 @@ jobs:
               run: |
                   if [ "${{ matrix.os }}" = "macos-latest" ]
                   then
-                      ln -s "/usr/local/opt/llvm/bin/clang-tidy" "/usr/local/bin/clang-tidy"
-                      ln -s "/usr/local/opt/llvm/bin/clang-format" "/usr/local/bin/clang-format"
+                      export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
                   fi
 
                   pwsh -command "Import-Module ./scripts/Linters.psm1; Test-TerminalGamesCode -Verbose"
