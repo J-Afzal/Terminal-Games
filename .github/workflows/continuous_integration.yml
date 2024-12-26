@@ -29,6 +29,7 @@ jobs:
                       brew install cmake
                       brew install ninja
                       brew install llvm@19
+                      export PATH="/opt/homebrew/opt/llvm/bin:$PATH
 
                       cmake --version
                       ninja --version
