@@ -35,6 +35,11 @@ jobs:
                       sudo apt-get install ninja-build
                   fi
 
+                  if [ "${{ matrix.os }}" = "windows-latest" ]
+                  then
+                      choco install ninja -y
+                  fi
+
             - name: Configure CMake
               run: cmake -S . -B ./build -G "Ninja"
 
