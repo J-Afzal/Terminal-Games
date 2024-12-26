@@ -33,11 +33,18 @@ jobs:
                       ln -s "/usr/local/opt/llvm/bin/clang-format" "/usr/local/bin/clang-format"
                       ln -s "/usr/local/opt/llvm/bin/clang-tidy" "/usr/local/bin/clang-tidy"
 
+                      echo "------------"
                       cmake --version
+                      echo "------------"
                       ninja --version
+                      echo "------------"
                       clang --version
+                      echo "------------"
                       clang-format --version
+                      echo "------------"
                       clang-tidy --version
+                      echo "------------"
+                      clang-tidy ./source/main.cpp
                   fi
 
                   if [ "${{ matrix.os }}" = "ubuntu-latest" ]
@@ -69,7 +76,7 @@ jobs:
                   fi
 
             - name: Configure CMake
-              run: cmake -S . -B ./build -G "Ninja" -D "CMAKE_BUILD_TYPE=Release" # TODO: Edit this to use clang???
+              run: cmake -S . -B ./build -G "Ninja" -D "CMAKE_C_COMPILER=clang"
 
             - name: Run clang-tidy
               shell: pwsh
