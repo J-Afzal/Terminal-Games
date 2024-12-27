@@ -13,7 +13,7 @@ jobs:
             matrix:
                 os:
                     - macos-latest
-                    # - ubuntu-latest
+                    - ubuntu-latest
                     - windows-latest
 
         runs-on: ${{ matrix.os }}
@@ -21,8 +21,37 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
+            - name: Install build dependencies
+              shell: bash
+              run: |
+                  if [ "${{ matrix.os }}" = "macos-latest" ]
+                  then
+                      brew install ninja
+                      brew install llvm
+                  fi
+
+                  if [ "${{ matrix.os }}" = "ubuntu-latest" ]
+                  then
+                      sudo apt-get install ninja-build
+                  fi
+
+                  if [ "${{ matrix.os }}" = "windows-latest" ]
+                  then
+                      choco install ninja -y
+                  fi
+
             - name: Configure CMake
-              run: cmake -S . -B ./build -D "CMAKE_BUILD_TYPE=Release"
+              run: cmake -S . -B ./build -G "Ninja"
+
+            - name: Run clang-tidy and clang-format
+              shell: bash
+              run: |
+                  if [ "${{ matrix.os }}" = "macos-latest" ]
+                  then
+                      export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+                  fi
+
+                  pwsh -command "Import-Module ./scripts/Linters.psm1; Test-TerminalGamesCode -Verbose"
 
             - name: Build Project
               run: cmake --build ./build --config Release
@@ -33,14 +62,14 @@ jobs:
                 os:
                     - macos-latest
                     - ubuntu-latest
-                    # - windows-latest
+                    - windows-latest
 
         runs-on: ${{ matrix.os }}
 
         steps:
             - uses: actions/checkout@v4
 
-            - name: Install dev dependencies
+            - name: Install linting dependencies
               run: npm install
 
             - name: Run cspell
@@ -60,5 +89,4 @@ jobs:
               shell: pwsh
               run: |
                   Import-Module ./scripts/Linters.psm1
-
                   Test-GitAttributesFile -Verbose

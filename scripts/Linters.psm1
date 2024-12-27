@@ -24,7 +24,7 @@ function Test-TerminalGamesCode {
     [CmdletBinding()]
     param()
 
-    Write-Output "##[group]Running Test-TerminalGamesCode..."
+    Write-Output "##[section]Running Test-TerminalGamesCode..."
 
     Write-Output "##[section]Retrieving all files to analyse..."
 
@@ -33,14 +33,11 @@ function Test-TerminalGamesCode {
     Write-Verbose "##[debug]Retrieved all files to analyse:"
     $allFilesToTest | ForEach-Object { "##[debug]'$_'" } | Write-Verbose
 
-    Write-Output "##[endgroup]"
-
     $filesWithErrors = @()
-
 
     foreach ($file in $allFilesToTest) {
 
-        Write-Output "##[group]Running Test-TerminalGamesCode against '$file'..."
+        Write-Output "##[section]Running Test-TerminalGamesCode against '$file'..."
 
         $ErrorActionPreference = "Continue"
 
@@ -51,8 +48,6 @@ function Test-TerminalGamesCode {
         if ($LASTEXITCODE -eq 1) {
             $filesWithErrors += $file
         }
-
-        Write-Output "##[endgroup]"
 
     }
 
@@ -91,7 +86,7 @@ function Test-GitAttributesFile {
     [CmdletBinding()]
     param()
 
-    Write-Output "##[group]Running Test-GitattributesFile..."
+    Write-Output "##[section]Running Test-GitattributesFile..."
 
     Write-Output "##[section]Retrieving contents of .gitattributes..."
 
@@ -119,7 +114,7 @@ function Test-GitAttributesFile {
             Write-Verbose "##[debug]Current line is code: '$line'"
 
             if (-not (
-                    $line -Match "^\* +text=auto$" -or
+                    $line -Match "^\* +text=auto +eol=lf$" -or
                     # File extensions with or without * wildcard
                     $line -Match "^\*?\.[a-z0-9-]+ +binary$" -or
                     $line -Match "^\*?\.[a-z0-9-]+ +text$" -or
@@ -252,6 +247,4 @@ function Test-GitAttributesFile {
     else {
         Write-Output "##[section].gitattributes conforms to standards."
     }
-
-    Write-Output "##[endgroup]"
 }

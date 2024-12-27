@@ -12,78 +12,75 @@
 
 #include "Constants.hpp"
 #include "Exceptions.hpp"
+#include "helpers/PageBuilder.hpp"
 #include "helpers/Terminal.hpp"
 
 namespace TerminalGames
 {
     uint32_t Terminal::GetUserChoiceFromMainMenus(const std::vector<std::string> &menus)
     {
-        uint32_t keyPress = 0;
         uint32_t currentSelection = 0;
 
         while (true)
         {
             PrintOutput(menus[currentSelection]);
 
-            keyPress = GetNextKeyPress();
-
-            if (keyPress == g_QUIT_KEY)
+            switch (GetNextKeyPress())
             {
+            case g_QUIT_KEY:
                 throw Exceptions::QuitMainMenu();
-            }
 
-            if (keyPress == g_ENTER_KEY)
-            {
+            case g_ENTER_KEY:
                 return currentSelection;
-            }
 
-            if (keyPress == g_UP_ARROW_KEY)
-            {
+            case g_UP_ARROW_KEY:
                 currentSelection == 0 ? currentSelection = (menus.size() - 1) : --currentSelection;
-            }
+                break;
 
-            else if (keyPress == g_DOWN_ARROW_KEY)
-            {
+            case g_DOWN_ARROW_KEY:
                 currentSelection == (menus.size() - 1) ? currentSelection = 0 : ++currentSelection;
+                break;
+
+            default:
+                break;
             }
         }
     }
 
     uint32_t Terminal::GetUserChoiceFromGameMenus(const std::vector<std::string> &menus)
     {
-        uint32_t keyPress = 0;
         uint32_t currentSelection = 0;
 
         while (true)
         {
             PrintOutput(menus[currentSelection]);
 
-            keyPress = GetNextKeyPress();
-
-            if (keyPress == g_QUIT_KEY)
+            switch (GetNextKeyPress())
             {
+            case g_QUIT_KEY:
                 throw Exceptions::QuitGame();
-            }
 
-            if (keyPress == g_ENTER_KEY)
-            {
+            case g_ENTER_KEY:
                 return currentSelection;
-            }
 
-            if (keyPress == g_UP_ARROW_KEY)
-            {
+            case g_UP_ARROW_KEY:
                 currentSelection == 0 ? currentSelection = (menus.size() - 1) : --currentSelection;
-            }
+                break;
 
-            else if (keyPress == g_DOWN_ARROW_KEY)
-            {
+            case g_DOWN_ARROW_KEY:
                 currentSelection == (menus.size() - 1) ? currentSelection = 0 : ++currentSelection;
+                break;
+
+            default:
+                break;
             }
         }
     }
 
     // NOLINTBEGIN (bugprone-easily-swappable-parameters)
     std::tuple<uint32_t, uint32_t> Terminal::GetUserCommandFromGameGrid(
+        const PageBuilder &pageBuilder,
+        const GameInfo &gameInfo,
         const uint32_t &startingRow,
         const uint32_t &startingColumn,
         const uint32_t &maxRow,
@@ -91,51 +88,85 @@ namespace TerminalGames
         const uint32_t &gridLeftPad,
         const uint32_t &gridTopPad,
         const uint32_t &gridElementWidth,
-        const uint32_t &gridElementHeight)
+        const uint32_t &gridElementHeight,
+        const bool & displayGetUserCommandPage)
     // NOLINTEND (bugprone-easily-swappable-parameters)
     {
-        Terminal::SetCursorVisibility(true);
+        if (displayGetUserCommandPage)
+        {
+            PrintOutput(pageBuilder.GetUserCommandPage(gameInfo));
+        }
 
-        uint32_t keyPress = 0;
         uint32_t row = startingRow;
         uint32_t column = startingColumn;
 
         while (true)
         {
-            Terminal::SetCursorPosition(static_cast<int16_t>(gridLeftPad + (column * gridElementWidth)), static_cast<int16_t>(gridTopPad + (row * gridElementHeight)));
+#ifdef _WIN32
+            SetCursorVisibility(true);
+            SetCursorPosition(static_cast<int16_t>(gridLeftPad + (column * gridElementWidth)), static_cast<int16_t>(gridTopPad + (row * gridElementHeight)));
+#else
+            GameInfo currentGameInfo = gameInfo;
 
-            keyPress = Terminal::GetNextKeyPress();
-
-            if (keyPress == g_QUIT_KEY)
+            switch (pageBuilder.GetCurrentPage())
             {
-                Terminal::SetCursorVisibility(false);
+            case Pages::TICTACTOE:
+                currentGameInfo.ticTacToeStruct.gameGrid[row][column][0] = '#'; // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+                currentGameInfo.ticTacToeStruct.gameGrid[row][column][2] = '#'; // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+                break;
+
+            case Pages::BATTLESHIPS:
+                if (displayGetUserCommandPage)
+                {
+                    currentGameInfo.battleshipsStruct.boardTwo[row][column][0] = '#'; // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+                    currentGameInfo.battleshipsStruct.boardTwo[row][column][2] = '#'; // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+                }
+
+                else
+                {
+                    currentGameInfo.battleshipsStruct.boardOne[row][column][0] = '#'; // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+                    currentGameInfo.battleshipsStruct.boardOne[row][column][2] = '#'; // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+                }
+                break;
+
+            default:
+                break;
+            }
+
+            PrintOutput(pageBuilder.GetUserCommandPage(currentGameInfo));
+#endif
+            switch (GetNextKeyPress())
+            {
+            case g_QUIT_KEY:
+                SetCursorVisibility(false);
                 throw Exceptions::QuitGame();
-            }
 
-            if (keyPress == g_ENTER_KEY)
-            {
-                Terminal::SetCursorVisibility(false);
+            case g_BACKSPACE_KEY:
+                SetCursorVisibility(false);
+                throw Exceptions::BackspaceKeyPressed();
+
+            case g_ENTER_KEY:
+                SetCursorVisibility(false);
                 return {row, column};
-            }
 
-            if (keyPress == g_UP_ARROW_KEY)
-            {
+            case g_UP_ARROW_KEY:
                 row == 0 ? row = maxRow : --row;
-            }
+                break;
 
-            else if (keyPress == g_DOWN_ARROW_KEY)
-            {
+            case g_DOWN_ARROW_KEY:
                 row == maxRow ? row = 0 : ++row;
-            }
+                break;
 
-            else if (keyPress == g_LEFT_ARROW_KEY)
-            {
+            case g_LEFT_ARROW_KEY:
                 column == 0 ? column = maxColumn : --column;
-            }
+                break;
 
-            else if (keyPress == g_RIGHT_ARROW_KEY)
-            {
+            case g_RIGHT_ARROW_KEY:
                 column == maxColumn ? column = 0 : ++column;
+                break;
+
+            default:
+                break;
             }
         }
     }
@@ -182,6 +213,8 @@ namespace TerminalGames
 
         // Move the cursor home
         SetConsoleCursorPosition(hStdOut, homeCoords);
+#else
+        std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 #endif
     }
 
@@ -191,7 +224,42 @@ namespace TerminalGames
         FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE));
         return _getch();
 #else
-        return 0;
+        std::string inputString;
+
+        while (true)
+        {
+            std::getline(std::cin, inputString);
+
+            if (inputString.size() != 1)
+            {
+                continue;
+            }
+
+            switch (inputString[0])
+            {
+            case g_ALTERNATIVE_BACKSPACE_KEY:
+                return g_BACKSPACE_KEY;
+
+            case g_ALTERNATIVE_ENTER_KEY:
+                return g_ENTER_KEY;
+
+            case g_ALTERNATIVE_UP_ARROW_KEY:
+                return g_UP_ARROW_KEY;
+
+            case g_ALTERNATIVE_DOWN_ARROW_KEY:
+                return g_DOWN_ARROW_KEY;
+
+            case g_ALTERNATIVE_LEFT_ARROW_KEY:
+                return g_LEFT_ARROW_KEY;
+
+            case g_ALTERNATIVE_RIGHT_ARROW_KEY:
+                return g_RIGHT_ARROW_KEY;
+
+
+            default:
+                return inputString[0];
+            }
+        }
 #endif
     }
 

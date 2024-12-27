@@ -39,8 +39,10 @@ namespace TerminalGames
     {
         struct TicTacToeStruct
         {
-            std::array<std::array<char, g_TICTACTOE_BOARD_WIDTH>, g_TICTACTOE_BOARD_HEIGHT> gameGrid;
-            std::string currentPlayer, playerCount, AISpeedName;
+            std::array<std::array<std::string, g_TICTACTOE_BOARD_WIDTH>, g_TICTACTOE_BOARD_HEIGHT> gameGrid;
+            std::string computerSpeedName;
+            std::string currentPlayer;
+            std::string playerCount;
             uint32_t turnCount;
             bool hasWinner;
         } ticTacToeStruct;
@@ -48,15 +50,23 @@ namespace TerminalGames
         struct HangmanStruct
         {
             std::vector<char> incorrectGuesses;
-            std::string currentGuessOfWord, wordToBeGuessed, playerCount, AISpeedName;
-            uint32_t errorCount, turnCount;
+            std::string computerSpeedName;
+            std::string currentGuessOfWord;
+            std::string playerCount;
+            std::string wordToBeGuessed;
+            uint32_t errorCount;
+            uint32_t turnCount;
         } hangmanStruct;
 
         struct BattleshipsStruct
         {
-            std::array<std::array<std::string, g_BATTLESHIPS_BOARD_WIDTH>, g_BATTLESHIPS_BOARD_HEIGHT> boardOne, boardTwo;
-            std::unordered_map<std::string, uint32_t> shipsRemainingOne, shipsRemainingTwo;
-            std::string playerCount, AISpeedName, currentPlayer;
+            std::array<std::array<std::string, g_BATTLESHIPS_BOARD_WIDTH>, g_BATTLESHIPS_BOARD_HEIGHT> boardOne;
+            std::array<std::array<std::string, g_BATTLESHIPS_BOARD_WIDTH>, g_BATTLESHIPS_BOARD_HEIGHT> boardTwo;
+            std::unordered_map<std::string, uint32_t> shipsRemainingOne;
+            std::unordered_map<std::string, uint32_t> shipsRemainingTwo;
+            std::string computerSpeedName;
+            std::string currentPlayer;
+            std::string playerCount;
             uint32_t turnCount;
             bool isGameOver;
         } battleshipsStruct;
@@ -90,6 +100,13 @@ namespace TerminalGames
         void SetProperties(const Pages &page, const bool &onlyUseASCII);
 
         /**
+         * @brief Get the current page type.
+         *
+         * @return Pages The current page type.
+         */
+        Pages GetCurrentPage() const;
+
+        /**
          * @brief Creates pages for displaying the main menu game selection screen.
          *
          * @param gameNames The name of the games that can be selected.
@@ -114,12 +131,12 @@ namespace TerminalGames
         std::vector<std::string> GetUserPlayerChoiceOptionSelectionGamePages(const GameInfo &gameInfo) const;
 
         /**
-         * @brief Creates pages for displaying option selection screen for the AI speed for a game.
+         * @brief Creates pages for displaying option selection screen for the computer speed for a game.
          *
          * @param gameInfo Information on the current state of the current game.
-         * @return std::vector<std::string> Pages where each page has a different AI speed selected.
+         * @return std::vector<std::string> Pages where each page has a different computer speed selected.
          */
-        std::vector<std::string> GetAISpeedOptionSelectionGamePages(const GameInfo &gameInfo) const;
+        std::vector<std::string> GetComputerSpeedOptionSelectionGamePages(const GameInfo &gameInfo) const;
 
         /**
          * @brief Creates a general game page with a custom message for use during a game.
@@ -140,19 +157,19 @@ namespace TerminalGames
         std::string GetUserCommandPage(const GameInfo &gameInfo) const;
 
         /**
-         * @brief Creates the AI command page for when the AI is entering their command.
+         * @brief Creates the computer command page for when the computer is entering their command.
          *
          * @param gameInfo Information on the current state of the current game.
-         * @return std::string A page with the current state of the game and a message that the AI is entering their command.
+         * @return std::string A page with the current state of the game and a message that the computer is entering their command.
          */
-        std::string GetAICommandPage(const GameInfo &gameInfo) const;
+        std::string GetComputerCommandPage(const GameInfo &gameInfo) const;
 
         /**
          * @brief Creates the game over page.
          *
          * @param gameInfo Information on the current state of the current game.
-         * @return std::string A page with the final state of the game and a message on who won, how many turns took place,
-         * and how to quit the game or play again.
+         * @return std::string A page with the final state of the game and a message on who won, how many turns took place, and
+         * how to quit the game or play again.
          */
         std::string GetGameOverPage(const GameInfo &gameInfo) const;
 
@@ -174,8 +191,8 @@ namespace TerminalGames
         std::string GetEmptyLine() const;
 
         /**
-         * @brief Creates a new line on a page with the input text is automatically centred. If the spacing on the sides
-         * is unequal, the left side will always have the higher amount of spacing.
+         * @brief Creates a new line on a page with the input text is automatically centred. If the spacing on the sides is
+         * unequal, the left side will always have the higher amount of spacing.
          *
          * @param input The text to display on the new line.
          * @param colour The colour of the input text.
@@ -186,8 +203,8 @@ namespace TerminalGames
         std::string GetNewLineCentred(const std::string &input, const Colours &colour, const std::string &selector) const;
 
         /**
-         * @brief Creates a new line on a page with the input text is automatically left justified (one space padding on
-         * to the left page edge).
+         * @brief Creates a new line on a page with the input text is automatically left justified (one space padding on to the
+         * left page edge).
          *
          * @param input The text to display on the new line.
          * @param colour The colour of the input text.
@@ -233,11 +250,6 @@ namespace TerminalGames
          * @return std::string The empty lines that are needed in between the topString and bottomString.
          */
         std::string GetRemainingEmptyLines(const std::string &topString, const std::string &bottomString) const;
-
-        /**
-         * @brief Dirty hack to get the CI to work as std::count fails with GNU 12.2.0
-         */
-        static int32_t ImplementStdCount(const std::string::const_iterator &begin, const std::string::const_iterator &end, const char &character);
 
         /**
          * @brief Creates pages for displaying option selection screens for the given options.
@@ -298,11 +310,11 @@ namespace TerminalGames
          * ║                     Tic Tac Toe                     ║   <- AddNewLineCentred("Tic Tac Toe")     <- AddTopBox()
          * ╚═════════════════════════════════════════════════════╝   <- AddBottomLine()                      <-
          * ╔═════════════════════════════════════════════════════╗   <- AddTopLine()
-         * ║  O │ O │ X                                          ║                                                                          <-
-         * ║ ───┼───┼───      # of Players = 0                   ║                                                                          <-
-         * ║  O │ X │ O                                          ║                                                                          <- GetTicTacToeSubPage() and GetGeneralGameSubPage()
-         * ║ ───┼───┼───     AI Difficulty = EASY                ║   <- AddNewLineLeftJustified("───┼───┼───     AI Difficulty = EASY")     <-
-         * ║  O │ X │ X                                          ║                                                                          <-
+         * ║  O │ O │ X                                          ║                                                                            <-
+         * ║ ───┼───┼───          # of Players = 0               ║                                                                            <-
+         * ║  O │ X │ O                                          ║                                                                            <- GetTicTacToeSubPage() and GetGeneralGameSubPage()
+         * ║ ───┼───┼───     Computer Difficulty = EASY          ║   <- AddNewLineLeftJustified("───┼───┼───     Computer Difficulty = EASY") <-
+         * ║  O │ X │ X                                          ║                                                                            <-
          * ║                                                     ║   <- AddEmptyLine()
          * ║                      GAME OVER                      ║   <- AddNewLineCentred("GAME OVER")
          * ║                                                     ║

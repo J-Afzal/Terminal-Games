@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <random>
 #include <string>
+#include <tuple>
 #include <unordered_map>
 #include <vector>
 
@@ -27,11 +28,18 @@ namespace TerminalGames
         PageBuilder m_pageBuilder;
         GameInfo m_gameInfo;
         std::default_random_engine m_randomNumberGenerator;
-        std::array<std::array<std::string, g_BATTLESHIPS_BOARD_WIDTH>, g_BATTLESHIPS_BOARD_HEIGHT> m_boardOne, m_boardTwo;
-        std::vector<uint32_t> m_movesRemainingOne, m_movesRemainingTwo;
-        std::unordered_map<std::string, uint32_t> m_shipsRemainingOne, m_shipsRemainingTwo;
-        std::string m_playerCount, m_AISpeedName, m_currentPlayer;
-        uint32_t m_turnCount, m_previousCommand, m_AISpeed, m_AICommand;
+        std::array<std::array<std::string, g_BATTLESHIPS_BOARD_WIDTH>, g_BATTLESHIPS_BOARD_HEIGHT> m_boardOne;
+        std::array<std::array<std::string, g_BATTLESHIPS_BOARD_WIDTH>, g_BATTLESHIPS_BOARD_HEIGHT> m_boardTwo;
+        std::vector<std::tuple<uint32_t, uint32_t>> m_commandsRemainingOne;
+        std::vector<std::tuple<uint32_t, uint32_t>> m_commandsRemainingTwo;
+        std::unordered_map<std::string, uint32_t> m_shipsRemainingOne;
+        std::unordered_map<std::string, uint32_t> m_shipsRemainingTwo;
+        std::tuple<uint32_t, uint32_t> m_previousCommand;
+        std::string m_computerSpeedName;
+        std::string m_currentPlayer;
+        std::string m_playerCount;
+        uint32_t m_computerSpeed;
+        uint32_t m_turnCount;
         bool m_isGameOver;
 
         /**
@@ -48,29 +56,6 @@ namespace TerminalGames
          * @brief See base class function for details.
          */
         void GetUserOptions() override;
-
-        /**
-         * @brief Prompts the user to select how many players will be playing the game.
-         */
-        void GetPlayerCount();
-
-        /**
-         * @brief Prompts the user to select how the speed of AI decision making (this does not affect the difficulty of
-         * the AI).
-         */
-        void GetAISpeed();
-
-        /**
-         * @brief Prompt the user to place all ships on the board.
-         */
-        void GetUserShipPositions();
-
-        /**
-         * @brief Randomly place all ships on the board.
-         *
-         * @param AIBoard The board containing the AI's ship positions.
-         */
-        void GetAIShipPositions(std::array<std::array<std::string, g_BATTLESHIPS_BOARD_WIDTH>, g_BATTLESHIPS_BOARD_HEIGHT> &AIBoard);
 
         /**
          * @brief See base class function for details.
@@ -95,25 +80,85 @@ namespace TerminalGames
         /**
          * @brief See base class function for details.
          */
-        void ExecuteAICommand() override;
-
-        /**
-         * @brief Executes the command on the opponent's board and updates their own board.
-         *
-         * @param opponentBoard The board containing the opponent's ship positions.
-         * @param opponentShipsRemaining The number of squares remaining for each opponent ship.
-         * @param commandsRemaining List of board spaces that remain un-attacked.
-         * @param command The board space that should be attacked.
-         */
-        void ExecuteCommand(
-            std::array<std::array<std::string, g_BATTLESHIPS_BOARD_WIDTH>, g_BATTLESHIPS_BOARD_HEIGHT> &opponentBoard,
-            std::unordered_map<std::string, uint32_t> &opponentShipsRemaining,
-            std::vector<uint32_t> &commandsRemaining,
-            const uint32_t &command);
+        void ExecuteComputerCommand() override;
 
         /**
          * @brief See base class function for details.
          */
         void GameOver() override;
+
+        /**
+         * @brief Prompts the user to select how many players will be playing the game.
+         */
+        void GetPlayerCount();
+
+        /**
+         * @brief Prompts the user to select how the speed of the computer decision making (this does not affect the difficulty
+         * of the computer).
+         */
+        void GetComputerSpeed();
+
+        /**
+         * @brief Prompt the user to place all ships on the board.
+         */
+        void GetUserShipPositions();
+
+        /**
+         * @brief
+         *
+         * @param currentShipPositions
+         * @param selectedShipGridLocation
+         * @param shipIsVertical
+         * @param shipIsHorizontal
+         * @return true
+         * @return false
+         */
+        bool ValidateUserShipPosition(
+            const std::vector<std::tuple<uint32_t, uint32_t>> &currentShipPositions,
+            const std::tuple<uint32_t, uint32_t> &selectedShipGridLocation,
+            bool &shipIsVertical,
+            bool &shipIsHorizontal);
+
+        /**
+         * @brief Randomly place all ships on the board.
+         *
+         * @param board The board containing the AI's ship positions.
+         */
+        void GetComputerShipPositions(std::array<std::array<std::string, g_BATTLESHIPS_BOARD_WIDTH>, g_BATTLESHIPS_BOARD_HEIGHT> &board);
+
+        /**
+         * @brief Checks whether at least a single ship is present on a game board.
+         *
+         * @param board The game board to check.
+         * @return true If at least a single ship is present on the board.
+         * @return false If no ships are present on the board
+         */
+        static bool IsShipPresent(std::array<std::array<std::string, g_BATTLESHIPS_BOARD_WIDTH>, g_BATTLESHIPS_BOARD_HEIGHT> &board);
+
+        /**
+         * @brief Checks whether the command is valid.
+         *
+         * @param command The command in the form of <row, column>.
+         * @return true If the command is valid.
+         * @return false If the command is not valid.
+         */
+        static bool ValidateCommand(
+            const std::vector<std::tuple<uint32_t, uint32_t>> &commandsRemaining,
+            const std::tuple<uint32_t, uint32_t> &command);
+
+        /**
+         * @brief Executes the command on the opponent's board and updates their own board and commands remaining.
+         *
+         * @param opponentBoard The board containing the opponent's ship positions.
+         * @param opponentShipsRemaining The number of squares remaining for each opponent ship.
+         * @param commandsRemaining List of board spaces that remain un-attacked.
+         * @param command The board row and column that should be attacked.
+         */
+        void ExecuteGeneralCommand(
+            std::array<std::array<std::string, g_BATTLESHIPS_BOARD_WIDTH>, g_BATTLESHIPS_BOARD_HEIGHT> &opponentBoard,
+            std::unordered_map<std::string, uint32_t> &opponentShipsRemaining,
+            std::vector<std::tuple<uint32_t, uint32_t>> &commandsRemaining,
+            const std::tuple<uint32_t, uint32_t> &command);
+
     };
 } // namespace TerminalGames

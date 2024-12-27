@@ -15,13 +15,18 @@ namespace TerminalGames::Exceptions
     class QuitGame : public std::exception {};
 
     /**
+     * @brief Used for functionality that has not been implemented.
+     */
+    class NotImplementedError : public std::exception {};
+
+    /**
      * @brief Used when the hangman game words.txt file is not found.
      */
     class HangmanWordsNotFound : public std::exception {};
 
     /**
-     * @brief Used for functionality that has not been implemented.
+     * @brief Used when the backspace key is pressed.
      */
-    class NotImplementedError : public std::exception {};
+    class BackspaceKeyPressed : public std::exception {};
 
 } // namespace TerminalGames::Exceptions
