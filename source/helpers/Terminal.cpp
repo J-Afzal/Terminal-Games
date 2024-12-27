@@ -111,21 +111,21 @@ namespace TerminalGames
             switch (pageBuilder.GetCurrentPage())
             {
             case Pages::TICTACTOE:
-                currentGameInfo.ticTacToeStruct.gameGrid[row][column][0] = '#';
-                currentGameInfo.ticTacToeStruct.gameGrid[row][column][2] = '#';
+                currentGameInfo.ticTacToeStruct.gameGrid[row][column][0] = '#'; // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+                currentGameInfo.ticTacToeStruct.gameGrid[row][column][2] = '#'; // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
                 break;
 
             case Pages::BATTLESHIPS:
                 if (displayGetUserCommandPage)
                 {
-                    currentGameInfo.battleshipsStruct.boardTwo[row][column][0] = '#';
-                    currentGameInfo.battleshipsStruct.boardTwo[row][column][2] = '#';
+                    currentGameInfo.battleshipsStruct.boardTwo[row][column][0] = '#'; // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+                    currentGameInfo.battleshipsStruct.boardTwo[row][column][2] = '#'; // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
                 }
 
                 else
                 {
-                    currentGameInfo.battleshipsStruct.boardOne[row][column][0] = '#';
-                    currentGameInfo.battleshipsStruct.boardOne[row][column][2] = '#';
+                    currentGameInfo.battleshipsStruct.boardOne[row][column][0] = '#'; // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+                    currentGameInfo.battleshipsStruct.boardOne[row][column][2] = '#'; // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
                 }
                 break;
 
