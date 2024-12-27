@@ -24,7 +24,7 @@ function Test-TerminalGamesCode {
     [CmdletBinding()]
     param()
 
-    Write-Output "##[group]Running Test-TerminalGamesCode..."
+    Write-Output "##[section]Running Test-TerminalGamesCode..."
 
     Write-Output "##[section]Retrieving all files to analyse..."
 
@@ -32,8 +32,6 @@ function Test-TerminalGamesCode {
 
     Write-Verbose "##[debug]Retrieved all files to analyse:"
     $allFilesToTest | ForEach-Object { "##[debug]'$_'" } | Write-Verbose
-
-    Write-Output "##[endgroup]"
 
     $filesWithErrors = @()
 
@@ -88,7 +86,7 @@ function Test-GitAttributesFile {
     [CmdletBinding()]
     param()
 
-    Write-Output "##[group]Running Test-GitattributesFile..."
+    Write-Output "##[section]Running Test-GitattributesFile..."
 
     Write-Output "##[section]Retrieving contents of .gitattributes..."
 
@@ -249,6 +247,4 @@ function Test-GitAttributesFile {
     else {
         Write-Output "##[section].gitattributes conforms to standards."
     }
-
-    Write-Output "##[endgroup]"
 }
