@@ -45,9 +45,9 @@ namespace TerminalGames
 
     MainMenu::~MainMenu()
     {
-        Terminal::Clear();
-        Terminal::SetCursorVisibility(true);
         Terminal::SetCursorPosition(0, 0);
+        Terminal::SetCursorVisibility(true);
+        Terminal::Clear();
     }
 
     void MainMenu::Run()
