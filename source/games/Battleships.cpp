@@ -99,7 +99,7 @@ namespace TerminalGames
         {
             for (const std::string &currentValue : currentRow)
             {
-                const auto currentValueFindLocation = ImplementStdRangesFind(g_BATTLESHIPS_SHIP_NAMES.begin(), g_BATTLESHIPS_SHIP_NAMES.end(), currentValue);
+                const auto currentValueFindLocation = ImplementStdRangesFind(g_BATTLESHIPS_SHIP_NAMES.begin(), g_BATTLESHIPS_SHIP_NAMES.end(), currentValue); // NOLINT(llvm-qualified-auto,readability-qualified-auto)
 
                 if (currentValueFindLocation != g_BATTLESHIPS_SHIP_NAMES.end())
                 {
@@ -401,7 +401,7 @@ namespace TerminalGames
                 for (std::tuple<uint32_t, uint32_t> currentPosition : shipPositions)
                 {
 
-                    const auto currentPositionFindLocation = ImplementStdRangesFind(
+                    const auto currentPositionFindLocation = ImplementStdRangesFind( // NOLINT(llvm-qualified-auto,readability-qualified-auto)
                         g_BATTLESHIPS_SHIP_NAMES.begin(),
                         g_BATTLESHIPS_SHIP_NAMES.end(),
                         board[std::get<0>(currentPosition)][std::get<1>(currentPosition)]); // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
@@ -444,7 +444,7 @@ namespace TerminalGames
         const uint32_t row = std::get<0>(command);
         const uint32_t column = std::get<1>(command);
 
-        const auto currentValueFindLocation = ImplementStdRangesFind(g_BATTLESHIPS_SHIP_NAMES.begin(), g_BATTLESHIPS_SHIP_NAMES.end(), opponentBoard[row][column]); // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+        const auto currentValueFindLocation = ImplementStdRangesFind(g_BATTLESHIPS_SHIP_NAMES.begin(), g_BATTLESHIPS_SHIP_NAMES.end(), opponentBoard[row][column]); // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index,llvm-qualified-auto,readability-qualified-auto)
 
         if (currentValueFindLocation != g_BATTLESHIPS_SHIP_NAMES.end())
         {
