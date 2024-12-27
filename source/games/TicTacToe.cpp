@@ -33,7 +33,7 @@ namespace TerminalGames
         {
             for (uint32_t j = 0; j < g_TICTACTOE_BOARD_WIDTH; j++)
             {
-                m_gameGrid[i][j] = ' '; // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+                m_gameGrid[i][j] = "   "; // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
                 m_movesRemaining.emplace_back(i, j);
             }
         }
@@ -103,18 +103,18 @@ namespace TerminalGames
     bool TicTacToe::IsGameOver()
     {
         // Check horizontals
-        if ((m_gameGrid[0][0] != ' ' && m_gameGrid[0][0] == m_gameGrid[0][1] && m_gameGrid[0][1] == m_gameGrid[0][2]) ||
-            (m_gameGrid[1][0] != ' ' && m_gameGrid[1][0] == m_gameGrid[1][1] && m_gameGrid[1][1] == m_gameGrid[1][2]) ||
-            (m_gameGrid[2][0] != ' ' && m_gameGrid[2][0] == m_gameGrid[2][1] && m_gameGrid[2][1] == m_gameGrid[2][2]) ||
+        if ((m_gameGrid[0][0] != "   " && m_gameGrid[0][0] == m_gameGrid[0][1] && m_gameGrid[0][1] == m_gameGrid[0][2]) ||
+            (m_gameGrid[1][0] != "   " && m_gameGrid[1][0] == m_gameGrid[1][1] && m_gameGrid[1][1] == m_gameGrid[1][2]) ||
+            (m_gameGrid[2][0] != "   " && m_gameGrid[2][0] == m_gameGrid[2][1] && m_gameGrid[2][1] == m_gameGrid[2][2]) ||
 
             // Check verticals
-            (m_gameGrid[0][0] != ' ' && m_gameGrid[0][0] == m_gameGrid[1][0] && m_gameGrid[1][0] == m_gameGrid[2][0]) ||
-            (m_gameGrid[0][1] != ' ' && m_gameGrid[0][1] == m_gameGrid[1][1] && m_gameGrid[1][1] == m_gameGrid[2][1]) ||
-            (m_gameGrid[0][2] != ' ' && m_gameGrid[0][2] == m_gameGrid[1][2] && m_gameGrid[1][2] == m_gameGrid[2][2]) ||
+            (m_gameGrid[0][0] != "   " && m_gameGrid[0][0] == m_gameGrid[1][0] && m_gameGrid[1][0] == m_gameGrid[2][0]) ||
+            (m_gameGrid[0][1] != "   " && m_gameGrid[0][1] == m_gameGrid[1][1] && m_gameGrid[1][1] == m_gameGrid[2][1]) ||
+            (m_gameGrid[0][2] != "   " && m_gameGrid[0][2] == m_gameGrid[1][2] && m_gameGrid[1][2] == m_gameGrid[2][2]) ||
 
             // Check diagonals
-            (m_gameGrid[0][0] != ' ' && m_gameGrid[0][0] == m_gameGrid[1][1] && m_gameGrid[1][1] == m_gameGrid[2][2]) ||
-            (m_gameGrid[2][0] != ' ' && m_gameGrid[2][0] == m_gameGrid[1][1] && m_gameGrid[1][1] == m_gameGrid[0][2]))
+            (m_gameGrid[0][0] != "   " && m_gameGrid[0][0] == m_gameGrid[1][1] && m_gameGrid[1][1] == m_gameGrid[2][2]) ||
+            (m_gameGrid[2][0] != "   " && m_gameGrid[2][0] == m_gameGrid[1][1] && m_gameGrid[1][1] == m_gameGrid[0][2]))
         {
             m_hasWinner = true;
             return m_hasWinner;
@@ -138,14 +138,12 @@ namespace TerminalGames
 
     void TicTacToe::ExecuteUserCommand()
     {
-        Terminal::PrintOutput(m_pageBuilder.GetUserCommandPage(m_gameInfo));
-
         const uint32_t startingRow = std::get<0>(m_movesRemaining.front());
         const uint32_t startingColumn = std::get<1>(m_movesRemaining.front());
 
         while (true)
         {
-            const std::tuple<uint32_t, uint32_t> selectedCommand = Terminal::GetUserCommandFromGameGrid(startingRow, startingColumn, g_TICTACTOE_BOARD_HEIGHT - 1, g_TICTACTOE_BOARD_WIDTH - 1, g_TICTACTOE_GRID_LEFT_PAD, g_TICTACTOE_GRID_TOP_PAD, g_TICTACTOE_GRID_ELEMENT_WIDTH, g_TICTACTOE_GRID_ELEMENT_HEIGHT);
+            const std::tuple<uint32_t, uint32_t> selectedCommand = Terminal::GetUserCommandFromGameGrid(m_pageBuilder, m_gameInfo, startingRow, startingColumn, g_TICTACTOE_BOARD_HEIGHT - 1, g_TICTACTOE_BOARD_WIDTH - 1, g_TICTACTOE_GRID_LEFT_PAD, g_TICTACTOE_GRID_TOP_PAD, g_TICTACTOE_GRID_ELEMENT_WIDTH, g_TICTACTOE_GRID_ELEMENT_HEIGHT);
 
             if (ValidateCommand(selectedCommand))
             {
@@ -183,10 +181,9 @@ namespace TerminalGames
     {
         const auto commandPosition = ImplementStdRangesFind(m_movesRemaining.begin(), m_movesRemaining.end(), command);
 
-        m_gameGrid[std::get<0>(command)][std::get<1>(command)] = m_currentPlayer.back(); // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+        m_gameGrid[std::get<0>(command)][std::get<1>(command)] = std::string(" ") + m_currentPlayer.back() + std::string(" "); // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
         m_movesRemaining.erase(commandPosition);
         m_turnCount++;
-        Terminal::SetCursorVisibility(false);
     }
 
     void TicTacToe::GameOver()

@@ -42,6 +42,8 @@ namespace TerminalGames
          * @brief Gets a user command based on the currently displayed game grid. Most of the parameters are to enable the
          * correct alignment of the cursor for different game grid sizes.
          *
+         * @param pageBuilder The page builder object to allow for refreshing the screen.
+         * @param gameInfo The game info object to pass to the page builder object.
          * @param startingRow The initial row to place the cursor.
          * @param startingColumn The initial column to place the cursor.
          * @param maxRow The maximum number of rows to limit the cursor.
@@ -53,6 +55,8 @@ namespace TerminalGames
          * @return std::tuple<uint32_t, uint32_t> The user command from the user in the for <row, column>.
          */
         static std::tuple<uint32_t, uint32_t> GetUserCommandFromGameGrid(
+            const PageBuilder &pageBuilder,
+            const GameInfo &gameInfo,
             const uint32_t &startingRow,
             const uint32_t &startingColumn,
             const uint32_t &maxRow,

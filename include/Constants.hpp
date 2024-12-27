@@ -69,7 +69,7 @@ namespace TerminalGames
     static constexpr uint32_t g_TICTACTOE_BOARD_WIDTH = 3;
     static constexpr uint32_t g_TICTACTOE_BOARD_HEIGHT = 3;
     static constexpr uint32_t g_TICTACTOE_MAXIMUM_ERROR_COUNT = g_TICTACTOE_BOARD_WIDTH * g_TICTACTOE_BOARD_HEIGHT;
-    static constexpr uint32_t g_TICTACTOE_GRID_LEFT_PAD = 4;
+    static constexpr uint32_t g_TICTACTOE_GRID_LEFT_PAD = 3;
     static constexpr uint32_t g_TICTACTOE_GRID_TOP_PAD = 4;
     static constexpr uint32_t g_TICTACTOE_GRID_ELEMENT_WIDTH = 4;
     static constexpr uint32_t g_TICTACTOE_GRID_ELEMENT_HEIGHT = 2;

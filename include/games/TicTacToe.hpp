@@ -27,7 +27,7 @@ namespace TerminalGames
         PageBuilder m_pageBuilder;
         GameInfo m_gameInfo;
         std::default_random_engine m_randomNumberGenerator;
-        std::array<std::array<char, g_TICTACTOE_BOARD_WIDTH>, g_TICTACTOE_BOARD_HEIGHT> m_gameGrid;
+        std::array<std::array<std::string, g_TICTACTOE_BOARD_WIDTH>, g_TICTACTOE_BOARD_HEIGHT> m_gameGrid;
         std::vector<std::tuple<uint32_t, uint32_t>> m_movesRemaining;
         std::string m_currentPlayer, m_playerCount, m_userPlayerChoice, m_AISpeedName;
         uint32_t m_turnCount, m_AISpeed;

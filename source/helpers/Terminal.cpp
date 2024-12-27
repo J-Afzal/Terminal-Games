@@ -12,6 +12,7 @@
 
 #include "Constants.hpp"
 #include "Exceptions.hpp"
+#include "helpers/PageBuilder.hpp"
 #include "helpers/Terminal.hpp"
 
 namespace TerminalGames
@@ -84,6 +85,8 @@ namespace TerminalGames
 
     // NOLINTBEGIN (bugprone-easily-swappable-parameters)
     std::tuple<uint32_t, uint32_t> Terminal::GetUserCommandFromGameGrid(
+        const PageBuilder &pageBuilder,
+        const GameInfo &gameInfo,
         const uint32_t &startingRow,
         const uint32_t &startingColumn,
         const uint32_t &maxRow,
@@ -94,7 +97,9 @@ namespace TerminalGames
         const uint32_t &gridElementHeight)
     // NOLINTEND (bugprone-easily-swappable-parameters)
     {
-        Terminal::SetCursorVisibility(true);
+        PrintOutput(pageBuilder.GetUserCommandPage(gameInfo));
+
+        SetCursorVisibility(true);
 
         uint32_t keyPress = 0;
         uint32_t row = startingRow;
@@ -102,19 +107,25 @@ namespace TerminalGames
 
         while (true)
         {
-            Terminal::SetCursorPosition(static_cast<int16_t>(gridLeftPad + (column * gridElementWidth)), static_cast<int16_t>(gridTopPad + (row * gridElementHeight)));
+            SetCursorPosition(static_cast<int16_t>(gridLeftPad + (column * gridElementWidth)), static_cast<int16_t>(gridTopPad + (row * gridElementHeight)));
 
-            keyPress = Terminal::GetNextKeyPress();
+#ifndef _OTHER_PLATFORM_TEST
+            GameInfo currentGameInfo = gameInfo;
+            currentGameInfo.ticTacToeStruct.gameGrid[row][column][0] = '#';
+            currentGameInfo.ticTacToeStruct.gameGrid[row][column][2] = '#';
+            PrintOutput(pageBuilder.GetUserCommandPage(currentGameInfo));
+#endif
+            keyPress = GetNextKeyPress();
 
             if (keyPress == g_QUIT_KEY)
             {
-                Terminal::SetCursorVisibility(false);
+                SetCursorVisibility(false);
                 throw Exceptions::QuitGame();
             }
 
             if (keyPress == g_ENTER_KEY)
             {
-                Terminal::SetCursorVisibility(false);
+                SetCursorVisibility(false);
                 return {row, column};
             }
 
@@ -182,6 +193,8 @@ namespace TerminalGames
 
         // Move the cursor home
         SetConsoleCursorPosition(hStdOut, homeCoords);
+#else
+        std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 #endif
     }
 
@@ -191,7 +204,38 @@ namespace TerminalGames
         FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE));
         return _getch();
 #else
-        return 0;
+        std::string inputString;
+
+        while (true)
+        {
+            std::getline(std::cin, inputString);
+
+            if (inputString.size() != 1)
+            {
+                continue;
+            }
+
+            switch (inputString[0])
+            {
+            case g_ALTERNATIVE_UP_ARROW_KEY:
+                return g_UP_ARROW_KEY;
+
+            case g_ALTERNATIVE_DOWN_ARROW_KEY:
+                return g_DOWN_ARROW_KEY;
+
+            case g_ALTERNATIVE_LEFT_ARROW_KEY:
+                return g_LEFT_ARROW_KEY;
+
+            case g_ALTERNATIVE_RIGHT_ARROW_KEY:
+                return g_RIGHT_ARROW_KEY;
+
+            case g_ALTERNATIVE_ENTER_KEY:
+                return g_ENTER_KEY;
+
+            default:
+                return inputString[0];
+            }
+        }
 #endif
     }
 

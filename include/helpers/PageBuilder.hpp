@@ -39,8 +39,10 @@ namespace TerminalGames
     {
         struct TicTacToeStruct
         {
-            std::array<std::array<char, g_TICTACTOE_BOARD_WIDTH>, g_TICTACTOE_BOARD_HEIGHT> gameGrid;
-            std::string currentPlayer, playerCount, AISpeedName;
+            std::array<std::array<std::string, g_TICTACTOE_BOARD_WIDTH>, g_TICTACTOE_BOARD_HEIGHT> gameGrid;
+            std::string currentPlayer;
+            std::string playerCount;
+            std::string AISpeedName;
             uint32_t turnCount;
             bool hasWinner;
         } ticTacToeStruct;
@@ -48,15 +50,23 @@ namespace TerminalGames
         struct HangmanStruct
         {
             std::vector<char> incorrectGuesses;
-            std::string currentGuessOfWord, wordToBeGuessed, playerCount, AISpeedName;
-            uint32_t errorCount, turnCount;
+            std::string currentGuessOfWord;
+            std::string wordToBeGuessed;
+            std::string playerCount;
+            std::string AISpeedName;
+            uint32_t errorCount;
+            uint32_t turnCount;
         } hangmanStruct;
 
         struct BattleshipsStruct
         {
-            std::array<std::array<std::string, g_BATTLESHIPS_BOARD_WIDTH>, g_BATTLESHIPS_BOARD_HEIGHT> boardOne, boardTwo;
-            std::unordered_map<std::string, uint32_t> shipsRemainingOne, shipsRemainingTwo;
-            std::string playerCount, AISpeedName, currentPlayer;
+            std::array<std::array<std::string, g_BATTLESHIPS_BOARD_WIDTH>, g_BATTLESHIPS_BOARD_HEIGHT> boardOne;
+            std::array<std::array<std::string, g_BATTLESHIPS_BOARD_WIDTH>, g_BATTLESHIPS_BOARD_HEIGHT> boardTwo;
+            std::unordered_map<std::string, uint32_t> shipsRemainingOne;
+            std::unordered_map<std::string, uint32_t> shipsRemainingTwo;
+            std::string playerCount;
+            std::string AISpeedName;
+            std::string currentPlayer;
             uint32_t turnCount;
             bool isGameOver;
         } battleshipsStruct;

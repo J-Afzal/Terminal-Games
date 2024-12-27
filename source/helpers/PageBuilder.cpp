@@ -423,20 +423,20 @@ namespace TerminalGames
     // NOLINTBEGIN
     std::string PageBuilder::GetTicTacToeSubPage(const GameInfo &gameInfo) const
     {
-        const std::array<std::array<char, 3>, 3> gameGrid = gameInfo.ticTacToeStruct.gameGrid;
+        const std::array<std::array<std::string, g_TICTACTOE_BOARD_WIDTH>, g_TICTACTOE_BOARD_HEIGHT> gameGrid = gameInfo.ticTacToeStruct.gameGrid;
         const std::string playerCount = gameInfo.ticTacToeStruct.playerCount, AISpeedName = gameInfo.ticTacToeStruct.AISpeedName;
 
         std::string Output;
 
-        Output += GetNewLineLeftJustified(std::string("  ") + gameGrid[0][0] + " " + char(179) + " " + gameGrid[0][1] + " " + char(179) + " " + gameGrid[0][2], Colours::WHITE, "");
+        Output += GetNewLineLeftJustified(gameGrid[0][0] + char(179) + gameGrid[0][1] + char(179) + gameGrid[0][2], Colours::WHITE, "");
 
-        Output += GetNewLineLeftJustified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)197 + (char)196 + (char)196 + (char)196 + char(197) + (char)196 + (char)196 + (char)196 + "    # of Players = " + playerCount, Colours::WHITE, "");
+        Output += GetNewLineLeftJustified(std::string("") + (char)196 + (char)196 + (char)196 + (char)197 + (char)196 + (char)196 + (char)196 + char(197) + (char)196 + (char)196 + (char)196 + "    # of Players = " + playerCount, Colours::WHITE, "");
 
-        Output += GetNewLineLeftJustified(std::string("  ") + gameGrid[1][0] + " " + char(179) + " " + gameGrid[1][1] + " " + char(179) + " " + gameGrid[1][2], Colours::WHITE, "");
+        Output += GetNewLineLeftJustified(gameGrid[1][0] + char(179) + gameGrid[1][1] + char(179) + gameGrid[1][2], Colours::WHITE, "");
 
-        Output += GetNewLineLeftJustified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)197 + (char)196 + (char)196 + (char)196 + char(197) + (char)196 + (char)196 + (char)196 + "    AI Speed = " + AISpeedName, Colours::WHITE, "");
+        Output += GetNewLineLeftJustified(std::string("") + (char)196 + (char)196 + (char)196 + (char)197 + (char)196 + (char)196 + (char)196 + char(197) + (char)196 + (char)196 + (char)196 + "    AI Speed = " + AISpeedName, Colours::WHITE, "");
 
-        Output += GetNewLineLeftJustified(std::string("  ") + gameGrid[2][0] + " " + char(179) + " " + gameGrid[2][1] + " " + char(179) + " " + gameGrid[2][2], Colours::WHITE, "");
+        Output += GetNewLineLeftJustified(gameGrid[2][0] + char(179) + gameGrid[2][1] + char(179) + gameGrid[2][2], Colours::WHITE, "");
 
         return Output;
     }
