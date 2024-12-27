@@ -55,8 +55,6 @@ namespace TerminalGames
             {
                 SetupGame();
 
-                UpdateGameInfo();
-
                 GetUserOptions();
 
                 while (!IsGameOver())
@@ -68,7 +66,7 @@ namespace TerminalGames
 
                     else
                     {
-                        ExecuteAICommand();
+                        ExecuteComputerCommand();
                     }
 
                     ToggleCurrentPlayer();
@@ -121,9 +119,9 @@ namespace TerminalGames
         virtual void ExecuteUserCommand() = 0;
 
         /**
-         * @brief Get a random command from the "AI".
+         * @brief Get a random command from the computer.
          */
-        virtual void ExecuteAICommand() = 0;
+        virtual void ExecuteComputerCommand() = 0;
 
         /**
          * @brief Display the game over message and prompt the user whether they would like to play again or quit the game.

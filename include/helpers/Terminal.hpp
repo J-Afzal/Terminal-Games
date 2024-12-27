@@ -5,11 +5,13 @@
 #include <tuple>
 #include <vector>
 
+#include "helpers/PageBuilder.hpp"
+
 namespace TerminalGames
 {
     /**
-     * @brief Handles all terminal related tasks such as getting user input,
-     * outputting to the terminal, clearing the terminal, etc
+     * @brief Handles all terminal related tasks such as getting user input, outputting to the terminal, clearing the terminal,
+     * etc.
      */
     class Terminal
     {
@@ -17,23 +19,19 @@ namespace TerminalGames
         Terminal() = delete;
 
         /**
-         * @brief Get the user choice from a list of main menus strings that are printed to
-         * the terminal.
+         * @brief Get the user choice from a list of main menus strings that are printed to the terminal.
          *
-         * @param menus An array of strings used to print to the terminal. The string chosen
-         * depends on user input. The only difference between each string is the selected menu
-         * option.
+         * @param menus An array of strings used to print to the terminal. The string chosen depends on user input. The only
+         * difference between each string is the selected menu option.
          * @return uint32_t The index of the menu string that the user selected.
          */
         static uint32_t GetUserChoiceFromMainMenus(const std::vector<std::string> &menus);
 
         /**
-         * @brief Get the user choice from a list of game menus strings that are printed to
-         * the terminal.
+         * @brief Get the user choice from a list of game menus strings that are printed to the terminal.
          *
-         * @param menus An array of strings used to print to the terminal. The string chosen
-         * depends on user input. The only difference between each string is the selected menu
-         * option.
+         * @param menus An array of strings used to print to the terminal. The string chosen depends on user input. The only
+         * difference between each string is the selected menu option.
          * @return uint32_t The index of the menu string that the user selected.
          */
         static uint32_t GetUserChoiceFromGameMenus(const std::vector<std::string> &menus);
@@ -52,6 +50,7 @@ namespace TerminalGames
          * @param gridTopPad The amount of padding between the top edge of the terminal and game grid.
          * @param gridElementWidth The number of characters wide for a specific grid element in the game grid.
          * @param gridElementHeight The number of characters tall for a specific grid element in the game grid.
+         * @param printUserCommandPage Whether to display the get user command page.
          * @return std::tuple<uint32_t, uint32_t> The user command from the user in the for <row, column>.
          */
         static std::tuple<uint32_t, uint32_t> GetUserCommandFromGameGrid(
@@ -64,7 +63,8 @@ namespace TerminalGames
             const uint32_t &gridLeftPad,
             const uint32_t &gridTopPad,
             const uint32_t &gridElementWidth,
-            const uint32_t &gridElementHeight);
+            const uint32_t &gridElementHeight,
+            const bool& displayGetUserCommandPage);
 
         /**
          * @brief Clears and then prints to the terminal.

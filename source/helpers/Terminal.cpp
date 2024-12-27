@@ -19,66 +19,60 @@ namespace TerminalGames
 {
     uint32_t Terminal::GetUserChoiceFromMainMenus(const std::vector<std::string> &menus)
     {
-        uint32_t keyPress = 0;
         uint32_t currentSelection = 0;
 
         while (true)
         {
             PrintOutput(menus[currentSelection]);
 
-            keyPress = GetNextKeyPress();
-
-            if (keyPress == g_QUIT_KEY)
+            switch (GetNextKeyPress())
             {
+            case g_QUIT_KEY:
                 throw Exceptions::QuitMainMenu();
-            }
 
-            if (keyPress == g_ENTER_KEY)
-            {
+            case g_ENTER_KEY:
                 return currentSelection;
-            }
 
-            if (keyPress == g_UP_ARROW_KEY)
-            {
+            case g_UP_ARROW_KEY:
                 currentSelection == 0 ? currentSelection = (menus.size() - 1) : --currentSelection;
-            }
+                break;
 
-            else if (keyPress == g_DOWN_ARROW_KEY)
-            {
+            case g_DOWN_ARROW_KEY:
                 currentSelection == (menus.size() - 1) ? currentSelection = 0 : ++currentSelection;
+                break;
+
+            default:
+                break;
             }
         }
     }
 
     uint32_t Terminal::GetUserChoiceFromGameMenus(const std::vector<std::string> &menus)
     {
-        uint32_t keyPress = 0;
         uint32_t currentSelection = 0;
 
         while (true)
         {
             PrintOutput(menus[currentSelection]);
 
-            keyPress = GetNextKeyPress();
-
-            if (keyPress == g_QUIT_KEY)
+            switch (GetNextKeyPress())
             {
+            case g_QUIT_KEY:
                 throw Exceptions::QuitGame();
-            }
 
-            if (keyPress == g_ENTER_KEY)
-            {
+            case g_ENTER_KEY:
                 return currentSelection;
-            }
 
-            if (keyPress == g_UP_ARROW_KEY)
-            {
+            case g_UP_ARROW_KEY:
                 currentSelection == 0 ? currentSelection = (menus.size() - 1) : --currentSelection;
-            }
+                break;
 
-            else if (keyPress == g_DOWN_ARROW_KEY)
-            {
+            case g_DOWN_ARROW_KEY:
                 currentSelection == (menus.size() - 1) ? currentSelection = 0 : ++currentSelection;
+                break;
+
+            default:
+                break;
             }
         }
     }
@@ -94,59 +88,85 @@ namespace TerminalGames
         const uint32_t &gridLeftPad,
         const uint32_t &gridTopPad,
         const uint32_t &gridElementWidth,
-        const uint32_t &gridElementHeight)
+        const uint32_t &gridElementHeight,
+        const bool & displayGetUserCommandPage)
     // NOLINTEND (bugprone-easily-swappable-parameters)
     {
-        PrintOutput(pageBuilder.GetUserCommandPage(gameInfo));
+        if (displayGetUserCommandPage)
+        {
+            PrintOutput(pageBuilder.GetUserCommandPage(gameInfo));
+        }
 
-        SetCursorVisibility(true);
-
-        uint32_t keyPress = 0;
         uint32_t row = startingRow;
         uint32_t column = startingColumn;
 
         while (true)
         {
+#ifdef _WIN32
+            SetCursorVisibility(true);
             SetCursorPosition(static_cast<int16_t>(gridLeftPad + (column * gridElementWidth)), static_cast<int16_t>(gridTopPad + (row * gridElementHeight)));
-
-#ifndef _OTHER_PLATFORM_TEST
+#else
             GameInfo currentGameInfo = gameInfo;
-            currentGameInfo.ticTacToeStruct.gameGrid[row][column][0] = '#';
-            currentGameInfo.ticTacToeStruct.gameGrid[row][column][2] = '#';
+
+            switch (pageBuilder.GetCurrentPage())
+            {
+            case Pages::TICTACTOE:
+                currentGameInfo.ticTacToeStruct.gameGrid[row][column][0] = '#';
+                currentGameInfo.ticTacToeStruct.gameGrid[row][column][2] = '#';
+                break;
+
+            case Pages::BATTLESHIPS:
+                if (displayGetUserCommandPage)
+                {
+                    currentGameInfo.battleshipsStruct.boardTwo[row][column][0] = '#';
+                    currentGameInfo.battleshipsStruct.boardTwo[row][column][2] = '#';
+                }
+
+                else
+                {
+                    currentGameInfo.battleshipsStruct.boardOne[row][column][0] = '#';
+                    currentGameInfo.battleshipsStruct.boardOne[row][column][2] = '#';
+                }
+                break;
+
+            default:
+                break;
+            }
+
             PrintOutput(pageBuilder.GetUserCommandPage(currentGameInfo));
 #endif
-            keyPress = GetNextKeyPress();
-
-            if (keyPress == g_QUIT_KEY)
+            switch (GetNextKeyPress())
             {
+            case g_QUIT_KEY:
                 SetCursorVisibility(false);
                 throw Exceptions::QuitGame();
-            }
 
-            if (keyPress == g_ENTER_KEY)
-            {
+            case g_BACKSPACE_KEY:
+                SetCursorVisibility(false);
+                throw Exceptions::BackspaceKeyPressed();
+
+            case g_ENTER_KEY:
                 SetCursorVisibility(false);
                 return {row, column};
-            }
 
-            if (keyPress == g_UP_ARROW_KEY)
-            {
+            case g_UP_ARROW_KEY:
                 row == 0 ? row = maxRow : --row;
-            }
+                break;
 
-            else if (keyPress == g_DOWN_ARROW_KEY)
-            {
+            case g_DOWN_ARROW_KEY:
                 row == maxRow ? row = 0 : ++row;
-            }
+                break;
 
-            else if (keyPress == g_LEFT_ARROW_KEY)
-            {
+            case g_LEFT_ARROW_KEY:
                 column == 0 ? column = maxColumn : --column;
-            }
+                break;
 
-            else if (keyPress == g_RIGHT_ARROW_KEY)
-            {
+            case g_RIGHT_ARROW_KEY:
                 column == maxColumn ? column = 0 : ++column;
+                break;
+
+            default:
+                break;
             }
         }
     }
@@ -217,6 +237,12 @@ namespace TerminalGames
 
             switch (inputString[0])
             {
+            case g_ALTERNATIVE_BACKSPACE_KEY:
+                return g_BACKSPACE_KEY;
+
+            case g_ALTERNATIVE_ENTER_KEY:
+                return g_ENTER_KEY;
+
             case g_ALTERNATIVE_UP_ARROW_KEY:
                 return g_UP_ARROW_KEY;
 
@@ -229,8 +255,6 @@ namespace TerminalGames
             case g_ALTERNATIVE_RIGHT_ARROW_KEY:
                 return g_RIGHT_ARROW_KEY;
 
-            case g_ALTERNATIVE_ENTER_KEY:
-                return g_ENTER_KEY;
 
             default:
                 return inputString[0];

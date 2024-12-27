@@ -27,54 +27,28 @@ namespace TerminalGames
 
     void Hangman::SetupGame()
     {
-        m_movesRemaining.reserve(g_HANGMAN_NUMBER_OF_LETTERS_IN_THE_ALPHABET);
-        m_movesRemaining = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+        m_commandsRemaining.reserve(g_HANGMAN_NUMBER_OF_LETTERS_IN_THE_ALPHABET);
+        m_commandsRemaining = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
         m_incorrectGuesses.clear();
-        m_wordToBeGuessed = "";
+        m_computerSpeedName = "N/A";
         m_currentGuessOfWord = "";
         m_playerCount = "N/A";
-        m_AISpeedName = "N/A";
+        m_wordToBeGuessed = "";
         m_errorCount = 0;
         m_turnCount = 0;
         m_hasWinner = false;
+        
         LoadWords();
-    }
-
-    void Hangman::LoadWords()
-    {
-        // words.txt contains a list of the ~1,000 most used words in English from:
-        // See: https://www.ef.co.uk/english-resources/english-vocabulary/top-1000-words/
-        std::ifstream WordsFile("../resources/words.txt");
-
-        if (WordsFile.is_open())
-        {
-            m_words.clear();
-
-            std::string Word;
-
-            while (std::getline(WordsFile, Word))
-            {
-                m_words.push_back(Word);
-            }
-
-            WordsFile.close();
-        }
-
-        else
-        {
-            WordsFile.close();
-            throw Exceptions::HangmanWordsNotFound();
-        }
     }
 
     void Hangman::UpdateGameInfo()
     {
         m_gameInfo.hangmanStruct = {
             .incorrectGuesses = m_incorrectGuesses,
+            .computerSpeedName = m_computerSpeedName,
             .currentGuessOfWord = m_currentGuessOfWord,
-            .wordToBeGuessed = m_wordToBeGuessed,
             .playerCount = m_playerCount,
-            .AISpeedName = m_AISpeedName,
+            .wordToBeGuessed = m_wordToBeGuessed,
             .errorCount = m_errorCount,
             .turnCount = m_turnCount};
     }
@@ -86,14 +60,14 @@ namespace TerminalGames
         if (m_playerCount == "0  ")
         {
             m_userIsGuesser = false;
-            GetAISpeed();
-            GetWordFromAI();
+            GetComputerSpeed();
+            GetWordFromComputer();
         }
 
         else if (m_playerCount == "1  ")
         {
             GetUserPlayerChoice();
-            GetAISpeed();
+            GetComputerSpeed();
 
             if (!m_userIsGuesser)
             {
@@ -102,7 +76,7 @@ namespace TerminalGames
 
             else
             {
-                GetWordFromAI();
+                GetWordFromComputer();
             }
         }
 
@@ -116,79 +90,8 @@ namespace TerminalGames
         {
             m_currentGuessOfWord.push_back('_');
         }
-    }
 
-    void Hangman::GetPlayerCount()
-    {
-        const std::vector<std::string> menus = m_pageBuilder.GetPlayerCountOptionSelectionGamePages(m_gameInfo);
-        m_playerCount = std::to_string(Terminal::GetUserChoiceFromGameMenus(menus)) + "  ";
-    }
-
-    void Hangman::GetUserPlayerChoice()
-    {
-        const std::vector<std::string> menus = m_pageBuilder.GetUserPlayerChoiceOptionSelectionGamePages(m_gameInfo);
-        Terminal::GetUserChoiceFromGameMenus(menus) == 0 ? m_userIsGuesser = true : m_userIsGuesser = false;
-    }
-
-    void Hangman::GetAISpeed()
-    {
-        const std::vector<std::string> menus = m_pageBuilder.GetAISpeedOptionSelectionGamePages(m_gameInfo);
-        m_AISpeed = Terminal::GetUserChoiceFromGameMenus(menus);
-
-        if (m_AISpeed == 0)
-        {
-            m_AISpeedName = "INSTANT";
-        }
-
-        else if (m_AISpeed == 1)
-        {
-            m_AISpeedName = "FAST";
-        }
-
-        else // == 2
-        {
-            m_AISpeedName = "SLOW";
-        }
-    }
-
-    void Hangman::GetWordFromUser()
-    {
-        const std::string output = m_pageBuilder.GetPageWithMessage(m_gameInfo, "Please enter the word to be guessed:");
-
-        std::string input;
-
-        while (true)
-        {
-            Terminal::PrintOutput(output);
-
-            Terminal::SetCursorPosition(39, 13); // NOLINT(cppcoreguidelines-avoid-magic-numbers, readability-magic-numbers)
-
-            std::getline(std::cin, input);
-
-            if (input == "q")
-            {
-                throw Exceptions::QuitGame();
-            }
-
-            if (input.size() < g_HANGMAN_MINIMUM_WORD_LENGTH || input.size() > g_HANGMAN_MAXIMUM_WORD_LENGTH)
-            {
-                continue;
-            }
-
-            // Capitalise word
-            std::ranges::transform(input.begin(), input.end(), input.begin(), ::toupper, {});
-
-            if (std::regex_match(input, std::regex("^[A-Za-z]+$")))
-            {
-                m_wordToBeGuessed = input;
-                return;
-            }
-        }
-    }
-
-    void Hangman::GetWordFromAI()
-    {
-        m_wordToBeGuessed = m_words[m_randomNumberGenerator() % m_words.size()];
+        UpdateGameInfo();
     }
 
     bool Hangman::IsGameOver()
@@ -222,83 +125,62 @@ namespace TerminalGames
     {
         Terminal::PrintOutput(m_pageBuilder.GetUserCommandPage(m_gameInfo));
 
-        uint32_t KeyPress = 0;
-        uint32_t CurrentSelection = 0;
+        uint32_t keyPress = 0;
+        uint32_t currentSelection = 0;
 
         while (true)
         {
             Terminal::SetCursorPosition(41, 13); // NOLINT(cppcoreguidelines-avoid-magic-numbers, readability-magic-numbers)
 
-            std::cout << std::string("\x1B[1;34m") + m_movesRemaining[CurrentSelection] + "\x1B[1;37m"; // Make it blue
+            std::cout << std::string("\x1B[1;34m") + m_commandsRemaining[currentSelection] + "\x1B[1;37m"; // Make it blue
 
-            KeyPress = Terminal::GetNextKeyPress();
+            keyPress = Terminal::GetNextKeyPress();
 
-            if (KeyPress == g_QUIT_KEY)
+            if (keyPress == g_QUIT_KEY)
             {
                 throw Exceptions::QuitGame();
             }
 
-            if (KeyPress == g_ENTER_KEY)
+            if (keyPress == g_ENTER_KEY)
             {
-                CheckGuessAndUpdateCurrentGuess(m_movesRemaining[CurrentSelection]);
+                ExecuteGeneralCommand(m_commandsRemaining[currentSelection]);
                 return;
             }
 
-            if (KeyPress == g_UP_ARROW_KEY)
+            if (keyPress == g_UP_ARROW_KEY)
             {
-                CurrentSelection == 0 ? CurrentSelection = m_movesRemaining.size() - 1 : --CurrentSelection;
+                currentSelection == 0 ? currentSelection = m_commandsRemaining.size() - 1 : --currentSelection;
             }
 
-            else if (KeyPress == g_DOWN_ARROW_KEY)
+            else if (keyPress == g_DOWN_ARROW_KEY)
             {
-                CurrentSelection == (m_movesRemaining.size() - 1) ? CurrentSelection = 0 : ++CurrentSelection;
+                currentSelection == (m_commandsRemaining.size() - 1) ? currentSelection = 0 : ++currentSelection;
             }
 
             else
             {
-                auto Command = ImplementStdRangesFind(m_movesRemaining.begin(), m_movesRemaining.end(), KeyPress - 32); // NOLINT(cppcoreguidelines-avoid-magic-numbers, readability-magic-numbers)
+                auto commandFindLocation = ImplementStdRangesFind(m_commandsRemaining.begin(), m_commandsRemaining.end(), keyPress - 32); // NOLINT(cppcoreguidelines-avoid-magic-numbers, readability-magic-numbers)
 
-                if (Command != m_movesRemaining.end())
+                if (commandFindLocation != m_commandsRemaining.end())
                 {
-                    CurrentSelection = static_cast<uint32_t>(std::distance(m_movesRemaining.begin(), Command));
+                    currentSelection = static_cast<uint32_t>(std::distance(m_commandsRemaining.begin(), commandFindLocation));
                 }
             }
         }
     }
 
-    void Hangman::ExecuteAICommand()
+    void Hangman::ExecuteComputerCommand()
     {
-        if (m_AISpeed != 0)
+        Terminal::PrintOutput(m_pageBuilder.GetComputerCommandPage(m_gameInfo));
+
+        if (m_computerSpeed != 0)
         {
-            Terminal::PrintOutput(m_pageBuilder.GetAICommandPage(m_gameInfo));
-            std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::seconds(m_AISpeed));
+            std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::seconds(m_computerSpeed));
         }
 
-        m_AICommand = m_movesRemaining[m_randomNumberGenerator() % m_movesRemaining.size()];
+        const char computerCommand = m_commandsRemaining[m_randomNumberGenerator() % m_commandsRemaining.size()];
 
-        CheckGuessAndUpdateCurrentGuess(m_AICommand);
-    }
-
-    void Hangman::CheckGuessAndUpdateCurrentGuess(const char &guess)
-    {
-        bool IsGuessCorrect = false;
-        for (uint32_t i = 0; i < m_wordToBeGuessed.size(); i++)
-        {
-            if (m_wordToBeGuessed[i] == guess)
-            {
-                IsGuessCorrect = true;
-                m_currentGuessOfWord[i] = guess;
-            }
-        }
-
-        if (!IsGuessCorrect)
-        {
-            m_incorrectGuesses.push_back(guess);
-            m_errorCount++;
-        }
-
-        m_movesRemaining.erase(ImplementStdRangesFind(m_movesRemaining.begin(), m_movesRemaining.end(), guess));
-        m_turnCount++;
+        ExecuteGeneralCommand(computerCommand);
     }
 
     void Hangman::GameOver()
@@ -309,5 +191,135 @@ namespace TerminalGames
         {
             throw Exceptions::QuitGame();
         }
+    }
+
+    void Hangman::LoadWords()
+    {
+        // words.txt contains a list of the ~1,000 most used words in English from:
+        // See: https://www.ef.co.uk/english-resources/english-vocabulary/top-1000-words/
+        std::ifstream wordsFile("../resources/words.txt");
+
+        if (wordsFile.is_open())
+        {
+            m_words.clear();
+
+            std::string Word;
+
+            while (std::getline(wordsFile, Word))
+            {
+                m_words.push_back(Word);
+            }
+
+            wordsFile.close();
+        }
+
+        else
+        {
+            wordsFile.close();
+            throw Exceptions::HangmanWordsNotFound();
+        }
+    }
+
+    void Hangman::GetPlayerCount()
+    {
+        UpdateGameInfo();
+
+        const std::vector<std::string> menus = m_pageBuilder.GetPlayerCountOptionSelectionGamePages(m_gameInfo);
+        m_playerCount = std::to_string(Terminal::GetUserChoiceFromGameMenus(menus)) + "  ";
+    }
+
+    void Hangman::GetUserPlayerChoice()
+    {
+        UpdateGameInfo();
+
+        const std::vector<std::string> menus = m_pageBuilder.GetUserPlayerChoiceOptionSelectionGamePages(m_gameInfo);
+        Terminal::GetUserChoiceFromGameMenus(menus) == 0 ? m_userIsGuesser = true : m_userIsGuesser = false;
+    }
+
+    void Hangman::GetComputerSpeed()
+    {
+        UpdateGameInfo();
+
+        const std::vector<std::string> menus = m_pageBuilder.GetComputerSpeedOptionSelectionGamePages(m_gameInfo);
+        m_computerSpeed = Terminal::GetUserChoiceFromGameMenus(menus);
+
+        if (m_computerSpeed == 0)
+        {
+            m_computerSpeedName = "INSTANT";
+        }
+
+        else if (m_computerSpeed == 1)
+        {
+            m_computerSpeedName = "FAST";
+        }
+
+        else // == 2
+        {
+            m_computerSpeedName = "SLOW";
+        }
+    }
+
+    void Hangman::GetWordFromUser()
+    {
+        UpdateGameInfo();
+
+        const std::string output = m_pageBuilder.GetPageWithMessage(m_gameInfo, "Please enter the word to be guessed:");
+
+        std::string input;
+
+        while (true)
+        {
+            Terminal::PrintOutput(output);
+
+            Terminal::SetCursorPosition(39, 13); // NOLINT(cppcoreguidelines-avoid-magic-numbers, readability-magic-numbers)
+
+            std::getline(std::cin, input);
+
+            if (input == "q")
+            {
+                throw Exceptions::QuitGame();
+            }
+
+            if (input.size() < g_HANGMAN_MINIMUM_WORD_LENGTH || input.size() > g_HANGMAN_MAXIMUM_WORD_LENGTH)
+            {
+                continue;
+            }
+
+            // Capitalise word
+            std::ranges::transform(input.begin(), input.end(), input.begin(), ::toupper, {});
+
+            if (std::regex_match(input, std::regex("^[A-Za-z]+$")))
+            {
+                m_wordToBeGuessed = input;
+                return;
+            }
+        }
+    }
+
+    void Hangman::GetWordFromComputer()
+    {
+        m_wordToBeGuessed = m_words[m_randomNumberGenerator() % m_words.size()];
+    }
+
+    void Hangman::ExecuteGeneralCommand(const char &guess)
+    {
+        bool isGuessCorrect = false;
+        for (uint32_t i = 0; i < m_wordToBeGuessed.size(); i++)
+        {
+            if (m_wordToBeGuessed[i] == guess)
+            {
+                isGuessCorrect = true;
+                m_currentGuessOfWord[i] = guess;
+            }
+        }
+
+        if (!isGuessCorrect)
+        {
+            m_incorrectGuesses.push_back(guess);
+            m_errorCount++;
+        }
+
+        m_commandsRemaining.erase(ImplementStdRangesFind(m_commandsRemaining.begin(), m_commandsRemaining.end(), guess));
+        m_turnCount++;
     }
 } // namespace TerminalGames

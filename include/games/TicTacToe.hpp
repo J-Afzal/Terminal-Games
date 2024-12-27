@@ -28,9 +28,14 @@ namespace TerminalGames
         GameInfo m_gameInfo;
         std::default_random_engine m_randomNumberGenerator;
         std::array<std::array<std::string, g_TICTACTOE_BOARD_WIDTH>, g_TICTACTOE_BOARD_HEIGHT> m_gameGrid;
-        std::vector<std::tuple<uint32_t, uint32_t>> m_movesRemaining;
-        std::string m_currentPlayer, m_playerCount, m_userPlayerChoice, m_AISpeedName;
-        uint32_t m_turnCount, m_AISpeed;
+        std::vector<std::tuple<uint32_t, uint32_t>> m_commandsRemaining;
+        std::tuple<uint32_t, uint32_t> m_previousCommand;
+        std::string m_computerSpeedName;
+        std::string m_currentPlayer;
+        std::string m_playerCount;
+        std::string m_userPlayerChoice;
+        uint32_t m_computerSpeed;
+        uint32_t m_turnCount;
         bool m_hasWinner;
 
         /**
@@ -47,23 +52,6 @@ namespace TerminalGames
          * @brief See base class function for details.
          */
         void GetUserOptions() override;
-
-        /**
-         * @brief Prompts the user to select how many players will be playing the game.
-         */
-        void GetPlayerCount();
-
-        /**
-         * @brief Prompts the user to select which player the will be playing the game as (only supported if playing
-         * against the AI).
-         */
-        void GetUserPlayerChoice();
-
-        /**
-         * @brief Prompts the user to select how the speed of AI decision making (this does not affect the difficulty of
-         * the AI).
-         */
-        void GetAISpeed();
 
         /**
          * @brief See base class function for details.
@@ -88,7 +76,29 @@ namespace TerminalGames
         /**
          * @brief See base class function for details.
          */
-        void ExecuteAICommand() override;
+        void ExecuteComputerCommand() override;
+
+        /**
+         * @brief See base class function for details.
+         */
+        void GameOver() override;
+
+        /**
+         * @brief Prompts the user to select how many players will be playing the game.
+         */
+        void GetPlayerCount();
+
+        /**
+         * @brief Prompts the user to select which player the will be playing the game as (only supported if playing against the
+         * computer).
+         */
+        void GetUserPlayerChoice();
+
+        /**
+         * @brief Prompts the user to select how the speed of computer decision making (this does not affect the difficulty of
+         * the computer).
+         */
+        void GetComputerSpeed();
 
         /**
          * @brief Checks whether the command is valid.
@@ -105,10 +115,5 @@ namespace TerminalGames
          * @param command The command in the form of <row, column>.
          */
         void ExecuteGeneralCommand(const std::tuple<uint32_t, uint32_t> &command);
-
-        /**
-         * @brief See base class function for details.
-         */
-        void GameOver() override;
     };
 } // namespace TerminalGames
