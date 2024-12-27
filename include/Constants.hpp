@@ -10,7 +10,7 @@ namespace TerminalGames
     /**
      * @brief Terminal
      */
-    // Keyboard values when getting user input.
+    // Keyboard values when getting user input on Windows.
     static constexpr uint32_t g_ENTER_KEY = '\r';
     static constexpr uint32_t g_UP_ARROW_KEY = 72;
     static constexpr uint32_t g_DOWN_ARROW_KEY = 80;
@@ -18,7 +18,15 @@ namespace TerminalGames
     static constexpr uint32_t g_RIGHT_ARROW_KEY = 77;
     static constexpr uint32_t g_QUIT_KEY = 'q';
 
-    // Cursor width while running.
+    // Keyboard values when getting user input on other platforms.
+    static constexpr uint32_t g_ALTERNATIVE_ENTER_KEY = 'e';
+    static constexpr uint32_t g_ALTERNATIVE_UP_ARROW_KEY = 'w';
+    static constexpr uint32_t g_ALTERNATIVE_DOWN_ARROW_KEY = 's';
+    static constexpr uint32_t g_ALTERNATIVE_LEFT_ARROW_KEY = 'a';
+    static constexpr uint32_t g_ALTERNATIVE_RIGHT_ARROW_KEY = 'd';
+    static constexpr uint32_t g_ALTERNATIVE_QUIT_KEY = 'q';
+
+    // Cursor width while running on windows.
     static constexpr uint32_t g_CURSOR_WIDTH_PERCENTAGE = 100;
 
     /**
