@@ -63,6 +63,7 @@ jobs:
                   if-no-files-found: error
 
     release:
+        needs: build
         runs-on: ubuntu-latest
 
         steps:
