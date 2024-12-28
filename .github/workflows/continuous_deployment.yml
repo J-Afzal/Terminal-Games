@@ -6,6 +6,10 @@ on:
     push:
         branches:
             - master
+    # TODO: remove after testing
+    pull_request:
+        branches:
+            - master
 
 jobs:
     build:
@@ -47,7 +51,8 @@ jobs:
             - name: Set release tag name
               run: echo "tag=terminal-games-$(date +%Y-%m-%d)-(${{ github.run_number }})" >> $GITHUB_ENV
 
+              # TODO remove draft
             - name: Create new release
-              run: gh release create "${{ env.tag }}" ./terminal-games-macos-latest/terminal-games-macos-latest ./terminal-games-ubuntu-latest/terminal-games-ubuntu-latest ./terminal-games-windows-latest/terminal-games-windows-latest.exe --generate-notes --latest
+              run: gh release create "${{ env.tag }}" ./terminal-games-macos-latest/terminal-games-macos-latest ./terminal-games-ubuntu-latest/terminal-games-ubuntu-latest ./terminal-games-windows-latest/terminal-games-windows-latest.exe --draft --generate-notes --latest
               env:
                   GH_TOKEN: ${{ github.token }}
