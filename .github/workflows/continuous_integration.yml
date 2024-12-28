@@ -56,6 +56,12 @@ jobs:
             - name: Build Project
               run: cmake --build ./build --config Release
 
+            - uses: actions/upload-artifact@v4
+              with:
+                  name: terminal-games-${{ matrix.os }}
+                  path: ./build/terminal-games-${{ matrix.os }}*
+                  if-no-files-found: error
+
     linting:
         strategy:
             matrix:

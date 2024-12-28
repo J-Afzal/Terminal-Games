@@ -1,0 +1,53 @@
+name: Continuous Deployment
+
+run-name: CD - ${{ github.run_number }} - ${{ github.head_ref }}
+
+on:
+    push:
+        branches:
+            - master
+
+jobs:
+    build:
+        strategy:
+            matrix:
+                os:
+                    - macos-latest
+                    - ubuntu-latest
+                    - windows-latest
+
+        runs-on: ${{ matrix.os }}
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Configure CMake
+              run: cmake -S . -B ./build
+
+            - name: Build Project
+              run: cmake --build ./build --config Release
+
+            - uses: actions/upload-artifact@v4
+              with:
+                  name: terminal-games-${{ matrix.os }}
+                  path: ./build/terminal-games-${{ matrix.os }}*
+                  if-no-files-found: error
+
+    release:
+        needs: build
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: actions/download-artifact@v4
+              with:
+                  pattern: terminal-games-*
+
+            - name: Set release tag name
+              run: echo "tag=terminal-games-$(date +%Y-%m-%d)-(${{ github.run_number }})" >> $GITHUB_ENV
+
+            - name: Create new release
+              run: gh release create "${{ env.tag }}" ./terminal-games-macos-latest/terminal-games-macos-latest ./terminal-games-ubuntu-latest/terminal-games-ubuntu-latest ./terminal-games-windows-latest/terminal-games-windows-latest.exe --generate-notes --latest
+              env:
+                  GH_TOKEN: ${{ github.token }}

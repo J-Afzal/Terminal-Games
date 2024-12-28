@@ -2,8 +2,6 @@
 #include <cctype>
 #include <chrono>
 #include <cstdint>
-#include <fstream>
-#include <iosfwd>
 #include <iostream>
 #include <iterator>
 #include <regex>
@@ -37,8 +35,6 @@ namespace TerminalGames
         m_errorCount = 0;
         m_turnCount = 0;
         m_hasWinner = false;
-        
-        LoadWords();
     }
 
     void Hangman::UpdateGameInfo()
@@ -193,33 +189,6 @@ namespace TerminalGames
         }
     }
 
-    void Hangman::LoadWords()
-    {
-        // words.txt contains a list of the ~1,000 most used words in English from:
-        // See: https://www.ef.co.uk/english-resources/english-vocabulary/top-1000-words/
-        std::ifstream wordsFile("../resources/words.txt");
-
-        if (wordsFile.is_open())
-        {
-            m_words.clear();
-
-            std::string Word;
-
-            while (std::getline(wordsFile, Word))
-            {
-                m_words.push_back(Word);
-            }
-
-            wordsFile.close();
-        }
-
-        else
-        {
-            wordsFile.close();
-            throw Exceptions::HangmanWordsNotFound();
-        }
-    }
-
     void Hangman::GetPlayerCount()
     {
         UpdateGameInfo();
@@ -298,7 +267,7 @@ namespace TerminalGames
 
     void Hangman::GetWordFromComputer()
     {
-        m_wordToBeGuessed = m_words[m_randomNumberGenerator() % m_words.size()];
+        m_wordToBeGuessed = m_WORDS[m_randomNumberGenerator() % m_WORDS.size()]; // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
     }
 
     void Hangman::ExecuteGeneralCommand(const char &guess)

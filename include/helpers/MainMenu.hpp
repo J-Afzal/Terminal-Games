@@ -75,10 +75,17 @@ namespace TerminalGames
         /**
          * @brief Parses the passed in command line arguments.
          *
-         * Usage: Terminal-Games [--a --ascii-only]
+         * Usage: terminal-games [options]
          *
-         * Options:
-         *         --a --ascii-only        Only use ASCII characters.
+         * OPTIONS:
+         *
+         * Generic Options:
+         *
+         *   --h --help        Display available options.
+         *
+         * terminal-games options:
+         *
+         *   --a --ascii-only  Only use ASCII characters (this removes all colour).
          *
          * @param commandLineArguments List of all command line arguments
          */

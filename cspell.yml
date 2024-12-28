@@ -5,6 +5,7 @@ ignorePaths:
     - LICENSE
 words:
     - bugprone
+    - cleanup
     - endgroup
     - linters
     - pwsh
@@ -12,6 +13,7 @@ ignoreWords:
     - altera
     - analyzer
     - choco
+    - discardable
     - ctest
     - hicpp
     - lastexitcode
