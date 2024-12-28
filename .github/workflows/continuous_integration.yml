@@ -76,6 +76,8 @@ jobs:
 
             - name: Create new release
               run: gh release create cd-release-${{ env.date }}-${{ github.run_number }} ./terminal-games-macos-latest ./terminal-games-ubuntu-latest ./terminal-games-windows-latest --draft --generate-notes --latest
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     linting:
         strategy:
