@@ -1,13 +1,27 @@
-cmake_minimum_required(VERSION 3.20)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.20)
 
-project(Terminal-Games)
+PROJECT(Terminal-Games)
 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+SET(CMAKE_CXX_STANDARD 20)
+SET(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-add_executable(terminal-games
+# Executable names used by the CD pipeline
+IF(APPLE)
+    SET(executable_name "terminal-games-macos-latest")
+ENDIF()
+
+IF(UNIX AND NOT APPLE)
+    SET(executable_name "terminal-games-ubuntu-latest")
+ENDIF()
+
+IF(WIN32)
+    SET(executable_name "terminal-games-windows-latest")
+ENDIF()
+
+ADD_EXECUTABLE(
+    ${executable_name}
     ${CMAKE_CURRENT_SOURCE_DIR}/source/main.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/helpers/MainMenu.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/helpers/PageBuilder.cpp

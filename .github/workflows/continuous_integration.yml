@@ -59,9 +59,28 @@ jobs:
             - uses: actions/upload-artifact@v4
               with:
                   name: terminal-games-${{ matrix.os }}
-                  path: ./build/terminal-games*
+                  path: ./build/terminal-games-${{ matrix.os }}*
                   if-no-files-found: error
-                  compression-level: 0
+
+    release:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/download-artifact@v4
+              with:
+                pattern: terminal-games-*
+
+            - name: Extract artifacts
+              run: |
+                7z x ./terminal-games-macos-latest
+                7z x ./terminal-games-ubuntu-latest
+                7z x ./terminal-games-windows-latest
+
+            - name: Get current date
+              run: echo "date=$(date +%Y%m%d)" >> $GITHUB_ENV
+
+            - name: Create new release
+              run: gh release create cd-release-${{ env.date }}-${{ github.run_number }} ./terminal-games-macos-latest ./terminal-games-ubuntu-latest ./terminal-games-windows-latest.exe --draft --generate-notes --latest
 
     linting:
         strategy:
