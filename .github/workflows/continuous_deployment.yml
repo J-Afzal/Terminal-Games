@@ -42,13 +42,15 @@ jobs:
               with:
                   pattern: terminal-games*
 
+            # Extract files
+
             - name: Get current date
               run: echo "date=$(date +%Y%m%d)" >> $GITHUB_ENV
+
+            # - name: Create new release
+            #   run: gh release create "cd-release-${{ env.date }}-${{ github.run_number }}"
 
             - name: test
               run: |
                   echo "cd-release-${{ env.date }}-${{ github.run_number }}"
                   ls
-
-            # - name: Create new release
-            #   run: gh release create "cd-release-${{ env.date }}-${{ github.run_number }}"

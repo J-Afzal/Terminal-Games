@@ -13,10 +13,12 @@
 
 # Documents
 *.md            text        diff=markdown
+*.rc            text
 *.txt           text
 LICENSE         text
 
 # Graphics
+*.ico           binary
 *.png           binary
 
 # Scripts
