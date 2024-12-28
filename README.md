@@ -2,8 +2,6 @@
 
 Simple games that run in the terminal.
 
-[![Continuous Integration](https://github.com/J-Afzal/Terminal-Games/actions/workflows/continuous_integration.yml/badge.svg)](https://github.com/J-Afzal/Terminal-Games/actions/workflows/continuous_integration.yml)
-
 ## Getting Started
 
 CMake can be used to build the project:
@@ -130,3 +128,11 @@ Test-TerminalGamesCode -Verbose
 
 On Windows, Visual Studio 2022 can be used by opening the folder as a CMake project and Visual Studio Code can be used by
 opening the folder through the `Developer PowerShell for VS` (otherwise you may see errors around cl.exe not being found).
+
+## Releases
+
+[![Continuous Integration](https://github.com/J-Afzal/Terminal-Games/actions/workflows/continuous_integration.yml/badge.svg)](https://github.com/J-Afzal/Terminal-Games/actions/workflows/continuous_integration.yml)
+[![Continuous Deployment](https://github.com/J-Afzal/Terminal-Games/actions/workflows/continuous_deployment.yml/badge.svg)](https://github.com/J-Afzal/Terminal-Games/actions/workflows/continuous_deployment.yml)
+
+Releases are performed automatically on pushes to master (i.e. when a pull request is merged) via the continuous deployment
+workflow.

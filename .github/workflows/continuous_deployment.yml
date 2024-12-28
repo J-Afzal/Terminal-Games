@@ -1,6 +1,6 @@
 name: Continuous Deployment
 
-run-name: CD - ${{ github.run_number }} - ${{ github.head_ref }}
+run-name: CD - ${{ github.run_number }} - ${{ github.ref }}
 
 on:
     push:
@@ -21,8 +21,26 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
+            - name: Install build dependencies
+              shell: bash
+              run: |
+                  if [ "${{ matrix.os }}" = "macos-latest" ]
+                  then
+                      brew install ninja
+                  fi
+
+                  if [ "${{ matrix.os }}" = "ubuntu-latest" ]
+                  then
+                      sudo apt-get install ninja-build
+                  fi
+
+                  if [ "${{ matrix.os }}" = "windows-latest" ]
+                  then
+                      choco install ninja -y
+                  fi
+
             - name: Configure CMake
-              run: cmake -S . -B ./build
+              run: cmake -S . -B ./build -G "Ninja"
 
             - name: Build Project
               run: cmake --build ./build --config Release
