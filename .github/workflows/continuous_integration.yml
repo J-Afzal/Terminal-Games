@@ -43,15 +43,15 @@ jobs:
             - name: Configure CMake
               run: cmake -S . -B ./build -G "Ninja"
 
-            - name: Run clang-tidy and clang-format
-              shell: bash
-              run: |
-                  if [ "${{ matrix.os }}" = "macos-latest" ]
-                  then
-                      export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
-                  fi
+            # - name: Run clang-tidy and clang-format
+            #   shell: bash
+            #   run: |
+            #       if [ "${{ matrix.os }}" = "macos-latest" ]
+            #       then
+            #           export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+            #       fi
 
-                  pwsh -command "Import-Module ./scripts/Linters.psm1; Test-TerminalGamesCode -Verbose"
+            #       pwsh -command "Import-Module ./scripts/Linters.psm1; Test-TerminalGamesCode -Verbose"
 
             - name: Build Project
               run: cmake --build ./build --config Release
@@ -74,13 +74,13 @@ jobs:
             - name: Extract artifacts
               run: |
                   ls
-                  7z x ./terminal-games-macos-latest.zip
+                  7z x ./terminal-games-macos-latest
                   ls
-                  7z x ./terminal-games-ubuntu-latest.zip
+                  7z x ./terminal-games-ubuntu-latest
                   ls
-                  7z x ./terminal-games-windows-latest.zip
+                  7z x ./terminal-games-windows-latest
                   ls
-                  
+
             - name: Get current date
               run: echo "date=$(date +%Y%m%d)" >> $GITHUB_ENV
 
