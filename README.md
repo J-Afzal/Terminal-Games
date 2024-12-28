@@ -42,7 +42,7 @@ terminal-games options:
 **Feature:** Pressing the `q` key on most screens within `terminal-games` will quit to the main menu if within a game and quit
 the program if within the main menu.
 
-![Main Menu](./resources/screenshots/mainmenu.png "Main Menu")
+![Main Menu](./resources/screenshots/main-menu.png "Main Menu")
 
 ### Tic Tac Toe
 
@@ -52,7 +52,7 @@ the program if within the main menu.
 
 **Note:** The computer's choices are random.
 
-![Tic Tac Toe](./resources/screenshots/tictactoe.png "Tic Tac Toe")
+![Tic Tac Toe](./resources/screenshots/tic-tac-toe.png "Tic Tac Toe")
 
 ### Hangman
 
