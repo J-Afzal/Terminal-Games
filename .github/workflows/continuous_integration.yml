@@ -43,15 +43,15 @@ jobs:
             - name: Configure CMake
               run: cmake -S . -B ./build -G "Ninja"
 
-            # - name: Run clang-tidy and clang-format
-            #   shell: bash
-            #   run: |
-            #       if [ "${{ matrix.os }}" = "macos-latest" ]
-            #       then
-            #           export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
-            #       fi
+            - name: Run clang-tidy and clang-format
+              shell: bash
+              run: |
+                  if [ "${{ matrix.os }}" = "macos-latest" ]
+                  then
+                      export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+                  fi
 
-            #       pwsh -command "Import-Module ./scripts/Linters.psm1; Test-TerminalGamesCode -Verbose"
+                  pwsh -command "Import-Module ./scripts/Linters.psm1; Test-TerminalGamesCode -Verbose"
 
             - name: Build Project
               run: cmake --build ./build --config Release
@@ -61,25 +61,6 @@ jobs:
                   name: terminal-games-${{ matrix.os }}
                   path: ./build/terminal-games-${{ matrix.os }}*
                   if-no-files-found: error
-
-    release:
-        needs: build
-        runs-on: ubuntu-latest
-
-        steps:
-            - uses: actions/checkout@v4
-
-            - uses: actions/download-artifact@v4
-              with:
-                  pattern: terminal-games-*
-
-            - name: Set release tag name
-              run: echo "tag=terminal-games-$(date +%Y-%m-%d)-(${{ github.run_number }})" >> $GITHUB_ENV
-
-            - name: Create new release
-              run: gh release create "${{ env.tag }}" ./terminal-games-macos-latest/terminal-games-macos-latest ./terminal-games-ubuntu-latest/terminal-games-ubuntu-latest ./terminal-games-windows-latest/terminal-games-windows-latest.exe --draft --generate-notes --latest
-              env:
-                  GH_TOKEN: ${{ github.token }}
 
     linting:
         strategy:

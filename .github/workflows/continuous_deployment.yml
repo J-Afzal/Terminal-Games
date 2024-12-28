@@ -30,27 +30,24 @@ jobs:
             - uses: actions/upload-artifact@v4
               with:
                   name: terminal-games-${{ matrix.os }}
-                  path: ./build/terminal-games*
+                  path: ./build/terminal-games-${{ matrix.os }}*
                   if-no-files-found: error
-                  compression-level: 0
 
     release:
+        needs: build
         runs-on: ubuntu-latest
 
         steps:
+            - uses: actions/checkout@v4
+
             - uses: actions/download-artifact@v4
               with:
-                  pattern: terminal-games*
+                  pattern: terminal-games-*
 
-            # Extract files
+            - name: Set release tag name
+              run: echo "tag=terminal-games-$(date +%Y-%m-%d)-(${{ github.run_number }})" >> $GITHUB_ENV
 
-            - name: Get current date
-              run: echo "date=$(date +%Y%m%d)" >> $GITHUB_ENV
-
-            # - name: Create new release
-            #   run: gh release create "cd-release-${{ env.date }}-${{ github.run_number }}"
-
-            - name: test
-              run: |
-                  echo "cd-release-${{ env.date }}-${{ github.run_number }}"
-                  ls
+            - name: Create new release
+              run: gh release create "${{ env.tag }}" ./terminal-games-macos-latest/terminal-games-macos-latest ./terminal-games-ubuntu-latest/terminal-games-ubuntu-latest ./terminal-games-windows-latest/terminal-games-windows-latest.exe --draft --generate-notes --latest
+              env:
+                  GH_TOKEN: ${{ github.token }}
