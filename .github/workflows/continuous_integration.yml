@@ -67,12 +67,14 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
+            - uses: actions/checkout@v4
+
             - uses: actions/download-artifact@v4
               with:
                   pattern: terminal-games-*
 
             - name: Get current date
-              run: echo "date=$(date +%Y%m%d)" >> $GITHUB_ENV
+              run: echo "date=$(date +%Y-%m-%d)" >> $GITHUB_ENV
 
             - name: Create new release
               run: gh release create cd-release-${{ env.date }}-${{ github.run_number }} ./terminal-games-macos-latest ./terminal-games-ubuntu-latest ./terminal-games-windows-latest --draft --generate-notes --latest
