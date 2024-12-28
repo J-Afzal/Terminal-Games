@@ -1,23 +1,24 @@
 version: "0.2"
 language: en-gb
 ignorePaths:
-    - build/
-    - LICENSE
+  - build/
+  - LICENSE
 words:
-    - bugprone
-    - endgroup
-    - linters
-    - pwsh
+  - bugprone
+  - cleanup
+  - endgroup
+  - linters
+  - pwsh
 ignoreWords:
-    - altera
-    - analyzer
-    - choco
-    - discardable
-    - ctest
-    - hicpp
-    - lastexitcode
-    - libc
-    - llvmlibc
-    - msvc
-    - nodiscard
-    - tictactoe
+  - altera
+  - analyzer
+  - choco
+  - discardable
+  - ctest
+  - hicpp
+  - lastexitcode
+  - libc
+  - llvmlibc
+  - msvc
+  - nodiscard
+  - tictactoe
