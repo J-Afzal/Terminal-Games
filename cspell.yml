@@ -12,6 +12,7 @@ ignoreWords:
     - altera
     - analyzer
     - choco
+    - discardable
     - ctest
     - hicpp
     - lastexitcode

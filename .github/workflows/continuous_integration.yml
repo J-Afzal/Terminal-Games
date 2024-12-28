@@ -58,9 +58,10 @@ jobs:
 
             - uses: actions/upload-artifact@v4
               with:
-                name: terminal-games-${{ matrix.os }}
-                path: ./build/terminal-games*
-                if-no-files-found: error
+                  name: terminal-games-${{ matrix.os }}
+                  path: ./build/terminal-games*
+                  if-no-files-found: error
+                  compression-level: 0
 
     linting:
         strategy:

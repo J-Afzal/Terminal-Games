@@ -29,9 +29,10 @@ jobs:
 
             - uses: actions/upload-artifact@v4
               with:
-                name: terminal-games-${{ matrix.os }}
-                path: ./build/terminal-games*
-                if-no-files-found: error
+                  name: terminal-games-${{ matrix.os }}
+                  path: ./build/terminal-games*
+                  if-no-files-found: error
+                  compression-level: 0
 
     release:
         runs-on: ubuntu-latest
@@ -39,15 +40,15 @@ jobs:
         steps:
             - uses: actions/download-artifact@v4
               with:
-                pattern: terminal-games*
+                  pattern: terminal-games*
 
             - name: Get current date
               run: echo "date=$(date +%Y%m%d)" >> $GITHUB_ENV
 
             - name: test
               run: |
-                echo "cd-release-${{ env.date }}-${{ github.run_number }}"
-                ls
+                  echo "cd-release-${{ env.date }}-${{ github.run_number }}"
+                  ls
 
             # - name: Create new release
             #   run: gh release create "cd-release-${{ env.date }}-${{ github.run_number }}"
