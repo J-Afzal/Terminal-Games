@@ -6,10 +6,6 @@ on:
     push:
         branches:
             - master
-    # TODO: remove after testing
-    pull_request:
-        branches:
-            - master
 
 jobs:
     build:
@@ -67,26 +63,9 @@ jobs:
                   pattern: terminal-games-*
 
             - name: Set release tag name
-              run: |
-                  ls
-                  cd ./terminal-games-macos-latest
-                  ls
-                  cd ..
+              run: echo "tag=terminal-games-$(date +%Y-%m-%d)-(${{ github.run_number }})" >> $GITHUB_ENV
 
-                  ls
-                  cd ./terminal-games-ubuntu-latest
-                  ls
-                  cd ..
-
-                  ls
-                  cd ./terminal-games-windows-latest
-                  ls
-                  cd ..
-
-                  echo "tag=terminal-games-$(date +%Y-%m-%d)-(${{ github.run_number }})" >> $GITHUB_ENV
-
-            # TODO: remove after testing
             - name: Create new release
-              run: gh release create "${{ env.tag }}" ./terminal-games-macos-latest/terminal-games-macos-latest ./terminal-games-ubuntu-latest/terminal-games-ubuntu-latest ./terminal-games-windows-latest/terminal-games-windows-latest.exe --draft --generate-notes --latest
+              run: gh release create "${{ env.tag }}" ./terminal-games-macos-latest/terminal-games-macos-latest ./terminal-games-ubuntu-latest/terminal-games-ubuntu-latest ./terminal-games-windows-latest/terminal-games-windows-latest.exe --generate-notes --latest
               env:
                   GH_TOKEN: ${{ github.token }}
