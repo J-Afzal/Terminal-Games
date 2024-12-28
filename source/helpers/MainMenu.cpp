@@ -73,12 +73,12 @@ namespace TerminalGames
                 return true;
             }
 
-            if (argument == "--help")
+            if (argument == "--h" || argument == "--ascii-only")
             {
                 std::string helpMessage = "\nUsage: terminal-games [options]";
                 helpMessage += "\n\nOPTIONS:";
                 helpMessage += "\n\nGeneric Options:";
-                helpMessage += "\n\n  --help            Display available options.";
+                helpMessage += "\n\n  --h --help        Display available options.";
                 helpMessage += "\n\nterminal-games options:";
                 helpMessage += "\n\n  --a --ascii-only  Only use ASCII characters (this removes all colour).\n\n";
                 std::cout << helpMessage;

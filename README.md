@@ -30,7 +30,7 @@ OPTIONS:
 
 Generic Options:
 
-  --help            Display available options.
+  --h --help        Display available options.
 
 terminal-games options:
 
@@ -39,8 +39,8 @@ terminal-games options:
 
 ## General Information
 
-**Feature:** Pressing the `q` key on most screens within `terminal-games` will quit to the main menu if within a game and quit
-the program if within the main menu.
+**Feature:** Pressing the `q` key on most screens within `terminal-games` will quit to the main menu, if within a game, and quit
+the program, if within the main menu.
 
 ![Main Menu](./resources/screenshots/main-menu.png "Main Menu")
 
@@ -58,14 +58,14 @@ the program if within the main menu.
 
 **Supports:** 2 players (user vs user), 1 player (user vs computer) and 0 players (computer vs computer).
 
-**Constraints:** The word to be guessed must be 3-14 characters long and contain only letters. Only a single letter can be
+**Constraints:** The word to be guessed must be 3-14 characters long and can only contain letters. Only a single letter can be
 guessed at a time.
 
-**Features:** When guessing, you can use the up/down arrow keys to scroll through the available letters or press a letter key to
-select it (please note that pressing q here will quit to the main menu).
+**Features:** When guessing, you can use the up/down arrow keys to scroll through the available letters, or press a letter key
+to select it (please note that pressing q here will quit to the main menu).
 
-**Note:** The computer's choices are random when selecting a letter to guess and when selecting a word to be guessed (from the
-`./resources/words.txt` file).
+**Note:** The computer's choices are random both when guessing letters and when selecting a word to be guessed from the
+`./resources/words.txt` file.
 
 ![Hangman](./resources/screenshots/hangman.png "Hangman")
 
@@ -104,6 +104,7 @@ Invoke-ScriptAnalyzer -Path . -Recurse -Severity Information
 
 Import-Module ./scripts/Linters.psm1
 Test-GitAttributesFile -Verbose
+Test-TerminalGamesCode -Verbose
 ```
 
 ### Clang
