@@ -71,15 +71,21 @@ jobs:
 
             - uses: actions/download-artifact@v4
               with:
-                  pattern: terminal-games-*
+                  pattern: terminal-games-*/*
 
-            - name: Get current date
-              run: echo "date=$(date +%Y-%m-%d)" >> $GITHUB_ENV
+            - name: Set release tag name
+              run: |
+                  ls
+                  echo "tag=terminal-games-$(date +%Y-%m-%d)" >> $GITHUB_ENV
 
             - name: Create new release
-              run: gh release create terminal-games-${{ env.date }}-(${{ github.run_number }}) ./terminal-games-macos-latest/terminal-games-macos-latest ./terminal-games-ubuntu-latest/terminal-games-ubuntu-latest ./terminal-games-windows-latest/terminal-games-windows-latest.exe --draft --generate-notes --latest
+              run: gh release create "${{ env.tag }}" ./terminal-games-macos-latest/terminal-games-macos-latest ./terminal-games-ubuntu-latest/terminal-games-ubuntu-latest ./terminal-games-windows-latest/terminal-games-windows-latest.exe --draft --generate-notes --latest
 
-# TODO: remove token? and remove run number and what happens if multiple release with same name?
+            - name: Delete release if any failure
+              if: failure()
+              run: gh release delete "${{ env.tag }}" --cleanup-tag --yes
+
+    # TODO: remove token? and remove run number and what happens if multiple release with same name? (${{ github.run_number }})
 
     linting:
         strategy:
