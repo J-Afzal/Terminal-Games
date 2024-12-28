@@ -10,7 +10,7 @@ namespace TerminalGames
 {
     /**
      * @brief Some C++ functions are not supported by some compilers (usually because the function call fails with GNU 12.2.0
-     * within the CI pipeline.) These functions are crudely implemented below for the project's specific use case.
+     * within the CI workflow.) These functions are crudely implemented below for the project's specific use case.
      */
     // Should work for all std containers
     template <typename T, typename U>
@@ -124,7 +124,7 @@ namespace TerminalGames
     static constexpr uint32_t g_TICTACTOE_GRID_ELEMENT_HEIGHT = 2;
 
     static constexpr uint32_t g_TICTACTOE_MAXIMUM_ERROR_COUNT = g_TICTACTOE_BOARD_WIDTH * g_TICTACTOE_BOARD_HEIGHT;
-    
+
     /**
      * @brief Hangman
      */

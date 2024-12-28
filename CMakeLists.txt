@@ -7,7 +7,7 @@ SET(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-# Executable names used by the CD pipeline
+# Executable names used by the CI/CD workflows
 IF(APPLE)
     SET(executable_name "terminal-games-macos-latest")
 ENDIF()
