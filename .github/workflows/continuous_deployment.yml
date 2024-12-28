@@ -1,6 +1,6 @@
 name: Continuous Deployment
 
-run-name: CD - ${{ github.run_number }} - ${{ github.head_ref }}
+run-name: CD - ${{ github.run_number }} - ${{ github.ref }}
 
 on:
     push:
