@@ -77,9 +77,9 @@ jobs:
               run: echo "date=$(date +%Y-%m-%d)" >> $GITHUB_ENV
 
             - name: Create new release
-              run: gh release create cd-release-${{ env.date }}-${{ github.run_number }} ./terminal-games-macos-latest/terminal-games-macos-latest ./terminal-games-ubuntu-latest/terminal-games-ubuntu-latest ./terminal-games-windows-latest/terminal-games-windows-latest.exe --draft --generate-notes --latest
-              env:
-                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: gh release create terminal-games-${{ env.date }}-(${{ github.run_number }}) ./terminal-games-macos-latest/terminal-games-macos-latest ./terminal-games-ubuntu-latest/terminal-games-ubuntu-latest ./terminal-games-windows-latest/terminal-games-windows-latest.exe --draft --generate-notes --latest
+
+# TODO: remove token? and remove run number and what happens if multiple release with same name?
 
     linting:
         strategy:
