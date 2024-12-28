@@ -5,23 +5,15 @@ project(Terminal-Games)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-include_directories(./include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 add_executable(terminal-games
-    ./source/main.cpp
-    ./include/Constants.hpp
-    ./include/Exceptions.hpp
-    ./include/helpers/MainMenu.hpp
-    ./source/helpers/MainMenu.cpp
-    ./include/helpers/PageBuilder.hpp
-    ./source/helpers/PageBuilder.cpp
-    ./include/helpers/Terminal.hpp
-    ./source/helpers/Terminal.cpp
-    ./include/games/Game.hpp
-    ./include/games/TicTacToe.hpp
-    ./source/games/TicTacToe.cpp
-    ./include/games/Hangman.hpp
-    ./source/games/Hangman.cpp
-    ./include/games/Battleships.hpp
-    ./source/games/Battleships.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/main.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/helpers/MainMenu.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/helpers/PageBuilder.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/helpers/Terminal.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/games/TicTacToe.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/games/Hangman.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/games/Battleships.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/resources/icons/terminal-games.rc
 )
