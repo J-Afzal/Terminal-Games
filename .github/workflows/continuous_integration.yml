@@ -71,21 +71,11 @@ jobs:
               with:
                   pattern: terminal-games-*
 
-            - name: Extract artifacts
-              run: |
-                  ls
-                  7z x ./terminal-games-macos-latest
-                  ls
-                  7z x ./terminal-games-ubuntu-latest
-                  ls
-                  7z x ./terminal-games-windows-latest
-                  ls
-
             - name: Get current date
               run: echo "date=$(date +%Y%m%d)" >> $GITHUB_ENV
 
             - name: Create new release
-              run: gh release create cd-release-${{ env.date }}-${{ github.run_number }} ./terminal-games-macos-latest ./terminal-games-ubuntu-latest ./terminal-games-windows-latest.exe --draft --generate-notes --latest
+              run: gh release create cd-release-${{ env.date }}-${{ github.run_number }} ./terminal-games-macos-latest ./terminal-games-ubuntu-latest ./terminal-games-windows-latest --draft --generate-notes --latest
 
     linting:
         strategy:
