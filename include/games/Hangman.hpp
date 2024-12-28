@@ -120,7 +120,7 @@ namespace TerminalGames
         bool m_userIsGuesser;
 
         static constexpr uint32_t m_NUMBER_OF_WORDS = 972;
-        static inline const std::array<std::string, m_NUMBER_OF_WORDS> m_WORDS = {
+        static inline const std::array<std::string, m_NUMBER_OF_WORDS> m_WORDS = { // NOLINT(cert-err58-cpp,fuchsia-statically-constructed-objects)
             "ABILITY",
             "ABLE",
             "ABOUT",

@@ -2,8 +2,6 @@
 #include <cctype>
 #include <chrono>
 #include <cstdint>
-#include <fstream>
-#include <iosfwd>
 #include <iostream>
 #include <iterator>
 #include <regex>
@@ -269,7 +267,7 @@ namespace TerminalGames
 
     void Hangman::GetWordFromComputer()
     {
-        m_wordToBeGuessed = m_WORDS[m_randomNumberGenerator() % m_WORDS.size()];
+        m_wordToBeGuessed = m_WORDS[m_randomNumberGenerator() % m_WORDS.size()]; // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
     }
 
     void Hangman::ExecuteGeneralCommand(const char &guess)
