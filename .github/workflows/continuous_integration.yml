@@ -87,8 +87,6 @@ jobs:
               env:
                   GH_TOKEN: ${{ github.token }}
 
-    # TODO: remove run number and what happens if multiple release with same name? (${{ github.run_number }})
-
     linting:
         strategy:
             matrix:
