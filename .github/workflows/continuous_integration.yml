@@ -73,10 +73,14 @@ jobs:
 
             - name: Extract artifacts
               run: |
-                  7z x ./terminal-games-macos-latest
-                  7z x ./terminal-games-ubuntu-latest
-                  7z x ./terminal-games-windows-latest
-
+                  ls
+                  7z x ./terminal-games-macos-latest.zip
+                  ls
+                  7z x ./terminal-games-ubuntu-latest.zip
+                  ls
+                  7z x ./terminal-games-windows-latest.zip
+                  ls
+                  
             - name: Get current date
               run: echo "date=$(date +%Y%m%d)" >> $GITHUB_ENV
 
