@@ -17,15 +17,15 @@
 
 namespace TerminalGames
 {
-    Hangman::Hangman(const bool &onlyUseASCII) // NOLINT(cert-msc32-c,cert-msc51-cpp,cppcoreguidelines-pro-type-member-init,hicpp-member-init)
+    Hangman::Hangman(const bool &p_onlyUseAscii) // NOLINT(cppcoreguidelines-pro-type-member-init,hicpp-member-init)
     {
-        m_pageBuilder.SetProperties(Pages::HANGMAN, onlyUseASCII);
+        m_pageBuilder.SetProperties(Pages::HANGMAN, p_onlyUseAscii);
         m_randomNumberGenerator.seed(std::chrono::system_clock::now().time_since_epoch().count());
     }
 
     void Hangman::SetupGame()
     {
-        m_commandsRemaining.reserve(g_HANGMAN_NUMBER_OF_LETTERS_IN_THE_ALPHABET);
+        m_commandsRemaining.reserve(G_HANGMAN_NUMBER_OF_LETTERS_IN_THE_ALPHABET);
         m_commandsRemaining = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
         m_incorrectGuesses.clear();
         m_computerSpeedName = "N/A";
@@ -39,14 +39,14 @@ namespace TerminalGames
 
     void Hangman::UpdateGameInfo()
     {
-        m_gameInfo.hangmanStruct = {
-            .incorrectGuesses = m_incorrectGuesses,
-            .computerSpeedName = m_computerSpeedName,
-            .currentGuessOfWord = m_currentGuessOfWord,
-            .playerCount = m_playerCount,
-            .wordToBeGuessed = m_wordToBeGuessed,
-            .errorCount = m_errorCount,
-            .turnCount = m_turnCount};
+        m_gameInfo.m_hangmanStruct = {
+            .m_incorrectGuesses = m_incorrectGuesses,
+            .m_computerSpeedName = m_computerSpeedName,
+            .m_currentGuessOfWord = m_currentGuessOfWord,
+            .m_playerCount = m_playerCount,
+            .m_wordToBeGuessed = m_wordToBeGuessed,
+            .m_errorCount = m_errorCount,
+            .m_turnCount = m_turnCount};
     }
 
     void Hangman::GetUserOptions()
@@ -92,7 +92,7 @@ namespace TerminalGames
 
     bool Hangman::IsGameOver()
     {
-        if (m_errorCount == g_HANGMAN_MAXIMUM_ERROR_COUNT)
+        if (m_errorCount == G_HANGMAN_MAXIMUM_ERROR_COUNT)
         {
             m_hasWinner = true;
             return m_hasWinner;
@@ -132,23 +132,23 @@ namespace TerminalGames
 
             keyPress = Terminal::GetNextKeyPress();
 
-            if (keyPress == g_QUIT_KEY)
+            if (keyPress == G_QUIT_KEY)
             {
                 throw Exceptions::QuitGame();
             }
 
-            if (keyPress == g_ENTER_KEY)
+            if (keyPress == G_ENTER_KEY)
             {
                 ExecuteGeneralCommand(m_commandsRemaining[currentSelection]);
                 return;
             }
 
-            if (keyPress == g_UP_ARROW_KEY)
+            if (keyPress == G_UP_ARROW_KEY)
             {
                 currentSelection == 0 ? currentSelection = m_commandsRemaining.size() - 1 : --currentSelection;
             }
 
-            else if (keyPress == g_DOWN_ARROW_KEY)
+            else if (keyPress == G_DOWN_ARROW_KEY)
             {
                 currentSelection == (m_commandsRemaining.size() - 1) ? currentSelection = 0 : ++currentSelection;
             }
@@ -174,9 +174,9 @@ namespace TerminalGames
             std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::seconds(m_computerSpeed));
         }
 
-        const char computerCommand = m_commandsRemaining[m_randomNumberGenerator() % m_commandsRemaining.size()];
+        const char COMPUTER_COMMAND = m_commandsRemaining[m_randomNumberGenerator() % m_commandsRemaining.size()];
 
-        ExecuteGeneralCommand(computerCommand);
+        ExecuteGeneralCommand(COMPUTER_COMMAND);
     }
 
     void Hangman::GameOver()
@@ -193,24 +193,24 @@ namespace TerminalGames
     {
         UpdateGameInfo();
 
-        const std::vector<std::string> menus = m_pageBuilder.GetPlayerCountOptionSelectionGamePages(m_gameInfo);
-        m_playerCount = std::to_string(Terminal::GetUserChoiceFromGameMenus(menus)) + "  ";
+        const std::vector<std::string> MENUS = m_pageBuilder.GetPlayerCountOptionSelectionGamePages(m_gameInfo);
+        m_playerCount = std::to_string(Terminal::GetUserChoiceFromGameMenus(MENUS)) + "  ";
     }
 
     void Hangman::GetUserPlayerChoice()
     {
         UpdateGameInfo();
 
-        const std::vector<std::string> menus = m_pageBuilder.GetUserPlayerChoiceOptionSelectionGamePages(m_gameInfo);
-        Terminal::GetUserChoiceFromGameMenus(menus) == 0 ? m_userIsGuesser = true : m_userIsGuesser = false;
+        const std::vector<std::string> MENUS = m_pageBuilder.GetUserPlayerChoiceOptionSelectionGamePages(m_gameInfo);
+        Terminal::GetUserChoiceFromGameMenus(MENUS) == 0 ? m_userIsGuesser = true : m_userIsGuesser = false;
     }
 
     void Hangman::GetComputerSpeed()
     {
         UpdateGameInfo();
 
-        const std::vector<std::string> menus = m_pageBuilder.GetComputerSpeedOptionSelectionGamePages(m_gameInfo);
-        m_computerSpeed = Terminal::GetUserChoiceFromGameMenus(menus);
+        const std::vector<std::string> MENUS = m_pageBuilder.GetComputerSpeedOptionSelectionGamePages(m_gameInfo);
+        m_computerSpeed = Terminal::GetUserChoiceFromGameMenus(MENUS);
 
         if (m_computerSpeed == 0)
         {
@@ -232,13 +232,13 @@ namespace TerminalGames
     {
         UpdateGameInfo();
 
-        const std::string output = m_pageBuilder.GetPageWithMessage(m_gameInfo, "Please enter the word to be guessed:");
+        const std::string OUTPUT = m_pageBuilder.GetPageWithMessage(m_gameInfo, "Please enter the word to be guessed:");
 
         std::string input;
 
         while (true)
         {
-            Terminal::PrintOutput(output);
+            Terminal::PrintOutput(OUTPUT);
 
             Terminal::SetCursorPosition(39, 13); // NOLINT(cppcoreguidelines-avoid-magic-numbers, readability-magic-numbers)
 
@@ -249,7 +249,7 @@ namespace TerminalGames
                 throw Exceptions::QuitGame();
             }
 
-            if (input.size() < g_HANGMAN_MINIMUM_WORD_LENGTH || input.size() > g_HANGMAN_MAXIMUM_WORD_LENGTH)
+            if (input.size() < G_HANGMAN_MINIMUM_WORD_LENGTH || input.size() > G_HANGMAN_MAXIMUM_WORD_LENGTH)
             {
                 continue;
             }
@@ -267,28 +267,28 @@ namespace TerminalGames
 
     void Hangman::GetWordFromComputer()
     {
-        m_wordToBeGuessed = m_WORDS[m_randomNumberGenerator() % m_WORDS.size()]; // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+        m_wordToBeGuessed = G_HANGMAN_COMPUTER_WORDS[m_randomNumberGenerator() % G_HANGMAN_COMPUTER_WORDS.size()]; // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
     }
 
-    void Hangman::ExecuteGeneralCommand(const char &guess)
+    void Hangman::ExecuteGeneralCommand(const char &p_guess)
     {
         bool isGuessCorrect = false;
         for (uint32_t i = 0; i < m_wordToBeGuessed.size(); i++)
         {
-            if (m_wordToBeGuessed[i] == guess)
+            if (m_wordToBeGuessed[i] == p_guess)
             {
                 isGuessCorrect = true;
-                m_currentGuessOfWord[i] = guess;
+                m_currentGuessOfWord[i] = p_guess;
             }
         }
 
         if (!isGuessCorrect)
         {
-            m_incorrectGuesses.push_back(guess);
+            m_incorrectGuesses.push_back(p_guess);
             m_errorCount++;
         }
 
-        m_commandsRemaining.erase(ImplementStdRangesFind(m_commandsRemaining.begin(), m_commandsRemaining.end(), guess));
+        m_commandsRemaining.erase(ImplementStdRangesFind(m_commandsRemaining.begin(), m_commandsRemaining.end(), p_guess));
         m_turnCount++;
     }
-} // namespace TerminalGames
+}

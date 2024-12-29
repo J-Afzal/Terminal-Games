@@ -29,4 +29,4 @@ namespace TerminalGames::Exceptions
      */
     class BackspaceKeyPressed : public std::exception {};
 
-} // namespace TerminalGames::Exceptions
+}

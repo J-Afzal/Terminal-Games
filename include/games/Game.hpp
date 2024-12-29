@@ -16,30 +16,30 @@ namespace TerminalGames
         /**
          * @brief Disable constructing a new Game object using copy constructor.
          *
-         * @param game The game to copy.
+         * @param p_game The game to copy.
          */
-        Game(const Game &game) = delete;
+        Game(const Game &p_game) = delete;
 
         /**
          * @brief Disable constructing a new Game object using move constructor.
          *
-         * @param game The game to copy.
+         * @param p_game The game to copy.
          */
-        Game(const Game &&game) = delete;
+        Game(const Game &&p_game) = delete;
 
         /**
          * @brief Disable constructing a new Game object using copy assignment operator.
          *
-         * @param game The game to copy.
+         * @param p_game The game to copy.
          */
-        Game &operator=(const Game &game) = delete;
+        Game &operator=(const Game &p_game) = delete;
 
         /**
          * @brief Disable constructing a new Game object using move assignment operator.
          *
-         * @param game The game to copy.
+         * @param p_game The game to copy.
          */
-        Game &operator=(const Game &&game) = delete;
+        Game &operator=(const Game &&p_game) = delete;
 
         /**
          * @brief Destroy the Game object
@@ -128,4 +128,4 @@ namespace TerminalGames
          */
         virtual void GameOver() = 0;
     };
-} // namespace TerminalGames
+}
