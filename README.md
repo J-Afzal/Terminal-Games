@@ -136,3 +136,64 @@ opening the folder through the `Developer PowerShell for VS` (otherwise you may 
 
 Releases are performed automatically on pushes to master (i.e. when a pull request is merged) via the continuous deployment
 workflow.
+
+<!--
+TODO:
+
+Tic Tac Toe
+    - Clean up code
+        - Remove braces for single line statements
+        - Check all NOLINT
+        - Collapse to single while loop in ExecuteNextUserCommand
+    - New features:
+        - Add restart with same settings with game over message update
+    - Create test plan and confirm all things work (including other platforms and with ascii only)
+
+Hangman
+    - Clean up code
+        - Remove braces for single line statements
+        - Check all NOLINT
+        - Show word to be guessed '_'s on first turn before any user input
+        - delete m_errorCount?
+    - New features:
+        - Add restart with same settings with game over message update
+    - Create test plan and confirm all things work (including other platforms and with ascii only)
+
+Battleships
+    - Clean up code
+        - Remove braces for single line statements
+        - Check all NOLINT
+    - New features:
+        - Add restart with same settings with game over message update
+    - Create test plan and confirm all things work (including other platforms and with ascii only)
+
+PageBuilder
+    - Clean up GetGameDisplay func (maybe implement grid system?)
+
+Main Menu
+    - Clean up code
+    - New features:
+        - Add homepage with option selection (ascii only and platform label and navigation instruction depending upon platform and press key to go to main menu)
+        - Press 'h' to go back to the above page
+    - Create test plan and confirm all things work (including other platforms and with ascii only)
+
+Linters
+    - gitattributes
+        - Flag extra new lines
+        - Redundant entries
+        - Duplicate entries
+    - cspell
+        - Redundant entries
+        - Duplicate entries
+    - file names
+        - they are all standardised to any casing (maybe use $fileName = $fileName.ToTitleCase()?)
+
+Doxygen
+    Add build to CI with artifact to check.
+    Add build and publish to CD and publish to GH pages (maybe commit to repo but make sure no infinite loop)
+    Update readme to link to GH pages docs
+
+Test Plans
+    Setup MacOS and Ubuntu VMs and see if test plan succeed
+    Update readme to reference them and differences between platforms
+ -->

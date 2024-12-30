@@ -71,9 +71,7 @@ namespace TerminalGames
         for (const std::string& argument : p_commandLineArguments)
         {
             if (argument == "--a" || argument == "--ascii-only")
-            {
                 return true;
-            }
 
             if (argument == "--h" || argument == "--ascii-only")
             {

@@ -85,9 +85,7 @@ namespace TerminalGames
         const bool& p_displayGetUserCommandPage)
     {
         if (p_displayGetUserCommandPage)
-        {
             PrintOutput(p_pageBuilder.GetUserCommandPage(p_gameInfo));
-        }
 
         uint32_t currentRow = std::get<0>(p_startingGridLocation);
         uint32_t currentColumn = std::get<1>(p_startingGridLocation);
@@ -227,28 +225,21 @@ namespace TerminalGames
 
         HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
         if (hStdOut == INVALID_HANDLE_VALUE)
-        {
             std::exit(1);
-        }
 
         // Get the number of cells in the current buffer
         if (!static_cast<bool>(GetConsoleScreenBufferInfo(hStdOut, &consoleScreenBufferInfo)))
-        {
             std::exit(2);
-        }
+
         cellCount = consoleScreenBufferInfo.dwSize.X * consoleScreenBufferInfo.dwSize.Y;
 
         // Fill the entire buffer with spaces
         if (!FillConsoleOutputCharacter(hStdOut, ' ', cellCount, HOME_COORDS, &count))
-        {
             std::exit(3);
-        }
 
         // Fill the entire buffer with the current colors and attributes
         if (!static_cast<bool>(FillConsoleOutputAttribute(hStdOut, consoleScreenBufferInfo.wAttributes, cellCount, HOME_COORDS, &count)))
-        {
             std::exit(4);
-        }
 
         // Move the cursor home
         SetConsoleCursorPosition(hStdOut, HOME_COORDS);
@@ -270,9 +261,7 @@ namespace TerminalGames
             std::getline(std::cin, inputString);
 
             if (inputString.size() != 1)
-            {
                 continue;
-            }
 
             switch (inputString[0])
             {
