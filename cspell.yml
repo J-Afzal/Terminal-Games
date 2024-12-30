@@ -24,5 +24,6 @@ ignoreWords:
     - msvc
     - noexcept
     - nodiscard
+    - nolint
     - tictactoe
     - werror
