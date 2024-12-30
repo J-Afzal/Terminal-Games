@@ -134,21 +134,21 @@ namespace TerminalGames
             switch (p_pageBuilder.GetCurrentPage())
             {
             case Pages::TICTACTOE:
-                currentGameInfo.ticTacToeStruct.gameGrid.at(currentRow).at(currentColumn).at(0) = '#';
-                currentGameInfo.ticTacToeStruct.gameGrid.at(currentRow).at(currentColumn).at(2) = '#';
+                currentGameInfo.m_ticTacToeStruct.m_gameGrid.at(currentRow).at(currentColumn).at(0) = '#';
+                currentGameInfo.m_ticTacToeStruct.m_gameGrid.at(currentRow).at(currentColumn).at(2) = '#';
                 break;
 
             case Pages::BATTLESHIPS:
                 if (displayGetUserCommandPage)
                 {
-                    currentGameInfo.battleshipsStruct.boardTwo.at(currentRow).at(currentColumn).at(0) = '#';
-                    currentGameInfo.battleshipsStruct.boardTwo.at(currentRow).at(currentColumn).at(2) = '#';
+                    currentGameInfo.m_battleshipsStruct.m_boardTwo.at(currentRow).at(currentColumn).at(0) = '#';
+                    currentGameInfo.m_battleshipsStruct.m_boardTwo.at(currentRow).at(currentColumn).at(2) = '#';
                 }
 
                 else
                 {
-                    currentGameInfo.battleshipsStruct.boardOne.at(currentRow).at(currentColumn).at(0) = '#';
-                    currentGameInfo.battleshipsStruct.boardOne.at(currentRow).at(currentColumn).at(2) = '#';
+                    currentGameInfo.m_battleshipsStruct.m_boardOne.at(currentRow).at(currentColumn).at(0) = '#';
+                    currentGameInfo.m_battleshipsStruct.m_boardOne.at(currentRow).at(currentColumn).at(2) = '#';
                 }
                 break;
 

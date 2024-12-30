@@ -12,16 +12,18 @@ Checks: "*, \
     -linuxkernel-*, \
     -llvm-header-guard, \
     -llvm-namespace-comment, \
+    -llvm-qualified-auto, \
     -llvmlibc-*, \
     -modernize-use-nodiscard, \
     -modernize-use-trailing-return-type, \
     -mpi-*, \
     -objc-*, \
     -openmp-*, \
+    -readability-qualified-auto, \
     -zircon-*"
 WarningsAsErrors: "*"
 CheckOptions:
-    - key: "readability-braces-around-statements.ShortStatementLines" # TODO: remove braces
+    - key: "readability-braces-around-statements.ShortStatementLines"
       value: 2
     - key: "readability-inconsistent-declaration-parameter-name.Strict"
       value: "true"
@@ -182,6 +184,8 @@ CheckOptions:
     ## Types
     - key: "readability-identifier-naming.TypeTemplateParameterCase"
       value: "CamelCase"
+    - key: readability-identifier-naming.TypeTemplateParameterIgnoredRegexp
+      value: expr-type
     - key: "readability-identifier-naming.TypeAliasCase"
       value: "lower_case"
     - key: "readability-identifier-naming.TypedefCase"
