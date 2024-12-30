@@ -91,9 +91,29 @@ namespace TerminalGames
 
         uint32_t currentRow = std::get<0>(p_startingGridLocation);
         uint32_t currentColumn = std::get<1>(p_startingGridLocation);
-
         uint32_t maxRow = 0;
         uint32_t maxColumn = 0;
+
+        switch (p_pageBuilder.GetCurrentPage())
+        {
+        case Pages::TICTACTOE:
+            maxColumn = G_TICTACTOE_BOARD_WIDTH - 1;
+            maxRow = G_TICTACTOE_BOARD_HEIGHT - 1;
+            break;
+
+        case Pages::BATTLESHIPS:
+            maxColumn = G_BATTLESHIPS_BOARD_WIDTH - 1;
+            maxRow = G_BATTLESHIPS_BOARD_HEIGHT - 1;
+            break;
+
+        default:
+            break;
+        }
+
+        while (true)
+        {
+#ifdef _WIN32
+
         uint32_t gridLeftPad = 0;
         uint32_t gridTopPad = 0;
         uint32_t gridElementWidth = 0;
@@ -122,10 +142,6 @@ namespace TerminalGames
         default:
             break;
         }
-
-        while (true)
-        {
-#ifdef _WIN32
             SetCursorVisibility(true);
             SetCursorPosition({static_cast<int16_t>(gridLeftPad + (currentColumn * gridElementWidth)), static_cast<int16_t>(gridTopPad + (currentRow * gridElementHeight))});
 #else
