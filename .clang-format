@@ -23,13 +23,13 @@ AlignConsecutiveDeclarations:
     AlignCompound: false
     AlignFunctionPointers: false
     PadOperators: false
-AlignConsecutiveMacros:
-    Enabled: false
-    AcrossEmptyLines: false
-    AcrossComments: false
-    AlignCompound: false
-    AlignFunctionPointers: false
-    PadOperators: false
+# AlignConsecutiveMacros:
+#     Enabled: false
+#     AcrossEmptyLines: false
+#     AcrossComments: false
+#     AlignCompound: false
+#     AlignFunctionPointers: false
+#     PadOperators: false
 AlignConsecutiveShortCaseStatements:
     Enabled: false
     AcrossEmptyLines: false
@@ -76,6 +76,7 @@ AllowShortLambdasOnASingleLine: All
 AllowShortLoopsOnASingleLine: false
 AlwaysBreakBeforeMultilineStrings: false
 BinPackArguments: false
+# BinPackParameters: OnePerLine
 BitFieldColonSpacing: Both
 BraceWrapping:
     AfterCaseLabel: true
@@ -104,6 +105,7 @@ BreakBeforeBraces: Custom
 BreakBeforeConceptDeclarations: Always
 BreakBeforeInlineASMColon: OnlyMultiline
 BreakBeforeTernaryOperators: false
+# BreakBinaryOperations: RespectPrecedence
 BreakConstructorInitializers: AfterColon
 BreakFunctionDefinitionParameters: false
 BreakInheritanceList: AfterColon
@@ -161,6 +163,7 @@ QualifierOrder:
     - type
 ReferenceAlignment: Left
 ReflowComments: true
+# ReflowComments: Always
 RemoveParentheses: ReturnStatement
 RemoveSemicolon: true
 RequiresClausePosition: OwnLine
