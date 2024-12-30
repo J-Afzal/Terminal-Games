@@ -22,7 +22,7 @@ namespace TerminalGames
 
     MainMenu::~MainMenu()
     {
-        Terminal::SetCursorPosition(0, 0);
+        Terminal::SetCursorPosition({0, 0});
         Terminal::SetCursorVisibility(true);
         Terminal::Clear();
     }
@@ -40,7 +40,7 @@ namespace TerminalGames
         m_games.push_back(std::make_unique<Battleships>(m_onlyUseASCII));
 
         Terminal::SetCursorVisibility(false);
-        Terminal::SetCursorPosition(0, 0);
+        Terminal::SetCursorPosition({0, 0});
 
         // Custom exceptions are used to return exit the games and the main menu.
         while (true)
@@ -63,7 +63,7 @@ namespace TerminalGames
 
         Terminal::Clear();
         Terminal::SetCursorVisibility(true);
-        Terminal::SetCursorPosition(0, 0);
+        Terminal::SetCursorPosition({0, 0});
     }
 
     bool MainMenu::ParseCommandLineArguments(const std::vector<std::string>& p_commandLineArguments)

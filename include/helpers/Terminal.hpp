@@ -82,9 +82,8 @@ namespace TerminalGames
         /**
          * @brief Wrapper for Windows.h SetConsoleCursorPosition()
          *
-         * @param p_xCoord The horizontal position to set the cursor to.
-         * @param p_yCoord The vertical position to set the cursor to.
+         * @param p_coords The horizontal and vertical position to set the cursor to.
          */
-        static void SetCursorPosition(const int16_t& p_xCoord, const int16_t& p_yCoord);
+        static void SetCursorPosition(const std::tuple<int16_t, int16_t>& p_coords);
     };
 }

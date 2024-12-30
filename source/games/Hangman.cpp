@@ -131,7 +131,7 @@ namespace TerminalGames
 
         while (true)
         {
-            Terminal::SetCursorPosition(G_HANGMAN_GET_USER_COMMAND_COLUMN, G_HANGMAN_USER_INPUT_ROW);
+            Terminal::SetCursorPosition({G_HANGMAN_GET_USER_COMMAND_COLUMN, G_HANGMAN_USER_INPUT_ROW});
 
             std::cout << std::string("\x1B[1;34m") + m_commandsRemaining[currentSelection] + "\x1B[1;37m"; // Make it blue
 
@@ -245,7 +245,7 @@ namespace TerminalGames
         {
             Terminal::PrintOutput(OUTPUT);
 
-            Terminal::SetCursorPosition(G_HANGMAN_GET_WORD_FROM_USER_COLUMN, G_HANGMAN_USER_INPUT_ROW);
+            Terminal::SetCursorPosition({G_HANGMAN_GET_WORD_FROM_USER_COLUMN, G_HANGMAN_USER_INPUT_ROW});
 
             std::getline(std::cin, input);
 

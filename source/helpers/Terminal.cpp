@@ -127,7 +127,7 @@ namespace TerminalGames
         {
 #ifdef _WIN32
             SetCursorVisibility(true);
-            SetCursorPosition(static_cast<int16_t>(gridLeftPad + (currentColumn * gridElementWidth)), static_cast<int16_t>(gridTopPad + (currentRow * gridElementHeight)));
+            SetCursorPosition({static_cast<int16_t>(gridLeftPad + (currentColumn * gridElementWidth)), static_cast<int16_t>(gridTopPad + (currentRow * gridElementHeight))});
 #else
             GameInfo currentGameInfo = p_gameInfo;
 
@@ -139,7 +139,7 @@ namespace TerminalGames
                 break;
 
             case Pages::BATTLESHIPS:
-                if (displayGetUserCommandPage)
+                if (p_displayGetUserCommandPage)
                 {
                     currentGameInfo.m_battleshipsStruct.m_boardTwo.at(currentRow).at(currentColumn).at(0) = '#';
                     currentGameInfo.m_battleshipsStruct.m_boardTwo.at(currentRow).at(currentColumn).at(2) = '#';
@@ -293,10 +293,10 @@ namespace TerminalGames
 #endif
     }
 
-    void Terminal::SetCursorPosition(const int16_t& p_xCoord, const int16_t& p_yCoord)
+    void Terminal::SetCursorPosition(const std::tuple<int16_t, int16_t>& p_coords)
     {
 #ifdef _WIN32
-        const COORD CURSOR_POSITION(p_xCoord, p_yCoord);
+        const COORD CURSOR_POSITION(std::get<0>(p_coords), std::get<1>(p_coords));
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), CURSOR_POSITION);
 #endif
     }
