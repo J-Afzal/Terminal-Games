@@ -26,31 +26,30 @@ jobs:
               run: |
                   if [ "${{ matrix.os }}" = "macos-latest" ]
                   then
+                      brew upgrade
                       brew install ninja
                       brew install llvm
                   fi
 
                   if [ "${{ matrix.os }}" = "ubuntu-latest" ]
                   then
-                      # Install brew
+                      sudo apt-get update
+                      sudo apt-get upgrade
+                      sudo apt-get install ninja-build
+
+                      # Install brew to get latest llvm
                       test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
                       test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
                       echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bashrc
                       export PATH="$HOME/.linuxbrew/bin:$PATH"
 
-                      # Install dependencies
-                      brew install ninja
                       brew install llvm
-
-                      ninja --version
-                      clang-tidy --version
-                      clang-format --version
                   fi
 
                   if [ "${{ matrix.os }}" = "windows-latest" ]
                   then
+                      choco upgrade all --force
                       choco install ninja -y
-                      choco install llvm -y
                   fi
 
             - name: Configure CMake
@@ -61,16 +60,15 @@ jobs:
               run: |
                   if [ "${{ matrix.os }}" = "macos-latest" ]
                   then
+                      # To override apple clang
                       export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
                   fi
 
                   if [ "${{ matrix.os }}" = "ubuntu-latest" ]
                   then
+                      # To use brew llvm package
                       export PATH="$HOME/.linuxbrew/bin:$PATH"
                   fi
-
-                  clang-tidy --version
-                  clang-format --version
 
                   pwsh -command "Import-Module ./scripts/Linters.psm1; Test-CodeUsingClangTools -Verbose"
 
