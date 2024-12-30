@@ -40,9 +40,6 @@ jobs:
                       choco install ninja -y
                   fi
 
-                  clang-tidy --version
-                  clang-format --version
-
             - name: Configure CMake
               run: cmake -S . -B ./build -G "Ninja"
 
@@ -53,6 +50,9 @@ jobs:
                   then
                       export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
                   fi
+
+                  clang-tidy --version
+                  clang-format --version
 
                   pwsh -command "Import-Module ./scripts/Linters.psm1; Test-CodeUsingClangTools -Verbose"
 
