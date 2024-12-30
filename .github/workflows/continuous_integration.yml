@@ -27,7 +27,6 @@ jobs:
                   if [ "${{ matrix.os }}" = "macos-latest" ]
                   then
                       brew install ninja
-                      brew install llvm
                   fi
 
                   if [ "${{ matrix.os }}" = "ubuntu-latest" ]
@@ -48,10 +47,28 @@ jobs:
               run: |
                   if [ "${{ matrix.os }}" = "macos-latest" ]
                   then
+                      # Override pre-installed clang and add to path
+                      brew install llvm
                       export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
                   fi
 
-                  pwsh -command "Import-Module ./scripts/Linters.psm1; Test-TerminalGamesCode -Verbose"
+                  if [ "${{ matrix.os }}" = "ubuntu-latest" ]
+                  then
+                      # Install brew to get latest llvm and clang tools
+                      test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
+                      test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+                      echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bashrc
+                      export PATH="$HOME/.linuxbrew/bin:$PATH"
+
+                      brew install llvm
+                  fi
+
+                  if [ "${{ matrix.os }}" = "windows-latest" ]
+                  then
+                      choco upgrade llvm -y
+                  fi
+
+                  pwsh -command "Import-Module ./scripts/Linters.psm1; Test-CodeUsingClangTools -Verbose"
 
             - name: Build Project
               run: cmake --build ./build --config Release

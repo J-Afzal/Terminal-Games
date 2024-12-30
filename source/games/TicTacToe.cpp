@@ -13,9 +13,12 @@
 
 namespace TerminalGames
 {
-    TicTacToe::TicTacToe(const bool &onlyUseASCII) // NOLINT(cert-msc32-c,cert-msc51-cpp,cppcoreguidelines-pro-type-member-init,hicpp-member-init)
+    TicTacToe::TicTacToe(const bool& p_onlyUseAscii) :
+        m_computerSpeed(0),
+        m_turnCount(0),
+        m_hasWinner(false)
     {
-        m_pageBuilder.SetProperties(Pages::TICTACTOE, onlyUseASCII);
+        m_pageBuilder.SetProperties(Pages::TICTACTOE, p_onlyUseAscii);
         m_randomNumberGenerator.seed(std::chrono::system_clock::now().time_since_epoch().count());
     }
 
@@ -30,11 +33,11 @@ namespace TerminalGames
         m_turnCount = 0;
         m_hasWinner = false;
 
-        for (uint32_t i = 0; i < g_TICTACTOE_BOARD_HEIGHT; i++)
+        for (uint32_t i = 0; i < G_TICTACTOE_BOARD_HEIGHT; i++)
         {
-            for (uint32_t j = 0; j < g_TICTACTOE_BOARD_WIDTH; j++)
+            for (uint32_t j = 0; j < G_TICTACTOE_BOARD_WIDTH; j++)
             {
-                m_gameGrid[i][j] = "   "; // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+                m_gameGrid.at(i).at(j) = "   ";
                 m_commandsRemaining.emplace_back(i, j);
             }
         }
@@ -42,13 +45,13 @@ namespace TerminalGames
 
     void TicTacToe::UpdateGameInfo()
     {
-        m_gameInfo.ticTacToeStruct = {
-            .gameGrid = m_gameGrid,
-            .computerSpeedName = m_computerSpeedName,
-            .currentPlayer = m_currentPlayer,
-            .playerCount = m_playerCount,
-            .turnCount = m_turnCount,
-            .hasWinner = m_hasWinner};
+        m_gameInfo.m_ticTacToeStruct = {
+            .m_gameGrid = m_gameGrid,
+            .m_computerSpeedName = m_computerSpeedName,
+            .m_currentPlayer = m_currentPlayer,
+            .m_playerCount = m_playerCount,
+            .m_turnCount = m_turnCount,
+            .m_hasWinner = m_hasWinner};
     }
 
     void TicTacToe::GetUserOptions()
@@ -90,7 +93,7 @@ namespace TerminalGames
             return m_hasWinner;
         }
 
-        return m_turnCount == g_TICTACTOE_MAXIMUM_ERROR_COUNT;
+        return m_turnCount == G_TICTACTOE_MAXIMUM_ERROR_COUNT;
     }
 
     void TicTacToe::ToggleCurrentPlayer()
@@ -108,17 +111,14 @@ namespace TerminalGames
 
     void TicTacToe::ExecuteUserCommand()
     {
-        const uint32_t startingRow = std::get<0>(m_previousCommand);
-        const uint32_t startingColumn = std::get<1>(m_previousCommand);
-
         while (true)
         {
-            const std::tuple<uint32_t, uint32_t> selectedCommand = Terminal::GetUserCommandFromGameGrid(m_pageBuilder, m_gameInfo, startingRow, startingColumn, g_TICTACTOE_BOARD_HEIGHT - 1, g_TICTACTOE_BOARD_WIDTH - 1, g_TICTACTOE_GRID_LEFT_PAD, g_TICTACTOE_GRID_TOP_PAD, g_TICTACTOE_GRID_ELEMENT_WIDTH, g_TICTACTOE_GRID_ELEMENT_HEIGHT, true);
+            const std::tuple<uint32_t, uint32_t> SELECTED_COMMAND = Terminal::GetUserCommandFromGameGrid(m_previousCommand, m_pageBuilder, m_gameInfo, true);
 
-            if (ValidateCommand(selectedCommand))
+            if (ValidateCommand(SELECTED_COMMAND))
             {
-                ExecuteGeneralCommand(selectedCommand);
-                m_previousCommand = selectedCommand;
+                ExecuteGeneralCommand(SELECTED_COMMAND);
+                m_previousCommand = SELECTED_COMMAND;
                 return;
             }
         }
@@ -133,11 +133,11 @@ namespace TerminalGames
             std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::seconds(m_computerSpeed));
         }
 
-        const std::tuple<uint32_t, uint32_t> selectedCommand = m_commandsRemaining[m_randomNumberGenerator() % m_commandsRemaining.size()];
+        const std::tuple<uint32_t, uint32_t> SELECTED_COMMAND = m_commandsRemaining[m_randomNumberGenerator() % m_commandsRemaining.size()];
 
-        if (ValidateCommand(selectedCommand))
+        if (ValidateCommand(SELECTED_COMMAND))
         {
-            ExecuteGeneralCommand(selectedCommand);
+            ExecuteGeneralCommand(SELECTED_COMMAND);
             return;
         }
     }
@@ -156,24 +156,24 @@ namespace TerminalGames
     {
         UpdateGameInfo();
 
-        const std::vector<std::string> menus = m_pageBuilder.GetPlayerCountOptionSelectionGamePages(m_gameInfo);
-        m_playerCount = std::to_string(Terminal::GetUserChoiceFromGameMenus(menus)) + "  ";
+        const std::vector<std::string> MENUS = m_pageBuilder.GetPlayerCountOptionSelectionGamePages(m_gameInfo);
+        m_playerCount = std::to_string(Terminal::GetUserChoiceFromGameMenus(MENUS)) + "  ";
     }
 
     void TicTacToe::GetUserPlayerChoice()
     {
         UpdateGameInfo();
 
-        const std::vector<std::string> menus = m_pageBuilder.GetUserPlayerChoiceOptionSelectionGamePages(m_gameInfo);
-        Terminal::GetUserChoiceFromGameMenus(menus) == 0 ? m_userPlayerChoice = "Player X" : m_userPlayerChoice = "Player O";
+        const std::vector<std::string> MENUS = m_pageBuilder.GetUserPlayerChoiceOptionSelectionGamePages(m_gameInfo);
+        Terminal::GetUserChoiceFromGameMenus(MENUS) == 0 ? m_userPlayerChoice = "Player X" : m_userPlayerChoice = "Player O";
     }
 
     void TicTacToe::GetComputerSpeed()
     {
         UpdateGameInfo();
 
-        const std::vector<std::string> menus = m_pageBuilder.GetComputerSpeedOptionSelectionGamePages(m_gameInfo);
-        m_computerSpeed = Terminal::GetUserChoiceFromGameMenus(menus);
+        const std::vector<std::string> MENUS = m_pageBuilder.GetComputerSpeedOptionSelectionGamePages(m_gameInfo);
+        m_computerSpeed = Terminal::GetUserChoiceFromGameMenus(MENUS);
 
         if (m_computerSpeed == 0)
         {
@@ -191,19 +191,19 @@ namespace TerminalGames
         }
     }
 
-    bool TicTacToe::ValidateCommand(const std::tuple<uint32_t, uint32_t> &command)
+    bool TicTacToe::ValidateCommand(const std::tuple<uint32_t, uint32_t>& p_command)
     {
-        const auto commandFindLocation = ImplementStdRangesFind(m_commandsRemaining.begin(), m_commandsRemaining.end(), command);
+        const auto COMMAND_FIND_LOCATION = ImplementStdRangesFind(m_commandsRemaining.begin(), m_commandsRemaining.end(), p_command);
 
-        return commandFindLocation != m_commandsRemaining.end();
+        return COMMAND_FIND_LOCATION != m_commandsRemaining.end();
     }
 
-    void TicTacToe::ExecuteGeneralCommand(const std::tuple<uint32_t, uint32_t> &command)
+    void TicTacToe::ExecuteGeneralCommand(const std::tuple<uint32_t, uint32_t>& p_command)
     {
-        const auto commandFindLocation = ImplementStdRangesFind(m_commandsRemaining.begin(), m_commandsRemaining.end(), command);
+        const auto COMMAND_FIND_LOCATION = ImplementStdRangesFind(m_commandsRemaining.begin(), m_commandsRemaining.end(), p_command);
 
-        m_gameGrid[std::get<0>(command)][std::get<1>(command)] = std::string(" ") + m_currentPlayer.back() + std::string(" "); // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
-        m_commandsRemaining.erase(commandFindLocation);
+        m_gameGrid.at(std::get<0>(p_command)).at(std::get<1>(p_command)) = std::string(" ") + m_currentPlayer.back() + std::string(" ");
+        m_commandsRemaining.erase(COMMAND_FIND_LOCATION);
         m_turnCount++;
     }
-} // namespace TerminalGames
+}

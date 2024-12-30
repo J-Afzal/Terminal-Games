@@ -13,12 +13,16 @@ ignoreWords:
     - altera
     - analyzer
     - choco
-    - discardable
+    - constexpr
     - ctest
+    - discardable
+    - extern
     - hicpp
     - lastexitcode
     - libc
     - llvmlibc
     - msvc
+    - noexcept
     - nodiscard
     - tictactoe
+    - werror

@@ -16,35 +16,37 @@
 
 namespace TerminalGames
 {
-    Battleships::Battleships(const bool &onlyUseASCII) // NOLINT(cert-msc32-c,cert-msc51-cpp,cppcoreguidelines-pro-type-member-init,hicpp-member-init)
+    Battleships::Battleships(const bool& p_onlyUseAscii) :
+        m_computerSpeed(0),
+        m_turnCount(0),
+        m_isGameOver(false)
     {
-        m_pageBuilder.SetProperties(Pages::BATTLESHIPS, onlyUseASCII);
+        m_pageBuilder.SetProperties(Pages::BATTLESHIPS, p_onlyUseAscii);
         m_randomNumberGenerator.seed(std::chrono::system_clock::now().time_since_epoch().count());
     }
 
     void Battleships::SetupGame()
     {
         m_randomNumberGenerator() % 2 == 0 ? m_currentPlayer = "Player One" : m_currentPlayer = "Player Two";
-        m_commandsRemainingOne.clear();
-        m_commandsRemainingTwo.clear();
         m_shipsRemainingOne = m_shipsRemainingTwo = {
-            {g_BATTLESHIPS_CARRIER_NAME, g_BATTLESHIPS_CARRIER_SIZE},
-            {g_BATTLESHIPS_BATTLESHIP_NAME, g_BATTLESHIPS_BATTLESHIP_SIZE},
-            {g_BATTLESHIPS_DESTROYER_NAME, g_BATTLESHIPS_DESTROYER_SIZE},
-            {g_BATTLESHIPS_SUBMARINE_NAME, g_BATTLESHIPS_SUBMARINE_SIZE},
-            {g_BATTLESHIPS_PATROL_BOAT_NAME, g_BATTLESHIPS_PATROL_BOAT_SIZE}};
+            {G_BATTLESHIPS_CARRIER_NAME,     G_BATTLESHIPS_CARRIER_SIZE    },
+            {G_BATTLESHIPS_BATTLESHIP_NAME,  G_BATTLESHIPS_BATTLESHIP_SIZE },
+            {G_BATTLESHIPS_DESTROYER_NAME,   G_BATTLESHIPS_DESTROYER_SIZE  },
+            {G_BATTLESHIPS_SUBMARINE_NAME,   G_BATTLESHIPS_SUBMARINE_SIZE  },
+            {G_BATTLESHIPS_PATROL_BOAT_NAME, G_BATTLESHIPS_PATROL_BOAT_SIZE}
+        };
         m_previousCommand = {0, 0};
         m_computerSpeedName = "N/A    ";
         m_playerCount = "N/A";
         m_turnCount = 0;
         m_isGameOver = false;
 
-        for (uint32_t i = 0; i < g_BATTLESHIPS_BOARD_HEIGHT; i++)
+        for (uint32_t i = 0; i < G_BATTLESHIPS_BOARD_HEIGHT; i++)
         {
-            for (uint32_t j = 0; j < g_BATTLESHIPS_BOARD_WIDTH; j++)
+            for (uint32_t j = 0; j < G_BATTLESHIPS_BOARD_WIDTH; j++)
             {
-                m_boardOne[i][j] = "   "; // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index) // TODO: this should use constants and probably same in tictactoe
-                m_boardTwo[i][j] = "   "; // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+                m_boardOne.at(i).at(j) = "   ";
+                m_boardTwo.at(i).at(j) = "   ";
                 m_commandsRemainingOne.emplace_back(i, j);
                 m_commandsRemainingTwo.emplace_back(i, j);
             }
@@ -53,16 +55,16 @@ namespace TerminalGames
 
     void Battleships::UpdateGameInfo()
     {
-        m_gameInfo.battleshipsStruct = {
-            .boardOne = m_boardOne,
-            .boardTwo = m_boardTwo,
-            .shipsRemainingOne = m_shipsRemainingOne,
-            .shipsRemainingTwo = m_shipsRemainingTwo,
-            .computerSpeedName = m_computerSpeedName,
-            .currentPlayer = m_currentPlayer,
-            .playerCount = m_playerCount,
-            .turnCount = m_turnCount,
-            .isGameOver = m_isGameOver};
+        m_gameInfo.m_battleshipsStruct = {
+            .m_boardOne = m_boardOne,
+            .m_boardTwo = m_boardTwo,
+            .m_shipsRemainingOne = m_shipsRemainingOne,
+            .m_shipsRemainingTwo = m_shipsRemainingTwo,
+            .m_computerSpeedName = m_computerSpeedName,
+            .m_currentPlayer = m_currentPlayer,
+            .m_playerCount = m_playerCount,
+            .m_turnCount = m_turnCount,
+            .m_isGameOver = m_isGameOver};
     }
 
     void Battleships::GetUserOptions()
@@ -93,24 +95,6 @@ namespace TerminalGames
         return m_isGameOver;
     }
 
-    bool Battleships::IsShipPresent(std::array<std::array<std::string, g_BATTLESHIPS_BOARD_WIDTH>, g_BATTLESHIPS_BOARD_HEIGHT> &board)
-    {
-        for (const std::array<std::string, g_BATTLESHIPS_BOARD_WIDTH> &currentRow : board)
-        {
-            for (const std::string &currentValue : currentRow)
-            {
-                const auto currentValueFindLocation = ImplementStdRangesFind(g_BATTLESHIPS_SHIP_NAMES.begin(), g_BATTLESHIPS_SHIP_NAMES.end(), currentValue); // NOLINT(llvm-qualified-auto,readability-qualified-auto)
-
-                if (currentValueFindLocation != g_BATTLESHIPS_SHIP_NAMES.end())
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
     void Battleships::ToggleCurrentPlayer()
     {
         m_currentPlayer == "Player One" ? m_currentPlayer = "Player Two" : m_currentPlayer = "Player One";
@@ -125,17 +109,14 @@ namespace TerminalGames
     {
         // This function is assumed to be only called during one player games where player one is the user and player two is the computer.
 
-        const uint32_t startingRow = std::get<0>(m_previousCommand);
-        const uint32_t startingColumn = std::get<1>(m_previousCommand);
-
         while (true)
         {
-            const std::tuple<uint32_t, uint32_t> selectedCommand = Terminal::GetUserCommandFromGameGrid(m_pageBuilder, m_gameInfo, startingRow, startingColumn, g_BATTLESHIPS_BOARD_HEIGHT - 1, g_BATTLESHIPS_BOARD_WIDTH - 1, g_BATTLESHIPS_GRID_LEFT_PAD, g_BATTLESHIPS_GRID_TOP_PAD, g_BATTLESHIPS_GRID_ELEMENT_WIDTH, g_BATTLESHIPS_GRID_ELEMENT_HEIGHT, true);
+            const std::tuple<uint32_t, uint32_t> SELECTED_COMMAND = Terminal::GetUserCommandFromGameGrid(m_previousCommand, m_pageBuilder, m_gameInfo, true);
 
-            if (ValidateCommand(m_commandsRemainingOne, selectedCommand))
+            if (ValidateCommand(m_commandsRemainingOne, SELECTED_COMMAND))
             {
-                ExecuteGeneralCommand(m_boardTwo, m_shipsRemainingTwo, m_commandsRemainingOne, selectedCommand);
-                m_previousCommand = selectedCommand;
+                ExecuteGeneralCommand(m_boardTwo, m_shipsRemainingTwo, m_commandsRemainingOne, SELECTED_COMMAND);
+                m_previousCommand = SELECTED_COMMAND;
                 return;
             }
         }
@@ -152,14 +133,14 @@ namespace TerminalGames
 
         if (m_currentPlayer == "Player One")
         {
-            const std::tuple<uint32_t, uint32_t> selectedCommand = m_commandsRemainingOne[m_randomNumberGenerator() % m_commandsRemainingOne.size()];
-            ExecuteGeneralCommand(m_boardTwo, m_shipsRemainingTwo, m_commandsRemainingOne, selectedCommand);
+            const std::tuple<uint32_t, uint32_t> SELECTED_COMMAND = m_commandsRemainingOne[m_randomNumberGenerator() % m_commandsRemainingOne.size()];
+            ExecuteGeneralCommand(m_boardTwo, m_shipsRemainingTwo, m_commandsRemainingOne, SELECTED_COMMAND);
         }
 
         else
         {
-            const std::tuple<uint32_t, uint32_t> selectedCommand = m_commandsRemainingTwo[m_randomNumberGenerator() % m_commandsRemainingTwo.size()];
-            ExecuteGeneralCommand(m_boardOne, m_shipsRemainingOne, m_commandsRemainingTwo, selectedCommand);
+            const std::tuple<uint32_t, uint32_t> SELECTED_COMMAND = m_commandsRemainingTwo[m_randomNumberGenerator() % m_commandsRemainingTwo.size()];
+            ExecuteGeneralCommand(m_boardOne, m_shipsRemainingOne, m_commandsRemainingTwo, SELECTED_COMMAND);
         }
     }
 
@@ -177,16 +158,16 @@ namespace TerminalGames
     {
         UpdateGameInfo();
 
-        const std::vector<std::string> menus = m_pageBuilder.GetPlayerCountOptionSelectionGamePages(m_gameInfo);
-        m_playerCount = std::to_string(Terminal::GetUserChoiceFromGameMenus(menus)) + "  ";
+        const std::vector<std::string> MENUS = m_pageBuilder.GetPlayerCountOptionSelectionGamePages(m_gameInfo);
+        m_playerCount = std::to_string(Terminal::GetUserChoiceFromGameMenus(MENUS)) + "  ";
     }
 
     void Battleships::GetComputerSpeed()
     {
         UpdateGameInfo();
 
-        const std::vector<std::string> menus = m_pageBuilder.GetComputerSpeedOptionSelectionGamePages(m_gameInfo);
-        m_computerSpeed = Terminal::GetUserChoiceFromGameMenus(menus);
+        const std::vector<std::string> MENUS = m_pageBuilder.GetComputerSpeedOptionSelectionGamePages(m_gameInfo);
+        m_computerSpeed = Terminal::GetUserChoiceFromGameMenus(MENUS);
 
         if (m_computerSpeed == 0)
         {
@@ -214,16 +195,15 @@ namespace TerminalGames
         uint32_t startingColumn = 0;
         uint32_t lastShipStartingRow = 0;
         uint32_t lastShipStartingColumn = 0;
-        bool shipIsVertical = false;
-        bool shipIsHorizontal = false;
+        std::tuple<bool, bool> shipIsHorizontalOrVertical = {false, false};
 
         // For each ship
-        for (uint32_t currentShip = 0; currentShip < g_BATTLESHIPS_SHIP_COUNT; currentShip++)
+        for (uint32_t currentShip = 0; currentShip < G_BATTLESHIPS_SHIP_COUNT; currentShip++)
         {
             std::vector<std::tuple<uint32_t, uint32_t>> currentShipPositions;
 
             // For each ship grid location (intentionally a signed int)
-            for (int32_t currentShipSize = 0; currentShipSize < g_BATTLESHIPS_SHIP_SIZES[currentShip]; currentShipSize++) // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+            for (int32_t currentShipSize = 0; currentShipSize < G_BATTLESHIPS_SHIP_SIZES.at(currentShip); currentShipSize++)
             {
                 // Set cursor position to the last known valid ship grid location selection
                 if (!currentShipPositions.empty())
@@ -236,25 +216,23 @@ namespace TerminalGames
                 {
                     startingRow = lastShipStartingRow;
                     startingColumn = lastShipStartingColumn;
-                    // Reset these values
-                    shipIsVertical = false;
-                    shipIsHorizontal = false;
+                    shipIsHorizontalOrVertical = {false, false}; // Reset these values
                 }
 
                 while (true) // While ship grid location is incorrect
                 {
                     try
                     {
-                        Terminal::PrintOutput(m_pageBuilder.GetPageWithMessage(m_gameInfo, g_BATTLESHIPS_SHIP_INSTRUCTIONS[currentShip])); // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+                        Terminal::PrintOutput(m_pageBuilder.GetPageWithMessage(m_gameInfo, G_BATTLESHIPS_SHIP_INSTRUCTIONS.at(currentShip)));
 
-                        const std::tuple<uint32_t, uint32_t> selectedShipGridLocation = Terminal::GetUserCommandFromGameGrid(m_pageBuilder, m_gameInfo, startingRow, startingColumn, g_BATTLESHIPS_BOARD_HEIGHT - 1, g_BATTLESHIPS_BOARD_WIDTH - 1, g_BATTLESHIPS_GRID_LEFT_PAD, g_BATTLESHIPS_GRID_TOP_PAD, g_BATTLESHIPS_GRID_ELEMENT_WIDTH, g_BATTLESHIPS_GRID_ELEMENT_HEIGHT, false);
+                        const std::tuple<uint32_t, uint32_t> SELECTED_SHIP_GRID_LOCATION = Terminal::GetUserCommandFromGameGrid({startingRow, startingColumn}, m_pageBuilder, m_gameInfo, false);
 
-                        if (ValidateUserShipPosition(currentShipPositions, selectedShipGridLocation, shipIsVertical, shipIsHorizontal))
+                        if (ValidateUserShipPosition(currentShipPositions, SELECTED_SHIP_GRID_LOCATION, shipIsHorizontalOrVertical))
                         {
-                            currentShipPositions.push_back(selectedShipGridLocation);
+                            currentShipPositions.push_back(SELECTED_SHIP_GRID_LOCATION);
 
                             // Place ship on selected grid location
-                            m_boardOne[std::get<0>(selectedShipGridLocation)][std::get<1>(selectedShipGridLocation)] = g_BATTLESHIPS_SHIP_NAMES[currentShip]; // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index, performance-inefficient-string-concatenation)
+                            m_boardOne.at(std::get<0>(SELECTED_SHIP_GRID_LOCATION)).at(std::get<1>(SELECTED_SHIP_GRID_LOCATION)) = G_BATTLESHIPS_SHIP_NAMES.at(currentShip);
 
                             UpdateGameInfo();
 
@@ -262,15 +240,15 @@ namespace TerminalGames
                         }
                     }
 
-                    catch (Exceptions::BackspaceKeyPressed &e)
+                    catch (Exceptions::BackspaceKeyPressed& e)
                     {
                         if (currentShipSize != 0)
                         {
                             // Undo previous ship placement and refresh display
-                            m_boardOne[std::get<0>(currentShipPositions.back())][std::get<1>(currentShipPositions.back())] = "   "; // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index) // TODO: hardcoded value
+                            m_boardOne.at(std::get<0>(currentShipPositions.back())).at(std::get<1>(currentShipPositions.back())) = "   ";
                             UpdateGameInfo();
                             currentShipPositions.pop_back();
-                            Terminal::PrintOutput(m_pageBuilder.GetPageWithMessage(m_gameInfo, g_BATTLESHIPS_SHIP_INSTRUCTIONS[currentShip])); // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+                            Terminal::PrintOutput(m_pageBuilder.GetPageWithMessage(m_gameInfo, G_BATTLESHIPS_SHIP_INSTRUCTIONS.at(currentShip)));
 
                             // Go back one in for loop (and another -1 to account for increment)
                             currentShipSize -= 2;
@@ -288,61 +266,59 @@ namespace TerminalGames
     }
 
     bool Battleships::ValidateUserShipPosition(
-        const std::vector<std::tuple<uint32_t, uint32_t>> &currentShipPositions,
-        const std::tuple<uint32_t, uint32_t> &selectedShipGridLocation,
-        bool &shipIsVertical, // NOLINT(bugprone-easily-swappable-parameters)
-        bool &shipIsHorizontal)
+        const std::vector<std::tuple<uint32_t, uint32_t>>& p_currentShipPositions,
+        const std::tuple<uint32_t, uint32_t>& p_selectedShipGridLocation,
+        std::tuple<bool, bool>& p_shipIsHorizontalOrVertical)
     {
         // This function is assumed to be only called during one player games where player one is the user and player two is the computer.
 
-        const uint32_t selectedShipGridRow = std::get<0>(selectedShipGridLocation);
-        const uint32_t selectedShipGridColumn = std::get<1>(selectedShipGridLocation);
+        const uint32_t SELECTED_SHIP_GRID_ROW = std::get<0>(p_selectedShipGridLocation);
+        const uint32_t SELECTED_SHIP_GRID_COLUMN = std::get<1>(p_selectedShipGridLocation);
 
-        if (m_boardOne[selectedShipGridRow][selectedShipGridColumn] != "   ") // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index) // TODO: hardcoded value
+        if (m_boardOne.at(SELECTED_SHIP_GRID_ROW).at(SELECTED_SHIP_GRID_COLUMN) != "   ")
         {
             return false;
         }
 
-        if (currentShipPositions.empty())
+        if (p_currentShipPositions.empty())
         {
             return true;
         }
 
-        const uint32_t previousSelectedShipGridRow = std::get<0>(currentShipPositions.back());
-        const uint32_t previousSelectedShipGridColumn = std::get<1>(currentShipPositions.back());
+        const uint32_t PREVIOUS_SELECTED_SHIP_GRID_ROW = std::get<0>(p_currentShipPositions.back());
+        const uint32_t PREVIOUS_SELECTED_SHIP_GRID_COLUMN = std::get<1>(p_currentShipPositions.back());
 
         // As selected grid locations are added incrementally only the previous selection needs to be checked.
-        const bool rowsAreTheSame = previousSelectedShipGridRow == selectedShipGridRow;
-        const bool columnsAreTheSame = previousSelectedShipGridColumn == selectedShipGridColumn;
+        const bool ROWS_ARE_THE_SAME = PREVIOUS_SELECTED_SHIP_GRID_ROW == SELECTED_SHIP_GRID_ROW;
+        const bool COLUMNS_ARE_THE_SAME = PREVIOUS_SELECTED_SHIP_GRID_COLUMN == SELECTED_SHIP_GRID_COLUMN;
 
         // Prevents selection of a diagonal grid location relative to the previous selection.
-        if (!rowsAreTheSame && !columnsAreTheSame)
+        if (!ROWS_ARE_THE_SAME && !COLUMNS_ARE_THE_SAME)
         {
             return false;
         }
 
-        const uint32_t rowDifferenceToPreviousSelection = std::abs(static_cast<int>(selectedShipGridRow) - static_cast<int>(previousSelectedShipGridRow));
-        const uint32_t columnDifferenceToPreviousSelection = std::abs(static_cast<int>(selectedShipGridColumn) - static_cast<int>(previousSelectedShipGridColumn));
+        const uint32_t ROW_DIFFERENCE_TO_PREVIOUS_SELECTION = std::abs(static_cast<int>(SELECTED_SHIP_GRID_ROW) - static_cast<int>(PREVIOUS_SELECTED_SHIP_GRID_ROW));
+        const uint32_t COLUMN_DIFFERENCE_TO_PREVIOUS_SELECTION = std::abs(static_cast<int>(SELECTED_SHIP_GRID_COLUMN) - static_cast<int>(PREVIOUS_SELECTED_SHIP_GRID_COLUMN));
 
         // Only adjacents grid locations are allowed
-        if ((rowDifferenceToPreviousSelection > 1) && (columnDifferenceToPreviousSelection > 1))
+        if ((ROW_DIFFERENCE_TO_PREVIOUS_SELECTION > 1) && (COLUMN_DIFFERENCE_TO_PREVIOUS_SELECTION > 1))
         {
             return false;
         }
 
-        if (currentShipPositions.size() == 1)
+        if (p_currentShipPositions.size() == 1)
         {
-            shipIsHorizontal = rowsAreTheSame;
-            shipIsVertical = columnsAreTheSame;
+            p_shipIsHorizontalOrVertical = {ROWS_ARE_THE_SAME, COLUMNS_ARE_THE_SAME};
             return true;
         }
 
-        if (shipIsHorizontal && !rowsAreTheSame)
+        if (std::get<0>(p_shipIsHorizontalOrVertical) && !ROWS_ARE_THE_SAME)
         {
             return false;
         }
 
-        if (shipIsVertical && !columnsAreTheSame)
+        if (std::get<1>(p_shipIsHorizontalOrVertical) && !COLUMNS_ARE_THE_SAME)
         {
             return false;
         }
@@ -350,10 +326,10 @@ namespace TerminalGames
         return true;
     }
 
-    void Battleships::GetComputerShipPositions(std::array<std::array<std::string, g_BATTLESHIPS_BOARD_WIDTH>, g_BATTLESHIPS_BOARD_HEIGHT> &board) // NOLINT(readability-function-cognitive-complexity)
+    void Battleships::GetComputerShipPositions(std::array<std::array<std::string, G_BATTLESHIPS_BOARD_WIDTH>, G_BATTLESHIPS_BOARD_HEIGHT>& p_board) // NOLINT(readability-function-cognitive-complexity)
     {
         // For each ship
-        for (uint32_t currentShip = 0; currentShip < g_BATTLESHIPS_SHIP_COUNT; currentShip++)
+        for (uint32_t currentShip = 0; currentShip < G_BATTLESHIPS_SHIP_COUNT; currentShip++)
         {
             while (true)
             {
@@ -368,12 +344,12 @@ namespace TerminalGames
                     // other column values will increment, then a max starting column value exists which is linked with the size
                     // of the ship. Therefore get a random value from 0 to the max starting column value.
 
-                    startingRow = m_randomNumberGenerator() % g_BATTLESHIPS_BOARD_HEIGHT; // Any row value allowed as ship is horizontal
+                    startingRow = m_randomNumberGenerator() % G_BATTLESHIPS_BOARD_HEIGHT; // Any row value allowed as ship is horizontal
 
-                    startingColumn = m_randomNumberGenerator() % (g_BATTLESHIPS_BOARD_WIDTH - g_BATTLESHIPS_SHIP_SIZES[currentShip]); // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+                    startingColumn = m_randomNumberGenerator() % (G_BATTLESHIPS_BOARD_WIDTH - G_BATTLESHIPS_SHIP_SIZES.at(currentShip));
 
                     // Column values increment by one
-                    for (uint32_t i = 0; i < g_BATTLESHIPS_SHIP_SIZES[currentShip]; i++) // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+                    for (uint32_t i = 0; i < G_BATTLESHIPS_SHIP_SIZES.at(currentShip); i++)
                     {
                         shipPositions.emplace_back(startingRow, startingColumn + i);
                     }
@@ -385,12 +361,12 @@ namespace TerminalGames
                     // row values will increment, then a max starting row value exists which is linked with the size of the
                     // ship. Therefore get a random value from 0 to the max starting row value.
 
-                    startingRow = m_randomNumberGenerator() % (g_BATTLESHIPS_BOARD_HEIGHT - g_BATTLESHIPS_SHIP_SIZES[currentShip]); // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+                    startingRow = m_randomNumberGenerator() % (G_BATTLESHIPS_BOARD_HEIGHT - G_BATTLESHIPS_SHIP_SIZES.at(currentShip));
 
-                    startingColumn = m_randomNumberGenerator() % g_BATTLESHIPS_BOARD_WIDTH; // Any column value allowed as ship is vertical
+                    startingColumn = m_randomNumberGenerator() % G_BATTLESHIPS_BOARD_WIDTH; // Any column value allowed as ship is vertical
 
                     // Row values increment by one
-                    for (uint32_t j = 0; j < g_BATTLESHIPS_SHIP_SIZES[currentShip]; j++) // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+                    for (uint32_t j = 0; j < G_BATTLESHIPS_SHIP_SIZES.at(currentShip); j++)
                     {
                         shipPositions.emplace_back(startingRow + j, startingColumn);
                     }
@@ -400,13 +376,12 @@ namespace TerminalGames
                 bool locationIsAlreadyOccupied = false;
                 for (std::tuple<uint32_t, uint32_t> currentPosition : shipPositions)
                 {
+                    const auto CURRENT_POSITION_FIND_LOCATION = ImplementStdRangesFind(
+                        G_BATTLESHIPS_SHIP_NAMES.begin(),
+                        G_BATTLESHIPS_SHIP_NAMES.end(),
+                        p_board.at(std::get<0>(currentPosition)).at(std::get<1>(currentPosition)));
 
-                    const auto currentPositionFindLocation = ImplementStdRangesFind( // NOLINT(llvm-qualified-auto,readability-qualified-auto)
-                        g_BATTLESHIPS_SHIP_NAMES.begin(),
-                        g_BATTLESHIPS_SHIP_NAMES.end(),
-                        board[std::get<0>(currentPosition)][std::get<1>(currentPosition)]); // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
-
-                    if (currentPositionFindLocation != g_BATTLESHIPS_SHIP_NAMES.end())
+                    if (CURRENT_POSITION_FIND_LOCATION != G_BATTLESHIPS_SHIP_NAMES.end())
                     {
                         locationIsAlreadyOccupied = true;
                         break;
@@ -418,7 +393,7 @@ namespace TerminalGames
                 {
                     for (std::tuple<uint32_t, uint32_t> currentPosition : shipPositions)
                     {
-                        board[std::get<0>(currentPosition)][std::get<1>(currentPosition)] = g_BATTLESHIPS_SHIP_NAMES[currentShip]; // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+                        p_board.at(std::get<0>(currentPosition)).at(std::get<1>(currentPosition)) = G_BATTLESHIPS_SHIP_NAMES.at(currentShip);
                     }
 
                     break; // Go to next ship to place
@@ -427,38 +402,56 @@ namespace TerminalGames
         }
     }
 
-    bool Battleships::ValidateCommand(const std::vector<std::tuple<uint32_t, uint32_t>> &commandsRemaining, const std::tuple<uint32_t, uint32_t> &command)
+    bool Battleships::IsShipPresent(std::array<std::array<std::string, G_BATTLESHIPS_BOARD_WIDTH>, G_BATTLESHIPS_BOARD_HEIGHT>& p_board)
     {
-        const auto commandFindLocation = ImplementStdRangesFind(commandsRemaining.begin(), commandsRemaining.end(), command);
+        for (const std::array<std::string, G_BATTLESHIPS_BOARD_WIDTH>& currentRow : p_board)
+        {
+            for (const std::string& currentValue : currentRow)
+            {
+                const auto CURRENT_VALUE_FIND_LOCATION = ImplementStdRangesFind(G_BATTLESHIPS_SHIP_NAMES.begin(), G_BATTLESHIPS_SHIP_NAMES.end(), currentValue);
 
-        return commandFindLocation != commandsRemaining.end();
+                if (CURRENT_VALUE_FIND_LOCATION != G_BATTLESHIPS_SHIP_NAMES.end())
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    bool Battleships::ValidateCommand(const std::vector<std::tuple<uint32_t, uint32_t>>& p_commandsRemaining, const std::tuple<uint32_t, uint32_t>& p_command)
+    {
+        const auto COMMAND_FIND_LOCATION = ImplementStdRangesFind(p_commandsRemaining.begin(), p_commandsRemaining.end(), p_command);
+
+        return COMMAND_FIND_LOCATION != p_commandsRemaining.end();
     }
 
     void Battleships::ExecuteGeneralCommand(
-        std::array<std::array<std::string, g_BATTLESHIPS_BOARD_WIDTH>, g_BATTLESHIPS_BOARD_HEIGHT> &opponentBoard,
-        std::unordered_map<std::string, uint32_t> &opponentShipsRemaining,
-        std::vector<std::tuple<uint32_t, uint32_t>> &commandsRemaining,
-        const std::tuple<uint32_t, uint32_t> &command)
+        std::array<std::array<std::string, G_BATTLESHIPS_BOARD_WIDTH>, G_BATTLESHIPS_BOARD_HEIGHT>& p_opponentBoard,
+        std::unordered_map<std::string, uint32_t>& p_opponentShipsRemaining,
+        std::vector<std::tuple<uint32_t, uint32_t>>& p_commandsRemaining,
+        const std::tuple<uint32_t, uint32_t>& p_command)
     {
-        const auto commandFindLocation = ImplementStdRangesFind(commandsRemaining.begin(), commandsRemaining.end(), command);
-        const uint32_t row = std::get<0>(command);
-        const uint32_t column = std::get<1>(command);
+        const auto COMMAND_FIND_LOCATION = ImplementStdRangesFind(p_commandsRemaining.begin(), p_commandsRemaining.end(), p_command);
+        const uint32_t ROW = std::get<0>(p_command);
+        const uint32_t COLUMN = std::get<1>(p_command);
 
-        const auto currentValueFindLocation = ImplementStdRangesFind(g_BATTLESHIPS_SHIP_NAMES.begin(), g_BATTLESHIPS_SHIP_NAMES.end(), opponentBoard[row][column]); // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index,llvm-qualified-auto,readability-qualified-auto)
+        const auto CURRENT_VALUE_FIND_LOCATION = ImplementStdRangesFind(G_BATTLESHIPS_SHIP_NAMES.begin(), G_BATTLESHIPS_SHIP_NAMES.end(), p_opponentBoard.at(ROW).at(COLUMN));
 
-        if (currentValueFindLocation != g_BATTLESHIPS_SHIP_NAMES.end())
+        if (CURRENT_VALUE_FIND_LOCATION != G_BATTLESHIPS_SHIP_NAMES.end())
         {
-            opponentShipsRemaining[opponentBoard[row][column]]--;                                                                     // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
-            opponentBoard[row][column] = g_BATTLESHIPS_SUCCESSFUL_ATTACK + opponentBoard[row][column][1] + g_BATTLESHIPS_SUCCESSFUL_ATTACK; // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+            p_opponentShipsRemaining.at(p_opponentBoard.at(ROW).at(COLUMN))--;
+            p_opponentBoard.at(ROW).at(COLUMN) = G_BATTLESHIPS_SUCCESSFUL_ATTACK + p_opponentBoard.at(ROW).at(COLUMN).at(1) + G_BATTLESHIPS_SUCCESSFUL_ATTACK;
         }
 
         else
         {
-            opponentBoard[row][column] = " " + g_BATTLESHIPS_MISSED_ATTACK + " "; // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+            p_opponentBoard.at(ROW).at(COLUMN) = " " + G_BATTLESHIPS_MISSED_ATTACK + " ";
         }
 
-        commandsRemaining.erase(commandFindLocation);
+        p_commandsRemaining.erase(COMMAND_FIND_LOCATION);
 
         m_turnCount++;
     }
-} // namespace TerminalGames
+}

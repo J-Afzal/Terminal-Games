@@ -19,15 +19,15 @@ namespace TerminalGames
         /**
          * @brief Construct a new Tic Tac Toe object.
          *
-         * @param onlyUseASCII Whether to use only ASCII characters (true) or to also use ANSI escapes codes (false).
+         * @param p_onlyUseAscii Whether to use only ASCII characters (true) or to also use ANSI escapes codes (false).
          */
-        explicit TicTacToe(const bool &onlyUseASCII);
+        explicit TicTacToe(const bool& p_onlyUseAscii);
 
     private:
         PageBuilder m_pageBuilder;
         GameInfo m_gameInfo;
         std::default_random_engine m_randomNumberGenerator;
-        std::array<std::array<std::string, g_TICTACTOE_BOARD_WIDTH>, g_TICTACTOE_BOARD_HEIGHT> m_gameGrid;
+        std::array<std::array<std::string, G_TICTACTOE_BOARD_WIDTH>, G_TICTACTOE_BOARD_HEIGHT> m_gameGrid;
         std::vector<std::tuple<uint32_t, uint32_t>> m_commandsRemaining;
         std::tuple<uint32_t, uint32_t> m_previousCommand;
         std::string m_computerSpeedName;
@@ -103,17 +103,17 @@ namespace TerminalGames
         /**
          * @brief Checks whether the command is valid.
          *
-         * @param command The command in the form of <row, column>.
+         * @param p_command The command in the form of <row, column>.
          * @return true If the command is valid.
          * @return false If the command is not valid.
          */
-        bool ValidateCommand(const std::tuple<uint32_t, uint32_t> &command);
+        bool ValidateCommand(const std::tuple<uint32_t, uint32_t>& p_command);
 
         /**
          * @brief Executes the command against the game grid.
          *
-         * @param command The command in the form of <row, column>.
+         * @param p_command The command in the form of <row, column>.
          */
-        void ExecuteGeneralCommand(const std::tuple<uint32_t, uint32_t> &command);
+        void ExecuteGeneralCommand(const std::tuple<uint32_t, uint32_t>& p_command);
     };
-} // namespace TerminalGames
+}

@@ -14,22 +14,24 @@
 
 namespace TerminalGames
 {
-    MainMenu::MainMenu(const std::vector<std::string> &commandLineArguments) : m_onlyUseASCII(ParseCommandLineArguments(commandLineArguments)) {}
+    MainMenu::MainMenu(const std::vector<std::string>& p_commandLineArguments) :
+        m_onlyUseASCII(ParseCommandLineArguments(p_commandLineArguments)) {}
 
-    MainMenu::MainMenu(const bool &onlyUseASCII) : m_onlyUseASCII(onlyUseASCII) {}
+    MainMenu::MainMenu(const bool& p_onlyUseAscii) :
+        m_onlyUseASCII(p_onlyUseAscii) {}
 
     MainMenu::~MainMenu()
     {
-        Terminal::SetCursorPosition(0, 0);
+        Terminal::SetCursorPosition({0, 0});
         Terminal::SetCursorVisibility(true);
         Terminal::Clear();
     }
 
     void MainMenu::Run()
     {
-        const PageBuilder pageBuilder(Pages::MAINMENU, m_onlyUseASCII);
-        const std::vector<std::string> menus({"Tic Tac Toe", "Hangman", "Battleships"});
-        m_mainMenus = pageBuilder.GetGameSelectionMainMenuPages(menus);
+        const PageBuilder PAGE_BUILDER(Pages::MAINMENU, m_onlyUseASCII);
+        const std::vector<std::string> MENUS({"Tic Tac Toe", "Hangman", "Battleships"});
+        m_mainMenus = PAGE_BUILDER.GetGameSelectionMainMenuPages(MENUS);
 
         // The index of games in m_Games should match the index of the string in m_mainMenus which has the game selected. This
         // is defined by the order of the input array to the previous line.
@@ -38,7 +40,7 @@ namespace TerminalGames
         m_games.push_back(std::make_unique<Battleships>(m_onlyUseASCII));
 
         Terminal::SetCursorVisibility(false);
-        Terminal::SetCursorPosition(0, 0);
+        Terminal::SetCursorPosition({0, 0});
 
         // Custom exceptions are used to return exit the games and the main menu.
         while (true)
@@ -48,12 +50,12 @@ namespace TerminalGames
                 m_games[Terminal::GetUserChoiceFromMainMenus(m_mainMenus)]->Play();
             }
 
-            catch (Exceptions::QuitMainMenu &e)
+            catch (Exceptions::QuitMainMenu& e)
             {
                 return;
             }
 
-            catch (Exceptions::QuitGame &e)
+            catch (Exceptions::QuitGame& e)
             {
                 continue;
             }
@@ -61,12 +63,12 @@ namespace TerminalGames
 
         Terminal::Clear();
         Terminal::SetCursorVisibility(true);
-        Terminal::SetCursorPosition(0, 0);
+        Terminal::SetCursorPosition({0, 0});
     }
 
-    bool MainMenu::ParseCommandLineArguments(const std::vector<std::string> &commandLineArguments)
+    bool MainMenu::ParseCommandLineArguments(const std::vector<std::string>& p_commandLineArguments)
     {
-        for (const std::string &argument : commandLineArguments)
+        for (const std::string& argument : p_commandLineArguments)
         {
             if (argument == "--a" || argument == "--ascii-only")
             {
@@ -82,10 +84,10 @@ namespace TerminalGames
                 helpMessage += "\n\nterminal-games options:";
                 helpMessage += "\n\n  --a --ascii-only  Only use ASCII characters (this removes all colour).\n\n";
                 std::cout << helpMessage;
-                exit(1); // NOLINT(concurrency-mt-unsafe)
+                exit(1);
             }
         }
 
         return false;
     }
-} // namespace TerminalGames
+}

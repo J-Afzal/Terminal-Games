@@ -3,8 +3,8 @@
 
 #include "helpers/MainMenu.hpp"
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
-    TerminalGames::MainMenu MainMenu(std::vector<std::string>(argv, argv + argc));
-    MainMenu.Run();
+    TerminalGames::MainMenu mainMenu(std::vector<std::string>(argv, argv + argc));
+    mainMenu.Run();
 }

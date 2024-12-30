@@ -20,16 +20,16 @@ namespace TerminalGames
         /**
          * @brief Construct a new Battleships object.
          *
-         * @param onlyUseASCII Whether to use only ASCII characters (true) or to also use ANSI escapes codes (false).
+         * @param p_onlyUseAscii Whether to use only ASCII characters (true) or to also use ANSI escapes codes (false).
          */
-        explicit Battleships(const bool &onlyUseASCII);
+        explicit Battleships(const bool& p_onlyUseAscii);
 
     private:
         PageBuilder m_pageBuilder;
         GameInfo m_gameInfo;
         std::default_random_engine m_randomNumberGenerator;
-        std::array<std::array<std::string, g_BATTLESHIPS_BOARD_WIDTH>, g_BATTLESHIPS_BOARD_HEIGHT> m_boardOne;
-        std::array<std::array<std::string, g_BATTLESHIPS_BOARD_WIDTH>, g_BATTLESHIPS_BOARD_HEIGHT> m_boardTwo;
+        std::array<std::array<std::string, G_BATTLESHIPS_BOARD_WIDTH>, G_BATTLESHIPS_BOARD_HEIGHT> m_boardOne;
+        std::array<std::array<std::string, G_BATTLESHIPS_BOARD_WIDTH>, G_BATTLESHIPS_BOARD_HEIGHT> m_boardTwo;
         std::vector<std::tuple<uint32_t, uint32_t>> m_commandsRemainingOne;
         std::vector<std::tuple<uint32_t, uint32_t>> m_commandsRemainingTwo;
         std::unordered_map<std::string, uint32_t> m_shipsRemainingOne;
@@ -106,59 +106,57 @@ namespace TerminalGames
         /**
          * @brief
          *
-         * @param currentShipPositions
-         * @param selectedShipGridLocation
-         * @param shipIsVertical
-         * @param shipIsHorizontal
-         * @return true
-         * @return false
+         * @param p_currentShipPositions
+         * @param p_selectedShipGridLocation
+         * @param p_shipIsHorizontalOrVertical
+         * @return true If ship position is valid.
+         * @return false If the ship position is invalid.
          */
         bool ValidateUserShipPosition(
-            const std::vector<std::tuple<uint32_t, uint32_t>> &currentShipPositions,
-            const std::tuple<uint32_t, uint32_t> &selectedShipGridLocation,
-            bool &shipIsVertical,
-            bool &shipIsHorizontal);
+            const std::vector<std::tuple<uint32_t, uint32_t>>& p_currentShipPositions,
+            const std::tuple<uint32_t, uint32_t>& p_selectedShipGridLocation,
+            std::tuple<bool, bool>& p_shipIsHorizontalOrVertical);
 
         /**
          * @brief Randomly place all ships on the board.
          *
          * @param board The board containing the AI's ship positions.
          */
-        void GetComputerShipPositions(std::array<std::array<std::string, g_BATTLESHIPS_BOARD_WIDTH>, g_BATTLESHIPS_BOARD_HEIGHT> &board);
+        void GetComputerShipPositions(std::array<std::array<std::string, G_BATTLESHIPS_BOARD_WIDTH>, G_BATTLESHIPS_BOARD_HEIGHT>& p_board);
 
         /**
          * @brief Checks whether at least a single ship is present on a game board.
          *
-         * @param board The game board to check.
+         * @param p_board The game board to check.
          * @return true If at least a single ship is present on the board.
          * @return false If no ships are present on the board
          */
-        static bool IsShipPresent(std::array<std::array<std::string, g_BATTLESHIPS_BOARD_WIDTH>, g_BATTLESHIPS_BOARD_HEIGHT> &board);
+        static bool IsShipPresent(std::array<std::array<std::string, G_BATTLESHIPS_BOARD_WIDTH>, G_BATTLESHIPS_BOARD_HEIGHT>& p_board);
 
         /**
          * @brief Checks whether the command is valid.
          *
-         * @param command The command in the form of <row, column>.
+         * @param p_commandsRemaining The command that haven't been done.
+         * @param p_command The command in the form of <row, column>.
          * @return true If the command is valid.
          * @return false If the command is not valid.
          */
         static bool ValidateCommand(
-            const std::vector<std::tuple<uint32_t, uint32_t>> &commandsRemaining,
-            const std::tuple<uint32_t, uint32_t> &command);
+            const std::vector<std::tuple<uint32_t, uint32_t>>& p_commandsRemaining,
+            const std::tuple<uint32_t, uint32_t>& p_command);
 
         /**
          * @brief Executes the command on the opponent's board and updates their own board and commands remaining.
          *
-         * @param opponentBoard The board containing the opponent's ship positions.
-         * @param opponentShipsRemaining The number of squares remaining for each opponent ship.
-         * @param commandsRemaining List of board spaces that remain un-attacked.
-         * @param command The board row and column that should be attacked.
+         * @param p_opponentBoard The board containing the opponent's ship positions.
+         * @param p_opponentShipsRemaining The number of squares remaining for each opponent ship.
+         * @param p_commandsRemaining List of board spaces that remain un-attacked.
+         * @param p_command The board row and column that should be attacked.
          */
         void ExecuteGeneralCommand(
-            std::array<std::array<std::string, g_BATTLESHIPS_BOARD_WIDTH>, g_BATTLESHIPS_BOARD_HEIGHT> &opponentBoard,
-            std::unordered_map<std::string, uint32_t> &opponentShipsRemaining,
-            std::vector<std::tuple<uint32_t, uint32_t>> &commandsRemaining,
-            const std::tuple<uint32_t, uint32_t> &command);
-
+            std::array<std::array<std::string, G_BATTLESHIPS_BOARD_WIDTH>, G_BATTLESHIPS_BOARD_HEIGHT>& p_opponentBoard,
+            std::unordered_map<std::string, uint32_t>& p_opponentShipsRemaining,
+            std::vector<std::tuple<uint32_t, uint32_t>>& p_commandsRemaining,
+            const std::tuple<uint32_t, uint32_t>& p_command);
     };
-} // namespace TerminalGames
+}
