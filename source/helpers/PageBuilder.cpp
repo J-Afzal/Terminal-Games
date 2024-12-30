@@ -82,19 +82,13 @@ namespace TerminalGames
             for (uint32_t j = 0; j < p_gameNames.size(); j++)
             {
                 if (i == j)
-                {
                     currentTopString += GetNewLineCentred(p_gameNames[j], Colours::BLUE, G_SELECTOR);
-                }
 
                 else
-                {
                     currentTopString += GetNewLineCentred(p_gameNames[j], Colours::WHITE, "");
-                }
 
                 if (j != p_gameNames.size() - 1) // Don't add extra line on the last game option.
-                {
                     currentTopString += GetEmptyLine();
-                }
             }
 
             output[i] = currentTopString;
@@ -198,28 +192,18 @@ namespace TerminalGames
         {
         case Pages::TICTACTOE:
             if (p_gameInfo.m_ticTacToeStruct.m_hasWinner) // This game can be drawn unlike the others.
-            {
                 topString += GetNewLineCentred(p_gameInfo.m_ticTacToeStruct.m_currentPlayer + " has won! The game lasted " + std::to_string(p_gameInfo.m_ticTacToeStruct.m_turnCount) + " turns.", Colours::WHITE, "");
-            }
 
             else
-            {
                 topString += GetNewLineCentred("The game is a draw! The game lasted " + std::to_string(p_gameInfo.m_ticTacToeStruct.m_turnCount) + " turns.", Colours::WHITE, "");
-            }
-
             break;
 
         case Pages::HANGMAN:
             if (p_gameInfo.m_hangmanStruct.m_errorCount == G_HANGMAN_MAXIMUM_ERROR_COUNT)
-            {
                 topString += GetNewLineCentred("The word setter has won! The game lasted " + std::to_string(p_gameInfo.m_hangmanStruct.m_turnCount) + " turns!", Colours::WHITE, "");
-            }
 
             else
-            {
                 topString += GetNewLineCentred("The guesser has won! The game lasted " + std::to_string(p_gameInfo.m_hangmanStruct.m_turnCount) + " turns.", Colours::WHITE, "");
-            }
-
             break;
 
         case Pages::BATTLESHIPS:
@@ -236,19 +220,13 @@ namespace TerminalGames
     std::string PageBuilder::AddColour(const std::string& p_input, const Colours& p_colour) const
     {
         if (m_onlyUseASCII)
-        {
             return p_input;
-        }
 
         if (p_colour == Colours::RED)
-        {
             return G_RED_ANSI_COLOUR_ESCAPE_CODE + p_input + G_WHITE_ANSI_COLOUR_ESCAPE_CODE;
-        }
 
         if (p_colour == Colours::BLUE)
-        {
             return G_BLUE_ANSI_COLOUR_ESCAPE_CODE + p_input + G_WHITE_ANSI_COLOUR_ESCAPE_CODE;
-        }
 
         return p_input; // Text is already white
     }
@@ -270,9 +248,7 @@ namespace TerminalGames
         // Pad between input and selector if the selector has been set.
         std::string selectorPadded;
         if (!p_selector.empty())
-        {
             selectorPadded = p_selector + " ";
-        }
 
         // +/- 2 = padding on either side (2) of input.
         const std::string INPUT_TRIMMED = ((p_input.size() + p_selector.size() + 2) > m_displayWidth) ? p_input.substr(0, m_displayWidth - p_selector.size() - 2) : p_input;
@@ -293,9 +269,7 @@ namespace TerminalGames
         // Pad due to left justification.
         std::string selectorPadded = " ";
         if (!p_selector.empty())
-        {
             selectorPadded += p_selector + " ";
-        }
 
         // +/- 2 = padding on either side (2) of input.
         const std::string INPUT_TRIMMED = ((p_input.size() + selectorPadded.size()) > m_displayWidth) ? p_input.substr(0, m_displayWidth - selectorPadded.size()) : p_input;
@@ -367,9 +341,7 @@ namespace TerminalGames
 
         std::string output;
         for (uint32_t i = 0; i < EMPTY_LINES_TO_ADD_COUNT; i++)
-        {
             output += GetEmptyLine();
-        }
 
         return output;
     }
@@ -389,15 +361,11 @@ namespace TerminalGames
             for (uint32_t j = 0; j < p_options.size(); j++)
             {
                 if (i == j)
-                {
                     currentTopString += GetNewLineLeftJustified(p_options[j], Colours::BLUE, G_SELECTOR);
-                }
 
                 else
-                {
                     // + 1 to match above statement which will have an extra pad between option and selector
                     currentTopString += GetNewLineLeftJustified(std::string(G_SELECTOR.size() + 1, ' ') + p_options[j], Colours::WHITE, "");
-                }
             }
 
             output[i] = currentTopString;
@@ -489,6 +457,7 @@ namespace TerminalGames
             output += "   (The word was " + wordToBeGuessed + ")";
             output.insert(output.size(), (62 - 18 - wordToBeGuessed.size() * 3), ' ');
         }
+
         else // do not show it
             output.insert(output.size(), (62 - wordToBeGuessed.size() * 2), ' ');
 

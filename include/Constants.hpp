@@ -15,12 +15,8 @@ namespace TerminalGames
     static T ImplementStdRangesFind(const T& p_begin, const T& p_end, const U& p_value) // NOLINT(bugprone-easily-swappable-parameters)
     {
         for (T i = p_begin; i < p_end; i++)
-        {
             if (*i == p_value)
-            {
                 return i;
-            }
-        }
 
         return p_end;
     }
@@ -32,12 +28,8 @@ namespace TerminalGames
         int32_t count = 0;
 
         for (T i = p_begin; i < p_end; i++)
-        {
             if (*i == p_value)
-            {
                 ++count;
-            }
-        }
 
         return count;
     }
