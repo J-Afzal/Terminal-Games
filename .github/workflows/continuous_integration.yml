@@ -32,12 +32,19 @@ jobs:
 
                   if [ "${{ matrix.os }}" = "ubuntu-latest" ]
                   then
-                      sudo apt-get install ninja-build
+                      # Install brew
+                      test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
+                      test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+                      echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bashrc
+
+                      brew install ninja
+                      brew install llvm
                   fi
 
                   if [ "${{ matrix.os }}" = "windows-latest" ]
                   then
                       choco install ninja -y
+                      choco install llvm -y
                   fi
 
             - name: Configure CMake
