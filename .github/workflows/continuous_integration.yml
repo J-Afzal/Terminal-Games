@@ -29,6 +29,8 @@ jobs:
                       brew upgrade
                       brew install ninja
                       brew install llvm
+                      # To override apple clang and add clang-tidy to path
+                      export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
                   fi
 
                   if [ "${{ matrix.os }}" = "ubuntu-latest" ]
@@ -52,8 +54,8 @@ jobs:
                       choco install ninja -y
                   fi
 
-                  clang-format --version
                   clang-tidy --version
+                  clang-format --version
 
             - name: Configure CMake
               run: cmake -S . -B ./build -G "Ninja"
