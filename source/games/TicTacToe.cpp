@@ -13,7 +13,7 @@
 
 namespace TerminalGames
 {
-    TicTacToe::TicTacToe(const bool &p_onlyUseAscii) // NOLINT(cppcoreguidelines-pro-type-member-init,hicpp-member-init)
+    TicTacToe::TicTacToe(const bool &p_onlyUseAscii) : m_computerSpeed(0), m_turnCount(0), m_hasWinner(false)
     {
         m_pageBuilder.SetProperties(Pages::TICTACTOE, p_onlyUseAscii);
         m_randomNumberGenerator.seed(std::chrono::system_clock::now().time_since_epoch().count());
@@ -34,7 +34,7 @@ namespace TerminalGames
         {
             for (uint32_t j = 0; j < G_TICTACTOE_BOARD_WIDTH; j++)
             {
-                m_gameGrid[i][j] = "   "; // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+                m_gameGrid.at(i).at(j) = "   ";
                 m_commandsRemaining.emplace_back(i, j);
             }
         }
@@ -199,7 +199,7 @@ namespace TerminalGames
     {
         const auto COMMAND_FIND_LOCATION = ImplementStdRangesFind(m_commandsRemaining.begin(), m_commandsRemaining.end(), p_command);
 
-        m_gameGrid[std::get<0>(p_command)][std::get<1>(p_command)] = std::string(" ") + m_currentPlayer.back() + std::string(" "); // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+        m_gameGrid.at(std::get<0>(p_command)).at(std::get<1>(p_command)) = std::string(" ") + m_currentPlayer.back() + std::string(" ");
         m_commandsRemaining.erase(COMMAND_FIND_LOCATION);
         m_turnCount++;
     }

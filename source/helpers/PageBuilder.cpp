@@ -11,17 +11,9 @@
 
 namespace TerminalGames
 {
-    PageBuilder::PageBuilder() : m_displayWidth(0),
-                                 m_displayHeight(0),
-                                 m_onlyUseASCII(false),
-                                 m_currentPage(Pages::DEFAULT)
-    {
-    }
+    PageBuilder::PageBuilder() : m_displayWidth(0), m_displayHeight(0), m_onlyUseASCII(false), m_currentPage(Pages::DEFAULT) {}
 
-    PageBuilder::PageBuilder(const Pages &p_page, const bool &p_onlyUseAscii) : m_displayWidth(0),
-                                                                                m_displayHeight(0),
-                                                                                m_onlyUseASCII(false),
-                                                                                m_currentPage(Pages::DEFAULT)
+    PageBuilder::PageBuilder(const Pages &p_page, const bool &p_onlyUseAscii) : m_displayWidth(0), m_displayHeight(0), m_onlyUseASCII(false), m_currentPage(Pages::DEFAULT)
     {
         this->SetProperties(p_page, p_onlyUseAscii);
     }

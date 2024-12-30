@@ -81,7 +81,13 @@ namespace TerminalGames
     static constexpr uint32_t G_HANGMAN_MINIMUM_WORD_LENGTH = 3;
     static constexpr uint32_t G_HANGMAN_MAXIMUM_WORD_LENGTH = 14;
     static constexpr uint32_t G_HANGMAN_MAXIMUM_ERROR_COUNT = 10;
+    static constexpr uint32_t G_HANGMAN_KEY_PRESS_CHAR_OFFSET = 32;
     static constexpr uint32_t G_HANGMAN_NUMBER_OF_LETTERS_IN_THE_ALPHABET = 26;
+
+    static constexpr uint32_t G_HANGMAN_USER_INPUT_ROW = 13;
+    static constexpr uint32_t G_HANGMAN_GET_WORD_FROM_USER_COLUMN = 39;
+    static constexpr uint32_t G_HANGMAN_GET_USER_COMMAND_COLUMN = 41;
+
 
     /**
      * @brief Battleships

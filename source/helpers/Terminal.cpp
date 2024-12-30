@@ -1,8 +1,9 @@
-// NOLINTBEGIN(misc-include-cleaner)
+ // NOLINTBEGIN(misc-include-cleaner)
 #include <cstdint>
 #include <cstdlib>
 #include <iostream>
 #include <string>
+#include <tuple>
 #include <vector>
 
 #ifdef _WIN32
@@ -133,21 +134,21 @@ namespace TerminalGames
             switch (p_pageBuilder.GetCurrentPage())
             {
             case Pages::TICTACTOE:
-                currentGameInfo.ticTacToeStruct.gameGrid[currentRow][currentColumn][0] = '#'; // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
-                currentGameInfo.ticTacToeStruct.gameGrid[currentRow][currentColumn][2] = '#'; // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+                currentGameInfo.ticTacToeStruct.gameGrid.at(currentRow).at(currentColumn).at(0) = '#';
+                currentGameInfo.ticTacToeStruct.gameGrid.at(currentRow).at(currentColumn).at(2) = '#';
                 break;
 
             case Pages::BATTLESHIPS:
                 if (displayGetUserCommandPage)
                 {
-                    currentGameInfo.battleshipsStruct.boardTwo[currentRow][currentColumn][0] = '#'; // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
-                    currentGameInfo.battleshipsStruct.boardTwo[currentRow][currentColumn][2] = '#'; // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+                    currentGameInfo.battleshipsStruct.boardTwo.at(currentRow).at(currentColumn).at(0) = '#';
+                    currentGameInfo.battleshipsStruct.boardTwo.at(currentRow).at(currentColumn).at(2) = '#';
                 }
 
                 else
                 {
-                    currentGameInfo.battleshipsStruct.boardOne[currentRow][column][0] = '#'; // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
-                    currentGameInfo.battleshipsStruct.boardOne[currentRow][column][2] = '#'; // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+                    currentGameInfo.battleshipsStruct.boardOne.at(currentRow).at(currentColumn).at(0) = '#';
+                    currentGameInfo.battleshipsStruct.boardOne.at(currentRow).at(currentColumn).at(2) = '#';
                 }
                 break;
 
@@ -300,4 +301,4 @@ namespace TerminalGames
 #endif
     }
 }
-// NOLINTEND(misc-include-cleaner)
+ // NOLINTEND(misc-include-cleaner)

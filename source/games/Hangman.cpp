@@ -17,7 +17,7 @@
 
 namespace TerminalGames
 {
-    Hangman::Hangman(const bool &p_onlyUseAscii) // NOLINT(cppcoreguidelines-pro-type-member-init,hicpp-member-init)
+    Hangman::Hangman(const bool &p_onlyUseAscii) : m_computerSpeed(0), m_errorCount(0), m_turnCount(0), m_hasWinner(false), m_userIsGuesser(false)
     {
         m_pageBuilder.SetProperties(Pages::HANGMAN, p_onlyUseAscii);
         m_randomNumberGenerator.seed(std::chrono::system_clock::now().time_since_epoch().count());
@@ -126,7 +126,7 @@ namespace TerminalGames
 
         while (true)
         {
-            Terminal::SetCursorPosition(41, 13); // NOLINT(cppcoreguidelines-avoid-magic-numbers, readability-magic-numbers)
+            Terminal::SetCursorPosition(G_HANGMAN_GET_USER_COMMAND_COLUMN, G_HANGMAN_USER_INPUT_ROW);
 
             std::cout << std::string("\x1B[1;34m") + m_commandsRemaining[currentSelection] + "\x1B[1;37m"; // Make it blue
 
@@ -155,7 +155,7 @@ namespace TerminalGames
 
             else
             {
-                auto commandFindLocation = ImplementStdRangesFind(m_commandsRemaining.begin(), m_commandsRemaining.end(), keyPress - 32); // NOLINT(cppcoreguidelines-avoid-magic-numbers, readability-magic-numbers)
+                auto commandFindLocation = ImplementStdRangesFind(m_commandsRemaining.begin(), m_commandsRemaining.end(), keyPress - G_HANGMAN_KEY_PRESS_CHAR_OFFSET);
 
                 if (commandFindLocation != m_commandsRemaining.end())
                 {
@@ -240,7 +240,7 @@ namespace TerminalGames
         {
             Terminal::PrintOutput(OUTPUT);
 
-            Terminal::SetCursorPosition(39, 13); // NOLINT(cppcoreguidelines-avoid-magic-numbers, readability-magic-numbers)
+            Terminal::SetCursorPosition(G_HANGMAN_GET_WORD_FROM_USER_COLUMN, G_HANGMAN_USER_INPUT_ROW);
 
             std::getline(std::cin, input);
 
@@ -267,7 +267,7 @@ namespace TerminalGames
 
     void Hangman::GetWordFromComputer()
     {
-        m_wordToBeGuessed = G_HANGMAN_COMPUTER_WORDS[m_randomNumberGenerator() % G_HANGMAN_COMPUTER_WORDS.size()]; // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+        m_wordToBeGuessed = G_HANGMAN_COMPUTER_WORDS.at(m_randomNumberGenerator() % G_HANGMAN_COMPUTER_WORDS.size());
     }
 
     void Hangman::ExecuteGeneralCommand(const char &p_guess)
