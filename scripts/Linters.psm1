@@ -35,6 +35,14 @@ function Test-CodeUsingClangTools {
 
     Write-Output "##[section]Running Test-CodeUsingClangTools..."
 
+    Write-Output "##[debug]Using the following clang-tidy version..."
+
+    (clang-tidy --version 2>&1) | ForEach-Object { "##[debug]$_" } | Write-Verbose
+
+    Write-Output "##[debug]Using the following clang-format version..."
+
+    (clang-format --version 2>&1) | ForEach-Object { "##[debug]$_" } | Write-Verbose
+
     Write-Output "##[section]Retrieving all files to analyse..."
 
     $allFilesToTest = git ls-files -c | ForEach-Object { if ($_.Split(".")[-1] -In ("cpp", "hpp")) { "./$_" } }

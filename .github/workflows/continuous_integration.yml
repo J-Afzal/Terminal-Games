@@ -52,6 +52,9 @@ jobs:
                       choco install ninja -y
                   fi
 
+                  clang-tidy --version
+                  clang-format --version
+
             - name: Configure CMake
               run: cmake -S . -B ./build -G "Ninja"
 
