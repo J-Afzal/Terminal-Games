@@ -89,7 +89,7 @@ namespace TerminalGames
          * @param p_page Which page type to configure the PageBuilder for.
          * @param p_onlyUseAscii Whether to use only ASCII characters (true) or to also use ANSI escapes codes (false).
          */
-        explicit PageBuilder(const Pages &p_page, const bool &p_onlyUseAscii);
+        explicit PageBuilder(const Pages& p_page, const bool& p_onlyUseAscii);
 
         /**
          * @brief Set the properties of the object.
@@ -97,7 +97,7 @@ namespace TerminalGames
          * @param p_page Which page type to configure the PageBuilder for.
          * @param p_onlyUseAscii Whether to use only ASCII characters (true) or to also use ANSI escapes codes (false).
          */
-        void SetProperties(const Pages &p_page, const bool &p_onlyUseAscii);
+        void SetProperties(const Pages& p_page, const bool& p_onlyUseAscii);
 
         /**
          * @brief Get the current page type.
@@ -112,7 +112,7 @@ namespace TerminalGames
          * @param p_gameNames The name of the games that can be selected.
          * @return std::vector<std::string> Pages where each page has a different game selected.
          */
-        std::vector<std::string> GetGameSelectionMainMenuPages(const std::vector<std::string> &p_gameNames) const;
+        std::vector<std::string> GetGameSelectionMainMenuPages(const std::vector<std::string>& p_gameNames) const;
 
         /**
          * @brief Creates pages for displaying option selection screen for the number of players playing the game.
@@ -120,7 +120,7 @@ namespace TerminalGames
          * @param p_gameInfo Information on the current state of the current game.
          * @return std::vector<std::string> Pages where each page has a different number of players selected.
          */
-        std::vector<std::string> GetPlayerCountOptionSelectionGamePages(const GameInfo &p_gameInfo) const;
+        std::vector<std::string> GetPlayerCountOptionSelectionGamePages(const GameInfo& p_gameInfo) const;
 
         /**
          * @brief Creates pages for displaying option selection screen for the user player choice for a game.
@@ -128,7 +128,7 @@ namespace TerminalGames
          * @param p_gameInfo Information on the current state of the current game.
          * @return std::vector<std::string> Pages where each page has a player choice selected.
          */
-        std::vector<std::string> GetUserPlayerChoiceOptionSelectionGamePages(const GameInfo &p_gameInfo) const;
+        std::vector<std::string> GetUserPlayerChoiceOptionSelectionGamePages(const GameInfo& p_gameInfo) const;
 
         /**
          * @brief Creates pages for displaying option selection screen for the computer speed for a game.
@@ -136,7 +136,7 @@ namespace TerminalGames
          * @param p_gameInfo Information on the current state of the current game.
          * @return std::vector<std::string> Pages where each page has a different computer speed selected.
          */
-        std::vector<std::string> GetComputerSpeedOptionSelectionGamePages(const GameInfo &p_gameInfo) const;
+        std::vector<std::string> GetComputerSpeedOptionSelectionGamePages(const GameInfo& p_gameInfo) const;
 
         /**
          * @brief Creates a general game page with a custom message for use during a game.
@@ -146,7 +146,7 @@ namespace TerminalGames
          * @return std::string A page with the current state of the game and a custom message.
          * @warning The message will be truncated if it is too long to be contained within a single line on the page.
          */
-        std::string GetPageWithMessage(const GameInfo &p_gameInfo, const std::string &p_message) const;
+        std::string GetPageWithMessage(const GameInfo& p_gameInfo, const std::string& p_message) const;
 
         /**
          * @brief Creates the user command page which prompts the user to enter a command during a game.
@@ -154,7 +154,7 @@ namespace TerminalGames
          * @param p_gameInfo Information on the current state of the current game.
          * @return std::string A page with the current state of the game and a prompt to the user to enter a command.
          */
-        std::string GetUserCommandPage(const GameInfo &p_gameInfo) const;
+        std::string GetUserCommandPage(const GameInfo& p_gameInfo) const;
 
         /**
          * @brief Creates the computer command page for when the computer is entering their command.
@@ -162,7 +162,7 @@ namespace TerminalGames
          * @param p_gameInfo Information on the current state of the current game.
          * @return std::string A page with the current state of the game and a message that the computer is entering their command.
          */
-        std::string GetComputerCommandPage(const GameInfo &p_gameInfo) const;
+        std::string GetComputerCommandPage(const GameInfo& p_gameInfo) const;
 
         /**
          * @brief Creates the game over page.
@@ -171,7 +171,7 @@ namespace TerminalGames
          * @return std::string A page with the final state of the game and a message on who won, how many turns took place, and
          * how to quit the game or play again.
          */
-        std::string GetGameOverPage(const GameInfo &p_gameInfo) const;
+        std::string GetGameOverPage(const GameInfo& p_gameInfo) const;
 
     private:
         /**
@@ -181,7 +181,7 @@ namespace TerminalGames
          * @param p_colour The colour of the input text.
          * @return std::string The input text wrapped with ANSI colour escape codes.
          */
-        std::string AddColour(const std::string &p_input, const Colours &p_colour) const;
+        std::string AddColour(const std::string& p_input, const Colours& p_colour) const;
 
         /**
          * @brief Creates a new line on a page but with no input text.
@@ -200,7 +200,7 @@ namespace TerminalGames
          * @return std::string A new line with the input text centred.
          * @warning The message will be truncated if it is too long to be contained within a single line on the page.
          */
-        std::string GetNewLineCentred(const std::string &p_input, const Colours &p_colour, const std::string &p_selector) const;
+        std::string GetNewLineCentred(const std::string& p_input, const Colours& p_colour, const std::string& p_selector) const;
 
         /**
          * @brief Creates a new line on a page with the input text is automatically left justified (one space padding on to the
@@ -212,7 +212,7 @@ namespace TerminalGames
          * @return std::string A new line with the input text left justified.
          * @warning The message will be truncated if it is too long to be contained within a single line on the page.
          */
-        std::string GetNewLineLeftJustified(const std::string &p_input, const Colours &p_colour, const std::string &p_selector) const;
+        std::string GetNewLineLeftJustified(const std::string& p_input, const Colours& p_colour, const std::string& p_selector) const;
 
         /**
          * @brief Creates the top line of a box within a page.
@@ -249,7 +249,7 @@ namespace TerminalGames
          * @param p_commonBottomString The part of the page below where the empty lines are to be padded.
          * @return std::string The empty lines that are needed in between the topString and bottomString.
          */
-        std::string GetRemainingEmptyLines(const std::string &p_commonTopString, const std::string &p_commonBottomString) const;
+        std::string GetRemainingEmptyLines(const std::string& p_commonTopString, const std::string& p_commonBottomString) const;
 
         /**
          * @brief Creates pages for displaying option selection screens for the given options.
@@ -261,7 +261,7 @@ namespace TerminalGames
          * @warning The message will be truncated if it is too long to be contained within a single line on the page.
          * @warning The page height will be allowed to extended pass the pre-defined page height to fit all the options provided.
          */
-        std::vector<std::string> GetOptionSelectionPages(const GameInfo &p_gameInfo, const std::string &p_message, const std::vector<std::string> &p_options) const;
+        std::vector<std::string> GetOptionSelectionPages(const GameInfo& p_gameInfo, const std::string& p_message, const std::vector<std::string>& p_options) const;
 
         /**
          * @brief Wrapper function around the game specific sub-page functions.
@@ -269,7 +269,7 @@ namespace TerminalGames
          * @param p_gameInfo Information on the current state of the current game.
          * @return std::string The subpage containing the current state of the current game.
          */
-        std::string GetGeneralGameSubPage(const GameInfo &p_gameInfo) const;
+        std::string GetGeneralGameSubPage(const GameInfo& p_gameInfo) const;
 
         /**
          * @brief Creates the subpage containing the current state of the TicTacToe game.
@@ -277,7 +277,7 @@ namespace TerminalGames
          * @param p_gameInfo Information on the current state of the current game.
          * @return std::string The subpage containing the current state of the TicTacToe game.
          */
-        std::string GetTicTacToeSubPage(const GameInfo &p_gameInfo) const;
+        std::string GetTicTacToeSubPage(const GameInfo& p_gameInfo) const;
 
         /**
          * @brief Creates the subpage containing the current state of the Hangman game.
@@ -285,7 +285,7 @@ namespace TerminalGames
          * @param p_gameInfo Information on the current state of the current game.
          * @return std::string The subpage containing the current state of the Hangman game.
          */
-        std::string GetHangmanSubPage(const GameInfo &p_gameInfo) const;
+        std::string GetHangmanSubPage(const GameInfo& p_gameInfo) const;
 
         /**
          * @brief Creates the subpage containing the current state of the Battleships game.
@@ -293,7 +293,7 @@ namespace TerminalGames
          * @param p_gameInfo Information on the current state of the current game.
          * @return std::string The subpage containing the current state of the Battleships game.
          */
-        std::string GetBattleshipsSubPage(const GameInfo &p_gameInfo) const;
+        std::string GetBattleshipsSubPage(const GameInfo& p_gameInfo) const;
 
         // Member variables
         std::string m_topTitle;

@@ -11,14 +11,22 @@
 
 namespace TerminalGames
 {
-    PageBuilder::PageBuilder() : m_displayWidth(0), m_displayHeight(0), m_onlyUseASCII(false), m_currentPage(Pages::DEFAULT) {}
+    PageBuilder::PageBuilder() :
+        m_displayWidth(0),
+        m_displayHeight(0),
+        m_onlyUseASCII(false),
+        m_currentPage(Pages::DEFAULT) {}
 
-    PageBuilder::PageBuilder(const Pages &p_page, const bool &p_onlyUseAscii) : m_displayWidth(0), m_displayHeight(0), m_onlyUseASCII(false), m_currentPage(Pages::DEFAULT)
+    PageBuilder::PageBuilder(const Pages& p_page, const bool& p_onlyUseAscii) :
+        m_displayWidth(0),
+        m_displayHeight(0),
+        m_onlyUseASCII(false),
+        m_currentPage(Pages::DEFAULT)
     {
         this->SetProperties(p_page, p_onlyUseAscii);
     }
 
-    void PageBuilder::SetProperties(const Pages &p_page, const bool &p_onlyUseAscii)
+    void PageBuilder::SetProperties(const Pages& p_page, const bool& p_onlyUseAscii)
     {
         m_currentPage = p_page;
         m_onlyUseASCII = p_onlyUseAscii;
@@ -59,7 +67,7 @@ namespace TerminalGames
         return m_currentPage;
     }
 
-    std::vector<std::string> PageBuilder::GetGameSelectionMainMenuPages(const std::vector<std::string> &p_gameNames) const
+    std::vector<std::string> PageBuilder::GetGameSelectionMainMenuPages(const std::vector<std::string>& p_gameNames) const
     {
         const std::string COMMON_TOP_STRING = GetTopBox() + GetTopLine();
         const std::string COMMON_BOTTOM_STRING = GetBottomLine() + GetBottomBox();
@@ -96,7 +104,7 @@ namespace TerminalGames
         return output;
     }
 
-    std::vector<std::string> PageBuilder::GetPlayerCountOptionSelectionGamePages(const GameInfo &p_gameInfo) const
+    std::vector<std::string> PageBuilder::GetPlayerCountOptionSelectionGamePages(const GameInfo& p_gameInfo) const
     {
         switch (m_currentPage)
         {
@@ -112,7 +120,7 @@ namespace TerminalGames
         }
     }
 
-    std::vector<std::string> PageBuilder::GetUserPlayerChoiceOptionSelectionGamePages(const GameInfo &p_gameInfo) const
+    std::vector<std::string> PageBuilder::GetUserPlayerChoiceOptionSelectionGamePages(const GameInfo& p_gameInfo) const
     {
         switch (m_currentPage)
         {
@@ -127,7 +135,7 @@ namespace TerminalGames
         }
     }
 
-    std::vector<std::string> PageBuilder::GetComputerSpeedOptionSelectionGamePages(const GameInfo &p_gameInfo) const
+    std::vector<std::string> PageBuilder::GetComputerSpeedOptionSelectionGamePages(const GameInfo& p_gameInfo) const
     {
         switch (m_currentPage)
         {
@@ -141,7 +149,7 @@ namespace TerminalGames
         }
     }
 
-    std::string PageBuilder::GetPageWithMessage(const GameInfo &p_gameInfo, const std::string &p_message) const
+    std::string PageBuilder::GetPageWithMessage(const GameInfo& p_gameInfo, const std::string& p_message) const
     {
         const std::string COMMON_TOP_STRING = GetTopBox() + GetTopLine() + GetGeneralGameSubPage(p_gameInfo) + GetEmptyLine() + GetNewLineLeftJustified(p_message, Colours::WHITE, "");
         const std::string COMMON_BOTTOM_STRING = GetBottomLine() + GetBottomBox();
@@ -149,7 +157,7 @@ namespace TerminalGames
         return COMMON_TOP_STRING + GetRemainingEmptyLines(COMMON_TOP_STRING, COMMON_BOTTOM_STRING) + COMMON_BOTTOM_STRING;
     }
 
-    std::string PageBuilder::GetUserCommandPage(const GameInfo &p_gameInfo) const
+    std::string PageBuilder::GetUserCommandPage(const GameInfo& p_gameInfo) const
     {
         switch (m_currentPage)
         {
@@ -167,7 +175,7 @@ namespace TerminalGames
         }
     }
 
-    std::string PageBuilder::GetComputerCommandPage(const GameInfo &p_gameInfo) const
+    std::string PageBuilder::GetComputerCommandPage(const GameInfo& p_gameInfo) const
     {
         switch (m_currentPage)
         {
@@ -181,7 +189,7 @@ namespace TerminalGames
         }
     }
 
-    std::string PageBuilder::GetGameOverPage(const GameInfo &p_gameInfo) const
+    std::string PageBuilder::GetGameOverPage(const GameInfo& p_gameInfo) const
     {
         std::string topString = GetTopBox() + GetTopLine() + GetGeneralGameSubPage(p_gameInfo) + GetEmptyLine() + GetNewLineCentred("GAME OVER", Colours::WHITE, "") + GetEmptyLine();
         const std::string BOTTOM_STRING = GetEmptyLine() + GetNewLineCentred("Press 'q' to quit OR any key to play again...", Colours::WHITE, "") + GetBottomLine() + GetBottomBox();
@@ -225,7 +233,7 @@ namespace TerminalGames
         return topString + GetRemainingEmptyLines(topString, BOTTOM_STRING) + BOTTOM_STRING;
     }
 
-    std::string PageBuilder::AddColour(const std::string &p_input, const Colours &p_colour) const
+    std::string PageBuilder::AddColour(const std::string& p_input, const Colours& p_colour) const
     {
         if (m_onlyUseASCII)
         {
@@ -255,7 +263,7 @@ namespace TerminalGames
         return output + G_VERTICAL_LINE + "\n";
     }
 
-    std::string PageBuilder::GetNewLineCentred(const std::string &p_input, const Colours &p_colour, const std::string &p_selector) const
+    std::string PageBuilder::GetNewLineCentred(const std::string& p_input, const Colours& p_colour, const std::string& p_selector) const
     {
         static const double DIVISOR = 2;
 
@@ -280,7 +288,7 @@ namespace TerminalGames
         return output + G_VERTICAL_LINE + "\n";
     }
 
-    std::string PageBuilder::GetNewLineLeftJustified(const std::string &p_input, const Colours &p_colour, const std::string &p_selector) const
+    std::string PageBuilder::GetNewLineLeftJustified(const std::string& p_input, const Colours& p_colour, const std::string& p_selector) const
     {
         // Pad due to left justification.
         std::string selectorPadded = " ";
@@ -347,12 +355,12 @@ namespace TerminalGames
             return {"The 'GetBottomBox' function does not support the current page type."};
         }
 
-        // G_RESET_ANSI_COLOUR_ESCAPE_CODE used to unset any ANSI colour escape code. If the program unexpectedly crashes the user's terminal will
-        // not be affected.
+        // G_RESET_ANSI_COLOUR_ESCAPE_CODE used to unset any ANSI colour escape code. If the program unexpectedly crashes the
+        // user's terminal will not be affected.
         return output + GetBottomLine() + G_RESET_ANSI_COLOUR_ESCAPE_CODE;
     }
 
-    std::string PageBuilder::GetRemainingEmptyLines(const std::string &p_commonTopString, const std::string &p_commonBottomString) const
+    std::string PageBuilder::GetRemainingEmptyLines(const std::string& p_commonTopString, const std::string& p_commonBottomString) const
     {
         const int32_t REMAINING_LINE_COUNT = static_cast<int32_t>(m_displayHeight) - TerminalGames::ImplementStdCount(p_commonTopString.begin(), p_commonTopString.end(), '\n') - TerminalGames::ImplementStdCount(p_commonBottomString.begin(), p_commonBottomString.end(), '\n');
         const uint32_t EMPTY_LINES_TO_ADD_COUNT = REMAINING_LINE_COUNT < 0 ? 0 : REMAINING_LINE_COUNT;
@@ -366,7 +374,7 @@ namespace TerminalGames
         return output;
     }
 
-    std::vector<std::string> PageBuilder::GetOptionSelectionPages(const GameInfo &p_gameInfo, const std::string &p_message, const std::vector<std::string> &p_options) const
+    std::vector<std::string> PageBuilder::GetOptionSelectionPages(const GameInfo& p_gameInfo, const std::string& p_message, const std::vector<std::string>& p_options) const
     {
         const std::string COMMON_TOP_STRING = GetTopBox() + GetTopLine() + GetGeneralGameSubPage(p_gameInfo) + GetEmptyLine() + GetNewLineLeftJustified(p_message, Colours::WHITE, "");
         const std::string COMMON_BOTTOM_STRING = GetBottomLine() + GetBottomBox();
@@ -399,7 +407,7 @@ namespace TerminalGames
         return output;
     }
 
-    std::string PageBuilder::GetGeneralGameSubPage(const GameInfo &p_gameInfo) const
+    std::string PageBuilder::GetGeneralGameSubPage(const GameInfo& p_gameInfo) const
     {
         switch (m_currentPage)
         {
@@ -418,7 +426,7 @@ namespace TerminalGames
     }
 
     // NOLINTBEGIN
-    std::string PageBuilder::GetTicTacToeSubPage(const GameInfo &gameInfo) const
+    std::string PageBuilder::GetTicTacToeSubPage(const GameInfo& gameInfo) const
     {
         const std::array<std::array<std::string, G_TICTACTOE_BOARD_WIDTH>, G_TICTACTOE_BOARD_HEIGHT> gameGrid = gameInfo.m_ticTacToeStruct.m_gameGrid;
         const std::string playerCount = gameInfo.m_ticTacToeStruct.m_playerCount, computerSpeedName = gameInfo.m_ticTacToeStruct.m_computerSpeedName;
@@ -438,7 +446,7 @@ namespace TerminalGames
         return output;
     }
 
-    std::string PageBuilder::GetHangmanSubPage(const GameInfo &gameInfo) const
+    std::string PageBuilder::GetHangmanSubPage(const GameInfo& gameInfo) const
     {
         const std::vector<char> incorrectGuesses = gameInfo.m_hangmanStruct.m_incorrectGuesses;
         const std::string currentGuessOfWord = gameInfo.m_hangmanStruct.m_currentGuessOfWord, wordToBeGuessed = gameInfo.m_hangmanStruct.m_wordToBeGuessed, playerCount = gameInfo.m_hangmanStruct.m_playerCount, computerSpeedName = gameInfo.m_hangmanStruct.m_computerSpeedName;
@@ -489,7 +497,7 @@ namespace TerminalGames
         return output + "\n";
     }
 
-    std::string PageBuilder::GetBattleshipsSubPage(const GameInfo &gameInfo) const
+    std::string PageBuilder::GetBattleshipsSubPage(const GameInfo& gameInfo) const
     {
         const std::array<std::array<std::string, 10>, 10> boardOne = gameInfo.m_battleshipsStruct.m_boardOne, boardTwo = gameInfo.m_battleshipsStruct.m_boardTwo;
         const std::unordered_map<std::string, uint32_t> shipsRemainingOne = gameInfo.m_battleshipsStruct.m_shipsRemainingOne, shipsRemainingTwo = gameInfo.m_battleshipsStruct.m_shipsRemainingTwo;
@@ -756,5 +764,6 @@ namespace TerminalGames
 
         return output;
     }
+
     // NOLINTEND
 }

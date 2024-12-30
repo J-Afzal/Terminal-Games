@@ -11,8 +11,8 @@ namespace TerminalGames
      * within the CI workflow). The following functions are crudely implemented below for this project's specific use case.
      */
     // Should work for all std containers
-    template <typename T, typename U>
-    static T ImplementStdRangesFind(const T &p_begin, const T &p_end, const U &p_value) // NOLINT(bugprone-easily-swappable-parameters)
+    template<typename T, typename U>
+    static T ImplementStdRangesFind(const T& p_begin, const T& p_end, const U& p_value) // NOLINT(bugprone-easily-swappable-parameters)
     {
         for (T i = p_begin; i < p_end; i++)
         {
@@ -26,8 +26,8 @@ namespace TerminalGames
     }
 
     // Should work for all std containers
-    template <typename T, typename U>
-    static int32_t ImplementStdCount(const T &p_begin, const T &p_end, const U &p_value) // NOLINT(bugprone-easily-swappable-parameters)
+    template<typename T, typename U>
+    static int32_t ImplementStdCount(const T& p_begin, const T& p_end, const U& p_value) // NOLINT(bugprone-easily-swappable-parameters)
     {
         int32_t count = 0;
 
@@ -43,7 +43,7 @@ namespace TerminalGames
     }
 
     // Only works for single instance of {} in p_stringToFormat
-    static std::string ImplementStdFormat(const std::string &p_stringToFormat, const uint32_t &p_varToInsert)
+    static std::string ImplementStdFormat(const std::string& p_stringToFormat, const uint32_t& p_varToInsert)
     {
         const std::string FORMAT_IDENTIFIER = "{}";
         const std::string BEFORE_STRING = p_stringToFormat.substr(0, p_stringToFormat.find(FORMAT_IDENTIFIER));
@@ -88,7 +88,6 @@ namespace TerminalGames
     static constexpr uint32_t G_HANGMAN_GET_WORD_FROM_USER_COLUMN = 39;
     static constexpr uint32_t G_HANGMAN_GET_USER_COMMAND_COLUMN = 41;
 
-
     /**
      * @brief Battleships
      */
@@ -115,9 +114,9 @@ namespace TerminalGames
     static const std::string G_BATTLESHIPS_SUBMARINE_NAME = "Submarine";
     static const std::string G_BATTLESHIPS_PATROL_BOAT_NAME = "Patrol Boat";
 
-    static const std::string G_BATTLESHIPS_PLACED_SHIP{static_cast<char>(178)};
-    static const std::string G_BATTLESHIPS_SUCCESSFUL_ATTACK{static_cast<char>(176)};
-    static const std::string G_BATTLESHIPS_MISSED_ATTACK{static_cast<char>(250)};
+    static const std::string G_BATTLESHIPS_PLACED_SHIP {static_cast<char>(178)};
+    static const std::string G_BATTLESHIPS_SUCCESSFUL_ATTACK {static_cast<char>(176)};
+    static const std::string G_BATTLESHIPS_MISSED_ATTACK {static_cast<char>(250)};
 
     static const std::array<std::string, G_BATTLESHIPS_SHIP_COUNT> G_BATTLESHIPS_SHIP_NAMES = {
         G_BATTLESHIPS_CARRIER_NAME,
@@ -191,7 +190,7 @@ namespace TerminalGames
      * @brief Hangman word list for the computer
      */
     static constexpr uint32_t G_NUMBER_OF_WORDS = 972;
-    static inline const std::array<std::string, G_NUMBER_OF_WORDS> G_HANGMAN_COMPUTER_WORDS = {
+    inline static const std::array<std::string, G_NUMBER_OF_WORDS> G_HANGMAN_COMPUTER_WORDS = {
         "ABILITY",
         "ABLE",
         "ABOUT",

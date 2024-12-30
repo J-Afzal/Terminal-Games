@@ -22,8 +22,15 @@ $ErrorActionPreference = "Stop"
 function Test-CodeUsingClangTools {
 
     [CmdletBinding()]
-    param(
-        # TODO: param to add fixing for clang format and tidy
+    param
+    (
+        [Parameter(Mandatory=$false)]
+        [switch]
+        $FixClangTidyErrors,
+
+        [Parameter(Mandatory=$false)]
+        [switch]
+        $FixClangFormatErrors
     )
 
     Write-Output "##[section]Running Test-CodeUsingClangTools..."
@@ -49,16 +56,51 @@ function Test-CodeUsingClangTools {
 
 
         if ($LASTEXITCODE -eq 1) {
-            $filesWithClangTidyErrors += $file
+
+            if ($FixClangTidyErrors) {
+                Write-Output "##[debug]Fixing clang-tidy issues in '$file'..."
+                (clang-tidy $file -p ./build 2>&1) | ForEach-Object { "##[debug]$_" } | Write-Verbose
+
+                if ($LASTEXITCODE -eq 1) {
+                    Write-Output "##[debug]clang-tidy issues still exist in '$file'..."
+                    $filesWithClangFormatErrors += $file
+                }
+
+                else {
+                    Write-Output "##[debug]All clang-tidy issues in '$file' have been fixed!"
+                }
+            }
+
+            else
+            {
+                $filesWithClangTidyErrors += $file
+            }
         }
 
         Write-Output "##[section]Running clang-format against '$file'..."
 
         (clang-format --Werror --dry-run $file) | ForEach-Object { "##[debug]$_" } | Write-Verbose
 
-
         if ($LASTEXITCODE -eq 1) {
-            $filesWithClangFormatErrors += $file
+
+            if ($FixClangFormatErrors) {
+                Write-Output "##[debug]Fixing clang-format issues in '$file'..."
+                (clang-format --Werror --i $file) | ForEach-Object { "##[debug]$_" } | Write-Verbose
+
+                if ($LASTEXITCODE -eq 1) {
+                    Write-Output "##[debug]clang-format issues still exist in '$file'..."
+                    $filesWithClangFormatErrors += $file
+                }
+
+                else {
+                    Write-Output "##[debug]All clang-format issues in '$file' have been fixed!"
+                }
+            }
+
+            else
+            {
+                $filesWithClangFormatErrors += $file
+            }
         }
 
         $ErrorActionPreference = "Stop"
@@ -81,7 +123,7 @@ function Test-CodeUsingClangTools {
 
     else
     {
-        Write-Output "##[section]Terminal Games code conforms to standards."
+        Write-Output "##[section]All code conforms to standards."
     }
 }
 

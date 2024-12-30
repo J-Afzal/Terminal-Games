@@ -14,9 +14,11 @@
 
 namespace TerminalGames
 {
-    MainMenu::MainMenu(const std::vector<std::string> &p_commandLineArguments) : m_onlyUseASCII(ParseCommandLineArguments(p_commandLineArguments)) {}
+    MainMenu::MainMenu(const std::vector<std::string>& p_commandLineArguments) :
+        m_onlyUseASCII(ParseCommandLineArguments(p_commandLineArguments)) {}
 
-    MainMenu::MainMenu(const bool &p_onlyUseAscii) : m_onlyUseASCII(p_onlyUseAscii) {}
+    MainMenu::MainMenu(const bool& p_onlyUseAscii) :
+        m_onlyUseASCII(p_onlyUseAscii) {}
 
     MainMenu::~MainMenu()
     {
@@ -48,12 +50,12 @@ namespace TerminalGames
                 m_games[Terminal::GetUserChoiceFromMainMenus(m_mainMenus)]->Play();
             }
 
-            catch (Exceptions::QuitMainMenu &e)
+            catch (Exceptions::QuitMainMenu& e)
             {
                 return;
             }
 
-            catch (Exceptions::QuitGame &e)
+            catch (Exceptions::QuitGame& e)
             {
                 continue;
             }
@@ -64,9 +66,9 @@ namespace TerminalGames
         Terminal::SetCursorPosition(0, 0);
     }
 
-    bool MainMenu::ParseCommandLineArguments(const std::vector<std::string> &p_commandLineArguments)
+    bool MainMenu::ParseCommandLineArguments(const std::vector<std::string>& p_commandLineArguments)
     {
-        for (const std::string &argument : p_commandLineArguments)
+        for (const std::string& argument : p_commandLineArguments)
         {
             if (argument == "--a" || argument == "--ascii-only")
             {

@@ -1,4 +1,4 @@
- // NOLINTBEGIN(misc-include-cleaner)
+// NOLINTBEGIN(misc-include-cleaner)
 #include <cstdint>
 #include <cstdlib>
 #include <iostream>
@@ -7,8 +7,8 @@
 #include <vector>
 
 #ifdef _WIN32
-#include "conio.h"
-#include "Windows.h"
+    #include "conio.h"
+    #include "Windows.h"
 #endif
 
 #include "Constants.hpp"
@@ -18,7 +18,7 @@
 
 namespace TerminalGames
 {
-    uint32_t Terminal::GetUserChoiceFromMainMenus(const std::vector<std::string> &p_menus)
+    uint32_t Terminal::GetUserChoiceFromMainMenus(const std::vector<std::string>& p_menus)
     {
         uint32_t currentSelection = 0;
 
@@ -48,7 +48,7 @@ namespace TerminalGames
         }
     }
 
-    uint32_t Terminal::GetUserChoiceFromGameMenus(const std::vector<std::string> &p_menus)
+    uint32_t Terminal::GetUserChoiceFromGameMenus(const std::vector<std::string>& p_menus)
     {
         uint32_t currentSelection = 0;
 
@@ -79,10 +79,10 @@ namespace TerminalGames
     }
 
     std::tuple<uint32_t, uint32_t> Terminal::GetUserCommandFromGameGrid(
-        const std::tuple<uint32_t, uint32_t> &p_startingGridLocation,
-        const PageBuilder &p_pageBuilder,
-        const GameInfo &p_gameInfo,
-        const bool &p_displayGetUserCommandPage)
+        const std::tuple<uint32_t, uint32_t>& p_startingGridLocation,
+        const PageBuilder& p_pageBuilder,
+        const GameInfo& p_gameInfo,
+        const bool& p_displayGetUserCommandPage)
     {
         if (p_displayGetUserCommandPage)
         {
@@ -194,7 +194,7 @@ namespace TerminalGames
         }
     }
 
-    void Terminal::PrintOutput(const std::string &p_output)
+    void Terminal::PrintOutput(const std::string& p_output)
     {
         Clear();
         std::cout << p_output;
@@ -285,7 +285,7 @@ namespace TerminalGames
 #endif
     }
 
-    void Terminal::SetCursorVisibility(const bool &p_cursorVisibility)
+    void Terminal::SetCursorVisibility(const bool& p_cursorVisibility)
     {
 #ifdef _WIN32
         const CONSOLE_CURSOR_INFO CURSOR_INFO(G_CURSOR_WIDTH_PERCENTAGE, static_cast<int>(p_cursorVisibility));
@@ -293,7 +293,7 @@ namespace TerminalGames
 #endif
     }
 
-    void Terminal::SetCursorPosition(const int16_t &p_xCoord, const int16_t &p_yCoord)
+    void Terminal::SetCursorPosition(const int16_t& p_xCoord, const int16_t& p_yCoord)
     {
 #ifdef _WIN32
         const COORD CURSOR_POSITION(p_xCoord, p_yCoord);
@@ -301,4 +301,5 @@ namespace TerminalGames
 #endif
     }
 }
- // NOLINTEND(misc-include-cleaner)
+
+// NOLINTEND(misc-include-cleaner)

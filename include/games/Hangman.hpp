@@ -18,7 +18,7 @@ namespace TerminalGames
          *
          * @param p_onlyUseAscii Whether to use only ASCII characters (true) or to also use ANSI escapes codes (false).
          */
-        explicit Hangman(const bool &p_onlyUseAscii);
+        explicit Hangman(const bool& p_onlyUseAscii);
 
     private:
         /**
@@ -102,7 +102,7 @@ namespace TerminalGames
          *
          * @param p_guess A single-letter to check.
          */
-        void ExecuteGeneralCommand(const char &p_guess);
+        void ExecuteGeneralCommand(const char& p_guess);
 
         PageBuilder m_pageBuilder;
         GameInfo m_gameInfo;

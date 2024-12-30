@@ -17,7 +17,12 @@
 
 namespace TerminalGames
 {
-    Hangman::Hangman(const bool &p_onlyUseAscii) : m_computerSpeed(0), m_errorCount(0), m_turnCount(0), m_hasWinner(false), m_userIsGuesser(false)
+    Hangman::Hangman(const bool& p_onlyUseAscii) :
+        m_computerSpeed(0),
+        m_errorCount(0),
+        m_turnCount(0),
+        m_hasWinner(false),
+        m_userIsGuesser(false)
     {
         m_pageBuilder.SetProperties(Pages::HANGMAN, p_onlyUseAscii);
         m_randomNumberGenerator.seed(std::chrono::system_clock::now().time_since_epoch().count());
@@ -270,7 +275,7 @@ namespace TerminalGames
         m_wordToBeGuessed = G_HANGMAN_COMPUTER_WORDS.at(m_randomNumberGenerator() % G_HANGMAN_COMPUTER_WORDS.size());
     }
 
-    void Hangman::ExecuteGeneralCommand(const char &p_guess)
+    void Hangman::ExecuteGeneralCommand(const char& p_guess)
     {
         bool isGuessCorrect = false;
         for (uint32_t i = 0; i < m_wordToBeGuessed.size(); i++)

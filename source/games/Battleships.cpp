@@ -16,7 +16,10 @@
 
 namespace TerminalGames
 {
-    Battleships::Battleships(const bool &p_onlyUseAscii) : m_computerSpeed(0), m_turnCount(0), m_isGameOver(false)
+    Battleships::Battleships(const bool& p_onlyUseAscii) :
+        m_computerSpeed(0),
+        m_turnCount(0),
+        m_isGameOver(false)
     {
         m_pageBuilder.SetProperties(Pages::BATTLESHIPS, p_onlyUseAscii);
         m_randomNumberGenerator.seed(std::chrono::system_clock::now().time_since_epoch().count());
@@ -26,11 +29,12 @@ namespace TerminalGames
     {
         m_randomNumberGenerator() % 2 == 0 ? m_currentPlayer = "Player One" : m_currentPlayer = "Player Two";
         m_shipsRemainingOne = m_shipsRemainingTwo = {
-            {G_BATTLESHIPS_CARRIER_NAME, G_BATTLESHIPS_CARRIER_SIZE},
-            {G_BATTLESHIPS_BATTLESHIP_NAME, G_BATTLESHIPS_BATTLESHIP_SIZE},
-            {G_BATTLESHIPS_DESTROYER_NAME, G_BATTLESHIPS_DESTROYER_SIZE},
-            {G_BATTLESHIPS_SUBMARINE_NAME, G_BATTLESHIPS_SUBMARINE_SIZE},
-            {G_BATTLESHIPS_PATROL_BOAT_NAME, G_BATTLESHIPS_PATROL_BOAT_SIZE}};
+            {G_BATTLESHIPS_CARRIER_NAME,     G_BATTLESHIPS_CARRIER_SIZE    },
+            {G_BATTLESHIPS_BATTLESHIP_NAME,  G_BATTLESHIPS_BATTLESHIP_SIZE },
+            {G_BATTLESHIPS_DESTROYER_NAME,   G_BATTLESHIPS_DESTROYER_SIZE  },
+            {G_BATTLESHIPS_SUBMARINE_NAME,   G_BATTLESHIPS_SUBMARINE_SIZE  },
+            {G_BATTLESHIPS_PATROL_BOAT_NAME, G_BATTLESHIPS_PATROL_BOAT_SIZE}
+        };
         m_previousCommand = {0, 0};
         m_computerSpeedName = "N/A    ";
         m_playerCount = "N/A";
@@ -236,7 +240,7 @@ namespace TerminalGames
                         }
                     }
 
-                    catch (Exceptions::BackspaceKeyPressed &e)
+                    catch (Exceptions::BackspaceKeyPressed& e)
                     {
                         if (currentShipSize != 0)
                         {
@@ -262,9 +266,9 @@ namespace TerminalGames
     }
 
     bool Battleships::ValidateUserShipPosition(
-        const std::vector<std::tuple<uint32_t, uint32_t>> &p_currentShipPositions,
-        const std::tuple<uint32_t, uint32_t> &p_selectedShipGridLocation,
-        std::tuple<bool, bool> &p_shipIsHorizontalOrVertical)
+        const std::vector<std::tuple<uint32_t, uint32_t>>& p_currentShipPositions,
+        const std::tuple<uint32_t, uint32_t>& p_selectedShipGridLocation,
+        std::tuple<bool, bool>& p_shipIsHorizontalOrVertical)
     {
         // This function is assumed to be only called during one player games where player one is the user and player two is the computer.
 
@@ -322,7 +326,7 @@ namespace TerminalGames
         return true;
     }
 
-    void Battleships::GetComputerShipPositions(std::array<std::array<std::string, G_BATTLESHIPS_BOARD_WIDTH>, G_BATTLESHIPS_BOARD_HEIGHT> &p_board) // NOLINT(readability-function-cognitive-complexity)
+    void Battleships::GetComputerShipPositions(std::array<std::array<std::string, G_BATTLESHIPS_BOARD_WIDTH>, G_BATTLESHIPS_BOARD_HEIGHT>& p_board) // NOLINT(readability-function-cognitive-complexity)
     {
         // For each ship
         for (uint32_t currentShip = 0; currentShip < G_BATTLESHIPS_SHIP_COUNT; currentShip++)
@@ -372,9 +376,9 @@ namespace TerminalGames
                 bool locationIsAlreadyOccupied = false;
                 for (std::tuple<uint32_t, uint32_t> currentPosition : shipPositions)
                 {
-
                     const auto CURRENT_POSITION_FIND_LOCATION = ImplementStdRangesFind(
-                        G_BATTLESHIPS_SHIP_NAMES.begin(), G_BATTLESHIPS_SHIP_NAMES.end(),
+                        G_BATTLESHIPS_SHIP_NAMES.begin(),
+                        G_BATTLESHIPS_SHIP_NAMES.end(),
                         p_board.at(std::get<0>(currentPosition)).at(std::get<1>(currentPosition)));
 
                     if (CURRENT_POSITION_FIND_LOCATION != G_BATTLESHIPS_SHIP_NAMES.end())
@@ -398,11 +402,11 @@ namespace TerminalGames
         }
     }
 
-    bool Battleships::IsShipPresent(std::array<std::array<std::string, G_BATTLESHIPS_BOARD_WIDTH>, G_BATTLESHIPS_BOARD_HEIGHT> &p_board)
+    bool Battleships::IsShipPresent(std::array<std::array<std::string, G_BATTLESHIPS_BOARD_WIDTH>, G_BATTLESHIPS_BOARD_HEIGHT>& p_board)
     {
-        for (const std::array<std::string, G_BATTLESHIPS_BOARD_WIDTH> &currentRow : p_board)
+        for (const std::array<std::string, G_BATTLESHIPS_BOARD_WIDTH>& currentRow : p_board)
         {
-            for (const std::string &currentValue : currentRow)
+            for (const std::string& currentValue : currentRow)
             {
                 const auto CURRENT_VALUE_FIND_LOCATION = ImplementStdRangesFind(G_BATTLESHIPS_SHIP_NAMES.begin(), G_BATTLESHIPS_SHIP_NAMES.end(), currentValue);
 
@@ -416,7 +420,7 @@ namespace TerminalGames
         return false;
     }
 
-    bool Battleships::ValidateCommand(const std::vector<std::tuple<uint32_t, uint32_t>> &p_commandsRemaining, const std::tuple<uint32_t, uint32_t> &p_command)
+    bool Battleships::ValidateCommand(const std::vector<std::tuple<uint32_t, uint32_t>>& p_commandsRemaining, const std::tuple<uint32_t, uint32_t>& p_command)
     {
         const auto COMMAND_FIND_LOCATION = ImplementStdRangesFind(p_commandsRemaining.begin(), p_commandsRemaining.end(), p_command);
 
@@ -424,10 +428,10 @@ namespace TerminalGames
     }
 
     void Battleships::ExecuteGeneralCommand(
-        std::array<std::array<std::string, G_BATTLESHIPS_BOARD_WIDTH>, G_BATTLESHIPS_BOARD_HEIGHT> &p_opponentBoard,
-        std::unordered_map<std::string, uint32_t> &p_opponentShipsRemaining,
-        std::vector<std::tuple<uint32_t, uint32_t>> &p_commandsRemaining,
-        const std::tuple<uint32_t, uint32_t> &p_command)
+        std::array<std::array<std::string, G_BATTLESHIPS_BOARD_WIDTH>, G_BATTLESHIPS_BOARD_HEIGHT>& p_opponentBoard,
+        std::unordered_map<std::string, uint32_t>& p_opponentShipsRemaining,
+        std::vector<std::tuple<uint32_t, uint32_t>>& p_commandsRemaining,
+        const std::tuple<uint32_t, uint32_t>& p_command)
     {
         const auto COMMAND_FIND_LOCATION = ImplementStdRangesFind(p_commandsRemaining.begin(), p_commandsRemaining.end(), p_command);
         const uint32_t ROW = std::get<0>(p_command);

@@ -76,7 +76,6 @@ AllowShortLambdasOnASingleLine: All
 AllowShortLoopsOnASingleLine: false
 AlwaysBreakBeforeMultilineStrings: false
 BinPackArguments: false
-BinPackParameters: OnePerLine
 BitFieldColonSpacing: Both
 BraceWrapping:
     AfterCaseLabel: true
@@ -99,19 +98,18 @@ BraceWrapping:
 BracedInitializerIndentWidth: 4
 BreakAdjacentStringLiterals: true
 BreakAfterAttributes: Leave
-BreakAfterReturnType: All
+BreakAfterReturnType: Automatic
 BreakBeforeBinaryOperators: None
 BreakBeforeBraces: Custom
 BreakBeforeConceptDeclarations: Always
 BreakBeforeInlineASMColon: OnlyMultiline
 BreakBeforeTernaryOperators: false
-BreakBinaryOperations: RespectPrecedence
 BreakConstructorInitializers: AfterColon
 BreakFunctionDefinitionParameters: false
 BreakInheritanceList: AfterColon
 BreakStringLiterals: true
 BreakTemplateDeclarations: true
-ColumnLimit: 128
+ColumnLimit: 0
 CompactNamespaces: false
 ConstructorInitializerIndentWidth: 4
 ContinuationIndentWidth: 4
@@ -162,7 +160,7 @@ QualifierOrder:
     - const
     - type
 ReferenceAlignment: Left
-ReflowComments: Always
+ReflowComments: true
 RemoveParentheses: ReturnStatement
 RemoveSemicolon: true
 RequiresClausePosition: OwnLine

@@ -25,7 +25,7 @@ namespace TerminalGames
          * difference between each string is the selected menu option.
          * @return uint32_t The index of the menu string that the user selected.
          */
-        static uint32_t GetUserChoiceFromMainMenus(const std::vector<std::string> &p_menus);
+        static uint32_t GetUserChoiceFromMainMenus(const std::vector<std::string>& p_menus);
 
         /**
          * @brief Get the user choice from a list of game menus strings that are printed to the terminal.
@@ -34,7 +34,7 @@ namespace TerminalGames
          * difference between each string is the selected menu option.
          * @return uint32_t The index of the menu string that the user selected.
          */
-        static uint32_t GetUserChoiceFromGameMenus(const std::vector<std::string> &p_menus);
+        static uint32_t GetUserChoiceFromGameMenus(const std::vector<std::string>& p_menus);
 
         /**
          * @brief Gets a user command based on the currently displayed game grid. Most of the parameters are to enable the
@@ -47,17 +47,17 @@ namespace TerminalGames
          * @return std::tuple<uint32_t, uint32_t> The user command from the user in the for <row, column>.
          */
         static std::tuple<uint32_t, uint32_t> GetUserCommandFromGameGrid(
-            const std::tuple<uint32_t, uint32_t> &p_startingGridLocation,
-            const PageBuilder &p_pageBuilder,
-            const GameInfo &p_gameInfo,
-            const bool &p_displayGetUserCommandPage);
+            const std::tuple<uint32_t, uint32_t>& p_startingGridLocation,
+            const PageBuilder& p_pageBuilder,
+            const GameInfo& p_gameInfo,
+            const bool& p_displayGetUserCommandPage);
 
         /**
          * @brief Clears and then prints to the terminal.
          *
          * @param output The string to output to the terminal.
          */
-        static void PrintOutput(const std::string &p_output);
+        static void PrintOutput(const std::string& p_output);
 
         /**
          * @brief Clears the terminal.
@@ -77,7 +77,7 @@ namespace TerminalGames
          *
          * @param p_cursorVisibility Whether the cursor should be visible.
          */
-        static void SetCursorVisibility(const bool &p_cursorVisibility);
+        static void SetCursorVisibility(const bool& p_cursorVisibility);
 
         /**
          * @brief Wrapper for Windows.h SetConsoleCursorPosition()
@@ -85,6 +85,6 @@ namespace TerminalGames
          * @param p_xCoord The horizontal position to set the cursor to.
          * @param p_yCoord The vertical position to set the cursor to.
          */
-        static void SetCursorPosition(const int16_t &p_xCoord, const int16_t &p_yCoord);
+        static void SetCursorPosition(const int16_t& p_xCoord, const int16_t& p_yCoord);
     };
 }

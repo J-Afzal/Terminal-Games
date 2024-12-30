@@ -21,7 +21,7 @@ namespace TerminalGames
          *
          * @param p_onlyUseAscii Whether to use only ASCII characters (true) or to also use ANSI escapes codes (false).
          */
-        explicit TicTacToe(const bool &p_onlyUseAscii);
+        explicit TicTacToe(const bool& p_onlyUseAscii);
 
     private:
         PageBuilder m_pageBuilder;
@@ -107,13 +107,13 @@ namespace TerminalGames
          * @return true If the command is valid.
          * @return false If the command is not valid.
          */
-        bool ValidateCommand(const std::tuple<uint32_t, uint32_t> &p_command);
+        bool ValidateCommand(const std::tuple<uint32_t, uint32_t>& p_command);
 
         /**
          * @brief Executes the command against the game grid.
          *
          * @param p_command The command in the form of <row, column>.
          */
-        void ExecuteGeneralCommand(const std::tuple<uint32_t, uint32_t> &p_command);
+        void ExecuteGeneralCommand(const std::tuple<uint32_t, uint32_t>& p_command);
     };
 }

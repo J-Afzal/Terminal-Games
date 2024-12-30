@@ -13,7 +13,10 @@
 
 namespace TerminalGames
 {
-    TicTacToe::TicTacToe(const bool &p_onlyUseAscii) : m_computerSpeed(0), m_turnCount(0), m_hasWinner(false)
+    TicTacToe::TicTacToe(const bool& p_onlyUseAscii) :
+        m_computerSpeed(0),
+        m_turnCount(0),
+        m_hasWinner(false)
     {
         m_pageBuilder.SetProperties(Pages::TICTACTOE, p_onlyUseAscii);
         m_randomNumberGenerator.seed(std::chrono::system_clock::now().time_since_epoch().count());
@@ -188,14 +191,14 @@ namespace TerminalGames
         }
     }
 
-    bool TicTacToe::ValidateCommand(const std::tuple<uint32_t, uint32_t> &p_command)
+    bool TicTacToe::ValidateCommand(const std::tuple<uint32_t, uint32_t>& p_command)
     {
         const auto COMMAND_FIND_LOCATION = ImplementStdRangesFind(m_commandsRemaining.begin(), m_commandsRemaining.end(), p_command);
 
         return COMMAND_FIND_LOCATION != m_commandsRemaining.end();
     }
 
-    void TicTacToe::ExecuteGeneralCommand(const std::tuple<uint32_t, uint32_t> &p_command)
+    void TicTacToe::ExecuteGeneralCommand(const std::tuple<uint32_t, uint32_t>& p_command)
     {
         const auto COMMAND_FIND_LOCATION = ImplementStdRangesFind(m_commandsRemaining.begin(), m_commandsRemaining.end(), p_command);
 
