@@ -51,7 +51,7 @@ jobs:
                       export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
                   fi
 
-                  pwsh -command "Import-Module ./scripts/Linters.psm1; Test-TerminalGamesCode -Verbose"
+                  pwsh -command "Import-Module ./scripts/Linters.psm1; Test-CodeUsingClangTools -Verbose"
 
             - name: Build Project
               run: cmake --build ./build --config Release

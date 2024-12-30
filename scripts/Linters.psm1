@@ -5,8 +5,8 @@ $ErrorActionPreference = "Stop"
     Runs clang-tidy against all git-tracked C++ files (*.cpp and *.hpp).
 
     .DESCRIPTION
-    Runs clang-tidy against all git-tracked C++ files (*.cpp and *.hpp). CMake must be configured in the ./build/ directory
-    from the root as 'compile_commands.json' file is used by clang-tidy.
+    Runs clang-tidy and clang-format against all git-tracked C++ files (*.cpp and *.hpp). CMake must be configured in the
+    ./build/ directory as the 'compile_commands.json' file is needed by clang-tidy.
 
     .INPUTS
     None.
@@ -16,15 +16,17 @@ $ErrorActionPreference = "Stop"
 
     .EXAMPLE
     Import-Module Linters.psm1
-    Test-TerminalGamesCode -Verbose
+    Test-CodeUsingClangTools -Verbose
 #>
 
-function Test-TerminalGamesCode {
+function Test-CodeUsingClangTools {
 
     [CmdletBinding()]
-    param()
+    param(
+        # TODO: param to add fixing for clang format and tidy
+    )
 
-    Write-Output "##[section]Running Test-TerminalGamesCode..."
+    Write-Output "##[section]Running Test-CodeUsingClangTools..."
 
     Write-Output "##[section]Retrieving all files to analyse..."
 
@@ -33,27 +35,47 @@ function Test-TerminalGamesCode {
     Write-Verbose "##[debug]Retrieved all files to analyse:"
     $allFilesToTest | ForEach-Object { "##[debug]'$_'" } | Write-Verbose
 
-    $filesWithErrors = @()
+    $filesWithClangTidyErrors = @()
+    $filesWithClangFormatErrors = @()
 
     foreach ($file in $allFilesToTest) {
 
-        Write-Output "##[section]Running Test-TerminalGamesCode against '$file'..."
-
         $ErrorActionPreference = "Continue"
+
+        Write-Output "##[section]Running clang-tidy against '$file'..."
+
 
         (clang-tidy $file -p ./build 2>&1) | ForEach-Object { "##[debug]$_" } | Write-Verbose
 
-        $ErrorActionPreference = "Stop"
 
         if ($LASTEXITCODE -eq 1) {
-            $filesWithErrors += $file
+            $filesWithClangTidyErrors += $file
         }
 
+        Write-Output "##[section]Running clang-format against '$file'..."
+
+        (clang-format --Werror --dry-run $file) | ForEach-Object { "##[debug]$_" } | Write-Verbose
+
+
+        if ($LASTEXITCODE -eq 1) {
+            $filesWithClangFormatErrors += $file
+        }
+
+        $ErrorActionPreference = "Stop"
     }
 
-    if ($filesWithErrors.Count -gt 0) {
-        Write-Verbose "##[debug]The following files do not conform to standards:"
-        $filesWithErrors | ForEach-Object { "##[debug]$_" } | Write-Verbose
+    if ($filesWithClangTidyErrors.Count -gt 0) {
+        Write-Verbose "##[debug]The following files do not conform to clang-tidy standards:"
+        $filesWithClangTidyErrors | ForEach-Object { "##[debug]$_" } | Write-Verbose
+    }
+
+    if ($filesWithClangFormatErrors.Count -gt 0) {
+        Write-Verbose "##[debug]The following files do not conform to clang-format standards:"
+        $filesWithClangFormatErrors | ForEach-Object { "##[debug]$_" } | Write-Verbose
+    }
+
+    if (($filesWithClangTidyErrors.Count -gt 0) -or ($filesWithClangFormatErrors.Count -gt 0))
+    {
         Write-Error "##[error]Please resolve the above errors!"
     }
 
