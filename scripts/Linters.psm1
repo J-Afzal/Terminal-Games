@@ -51,15 +51,13 @@ function Test-CodeUsingClangTools {
 
         Write-Output "##[section]Running clang-tidy against '$file'..."
 
-
         (clang-tidy $file -p ./build 2>&1) | ForEach-Object { "##[debug]$_" } | Write-Verbose
-
 
         if ($LASTEXITCODE -eq 1) {
 
             if ($FixClangTidyErrors) {
                 Write-Output "##[debug]Fixing clang-tidy issues in '$file'..."
-                (clang-tidy $file -p ./build 2>&1) | ForEach-Object { "##[debug]$_" } | Write-Verbose
+                (clang-tidy --fix $file -p ./build 2>&1) | ForEach-Object { "##[debug]$_" } | Write-Verbose
 
                 if ($LASTEXITCODE -eq 1) {
                     Write-Output "##[debug]clang-tidy issues still exist in '$file'..."
