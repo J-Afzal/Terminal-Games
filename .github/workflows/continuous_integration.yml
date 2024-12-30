@@ -26,20 +26,16 @@ jobs:
               run: |
                   if [ "${{ matrix.os }}" = "macos-latest" ]
                   then
-                      brew upgrade
                       brew install ninja
                   fi
 
                   if [ "${{ matrix.os }}" = "ubuntu-latest" ]
                   then
-                      sudo apt-get update
-                      sudo apt-get upgrade
                       sudo apt-get install ninja-build
                   fi
 
                   if [ "${{ matrix.os }}" = "windows-latest" ]
                   then
-                      choco upgrade all --force
                       choco install ninja -y
                   fi
 
@@ -51,20 +47,25 @@ jobs:
               run: |
                   if [ "${{ matrix.os }}" = "macos-latest" ]
                   then
-                      # To override apple clang and add clang-tidy to path
+                      # Override pre-installed clang and add to path
                       brew install llvm
                       export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
                   fi
 
                   if [ "${{ matrix.os }}" = "ubuntu-latest" ]
                   then
-                      # Install brew to get latest llvm
+                      # Install brew to get latest llvm and clang tools
                       test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
                       test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
                       echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bashrc
                       export PATH="$HOME/.linuxbrew/bin:$PATH"
 
                       brew install llvm
+                  fi
+
+                  if [ "${{ matrix.os }}" = "windows-latest" ]
+                  then
+                      choco upgrade llvm -y
                   fi
 
                   pwsh -command "Import-Module ./scripts/Linters.psm1; Test-CodeUsingClangTools -Verbose"
