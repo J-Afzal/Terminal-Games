@@ -114,34 +114,34 @@ namespace TerminalGames
         {
 #ifdef _WIN32
 
-        uint32_t gridLeftPad = 0;
-        uint32_t gridTopPad = 0;
-        uint32_t gridElementWidth = 0;
-        uint32_t gridElementHeight = 0;
+            uint32_t gridLeftPad = 0;
+            uint32_t gridTopPad = 0;
+            uint32_t gridElementWidth = 0;
+            uint32_t gridElementHeight = 0;
 
-        switch (p_pageBuilder.GetCurrentPage())
-        {
-        case Pages::TICTACTOE:
-            maxColumn = G_TICTACTOE_BOARD_WIDTH - 1;
-            maxRow = G_TICTACTOE_BOARD_HEIGHT - 1;
-            gridLeftPad = G_TICTACTOE_GRID_LEFT_PAD;
-            gridTopPad = G_TICTACTOE_GRID_TOP_PAD;
-            gridElementWidth = G_TICTACTOE_GRID_ELEMENT_WIDTH;
-            gridElementHeight = G_TICTACTOE_GRID_ELEMENT_HEIGHT;
-            break;
+            switch (p_pageBuilder.GetCurrentPage())
+            {
+            case Pages::TICTACTOE:
+                maxColumn = G_TICTACTOE_BOARD_WIDTH - 1;
+                maxRow = G_TICTACTOE_BOARD_HEIGHT - 1;
+                gridLeftPad = G_TICTACTOE_GRID_LEFT_PAD;
+                gridTopPad = G_TICTACTOE_GRID_TOP_PAD;
+                gridElementWidth = G_TICTACTOE_GRID_ELEMENT_WIDTH;
+                gridElementHeight = G_TICTACTOE_GRID_ELEMENT_HEIGHT;
+                break;
 
-        case Pages::BATTLESHIPS:
-            maxColumn = G_BATTLESHIPS_BOARD_WIDTH - 1;
-            maxRow = G_BATTLESHIPS_BOARD_HEIGHT - 1;
-            gridLeftPad = G_BATTLESHIPS_GRID_LEFT_PAD;
-            gridTopPad = G_BATTLESHIPS_GRID_TOP_PAD;
-            gridElementWidth = G_BATTLESHIPS_GRID_ELEMENT_WIDTH;
-            gridElementHeight = G_BATTLESHIPS_GRID_ELEMENT_HEIGHT;
-            break;
+            case Pages::BATTLESHIPS:
+                maxColumn = G_BATTLESHIPS_BOARD_WIDTH - 1;
+                maxRow = G_BATTLESHIPS_BOARD_HEIGHT - 1;
+                gridLeftPad = G_BATTLESHIPS_GRID_LEFT_PAD;
+                gridTopPad = G_BATTLESHIPS_GRID_TOP_PAD;
+                gridElementWidth = G_BATTLESHIPS_GRID_ELEMENT_WIDTH;
+                gridElementHeight = G_BATTLESHIPS_GRID_ELEMENT_HEIGHT;
+                break;
 
-        default:
-            break;
-        }
+            default:
+                break;
+            }
             SetCursorVisibility(true);
             SetCursorPosition({static_cast<int16_t>(gridLeftPad + (currentColumn * gridElementWidth)), static_cast<int16_t>(gridTopPad + (currentRow * gridElementHeight))});
 #else
