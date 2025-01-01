@@ -690,10 +690,10 @@ function Test-CSpellConfigFile {
     TODO
 
     .INPUTS
-    None.
+    TODO
 
     .OUTPUTS
-    System.Object[]
+    TODO
 
     .EXAMPLE
     Import-Module Linters.psm1
@@ -704,6 +704,7 @@ function Compare-ObjectExact {
     # TODO: document and add write-outputs, verbose, etc..
 
     [CmdletBinding()]
+    [OutputType([System.Object[]])]
     param(
         [Parameter(Mandatory = $true)]
         [System.Object[]]
