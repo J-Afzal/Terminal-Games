@@ -2,6 +2,172 @@ $ErrorActionPreference = "Stop"
 
 <#
     .SYNOPSIS
+    Wrapper around cspell.
+
+    .DESCRIPTION
+    Raises an error if linting errors found.
+
+    .INPUTS
+    None.
+
+    .OUTPUTS
+    None.
+
+    .EXAMPLE
+    Import-Module Linters.psm1
+    Test-CodeUsingCSpell -Verbose
+#>
+
+function Test-CodeUsingCSpell {
+
+    [CmdletBinding()]
+    param()
+
+    Write-Output "##[section]Running Test-CodeUsingCSpell..."
+
+    Write-Output "##[section]Retrieving all files to test against cspell..."
+    $allFilesToTest = git ls-files -c | ForEach-Object { if (($_.Split(".")[-1] -NotIn ("ico", "png")) -And ($_.Split(".")[-2] -ne "package-lock")) { $_ } }
+
+    Write-Verbose "##[debug]Retrieved all files to test against cspell:"
+    $allFilesToTest | ForEach-Object { "##[debug]'$_'" } | Write-Verbose
+
+    $filesWithErrors = @()
+
+    foreach ($file in $allFilesToTest) {
+
+        Write-Output "##[section]Running cspell against '$file'..."
+
+        (npx -c "cspell --unique --show-context --no-progress --no-summary $file") | ForEach-Object { "##[debug]$_" } | Write-Verbose
+
+        if ($LASTEXITCODE -eq 1) {
+            $filesWithErrors += $file
+        }
+    }
+
+    if ($filesWithErrors.Count -gt 0) {
+        Write-Verbose "##[debug]The following files have cspell errors:"
+        $filesWithErrors | ForEach-Object { "##[debug]$_" } | Write-Verbose
+        Write-Error "##[error]Please resolve the above errors!"
+    }
+
+    else {
+        Write-Output "##[section]All files conform to cspell standards!"
+    }
+}
+
+<#
+    .SYNOPSIS
+    Wrapper around prettier.
+
+    .DESCRIPTION
+    Raises an error if linting errors found.
+
+    .INPUTS
+    None.
+
+    .OUTPUTS
+    None.
+
+    .EXAMPLE
+    Import-Module Linters.psm1
+    Test-CodeUsingPrettier -Verbose
+#>
+
+function Test-CodeUsingPrettier {
+
+    [CmdletBinding()]
+    param()
+
+    Write-Output "##[section]Running Test-CodeUsingPrettier..."
+
+    Write-Output "##[section]Retrieving all files to test against prettier..."
+    $allFilesToTest = git ls-files -c | ForEach-Object { if (($_.Split(".")[-1] -In ("clang-format", "clang-tidy", "json", "md", "yml")) -And ($_.Split(".")[-2] -ne "package-lock")) { $_ } }
+
+    Write-Verbose "##[debug]Retrieved all files to test against prettier:"
+    $allFilesToTest | ForEach-Object { "##[debug]'$_'" } | Write-Verbose
+
+    $filesWithErrors = @()
+
+    foreach ($file in $allFilesToTest) {
+
+        Write-Output "##[section]Running prettier against '$file'..."
+
+        (npx -c "prettier $file --debug-check") | ForEach-Object { "##[debug]$_" } | Write-Verbose
+
+        if ($LASTEXITCODE -eq 1) {
+            $filesWithErrors += $file
+        }
+    }
+
+    if ($filesWithErrors.Count -gt 0) {
+        Write-Verbose "##[debug]The following files have prettier errors:"
+        $filesWithErrors | ForEach-Object { "##[debug]$_" } | Write-Verbose
+        Write-Error "##[error]Please resolve the above errors!"
+    }
+
+    else {
+        Write-Output "##[section]All files conform to prettier standards!"
+    }
+}
+
+<#
+    .SYNOPSIS
+    Wrapper around PSScriptAnalyzer.
+
+    .DESCRIPTION
+    Raises an error if linting errors found.
+
+    .INPUTS
+    None.
+
+    .OUTPUTS
+    None.
+
+    .EXAMPLE
+    Import-Module Linters.psm1
+    Test-CodeUsingPSScriptAnalyzer -Verbose
+#>
+
+function Test-CodeUsingPSScriptAnalyzer {
+
+    [CmdletBinding()]
+    param()
+
+    Write-Output "##[section]Running Test-CodeUsingPSScriptAnalyzer..."
+
+    Write-Output "##[section]Retrieving all files to test against PSScriptAnalyzer..."
+    $allFilesToTest = git ls-files -c | ForEach-Object { if ($_.Split(".")[-1] -In ("ps1", "psd1", "psm1")) { $_ } }
+
+    Write-Verbose "##[debug]Retrieved all files to test against PSScriptAnalyzer:"
+    $allFilesToTest | ForEach-Object { "##[debug]'$_'" } | Write-Verbose
+
+    $filesWithErrors = @()
+
+    foreach ($file in $allFilesToTest) {
+
+        Write-Output "##[section]Running PSScriptAnalyzer against '$file'..."
+
+        Invoke-ScriptAnalyzer $file
+        $output = Invoke-ScriptAnalyzer $file
+
+        if ($output.Length -gt 0) {
+            $filesWithErrors += $file
+        }
+    }
+
+    if ($filesWithErrors.Count -gt 0) {
+        Write-Verbose "##[debug]The following files have PSScriptAnalyzer errors:"
+        $filesWithErrors | ForEach-Object { "##[debug]$_" } | Write-Verbose
+        Write-Error "##[error]Please resolve the above errors!"
+    }
+
+    else {
+        Write-Output "##[section]All files conform to PSScriptAnalyzer standards!"
+    }
+}
+
+<#
+    .SYNOPSIS
     Runs clang-tidy against all git-tracked C++ files (*.cpp and *.hpp).
 
     .DESCRIPTION
@@ -16,38 +182,35 @@ $ErrorActionPreference = "Stop"
 
     .EXAMPLE
     Import-Module Linters.psm1
-    Test-CodeUsingClangTools -Verbose
+    Test-CodeUsingClang -Verbose
 #>
 
-function Test-CodeUsingClangTools {
+function Test-CodeUsingClang {
 
     [CmdletBinding()]
     param
     (
-        [Parameter(Mandatory=$false)]
+        [Parameter(Mandatory = $false)]
         [switch]
         $FixClangTidyErrors,
 
-        [Parameter(Mandatory=$false)]
+        [Parameter(Mandatory = $false)]
         [switch]
         $FixClangFormatErrors
     )
 
-    Write-Output "##[section]Running Test-CodeUsingClangTools..."
+    Write-Output "##[section]Running Test-CodeUsingClang..."
 
     Write-Output "##[debug]Using the following clang-tidy version..."
-
     (clang-tidy --version 2>&1) | ForEach-Object { "##[debug]$_" } | Write-Verbose
 
     Write-Output "##[debug]Using the following clang-format version..."
-
     (clang-format --version 2>&1) | ForEach-Object { "##[debug]$_" } | Write-Verbose
 
-    Write-Output "##[section]Retrieving all files to analyse..."
-
+    Write-Output "##[section]Retrieving all files to test..."
     $allFilesToTest = git ls-files -c | ForEach-Object { if ($_.Split(".")[-1] -In ("cpp", "hpp")) { "./$_" } }
 
-    Write-Verbose "##[debug]Retrieved all files to analyse:"
+    Write-Verbose "##[debug]Retrieved all files to test:"
     $allFilesToTest | ForEach-Object { "##[debug]'$_'" } | Write-Verbose
 
     $filesWithClangTidyErrors = @()
@@ -58,7 +221,6 @@ function Test-CodeUsingClangTools {
         $ErrorActionPreference = "Continue"
 
         Write-Output "##[section]Running clang-tidy against '$file'..."
-
         (clang-tidy $file -p ./build 2>&1) | ForEach-Object { "##[debug]$_" } | Write-Verbose
 
         if ($LASTEXITCODE -eq 1) {
@@ -77,14 +239,12 @@ function Test-CodeUsingClangTools {
                 }
             }
 
-            else
-            {
+            else {
                 $filesWithClangTidyErrors += $file
             }
         }
 
         Write-Output "##[section]Running clang-format against '$file'..."
-
         (clang-format --Werror --dry-run $file) | ForEach-Object { "##[debug]$_" } | Write-Verbose
 
         if ($LASTEXITCODE -eq 1) {
@@ -103,8 +263,7 @@ function Test-CodeUsingClangTools {
                 }
             }
 
-            else
-            {
+            else {
                 $filesWithClangFormatErrors += $file
             }
         }
@@ -122,14 +281,12 @@ function Test-CodeUsingClangTools {
         $filesWithClangFormatErrors | ForEach-Object { "##[debug]$_" } | Write-Verbose
     }
 
-    if (($filesWithClangTidyErrors.Count -gt 0) -or ($filesWithClangFormatErrors.Count -gt 0))
-    {
+    if (($filesWithClangTidyErrors.Count -gt 0) -or ($filesWithClangFormatErrors.Count -gt 0)) {
         Write-Error "##[error]Please resolve the above errors!"
     }
 
-    else
-    {
-        Write-Output "##[section]All code conforms to standards."
+    else {
+        Write-Output "##[section]All files conform to standards!"
     }
 }
 

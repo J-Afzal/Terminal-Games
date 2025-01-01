@@ -69,7 +69,7 @@ jobs:
                       choco upgrade llvm -y
                   fi
 
-                  pwsh -command "Import-Module ./scripts/Linters.psm1; Test-CodeUsingClangTools -Verbose"
+                  pwsh -command "Import-Module ./scripts/Linters.psm1; Test-CodeUsingClang -Verbose"
 
             - name: Build Project
               run: cmake --build ./build --config Release
@@ -100,15 +100,22 @@ jobs:
               run: npm install
 
             - name: Run cspell
-              run: npx cspell .
-
-            - name: Run prettier (for JSON linting)
               if: success() || failure()
-              run: npx prettier . --check
+              run: |
+                  Import-Module ./scripts/Linters.psm1
+                  Test-CodeUsingCSpell -Verbose
 
-            - name: Run PSScriptAnalyzer (for PowerShell linting)
+            - name: Run prettier
               if: success() || failure()
-              run: Invoke-ScriptAnalyzer -Path . -Recurse -Severity Information
+              run: |
+                  Import-Module ./scripts/Linters.psm1
+                  Test-CodeUsingPrettier -Verbose
+
+            - name: Run PSScriptAnalyzer
+              if: success() || failure()
+              run: |
+                  Import-Module ./scripts/Linters.psm1
+                  Test-CodeUsingPSScriptAnalyzer -Verbose
 
             - name: Run gitattributes linter
               if: success() || failure()
