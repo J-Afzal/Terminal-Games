@@ -295,7 +295,12 @@ function Test-CodeUsingClang {
     Lints the .gitattributes file.
 
     .DESCRIPTION
-    Raises an error if linting issues are found and lists all lines which contain linting issues.
+    Raises an error if linting issues are found for the following issues:
+        - Duplicate empty lines
+        - Duplicate entries
+        - Redundant entries
+        - Malformed entries
+        - Missing entries
 
     .INPUTS
     None.
@@ -316,78 +321,144 @@ function Test-GitAttributesFile {
     Write-Output "##[section]Running Test-GitattributesFile..."
 
     Write-Output "##[section]Retrieving contents of .gitattributes..."
-
     $gitattributesFileContents = @(Get-Content -Path ./.gitattributes)
-
     Write-Verbose "##[debug]Finished retrieving the contents .gitattributes."
 
-    $gitattributesFileContentsWithoutComments = @()
-    $linesNotMatchingCodeStandards = @()
-    $linesNotMatchingCommentStandards = @()
+    Write-Output "##[section]Retrieving all unique file extensions and unique files without a file extension..."
+    $gitTrackedFiles = git ls-files -c | Split-Path -Leaf
+    $uniqueGitTrackedFileExtensions = $gitTrackedFiles | ForEach-Object { if ($_.Split(".").Length -gt 1) { "\.$($_.Split(".")[-1])" } } | Sort-Object | Select-Object -Unique
+    $uniqueGitTrackedFileNamesWithoutExtensions = $gitTrackedFiles | ForEach-Object { if ($_.Split(".").Length -eq 1) { $_ } } | Sort-Object | Select-Object -Unique
 
-    Write-Output "##[section]Starting .gitattributes validation..."
+    Write-Verbose "##[debug]Retrieved unique file extensions:"
+    $uniqueGitTrackedFileExtensions | ForEach-Object { "##[debug]$($_.TrimStart("\"))" } | Write-Verbose
+
+    Write-Verbose "##[debug]Retrieved unique files without a file extension:"
+    $uniqueGitTrackedFileNamesWithoutExtensions | ForEach-Object { "##[debug]$_" } | Write-Verbose
+
+    $uniqueGitTrackedFileExtensionsAndFileNamesWithoutExtensions = $uniqueGitTrackedFileExtensions + $uniqueGitTrackedFileNamesWithoutExtensions
+
+    Write-Output "##[section]Checking .gitattributes formatting..."
+    $gitattributesFileContentsWithoutComments = @()
+    $previouslyFoundEntries = @()
+    $lintingErrors = @()
+    $lineNumber = 0;
+    $previousLineWasBlank = $false
 
     foreach ($line in $gitattributesFileContents) {
+        $lineNumber += 1;
 
         if ($line -eq "") {
             Write-Verbose "##[debug]Current line is blank: '$line'"
-            continue
+
+            if ($previousLineWasBlank) {
+                $lintingErrors += @{lineNumber = $lineNumber; line = "'$line'"; errorMessage = "Duplicate blank line." }
+            }
+
+            $previousLineWasBlank = $true
         }
 
-        # Match every before and including '#'
-        $lineBeforeAndIncludingComment = $line | Select-String -Pattern ".*#"
+        else {
+            # Match every before and including '#'
+            $lineBeforeAndIncludingComment = $line | Select-String -Pattern ".*#"
 
-        if ($null -eq $lineBeforeAndIncludingComment) {
-            Write-Verbose "##[debug]Current line is code: '$line'"
+            if ($null -eq $lineBeforeAndIncludingComment) {
+                Write-Verbose "##[debug]Current line is code: '$line'"
 
-            if (-not (
-                    $line -Match "^\* +text=auto +eol=lf$" -or
-                    # File extensions with or without * wildcard
-                    $line -Match "^\*?\.[a-z0-9-]+ +binary$" -or
-                    $line -Match "^\*?\.[a-z0-9-]+ +text$" -or
-                    $line -Match "^\*?\.[a-z0-9-]+ +text +eol=[a-z]+$" -or
-                    $line -Match "^\*?\.[a-z0-9-]+ +text +diff=[a-z]+$" -or
-                    $line -Match "^\*?\.[a-z0-9-]+ +text +eol=[a-z]+ +diff=[a-z]+$" -or
-                    # Files
-                    $line -Match "^[a-z0-9-]+ +binary$" -or
-                    $line -Match "^[a-z0-9-]+ +text$" -or
-                    $line -Match "^[a-z0-9-]+ +text +eol=[a-z]+$" -or
-                    $line -Match "^[a-z0-9-]+ +text +diff=[a-z]+$" -or
-                    $line -Match "^[a-z0-9-]+ +text +eol=[a-z]+ +diff=[a-z]+$"
-                )) {
-                $linesNotMatchingCodeStandards += $line
+                if (-not (
+                        $line -Match "^\* +text=auto +eol=lf$" -or
+                        # File extensions with or without * wildcard
+                        $line -Match "^\*?\.[a-z0-9-]+ +binary$" -or
+                        $line -Match "^\*?\.[a-z0-9-]+ +text$" -or
+                        $line -Match "^\*?\.[a-z0-9-]+ +text +eol=[a-z]+$" -or
+                        $line -Match "^\*?\.[a-z0-9-]+ +text +diff=[a-z]+$" -or
+                        $line -Match "^\*?\.[a-z0-9-]+ +text +eol=[a-z]+ +diff=[a-z]+$" -or
+                        # Files without an extension
+                        $line -Match "^[a-zA-Z0-9-]+ +binary$" -or
+                        $line -Match "^[a-zA-Z0-9-]+ +text$" -or
+                        $line -Match "^[a-zA-Z0-9-]+ +text +eol=[a-z]+$" -or
+                        $line -Match "^[a-zA-Z0-9-]+ +text +diff=[a-z]+$" -or
+                        $line -Match "^[a-zA-Z0-9-]+ +text +eol=[a-z]+ +diff=[a-z]+$"
+                    )) {
+                    $lintingErrors += @{lineNumber = $lineNumber; line = "'$line'"; errorMessage = "Non-comment lines must match one of the following: '* text=auto', '[FILE]/[FILE EXTENSION] binary', '[FILE]/[FILE EXTENSION] text', '[FILE]/[FILE EXTENSION] text eol=[TEXT]', '[FILE]/[FILE EXTENSION] text diff=[TEXT]' or '[FILE]/[FILE EXTENSION] text eol=[TEXT] diff=[TEXT]'." }
+                }
+
+                else {
+                    # Used to check for missing entries later
+                    $gitattributesFileContentsWithoutComments += $line
+
+                    # Check for duplicate and redundant entries
+                    $fileExtensionOrFileWithoutExtension = $line | Select-String -Pattern "(^\*?\.[a-z0-9-]+)|^[a-zA-Z0-9-]+"
+
+                    if ($null -ne $fileExtensionOrFileWithoutExtension) {
+                        $fileExtensionOrFileWithoutExtension = $fileExtensionOrFileWithoutExtension.Matches.Value
+
+                        if ($uniqueGitTrackedFileExtensions.Contains("\$($fileExtensionOrFileWithoutExtension.TrimStart("*"))") -or
+                            $uniqueGitTrackedFileNamesWithoutExtensions.Contains($fileExtensionOrFileWithoutExtension)) {
+
+                            if ($previouslyFoundEntries.Contains($fileExtensionOrFileWithoutExtension) -or
+                                $previouslyFoundEntries.Contains($fileExtensionOrFileWithoutExtension)) {
+                                $lintingErrors += @{lineNumber = $lineNumber; line = "'$line'"; errorMessage = "Duplicate entry." }
+                            }
+
+                            else {
+                                $previouslyFoundEntries += $fileExtensionOrFileWithoutExtension
+                            }
+                        }
+
+                        else {
+                            $lintingErrors += @{lineNumber = $lineNumber; line = "'$line'"; errorMessage = "Redundant entry." }
+                        }
+                    }
+                }
+            }
+
+            elseif ($lineBeforeAndIncludingComment.Matches.Value.Length -eq 1) {
+                Write-Verbose "##[debug]Current line is comment: '$line'"
             }
 
             else {
-                $gitattributesFileContentsWithoutComments += $line
+                Write-Verbose "##[debug]Current line is a mixture of comment and code: '$line'"
+                $lintingErrors += @{lineNumber = $lineNumber; line = "'$line'"; errorMessage = "Lines must be blank, entirely comment or entirely non-comment." }
             }
 
-            continue
+            $previousLineWasBlank = $false
+        }
+    }
+
+    Write-Verbose "##[debug]Finished checking .gitattributes formatting."
+
+    Write-Output "##[section]Checking all unique file extensions and files without extensions have a .gitattributes entry:"
+
+    foreach ($fileExtensionOrFileNameWithoutExtension in $uniqueGitTrackedFileExtensionsAndFileNamesWithoutExtensions) {
+
+        $foundMatch = $false
+
+        foreach ($line in $gitattributesFileContentsWithoutComments) {
+
+            if ($line -Match $fileExtensionOrFileNameWithoutExtension ) {
+                Write-Verbose "##[debug]$fileExtension entry found in: '$line'"
+                $foundMatch = $true
+                break
+            }
         }
 
-        if ($lineBeforeAndIncludingComment.matches.value.Length -eq 1) {
-            Write-Verbose "##[debug]Current line is comment: '$line'"
-            continue
+        if (-not $foundMatch) {
+            $lintingErrors += @{lineNumber = "N/A"; line = "N/A"; errorMessage = "'$($fileExtensionOrFileNameWithoutExtension.TrimStart("\"))' does not have a .gitattributes entry." }
         }
-
-        Write-Verbose "##[debug]Current line is a mixture of comment and code: '$line'"
-        $linesNotMatchingCommentStandards += $line
     }
 
-    Write-Verbose "##[debug]Finished .gitattributes validation."
+    Write-Verbose "##[debug]Finished checking that all unique file extensions and files without extensions have a .gitattributes entry."
 
-    if ($linesNotMatchingCodeStandards.Length -gt 0) {
-        Write-Output "##[error]Standards require the below lines to be one of: '* text=auto', '[FILE]/[FILE EXTENSION] binary', '[FILE]/[FILE EXTENSION] text', '[FILE]/[FILE EXTENSION] text eol=[TEXT]', '[FILE]/[FILE EXTENSION] text diff=[TEXT]' or '[FILE]/[FILE EXTENSION] text eol=[TEXT] diff=[TEXT]'"
-        $linesNotMatchingCodeStandards | ForEach-Object { "##[error]'$_'" } | Write-Output
-    }
-
-    if ($linesNotMatchingCommentStandards.Length -gt 0) {
-        Write-Output "##[error]Standards require the below lines to be one of: blank, entirely comment or entirely non-comment:"
-        $linesNotMatchingCommentStandards | ForEach-Object { "##[error]'$_'" } | Write-Output
-    }
-
-    if (($linesNotMatchingCodeStandards.Length -gt 0) -or ($linesNotMatchingCommentStandards.Length -gt 0)) {
+    if ($lintingErrors.Length -gt 0) {
+        $lintingErrors | ForEach-Object { [PSCustomObject]$_ } | Format-Table -AutoSize -Wrap -Property lineNumber, line, errorMessage
         Write-Error "##[error]Please resolve the above errors!"
+    }
+
+    else {
+        Write-Output "##[section]All .gitattributes tests passed!"
+    }
+}
+
     }
 
     Write-Output "##[section]Retrieving all unique file extensions and unique files without a file extension..."
