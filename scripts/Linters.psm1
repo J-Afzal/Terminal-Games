@@ -5,7 +5,7 @@ $ErrorActionPreference = "Stop"
     Wrapper around cspell.
 
     .DESCRIPTION
-    Raises an error if linting errors found.
+    Raises an error if linting errors found (with exception of the package-lock.json file).
 
     .INPUTS
     None.
@@ -60,7 +60,7 @@ function Test-CodeUsingCSpell {
     Wrapper around prettier.
 
     .DESCRIPTION
-    Raises an error if linting errors found.
+    Raises an error if linting errors found (with exception of the package-lock.json file).
 
     .INPUTS
     None.
@@ -470,7 +470,7 @@ function Test-GitAttributesFile {
         - Invalid ordering of keys
         - Duplicate entries in ignorePaths, words and ignoreWords
         - Entries that are in both words and ignoreWords
-        - Entries in ignorePaths that are not present in gitignore
+        - Entries in ignorePaths that are not present in gitignore (with exception of the package-lock.json file)
         - Entries in words and ignoreWords that are not present in the codebase
 
     This function will throw errors for cspell.yml files that don't have any ignorePaths, words and ignoreWords values.
@@ -605,6 +605,12 @@ function Test-CSpellConfigFile {
         if (Compare-ObjectExact -ReferenceObject $cspellIgnorePathsSorted -DifferenceObject $cspellIgnorePaths) {
             $lintingErrors += @{lineNumber = "N/A"; line = "N/A"; errorMessage = "'ignorePaths' is not alphabetically ordered." }
         }
+
+        $gitignoreFileContents = @(Get-Content -Path ./.gitignore)
+
+        if (Compare-ObjectExact -ReferenceObject $gitignoreFileContents -DifferenceObject $cspellIgnorePaths) {
+            $lintingErrors += @{lineNumber = "N/A"; line = "N/A"; errorMessage = "'ignorePaths' does not match the entries in .gitignore." }
+        }
     }
 
     if ($cspellWords.Length -gt 1) {
@@ -656,23 +662,11 @@ function Test-CSpellConfigFile {
 
     Write-Output "##[debug]Finished checking if 'words' are found in 'ignoreWords'."
 
-
-
-    Write-Output "##[section]Checking that all gitignore values are found within 'ignorePaths'..."
-    
-    # TODO: Confirm all ignorePaths are found in gitignore (except package-lock.json)
-
-    Write-Output "##[debug]Finished that all gitignore values are found within 'ignorePaths'."
-
-
-
     Write-Output "##[section]Checking that all 'words' and 'ignoreWords' values are found in the codebase..."
 
     # TODO: Confirm all words and ignore words are found in the project files
 
     Write-Output "##[debug]Finished that all 'words' and 'ignoreWords' values are found in the codebase."
-
-
 
     if ($lintingErrors.Length -gt 0) {
         $lintingErrors | ForEach-Object { [PSCustomObject]$_ } | Format-Table -AutoSize -Wrap -Property lineNumber, line, errorMessage
@@ -750,4 +744,51 @@ function Compare-ObjectExact {
     return $errors
 }
 
+<#
+    .SYNOPSIS
+    Run all linting checks.
+
+    .DESCRIPTION
+    Intended to be used during development to manually check for linting issues before pushing a commit.
+    Raises an error at the first occurrence of a linting error.
+
+    .INPUTS
+    None.
+
+    .OUTPUTS
+    None.
+
+    .EXAMPLE
+    Import-Module Linters.psm1
+    Test-CodeUsingAllLinting -Verbose
+#>
+
+function Test-CodeUsingAllLinting {
+
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $false)]
+        [switch]
+        $FixClangTidyErrors,
+
+        [Parameter(Mandatory = $false)]
+        [switch]
+        $FixClangFormatErrors
+    )
+
+    Write-Output "##[section]Running Test-CodeUsingAllLinting..."
+
+    Test-CSpellConfigFile -Verbose
+
+    Test-CodeUsingCSpell -Verbose
+
+    Test-CodeUsingPrettier -Verbose
+
+    Test-CodeUsingPSScriptAnalyzer -Verbose
+
+    Test-GitAttributesFile -Verbose
+
+    Test-CodeUsingClang -Verbose -FixClangTidyErrors:$FixClangTidyErrors -FixClangFormatErrors:$FixClangFormatErrors
+
+    Write-Output "##[section]All linting tests passed!"
 }
