@@ -55,7 +55,7 @@ namespace TerminalGames
 
     void Battleships::UpdateGameInfo()
     {
-        m_gameInfo.m_battleshipsStruct = {
+        m_gameInfo.m_battleshipsGameInfo = {
             .m_boardOne = m_boardOne,
             .m_boardTwo = m_boardTwo,
             .m_shipsRemainingOne = m_shipsRemainingOne,

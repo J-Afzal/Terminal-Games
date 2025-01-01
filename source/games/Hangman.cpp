@@ -44,7 +44,7 @@ namespace TerminalGames
 
     void Hangman::UpdateGameInfo()
     {
-        m_gameInfo.m_hangmanStruct = {
+        m_gameInfo.m_hangmanGameInfo = {
             .m_incorrectGuesses = m_incorrectGuesses,
             .m_computerSpeedName = m_computerSpeedName,
             .m_currentGuessOfWord = m_currentGuessOfWord,

@@ -92,7 +92,7 @@ namespace TerminalGames
         uint32_t maxRow = 0;
         uint32_t maxColumn = 0;
 
-        switch (p_pageBuilder.GetCurrentPage())
+        switch (p_pageBuilder.GetCurrentPageType())
         {
         case Pages::TICTACTOE:
             maxColumn = G_TICTACTOE_BOARD_WIDTH - 1;
@@ -117,7 +117,7 @@ namespace TerminalGames
             uint32_t gridElementWidth = 0;
             uint32_t gridElementHeight = 0;
 
-            switch (p_pageBuilder.GetCurrentPage())
+            switch (p_pageBuilder.GetCurrentPageType())
             {
             case Pages::TICTACTOE:
                 maxColumn = G_TICTACTOE_BOARD_WIDTH - 1;
@@ -145,24 +145,24 @@ namespace TerminalGames
 #else
             GameInfo currentGameInfo = p_gameInfo;
 
-            switch (p_pageBuilder.GetCurrentPage())
+            switch (p_pageBuilder.GetCurrentPageType())
             {
             case Pages::TICTACTOE:
-                currentGameInfo.m_ticTacToeStruct.m_gameGrid.at(currentRow).at(currentColumn).at(0) = '#';
-                currentGameInfo.m_ticTacToeStruct.m_gameGrid.at(currentRow).at(currentColumn).at(2) = '#';
+                currentGameInfo.m_ticTacToeGameInfo.m_gameGrid.at(currentRow).at(currentColumn).at(0) = '#';
+                currentGameInfo.m_ticTacToeGameInfo.m_gameGrid.at(currentRow).at(currentColumn).at(2) = '#';
                 break;
 
             case Pages::BATTLESHIPS:
                 if (p_displayGetUserCommandPage)
                 {
-                    currentGameInfo.m_battleshipsStruct.m_boardTwo.at(currentRow).at(currentColumn).at(0) = '#';
-                    currentGameInfo.m_battleshipsStruct.m_boardTwo.at(currentRow).at(currentColumn).at(2) = '#';
+                    currentGameInfo.m_battleshipsGameInfo.m_boardTwo.at(currentRow).at(currentColumn).at(0) = '#';
+                    currentGameInfo.m_battleshipsGameInfo.m_boardTwo.at(currentRow).at(currentColumn).at(2) = '#';
                 }
 
                 else
                 {
-                    currentGameInfo.m_battleshipsStruct.m_boardOne.at(currentRow).at(currentColumn).at(0) = '#';
-                    currentGameInfo.m_battleshipsStruct.m_boardOne.at(currentRow).at(currentColumn).at(2) = '#';
+                    currentGameInfo.m_battleshipsGameInfo.m_boardOne.at(currentRow).at(currentColumn).at(0) = '#';
+                    currentGameInfo.m_battleshipsGameInfo.m_boardOne.at(currentRow).at(currentColumn).at(2) = '#';
                 }
                 break;
 

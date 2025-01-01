@@ -45,7 +45,7 @@ namespace TerminalGames
 
     void TicTacToe::UpdateGameInfo()
     {
-        m_gameInfo.m_ticTacToeStruct = {
+        m_gameInfo.m_ticTacToeGameInfo = {
             .m_gameGrid = m_gameGrid,
             .m_computerSpeedName = m_computerSpeedName,
             .m_currentPlayer = m_currentPlayer,

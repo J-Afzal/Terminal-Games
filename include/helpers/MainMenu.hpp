@@ -15,11 +15,6 @@ namespace TerminalGames
     {
     public:
         /**
-         * @brief Disable constructing a new Main Menu object with no arguments.
-         */
-        explicit MainMenu() = delete;
-
-        /**
          * @brief Construct a new MainMenu object (for CLI use).
          *
          * @param p_commandLineArguments List of all command line arguments
@@ -32,6 +27,21 @@ namespace TerminalGames
          * @param p_onlyUseAscii Whether to use only ASCII characters (true) or to also use ANSI escapes codes (false).
          */
         explicit MainMenu(const bool& p_onlyUseAscii);
+
+        /**
+         * @brief Destruct a MainMenu object.
+         */
+        ~MainMenu();
+
+        /**
+         * @brief Orchestration function for Terminal-Games.
+         */
+        void Run();
+
+        /**
+         * @brief Disable constructing a new Main Menu object with no arguments.
+         */
+        MainMenu() = delete;
 
         /**
          * @brief Disable constructing a new MainMenu object using copy constructor.
@@ -60,16 +70,6 @@ namespace TerminalGames
          * @param p_mainMenu The MainMenu to copy.
          */
         MainMenu& operator=(const MainMenu&& p_mainMenu) = delete;
-
-        /**
-         * @brief Destruct a MainMenu object.
-         */
-        ~MainMenu();
-
-        /**
-         * @brief Orchestration function for Terminal-Games.
-         */
-        void Run();
 
     private:
         /**
