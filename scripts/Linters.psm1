@@ -459,90 +459,295 @@ function Test-GitAttributesFile {
     }
 }
 
+<#
+    .SYNOPSIS
+    Lints the cspell.yml file.
+
+    .DESCRIPTION
+    Raises an error if linting issues are found for the following issues:
+        - Invalid version number
+        - Invalid language
+        - Invalid ordering of keys
+        - Duplicate entries in ignorePaths, words and ignoreWords
+        - Entries that are in both words and ignoreWords
+        - Entries in ignorePaths that are not present in gitignore
+        - Entries in words and ignoreWords that are not present in the codebase
+
+    This function will throw errors for cspell.yml files that don't have any ignorePaths, words and ignoreWords values.
+
+    .INPUTS
+    None.
+
+    .OUTPUTS
+    None.
+
+    .EXAMPLE
+    Import-Module Linters.psm1
+    Test-CSpellConfigFile -Verbose
+#>
+
+function Test-CSpellConfigFile {
+
+    [CmdletBinding()]
+    param()
+
+    Write-Output "##[section]Running Test-CSpellConfigFile..."
+
+    Write-Output "##[section]Retrieving contents of cspell.yml..."
+    $cspellFileContents = @(Get-Content -Path ./cspell.yml)
+    Write-Verbose "##[debug]Finished retrieving the contents cspell.yml."
+
+    Write-Output "##[section]Checking layout..."
+    $lintingErrors = @()
+
+    if ($cspellFileContents.Get(0) -ne "version: ""0.2""") {
+        $lintingErrors += @{lineNumber = 1; line = "'$($cspellFileContents.Get(0))'"; errorMessage = "Invalid version number. Expected 'version: ""0.2""'." }
     }
 
-    Write-Output "##[section]Retrieving all unique file extensions and unique files without a file extension..."
+    if ($cspellFileContents.Get(1) -ne "language: en-gb") {
+        $lintingErrors += @{lineNumber = 1; line = "'$($cspellFileContents.Get(1))'"; errorMessage = "Invalid language. Expected 'language: en-gb'." }
+    }
 
-    $gitTrackedFiles = git ls-files -c | Split-Path -Leaf
-    $uniqueGitTrackedFileExtensions = $gitTrackedFiles | ForEach-Object { if ($_.Split(".").Length -gt 1) { ".$($_.Split(".")[-1])" } } | Sort-Object | Select-Object -Unique
-    $uniqueGitTrackedFilesWithoutExtensions = $gitTrackedFiles | ForEach-Object { if ($_.Split(".").Length -eq 1) { $_ } } | Sort-Object | Select-Object -Unique
+    Write-Verbose "##[debug]Retrieving 'ignorePaths', 'words' and 'ignoreWords'..."
+    $cspellIgnorePaths = @()
+    $cspellWords = @()
+    $cspellIgnoreWords = @()
+    $orderOfKeys = @()
+    $currentKey = ""
+    $lineNumber = 0;
 
-    Write-Verbose "##[debug]Retrieved unique file extensions:"
-    $uniqueGitTrackedFileExtensions | ForEach-Object { "##[debug]$_" } | Write-Verbose
-    Write-Verbose "##[debug]Retrieved unique files without a file extension:"
-    $uniqueGitTrackedFilesWithoutExtensions | ForEach-Object { "##[debug]$_" } | Write-Verbose
+    foreach ($line in $cspellFileContents) {
 
-    $fileExtensionsMissingGitattributes = @()
-    $linesForDuplicateEntries = @()
+        $lineNumber += 1;
 
-    Write-Output "##[section]Checking all unique file extensions have a .gitattributes entry:"
+        if ($line -eq "") {
+            Write-Verbose "##[debug]Current line is blank: '$line'"
+            $lintingErrors += @{lineNumber = $lineNumber; line = "'$line'"; errorMessage = "Empty line." }
+            continue
+        }
 
-    foreach ($fileExtension in $uniqueGitTrackedFileExtensions) {
+        $key = $line | Select-String -Pattern "^[a-zA-Z]+"
 
-        $foundMatch = $false
+        if ($null -eq $key) {
 
-        foreach ($line in $gitattributesFileContentsWithoutComments) {
+            switch ($currentKey) {
+                ignorePaths {
+                    Write-Verbose "##[debug]Current line is an ignorePaths value: '$line'"
 
-            if ($line -Match "\$fileExtension" ) {
-                Write-Verbose "##[debug]$fileExtension entry found in: '$line'"
+                    # Assumes an indentation of four characters
+                    $value = $line.TrimStart("    - ")
 
-                if ($foundMatch) {
-                    $linesForDuplicateEntries += $line
+                    if ($cspellIgnorePaths.Contains($value)) {
+                        $lintingErrors += @{lineNumber = $lineNumber; line = "'$line'"; errorMessage = "Duplicate entry within ignorePaths." }
+                    }
+
+                    $cspellIgnorePaths += $line.TrimStart("    - ")
                 }
 
-                $foundMatch = $true
+                words {
+                    Write-Verbose "##[debug]Current line is an words value: '$line'"
+
+                    # Assumes an indentation of four characters
+                    $value = $line.TrimStart("    - ")
+
+                    if ($cspellWords.Contains($value)) {
+                        $lintingErrors += @{lineNumber = $lineNumber; line = "'$line'"; errorMessage = "Duplicate entry within words." }
+                    }
+
+                    $cspellWords += $line.TrimStart("    - ")
+                }
+
+                ignoreWords {
+                    Write-Verbose "##[debug]Current line is an ignoreWords value: '$line'"
+
+                    # Assumes an indentation of four characters
+                    $value = $line.TrimStart("    - ")
+
+                    if ($cspellIgnoreWords.Contains($value)) {
+                        $lintingErrors += @{lineNumber = $lineNumber; line = "'$line'"; errorMessage = "Duplicate entry within ignoreWords." }
+                    }
+
+                    $cspellIgnoreWords += $line.TrimStart("    - ")
+                }
+
+                default {
+                    Write-Verbose "##[debug]Current line is a value for an unexpected key: '$line'"
+
+                    $lintingErrors += @{lineNumber = $lineNumber; line = "'$line'"; errorMessage = "Value is a value for an unexpected key." }
+                }
             }
         }
 
-        if (-not $foundMatch) {
-            $fileExtensionsMissingGitattributes += $fileExtension
+        else {
+            Write-Verbose "##[debug]Current line is a key: '$line'"
+
+            $currentKey = $key.Matches[0].Value
+            $orderOfKeys += $currentKey
         }
     }
 
-    Write-Verbose "##[debug]Finished checking that all unique file extensions have a .gitattributes entry."
+    Write-Verbose "##[debug]Retrieved 'ignorePaths', 'words' and 'ignoreWords'."
 
-    Write-Output "##[section]Checking all unique files without a file extension have a .gitattributes entry:"
+    $expectedOrderOfKeys = @("version", "language", "ignorePaths", "words", "ignoreWords")
 
-    foreach ($fileName in $uniqueGitTrackedFilesWithoutExtensions) {
+    if (Compare-ObjectExact -ReferenceObject $expectedOrderOfKeys -DifferenceObject $orderOfKeys) {
+        $lintingErrors += @{lineNumber = "N/A"; line = "N/A"; errorMessage = "Keys are incorrectly ordered. Expected the order: 'version', 'language', 'ignorePaths', 'words', 'ignoreWords'." }
+    }
 
-        $foundMatch = $false
+    Write-Output "##[debug]Finished checking layout."
 
-        foreach ($line in $gitattributesFileContentsWithoutComments) {
+    Write-Output "##[section]Checking 'ignorePaths', 'words' and 'ignoreWords' are alphabetically ordered..."
 
-            if ($line -Match $fileName ) {
-                Write-Verbose "##[debug]$fileName entry found in: '$line'"
+    if ($cspellIgnorePaths.Length -gt 1) {
 
-                if ($foundMatch) {
-                    $linesForDuplicateEntries += $line
+        $cspellIgnorePathsSorted = $cspellIgnorePaths | Sort-Object
+
+        if (Compare-ObjectExact -ReferenceObject $cspellIgnorePathsSorted -DifferenceObject $cspellIgnorePaths) {
+            $lintingErrors += @{lineNumber = "N/A"; line = "N/A"; errorMessage = "'ignorePaths' is not alphabetically ordered." }
+        }
+    }
+
+    if ($cspellWords.Length -gt 1) {
+
+        $cspellWordsSorted = $cspellWords | Sort-Object
+
+        if (Compare-ObjectExact -ReferenceObject $cspellWordsSorted -DifferenceObject $cspellWords) {
+            $lintingErrors += @{lineNumber = "N/A"; line = "N/A"; errorMessage = "'words' is not alphabetically ordered." }
+        }
+    }
+
+    if ($cspellIgnoreWords.Length -gt 1) {
+
+        $cspellIgnoreWordsSorted = $cspellIgnoreWords | Sort-Object
+
+        if (Compare-ObjectExact -ReferenceObject $cspellIgnoreWordsSorted -DifferenceObject $cspellIgnoreWords) {
+            $lintingErrors += @{lineNumber = "N/A"; line = "N/A"; errorMessage = "'ignoreWords' is not alphabetically ordered." }
+        }
+    }
+
+    Write-Output "##[debug]Finished checking 'ignorePaths', 'words' and 'ignoreWords' are alphabetically ordered."
+
+    Write-Output "##[section]Checking if 'words' are found in 'ignoreWords'..."
+    $lineNumber = 0;
+
+    foreach ($line in $cspellFileContents) {
+
+        $lineNumber += 1;
+
+        $key = $line | Select-String -Pattern "^[a-zA-Z]+"
+
+        if ($null -eq $key) {
+
+            if ($currentKey -eq "words") {
+
+                # Assumes an indentation of four characters
+                $value = $line.TrimStart("    - ")
+
+                if ($cspellIgnoreWords.Contains($value)) {
+                    $lintingErrors += @{lineNumber = $lineNumber; line = "'$line'"; errorMessage = "'words' entry also found in 'ignoreWords'." }
                 }
-
-                $foundMatch = $true
             }
         }
 
-        if (-not $foundMatch) {
-            $fileExtensionsMissingGitattributes += $fileName
+        else {
+            $currentKey = $key.Matches[0].Value
         }
     }
 
+    Write-Output "##[debug]Finished checking if 'words' are found in 'ignoreWords'."
 
-    Write-Verbose "##[debug]Finished checking that all unique files without a file extension have a .gitattributes entry."
 
-    if ($fileExtensionsMissingGitattributes.Length -gt 0) {
-        Write-Output "##[error]Standards require the following file extensions (and files without a file extension) to have an explicit entry in .gitattributes:"
-        $fileExtensionsMissingGitattributes | ForEach-Object { "##[error]'$_'" } | Write-Output
-    }
 
-    if ($linesForDuplicateEntries.Length -gt 0) {
-        Write-Output "##[error]Standards do not allow multiple entries for the following file extensions (and files without a file extension) within .gitattributes:"
-        $linesForDuplicateEntries | ForEach-Object { "##[error]'$_'" } | Write-Output
-    }
+    Write-Output "##[section]Checking that all gitignore values are found within 'ignorePaths'..."
+    
+    # TODO: Confirm all ignorePaths are found in gitignore (except package-lock.json)
 
-    if (($fileExtensionsMissingGitattributes.Length -gt 0) -or ($linesForDuplicateEntries.Length -gt 0)) {
+    Write-Output "##[debug]Finished that all gitignore values are found within 'ignorePaths'."
+
+
+
+    Write-Output "##[section]Checking that all 'words' and 'ignoreWords' values are found in the codebase..."
+
+    # TODO: Confirm all words and ignore words are found in the project files
+
+    Write-Output "##[debug]Finished that all 'words' and 'ignoreWords' values are found in the codebase."
+
+
+
+    if ($lintingErrors.Length -gt 0) {
+        $lintingErrors | ForEach-Object { [PSCustomObject]$_ } | Format-Table -AutoSize -Wrap -Property lineNumber, line, errorMessage
         Write-Error "##[error]Please resolve the above errors!"
     }
 
     else {
-        Write-Output "##[section].gitattributes conforms to standards."
+        Write-Output "##[section]All cspell.yml tests passed!"
     }
+}
+
+<#
+    .SYNOPSIS
+    TODO
+
+    .DESCRIPTION
+    TODO
+
+    .INPUTS
+    None.
+
+    .OUTPUTS
+    None.
+
+    .EXAMPLE
+    Import-Module Linters.psm1
+    Compare-ObjectExact -ReferenceObject $arrayOne -DifferenceObject $arrayTwo -Verbose
+#>
+
+function Compare-ObjectExact {
+    # TODO: document and add write-outputs, verbose, etc..
+
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true)]
+        [System.Object[]]
+        $ReferenceObject,
+
+        [Parameter(Mandatory = $true)]
+        [System.Object[]]
+        $DifferenceObject
+    )
+
+    $errors = @()
+
+    for ($index = 0; $index -lt $ReferenceObject.Length; $index++) {
+
+        try {
+
+            if ($ReferenceObject[$index].GetType() -ne $DifferenceObject[$index].GetType()) {
+                $errors += "Expected '$($DifferenceObject[$index])' to be of type '$($ReferenceObject[$index].GetType())' but instead is type '$($DifferenceObject[$index].GetType())'."
+            }
+
+            elseif ($ReferenceObject[$index] -ne $DifferenceObject[$index]) {
+                $errors += "'$($DifferenceObject[$index])' found instead of '$($ReferenceObject[$index])'."
+            }
+        }
+
+        catch {
+
+            # Assuming that this is caused by an index out of bounds error with DifferenceObject
+            $errors += "'$($ReferenceObject[$index])' was not found."
+
+        }
+    }
+
+    if ($DifferenceObject.Length -gt $ReferenceObject.Length) {
+
+        for ($index = $ReferenceObject.Length; $index -lt $DifferenceObject.Length; $index++) {
+
+            $errors += "An extra value of '$($DifferenceObject[$index])' found."
+        }
+    }
+
+    return $errors
+}
+
 }

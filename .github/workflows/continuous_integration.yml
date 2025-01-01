@@ -99,6 +99,11 @@ jobs:
             - name: Install linting dependencies
               run: npm install
 
+            - name: Run cspell config linter
+              run: |
+                  Import-Module ./scripts/Linters.psm1
+                  Test-CSpellConfigFile -Verbose
+
             - name: Run cspell
               if: success() || failure()
               run: |

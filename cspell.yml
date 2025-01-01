@@ -1,8 +1,11 @@
 version: "0.2"
 language: en-gb
 ignorePaths:
+    - .vs/
+    - .vscode/
     - build/
-    - LICENSE
+    - node_modules/
+    - package-lock.json
 words:
     - bugprone
     - cleanup
@@ -15,15 +18,25 @@ ignoreWords:
     - choco
     - constexpr
     - ctest
+    - defenses
     - discardable
+    - dont
     - extern
+    - favor
     - hicpp
     - lastexitcode
     - libc
+    - linuxbrew
+    - linuxkernel
     - llvmlibc
     - msvc
-    - noexcept
     - nodiscard
+    - noexcept
     - nolint
+    - noncommercially
+    - objc
+    - openmp
+    - reflow
+    - shellenv
     - tictactoe
     - werror
