@@ -17,12 +17,14 @@ jobs:
                     - windows-latest
 
         runs-on: ${{ matrix.os }}
+        defaults:
+            run:
+                shell: bash
 
         steps:
             - uses: actions/checkout@v4
 
             - name: Install build dependencies
-              shell: bash
               run: |
                   if [ "${{ matrix.os }}" = "macos-latest" ]
                   then
@@ -43,7 +45,6 @@ jobs:
               run: cmake -S . -B ./build -G "Ninja"
 
             - name: Run clang-tidy and clang-format
-              shell: bash
               run: |
                   if [ "${{ matrix.os }}" = "macos-latest" ]
                   then
@@ -88,6 +89,9 @@ jobs:
                     - windows-latest
 
         runs-on: ${{ matrix.os }}
+        defaults:
+            run:
+                shell: pwsh
 
         steps:
             - uses: actions/checkout@v4
@@ -104,12 +108,10 @@ jobs:
 
             - name: Run PSScriptAnalyzer (for PowerShell linting)
               if: success() || failure()
-              shell: pwsh
               run: Invoke-ScriptAnalyzer -Path . -Recurse -Severity Information
 
             - name: Run gitattributes linter
               if: success() || failure()
-              shell: pwsh
               run: |
                   Import-Module ./scripts/Linters.psm1
                   Test-GitAttributesFile -Verbose

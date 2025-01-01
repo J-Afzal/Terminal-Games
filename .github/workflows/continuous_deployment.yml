@@ -17,12 +17,14 @@ jobs:
                     - windows-latest
 
         runs-on: ${{ matrix.os }}
+        defaults:
+            run:
+                shell: bash
 
         steps:
             - uses: actions/checkout@v4
 
             - name: Install build dependencies
-              shell: bash
               run: |
                   if [ "${{ matrix.os }}" = "macos-latest" ]
                   then
@@ -54,6 +56,9 @@ jobs:
     release:
         needs: build
         runs-on: ubuntu-latest
+        defaults:
+            run:
+                shell: bash
 
         steps:
             - uses: actions/checkout@v4
