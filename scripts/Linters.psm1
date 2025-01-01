@@ -608,6 +608,10 @@ function Test-CSpellConfigFile {
 
         $gitignoreFileContents = @(Get-Content -Path ./.gitignore)
 
+        # Add package-lock.json and re-sort gitattributes
+        $gitignoreFileContents += "package-lock.json"
+        $gitignoreFileContents = $gitignoreFileContents | Sort-Object
+
         if (Compare-ObjectExact -ReferenceObject $gitignoreFileContents -DifferenceObject $cspellIgnorePaths) {
             $lintingErrors += @{lineNumber = "N/A"; line = "N/A"; errorMessage = "'ignorePaths' does not match the entries in .gitignore." }
         }
@@ -689,7 +693,7 @@ function Test-CSpellConfigFile {
     None.
 
     .OUTPUTS
-    None.
+    System.Object[]
 
     .EXAMPLE
     Import-Module Linters.psm1
