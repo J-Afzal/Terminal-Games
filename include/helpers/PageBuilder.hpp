@@ -11,16 +11,6 @@
 namespace TerminalGames
 {
     /**
-     * @brief Colours representing ANSI escape codes.
-     */
-    enum class Colours : std::uint8_t
-    {
-        WHITE,
-        RED,
-        BLUE
-    };
-
-    /**
      * @brief Pages representing the pages that PageBuilder supports.
      */
     enum class Pages : std::uint8_t
@@ -33,11 +23,21 @@ namespace TerminalGames
     };
 
     /**
+     * @brief Colours representing ANSI escape codes.
+     */
+    enum class Colours : std::uint8_t
+    {
+        WHITE,
+        RED,
+        BLUE
+    };
+
+    /**
      * @brief Used by game objects to package up their current state into a format that can be used by PageBuilder.
      */
     struct GameInfo
     {
-        struct TicTacToeStruct
+        struct TicTacToeGameInfo
         {
             std::array<std::array<std::string, G_TICTACTOE_BOARD_WIDTH>, G_TICTACTOE_BOARD_HEIGHT> m_gameGrid;
             std::string m_computerSpeedName;
@@ -45,9 +45,9 @@ namespace TerminalGames
             std::string m_playerCount;
             uint32_t m_turnCount;
             bool m_hasWinner;
-        } m_ticTacToeStruct;
+        } m_ticTacToeGameInfo;
 
-        struct HangmanStruct
+        struct HangmanGameInfo
         {
             std::vector<char> m_incorrectGuesses;
             std::string m_computerSpeedName;
@@ -56,9 +56,10 @@ namespace TerminalGames
             std::string m_wordToBeGuessed;
             uint32_t m_errorCount;
             uint32_t m_turnCount;
-        } m_hangmanStruct;
+            char m_currentGuess;
+        } m_hangmanGameInfo;
 
-        struct BattleshipsStruct
+        struct BattleshipsGameInfo
         {
             std::array<std::array<std::string, G_BATTLESHIPS_BOARD_WIDTH>, G_BATTLESHIPS_BOARD_HEIGHT> m_boardOne;
             std::array<std::array<std::string, G_BATTLESHIPS_BOARD_WIDTH>, G_BATTLESHIPS_BOARD_HEIGHT> m_boardTwo;
@@ -69,7 +70,7 @@ namespace TerminalGames
             std::string m_playerCount;
             uint32_t m_turnCount;
             bool m_isGameOver;
-        } m_battleshipsStruct;
+        } m_battleshipsGameInfo;
     };
 
     /**
@@ -104,7 +105,7 @@ namespace TerminalGames
          *
          * @return Pages The current page type.
          */
-        Pages GetCurrentPage() const;
+        Pages GetCurrentPageType() const;
 
         /**
          * @brief Creates pages for displaying the main menu game selection screen.
@@ -198,9 +199,11 @@ namespace TerminalGames
          * @param p_colour The colour of the input text.
          * @param p_selector An identifier to show the line is selected.
          * @return std::string A new line with the input text centred.
-         * @warning The message will be truncated if it is too long to be contained within a single line on the page.
+         * @warning p_input will be truncated if it is too long to be contained within a single line on the page. Furthermore,
+         * if p_input has colour added to it (i.e. it contins ANSI colour escape codes) then this will lead to unexpected
+         * behaviour.
          */
-        std::string GetNewLineCentred(const std::string& p_input, const Colours& p_colour, const std::string& p_selector) const;
+        std::string GetNewLineCentred(const std::string& p_input, const Colours& p_colour = Colours::WHITE, const std::string& p_selector = "") const;
 
         /**
          * @brief Creates a new line on a page with the input text is automatically left justified (one space padding on to the
@@ -210,9 +213,11 @@ namespace TerminalGames
          * @param p_colour The colour of the input text.
          * @param p_selector An identifier to show the line is selected.
          * @return std::string A new line with the input text left justified.
-         * @warning The message will be truncated if it is too long to be contained within a single line on the page.
+         * @warning p_input will be truncated if it is too long to be contained within a single line on the page. Furthermore,
+         * if p_input has colour added to it (i.e. it contins ANSI colour escape codes) then this will lead to unexpected
+         * behaviour.
          */
-        std::string GetNewLineLeftJustified(const std::string& p_input, const Colours& p_colour, const std::string& p_selector) const;
+        std::string GetNewLineLeftJustified(const std::string& p_input, const Colours& p_colour = Colours::WHITE, const std::string& p_selector = "") const;
 
         /**
          * @brief Creates the top line of a box within a page.
@@ -297,9 +302,12 @@ namespace TerminalGames
 
         // Member variables
         std::string m_topTitle;
-        uint32_t m_displayWidth, m_displayHeight;
-        bool m_onlyUseASCII;
+        uint32_t m_displayWidth;
+        uint32_t m_displayHeight;
+        uint32_t m_maximumInputSize;
+        uint32_t m_maximumFilledLineSize;
         Pages m_currentPage;
+        bool m_onlyUseASCII;
 
         /**
          * @brief A visual example of what some of the lower level function do:
@@ -312,7 +320,7 @@ namespace TerminalGames
          * ╔═════════════════════════════════════════════════════╗   <- AddTopLine()
          * ║  O │ O │ X                                          ║                                                                            <-
          * ║ ───┼───┼───          # of Players = 0               ║                                                                            <-
-         * ║  O │ X │ O                                          ║                                                                            <- GetTicTacToeSubPage() and GetGeneralGameSubPage()
+         * ║  O │ X │ O                                          ║                                                                            <- GetGeneralGameSubPage() -> GetTicTacToeSubPage()
          * ║ ───┼───┼───     Computer Difficulty = EASY          ║   <- AddNewLineLeftJustified("───┼───┼───     Computer Difficulty = EASY") <-
          * ║  O │ X │ X                                          ║                                                                            <-
          * ║                                                     ║   <- AddEmptyLine()

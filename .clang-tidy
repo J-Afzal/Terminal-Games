@@ -7,15 +7,18 @@ Checks: "*, \
     -concurrency-*, \
     -darwin-*, \
     -fuchsia-default-arguments-calls, \
+    -fuchsia-default-arguments-declarations, \
     -fuchsia-statically-constructed-objects, \
     -google-readability-braces-around-statements, \
     -google-readability-namespace-comments, \
     -hicpp-braces-around-statements, \
+    -hicpp-use-auto, \
     -linuxkernel-*, \
     -llvm-header-guard, \
     -llvm-namespace-comment, \
     -llvm-qualified-auto, \
     -llvmlibc-*, \
+    -modernize-use-auto, \
     -modernize-use-nodiscard, \
     -modernize-use-trailing-return-type, \
     -mpi-*, \
