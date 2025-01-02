@@ -1,6 +1,5 @@
 #include <array>
 #include <cmath>
-#include <cstddef>
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -14,12 +13,16 @@ namespace TerminalGames
     PageBuilder::PageBuilder() :
         m_displayWidth(0),
         m_displayHeight(0),
+        m_maximumInputSize(0),
+        m_maximumFilledLineSize(0),
         m_onlyUseASCII(false),
         m_currentPage(Pages::DEFAULT) {}
 
     PageBuilder::PageBuilder(const Pages& p_page, const bool& p_onlyUseAscii) :
         m_displayWidth(0),
         m_displayHeight(0),
+        m_maximumInputSize(0),
+        m_maximumFilledLineSize(0),
         m_onlyUseASCII(false),
         m_currentPage(Pages::DEFAULT)
     {
@@ -60,6 +63,9 @@ namespace TerminalGames
         default:
             throw Exceptions::NotImplementedError();
         }
+
+        m_maximumInputSize = m_displayWidth - G_MINIMUM_LEFT_VERTICAL_LINE_SIZE - G_MINIMUM_LEFT_PADDING_SIZE - G_MINIMUM_RIGHT_PADDING_SIZE - G_MINIMUM_RIGHT_VERTICAL_LINE_SIZE;
+        m_maximumFilledLineSize = m_displayWidth - G_MINIMUM_LEFT_VERTICAL_LINE_SIZE - G_MINIMUM_RIGHT_VERTICAL_LINE_SIZE;
     }
 
     Pages PageBuilder::GetCurrentPageType() const
@@ -82,7 +88,7 @@ namespace TerminalGames
             for (uint32_t j = 0; j < p_gameNames.size(); j++)
             {
                 if (i == j)
-                    currentTopString += GetNewLineCentred(AddColour(G_SELECTOR + p_gameNames[j], Colours::BLUE));
+                    currentTopString += GetNewLineCentred(p_gameNames[j], Colours::BLUE, G_SELECTOR);
 
                 else
                     currentTopString += GetNewLineCentred(p_gameNames[j]);
@@ -159,7 +165,7 @@ namespace TerminalGames
             return GetPageWithMessage(p_gameInfo, p_gameInfo.m_ticTacToeGameInfo.m_currentPlayer + ", please enter your next command!");
 
         case Pages::HANGMAN:
-            return GetPageWithMessage(p_gameInfo, "Guesser, please enter your next guess:");
+            return GetPageWithMessage(p_gameInfo, "Guesser, please enter your next guess: " + AddColour(std::string() + p_gameInfo.m_hangmanGameInfo.m_currentGuess, Colours::BLUE));
 
         case Pages::BATTLESHIPS:
             return GetPageWithMessage(p_gameInfo, p_gameInfo.m_battleshipsGameInfo.m_currentPlayer + ", please enter your next command!");
@@ -236,37 +242,63 @@ namespace TerminalGames
         std::string output;
         output += G_VERTICAL_LINE;
 
-        output.insert(output.size(), m_displayWidth, ' ');
+        output.insert(output.size(), m_maximumFilledLineSize, ' ');
 
         return output + G_VERTICAL_LINE + "\n";
     }
 
-    std::string PageBuilder::GetNewLineCentred(const std::string& p_input) const
+    std::string PageBuilder::GetNewLineCentred(const std::string& p_input, const Colours& p_colour, const std::string& p_selector) const
     {
         static const double DIVISOR = 2;
 
-        // +/- 2 = padding on either side (2) of input.
-        const std::string INPUT_TRIMMED = ((p_input.size() + 2) > m_displayWidth) ? p_input.substr(0, m_displayWidth - 2) : p_input;
+        // ANSI colour escape codes when within a string take up *** characters but visually have zero width. Thus, exclude them
+        // from all padding calculations.
+        const std::string INPUT_WITH_SELECTOR = p_selector.empty() ? p_input : p_selector + " " + p_input;
+        const uint32_t INPUT_WITH_SELECTOR_ANSI_COLOUR_ESCAPE_CODE_COUNT = ImplementStdCount(INPUT_WITH_SELECTOR.begin(), INPUT_WITH_SELECTOR.end(), G_ANSI_COLOUR_ESCAPE_CODE_START);
+        const uint32_t INPUT_WITH_SELECTOR_SIZE = static_cast<uint32_t>(INPUT_WITH_SELECTOR.size()) - (INPUT_WITH_SELECTOR_ANSI_COLOUR_ESCAPE_CODE_COUNT * G_ANSI_COLOUR_ESCAPE_CODE_SIZE);
+
+        const uint32_t SELECTOR_ANSI_COLOUR_ESCAPE_CODE_COUNT = ImplementStdCount(p_selector.begin(), p_selector.end(), G_ANSI_COLOUR_ESCAPE_CODE_START);
+        const uint32_t SELECTOR_SIZE = static_cast<uint32_t>(p_selector.size()) - (SELECTOR_ANSI_COLOUR_ESCAPE_CODE_COUNT * G_ANSI_COLOUR_ESCAPE_CODE_SIZE);
+
+        const std::string INPUT_TRIMMED = INPUT_WITH_SELECTOR_SIZE > m_maximumInputSize ? INPUT_WITH_SELECTOR.substr(0, m_maximumInputSize) : INPUT_WITH_SELECTOR;
+        const uint32_t INPUT_TRIMMED_SIZE = static_cast<uint32_t>(INPUT_TRIMMED.size()) - (INPUT_WITH_SELECTOR_ANSI_COLOUR_ESCAPE_CODE_COUNT * G_ANSI_COLOUR_ESCAPE_CODE_SIZE);
+
+        const uint32_t LEFT_PADDING_SIZE = static_cast<uint32_t>(ceil(static_cast<double>(m_maximumInputSize - (INPUT_TRIMMED_SIZE - SELECTOR_SIZE)) / DIVISOR) - SELECTOR_SIZE);
+        const uint32_t RIGHT_PADDING_SIZE = static_cast<uint32_t>(floor(static_cast<double>(m_maximumInputSize - (INPUT_TRIMMED_SIZE - SELECTOR_SIZE)) / DIVISOR));
 
         std::string output;
         output += G_VERTICAL_LINE;
-
-        output.insert(output.size(), static_cast<size_t>(ceil(static_cast<double>(m_displayWidth - INPUT_TRIMMED.size()) / DIVISOR)), ' ');
-        output += INPUT_TRIMMED;
-        output.insert(output.size(), static_cast<size_t>(floor(static_cast<double>(m_displayWidth - INPUT_TRIMMED.size()) / DIVISOR)), ' ');
+        output.insert(output.size(), G_MINIMUM_LEFT_PADDING_SIZE + LEFT_PADDING_SIZE, ' ');
+        output += AddColour(INPUT_TRIMMED, p_colour);
+        output.insert(output.size(), RIGHT_PADDING_SIZE + G_MINIMUM_RIGHT_PADDING_SIZE, ' ');
 
         return output + G_VERTICAL_LINE + "\n";
     }
 
-    std::string PageBuilder::GetNewLineLeftJustified(const std::string& p_input) const
+    std::string PageBuilder::GetNewLineLeftJustified(const std::string& p_input, const Colours& p_colour, const std::string& p_selector) const
     {
-        // +/- 2 = padding on either side (2) of input.
-        const std::string INPUT_TRIMMED = ((p_input.size() + 2) > m_displayWidth) ? p_input.substr(0, m_displayWidth - 2) : p_input;
+        const std::string INPUT = p_selector.empty() ? p_input : p_selector + " " + p_input;
+
+        // ANSI colour escape codes when within a string take up *** characters but visually have zero width. Thus, exclude them
+        // from all padding calculations.
+        const uint32_t ANSI_COLOUR_ESCAPE_CODE_COUNT = ImplementStdCount(INPUT.begin(), INPUT.end(), G_ANSI_COLOUR_ESCAPE_CODE_START);
+        const uint32_t INPUT_SIZE = static_cast<uint32_t>(INPUT.size()) - (ANSI_COLOUR_ESCAPE_CODE_COUNT * G_ANSI_COLOUR_ESCAPE_CODE_SIZE);
 
         std::string output;
         output += G_VERTICAL_LINE;
-        output += INPUT_TRIMMED;
-        output.insert(output.size(), m_displayWidth - INPUT_TRIMMED.size(), ' ');
+        output.insert(output.size(), G_MINIMUM_LEFT_PADDING_SIZE, ' ');
+
+        if (INPUT_SIZE > m_maximumInputSize)
+        {
+            output += AddColour(INPUT.substr(0, m_maximumInputSize), p_colour);
+            output.insert(output.size(), G_MINIMUM_RIGHT_PADDING_SIZE, ' ');
+        }
+
+        else
+        {
+            output += AddColour(INPUT, p_colour);
+            output.insert(output.size(), m_maximumInputSize + G_MINIMUM_RIGHT_PADDING_SIZE - INPUT_SIZE, ' ');
+        }
 
         return output + G_VERTICAL_LINE + "\n";
     }
@@ -276,7 +308,7 @@ namespace TerminalGames
         std::string output;
         output += G_TOP_LEFT_CORNER;
 
-        output.insert(output.size(), m_displayWidth, G_HORIZONTAL_LINE);
+        output.insert(output.size(), m_maximumFilledLineSize, G_HORIZONTAL_LINE);
 
         return output + G_TOP_RIGHT_CORNER + "\n";
     }
@@ -286,14 +318,14 @@ namespace TerminalGames
         std::string output;
         output += G_BOTTOM_LEFT_CORNER;
 
-        output.insert(output.size(), m_displayWidth, G_HORIZONTAL_LINE);
+        output.insert(output.size(), m_maximumFilledLineSize, G_HORIZONTAL_LINE);
 
         return output + G_BOTTOM_RIGHT_CORNER + "\n";
     }
 
     std::string PageBuilder::GetTopBox() const
     {
-        return G_WHITE_ANSI_COLOUR_ESCAPE_CODE + GetTopLine() + GetNewLineCentred(AddColour(m_topTitle, Colours::RED)) + GetBottomLine();
+        return G_WHITE_ANSI_COLOUR_ESCAPE_CODE + GetTopLine() + GetNewLineCentred(m_topTitle, Colours::RED) + GetBottomLine();
     }
 
     std::string PageBuilder::GetBottomBox() const
@@ -304,13 +336,13 @@ namespace TerminalGames
         switch (m_currentPage)
         {
         case Pages::MAINMENU:
-            output += GetNewLineCentred(AddColour(G_MENU_BOTTOM_TITLE, Colours::RED));
+            output += GetNewLineCentred(G_MENU_BOTTOM_TITLE, Colours::RED);
             break;
 
         case Pages::TICTACTOE:
         case Pages::HANGMAN:
         case Pages::BATTLESHIPS:
-            output += GetNewLineCentred(AddColour(G_GAME_BOTTOM_TITLE, Colours::RED));
+            output += GetNewLineCentred(G_GAME_BOTTOM_TITLE, Colours::RED);
             break;
 
         default:
@@ -349,7 +381,7 @@ namespace TerminalGames
             for (uint32_t j = 0; j < p_options.size(); j++)
             {
                 if (i == j)
-                    currentTopString += GetNewLineLeftJustified(AddColour(G_SELECTOR + " " + p_options[j], Colours::BLUE));
+                    currentTopString += GetNewLineLeftJustified(p_options[j], Colours::BLUE, G_SELECTOR);
 
                 else
                     // + 1 to match above statement which will have an extra pad between option and selector
@@ -391,11 +423,11 @@ namespace TerminalGames
 
         output += GetNewLineLeftJustified(gameGrid[0][0] + char(179) + gameGrid[0][1] + char(179) + gameGrid[0][2]);
 
-        output += GetNewLineLeftJustified(std::string("") + (char)196 + (char)196 + (char)196 + (char)197 + (char)196 + (char)196 + (char)196 + char(197) + (char)196 + (char)196 + (char)196 + "          # of Players = " + playerCount);
+        output += GetNewLineLeftJustified(std::string("") + (char)196 + (char)196 + (char)196 + (char)197 + (char)196 + (char)196 + (char)196 + char(197) + (char)196 + (char)196 + (char)196 + "         # of Players = " + playerCount);
 
         output += GetNewLineLeftJustified(gameGrid[1][0] + char(179) + gameGrid[1][1] + char(179) + gameGrid[1][2]);
 
-        output += GetNewLineLeftJustified(std::string("") + (char)196 + (char)196 + (char)196 + (char)197 + (char)196 + (char)196 + (char)196 + char(197) + (char)196 + (char)196 + (char)196 + "    Computer Speed = " + computerSpeedName);
+        output += GetNewLineLeftJustified(std::string("") + (char)196 + (char)196 + (char)196 + (char)197 + (char)196 + (char)196 + (char)196 + char(197) + (char)196 + (char)196 + (char)196 + "        Computer Speed = " + computerSpeedName);
 
         output += GetNewLineLeftJustified(gameGrid[2][0] + char(179) + gameGrid[2][1] + char(179) + gameGrid[2][2]);
 

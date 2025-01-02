@@ -116,6 +116,7 @@ namespace TerminalGames
         uint32_t m_computerSpeed;
         uint32_t m_errorCount;
         uint32_t m_turnCount;
+        char m_currentGuess;
         bool m_hasWinner;
         bool m_userIsGuesser;
     };

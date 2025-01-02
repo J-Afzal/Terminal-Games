@@ -42,8 +42,6 @@ namespace TerminalGames
         Terminal::SetCursorVisibility(false);
         Terminal::SetCursorPosition({0, 0});
 
-        
-
         // Custom exceptions are used to return exit the games and the main menu.
         while (true)
         {

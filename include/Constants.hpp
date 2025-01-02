@@ -47,13 +47,13 @@ namespace TerminalGames
     /**
      * @brief MainMenu
      */
-    static constexpr uint32_t G_MAIN_MENU_DISPLAY_WIDTH = 30;
+    static constexpr uint32_t G_MAIN_MENU_DISPLAY_WIDTH = 32;
     static constexpr uint32_t G_MAIN_MENU_DISPLAY_HEIGHT = 13;
 
     /**
      * @brief Tic Tac Toe
      */
-    static constexpr uint32_t G_TICTACTOE_DISPLAY_WIDTH = 53;
+    static constexpr uint32_t G_TICTACTOE_DISPLAY_WIDTH = 55;
     static constexpr uint32_t G_TICTACTOE_DISPLAY_HEIGHT = 19;
     static constexpr uint32_t G_TICTACTOE_BOARD_WIDTH = 3;
     static constexpr uint32_t G_TICTACTOE_BOARD_HEIGHT = 3;
@@ -67,11 +67,11 @@ namespace TerminalGames
     /**
      * @brief Hangman
      */
-    static constexpr uint32_t G_HANGMAN_DISPLAY_WIDTH = 62;
+    static constexpr uint32_t G_HANGMAN_DISPLAY_WIDTH = 64;
     static constexpr uint32_t G_HANGMAN_DISPLAY_HEIGHT = 22;
 
-    static constexpr uint32_t G_HANGMAN_MINIMUM_WORD_LENGTH = 3;
-    static constexpr uint32_t G_HANGMAN_MAXIMUM_WORD_LENGTH = 14;
+    static constexpr uint32_t G_HANGMAN_MINIMUM_WORD_SIZE = 3;
+    static constexpr uint32_t G_HANGMAN_MAXIMUM_WORD_SIZE = 14;
     static constexpr uint32_t G_HANGMAN_MAXIMUM_ERROR_COUNT = 10;
     static constexpr uint32_t G_HANGMAN_KEY_PRESS_CHAR_OFFSET = 32;
     static constexpr uint32_t G_HANGMAN_NUMBER_OF_LETTERS_IN_THE_ALPHABET = 26;
@@ -83,7 +83,7 @@ namespace TerminalGames
     /**
      * @brief Battleships
      */
-    static constexpr uint32_t G_BATTLESHIPS_DISPLAY_WIDTH = 147;
+    static constexpr uint32_t G_BATTLESHIPS_DISPLAY_WIDTH = 149;
     static constexpr uint32_t G_BATTLESHIPS_DISPLAY_HEIGHT = 38;
     static constexpr uint32_t G_BATTLESHIPS_BOARD_WIDTH = 10;
     static constexpr uint32_t G_BATTLESHIPS_BOARD_HEIGHT = 10;
@@ -142,6 +142,8 @@ namespace TerminalGames
     static const std::string G_GAME_BOTTOM_TITLE = "q = quit to main menu";
 
     // ANSI colour escape codes
+    static constexpr uint32_t G_ANSI_COLOUR_ESCAPE_CODE_SIZE = 7;
+    static constexpr char G_ANSI_COLOUR_ESCAPE_CODE_START = '\x1B';
     static const std::string G_WHITE_ANSI_COLOUR_ESCAPE_CODE = "\x1B[1;37m";
     static const std::string G_RED_ANSI_COLOUR_ESCAPE_CODE = "\x1B[1;31m";
     static const std::string G_BLUE_ANSI_COLOUR_ESCAPE_CODE = "\x1B[1;34m";
@@ -154,6 +156,12 @@ namespace TerminalGames
     static constexpr char G_BOTTOM_RIGHT_CORNER = static_cast<char>(188);
     static constexpr char G_BOTTOM_LEFT_CORNER = static_cast<char>(200);
     static constexpr char G_TOP_LEFT_CORNER = static_cast<char>(201);
+
+    // Padding
+    static constexpr uint32_t G_MINIMUM_LEFT_VERTICAL_LINE_SIZE = 1;
+    static constexpr uint32_t G_MINIMUM_LEFT_PADDING_SIZE = 1;
+    static constexpr uint32_t G_MINIMUM_RIGHT_PADDING_SIZE = 1;
+    static constexpr uint32_t G_MINIMUM_RIGHT_VERTICAL_LINE_SIZE = 1;
 
     /**
      * @brief Terminal

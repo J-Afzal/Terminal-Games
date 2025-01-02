@@ -56,6 +56,7 @@ namespace TerminalGames
             std::string m_wordToBeGuessed;
             uint32_t m_errorCount;
             uint32_t m_turnCount;
+            char m_currentGuess;
         } m_hangmanGameInfo;
 
         struct BattleshipsGameInfo
@@ -195,20 +196,28 @@ namespace TerminalGames
          * unequal, the left side will always have the higher amount of spacing.
          *
          * @param p_input The text to display on the new line.
+         * @param p_colour The colour of the input text.
+         * @param p_selector An identifier to show the line is selected.
          * @return std::string A new line with the input text centred.
-         * @warning The message will be truncated if it is too long to be contained within a single line on the page.
+         * @warning p_input will be truncated if it is too long to be contained within a single line on the page. Furthermore,
+         * if p_input has colour added to it (i.e. it contins ANSI colour escape codes) then this will lead to unexpected
+         * behaviour.
          */
-        std::string GetNewLineCentred(const std::string& p_input) const;
+        std::string GetNewLineCentred(const std::string& p_input, const Colours& p_colour = Colours::WHITE, const std::string& p_selector = "") const;
 
         /**
          * @brief Creates a new line on a page with the input text is automatically left justified (one space padding on to the
          * left page edge).
          *
          * @param p_input The text to display on the new line.
+         * @param p_colour The colour of the input text.
+         * @param p_selector An identifier to show the line is selected.
          * @return std::string A new line with the input text left justified.
-         * @warning The message will be truncated if it is too long to be contained within a single line on the page.
+         * @warning p_input will be truncated if it is too long to be contained within a single line on the page. Furthermore,
+         * if p_input has colour added to it (i.e. it contins ANSI colour escape codes) then this will lead to unexpected
+         * behaviour.
          */
-        std::string GetNewLineLeftJustified(const std::string& p_input) const;
+        std::string GetNewLineLeftJustified(const std::string& p_input, const Colours& p_colour = Colours::WHITE, const std::string& p_selector = "") const;
 
         /**
          * @brief Creates the top line of a box within a page.
@@ -293,9 +302,12 @@ namespace TerminalGames
 
         // Member variables
         std::string m_topTitle;
-        uint32_t m_displayWidth, m_displayHeight;
-        bool m_onlyUseASCII;
+        uint32_t m_displayWidth;
+        uint32_t m_displayHeight;
+        uint32_t m_maximumInputSize;
+        uint32_t m_maximumFilledLineSize;
         Pages m_currentPage;
+        bool m_onlyUseASCII;
 
         /**
          * @brief A visual example of what some of the lower level function do:

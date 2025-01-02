@@ -21,6 +21,7 @@ namespace TerminalGames
         m_computerSpeed(0),
         m_errorCount(0),
         m_turnCount(0),
+        m_currentGuess(0),
         m_hasWinner(false),
         m_userIsGuesser(false)
     {
@@ -32,6 +33,7 @@ namespace TerminalGames
     {
         m_commandsRemaining.reserve(G_HANGMAN_NUMBER_OF_LETTERS_IN_THE_ALPHABET);
         m_commandsRemaining = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+        m_currentGuess = 'A';
         m_incorrectGuesses.clear();
         m_computerSpeedName = "N/A";
         m_currentGuessOfWord = "";
@@ -51,7 +53,8 @@ namespace TerminalGames
             .m_playerCount = m_playerCount,
             .m_wordToBeGuessed = m_wordToBeGuessed,
             .m_errorCount = m_errorCount,
-            .m_turnCount = m_turnCount};
+            .m_turnCount = m_turnCount,
+            .m_currentGuess = m_currentGuess};
     }
 
     void Hangman::GetUserOptions()
@@ -124,16 +127,14 @@ namespace TerminalGames
 
     void Hangman::ExecuteUserCommand()
     {
-        Terminal::PrintOutput(m_pageBuilder.GetUserCommandPage(m_gameInfo));
-
         uint32_t keyPress = 0;
         uint32_t currentSelection = 0;
 
         while (true)
         {
-            Terminal::SetCursorPosition({G_HANGMAN_GET_USER_COMMAND_COLUMN, G_HANGMAN_USER_INPUT_ROW});
+            m_gameInfo.m_hangmanGameInfo.m_currentGuess = m_commandsRemaining[currentSelection];
 
-            std::cout << std::string("\x1B[1;34m") + m_commandsRemaining[currentSelection] + "\x1B[1;37m"; // Make it blue
+            Terminal::PrintOutput(m_pageBuilder.GetUserCommandPage(m_gameInfo));
 
             keyPress = Terminal::GetNextKeyPress();
 
@@ -254,7 +255,7 @@ namespace TerminalGames
                 throw Exceptions::QuitGame();
             }
 
-            if (input.size() < G_HANGMAN_MINIMUM_WORD_LENGTH || input.size() > G_HANGMAN_MAXIMUM_WORD_LENGTH)
+            if (input.size() < G_HANGMAN_MINIMUM_WORD_SIZE || input.size() > G_HANGMAN_MAXIMUM_WORD_SIZE)
             {
                 continue;
             }
