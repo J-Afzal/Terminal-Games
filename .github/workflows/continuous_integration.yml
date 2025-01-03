@@ -64,37 +64,37 @@ jobs:
                   Install-LintingDependencies -OperatingSystem "${{ matrix.os }}" -Verbose
 
             - name: Run gitattributes linter
-              if: steps.dependencies.outcome == 'success'
+              if: (success() || failure()) && steps.dependencies.outcome == 'success'
               run: |
                   Import-Module ./modules/Terminal-Games.psd1
                   Test-GitAttributesFile -Verbose
 
             - name: Run cspell config linter
-              if: steps.dependencies.outcome == 'success'
+              if: (success() || failure()) && steps.dependencies.outcome == 'success'
               run: |
                   Import-Module ./modules/Terminal-Games.psd1
                   Test-CSpellConfigurationFile -Verbose
 
             - name: Run cspell
-              if: steps.dependencies.outcome == 'success'
+              if: (success() || failure()) && steps.dependencies.outcome == 'success'
               run: |
                   Import-Module ./modules/Terminal-Games.psd1
                   Test-CodeUsingCSpell -Verbose
 
             - name: Run prettier
-              if: steps.dependencies.outcome == 'success'
+              if: (success() || failure()) && steps.dependencies.outcome == 'success'
               run: |
                   Import-Module ./modules/Terminal-Games.psd1
                   Test-CodeUsingPrettier -Verbose
 
             - name: Run PSScriptAnalyzer
-              if: steps.dependencies.outcome == 'success'
+              if: (success() || failure()) && steps.dependencies.outcome == 'success'
               run: |
                   Import-Module ./modules/Terminal-Games.psd1
                   Test-CodeUsingPSScriptAnalyzer -Verbose
 
             - name: Run clang-tidy and clang-format
-              if: steps.dependencies.outcome == 'success'
+              if: (success() || failure()) && steps.dependencies.outcome == 'success'
               run: |
                   Import-Module ./modules/Terminal-Games.psd1
                   Test-CodeUsingClang -Verbose
