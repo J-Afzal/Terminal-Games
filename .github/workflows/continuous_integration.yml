@@ -26,7 +26,7 @@ jobs:
 
             - name: Install build dependencies
               run: |
-                  Import-Module ./scripts/Dependencies.psm1
+                  Import-Module ./scripts/Terminal-Games.psd1
                   Install-BuildDependencies -Verbose
 
             - name: Configure CMake
@@ -41,7 +41,7 @@ jobs:
                   path: ./build/terminal-games-${{ matrix.os }}*
                   if-no-files-found: error
 
-    linting:
+    lint:
         strategy:
             matrix:
                 os:
@@ -59,40 +59,40 @@ jobs:
 
             - name: Install linting dependencies
               run: |
-                  Import-Module ./scripts/Dependencies.psm1
+                  Import-Module ./scripts/Terminal-Games.psd1
                   Install-LintingDependencies -Verbose
 
             - name: Run gitattributes linter
               run: |
-                  Import-Module ./scripts/Linters.psm1
+                  Import-Module ./scripts/Terminal-Games.psd1
                   Test-GitAttributesFile -Verbose
 
             - name: Run cspell config linter
               if: success() || failure()
               run: |
-                  Import-Module ./scripts/Linters.psm1
+                  Import-Module ./scripts/Terminal-Games.psd1
                   Test-CSpellConfigurationFile -Verbose
 
             - name: Run cspell
               if: success() || failure()
               run: |
-                  Import-Module ./scripts/Linters.psm1
+                  Import-Module ./scripts/Terminal-Games.psd1
                   Test-CodeUsingCSpell -Verbose
 
             - name: Run prettier
               if: success() || failure()
               run: |
-                  Import-Module ./scripts/Linters.psm1
+                  Import-Module ./scripts/Terminal-Games.psd1
                   Test-CodeUsingPrettier -Verbose
 
             - name: Run PSScriptAnalyzer
               if: success() || failure()
               run: |
-                  Import-Module ./scripts/Linters.psm1
+                  Import-Module ./scripts/Terminal-Games.psd1
                   Test-CodeUsingPSScriptAnalyzer -Verbose
 
             - name: Run clang-tidy and clang-format
               if: success() || failure()
               run: |
-                  Import-Module ./scripts/Linters.psm1
+                  Import-Module ./scripts/Terminal-Games.psd1
                   Test-CodeUsingClang -Verbose

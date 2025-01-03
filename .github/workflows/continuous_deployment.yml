@@ -19,27 +19,15 @@ jobs:
         runs-on: ${{ matrix.os }}
         defaults:
             run:
-                shell: bash
+                shell: pwsh
 
         steps:
             - uses: actions/checkout@v4
 
             - name: Install build dependencies
               run: |
-                  if [ "${{ matrix.os }}" = "macos-latest" ]
-                  then
-                      brew install ninja
-                  fi
-
-                  if [ "${{ matrix.os }}" = "ubuntu-latest" ]
-                  then
-                      sudo apt-get install ninja-build
-                  fi
-
-                  if [ "${{ matrix.os }}" = "windows-latest" ]
-                  then
-                      choco install ninja -y
-                  fi
+                  Import-Module ./scripts/Terminal-Games.psd1
+                  Install-BuildDependencies -Verbose
 
             - name: Configure CMake
               run: cmake -S . -B ./build -G "Ninja"
