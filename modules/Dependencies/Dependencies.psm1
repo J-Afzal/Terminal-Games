@@ -1,7 +1,5 @@
 $ErrorActionPreference = "Stop"
 
-#TODO: how to call from other module?
-
 <#
     .SYNOPSIS
     TODO
