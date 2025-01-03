@@ -443,7 +443,7 @@ function Test-GitAttributesFile {
         }
 
         if (-not $foundMatch) {
-            $lintingErrors += @{lineNumber = "N/A"; line = "N/A"; errorMessage = "'$($fileExtensionOrFileNameWithoutExtension.TrimStart("\"))' does not have a .gitattributes entry." }
+            $lintingErrors += @{lineNumber = "-"; line = "-"; errorMessage = "'$($fileExtensionOrFileNameWithoutExtension.TrimStart("\"))' does not have a .gitattributes entry." }
         }
     }
 
@@ -494,107 +494,118 @@ function Test-CSpellConfigFile {
     Write-Output "##[section]Running Test-CSpellConfigFile..."
 
     Write-Output "##[section]Retrieving contents of cspell.yml..."
-    $cspellFileContents = @(Get-Content -Path ./cspell.yml)
+    [Collections.Generic.List[String]] $cspellFileContents = Get-Content -Path ./cspell.yml
     Write-Verbose "##[debug]Finished retrieving the contents cspell.yml."
 
     Write-Output "##[section]Checking layout..."
-    $lintingErrors = @()
+    [Collections.Generic.List[HashTable]] $lintingErrors = @()
 
-    if ($cspellFileContents.Get(0) -ne "version: ""0.2""") {
-        $lintingErrors += @{lineNumber = 1; line = "'$($cspellFileContents.Get(0))'"; errorMessage = "Invalid version number. Expected 'version: ""0.2""'." }
+    if ($cspellFileContents[0] -ne "version: ""0.2""") {
+        $lintingErrors.Add(@{lineNumber = 1; line = "'$($cspellFileContents[0])'"; errorMessage = "Invalid version number. Expected 'version: ""0.2""'." })
     }
 
-    if ($cspellFileContents.Get(1) -ne "language: en-gb") {
-        $lintingErrors += @{lineNumber = 1; line = "'$($cspellFileContents.Get(1))'"; errorMessage = "Invalid language. Expected 'language: en-gb'." }
+    if ($cspellFileContents[1] -ne "language: en-gb") {
+        $lintingErrors.Add(@{lineNumber = 1; line = "'$($cspellFileContents[1])'"; errorMessage = "Invalid language. Expected 'language: en-gb'." })
     }
 
     Write-Verbose "##[debug]Retrieving 'ignorePaths', 'words' and 'ignoreWords'..."
-    $cspellIgnorePaths = @()
-    $cspellWords = @()
-    $cspellIgnoreWords = @()
-    $orderOfKeys = @()
+    [Collections.Generic.List[String]] $cspellIgnorePaths = @()
+    [Collections.Generic.List[String]] $cspellWords = @()
+    [Collections.Generic.List[String]] $cspellIgnoreWords = @()
+    [Collections.Generic.List[String]] $orderOfKeys = @()
+    [Collections.Generic.List[String]] $expectedOrderOfKeys = @("version", "language", "ignorePaths", "words", "ignoreWords")
     $currentKey = ""
-    $lineNumber = 0;
 
-    foreach ($line in $cspellFileContents) {
+    for ($index = 0; $index -lt $cspellFileContents.Count; $index++) {
 
-        $lineNumber += 1;
+        $currentLine = $cspellFileContents[$index]
 
-        if ($line -eq "") {
-            Write-Verbose "##[debug]Current line is blank: '$line'"
-            $lintingErrors += @{lineNumber = $lineNumber; line = "'$line'"; errorMessage = "Empty line." }
+        if ($currentLine -eq "") {
+            Write-Verbose "##[debug]Current line is blank: '$currentLine'"
+            $lintingErrors.Add(@{lineNumber = $index + 1; line = "'$currentLine'"; errorMessage = "Empty line." })
             continue
         }
 
-        $key = $line | Select-String -Pattern "^[a-zA-Z]+"
+        $key = $currentLine | Select-String -Pattern "^[a-zA-Z]+"
 
         if ($null -eq $key) {
 
             switch ($currentKey) {
                 ignorePaths {
-                    Write-Verbose "##[debug]Current line is an ignorePaths value: '$line'"
+                    Write-Verbose "##[debug]Current line is an ignorePaths value: '$currentLine'"
 
                     # Assumes an indentation of four characters
-                    $value = $line.TrimStart("    - ")
+                    $value = $currentLine.TrimStart("    - ")
 
                     if ($cspellIgnorePaths.Contains($value)) {
-                        $lintingErrors += @{lineNumber = $lineNumber; line = "'$line'"; errorMessage = "Duplicate entry within ignorePaths." }
+                        $lintingErrors.Add(@{lineNumber = $index + 1; line = "'$currentLine'"; errorMessage = "Duplicate entry within ignorePaths." })
                     }
 
-                    $cspellIgnorePaths += $line.TrimStart("    - ")
+                    $cspellIgnorePaths.Add($value)
                 }
 
                 words {
-                    Write-Verbose "##[debug]Current line is an words value: '$line'"
+                    Write-Verbose "##[debug]Current line is an words value: '$currentLine'"
 
                     # Assumes an indentation of four characters
-                    $value = $line.TrimStart("    - ")
+                    $value = $currentLine.TrimStart("    - ")
 
-                    if ($cspellWords.Contains($value)) {
-                        $lintingErrors += @{lineNumber = $lineNumber; line = "'$line'"; errorMessage = "Duplicate entry within words." }
+                    if ($value -ne $value.ToLower()) {
+                        $lintingErrors.Add(@{lineNumber = $index + 1; line = "'$currentLine'"; errorMessage = "Value is not lowercase." })
                     }
 
-                    $cspellWords += $line.TrimStart("    - ")
+                    if ($cspellWords.Contains($value.ToLower())) {
+                        $lintingErrors.Add(@{lineNumber = $index + 1; line = "'$currentLine'"; errorMessage = "Duplicate entry within words." })
+                    }
+
+                    $cspellWords.Add($value.ToLower())
                 }
 
                 ignoreWords {
-                    Write-Verbose "##[debug]Current line is an ignoreWords value: '$line'"
+                    Write-Verbose "##[debug]Current line is an ignoreWords value: '$currentLine'"
 
                     # Assumes an indentation of four characters
-                    $value = $line.TrimStart("    - ")
+                    $value = $currentLine.TrimStart("    - ")
 
-                    if ($cspellIgnoreWords.Contains($value)) {
-                        $lintingErrors += @{lineNumber = $lineNumber; line = "'$line'"; errorMessage = "Duplicate entry within ignoreWords." }
+                    if ($value -ne $value.ToLower()) {
+                        $lintingErrors.Add(@{lineNumber = $index + 1; line = "'$currentLine'"; errorMessage = "Value is not lowercase." })
                     }
 
-                    $cspellIgnoreWords += $line.TrimStart("    - ")
+                    if ($cspellIgnoreWords.Contains($value.ToLower())) {
+                        $lintingErrors.Add(@{lineNumber = $index + 1; line = "'$currentLine'"; errorMessage = "Duplicate entry within ignoreWords." })
+                    }
+
+                    $cspellIgnoreWords.Add($value.ToLower())
                 }
 
                 default {
-                    Write-Verbose "##[debug]Current line is a value for an unexpected key: '$line'"
+                    Write-Verbose "##[debug]Current line is a value for an unexpected key: '$currentLine'"
 
-                    $lintingErrors += @{lineNumber = $lineNumber; line = "'$line'"; errorMessage = "Value is a value for an unexpected key." }
+                    $lintingErrors.Add(@{lineNumber = $index + 1; line = "'$currentLine'"; errorMessage = "Value for an unexpected key." })
                 }
             }
         }
 
         else {
-            Write-Verbose "##[debug]Current line is a key: '$line'"
+            Write-Verbose "##[debug]Current line is a key: '$currentLine'"
 
             $currentKey = $key.Matches[0].Value
-            $orderOfKeys += $currentKey
+
+            if (-Not $expectedOrderOfKeys.Contains($currentKey)) {
+                $lintingErrors.Add(@{lineNumber = $index + 1; line = "'$currentLine'"; errorMessage = "Unexpected key." })
+            }
+
+            $orderOfKeys.Add($currentKey)
         }
     }
 
     Write-Verbose "##[debug]Retrieved 'ignorePaths', 'words' and 'ignoreWords'."
 
-    $expectedOrderOfKeys = @("version", "language", "ignorePaths", "words", "ignoreWords")
-
     if (Compare-ObjectExact -ReferenceObject $expectedOrderOfKeys -DifferenceObject $orderOfKeys) {
-        $lintingErrors += @{lineNumber = "N/A"; line = "N/A"; errorMessage = "Keys are incorrectly ordered. Expected the order: 'version', 'language', 'ignorePaths', 'words', 'ignoreWords'." }
+        $lintingErrors.Add(@{lineNumber = "-"; line = "-"; errorMessage = "Keys are incorrectly ordered or contain unexpected keys. Expected the order: 'version', 'language', 'ignorePaths', 'words', 'ignoreWords'." })
     }
 
-    Write-Output "##[debug]Finished checking layout."
+    Write-Verbose "##[debug]Finished checking layout."
 
     Write-Output "##[section]Checking 'ignorePaths', 'words' and 'ignoreWords' are alphabetically ordered..."
 
@@ -603,17 +614,17 @@ function Test-CSpellConfigFile {
         $cspellIgnorePathsSorted = $cspellIgnorePaths | Sort-Object
 
         if (Compare-ObjectExact -ReferenceObject $cspellIgnorePathsSorted -DifferenceObject $cspellIgnorePaths) {
-            $lintingErrors += @{lineNumber = "N/A"; line = "N/A"; errorMessage = "'ignorePaths' is not alphabetically ordered." }
+            $lintingErrors.Add(@{lineNumber = "-"; line = "-"; errorMessage = "'ignorePaths' is not alphabetically ordered." })
         }
 
-        $gitignoreFileContents = @(Get-Content -Path ./.gitignore)
+        [Collections.Generic.List[String]] $gitignoreFileContents = Get-Content -Path ./.gitignore
 
         # Add package-lock.json and re-sort gitattributes
-        $gitignoreFileContents += "package-lock.json"
-        $gitignoreFileContents = $gitignoreFileContents | Sort-Object
+        $gitignoreFileContents.Add("package-lock.json")
+        $gitignoreFileContents.Sort()
 
         if (Compare-ObjectExact -ReferenceObject $gitignoreFileContents -DifferenceObject $cspellIgnorePaths) {
-            $lintingErrors += @{lineNumber = "N/A"; line = "N/A"; errorMessage = "'ignorePaths' does not match the entries in .gitignore." }
+            $lintingErrors.Add(@{lineNumber = "-"; line = "-"; errorMessage = "'ignorePaths' does not match the entries in .gitignore." })
         }
     }
 
@@ -622,7 +633,7 @@ function Test-CSpellConfigFile {
         $cspellWordsSorted = $cspellWords | Sort-Object
 
         if (Compare-ObjectExact -ReferenceObject $cspellWordsSorted -DifferenceObject $cspellWords) {
-            $lintingErrors += @{lineNumber = "N/A"; line = "N/A"; errorMessage = "'words' is not alphabetically ordered." }
+            $lintingErrors.Add(@{lineNumber = "-"; line = "-"; errorMessage = "'words' is not alphabetically ordered." })
         }
     }
 
@@ -631,30 +642,30 @@ function Test-CSpellConfigFile {
         $cspellIgnoreWordsSorted = $cspellIgnoreWords | Sort-Object
 
         if (Compare-ObjectExact -ReferenceObject $cspellIgnoreWordsSorted -DifferenceObject $cspellIgnoreWords) {
-            $lintingErrors += @{lineNumber = "N/A"; line = "N/A"; errorMessage = "'ignoreWords' is not alphabetically ordered." }
+            $lintingErrors.Add(@{lineNumber = "-"; line = "-"; errorMessage = "'ignoreWords' is not alphabetically ordered." })
         }
     }
 
-    Write-Output "##[debug]Finished checking 'ignorePaths', 'words' and 'ignoreWords' are alphabetically ordered."
+    Write-Verbose "##[debug]Finished checking 'ignorePaths', 'words' and 'ignoreWords' are alphabetically ordered."
 
     Write-Output "##[section]Checking if 'words' are found in 'ignoreWords'..."
-    $lineNumber = 0;
 
-    foreach ($line in $cspellFileContents) {
+    # Re-iterate over file to give line number context
+    for ($index = 0; $index -lt $cspellFileContents.Count; $index++) {
 
-        $lineNumber += 1;
+        $currentLine = $cspellFileContents[$index]
 
-        $key = $line | Select-String -Pattern "^[a-zA-Z]+"
+        $key = $currentLine | Select-String -Pattern "^[a-zA-Z]+"
 
         if ($null -eq $key) {
 
             if ($currentKey -eq "words") {
 
                 # Assumes an indentation of four characters
-                $value = $line.TrimStart("    - ")
+                $value = $currentLine.TrimStart("    - ")
 
                 if ($cspellIgnoreWords.Contains($value)) {
-                    $lintingErrors += @{lineNumber = $lineNumber; line = "'$line'"; errorMessage = "'words' entry also found in 'ignoreWords'." }
+                    $lintingErrors.Add(@{lineNumber = $index + 1; line = "'$currentLine'"; errorMessage = "'words' entry also found in 'ignoreWords'." })
                 }
             }
         }
@@ -664,13 +675,63 @@ function Test-CSpellConfigFile {
         }
     }
 
-    Write-Output "##[debug]Finished checking if 'words' are found in 'ignoreWords'."
+    Write-Verbose "##[debug]Finished checking if 'words' are found in 'ignoreWords'."
 
-    Write-Output "##[section]Checking that all 'words' and 'ignoreWords' values are found in the codebase..."
+    Write-Output "##[section]Checking whether all 'words' and 'ignoreWords' values are found in the codebase..."
 
-    # TODO: Confirm all words and ignore words are found in the project files
+    Write-Verbose "##[debug]Retrieving all files to test against..."
+    # Same file list as found in Test-CodeUsingCSpell but also exclude cspell.yml (assumes cspell.yml is the only file with a file name of cspell)
+    $allFilesBeingTestedByCSpell = git ls-files -c | ForEach-Object { if (($_.Split(".")[-1] -NotIn ("ico", "png")) -And ($_.Split(".")[-2] -NotIn ("cspell", "package-lock"))) { $_ } }
 
-    Write-Output "##[debug]Finished that all 'words' and 'ignoreWords' values are found in the codebase."
+    Write-Verbose "##[debug]Retrieved all files to test against:"
+    $allFilesBeingTestedByCSpell | ForEach-Object { "##[debug]'$_'" } | Write-Output
+
+    [Collections.Generic.List[String]] $redundantCSpellWords = $cspellWords
+    [Collections.Generic.List[String]] $redundantCSpellIgnoreWords = $cspellIgnoreWords
+
+    foreach ($file in $allFilesBeingTestedByCSpell) {
+
+        Write-Verbose "##[debug]Reading contents of '$file'..."
+
+        $fileContents = @(Get-Content -Path $file)
+
+        foreach ($line in $fileContents) {
+
+            for ($index = 0; $index -lt $redundantCSpellWords.Count; $index++) {
+
+                $result = Select-String -InputObject $line -SimpleMatch $redundantCSpellWords[$index]
+
+                if ($null -ne $result) {
+                    if ($redundantCSpellWords.Contains($redundantCSpellWords[$index])) {
+                        $redundantCSpellWords.RemoveAt($index)
+                        $index--
+                    }
+                }
+            }
+
+            for ($index = 0; $index -lt $redundantCSpellIgnoreWords.Count; $index++) {
+
+                $result = Select-String -InputObject $line -SimpleMatch $redundantCSpellIgnoreWords[$index]
+
+                if ($null -ne $result) {
+                    if ($redundantCSpellIgnoreWords.Contains($redundantCSpellIgnoreWords[$index])) {
+                        $redundantCSpellIgnoreWords.RemoveAt($index)
+                        $index--
+                    }
+                }
+            }
+        }
+    }
+
+    if ($redundantCSpellWords.Count -gt 0) {
+        $lintingErrors.Add(@{lineNumber = "-"; line = "-"; errorMessage = "The following 'words' are redundant: $($redundantCSpellWords | ForEach-Object { "'$_'" })" })
+    }
+
+    if ($redundantCSpellIgnoreWords.Count -gt 0) {
+        $lintingErrors.Add(@{lineNumber = "-"; line = "-"; errorMessage = "The following 'ignoreWords' are redundant: $($redundantCSpellIgnoreWords | ForEach-Object { "'$_'" })" })
+    }
+
+    Write-Verbose "##[debug]Finished checking whether all 'words' and 'ignoreWords' values are found in the codebase."
 
     if ($lintingErrors.Length -gt 0) {
         $lintingErrors | ForEach-Object { [PSCustomObject]$_ } | Format-Table -AutoSize -Wrap -Property lineNumber, line, errorMessage
@@ -704,7 +765,7 @@ function Compare-ObjectExact {
     # TODO: document and add write-outputs, verbose, etc..
 
     [CmdletBinding()]
-    [OutputType([System.Object[]])]
+    [OutputType([Collections.Generic.List[String]])]
     param(
         [Parameter(Mandatory = $true)]
         [System.Object[]]
@@ -715,25 +776,25 @@ function Compare-ObjectExact {
         $DifferenceObject
     )
 
-    $errors = @()
+    [Collections.Generic.List[String]] $errors = @()
 
     for ($index = 0; $index -lt $ReferenceObject.Length; $index++) {
 
         try {
 
             if ($ReferenceObject[$index].GetType() -ne $DifferenceObject[$index].GetType()) {
-                $errors += "Expected '$($DifferenceObject[$index])' to be of type '$($ReferenceObject[$index].GetType())' but instead is type '$($DifferenceObject[$index].GetType())'."
+                $errors.Add("Expected '$($DifferenceObject[$index])' to be of type '$($ReferenceObject[$index].GetType())' but instead is type '$($DifferenceObject[$index].GetType())'.")
             }
 
             elseif ($ReferenceObject[$index] -ne $DifferenceObject[$index]) {
-                $errors += "'$($DifferenceObject[$index])' found instead of '$($ReferenceObject[$index])'."
+                $errors.Add("'$($DifferenceObject[$index])' found instead of '$($ReferenceObject[$index])'.")
             }
         }
 
         catch {
 
             # Assuming that this is caused by an index out of bounds error with DifferenceObject
-            $errors += "'$($ReferenceObject[$index])' was not found."
+            $errors.Add("'$($ReferenceObject[$index])' was not found.")
 
         }
     }
@@ -742,7 +803,7 @@ function Compare-ObjectExact {
 
         for ($index = $ReferenceObject.Length; $index -lt $DifferenceObject.Length; $index++) {
 
-            $errors += "An extra value of '$($DifferenceObject[$index])' found."
+            $errors.Add("An extra value of '$($DifferenceObject[$index])' found.")
         }
     }
 
