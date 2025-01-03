@@ -98,8 +98,8 @@ function Install-LintingDependencies {
 
         ubuntu-latest {
             # Install brew to get latest llvm and clang tools
-            Invoke-Expression "test -d ~/.linuxbrew && eval '$(~/.linuxbrew/bin/brew shellenv)'"
-            Invoke-Expression "test -d /home/linuxbrew/.linuxbrew && eval '$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)'"
+            # Invoke-Expression "test -d ~/.linuxbrew && eval '$(~/.linuxbrew/bin/brew shellenv)'"
+            # Invoke-Expression "test -d /home/linuxbrew/.linuxbrew && eval '$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)'"
             # Invoke-Expression "echo 'eval '$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)' >> ~/.bashrc"
             Invoke-Expression "export PATH='$HOME/.linuxbrew/bin:$PATH'"
 
