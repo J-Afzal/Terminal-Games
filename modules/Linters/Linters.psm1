@@ -663,8 +663,9 @@ function Test-CodeUsingClang {
 
     Write-Output "##[section]Running Test-CodeUsingClang..."
 
-    # Path needs re-updating 
+    # Path needs re-updating in macOS
     if ($OperatingSystem -eq "macos-latest") { # TODO: global functions
+        Write-Verbose "##[debug]Updating LLVM path on macOS..."
         $env:Path = '/opt/homebrew/opt/llvm/bin' + $env:Path
     }
 

@@ -23,9 +23,8 @@ LICENSE         text
 *.png           binary
 
 # Scripts
-# These are explicitly windows files and should use crlf
 *.psd1          text
-*.psm1          text       eol=crlf
+*.psm1          text
 
 # Serialisation
 *.json          text
