@@ -26,7 +26,7 @@ jobs:
 
             - name: Install build dependencies
               run: |
-                  Import-Module ./scripts/Terminal-Games.psd1
+                  Import-Module ./modules/Terminal-Games.psd1
                   Install-BuildDependencies -Verbose
 
             - name: Configure CMake
