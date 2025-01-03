@@ -24,7 +24,7 @@ LICENSE         text
 
 # Scripts
 # These are explicitly windows files and should use crlf
-*.psd1          text       eol=crlf
+*.psd1          text
 *.psm1          text       eol=crlf
 
 # Serialisation
