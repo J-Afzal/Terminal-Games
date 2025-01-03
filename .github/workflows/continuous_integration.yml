@@ -58,41 +58,43 @@ jobs:
             - uses: actions/checkout@v4
 
             - name: Install linting dependencies
+              id: dependencies
               run: |
                   Import-Module ./modules/Terminal-Games.psd1
                   Install-LintingDependencies -Verbose
 
             - name: Run gitattributes linter
+              if: steps.dependencies.outcome == 'success'
               run: |
                   Import-Module ./modules/Terminal-Games.psd1
                   Test-GitAttributesFile -Verbose
 
             - name: Run cspell config linter
-              if: success() || failure()
+              if: steps.dependencies.outcome == 'success'
               run: |
                   Import-Module ./modules/Terminal-Games.psd1
                   Test-CSpellConfigurationFile -Verbose
 
             - name: Run cspell
-              if: success() || failure()
+              if: steps.dependencies.outcome == 'success'
               run: |
                   Import-Module ./modules/Terminal-Games.psd1
                   Test-CodeUsingCSpell -Verbose
 
             - name: Run prettier
-              if: success() || failure()
+              if: steps.dependencies.outcome == 'success'
               run: |
                   Import-Module ./modules/Terminal-Games.psd1
                   Test-CodeUsingPrettier -Verbose
 
             - name: Run PSScriptAnalyzer
-              if: success() || failure()
+              if: steps.dependencies.outcome == 'success'
               run: |
                   Import-Module ./modules/Terminal-Games.psd1
                   Test-CodeUsingPSScriptAnalyzer -Verbose
 
             - name: Run clang-tidy and clang-format
-              if: success() || failure()
+              if: steps.dependencies.outcome == 'success'
               run: |
                   Import-Module ./modules/Terminal-Games.psd1
                   Test-CodeUsingClang -Verbose

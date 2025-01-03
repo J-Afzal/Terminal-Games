@@ -13,8 +13,6 @@
         "Test-CodeUsingPrettier",
         "Test-CodeUsingPSScriptAnalyzer",
         "Test-CodeUsingClang",
-        "Test-CodeUsingAllLinters",
-
-        "Compare-ObjectExact"
+        "Test-CodeUsingAllLinters"
     )
 }
