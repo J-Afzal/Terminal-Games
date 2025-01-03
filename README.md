@@ -91,10 +91,11 @@ The continuous deployment workflow runs against all commits to master, builds th
 ## Development Setup
 
 For development a few extra tools are needed to check for linting issues locally. The `Test-CodeUsingAllLinting` function
-can be called to run all the linting found in the CI workflow:
+can be called to run all the linting found in the CI workflow and has an optional flag to install most linting dependencies (
+assumes PowerShell is already installed):
 
 ```ps1
-Import-Module .\scripts\Linters.psm1 -Force
+Import-Module ./scripts/Terminal-Games.psd1
 Test-CodeUsingAllLinting -Verbose
 ```
 
@@ -103,15 +104,16 @@ Test-CodeUsingAllLinting -Verbose
 Install PowerShell to run the `Linters` module and the ScriptAnalyzer:
 
 ```ps1
-Invoke-ScriptAnalyzer -Path . -Recurse
+Import-Module ./scripts/Terminal-Games.psd1
+Test-CodeUsingPSScriptAnalyzer -Verbose
 ```
 
 ### Node
 
 Install the Node (>= v22.12.0) dependencies to run the `cspell` and `prettier` linters:
 
-```cmd
-Import-Module ./scripts/Linters.psm1
+```ps1
+Import-Module ./scripts/Terminal-Games.psd1
 Test-CodeUsingCSpell -Verbose
 Test-CodeUsingPrettier -Verbose
 ```
@@ -126,10 +128,11 @@ use [chocolatey](https://community.chocolatey.org/packages/llvm).
 clang-tidy [file] -p ./build
 ```
 
-Or using the `Linters` module to run `clang-tidy` and `clang-format` against the entire repository:
+Or using the `Linters` module to run `clang-tidy` and `clang-format` against the entire repository (with optional parameters to
+fix any fixable errors):
 
 ```ps1
-Import-Module ./scripts/Linters.psm1
+Import-Module ./scripts/Terminal-Games.psd1
 Test-CodeUsingClang -Verbose
 ```
 
