@@ -27,7 +27,7 @@ jobs:
             - name: Install build dependencies
               run: |
                   Import-Module ./modules/Terminal-Games.psd1
-                  Install-BuildDependencies -Verbose
+                  Install-BuildDependencies -OperatingSystem "${{ matrix.os }}" -Verbose
 
             - name: Configure CMake
               run: cmake -S . -B ./build -G "Ninja"
@@ -61,7 +61,7 @@ jobs:
               id: dependencies
               run: |
                   Import-Module ./modules/Terminal-Games.psd1
-                  Install-LintingDependencies -Verbose
+                  Install-LintingDependencies -OperatingSystem "${{ matrix.os }}" -Verbose
 
             - name: Run gitattributes linter
               if: steps.dependencies.outcome == 'success'
