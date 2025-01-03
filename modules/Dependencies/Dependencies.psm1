@@ -117,7 +117,9 @@ function Install-LintingDependencies {
 
         Write-Output "##[section]Configuring CMake to generate the 'compile_commands.json' file..."
 
-        # This will fail if ninja is not installed. Use Install-BuildDependencies to resolve this error.
+        # This will fail if ninja is not installed so Install-BuildDependencies is called.
+        Install-BuildDependencies
+
         cmake -S . -B ./build -G "Ninja"
 
         Write-Verbose "##[debug]Finished configuring CMake to generate the 'compile_commands.json' file."
