@@ -91,23 +91,23 @@ function Install-LintingDependencies {
 
     switch ($OperatingSystem) {
         macos-latest {
-            # Override pre-installed clang and add to path
-            Invoke-Expression "brew install llvm"
-            Invoke-Expression "export PATH='/opt/homebrew/opt/llvm/bin:$PATH'"
+            # Override pre-installed clang by adding llvm to path
+            brew install llvm
+            $env:Path = '/opt/homebrew/opt/llvm/bin' + $env:Path
         }
 
         ubuntu-latest {
-            # Install brew to get latest llvm and clang tools
             # Invoke-Expression "test -d ~/.linuxbrew && eval '$(~/.linuxbrew/bin/brew shellenv)'"
             # Invoke-Expression "test -d /home/linuxbrew/.linuxbrew && eval '$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)'"
             # Invoke-Expression "echo 'eval '$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)' >> ~/.bashrc"
-            Invoke-Expression "export PATH='$HOME/.linuxbrew/bin:$PATH'"
 
-            Invoke-Expression "brew install llvm"
+            # Install brew to get latest llvm and clang tools
+            $env:Path = '/home/linuxbrew/.linuxbrew/bin' + $env:Path
+            brew install llvm
         }
 
         windows-latest {
-            Invoke-Expression "choco upgrade llvm -y"
+            choco upgrade llvm -y
         }
     }
 
