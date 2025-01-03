@@ -8,8 +8,6 @@ ignorePaths:
     - package-lock.json
 words:
     - bugprone
-    - cleanup
-    - endgroup
     - linters
     - pwsh
 ignoreWords:
@@ -17,7 +15,6 @@ ignoreWords:
     - analyzer
     - choco
     - constexpr
-    - ctest
     - defenses
     - discardable
     - dont
@@ -29,7 +26,6 @@ ignoreWords:
     - linuxbrew
     - linuxkernel
     - llvmlibc
-    - msvc
     - nodiscard
     - noexcept
     - nolint
