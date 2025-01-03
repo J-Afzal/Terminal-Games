@@ -97,4 +97,4 @@ jobs:
               if: (success() || failure()) && steps.dependencies.outcome == 'success'
               run: |
                   Import-Module ./modules/Terminal-Games.psd1
-                  Test-CodeUsingClang -Verbose
+                  Test-CodeUsingClang -OperatingSystem "${{ matrix.os }}" -Verbose

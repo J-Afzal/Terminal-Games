@@ -649,6 +649,10 @@ function Test-CodeUsingClang {
     param
     (
         [Parameter(Mandatory = $false)]
+        [String]
+        $OperatingSystem,
+
+        [Parameter(Mandatory = $false)]
         [Switch]
         $FixClangTidyErrors,
 
@@ -658,6 +662,11 @@ function Test-CodeUsingClang {
     )
 
     Write-Output "##[section]Running Test-CodeUsingClang..."
+
+    # Path needs re-updating 
+    if ($OperatingSystem -eq "macos-latest") { # TODO: global functions
+        $env:Path = '/opt/homebrew/opt/llvm/bin' + $env:Path
+    }
 
     Write-Verbose "##[debug]Using the following clang-tidy version..."
     (clang-tidy --version 2>&1) | ForEach-Object { "##[debug]$_" } | Write-Verbose
