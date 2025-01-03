@@ -2,296 +2,6 @@ $ErrorActionPreference = "Stop"
 
 <#
     .SYNOPSIS
-    Wrapper around cspell.
-
-    .DESCRIPTION
-    Raises an error if linting errors found (with exception of the package-lock.json file).
-
-    .INPUTS
-    None.
-
-    .OUTPUTS
-    None.
-
-    .EXAMPLE
-    Import-Module Linters.psm1
-    Test-CodeUsingCSpell -Verbose
-#>
-
-function Test-CodeUsingCSpell {
-
-    [CmdletBinding()]
-    param()
-
-    Write-Output "##[section]Running Test-CodeUsingCSpell..."
-
-    Write-Output "##[section]Retrieving all files to test against cspell..."
-    $allFilesToTest = git ls-files -c | ForEach-Object { if (($_.Split(".")[-1] -NotIn ("ico", "png")) -And ($_.Split(".")[-2] -ne "package-lock")) { $_ } }
-
-    Write-Verbose "##[debug]Retrieved all files to test against cspell:"
-    $allFilesToTest | ForEach-Object { "##[debug]'$_'" } | Write-Verbose
-
-    $filesWithErrors = @()
-
-    foreach ($file in $allFilesToTest) {
-
-        Write-Output "##[section]Running cspell against '$file'..."
-
-        (npx -c "cspell --unique --show-context --no-progress --no-summary $file") | ForEach-Object { "##[debug]$_" } | Write-Verbose
-
-        if ($LASTEXITCODE -eq 1) {
-            $filesWithErrors += $file
-        }
-    }
-
-    if ($filesWithErrors.Count -gt 0) {
-        Write-Verbose "##[debug]The following files have cspell errors:"
-        $filesWithErrors | ForEach-Object { "##[debug]$_" } | Write-Verbose
-        Write-Error "##[error]Please resolve the above errors!"
-    }
-
-    else {
-        Write-Output "##[section]All files conform to cspell standards!"
-    }
-}
-
-<#
-    .SYNOPSIS
-    Wrapper around prettier.
-
-    .DESCRIPTION
-    Raises an error if linting errors found (with exception of the package-lock.json file).
-
-    .INPUTS
-    None.
-
-    .OUTPUTS
-    None.
-
-    .EXAMPLE
-    Import-Module Linters.psm1
-    Test-CodeUsingPrettier -Verbose
-#>
-
-function Test-CodeUsingPrettier {
-
-    [CmdletBinding()]
-    param()
-
-    Write-Output "##[section]Running Test-CodeUsingPrettier..."
-
-    Write-Output "##[section]Retrieving all files to test against prettier..."
-    $allFilesToTest = git ls-files -c | ForEach-Object { if (($_.Split(".")[-1] -In ("clang-format", "clang-tidy", "json", "md", "yml")) -And ($_.Split(".")[-2] -ne "package-lock")) { $_ } }
-
-    Write-Verbose "##[debug]Retrieved all files to test against prettier:"
-    $allFilesToTest | ForEach-Object { "##[debug]'$_'" } | Write-Verbose
-
-    $filesWithErrors = @()
-
-    foreach ($file in $allFilesToTest) {
-
-        Write-Output "##[section]Running prettier against '$file'..."
-
-        (npx -c "prettier $file --debug-check") | ForEach-Object { "##[debug]$_" } | Write-Verbose
-
-        if ($LASTEXITCODE -eq 1) {
-            $filesWithErrors += $file
-        }
-    }
-
-    if ($filesWithErrors.Count -gt 0) {
-        Write-Verbose "##[debug]The following files have prettier errors:"
-        $filesWithErrors | ForEach-Object { "##[debug]$_" } | Write-Verbose
-        Write-Error "##[error]Please resolve the above errors!"
-    }
-
-    else {
-        Write-Output "##[section]All files conform to prettier standards!"
-    }
-}
-
-<#
-    .SYNOPSIS
-    Wrapper around PSScriptAnalyzer.
-
-    .DESCRIPTION
-    Raises an error if linting errors found.
-
-    .INPUTS
-    None.
-
-    .OUTPUTS
-    None.
-
-    .EXAMPLE
-    Import-Module Linters.psm1
-    Test-CodeUsingPSScriptAnalyzer -Verbose
-#>
-
-function Test-CodeUsingPSScriptAnalyzer {
-
-    [CmdletBinding()]
-    param()
-
-    Write-Output "##[section]Running Test-CodeUsingPSScriptAnalyzer..."
-
-    Write-Output "##[section]Retrieving all files to test against PSScriptAnalyzer..."
-    $allFilesToTest = git ls-files -c | ForEach-Object { if ($_.Split(".")[-1] -In ("ps1", "psd1", "psm1")) { $_ } }
-
-    Write-Verbose "##[debug]Retrieved all files to test against PSScriptAnalyzer:"
-    $allFilesToTest | ForEach-Object { "##[debug]'$_'" } | Write-Verbose
-
-    $filesWithErrors = @()
-
-    foreach ($file in $allFilesToTest) {
-
-        Write-Output "##[section]Running PSScriptAnalyzer against '$file'..."
-
-        Invoke-ScriptAnalyzer $file
-        $output = Invoke-ScriptAnalyzer $file
-
-        if ($output.Length -gt 0) {
-            $filesWithErrors += $file
-        }
-    }
-
-    if ($filesWithErrors.Count -gt 0) {
-        Write-Verbose "##[debug]The following files have PSScriptAnalyzer errors:"
-        $filesWithErrors | ForEach-Object { "##[debug]$_" } | Write-Verbose
-        Write-Error "##[error]Please resolve the above errors!"
-    }
-
-    else {
-        Write-Output "##[section]All files conform to PSScriptAnalyzer standards!"
-    }
-}
-
-<#
-    .SYNOPSIS
-    Runs clang-tidy against all git-tracked C++ files (*.cpp and *.hpp).
-
-    .DESCRIPTION
-    Runs clang-tidy and clang-format against all git-tracked C++ files (*.cpp and *.hpp). CMake must be configured in the
-    ./build/ directory as the 'compile_commands.json' file is needed by clang-tidy.
-
-    .INPUTS
-    None.
-
-    .OUTPUTS
-    None.
-
-    .EXAMPLE
-    Import-Module Linters.psm1
-    Test-CodeUsingClang -Verbose
-#>
-
-function Test-CodeUsingClang {
-
-    [CmdletBinding()]
-    param
-    (
-        [Parameter(Mandatory = $false)]
-        [switch]
-        $FixClangTidyErrors,
-
-        [Parameter(Mandatory = $false)]
-        [switch]
-        $FixClangFormatErrors
-    )
-
-    Write-Output "##[section]Running Test-CodeUsingClang..."
-
-    Write-Output "##[debug]Using the following clang-tidy version..."
-    (clang-tidy --version 2>&1) | ForEach-Object { "##[debug]$_" } | Write-Verbose
-
-    Write-Output "##[debug]Using the following clang-format version..."
-    (clang-format --version 2>&1) | ForEach-Object { "##[debug]$_" } | Write-Verbose
-
-    Write-Output "##[section]Retrieving all files to test..."
-    $allFilesToTest = git ls-files -c | ForEach-Object { if ($_.Split(".")[-1] -In ("cpp", "hpp")) { "./$_" } }
-
-    Write-Verbose "##[debug]Retrieved all files to test:"
-    $allFilesToTest | ForEach-Object { "##[debug]'$_'" } | Write-Verbose
-
-    $filesWithClangTidyErrors = @()
-    $filesWithClangFormatErrors = @()
-
-    foreach ($file in $allFilesToTest) {
-
-        $ErrorActionPreference = "Continue"
-
-        Write-Output "##[section]Running clang-tidy against '$file'..."
-        (clang-tidy $file -p ./build 2>&1) | ForEach-Object { "##[debug]$_" } | Write-Verbose
-
-        if ($LASTEXITCODE -eq 1) {
-
-            if ($FixClangTidyErrors) {
-                Write-Output "##[debug]Fixing clang-tidy issues in '$file'..."
-                (clang-tidy --fix $file -p ./build 2>&1) | ForEach-Object { "##[debug]$_" } | Write-Verbose
-
-                if ($LASTEXITCODE -eq 1) {
-                    Write-Output "##[debug]clang-tidy issues still exist in '$file'..."
-                    $filesWithClangFormatErrors += $file
-                }
-
-                else {
-                    Write-Output "##[debug]All clang-tidy issues in '$file' have been fixed!"
-                }
-            }
-
-            else {
-                $filesWithClangTidyErrors += $file
-            }
-        }
-
-        Write-Output "##[section]Running clang-format against '$file'..."
-        (clang-format --Werror --dry-run $file) | ForEach-Object { "##[debug]$_" } | Write-Verbose
-
-        if ($LASTEXITCODE -eq 1) {
-
-            if ($FixClangFormatErrors) {
-                Write-Output "##[debug]Fixing clang-format issues in '$file'..."
-                (clang-format --Werror --i $file) | ForEach-Object { "##[debug]$_" } | Write-Verbose
-
-                if ($LASTEXITCODE -eq 1) {
-                    Write-Output "##[debug]clang-format issues still exist in '$file'..."
-                    $filesWithClangFormatErrors += $file
-                }
-
-                else {
-                    Write-Output "##[debug]All clang-format issues in '$file' have been fixed!"
-                }
-            }
-
-            else {
-                $filesWithClangFormatErrors += $file
-            }
-        }
-
-        $ErrorActionPreference = "Stop"
-    }
-
-    if ($filesWithClangTidyErrors.Count -gt 0) {
-        Write-Verbose "##[debug]The following files do not conform to clang-tidy standards:"
-        $filesWithClangTidyErrors | ForEach-Object { "##[debug]$_" } | Write-Verbose
-    }
-
-    if ($filesWithClangFormatErrors.Count -gt 0) {
-        Write-Verbose "##[debug]The following files do not conform to clang-format standards:"
-        $filesWithClangFormatErrors | ForEach-Object { "##[debug]$_" } | Write-Verbose
-    }
-
-    if (($filesWithClangTidyErrors.Count -gt 0) -or ($filesWithClangFormatErrors.Count -gt 0)) {
-        Write-Error "##[error]Please resolve the above errors!"
-    }
-
-    else {
-        Write-Output "##[section]All files conform to standards!"
-    }
-}
-
-<#
-    .SYNOPSIS
     Lints the .gitattributes file.
 
     .DESCRIPTION
@@ -309,7 +19,7 @@ function Test-CodeUsingClang {
     None.
 
     .EXAMPLE
-    Import-Module Linters.psm1
+    Import-Module ./scripts/Terminal-Games.psd1
     Test-GitattributesFile -Verbose
 #>
 
@@ -337,7 +47,7 @@ function Test-GitAttributesFile {
 
     $uniqueGitTrackedFileExtensionsAndFileNamesWithoutExtensions = $uniqueGitTrackedFileExtensions + $uniqueGitTrackedFileNamesWithoutExtensions
 
-    Write-Output "##[section]Checking .gitattributes formatting..."
+    Write-Output "##[section]Checking .gitattributes file..."
     $gitattributesFileContentsWithoutComments = @()
     $previouslyFoundEntries = @()
     $lintingErrors = @()
@@ -425,7 +135,7 @@ function Test-GitAttributesFile {
         }
     }
 
-    Write-Verbose "##[debug]Finished checking .gitattributes formatting."
+    Write-Verbose "##[debug]Finished checking .gitattributes file."
 
     Write-Output "##[section]Checking all unique file extensions and files without extensions have a .gitattributes entry:"
 
@@ -450,7 +160,7 @@ function Test-GitAttributesFile {
     Write-Verbose "##[debug]Finished checking that all unique file extensions and files without extensions have a .gitattributes entry."
 
     if ($lintingErrors.Length -gt 0) {
-        $lintingErrors | ForEach-Object { [PSCustomObject]$_ } | Format-Table -AutoSize -Wrap -Property lineNumber, line, errorMessage
+        $lintingErrors | Sort-Object { $_.lineNumber }, { $_.errorMessage } | ForEach-Object { [PSCustomObject]$_ } | Format-Table -AutoSize -Wrap -Property lineNumber, line, errorMessage
         Write-Error "##[error]Please resolve the above errors!"
     }
 
@@ -482,38 +192,40 @@ function Test-GitAttributesFile {
     None.
 
     .EXAMPLE
-    Import-Module Linters.psm1
-    Test-CSpellConfigFile -Verbose
+    Import-Module ./scripts/Terminal-Games.psd1
+    Test-CSpellConfigurationFile -Verbose
 #>
 
-function Test-CSpellConfigFile {
+function Test-CSpellConfigurationFile {
 
     [CmdletBinding()]
     param()
 
-    Write-Output "##[section]Running Test-CSpellConfigFile..."
+    Write-Output "##[section]Running Test-CSpellConfigurationFile..."
 
     Write-Output "##[section]Retrieving contents of cspell.yml..."
     [Collections.Generic.List[String]] $cspellFileContents = Get-Content -Path ./cspell.yml
     Write-Verbose "##[debug]Finished retrieving the contents cspell.yml."
 
-    Write-Output "##[section]Checking layout..."
+    Write-Output "##[section]Checking cspell.yml file..."
     [Collections.Generic.List[HashTable]] $lintingErrors = @()
 
+    # The below if statements will cause an exception if the file is empty or only a single line. This is fine as the config
+    # file is in a useless state if it is empty or a single line and thus isn't an allowed state.
     if ($cspellFileContents[0] -ne "version: ""0.2""") {
         $lintingErrors.Add(@{lineNumber = 1; line = "'$($cspellFileContents[0])'"; errorMessage = "Invalid version number. Expected 'version: ""0.2""'." })
     }
 
     if ($cspellFileContents[1] -ne "language: en-gb") {
-        $lintingErrors.Add(@{lineNumber = 1; line = "'$($cspellFileContents[1])'"; errorMessage = "Invalid language. Expected 'language: en-gb'." })
+        $lintingErrors.Add(@{lineNumber = 2; line = "'$($cspellFileContents[1])'"; errorMessage = "Invalid language. Expected 'language: en-gb'." })
     }
 
     Write-Verbose "##[debug]Retrieving 'ignorePaths', 'words' and 'ignoreWords'..."
+    [Collections.Generic.List[String]] $expectedOrderOfKeys = @("version", "language", "ignorePaths", "words", "ignoreWords")
+    [Collections.Generic.List[String]] $orderOfKeys = @()
     [Collections.Generic.List[String]] $cspellIgnorePaths = @()
     [Collections.Generic.List[String]] $cspellWords = @()
     [Collections.Generic.List[String]] $cspellIgnoreWords = @()
-    [Collections.Generic.List[String]] $orderOfKeys = @()
-    [Collections.Generic.List[String]] $expectedOrderOfKeys = @("version", "language", "ignorePaths", "words", "ignoreWords")
     $currentKey = ""
 
     for ($index = 0; $index -lt $cspellFileContents.Count; $index++) {
@@ -522,7 +234,7 @@ function Test-CSpellConfigFile {
 
         if ($currentLine -eq "") {
             Write-Verbose "##[debug]Current line is blank: '$currentLine'"
-            $lintingErrors.Add(@{lineNumber = $index + 1; line = "'$currentLine'"; errorMessage = "Empty line." })
+            $lintingErrors.Add(@{lineNumber = $index + 1; line = "'$currentLine'"; errorMessage = "Invalid empty line." })
             continue
         }
 
@@ -549,16 +261,17 @@ function Test-CSpellConfigFile {
 
                     # Assumes an indentation of four characters
                     $value = $currentLine.TrimStart("    - ")
+                    $valueLowerCase = $value.ToLower()
 
-                    if ($value -ne $value.ToLower()) {
+                    if ($value -CMatch "[A-Z]") {
                         $lintingErrors.Add(@{lineNumber = $index + 1; line = "'$currentLine'"; errorMessage = "Value is not lowercase." })
                     }
 
-                    if ($cspellWords.Contains($value.ToLower())) {
+                    if ($cspellWords.Contains($valueLowerCase)) {
                         $lintingErrors.Add(@{lineNumber = $index + 1; line = "'$currentLine'"; errorMessage = "Duplicate entry within words." })
                     }
 
-                    $cspellWords.Add($value.ToLower())
+                    $cspellWords.Add($valueLowerCase)
                 }
 
                 ignoreWords {
@@ -566,22 +279,23 @@ function Test-CSpellConfigFile {
 
                     # Assumes an indentation of four characters
                     $value = $currentLine.TrimStart("    - ")
+                    $valueLowerCase = $value.ToLower()
 
-                    if ($value -ne $value.ToLower()) {
+                    if ($value -CMatch "[A-Z]") {
                         $lintingErrors.Add(@{lineNumber = $index + 1; line = "'$currentLine'"; errorMessage = "Value is not lowercase." })
                     }
 
-                    if ($cspellIgnoreWords.Contains($value.ToLower())) {
+                    if ($cspellIgnoreWords.Contains($valueLowerCase)) {
                         $lintingErrors.Add(@{lineNumber = $index + 1; line = "'$currentLine'"; errorMessage = "Duplicate entry within ignoreWords." })
                     }
 
-                    $cspellIgnoreWords.Add($value.ToLower())
+                    $cspellIgnoreWords.Add($valueLowerCase)
                 }
 
                 default {
                     Write-Verbose "##[debug]Current line is a value for an unexpected key: '$currentLine'"
 
-                    $lintingErrors.Add(@{lineNumber = $index + 1; line = "'$currentLine'"; errorMessage = "Value for an unexpected key." })
+                    $lintingErrors.Add(@{lineNumber = $index + 1; line = "'$currentLine'"; errorMessage = "Value for an invalid key." })
                 }
             }
         }
@@ -592,7 +306,7 @@ function Test-CSpellConfigFile {
             $currentKey = $key.Matches[0].Value
 
             if (-Not $expectedOrderOfKeys.Contains($currentKey)) {
-                $lintingErrors.Add(@{lineNumber = $index + 1; line = "'$currentLine'"; errorMessage = "Unexpected key." })
+                $lintingErrors.Add(@{lineNumber = $index + 1; line = "'$currentLine'"; errorMessage = "Invalid key." })
             }
 
             $orderOfKeys.Add($currentKey)
@@ -602,10 +316,10 @@ function Test-CSpellConfigFile {
     Write-Verbose "##[debug]Retrieved 'ignorePaths', 'words' and 'ignoreWords'."
 
     if (Compare-ObjectExact -ReferenceObject $expectedOrderOfKeys -DifferenceObject $orderOfKeys) {
-        $lintingErrors.Add(@{lineNumber = "-"; line = "-"; errorMessage = "Keys are incorrectly ordered or contain unexpected keys. Expected the order: 'version', 'language', 'ignorePaths', 'words', 'ignoreWords'." })
+        $lintingErrors.Add(@{lineNumber = "-"; line = "-"; errorMessage = "Keys are incorrectly ordered, incorrectly cased or contain an unexpected key. Expected the following ordered keys: 'version', 'language', 'ignorePaths', 'words', 'ignoreWords'." })
     }
 
-    Write-Verbose "##[debug]Finished checking layout."
+    Write-Verbose "##[debug]Finished checking cspell.yml file."
 
     Write-Output "##[section]Checking 'ignorePaths', 'words' and 'ignoreWords' are alphabetically ordered..."
 
@@ -662,7 +376,7 @@ function Test-CSpellConfigFile {
             if ($currentKey -eq "words") {
 
                 # Assumes an indentation of four characters
-                $value = $currentLine.TrimStart("    - ")
+                $value = $currentLine.TrimStart("    - ").ToLower()
 
                 if ($cspellIgnoreWords.Contains($value)) {
                     $lintingErrors.Add(@{lineNumber = $index + 1; line = "'$currentLine'"; errorMessage = "'words' entry also found in 'ignoreWords'." })
@@ -677,7 +391,7 @@ function Test-CSpellConfigFile {
 
     Write-Verbose "##[debug]Finished checking if 'words' are found in 'ignoreWords'."
 
-    Write-Output "##[section]Checking whether all 'words' and 'ignoreWords' values are found in the codebase..."
+    Write-Output "##[section]Checking for redundant 'words' and 'ignoreWords'..."
 
     Write-Verbose "##[debug]Retrieving all files to test against..."
     # Same file list as found in Test-CodeUsingCSpell but also exclude cspell.yml (assumes cspell.yml is the only file with a file name of cspell)
@@ -731,10 +445,10 @@ function Test-CSpellConfigFile {
         $lintingErrors.Add(@{lineNumber = "-"; line = "-"; errorMessage = "The following 'ignoreWords' are redundant: $($redundantCSpellIgnoreWords | ForEach-Object { "'$_'" })" })
     }
 
-    Write-Verbose "##[debug]Finished checking whether all 'words' and 'ignoreWords' values are found in the codebase."
+    Write-Output "##[section]Finished checking for redundant 'words' and 'ignoreWords'."
 
-    if ($lintingErrors.Length -gt 0) {
-        $lintingErrors | ForEach-Object { [PSCustomObject]$_ } | Format-Table -AutoSize -Wrap -Property lineNumber, line, errorMessage
+    if ($lintingErrors.Count -gt 0) {
+        $lintingErrors | Sort-Object { $_.lineNumber }, { $_.errorMessage } | ForEach-Object { [PSCustomObject]$_ } | Format-Table -AutoSize -Wrap -Property lineNumber, line, errorMessage
         Write-Error "##[error]Please resolve the above errors!"
     }
 
@@ -745,69 +459,293 @@ function Test-CSpellConfigFile {
 
 <#
     .SYNOPSIS
-    TODO
+    Wrapper around cspell.
 
     .DESCRIPTION
-    TODO
+    Raises an error if linting errors found (with exception of the package-lock.json file).
 
     .INPUTS
-    TODO
+    None.
 
     .OUTPUTS
-    TODO
+    None.
 
     .EXAMPLE
-    Import-Module Linters.psm1
-    Compare-ObjectExact -ReferenceObject $arrayOne -DifferenceObject $arrayTwo -Verbose
+    Import-Module ./scripts/Terminal-Games.psd1
+    Test-CodeUsingCSpell -Verbose
 #>
 
-function Compare-ObjectExact {
-    # TODO: document and add write-outputs, verbose, etc..
+function Test-CodeUsingCSpell {
 
     [CmdletBinding()]
-    [OutputType([Collections.Generic.List[String]])]
-    param(
-        [Parameter(Mandatory = $true)]
-        [System.Object[]]
-        $ReferenceObject,
+    param()
 
-        [Parameter(Mandatory = $true)]
-        [System.Object[]]
-        $DifferenceObject
+    Write-Output "##[section]Running Test-CodeUsingCSpell..."
+
+    Write-Output "##[section]Retrieving all files to test against cspell..."
+    $allFilesToTest = git ls-files -c | ForEach-Object { if (($_.Split(".")[-1] -NotIn ("ico", "png")) -And ($_.Split(".")[-2] -ne "package-lock")) { $_ } }
+
+    Write-Verbose "##[debug]Retrieved all files to test against cspell:"
+    $allFilesToTest | ForEach-Object { "##[debug]'$_'" } | Write-Verbose
+
+    $filesWithErrors = @()
+
+    foreach ($file in $allFilesToTest) {
+
+        Write-Output "##[section]Running cspell against '$file'..."
+
+        (npx -c "cspell --unique --show-context --no-progress --no-summary $file") | ForEach-Object { "##[debug]$_" } | Write-Verbose
+
+        if ($LASTEXITCODE -eq 1) {
+            $filesWithErrors += $file
+        }
+    }
+
+    if ($filesWithErrors.Count -gt 0) {
+        Write-Verbose "##[debug]The following files have cspell errors:"
+        $filesWithErrors | ForEach-Object { "##[debug]$_" } | Write-Verbose
+        Write-Error "##[error]Please resolve the above errors!"
+    }
+
+    else {
+        Write-Output "##[section]All files conform to cspell standards!"
+    }
+}
+
+<#
+    .SYNOPSIS
+    Wrapper around prettier.
+
+    .DESCRIPTION
+    Raises an error if linting errors found (with exception of the package-lock.json file).
+
+    .INPUTS
+    None.
+
+    .OUTPUTS
+    None.
+
+    .EXAMPLE
+    Import-Module ./scripts/Terminal-Games.psd1
+    Test-CodeUsingPrettier -Verbose
+#>
+
+function Test-CodeUsingPrettier {
+
+    [CmdletBinding()]
+    param()
+
+    Write-Output "##[section]Running Test-CodeUsingPrettier..."
+
+    Write-Output "##[section]Retrieving all files to test against prettier..."
+    $allFilesToTest = git ls-files -c | ForEach-Object { if (($_.Split(".")[-1] -In ("clang-format", "clang-tidy", "json", "md", "yml")) -And ($_.Split(".")[-2] -ne "package-lock")) { $_ } }
+
+    Write-Verbose "##[debug]Retrieved all files to test against prettier:"
+    $allFilesToTest | ForEach-Object { "##[debug]'$_'" } | Write-Verbose
+
+    $filesWithErrors = @()
+
+    foreach ($file in $allFilesToTest) {
+
+        Write-Output "##[section]Running prettier against '$file'..."
+
+        (npx -c "prettier $file --debug-check") | ForEach-Object { "##[debug]$_" } | Write-Verbose
+
+        if ($LASTEXITCODE -eq 1) {
+            $filesWithErrors += $file
+        }
+    }
+
+    if ($filesWithErrors.Count -gt 0) {
+        Write-Verbose "##[debug]The following files have prettier errors:"
+        $filesWithErrors | ForEach-Object { "##[debug]$_" } | Write-Verbose
+        Write-Error "##[error]Please resolve the above errors!"
+    }
+
+    else {
+        Write-Output "##[section]All files conform to prettier standards!"
+    }
+}
+
+<#
+    .SYNOPSIS
+    Wrapper around PSScriptAnalyzer.
+
+    .DESCRIPTION
+    Raises an error if linting errors found.
+
+    .INPUTS
+    None.
+
+    .OUTPUTS
+    None.
+
+    .EXAMPLE
+    Import-Module ./scripts/Terminal-Games.psd1
+    Test-CodeUsingPSScriptAnalyzer -Verbose
+#>
+
+function Test-CodeUsingPSScriptAnalyzer {
+
+    [CmdletBinding()]
+    param()
+
+    Write-Output "##[section]Running Test-CodeUsingPSScriptAnalyzer..."
+
+    Write-Output "##[section]Retrieving all files to test against PSScriptAnalyzer..."
+    $allFilesToTest = git ls-files -c | ForEach-Object { if ($_.Split(".")[-1] -In ("ps1", "psd1", "psm1")) { $_ } }
+
+    Write-Verbose "##[debug]Retrieved all files to test against PSScriptAnalyzer:"
+    $allFilesToTest | ForEach-Object { "##[debug]'$_'" } | Write-Verbose
+
+    $filesWithErrors = @()
+
+    foreach ($file in $allFilesToTest) {
+
+        Write-Output "##[section]Running PSScriptAnalyzer against '$file'..."
+
+        Invoke-ScriptAnalyzer -Path $file -Settings ./PSScriptAnalyzerSettings.psd1
+        $output = Invoke-ScriptAnalyzer -Path $file -Settings ./PSScriptAnalyzerSettings.psd1
+
+        if ($output.Length -gt 0) {
+            $filesWithErrors += $file
+        }
+    }
+
+    if ($filesWithErrors.Count -gt 0) {
+        Write-Verbose "##[debug]The following files have PSScriptAnalyzer errors:"
+        $filesWithErrors | ForEach-Object { "##[debug]$_" } | Write-Verbose
+        Write-Error "##[error]Please resolve the above errors!"
+    }
+
+    else {
+        Write-Output "##[section]All files conform to PSScriptAnalyzer standards!"
+    }
+}
+
+<#
+    .SYNOPSIS
+    Wrapper around clang-tidy.
+
+    .DESCRIPTION
+    Runs clang-tidy and clang-format against all git-tracked C++ files (*.cpp and *.hpp).
+    CMake must be configured in the ./build/ directory as the 'compile_commands.json' file is needed by clang-tidy.
+    Raises an error if linting errors found.
+
+    .INPUTS
+    None.
+
+    .OUTPUTS
+    None.
+
+    .EXAMPLE
+    Import-Module ./scripts/Terminal-Games.psd1
+    Test-CodeUsingClang -Verbose
+#>
+
+function Test-CodeUsingClang {
+
+    [CmdletBinding()]
+    param
+    (
+        [Parameter(Mandatory = $false)]
+        [Switch]
+        $FixClangTidyErrors,
+
+        [Parameter(Mandatory = $false)]
+        [Switch]
+        $FixClangFormatErrors
     )
 
-    [Collections.Generic.List[String]] $errors = @()
+    Write-Output "##[section]Running Test-CodeUsingClang..."
 
-    for ($index = 0; $index -lt $ReferenceObject.Length; $index++) {
+    Write-Verbose "##[debug]Using the following clang-tidy version..."
+    (clang-tidy --version 2>&1) | ForEach-Object { "##[debug]$_" } | Write-Verbose
 
-        try {
+    Write-Verbose "##[debug]Using the following clang-format version..."
+    (clang-format --version 2>&1) | ForEach-Object { "##[debug]$_" } | Write-Verbose
 
-            if ($ReferenceObject[$index].GetType() -ne $DifferenceObject[$index].GetType()) {
-                $errors.Add("Expected '$($DifferenceObject[$index])' to be of type '$($ReferenceObject[$index].GetType())' but instead is type '$($DifferenceObject[$index].GetType())'.")
+    Write-Output "##[section]Retrieving all files to test..."
+    $allFilesToTest = git ls-files -c | ForEach-Object { if ($_.Split(".")[-1] -In ("cpp", "hpp")) { "./$_" } }
+
+    Write-Verbose "##[debug]Retrieved all files to test:"
+    $allFilesToTest | ForEach-Object { "##[debug]'$_'" } | Write-Verbose
+
+    $filesWithClangTidyErrors = @()
+    $filesWithClangFormatErrors = @()
+
+    foreach ($file in $allFilesToTest) {
+
+        $ErrorActionPreference = "Continue"
+
+        Write-Output "##[section]Running clang-tidy against '$file'..."
+        (clang-tidy $file -p ./build 2>&1) | ForEach-Object { "##[debug]$_" } | Write-Verbose
+
+        if ($LASTEXITCODE -eq 1) {
+
+            if ($FixClangTidyErrors) {
+                Write-Verbose "##[debug]Fixing clang-tidy issues in '$file'..."
+                (clang-tidy --fix $file -p ./build 2>&1) | ForEach-Object { "##[debug]$_" } | Write-Verbose
+
+                if ($LASTEXITCODE -eq 1) {
+                    Write-Verbose "##[debug]clang-tidy issues still exist in '$file'..."
+                    $filesWithClangFormatErrors += $file
+                }
+
+                else {
+                    Write-Verbose "##[debug]All clang-tidy issues in '$file' have been fixed!"
+                }
             }
 
-            elseif ($ReferenceObject[$index] -ne $DifferenceObject[$index]) {
-                $errors.Add("'$($DifferenceObject[$index])' found instead of '$($ReferenceObject[$index])'.")
+            else {
+                $filesWithClangTidyErrors += $file
             }
         }
 
-        catch {
+        Write-Output "##[section]Running clang-format against '$file'..."
+        (clang-format --Werror --dry-run $file) | ForEach-Object { "##[debug]$_" } | Write-Verbose
 
-            # Assuming that this is caused by an index out of bounds error with DifferenceObject
-            $errors.Add("'$($ReferenceObject[$index])' was not found.")
+        if ($LASTEXITCODE -eq 1) {
 
+            if ($FixClangFormatErrors) {
+                Write-Verbose "##[debug]Fixing clang-format issues in '$file'..."
+                (clang-format --Werror --i $file) | ForEach-Object { "##[debug]$_" } | Write-Verbose
+
+                if ($LASTEXITCODE -eq 1) {
+                    Write-Verbose "##[debug]clang-format issues still exist in '$file'..."
+                    $filesWithClangFormatErrors += $file
+                }
+
+                else {
+                    Write-Verbose "##[debug]All clang-format issues in '$file' have been fixed!"
+                }
+            }
+
+            else {
+                $filesWithClangFormatErrors += $file
+            }
         }
+
+        $ErrorActionPreference = "Stop"
     }
 
-    if ($DifferenceObject.Length -gt $ReferenceObject.Length) {
-
-        for ($index = $ReferenceObject.Length; $index -lt $DifferenceObject.Length; $index++) {
-
-            $errors.Add("An extra value of '$($DifferenceObject[$index])' found.")
-        }
+    if ($filesWithClangTidyErrors.Count -gt 0) {
+        Write-Verbose "##[debug]The following files do not conform to clang-tidy standards:"
+        $filesWithClangTidyErrors | ForEach-Object { "##[debug]$_" } | Write-Verbose
     }
 
-    return $errors
+    if ($filesWithClangFormatErrors.Count -gt 0) {
+        Write-Verbose "##[debug]The following files do not conform to clang-format standards:"
+        $filesWithClangFormatErrors | ForEach-Object { "##[debug]$_" } | Write-Verbose
+    }
+
+    if (($filesWithClangTidyErrors.Count -gt 0) -or ($filesWithClangFormatErrors.Count -gt 0)) {
+        Write-Error "##[error]Please resolve the above errors!"
+    }
+
+    else {
+        Write-Output "##[section]All files conform to standards!"
+    }
 }
 
 <#
@@ -825,34 +763,42 @@ function Compare-ObjectExact {
     None.
 
     .EXAMPLE
-    Import-Module Linters.psm1
+    Import-Module ./scripts/Terminal-Games.psd1
     Test-CodeUsingAllLinting -Verbose
 #>
 
-function Test-CodeUsingAllLinting {
+function Test-CodeUsingAllLinters {
 
     [CmdletBinding()]
     param(
         [Parameter(Mandatory = $false)]
-        [switch]
+        [Switch]
+        $InstallLintingDependencies,
+
+        [Parameter(Mandatory = $false)]
+        [Switch]
         $FixClangTidyErrors,
 
         [Parameter(Mandatory = $false)]
-        [switch]
+        [Switch]
         $FixClangFormatErrors
     )
 
     Write-Output "##[section]Running Test-CodeUsingAllLinting..."
 
-    Test-CSpellConfigFile -Verbose
+    if ($InstallLintingDependencies) {
+        Install-LintingDependencies -Verbose
+    }
+
+    Test-GitAttributesFile -Verbose
+
+    Test-CSpellConfigurationFile -Verbose
 
     Test-CodeUsingCSpell -Verbose
 
     Test-CodeUsingPrettier -Verbose
 
     Test-CodeUsingPSScriptAnalyzer -Verbose
-
-    Test-GitAttributesFile -Verbose
 
     Test-CodeUsingClang -Verbose -FixClangTidyErrors:$FixClangTidyErrors -FixClangFormatErrors:$FixClangFormatErrors
 

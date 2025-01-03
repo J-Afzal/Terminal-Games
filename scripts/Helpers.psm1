@@ -16,7 +16,7 @@ $ErrorActionPreference = "Stop"
     TODO
 
     .EXAMPLE
-    Import-Module Linters.psm1
+    Import-Module ./scripts/Terminal-Games.psd1
     Compare-ObjectExact -ReferenceObject $arrayOne -DifferenceObject $arrayTwo -Verbose
 #>
 

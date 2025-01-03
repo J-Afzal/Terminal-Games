@@ -26,7 +26,7 @@ function Install-BuildDependencies {
         [Parameter(Mandatory = $false)]
         [ValidateSet('macos-latest','ubuntu-latest','windows-latest')]
         [String]
-        $OperatingSystem,
+        $OperatingSystem
     )
 
     Write-Output "##[section]Running Install-BuildDependencies..."
@@ -72,7 +72,7 @@ function Install-LintingDependencies {
         [Parameter(Mandatory = $false)]
         [ValidateSet('macos-latest','ubuntu-latest','windows-latest')]
         [String]
-        $OperatingSystem,
+        $OperatingSystem
     )
 
     Write-Output "##[section]Running Install-LintingDependencies..."
@@ -102,7 +102,7 @@ function Install-LintingDependencies {
             # Install brew to get latest llvm and clang tools
             Invoke-Expression "test -d ~/.linuxbrew && eval '$(~/.linuxbrew/bin/brew shellenv)'"
             Invoke-Expression "test -d /home/linuxbrew/.linuxbrew && eval '$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)'"
-            Invoke-Expression "echo 'eval \"\$($(brew --prefix)/bin/brew shellenv)\"' >> ~/.bashrc"
+            # Invoke-Expression "echo 'eval '$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)' >> ~/.bashrc"
             Invoke-Expression "export PATH='$HOME/.linuxbrew/bin:$PATH'"
 
             Invoke-Expression "brew install llvm"
@@ -115,7 +115,7 @@ function Install-LintingDependencies {
 
     Write-Verbose "##[debug]Finished installing clang-tidy and clang-format."
 
-    if (-Not Test-Path "./build/compile_commands.json") {
+    if (-Not (Test-Path -Path "./build/compile_commands.json")) {
 
         Write-Output "##[section]Configuring CMake to generate the 'compile_commands.json' file..."
 
