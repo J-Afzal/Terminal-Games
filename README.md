@@ -95,7 +95,7 @@ can be called to run all the linting found in the CI workflow and has an optiona
 assumes PowerShell is already installed):
 
 ```ps1
-Import-Module ./modules/Terminal-Games.psd1
+Import-Module ./modules/TerminalGames.psd1
 Test-CodeUsingAllLinting -Verbose
 ```
 
@@ -104,7 +104,7 @@ Test-CodeUsingAllLinting -Verbose
 Install PowerShell to run the `Linters` module and the ScriptAnalyzer:
 
 ```ps1
-Import-Module ./modules/Terminal-Games.psd1
+Import-Module ./modules/TerminalGames.psd1
 Test-CodeUsingPSScriptAnalyzer -Verbose
 ```
 
@@ -113,7 +113,7 @@ Test-CodeUsingPSScriptAnalyzer -Verbose
 Install the Node (>= v22.12.0) dependencies to run the `cspell` and `prettier` linters:
 
 ```ps1
-Import-Module ./modules/Terminal-Games.psd1
+Import-Module ./modules/TerminalGames.psd1
 Test-CodeUsingCSpell -Verbose
 Test-CodeUsingPrettier -Verbose
 ```
@@ -132,7 +132,7 @@ Or using the `Linters` module to run `clang-tidy` and `clang-format` against the
 fix any fixable errors):
 
 ```ps1
-Import-Module ./modules/Terminal-Games.psd1
+Import-Module ./modules/TerminalGames.psd1
 Test-CodeUsingClang -Verbose
 ```
 

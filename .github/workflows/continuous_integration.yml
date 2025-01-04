@@ -26,7 +26,7 @@ jobs:
 
             - name: Install build dependencies
               run: |
-                  Import-Module ./modules/Terminal-Games.psd1
+                  Import-Module ./modules/TerminalGames.psd1
                   Install-BuildDependencies -OperatingSystem "${{ matrix.os }}" -Verbose
 
             - name: Configure CMake
@@ -60,53 +60,53 @@ jobs:
             - name: Install linting dependencies
               id: dependencies
               run: |
-                  Import-Module ./modules/Terminal-Games.psd1
+                  Import-Module ./modules/TerminalGames.psd1
                   Install-LintingDependencies -OperatingSystem "${{ matrix.os }}" -Verbose
 
             - name: Run gitignore linter
               if: (success() || failure()) && steps.dependencies.outcome == 'success'
               run: |
-                  Import-Module ./modules/Terminal-Games.psd1
+                  Import-Module ./modules/TerminalGames.psd1
                   Test-GitIgnoreFile -Verbose
 
             - name: Run gitattributes linter
               if: (success() || failure()) && steps.dependencies.outcome == 'success'
               run: |
-                  Import-Module ./modules/Terminal-Games.psd1
+                  Import-Module ./modules/TerminalGames.psd1
                   Test-GitAttributesFile -Verbose
 
             - name: Run cspell config linter
               if: (success() || failure()) && steps.dependencies.outcome == 'success'
               run: |
-                  Import-Module ./modules/Terminal-Games.psd1
+                  Import-Module ./modules/TerminalGames.psd1
                   Test-CSpellConfigurationFile -Verbose
 
             - name: Run prettierignore linter
               if: (success() || failure()) && steps.dependencies.outcome == 'success'
               run: |
-                  Import-Module ./modules/Terminal-Games.psd1
+                  Import-Module ./modules/TerminalGames.psd1
                   Test-PrettierIgnoreFile -Verbose
 
             - name: Run cspell
               if: (success() || failure()) && steps.dependencies.outcome == 'success'
               run: |
-                  Import-Module ./modules/Terminal-Games.psd1
+                  Import-Module ./modules/TerminalGames.psd1
                   Test-CodeUsingCSpell -Verbose
 
             - name: Run prettier
               if: (success() || failure()) && steps.dependencies.outcome == 'success'
               run: |
-                  Import-Module ./modules/Terminal-Games.psd1
+                  Import-Module ./modules/TerminalGames.psd1
                   Test-CodeUsingPrettier -Verbose
 
             - name: Run PSScriptAnalyzer
               if: (success() || failure()) && steps.dependencies.outcome == 'success'
               run: |
-                  Import-Module ./modules/Terminal-Games.psd1
+                  Import-Module ./modules/TerminalGames.psd1
                   Test-CodeUsingPSScriptAnalyzer -Verbose
 
             - name: Run clang-tidy and clang-format
               if: (success() || failure()) && steps.dependencies.outcome == 'success'
               run: |
-                  Import-Module ./modules/Terminal-Games.psd1
+                  Import-Module ./modules/TerminalGames.psd1
                   Test-CodeUsingClang -OperatingSystem "${{ matrix.os }}" -Verbose

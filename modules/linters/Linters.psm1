@@ -18,7 +18,7 @@ $ErrorActionPreference = "Stop"
     None.
 
     .EXAMPLE
-    Import-Module ./modules/Terminal-Games.psd1
+    Import-Module ./modules/TerminalGames.psd1
     Test-GitIgnoreFile -Verbose
 #>
 
@@ -126,7 +126,7 @@ function Test-GitIgnoreFile {
     None.
 
     .EXAMPLE
-    Import-Module ./modules/Terminal-Games.psd1
+    Import-Module ./modules/TerminalGames.psd1
     Test-GitattributesFile -Verbose
 #>
 
@@ -299,7 +299,7 @@ function Test-GitAttributesFile {
     None.
 
     .EXAMPLE
-    Import-Module ./modules/Terminal-Games.psd1
+    Import-Module ./modules/TerminalGames.psd1
     Test-CSpellConfigurationFile -Verbose
 #>
 
@@ -578,7 +578,7 @@ function Test-CSpellConfigurationFile {
     None.
 
     .EXAMPLE
-    Import-Module ./modules/Terminal-Games.psd1
+    Import-Module ./modules/TerminalGames.psd1
     Test-PrettierIgnoreFile -Verbose
 #>
 
@@ -632,7 +632,7 @@ function Test-PrettierIgnoreFile {
     None.
 
     .EXAMPLE
-    Import-Module ./modules/Terminal-Games.psd1
+    Import-Module ./modules/TerminalGames.psd1
     Test-CodeUsingCSpell -Verbose
 #>
 
@@ -687,7 +687,7 @@ function Test-CodeUsingCSpell {
     None.
 
     .EXAMPLE
-    Import-Module ./modules/Terminal-Games.psd1
+    Import-Module ./modules/TerminalGames.psd1
     Test-CodeUsingPrettier -Verbose
 #>
 
@@ -742,7 +742,7 @@ function Test-CodeUsingPrettier {
     None.
 
     .EXAMPLE
-    Import-Module ./modules/Terminal-Games.psd1
+    Import-Module ./modules/TerminalGames.psd1
     Test-CodeUsingPSScriptAnalyzer -Verbose
 #>
 
@@ -800,7 +800,7 @@ function Test-CodeUsingPSScriptAnalyzer {
     None.
 
     .EXAMPLE
-    Import-Module ./modules/Terminal-Games.psd1
+    Import-Module ./modules/TerminalGames.psd1
     Test-CodeUsingClang -Verbose
 #>
 
@@ -934,7 +934,7 @@ function Test-CodeUsingClang {
     None.
 
     .EXAMPLE
-    Import-Module ./modules/Terminal-Games.psd1
+    Import-Module ./modules/TerminalGames.psd1
     Test-CodeUsingAllLinting -Verbose
 #>
 
