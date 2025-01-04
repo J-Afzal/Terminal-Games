@@ -29,5 +29,5 @@ ADD_EXECUTABLE(
     ${CMAKE_CURRENT_SOURCE_DIR}/source/games/TicTacToe.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/games/Hangman.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/games/Battleships.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/resources/icons/terminal-games.rc
+    ${CMAKE_CURRENT_SOURCE_DIR}/resources/icons/TerminalGames.rc
 )
