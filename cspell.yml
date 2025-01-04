@@ -1,5 +1,8 @@
 version: "0.2"
 language: en-gb
+dictionaries:
+    - cpp
+    - powershell
 ignorePaths:
     - .vs/
     - .vscode/
@@ -9,28 +12,17 @@ ignorePaths:
 words:
     - bugprone
     - linters
-    - pwsh
 ignoreWords:
     - altera
-    - analyzer
     - choco
-    - constexpr
     - defenses
-    - discardable
-    - dont
-    - extern
-    - favor
     - hicpp
-    - lastexitcode
-    - libc
     - linuxbrew
     - linuxkernel
     - llvmlibc
     - nodiscard
-    - noexcept
     - nolint
     - noncommercially
-    - objc
     - openmp
     - reflow
     - shellenv
