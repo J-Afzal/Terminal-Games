@@ -40,7 +40,7 @@ terminal-games options:
 **Feature:** Pressing the `q` key on most screens within `terminal-games` will quit to the main menu, if within a game, and quit
 the program, if within the main menu.
 
-![Main Menu](./resources/screenshots/main-menu.png "Main Menu")
+![Main Menu](./resources/screenshots/MainMenu.png "Main Menu")
 
 ### Tic Tac Toe
 
@@ -50,7 +50,7 @@ the program, if within the main menu.
 
 **Note:** The computer's choices are random.
 
-![Tic Tac Toe](./resources/screenshots/tic-tac-toe.png "Tic Tac Toe")
+![Tic Tac Toe](./resources/screenshots/TicTacToe.png "Tic Tac Toe")
 
 ### Hangman
 
@@ -65,7 +65,7 @@ to select it (please note that pressing q here will quit to the main menu).
 **Note:** The computer's choices are random both when guessing letters and when selecting a word to be guessed from the
 `./resources/words.txt` file.
 
-![Hangman](./resources/screenshots/hangman.png "Hangman")
+![Hangman](./resources/screenshots/Hangman.png "Hangman")
 
 ### Battleships
 
@@ -77,12 +77,12 @@ that has not been completely placed on the board.
 
 **Note:** The computer's choices are random for both selecting where to place ships and where to attack.
 
-![Battleships](./resources/screenshots/battleships.png "Battleships")
+![Battleships](./resources/screenshots/Battleships.png "Battleships")
 
 ## CI / CD
 
-[![Continuous Integration](https://github.com/J-Afzal/Terminal-Games/actions/workflows/continuous_integration.yml/badge.svg)](https://github.com/J-Afzal/Terminal-Games/actions/workflows/continuous_integration.yml)
-[![Continuous Deployment](https://github.com/J-Afzal/Terminal-Games/actions/workflows/continuous_deployment.yml/badge.svg)](https://github.com/J-Afzal/Terminal-Games/actions/workflows/continuous_deployment.yml)
+[![Continuous Integration](https://github.com/J-Afzal/Terminal-Games/actions/workflows/ContinuousIntegration.yml/badge.svg)](https://github.com/J-Afzal/Terminal-Games/actions/workflows/ContinuousIntegration.yml)
+[![Continuous Deployment](https://github.com/J-Afzal/Terminal-Games/actions/workflows/ContinuousDeployment.yml/badge.svg)](https://github.com/J-Afzal/Terminal-Games/actions/workflows/ContinuousDeployment.yml)
 
 The continuous integration workflow runs against all commits on pull requests, builds the code and runs linting checks.
 
