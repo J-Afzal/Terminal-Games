@@ -63,6 +63,12 @@ jobs:
                   Import-Module ./modules/Terminal-Games.psd1
                   Install-LintingDependencies -OperatingSystem "${{ matrix.os }}" -Verbose
 
+            - name: Run gitignore linter
+              if: (success() || failure()) && steps.dependencies.outcome == 'success'
+              run: |
+                  Import-Module ./modules/Terminal-Games.psd1
+                  Test-GitIgnoreFile -Verbose
+
             - name: Run gitattributes linter
               if: (success() || failure()) && steps.dependencies.outcome == 'success'
               run: |
@@ -74,6 +80,12 @@ jobs:
               run: |
                   Import-Module ./modules/Terminal-Games.psd1
                   Test-CSpellConfigurationFile -Verbose
+
+            - name: Run prettierignore linter
+              if: (success() || failure()) && steps.dependencies.outcome == 'success'
+              run: |
+                  Import-Module ./modules/Terminal-Games.psd1
+                  Test-PrettierIgnoreFile -Verbose
 
             - name: Run cspell
               if: (success() || failure()) && steps.dependencies.outcome == 'success'

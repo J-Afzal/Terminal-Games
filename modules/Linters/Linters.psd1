@@ -7,8 +7,10 @@
     )
 
     FunctionsToExport = @(
+        "Test-GitIgnoreFile",
         "Test-GitAttributesFile",
         "Test-CSpellConfigurationFile",
+        "Test-PrettierIgnoreFile",
         "Test-CodeUsingCSpell",
         "Test-CodeUsingPrettier",
         "Test-CodeUsingPSScriptAnalyzer",

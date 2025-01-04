@@ -2,6 +2,113 @@ $ErrorActionPreference = "Stop"
 
 <#
     .SYNOPSIS
+    Lints the .gitignore file.
+
+    .DESCRIPTION
+    Raises an error if linting issues are found for the following issues:
+        - Duplicate empty lines
+        - Duplicate entries
+        - Redundant entries
+        - Not alphabetically ordered
+
+    .INPUTS
+    None.
+
+    .OUTPUTS
+    None.
+
+    .EXAMPLE
+    Import-Module ./modules/Terminal-Games.psd1
+    Test-GitIgnoreFile -Verbose
+#>
+
+function Test-GitIgnoreFile {
+
+    [CmdletBinding()]
+    param()
+
+    Write-Output "##[section]Running Test-GitIgnoreFile..."
+
+    Write-Output "##[section]Retrieving contents of .gitignore..."
+    $gitignoreFileContents = @(Get-Content -Path ./.gitignore)
+    Write-Verbose "##[debug]Finished retrieving the contents .gitignore."
+
+    Write-Output "##[section]Checking .gitignore file..."
+    $previouslyFoundEntries = @()
+    $lintingErrors = @()
+
+    for ($index = 0; $index -lt $gitignoreFileContents.Count; $index++) {
+
+        $currentLine = $gitignoreFileContents[$index]
+
+        if ($currentLine -eq "") {
+            Write-Verbose "##[debug]Current line is blank: '$currentLine'"
+
+            if ($previousLineWasBlank) {
+                $lintingErrors += @{lineNumber = $index + 1; line = "'$currentLine'"; errorMessage = "Duplicate blank line." }
+            }
+
+            $previousLineWasBlank = $true
+        }
+
+        else {
+            # Match every before and including '#'
+            $lineBeforeAndIncludingComment = $currentLine | Select-String -Pattern ".*#"
+
+            if ($null -eq $lineBeforeAndIncludingComment) {
+                Write-Verbose "##[debug]Current line is code: '$currentLine'"
+
+                if ($previouslyFoundEntries.Contains($currentLine)) {
+                    $lintingErrors += @{lineNumber = $index + 1; line = "'$currentLine'"; errorMessage = "Duplicate entry." }
+                }
+
+                if (-Not (Test-Path -Path $currentLine)) {
+                        $lintingErrors += @{lineNumber = $index + 1; line = "'$currentLine'"; errorMessage = "Redundant or malformed entry." }
+                }
+
+                $previouslyFoundEntries += $currentLine
+            }
+
+            elseif ($lineBeforeAndIncludingComment.Matches.Value.Length -eq 1) {
+                Write-Verbose "##[debug]Current line is comment: '$currentLine'"
+            }
+
+            else {
+                Write-Verbose "##[debug]Current line is a mixture of comment and code: '$line'"
+                $lintingErrors += @{lineNumber = $index + 1; line = "'$currentLine'"; errorMessage = "Line must be blank, entirely comment or entirely non-comment." }
+            }
+
+            $previousLineWasBlank = $false
+        }
+    }
+
+    Write-Verbose "##[debug]Finished checking .gitignore file."
+
+    Write-Output "##[section]Checking all entries are alphabetically ordered..."
+
+    if ($previouslyFoundEntries.Length -gt 1) {
+
+        $previouslyFoundEntriesSorted = $previouslyFoundEntries | Sort-Object
+
+        if (Compare-ObjectExact -ReferenceObject $previouslyFoundEntriesSorted -DifferenceObject $previouslyFoundEntries) {
+            $lintingErrors += @{lineNumber = "-"; line = "-"; errorMessage = "Entries are not alphabetically ordered." }
+        }
+    }
+
+    Write-Output "##[debug]Finished checking all entries are alphabetically ordered."
+
+    if ($lintingErrors.Length -gt 0) {
+        $lintingErrors | Sort-Object { $_.lineNumber }, { $_.errorMessage } | ForEach-Object { [PSCustomObject]$_ } | Format-Table -AutoSize -Wrap -Property lineNumber, line, errorMessage
+        Write-Error "##[error]Please resolve the above errors!"
+    }
+
+    else {
+        Write-Output "##[section]All .gitignore tests passed!"
+    }
+}
+
+<#
+    .SYNOPSIS
     Lints the .gitattributes file.
 
     .DESCRIPTION
@@ -459,6 +566,60 @@ function Test-CSpellConfigurationFile {
 
 <#
     .SYNOPSIS
+    Lints the .prettierignore file.
+
+    .DESCRIPTION
+    Raises an error if the file does not match the .gitignore file (with exception of the package-lock.json file).
+
+    .INPUTS
+    None.
+
+    .OUTPUTS
+    None.
+
+    .EXAMPLE
+    Import-Module ./modules/Terminal-Games.psd1
+    Test-PrettierIgnoreFile -Verbose
+#>
+
+function Test-PrettierIgnoreFile {
+
+    [CmdletBinding()]
+    param()
+
+    Write-Output "##[section]Running Test-PrettierIgnoreFile..."
+
+    Write-Output "##[section]Retrieving contents of .prettierignore..."
+    $prettierIgnoreFileContents = @(Get-Content -Path ./.prettierignore)
+    Write-Verbose "##[debug]Finished retrieving the contents .prettierignore."
+
+    Write-Output "##[section]Retrieving contents of .gitignore..."
+    $gitignoreFileContents = @(Get-Content -Path ./.gitignore)
+    Write-Verbose "##[debug]Finished retrieving the contents .gitignore."
+
+    Write-Output "##[section]Checking that .prettierignore matches .gitignore exactly..."
+
+    $gitignoreFileContents += "package-lock.json"
+    $gitignoreFileContents = $gitignoreFileContents | Sort-Object
+
+    if (Compare-ObjectExact -ReferenceObject $gitignoreFileContents -DifferenceObject $prettierIgnoreFileContents) {
+        $lintingErrors += @{lineNumber = "-"; line = "-"; errorMessage = ".prettierignore does not match .gitignore" }
+    }
+
+    Write-Output "##[debug]Finished checking that .prettierignore matches .gitignore exactly."
+
+    if ($lintingErrors.Length -gt 0) {
+        $lintingErrors | Sort-Object { $_.lineNumber }, { $_.errorMessage } | ForEach-Object { [PSCustomObject]$_ } | Format-Table -AutoSize -Wrap -Property lineNumber, line, errorMessage
+        Write-Error "##[error]Please resolve the above errors!"
+    }
+
+    else {
+        Write-Output "##[section]All .prettierignore tests passed!"
+    }
+}
+
+<#
+    .SYNOPSIS
     Wrapper around cspell.
 
     .DESCRIPTION
@@ -800,9 +961,13 @@ function Test-CodeUsingAllLinters {
         Install-LintingDependencies -Verbose
     }
 
+    Test-GitIgnoreFile -Verbose
+
     Test-GitAttributesFile -Verbose
 
     Test-CSpellConfigurationFile -Verbose
+
+    Test-PrettierIgnoreFile -Verbose
 
     Test-CodeUsingCSpell -Verbose
 
