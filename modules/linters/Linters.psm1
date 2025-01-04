@@ -285,12 +285,13 @@ function Test-GitAttributesFile {
         - Invalid version number
         - Invalid language
         - Invalid ordering of keys
-        - Duplicate entries in ignorePaths, words and ignoreWords
+        - Non-alphabetical ordering of values within keys
+        - Duplicate entries in dictionaries, ignorePaths, words and ignoreWords
         - Entries that are in both words and ignoreWords
         - Entries in ignorePaths that are not present in gitignore (with exception of the package-lock.json file)
         - Entries in words and ignoreWords that are not present in the codebase
 
-    This function will throw errors for cspell.yml files that don't have any ignorePaths, words and ignoreWords values.
+    This function will also throw errors for cspell.yml files that don't have any dictionaries, ignorePaths, words and ignoreWords values.
 
     .INPUTS
     None.
@@ -327,9 +328,10 @@ function Test-CSpellConfigurationFile {
         $lintingErrors.Add(@{lineNumber = 2; line = "'$($cspellFileContents[1])'"; errorMessage = "Invalid language. Expected 'language: en-gb'." })
     }
 
-    Write-Verbose "##[debug]Retrieving 'ignorePaths', 'words' and 'ignoreWords'..."
-    [Collections.Generic.List[String]] $expectedOrderOfKeys = @("version", "language", "ignorePaths", "words", "ignoreWords")
+    Write-Verbose "##[debug]Retrieving 'dictionaries', 'ignorePaths', 'words' and 'ignoreWords'..."
+    [Collections.Generic.List[String]] $expectedOrderOfKeys = @("version", "language", "dictionaries", "ignorePaths", "words", "ignoreWords")
     [Collections.Generic.List[String]] $orderOfKeys = @()
+    [Collections.Generic.List[String]] $cspellDictionaries = @()
     [Collections.Generic.List[String]] $cspellIgnorePaths = @()
     [Collections.Generic.List[String]] $cspellWords = @()
     [Collections.Generic.List[String]] $cspellIgnoreWords = @()
@@ -350,21 +352,34 @@ function Test-CSpellConfigurationFile {
         if ($null -eq $key) {
 
             switch ($currentKey) {
+                dictionaries {
+                    Write-Verbose "##[debug]Current line is a 'dictionaries' value: '$currentLine'"
+
+                    # Assumes an indentation of four characters
+                    $value = $currentLine.TrimStart("    - ")
+
+                    if ($cspellDictionaries.Contains($value)) {
+                        $lintingErrors.Add(@{lineNumber = $index + 1; line = "'$currentLine'"; errorMessage = "Duplicate entry within 'dictionaries'." })
+                    }
+
+                    $cspellDictionaries.Add($value)
+                }
+
                 ignorePaths {
-                    Write-Verbose "##[debug]Current line is an ignorePaths value: '$currentLine'"
+                    Write-Verbose "##[debug]Current line is an 'ignorePaths' value: '$currentLine'"
 
                     # Assumes an indentation of four characters
                     $value = $currentLine.TrimStart("    - ")
 
                     if ($cspellIgnorePaths.Contains($value)) {
-                        $lintingErrors.Add(@{lineNumber = $index + 1; line = "'$currentLine'"; errorMessage = "Duplicate entry within ignorePaths." })
+                        $lintingErrors.Add(@{lineNumber = $index + 1; line = "'$currentLine'"; errorMessage = "Duplicate entry within 'ignorePaths'." })
                     }
 
                     $cspellIgnorePaths.Add($value)
                 }
 
                 words {
-                    Write-Verbose "##[debug]Current line is an words value: '$currentLine'"
+                    Write-Verbose "##[debug]Current line is a 'words' value: '$currentLine'"
 
                     # Assumes an indentation of four characters
                     $value = $currentLine.TrimStart("    - ")
@@ -375,14 +390,14 @@ function Test-CSpellConfigurationFile {
                     }
 
                     if ($cspellWords.Contains($valueLowerCase)) {
-                        $lintingErrors.Add(@{lineNumber = $index + 1; line = "'$currentLine'"; errorMessage = "Duplicate entry within words." })
+                        $lintingErrors.Add(@{lineNumber = $index + 1; line = "'$currentLine'"; errorMessage = "Duplicate entry within 'words'." })
                     }
 
                     $cspellWords.Add($valueLowerCase)
                 }
 
                 ignoreWords {
-                    Write-Verbose "##[debug]Current line is an ignoreWords value: '$currentLine'"
+                    Write-Verbose "##[debug]Current line is an 'ignoreWords' value: '$currentLine'"
 
                     # Assumes an indentation of four characters
                     $value = $currentLine.TrimStart("    - ")
@@ -393,7 +408,7 @@ function Test-CSpellConfigurationFile {
                     }
 
                     if ($cspellIgnoreWords.Contains($valueLowerCase)) {
-                        $lintingErrors.Add(@{lineNumber = $index + 1; line = "'$currentLine'"; errorMessage = "Duplicate entry within ignoreWords." })
+                        $lintingErrors.Add(@{lineNumber = $index + 1; line = "'$currentLine'"; errorMessage = "Duplicate entry within 'ignoreWords'." })
                     }
 
                     $cspellIgnoreWords.Add($valueLowerCase)
@@ -420,15 +435,25 @@ function Test-CSpellConfigurationFile {
         }
     }
 
-    Write-Verbose "##[debug]Retrieved 'ignorePaths', 'words' and 'ignoreWords'."
+    Write-Verbose "##[debug]Retrieved 'dictionaries', 'ignorePaths', 'words' and 'ignoreWords'."
 
     if (Compare-ObjectExact -ReferenceObject $expectedOrderOfKeys -DifferenceObject $orderOfKeys) {
-        $lintingErrors.Add(@{lineNumber = "-"; line = "-"; errorMessage = "Keys are incorrectly ordered, incorrectly cased or contain an unexpected key. Expected the following ordered keys: 'version', 'language', 'ignorePaths', 'words', 'ignoreWords'." })
+        $lintingErrors.Add(@{lineNumber = "-"; line = "-"; errorMessage = "Keys are missing, incorrectly ordered, incorrectly cased, or contain an unexpected key. Expected the following order of keys: 'version', 'language', 'dictionaries', 'ignorePaths', 'words', 'ignoreWords'." })
     }
 
     Write-Verbose "##[debug]Finished checking cspell.yml file."
 
-    Write-Output "##[section]Checking 'ignorePaths', 'words' and 'ignoreWords' are alphabetically ordered..."
+    Write-Output "##[section]Checking 'dictionaries', 'ignorePaths', 'words' and 'ignoreWords' are alphabetically ordered..."
+
+    if ($cspellDictionaries.Length -gt 1) {
+
+        $cspellDictionariesSorted = $cspellDictionaries | Sort-Object
+
+        if (Compare-ObjectExact -ReferenceObject $cspellDictionariesSorted -DifferenceObject $cspellDictionaries) {
+            $lintingErrors.Add(@{lineNumber = "-"; line = "-"; errorMessage = "'dictionaries' is not alphabetically ordered." })
+        }
+    }
+
 
     if ($cspellIgnorePaths.Length -gt 1) {
 
@@ -765,8 +790,8 @@ function Test-CodeUsingPSScriptAnalyzer {
 
         Write-Output "##[section]Running PSScriptAnalyzer against '$file'..."
 
-        Invoke-ScriptAnalyzer -Path $file -Settings ./PSScriptAnalyzerSettings.psd1
-        $output = Invoke-ScriptAnalyzer -Path $file -Settings ./PSScriptAnalyzerSettings.psd1
+        Invoke-ScriptAnalyzer -Path $file -Settings ./modules/PSScriptAnalyzerSettings.psd1
+        $output = Invoke-ScriptAnalyzer -Path $file -Settings ./modules/PSScriptAnalyzerSettings.psd1
 
         if ($output.Length -gt 0) {
             $filesWithErrors += $file
