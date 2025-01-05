@@ -118,6 +118,7 @@ function Test-CodeUsingClang {
         switch ($Platform) {
             macos-latest {
                 brew install llvm
+                export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
                 $clangTidy = "clang-tidy"
                 $clangFormat = "clang-format"
             }
@@ -126,7 +127,6 @@ function Test-CodeUsingClang {
                 wget https://apt.llvm.org/llvm.sh
                 chmod +x llvm.sh
                 sudo ./llvm.sh 19
-
                 sudo apt install clang-tidy-19
                 sudo apt install clang-format-19
                 $clangTidy = "clang-tidy-19"
