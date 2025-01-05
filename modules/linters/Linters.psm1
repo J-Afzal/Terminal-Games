@@ -82,24 +82,28 @@ function Test-CodeUsingAllLinters {
 
     .EXAMPLE
     Import-Module ./modules/TerminalGames.psd1
-    Test-CodeUsingClang -Platform "macos-latest" -FixClangTidyErrors -FixClangFormatErrors -Verbose
+    Test-CodeUsingClang -InstallClangTools -Platform "macos-latest" -FixClangTidyErrors -FixClangFormatErrors -Verbose
 #>
 
 function Test-CodeUsingClang {
 
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName="None")]
     param
     (
-        [Parameter(Position=0, Mandatory=$false)]
+        [Parameter(Position=0, Mandatory=$false, ParameterSetName="InstallClangTools")]
+        [switch]
+        $InstallClangTools,
+
+        [Parameter(Position=1, Mandatory=$true, ParameterSetName="InstallClangTools")]
         [ValidateSet("macos-latest", "ubuntu-latest", "windows-latest")]
         [string]
         $Platform,
 
-        [Parameter(Position=1, Mandatory=$false)]
+        [Parameter(Position=2, Mandatory=$false)]
         [switch]
         $FixClangTidyErrors,
 
-        [Parameter(Position=2, Mandatory=$false)]
+        [Parameter(Position=3, Mandatory=$false)]
         [switch]
         $FixClangFormatErrors
     )
@@ -110,17 +114,43 @@ function Test-CodeUsingClang {
     Write-Verbose "##[debug]    FixClangTidyErrors: $FixClangTidyErrors"
     Write-Verbose "##[debug]    FixClangFormatErrors: $FixClangFormatErrors"
 
-    # Path needs re-updating in macOS
-    if ($Platform -eq "macos-latest") {
-        Write-Verbose "##[debug]Updating LLVM path on macOS..."
-        $env:Path = '/opt/homebrew/opt/llvm/bin' + $env:Path
+    if ($InstallClangTools) {
+        switch ($Platform) {
+            macos-latest {
+                brew install llvm
+                $clangTidy = "clang-tidy"
+                $clangFormat = "clang-format"
+            }
+
+            ubuntu-latest {
+                wget https://apt.llvm.org/llvm.sh
+                chmod +x llvm.sh
+                sudo ./llvm.sh 19
+
+                sudo apt install clang-tidy-19
+                sudo apt install clang-format-19
+                $clangTidy = "clang-tidy-19"
+                $clangFormat = "clang-format-19"
+            }
+
+            windows-latest {
+                choco upgrade llvm -y
+                $clangTidy = "clang-tidy"
+                $clangFormat = "clang-format"
+            }
+        }
+    }
+
+    else {
+        $clangTidy = "clang-tidy"
+        $clangFormat = "clang-format"
     }
 
     Write-Verbose "##[debug]Using the following clang-tidy version..."
-    (clang-tidy --version) | ForEach-Object { "##[debug]$_" } | Write-Verbose
+    Invoke-Expression "$clangTidy --version" | ForEach-Object { "##[debug]$_" } | Write-Verbose
 
     Write-Verbose "##[debug]Using the following clang-format version..."
-    (clang-format --version) | ForEach-Object { "##[debug]$_" } | Write-Verbose
+    Invoke-Expression "$clangFormat --version" | ForEach-Object { "##[debug]$_" } | Write-Verbose
 
     Write-Output "##[section]Retrieving all files to test against clang-tidy and clang-format..."
     $filesToTest = Get-FilteredFilePathsToTest -FileExtensionFilter "Include" -FileExtensions @("cpp", "hpp")
@@ -132,13 +162,13 @@ function Test-CodeUsingClang {
         $ErrorActionPreference = "Continue"
 
         Write-Output "##[section]Running clang-tidy against '$file'..."
-        (clang-tidy $file -p ./build 2>&1) | ForEach-Object { "##[debug]$_" } | Write-Verbose
+        Invoke-Expression "$clangTidy $file -p ./build 2>&1" | ForEach-Object { "##[debug]$_" } | Write-Verbose
 
         if ($LASTEXITCODE -eq 1) {
 
             if ($FixClangTidyErrors) {
                 Write-Verbose "##[debug]Fixing clang-tidy issues in '$file'..."
-                (clang-tidy --fix $file -p ./build 2>&1) | ForEach-Object { "##[debug]$_" } | Write-Verbose
+                Invoke-Expression "$clangTidy --fix $file -p ./build 2>&1" | ForEach-Object { "##[debug]$_" } | Write-Verbose
 
                 if ($LASTEXITCODE -eq 1) {
                     Write-Verbose "##[debug]clang-tidy issues still exist in '$file'..."
@@ -156,13 +186,13 @@ function Test-CodeUsingClang {
         }
 
         Write-Output "##[section]Running clang-format against '$file'..."
-        (clang-format --Werror --dry-run $file 2>&1) | ForEach-Object { "##[debug]$_" } | Write-Verbose
+        Invoke-Expression "$clangFormat --Werror --dry-run $file 2>&1" | ForEach-Object { "##[debug]$_" } | Write-Verbose
 
         if ($LASTEXITCODE -eq 1) {
 
             if ($FixClangFormatErrors) {
                 Write-Verbose "##[debug]Fixing clang-format issues in '$file'..."
-                (clang-format --Werror --i $file 2>&1) | ForEach-Object { "##[debug]$_" } | Write-Verbose
+                Invoke-Expression "$clangFormat --Werror --i $file 2>&1" | ForEach-Object { "##[debug]$_" } | Write-Verbose
 
                 if ($LASTEXITCODE -eq 1) {
                     Write-Verbose "##[debug]clang-format issues still exist in '$file'..."
