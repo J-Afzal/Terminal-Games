@@ -17,13 +17,18 @@ fi
 
 if [ $platform = ubuntu-latest ]
 then
-    # Install brew to get latest llvm and clang tools
-    test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
-    test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-    echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bashrc
-    export PATH="$HOME/.linuxbrew/bin:$PATH"
+    # # Install brew to get latest llvm and clang tools
+    # test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
+    # test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    # echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bashrc
+    # export PATH="$HOME/.linuxbrew/bin:$PATH"
 
-    brew install llvm
+    # brew install llvm
+
+    sudo apt-get update
+
+    sudo apt-get install --only-upgrade clang-tidy
+    sudo apt-get install --only-upgrade clang-format
 fi
 
 if [ $platform = windows-latest ]

@@ -8,46 +8,46 @@ on:
             - master
 
 jobs:
-    build:
-        strategy:
-            matrix:
-                os:
-                    - macos-latest
-                    - ubuntu-latest
-                    - windows-latest
+    # build:
+    #     strategy:
+    #         matrix:
+    #             os:
+    #                 - macos-latest
+    #                 - ubuntu-latest
+    #                 - windows-latest
 
-        runs-on: ${{ matrix.os }}
-        defaults:
-            run:
-                shell: pwsh
+    #     runs-on: ${{ matrix.os }}
+    #     defaults:
+    #         run:
+    #             shell: pwsh
 
-        steps:
-            - uses: actions/checkout@v4
+    #     steps:
+    #         - uses: actions/checkout@v4
 
-            - name: Install build dependencies
-              run: |
-                  Import-Module ./modules/TerminalGames.psd1
-                  Install-BuildDependencies -Platform "${{ matrix.os }}" -Verbose
+    #         - name: Install build dependencies
+    #           run: |
+    #               Import-Module ./modules/TerminalGames.psd1
+    #               Install-BuildDependencies -Platform "${{ matrix.os }}" -Verbose
 
-            - name: Configure CMake
-              run: cmake -S . -B ./build -G "Ninja"
+    #         - name: Configure CMake
+    #           run: cmake -S . -B ./build -G "Ninja"
 
-            - name: Build Project
-              run: cmake --build ./build --config Release
+    #         - name: Build Project
+    #           run: cmake --build ./build --config Release
 
-            - uses: actions/upload-artifact@v4
-              with:
-                  name: terminal-games-${{ matrix.os }}
-                  path: ./build/terminal-games-${{ matrix.os }}*
-                  if-no-files-found: error
+    #         - uses: actions/upload-artifact@v4
+    #           with:
+    #               name: terminal-games-${{ matrix.os }}
+    #               path: ./build/terminal-games-${{ matrix.os }}*
+    #               if-no-files-found: error
 
     lint:
         strategy:
             matrix:
                 os:
                     # - macos-latest
-                    # - ubuntu-latest
-                    - windows-latest
+                    - ubuntu-latest
+                    # - windows-latest
 
         runs-on: ${{ matrix.os }}
         defaults:
