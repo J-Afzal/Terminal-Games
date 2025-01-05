@@ -124,13 +124,19 @@ function Test-CodeUsingClang {
             }
 
             ubuntu-latest {
-                wget https://apt.llvm.org/llvm.sh
-                chmod +x llvm.sh
-                sudo ./llvm.sh 19
-                sudo apt install clang-tidy-19
-                sudo apt install clang-format-19
-                $clangTidy = "clang-tidy-19"
-                $clangFormat = "clang-format-19"
+                # wget https://apt.llvm.org/llvm.sh
+                # chmod +x llvm.sh
+                # sudo ./llvm.sh 19
+                # sudo apt install clang-tidy-19
+                # sudo apt install clang-format-19
+                # $clangTidy = "clang-tidy-19"
+                # $clangFormat = "clang-format-19"
+
+                & bash test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
+                & bash test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+                & bash echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bashrc
+                $clangTidy = "clang-tidy"
+                $clangFormat = "clang-format"
             }
 
             windows-latest {
