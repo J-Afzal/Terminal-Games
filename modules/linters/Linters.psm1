@@ -118,7 +118,7 @@ function Test-CodeUsingClang {
         switch ($Platform) {
             macos-latest {
                 brew install llvm
-                & bash "export PATH='/opt/homebrew/opt/llvm/bin:$PATH'"
+                & bash -l -c "export PATH='/opt/homebrew/opt/llvm/bin:$PATH'"
                 $clangTidy = "clang-tidy"
                 $clangFormat = "clang-format"
             }
