@@ -8,14 +8,14 @@ echo "##[section]Running InstallClangTools.sh..."
 echo "##[debug]Parameters:"
 echo "##[debug]    Platform: $platform"
 
-if [ "$platform" = "macos-latest" ]
+if [ $platform = macos-latest ]
 then
     # Override pre-installed clang and add to path
     brew install llvm
     export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
 fi
 
-if [ "$platform" = "ubuntu-latest" ]
+if [ $platform = ubuntu-latest ]
 then
     # Install brew to get latest llvm and clang tools
     test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
@@ -26,7 +26,7 @@ then
     brew install llvm
 fi
 
-if [ "$platform" = "windows-latest" ]
+if [ $platform = windows-latest ]
 then
     choco upgrade llvm -y
 fi
