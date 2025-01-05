@@ -104,6 +104,12 @@ function Install-LintingDependencies {
 
             sudo apt install clang-tidy-19
             sudo apt install clang-format-19
+
+            clang-tidy --version
+            clang-format --version
+
+            clang-tidy-19 --version
+            clang-format-19 --version
         }
 
         windows-latest {
