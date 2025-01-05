@@ -103,16 +103,7 @@ function Install-LintingDependencies {
         }
 
         ubuntu-latest {
-            # Invoke-Expression "test -d ~/.linuxbrew && eval ""$(~/.linuxbrew/bin/brew shellenv)"""
-            # Invoke-Expression "test -d /home/linuxbrew/.linuxbrew && eval ""$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"""
-            # Invoke-Expression "echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bashrc"
-
-            # Install brew to get latest llvm and clang tools
-            $env:Path = "/home/linuxbrew/.linuxbrew/bin" + $env:Path
-            Assert-ExternalCommandError -Verbose
-
-            brew install llvm
-            Assert-ExternalCommandError -Verbose
+            
         }
 
         windows-latest {
