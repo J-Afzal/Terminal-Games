@@ -26,9 +26,10 @@ then
     # brew install llvm
 
     sudo apt-get update
+    sudo apt-get upgrade
 
-    sudo apt-get install --only-upgrade clang-tidy
-    sudo apt-get install --only-upgrade clang-format
+    sudo apt-get install clang-tidy-19
+    sudo apt-get install clang-format-19
 fi
 
 if [ $platform = windows-latest ]
