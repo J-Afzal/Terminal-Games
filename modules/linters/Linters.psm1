@@ -878,7 +878,7 @@ function Test-GitIgnoreFile {
                     $lintingErrors += @{lineNumber = $currentLineNumber; line = "'$currentLine'"; errorMessage = "Duplicate entry." }
                 }
 
-                if (-Not (Test-Path -Path $currentLine) -And -NotIn (".vs/", ".vscode/")) { # Exclude IDE directories
+                if (-Not (Test-Path -Path $currentLine) -And $currentLine -NotIn (".vs/", ".vscode/")) { # Exclude IDE directories
                     $lintingErrors += @{lineNumber = $currentLineNumber; line = "'$currentLine'"; errorMessage = "Redundant or malformed entry." }
                 }
 
