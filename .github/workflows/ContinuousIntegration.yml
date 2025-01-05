@@ -45,7 +45,7 @@ jobs:
         strategy:
             matrix:
                 os:
-                    # - macos-latest
+                    - macos-latest
                     - ubuntu-latest
                     - windows-latest
 
@@ -109,4 +109,4 @@ jobs:
               if: (success() || failure()) && steps.dependencies.outcome == 'success'
               run: |
                   Import-Module ./modules/TerminalGames.psd1
-                  Test-CodeUsingClang -Platform "${{ matrix.os }}" -Verbose
+                  Test-CodeUsingClang -InstallClangTools -Platform "${{ matrix.os }}" -Verbose

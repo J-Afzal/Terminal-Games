@@ -1,8 +1,8 @@
 @{
-    ModuleVersion = '1.0'
+    ModuleVersion = "1.0"
 
     NestedModules = @(
-        './modules/dependencies/Dependencies.psm1'
+        "./modules/dependencies/Dependencies.psm1"
     )
 
     FunctionsToExport = @(
