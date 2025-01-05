@@ -53,10 +53,11 @@ function Install-BuildDependencies {
 
 <#
     .SYNOPSIS
-    Installs all linting that are needed to lint within GitHub workflows.
+    Installs all linting dependencies needed to run the lint job within GitHub workflows.
 
     .DESCRIPTION
     This function only installs the linting dependencies not found on the GitHub workflow platforms.
+    Clang tools are not installed here and instead are installed in the function that uses them.
 
     .INPUTS
     [string] Platform. The current GitHub workflow platform.
@@ -90,12 +91,6 @@ function Install-LintingDependencies {
     Assert-ExternalCommandError -Verbose
 
     Write-Verbose "##[debug]Finished installing npm dependencies."
-
-    Write-Output "##[section]Installing clang-tidy and clang-format..."
-
-    bash ./modules/dependencies/InstallClangTools.sh "$Platform"
-
-    Write-Verbose "##[debug]Finished installing clang-tidy and clang-format."
 
     if (-Not (Test-Path -Path "./build/compile_commands.json")) {
 
