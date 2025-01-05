@@ -119,6 +119,7 @@ function Test-CodeUsingClang {
             macos-latest {
                 brew install llvm
                 & bash PATH=~/opt/homebrew/opt/llvm/bin:$PATH
+                & bash export PATH
                 $clangTidy = "clang-tidy"
                 $clangFormat = "clang-format"
             }
@@ -133,8 +134,8 @@ function Test-CodeUsingClang {
                 # $clangFormat = "clang-format-19"
 
                 & bash test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
-                & bash test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-                & bash echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bashrc
+                # & bash test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+                # & bash echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bashrc
                 $clangTidy = "clang-tidy"
                 $clangFormat = "clang-format"
             }
