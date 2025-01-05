@@ -94,23 +94,22 @@ function Install-LintingDependencies {
 
     switch ($Platform) {
         macos-latest {
-            # Override pre-installed clang by adding llvm to path
             brew install llvm
-            Assert-ExternalCommandError -Verbose
-
-            $env:Path = "/opt/homebrew/opt/llvm/bin" + $env:Path
-            Assert-ExternalCommandError -Verbose
         }
 
         ubuntu-latest {
-            
+            sudo apt install clang-tidy-19
+            Assert-ExternalCommandError -Verbose
+
+            sudo apt install clang-format-19
         }
 
         windows-latest {
             choco upgrade llvm -y
-            Assert-ExternalCommandError -Verbose
         }
     }
+
+    Assert-ExternalCommandError -Verbose
 
     Write-Verbose "##[debug]Finished installing clang-tidy and clang-format."
 
