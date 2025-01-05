@@ -17,6 +17,7 @@ ignoreWords:
     - choco
     - defenses
     - hicpp
+    - linuxbrew
     - linuxkernel
     - llvmlibc
     - nodiscard
@@ -24,5 +25,6 @@ ignoreWords:
     - noncommercially
     - openmp
     - reflow
+    - shellenv
     - tictactoe
     - werror

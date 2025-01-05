@@ -86,7 +86,7 @@ function Install-LintingDependencies {
     Write-Output "##[section]Installing npm dependencies..."
 
     npm install
-    
+
     Assert-ExternalCommandError -Verbose
 
     Write-Verbose "##[debug]Finished installing npm dependencies."
