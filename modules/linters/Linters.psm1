@@ -117,7 +117,7 @@ function Test-CodeUsingClang {
     if ($InstallClangTools) {
         Write-Output "##[section]Installing clang-tidy and clang-format..."
 
-        bash ./modules/dependencies/InstallClangTools.sh "$Platform"
+        bash ./modules/dependencies/InstallClangTools.sh $Platform
 
         Write-Verbose "##[debug]Finished installing clang-tidy and clang-format."
     }
