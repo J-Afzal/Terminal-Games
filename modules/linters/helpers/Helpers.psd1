@@ -6,6 +6,9 @@
     )
 
     FunctionsToExport = @(
+        "Assert-ExternalCommandError",
+        "Get-AllFilePathsToTest",
+        "Get-FilteredFilePathsToTest",
         "Compare-ObjectExact"
     )
 }

@@ -2,112 +2,122 @@ $ErrorActionPreference = "Stop"
 
 <#
     .SYNOPSIS
-    TODO
+    Installs all dependencies that are needed to build within GitHub workflows.
 
     .DESCRIPTION
-    TODO
+    This function only installs the build dependencies not found on the GitHub workflow platforms.
 
     .INPUTS
-    TODO
+    [string] Platform. The current GitHub workflow platform.
 
     .OUTPUTS
-    TODO
+    None.
 
     .EXAMPLE
-    TODO
+    Import-Module ./modules/TerminalGames.psd1
+    Install-BuildDependencies -Platform "macos-latest" -Verbose
 #>
 
 function Install-BuildDependencies {
 
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory = $false)]
-        [ValidateSet('macos-latest','ubuntu-latest','windows-latest')]
-        [String]
-        $OperatingSystem
+        [Parameter(Position=0, Mandatory=$false)]
+        [ValidateSet("macos-latest", "ubuntu-latest", "windows-latest")]
+        [string]
+        $Platform
     )
 
     Write-Output "##[section]Running Install-BuildDependencies..."
+    Write-Verbose "##[debug]Parameters:"
+    Write-Verbose "##[debug]    Platform: $Platform"
 
-    Write-Verbose "##[debug]OperatingSystem: $OperatingSystem"
-
-    switch ($OperatingSystem) {
+    switch ($Platform) {
         macos-latest {
-            Invoke-Expression "brew install ninja"
+            brew install ninja
         }
 
         ubuntu-latest {
-            Invoke-Expression "sudo apt-get install ninja-build"
+            sudo apt-get install ninja-build
         }
 
         windows-latest {
-            Invoke-Expression "choco install ninja -y"
+            choco install ninja -y
         }
     }
+
+    Assert-ExternalCommandError -Verbose
+
+    Write-Output "##[section]All build dependencies installed!"
 }
 
 <#
     .SYNOPSIS
-    TODO
+    Installs all linting that are needed to lint within GitHub workflows.
 
     .DESCRIPTION
-    TODO
+    This function only installs the linting dependencies not found on the GitHub workflow platforms.
 
     .INPUTS
-    TODO
+    [string] Platform. The current GitHub workflow platform.
 
     .OUTPUTS
-    TODO
+    None.
 
     .EXAMPLE
-    TODO
+    Import-Module ./modules/TerminalGames.psd1
+    Install-LintingDependencies -Platform "macos-latest" -Verbose
 #>
 
 function Install-LintingDependencies {
 
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory = $false)]
-        [ValidateSet('macos-latest','ubuntu-latest','windows-latest')]
-        [String]
-        $OperatingSystem
+        [Parameter(Position=0, Mandatory=$false)]
+        [ValidateSet("macos-latest", "ubuntu-latest", "windows-latest")]
+        [string]
+        $Platform
     )
 
     Write-Output "##[section]Running Install-LintingDependencies..."
-
-    Write-Verbose "##[debug]OperatingSystem: $OperatingSystem"
+    Write-Verbose "##[debug]Parameters:"
+    Write-Verbose "##[debug]    Platform: $Platform"
 
     Write-Output "##[section]Installing npm dependencies..."
 
     npm install
-
-    if ($LASTEXITCODE -eq 1) {
-        Write-Error "Please resolve the above errors!"
-    }
+    Assert-ExternalCommandError -Verbose
 
     Write-Verbose "##[debug]Finished installing npm dependencies."
 
     Write-Output "##[section]Installing clang-tidy and clang-format..."
 
-    switch ($OperatingSystem) {
+    switch ($Platform) {
         macos-latest {
             # Override pre-installed clang by adding llvm to path
             brew install llvm
-            $env:Path = '/opt/homebrew/opt/llvm/bin' + $env:Path
+            Assert-ExternalCommandError -Verbose
+
+            $env:Path = "/opt/homebrew/opt/llvm/bin" + $env:Path
+            Assert-ExternalCommandError -Verbose
         }
 
         ubuntu-latest {
-            # Invoke-Expression "test -d ~/.linuxbrew && eval '$(~/.linuxbrew/bin/brew shellenv)'"
-            # Invoke-Expression "test -d /home/linuxbrew/.linuxbrew && eval '$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)'"
-            # Invoke-Expression "echo 'eval '$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)' >> ~/.bashrc"
+            # Invoke-Expression "test -d ~/.linuxbrew && eval ""$(~/.linuxbrew/bin/brew shellenv)"""
+            # Invoke-Expression "test -d /home/linuxbrew/.linuxbrew && eval ""$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"""
+            # Invoke-Expression "echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bashrc"
 
             # Install brew to get latest llvm and clang tools
-            $env:Path = '/home/linuxbrew/.linuxbrew/bin' + $env:Path
+            $env:Path = "/home/linuxbrew/.linuxbrew/bin" + $env:Path
+            Assert-ExternalCommandError -Verbose
+
             brew install llvm
+            Assert-ExternalCommandError -Verbose
         }
 
         windows-latest {
             choco upgrade llvm -y
+            Assert-ExternalCommandError -Verbose
         }
     }
 
@@ -118,10 +128,14 @@ function Install-LintingDependencies {
         Write-Output "##[section]Configuring CMake to generate the 'compile_commands.json' file..."
 
         # This will fail if ninja is not installed so Install-BuildDependencies is called.
-        Install-BuildDependencies -OperatingSystem $OperatingSystem
+        Install-BuildDependencies -Platform $Platform
 
         cmake -S . -B ./build -G "Ninja"
 
+        Assert-ExternalCommandError -Verbose
+
         Write-Verbose "##[debug]Finished configuring CMake to generate the 'compile_commands.json' file."
     }
+
+    Write-Output "##[section]All linting dependencies installed!"
 }
