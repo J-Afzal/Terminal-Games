@@ -1,3 +1,3 @@
 @{
-    ExcludeRules=@("PSAvoidUsingInvokeExpression", "PSUseSingularNouns")
+    ExcludeRules=@("PSUseSingularNouns")
 }

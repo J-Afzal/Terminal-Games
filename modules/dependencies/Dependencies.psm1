@@ -86,32 +86,14 @@ function Install-LintingDependencies {
     Write-Output "##[section]Installing npm dependencies..."
 
     npm install
+    
     Assert-ExternalCommandError -Verbose
 
     Write-Verbose "##[debug]Finished installing npm dependencies."
 
     Write-Output "##[section]Installing clang-tidy and clang-format..."
 
-    switch ($Platform) {
-        macos-latest {
-            brew install llvm
-        }
-
-        ubuntu-latest {
-            wget https://apt.llvm.org/llvm.sh
-            chmod +x llvm.sh
-            sudo ./llvm.sh 19
-
-            sudo apt install clang-tidy-19
-            sudo apt install clang-format-19
-        }
-
-        windows-latest {
-            choco upgrade llvm -y
-        }
-    }
-
-    Assert-ExternalCommandError -Verbose
+    bash ./modules/dependencies/InstallClangTools.sh "$Platform"
 
     Write-Verbose "##[debug]Finished installing clang-tidy and clang-format."
 

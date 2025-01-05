@@ -115,49 +115,18 @@ function Test-CodeUsingClang {
     Write-Verbose "##[debug]    FixClangFormatErrors: $FixClangFormatErrors"
 
     if ($InstallClangTools) {
-        switch ($Platform) {
-            macos-latest {
-                brew install llvm
-                & bash PATH=~/opt/homebrew/opt/llvm/bin:$PATH
-                & bash export PATH
-                $clangTidy = "clang-tidy"
-                $clangFormat = "clang-format"
-            }
+        Write-Output "##[section]Installing clang-tidy and clang-format..."
 
-            ubuntu-latest {
-                # wget https://apt.llvm.org/llvm.sh
-                # chmod +x llvm.sh
-                # sudo ./llvm.sh 19
-                # sudo apt install clang-tidy-19
-                # sudo apt install clang-format-19
-                # $clangTidy = "clang-tidy-19"
-                # $clangFormat = "clang-format-19"
+        bash ./modules/dependencies/InstallClangTools.sh "$Platform"
 
-                & bash test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
-                # & bash test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-                # & bash echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bashrc
-                $clangTidy = "clang-tidy"
-                $clangFormat = "clang-format"
-            }
-
-            windows-latest {
-                choco upgrade llvm -y
-                $clangTidy = "clang-tidy"
-                $clangFormat = "clang-format"
-            }
-        }
-    }
-
-    else {
-        $clangTidy = "clang-tidy"
-        $clangFormat = "clang-format"
+        Write-Verbose "##[debug]Finished installing clang-tidy and clang-format."
     }
 
     Write-Verbose "##[debug]Using the following clang-tidy version..."
-    Invoke-Expression "$clangTidy --version" | ForEach-Object { "##[debug]$_" } | Write-Verbose
+    (clang-tidy --version) | ForEach-Object { "##[debug]$_" } | Write-Verbose
 
     Write-Verbose "##[debug]Using the following clang-format version..."
-    Invoke-Expression "$clangFormat --version" | ForEach-Object { "##[debug]$_" } | Write-Verbose
+    (clang-format --version) | ForEach-Object { "##[debug]$_" } | Write-Verbose
 
     Write-Output "##[section]Retrieving all files to test against clang-tidy and clang-format..."
     $filesToTest = Get-FilteredFilePathsToTest -FileExtensionFilter "Include" -FileExtensions @("cpp", "hpp")
@@ -169,13 +138,13 @@ function Test-CodeUsingClang {
         $ErrorActionPreference = "Continue"
 
         Write-Output "##[section]Running clang-tidy against '$file'..."
-        Invoke-Expression "$clangTidy $file -p ./build 2>&1" | ForEach-Object { "##[debug]$_" } | Write-Verbose
+        (clang-tidy $file -p ./build 2>&1) | ForEach-Object { "##[debug]$_" } | Write-Verbose
 
         if ($LASTEXITCODE -eq 1) {
 
             if ($FixClangTidyErrors) {
                 Write-Verbose "##[debug]Fixing clang-tidy issues in '$file'..."
-                Invoke-Expression "$clangTidy --fix $file -p ./build 2>&1" | ForEach-Object { "##[debug]$_" } | Write-Verbose
+                (clang-tidy --fix $file -p ./build 2>&1) | ForEach-Object { "##[debug]$_" } | Write-Verbose
 
                 if ($LASTEXITCODE -eq 1) {
                     Write-Verbose "##[debug]clang-tidy issues still exist in '$file'..."
@@ -193,13 +162,13 @@ function Test-CodeUsingClang {
         }
 
         Write-Output "##[section]Running clang-format against '$file'..."
-        Invoke-Expression "$clangFormat --Werror --dry-run $file 2>&1" | ForEach-Object { "##[debug]$_" } | Write-Verbose
+        (clang-format --Werror --dry-run $file 2>&1) | ForEach-Object { "##[debug]$_" } | Write-Verbose
 
         if ($LASTEXITCODE -eq 1) {
 
             if ($FixClangFormatErrors) {
                 Write-Verbose "##[debug]Fixing clang-format issues in '$file'..."
-                Invoke-Expression "$clangFormat --Werror --i $file 2>&1" | ForEach-Object { "##[debug]$_" } | Write-Verbose
+                (clang-format --Werror --i $file 2>&1) | ForEach-Object { "##[debug]$_" } | Write-Verbose
 
                 if ($LASTEXITCODE -eq 1) {
                     Write-Verbose "##[debug]clang-format issues still exist in '$file'..."
