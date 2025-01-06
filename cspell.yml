@@ -1,29 +1,30 @@
 version: "0.2"
 language: en-gb
+dictionaries:
+    - cpp
+    - powershell
 ignorePaths:
+    - .vs/
+    - .vscode/
     - build/
-    - LICENSE
+    - node_modules/
+    - package-lock.json
 words:
     - bugprone
-    - cleanup
-    - endgroup
     - linters
-    - pwsh
 ignoreWords:
     - altera
-    - analyzer
     - choco
-    - constexpr
-    - ctest
-    - discardable
-    - extern
+    - defenses
     - hicpp
-    - lastexitcode
-    - libc
+    - linuxbrew
+    - linuxkernel
     - llvmlibc
-    - msvc
-    - noexcept
     - nodiscard
     - nolint
+    - noncommercially
+    - openmp
+    - reflow
+    - shellenv
     - tictactoe
     - werror

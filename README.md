@@ -40,7 +40,7 @@ terminal-games options:
 **Feature:** Pressing the `q` key on most screens within `terminal-games` will quit to the main menu, if within a game, and quit
 the program, if within the main menu.
 
-![Main Menu](./resources/screenshots/main-menu.png "Main Menu")
+![Main Menu](./resources/screenshots/MainMenu.png "Main Menu")
 
 ### Tic Tac Toe
 
@@ -50,7 +50,7 @@ the program, if within the main menu.
 
 **Note:** The computer's choices are random.
 
-![Tic Tac Toe](./resources/screenshots/tic-tac-toe.png "Tic Tac Toe")
+![Tic Tac Toe](./resources/screenshots/TicTacToe.png "Tic Tac Toe")
 
 ### Hangman
 
@@ -65,7 +65,7 @@ to select it (please note that pressing q here will quit to the main menu).
 **Note:** The computer's choices are random both when guessing letters and when selecting a word to be guessed from the
 `./resources/words.txt` file.
 
-![Hangman](./resources/screenshots/hangman.png "Hangman")
+![Hangman](./resources/screenshots/Hangman.png "Hangman")
 
 ### Battleships
 
@@ -77,123 +77,81 @@ that has not been completely placed on the board.
 
 **Note:** The computer's choices are random for both selecting where to place ships and where to attack.
 
-![Battleships](./resources/screenshots/battleships.png "Battleships")
+![Battleships](./resources/screenshots/Battleships.png "Battleships")
+
+## CI / CD
+
+[![Continuous Integration](https://github.com/J-Afzal/Terminal-Games/actions/workflows/ContinuousIntegration.yml/badge.svg)](https://github.com/J-Afzal/Terminal-Games/actions/workflows/ContinuousIntegration.yml)
+[![Continuous Deployment](https://github.com/J-Afzal/Terminal-Games/actions/workflows/ContinuousDeployment.yml/badge.svg)](https://github.com/J-Afzal/Terminal-Games/actions/workflows/ContinuousDeployment.yml)
+
+The continuous integration workflow runs against all commits on pull requests, builds the code and runs linting checks.
+
+The continuous deployment workflow runs against all commits to master, builds the code and deploys the executables as a release.
 
 ## Development Setup
 
-For development a few extra tools are needed.
+For development a few extra tools are needed to check for linting issues locally. The `Test-CodeUsingAllLinting` function
+can be called to locally run all the linting steps in the CI workflow.
 
-### Node
-
-Install the Node (>= v22.12.0) dependencies to run the `cspell` and `prettier` linters:
-
-```cmd
-npm install
-cspell .
-prettier . --check
+```ps1
+Import-Module ./modules/TerminalGames.psd1
+Test-CodeUsingAllLinting -Verbose
 ```
+
+The obvious dependencies are:
+
+- Git
+- CMake (>= v3.20)
+- C++ compiler of your choice
 
 ### PowerShell
 
-Install PowerShell to run the ScriptAnalyzer and custom scripts:
+Install PowerShell to run the `TerminalGames` module and the ScriptAnalyzer:
 
 ```ps1
-Invoke-ScriptAnalyzer -Path . -Recurse -Severity Information
-
-Import-Module ./scripts/Linters.psm1
-Test-GitAttributesFile -Verbose
-Test-TerminalGamesCode -Verbose
+Import-Module ./modules/TerminalGames.psd1
+Test-CodeUsingPSScriptAnalyzer -Verbose
 ```
+
+### Node
+
+Install the Node (>= v22.12.0) dependencies using `npm install` to run the `cspell` and `prettier` linters:
+
+```ps1
+Import-Module ./modules/TerminalGames.psd1
+Test-CodeUsingCSpell -Verbose
+Test-CodeUsingPrettier -Verbose
+```
+
+### Generator
+
+Any generator can be used to build the project but to run `clang-tidy`/`clang-format` CMake must be configured using a generator
+that creates a `compile_commands.json` file in the build directory before running `clang-tidy`/`clang-format` (e.g.
+`-G "Ninja"`, `-G "NMake Makefiles"`, etc)
 
 ### Clang
 
-Install `clang` and `clang-tidy` (>= version 19.1.6). On windows you can download and run the `LLVM-19.1.6-win64.exe` binary
-from the [LLVM release page](https://github.com/llvm/llvm-project/releases/tag/llvmorg-19.1.6).
+Install `clang-tidy` and `clang-format` (>= version 19.1.6). On windows you can download and run the `LLVM-19.1.6-win64.exe`
+binary from the [LLVM release page](https://github.com/llvm/llvm-project/releases/tag/llvmorg-19.1.6) or use
+[chocolatey](https://community.chocolatey.org/packages/llvm).
 
 ```cmd
 clang-tidy [file] -p ./build
 ```
 
-Or you can use the custom linter script to run `clang-tidy` against the entire repository:
-
-```ps1
-Import-Module ./scripts/Linters.psm1
-Test-TerminalGamesCode -Verbose
+```cmd
+clang-format --Werror --dry-run [file]
 ```
 
-:warning: CMake must be configured using a generator that creates a `compile_commands.json` file in the build directory before running
-`clang-tidy` (e.g. `-G "Ninja"`, `-G "NMake Makefiles"`, etc) :warning:
+The `TerminalGames` module can be used to run `clang-tidy` and `clang-format` against the entire repository (with optional
+parameters to fix any fixable errors):
+
+```ps1
+Import-Module ./modules/TerminalGames.psd1
+Test-CodeUsingClang -FixClangTidyErrors -FixClangFormatErrors -Verbose
+```
 
 ### IDE
 
 On Windows, Visual Studio 2022 can be used by opening the folder as a CMake project and Visual Studio Code can be used by
 opening the folder through the `Developer PowerShell for VS` (otherwise you may see errors around cl.exe not being found).
-
-## Releases
-
-[![Continuous Integration](https://github.com/J-Afzal/Terminal-Games/actions/workflows/continuous_integration.yml/badge.svg)](https://github.com/J-Afzal/Terminal-Games/actions/workflows/continuous_integration.yml)
-[![Continuous Deployment](https://github.com/J-Afzal/Terminal-Games/actions/workflows/continuous_deployment.yml/badge.svg)](https://github.com/J-Afzal/Terminal-Games/actions/workflows/continuous_deployment.yml)
-
-Releases are performed automatically on pushes to master (i.e. when a pull request is merged) via the continuous deployment
-workflow.
-
-<!--
-TODO:
-
-Tic Tac Toe
-    - Clean up code
-        - Remove braces for single line statements
-        - Check all NOLINT
-        - Collapse to single while loop in ExecuteNextUserCommand
-    - New features:
-        - Add restart with same settings with game over message update
-    - Create test plan and confirm all things work (including other platforms and with ascii only)
-
-Hangman
-    - Clean up code
-        - Remove braces for single line statements
-        - Check all NOLINT
-        - Show word to be guessed '_'s on first turn before any user input
-        - delete m_errorCount?
-    - New features:
-        - Add restart with same settings with game over message update
-    - Create test plan and confirm all things work (including other platforms and with ascii only)
-
-Battleships
-    - Clean up code
-        - Remove braces for single line statements
-        - Check all NOLINT
-    - New features:
-        - Add restart with same settings with game over message update
-    - Create test plan and confirm all things work (including other platforms and with ascii only)
-
-PageBuilder
-    - Clean up GetGameDisplay func (maybe implement grid system?)
-
-Main Menu
-    - Clean up code
-    - New features:
-        - Add homepage with option selection (ascii only and platform label and navigation instruction depending upon platform and press key to go to main menu)
-        - Press 'h' to go back to the above page
-    - Create test plan and confirm all things work (including other platforms and with ascii only)
-
-Linters
-    - gitattributes
-        - Flag extra new lines
-        - Redundant entries
-        - Duplicate entries
-    - cspell
-        - Redundant entries
-        - Duplicate entries
-    - file names
-        - they are all standardised to any casing (maybe use $fileName = $fileName.ToTitleCase()?)
-
-Doxygen
-    Add build to CI with artifact to check.
-    Add build and publish to CD and publish to GH pages (maybe commit to repo but make sure no infinite loop)
-    Update readme to link to GH pages docs
-
-Test Plans
-    Setup MacOS and Ubuntu VMs and see if test plan succeed
-    Update readme to reference them and differences between platforms
- -->
