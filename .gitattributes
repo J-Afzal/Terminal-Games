@@ -25,7 +25,6 @@ LICENSE         text
 # Scripts
 *.psd1          text
 *.psm1          text
-*.sh            text
 
 # Serialisation
 *.json          text

@@ -22,6 +22,7 @@ $ErrorActionPreference = "Stop"
 function Assert-ExternalCommandError {
 
     [CmdletBinding()]
+    [OutputType([system.boolean])]
     param()
 
     Write-Verbose "##[debug]Running Assert-ExternalCommandError..."
@@ -57,6 +58,7 @@ function Assert-ExternalCommandError {
 function Get-AllFilePathsToTest {
 
     [CmdletBinding()]
+    [OutputType([system.object[]])]
     param()
 
     Write-Verbose "##[debug]Running Get-AllFilesToTest..."
