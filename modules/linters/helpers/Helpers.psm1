@@ -11,7 +11,7 @@ $ErrorActionPreference = "Stop"
     None.
 
     .OUTPUTS
-    [bool]. Whether the external command has thrown an error.
+    system.boolean Whether the external command has thrown an error.
 
     .EXAMPLE
     Import-Module ./modules/TerminalGames.psd1
@@ -47,7 +47,7 @@ function Assert-ExternalCommandError {
     None.
 
     .OUTPUTS
-    system.object[]. A list of file paths (relative to the root of the repository).
+    system.object[] A list of file paths (relative to the root of the repository).
 
 
     .EXAMPLE
@@ -90,7 +90,7 @@ function Get-AllFilePathsToTest {
     FileNameFilter.
 
     .OUTPUTS
-    system.object[]. A list of file paths (relative to the root of the repository).
+    system.object[] A list of file paths (relative to the root of the repository).
 
     .EXAMPLE
     Import-Module ./modules/TerminalGames.psd1
@@ -175,7 +175,7 @@ function Get-FilteredFilePathsToTest {
     system.object[] DifferenceObject. Specifies the objects that are compared to the reference objects.
 
     .OUTPUTS
-    system.object[]. A list of error messages.
+    system.object[] A list of error messages.
 
     .EXAMPLE
     Import-Module ./modules/TerminalGames.psd1

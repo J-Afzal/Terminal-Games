@@ -108,7 +108,7 @@ function Install-LintingDependencies {
         if (Assert-ExternalCommandError -Verbose) {
             Write-Error "Please resolve the above errors!"
         }
-        
+
         Write-Verbose "##[debug]Finished configuring CMake to generate the 'compile_commands.json' file."
     }
 
