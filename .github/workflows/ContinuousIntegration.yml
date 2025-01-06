@@ -107,6 +107,9 @@ jobs:
 
             - name: Run clang-tidy and clang-format
               if: (success() || failure()) && steps.dependencies.outcome == 'success'
+              shell: bash
               run: |
-                  Import-Module ./modules/TerminalGames.psd1
-                  Test-CodeUsingClang -InstallClangTools -Platform "${{ matrix.os }}" -Verbose
+                  ./modules/dependencies/InstallClangTools.sh
+
+                  pwsh -command "Import-Module ./modules/TerminalGames.psd1"
+                  pwsh -command "Test-CodeUsingClang -Verbose"

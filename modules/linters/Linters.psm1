@@ -9,8 +9,6 @@ $ErrorActionPreference = "Stop"
     Raises an error at the first occurrence of a linting error.
 
     .INPUTS
-    [string] Platform. The current platform (i.e. the GitHub-hosted runner) to install the linting
-    dependencies on to. Do not use
 
     [switch] FixClangTidyErrors. Whether to use clang-tidy to automatically fix any fixable errors.
 
@@ -21,7 +19,7 @@ $ErrorActionPreference = "Stop"
 
     .EXAMPLE
     Import-Module ./modules/TerminalGames.psd1
-    Test-CodeUsingAllLinting -Platform "macos-latest" -FixClangTidyErrors -FixClangFormatErrors -Verbose
+    Test-CodeUsingAllLinting -FixClangTidyErrors -FixClangFormatErrors -Verbose
 #>
 
 function Test-CodeUsingAllLinters {
@@ -56,7 +54,7 @@ function Test-CodeUsingAllLinters {
 
     Test-CodeUsingPSScriptAnalyzer -Verbose
 
-    Test-CodeUsingClang -Verbose -FixClangTidyErrors:$FixClangTidyErrors -FixClangFormatErrors:$FixClangFormatErrors
+    Test-CodeUsingClang -FixClangTidyErrors:$FixClangTidyErrors -FixClangFormatErrors:$FixClangFormatErrors -Verbose
 
     Write-Output "##[section]All linting tests passed!"
 }
@@ -71,8 +69,6 @@ function Test-CodeUsingAllLinters {
     Raises an error if linting errors found.
 
     .INPUTS
-    [string] Platform. The current platform (i.e. the GitHub-hosted runner).
-
     [switch] FixClangTidyErrors. Whether to use clang-tidy to automatically fix any fixable errors.
 
     [switch] FixClangFormatErrors. Whether to use clang-format to automatically fix any fixable errors.
@@ -82,45 +78,27 @@ function Test-CodeUsingAllLinters {
 
     .EXAMPLE
     Import-Module ./modules/TerminalGames.psd1
-    Test-CodeUsingClang -InstallClangTools -Platform "macos-latest" -FixClangTidyErrors -FixClangFormatErrors -Verbose
+    Test-CodeUsingClang -FixClangTidyErrors -FixClangFormatErrors -Verbose
 #>
 
 function Test-CodeUsingClang {
 
-    [CmdletBinding(DefaultParameterSetName="None")]
+    [CmdletBinding()]
     param
     (
-        [Parameter(Position=0, Mandatory=$false, ParameterSetName="InstallClangTools")]
-        [switch]
-        $InstallClangTools,
-
-        [Parameter(Position=1, Mandatory=$true, ParameterSetName="InstallClangTools")]
-        [ValidateSet("macos-latest", "ubuntu-latest", "windows-latest")]
-        [string]
-        $Platform,
-
-        [Parameter(Position=2, Mandatory=$false)]
+        [Parameter(Position=0, Mandatory=$false)]
         [switch]
         $FixClangTidyErrors,
 
-        [Parameter(Position=3, Mandatory=$false)]
+        [Parameter(Position=1, Mandatory=$false)]
         [switch]
         $FixClangFormatErrors
     )
 
     Write-Output "##[section]Running Test-CodeUsingClang..."
     Write-Verbose "##[debug]Parameters:"
-    Write-Verbose "##[debug]    Platform: $Platform"
     Write-Verbose "##[debug]    FixClangTidyErrors: $FixClangTidyErrors"
     Write-Verbose "##[debug]    FixClangFormatErrors: $FixClangFormatErrors"
-
-    if ($InstallClangTools) {
-        Write-Output "##[section]Installing clang-tidy and clang-format..."
-
-        bash ./modules/dependencies/InstallClangTools.sh $Platform
-
-        Write-Verbose "##[debug]Finished installing clang-tidy and clang-format."
-    }
 
     Write-Verbose "##[debug]Using the following clang-tidy version..."
     (clang-tidy --version) | ForEach-Object { "##[debug]$_" } | Write-Verbose
@@ -140,13 +118,13 @@ function Test-CodeUsingClang {
         Write-Output "##[section]Running clang-tidy against '$file'..."
         (clang-tidy $file -p ./build 2>&1) | ForEach-Object { "##[debug]$_" } | Write-Verbose
 
-        if ($LASTEXITCODE -eq 1) {
+        if (Assert-ExternalCommandError -Verbose) {
 
             if ($FixClangTidyErrors) {
                 Write-Verbose "##[debug]Fixing clang-tidy issues in '$file'..."
                 (clang-tidy --fix $file -p ./build 2>&1) | ForEach-Object { "##[debug]$_" } | Write-Verbose
 
-                if ($LASTEXITCODE -eq 1) {
+                if (Assert-ExternalCommandError -Verbose) {
                     Write-Verbose "##[debug]clang-tidy issues still exist in '$file'..."
                     $filesWithErrors += $file
                 }
@@ -164,13 +142,13 @@ function Test-CodeUsingClang {
         Write-Output "##[section]Running clang-format against '$file'..."
         (clang-format --Werror --dry-run $file 2>&1) | ForEach-Object { "##[debug]$_" } | Write-Verbose
 
-        if ($LASTEXITCODE -eq 1) {
+        if (Assert-ExternalCommandError -Verbose) {
 
             if ($FixClangFormatErrors) {
                 Write-Verbose "##[debug]Fixing clang-format issues in '$file'..."
                 (clang-format --Werror --i $file 2>&1) | ForEach-Object { "##[debug]$_" } | Write-Verbose
 
-                if ($LASTEXITCODE -eq 1) {
+                if (Assert-ExternalCommandError -Verbose) {
                     Write-Verbose "##[debug]clang-format issues still exist in '$file'..."
                     $filesWithErrors += $file
                 }
@@ -235,7 +213,7 @@ function Test-CodeUsingCSpell {
 
         (npx -c "cspell --unique --show-context --no-progress --no-summary $file") | ForEach-Object { "##[debug]$_" } | Write-Verbose
 
-        if ($LASTEXITCODE -eq 1) {
+        if (Assert-ExternalCommandError -Verbose) {
             $filesWithErrors += $file
         }
     }
@@ -287,7 +265,7 @@ function Test-CodeUsingPrettier {
 
         (npx -c "prettier $file --debug-check") | ForEach-Object { "##[debug]$_" } | Write-Verbose
 
-        if ($LASTEXITCODE -eq 1) {
+        if (Assert-ExternalCommandError -Verbose) {
             $filesWithErrors += $file
         }
     }

@@ -2,7 +2,7 @@ $ErrorActionPreference = "Stop"
 
 <#
     .SYNOPSIS
-    Throws an error when an external function has thrown an error via LASTEXITCODE.
+    Asserts whether an error when an external function has thrown an error via LASTEXITCODE.
 
     .DESCRIPTION
     This function must be called immediately after the external function call.
@@ -11,7 +11,7 @@ $ErrorActionPreference = "Stop"
     None.
 
     .OUTPUTS
-    None.
+    [bool]. Whether the external command has thrown an error.
 
     .EXAMPLE
     Import-Module ./modules/TerminalGames.psd1
@@ -27,7 +27,11 @@ function Assert-ExternalCommandError {
     Write-Verbose "##[debug]Running Assert-ExternalCommandError..."
 
     if ($LASTEXITCODE -eq 1) {
-        Write-Error "Please resolve the above errors!"
+        return $true
+    }
+
+    else {
+        return $false
     }
 }
 

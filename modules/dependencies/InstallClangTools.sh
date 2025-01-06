@@ -17,8 +17,13 @@ fi
 
 if [ $platform = ubuntu-latest ]
 then
-    sudo apt-get install clang-tidy-19
-    sudo apt-get install clang-format-19
+    # Install brew to get latest llvm and clang tools
+    test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
+    test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bashrc
+    export PATH="$HOME/.linuxbrew/bin:$PATH"
+
+    brew install llvm
 fi
 
 if [ $platform = windows-latest ]

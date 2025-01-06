@@ -46,7 +46,9 @@ function Install-BuildDependencies {
         }
     }
 
-    Assert-ExternalCommandError -Verbose
+    if (Assert-ExternalCommandError -Verbose) {
+        Write-Error "Please resolve the above errors!"
+    }
 
     Write-Output "##[section]All build dependencies installed!"
 }
@@ -88,7 +90,9 @@ function Install-LintingDependencies {
 
     npm install
 
-    Assert-ExternalCommandError -Verbose
+    if (Assert-ExternalCommandError -Verbose) {
+        Write-Error "Please resolve the above errors!"
+    }
 
     Write-Verbose "##[debug]Finished installing npm dependencies."
 
@@ -101,8 +105,10 @@ function Install-LintingDependencies {
 
         cmake -S . -B ./build -G "Ninja"
 
-        Assert-ExternalCommandError -Verbose
-
+        if (Assert-ExternalCommandError -Verbose) {
+            Write-Error "Please resolve the above errors!"
+        }
+        
         Write-Verbose "##[debug]Finished configuring CMake to generate the 'compile_commands.json' file."
     }
 
