@@ -109,7 +109,27 @@ jobs:
               if: (success() || failure()) && steps.dependencies.outcome == 'success'
               shell: bash
               run: |
-                  chmod +x ./modules/dependencies/InstallClangTools.sh
-                  ./modules/dependencies/InstallClangTools.sh ${{ matrix.os }}
+                  if [ ${{ matrix.os }} = macos-latest ]
+                  then
+                      # Override pre-installed clang and add to path
+                      brew install llvm
+                      export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+                  fi
+
+                  if [ ${{ matrix.os }} = ubuntu-latest ]
+                  then
+                      # Install brew to get latest llvm and clang tools
+                      test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
+                      test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+                      echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bashrc
+                      export PATH="$HOME/.linuxbrew/bin:$PATH"
+
+                      brew install llvm
+                  fi
+
+                  if [ ${{ matrix.os }} = windows-latest ]
+                  then
+                      choco upgrade llvm -y
+                  fi
 
                   pwsh -command "Import-Module ./modules/TerminalGames.psd1; Test-CodeUsingClang -Verbose"
