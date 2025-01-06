@@ -110,7 +110,7 @@ jobs:
               shell: bash
               run: |
                   chmod +x ./modules/dependencies/InstallClangTools.sh
-                  ./modules/dependencies/InstallClangTools.sh
+                  ./modules/dependencies/InstallClangTools.sh ${{ matrix.os }}
 
                   pwsh -command "Import-Module ./modules/TerminalGames.psd1"
                   pwsh -command "Test-CodeUsingClang -Verbose"
