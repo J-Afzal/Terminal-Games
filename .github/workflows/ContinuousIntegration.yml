@@ -8,38 +8,38 @@ on:
             - master
 
 jobs:
-    # build:
-    #     strategy:
-    #         matrix:
-    #             os:
-    #                 - macos-latest
-    #                 - ubuntu-latest
-    #                 - windows-latest
+    build:
+        strategy:
+            matrix:
+                os:
+                    - macos-latest
+                    - ubuntu-latest
+                    - windows-latest
 
-    #     runs-on: ${{ matrix.os }}
-    #     defaults:
-    #         run:
-    #             shell: pwsh
+        runs-on: ${{ matrix.os }}
+        defaults:
+            run:
+                shell: pwsh
 
-    #     steps:
-    #         - uses: actions/checkout@v4
+        steps:
+            - uses: actions/checkout@v4
 
-    #         - name: Install build dependencies
-    #           run: |
-    #               Import-Module ./modules/TerminalGames.psd1
-    #               Install-BuildDependencies -Platform "${{ matrix.os }}" -Verbose
+            - name: Install build dependencies
+              run: |
+                  Import-Module ./modules/TerminalGames.psd1
+                  Install-BuildDependencies -Platform "${{ matrix.os }}" -Verbose
 
-    #         - name: Configure CMake
-    #           run: cmake -S . -B ./build -G "Ninja"
+            - name: Configure CMake
+              run: cmake -S . -B ./build -G "Ninja"
 
-    #         - name: Build Project
-    #           run: cmake --build ./build --config Release
+            - name: Build Project
+              run: cmake --build ./build --config Release
 
-    #         - uses: actions/upload-artifact@v4
-    #           with:
-    #               name: terminal-games-${{ matrix.os }}
-    #               path: ./build/terminal-games-${{ matrix.os }}*
-    #               if-no-files-found: error
+            - uses: actions/upload-artifact@v4
+              with:
+                  name: terminal-games-${{ matrix.os }}
+                  path: ./build/terminal-games-${{ matrix.os }}*
+                  if-no-files-found: error
 
     lint:
         strategy:
@@ -47,7 +47,7 @@ jobs:
                 os:
                     - macos-latest
                     - ubuntu-latest
-                    # - windows-latest
+                    - windows-latest
 
         runs-on: ${{ matrix.os }}
         defaults:
@@ -63,56 +63,58 @@ jobs:
                   Import-Module ./modules/TerminalGames.psd1
                   Install-LintingDependencies -Platform "${{ matrix.os }}" -Verbose
 
-            # - name: Run gitignore linter
-            #   if: (success() || failure()) && steps.dependencies.outcome == 'success'
-            #   run: |
-            #       Import-Module ./modules/TerminalGames.psd1
-            #       Test-GitIgnoreFile -Verbose
+            - name: Run gitignore linter
+              if: (success() || failure()) && steps.dependencies.outcome == 'success'
+              run: |
+                  Import-Module ./modules/TerminalGames.psd1
+                  Test-GitIgnoreFile -Verbose
 
-            # - name: Run gitattributes linter
-            #   if: (success() || failure()) && steps.dependencies.outcome == 'success'
-            #   run: |
-            #       Import-Module ./modules/TerminalGames.psd1
-            #       Test-GitAttributesFile -Verbose
+            - name: Run gitattributes linter
+              if: (success() || failure()) && steps.dependencies.outcome == 'success'
+              run: |
+                  Import-Module ./modules/TerminalGames.psd1
+                  Test-GitAttributesFile -Verbose
 
-            # - name: Run cspell config linter
-            #   if: (success() || failure()) && steps.dependencies.outcome == 'success'
-            #   run: |
-            #       Import-Module ./modules/TerminalGames.psd1
-            #       Test-CSpellConfigurationFile -Verbose
+            - name: Run cspell config linter
+              if: (success() || failure()) && steps.dependencies.outcome == 'success'
+              run: |
+                  Import-Module ./modules/TerminalGames.psd1
+                  Test-CSpellConfigurationFile -Verbose
 
-            # - name: Run prettierignore linter
-            #   if: (success() || failure()) && steps.dependencies.outcome == 'success'
-            #   run: |
-            #       Import-Module ./modules/TerminalGames.psd1
-            #       Test-PrettierIgnoreFile -Verbose
+            - name: Run prettierignore linter
+              if: (success() || failure()) && steps.dependencies.outcome == 'success'
+              run: |
+                  Import-Module ./modules/TerminalGames.psd1
+                  Test-PrettierIgnoreFile -Verbose
 
-            # - name: Run cspell
-            #   if: (success() || failure()) && steps.dependencies.outcome == 'success'
-            #   run: |
-            #       Import-Module ./modules/TerminalGames.psd1
-            #       Test-CodeUsingCSpell -Verbose
+            - name: Run cspell
+              if: (success() || failure()) && steps.dependencies.outcome == 'success'
+              run: |
+                  Import-Module ./modules/TerminalGames.psd1
+                  Test-CodeUsingCSpell -Verbose
 
-            # - name: Run prettier
-            #   if: (success() || failure()) && steps.dependencies.outcome == 'success'
-            #   run: |
-            #       Import-Module ./modules/TerminalGames.psd1
-            #       Test-CodeUsingPrettier -Verbose
+            - name: Run prettier
+              if: (success() || failure()) && steps.dependencies.outcome == 'success'
+              run: |
+                  Import-Module ./modules/TerminalGames.psd1
+                  Test-CodeUsingPrettier -Verbose
 
-            # - name: Run PSScriptAnalyzer
-            #   if: (success() || failure()) && steps.dependencies.outcome == 'success'
-            #   run: |
-            #       Import-Module ./modules/TerminalGames.psd1
-            #       Test-CodeUsingPSScriptAnalyzer -Verbose
+            - name: Run PSScriptAnalyzer
+              if: (success() || failure()) && steps.dependencies.outcome == 'success'
+              run: |
+                  Import-Module ./modules/TerminalGames.psd1
+                  Test-CodeUsingPSScriptAnalyzer -Verbose
 
             - name: Run clang-tidy and clang-format
               if: (success() || failure()) && steps.dependencies.outcome == 'success'
               shell: bash
               run: |
+                  # Install the latest version of clang-tidy and clang-format
+
                   if [ ${{ matrix.os }} = macos-latest ]
                   then
-                      # Override pre-installed clang and add to path
                       brew install llvm
+                      # Override pre-installed clang by adding to the path
                       export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
                   fi
 
