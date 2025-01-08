@@ -24,9 +24,9 @@ namespace TerminalGames
         /**
          * @brief Construct a new MainMenu object.
          *
-         * @param p_onlyUseAscii Whether to use only ASCII characters (true) or to also use ANSI escapes codes (false).
+         * @param p_useAnsiEscapeCodes Whether to use use ANSI escapes codes (true) or only ASCII characters (false).
          */
-        explicit MainMenu(const bool& p_onlyUseAscii);
+        explicit MainMenu(const bool& p_useAnsiEscapeCodes);
 
         /**
          * @brief Destruct a MainMenu object.
@@ -93,6 +93,6 @@ namespace TerminalGames
 
         std::vector<std::unique_ptr<Game>> m_games;
         std::vector<std::string> m_mainMenus;
-        bool m_onlyUseASCII;
+        bool m_useAnsiEscapeCodes;
     };
 }

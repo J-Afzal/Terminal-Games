@@ -4,8 +4,9 @@
 #include <string>
 #include <vector>
 
-#include "Constants.hpp"
-#include "Exceptions.hpp"
+#include "helpers/Constants.hpp"
+#include "helpers/Exceptions.hpp"
+#include "helpers/Functions.hpp"
 #include "helpers/PageBuilder.hpp"
 
 namespace TerminalGames
@@ -15,47 +16,51 @@ namespace TerminalGames
         m_displayHeight(0),
         m_maximumInputSize(0),
         m_maximumFilledLineSize(0),
-        m_onlyUseASCII(false),
+        m_useAnsiEscapeCodes(false),
         m_currentPage(Pages::DEFAULT) {}
 
-    PageBuilder::PageBuilder(const Pages& p_page, const bool& p_onlyUseAscii) :
+    PageBuilder::PageBuilder(const Pages& p_page, const bool& p_useAnsiEscapeCodes) :
         m_displayWidth(0),
         m_displayHeight(0),
         m_maximumInputSize(0),
         m_maximumFilledLineSize(0),
-        m_onlyUseASCII(false),
+        m_useAnsiEscapeCodes(false),
         m_currentPage(Pages::DEFAULT)
     {
-        this->SetProperties(p_page, p_onlyUseAscii);
+        SetProperties(p_page, p_useAnsiEscapeCodes);
     }
 
-    void PageBuilder::SetProperties(const Pages& p_page, const bool& p_onlyUseAscii)
+    void PageBuilder::SetProperties(const Pages& p_page, const bool& p_useAnsiEscapeCodes)
     {
         m_currentPage = p_page;
-        m_onlyUseASCII = p_onlyUseAscii;
+        m_useAnsiEscapeCodes = p_useAnsiEscapeCodes;
 
         switch (m_currentPage)
         {
         case Pages::MAINMENU:
-            m_topTitle = "Terminal-Games";
+            m_topTitle = G_MAIN_MENU_TOP_TITLE;
+            m_bottomTitle = G_MAIN_MENU_BOTTOM_TITLE;
             m_displayWidth = G_MAIN_MENU_DISPLAY_WIDTH;
             m_displayHeight = G_MAIN_MENU_DISPLAY_HEIGHT;
             break;
 
         case Pages::TICTACTOE:
-            m_topTitle = "Tic Tac Toe";
+            m_topTitle = G_TICTACTOE_BOTTOM_TITLE;
+            m_bottomTitle = G_TICTACTOE_TOP_TITLE;
             m_displayWidth = G_TICTACTOE_DISPLAY_WIDTH;
             m_displayHeight = G_TICTACTOE_DISPLAY_HEIGHT;
             break;
 
         case Pages::HANGMAN:
-            m_topTitle = "Hangman";
+            m_topTitle = G_HANGMAN_BOTTOM_TITLE;
+            m_bottomTitle = G_HANGMAN_TOP_TITLE;
             m_displayWidth = G_HANGMAN_DISPLAY_WIDTH;
             m_displayHeight = G_HANGMAN_DISPLAY_HEIGHT;
             break;
 
         case Pages::BATTLESHIPS:
-            m_topTitle = "Battleships";
+            m_topTitle = G_BATTLESHIPS_BOTTOM_TITLE;
+            m_bottomTitle = G_BATTLESHIPS_TOP_TITLE;
             m_displayWidth = G_BATTLESHIPS_DISPLAY_WIDTH;
             m_displayHeight = G_BATTLESHIPS_DISPLAY_HEIGHT;
             break;
@@ -225,16 +230,28 @@ namespace TerminalGames
 
     std::string PageBuilder::AddColour(const std::string& p_input, const Colours& p_colour) const
     {
-        if (m_onlyUseASCII)
+        if (!m_useAnsiEscapeCodes)
             return p_input;
 
-        if (p_colour == Colours::RED)
+        switch (p_colour)
+        {
+        case Colours::RED:
             return G_RED_ANSI_COLOUR_ESCAPE_CODE + p_input + G_WHITE_ANSI_COLOUR_ESCAPE_CODE;
 
-        if (p_colour == Colours::BLUE)
+        case Colours::BLUE:
             return G_BLUE_ANSI_COLOUR_ESCAPE_CODE + p_input + G_WHITE_ANSI_COLOUR_ESCAPE_CODE;
 
-        return p_input; // Text is already white
+        case Colours::GREEN:
+            return G_GREEN_ANSI_COLOUR_ESCAPE_CODE + p_input + G_WHITE_ANSI_COLOUR_ESCAPE_CODE;
+
+        case Colours::YELLOW:
+            return G_YELLOW_ANSI_COLOUR_ESCAPE_CODE + p_input + G_WHITE_ANSI_COLOUR_ESCAPE_CODE;
+
+        default:
+            return p_input; // Text is already white
+        }
+    }
+
     }
 
     std::string PageBuilder::GetEmptyLine() const
@@ -330,28 +347,9 @@ namespace TerminalGames
 
     std::string PageBuilder::GetBottomBox() const
     {
-        std::string output;
-        output += GetTopLine();
-
-        switch (m_currentPage)
-        {
-        case Pages::MAINMENU:
-            output += GetNewLineCentred(G_MENU_BOTTOM_TITLE, Colours::RED);
-            break;
-
-        case Pages::TICTACTOE:
-        case Pages::HANGMAN:
-        case Pages::BATTLESHIPS:
-            output += GetNewLineCentred(G_GAME_BOTTOM_TITLE, Colours::RED);
-            break;
-
-        default:
-            return {"The 'GetBottomBox' function does not support the current page type."};
-        }
-
         // G_RESET_ANSI_COLOUR_ESCAPE_CODE used to unset any ANSI colour escape code. If the program unexpectedly crashes the
         // user's terminal will not be affected.
-        return output + GetBottomLine() + G_RESET_ANSI_COLOUR_ESCAPE_CODE;
+        return GetTopLine() + GetNewLineCentred(m_bottomTitle, Colours::RED) + GetBottomLine() + G_RESET_ANSI_COLOUR_ESCAPE_CODE;
     }
 
     std::string PageBuilder::GetRemainingEmptyLines(const std::string& p_commonTopString, const std::string& p_commonBottomString) const

@@ -4,10 +4,10 @@
 #include <string>
 #include <vector>
 
-#include "Exceptions.hpp"
 #include "games/Battleships.hpp"
 #include "games/Hangman.hpp"
 #include "games/TicTacToe.hpp"
+#include "helpers/Exceptions.hpp"
 #include "helpers/MainMenu.hpp"
 #include "helpers/PageBuilder.hpp"
 #include "helpers/Terminal.hpp"

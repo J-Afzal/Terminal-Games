@@ -6,7 +6,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include "Constants.hpp"
+#include "helpers/Constants.hpp"
 
 namespace TerminalGames
 {
@@ -88,17 +88,17 @@ namespace TerminalGames
          * @brief Construct a new StringBuilder object.
          *
          * @param p_page Which page type to configure the PageBuilder for.
-         * @param p_onlyUseAscii Whether to use only ASCII characters (true) or to also use ANSI escapes codes (false).
+         * @param p_useAnsiEscapeCodes Whether to use use ANSI escapes codes (true) or only ASCII characters (false).
          */
-        explicit PageBuilder(const Pages& p_page, const bool& p_onlyUseAscii);
+        explicit PageBuilder(const Pages& p_page, const bool& p_useAnsiEscapeCodes);
 
         /**
          * @brief Set the properties of the object.
          *
          * @param p_page Which page type to configure the PageBuilder for.
-         * @param p_onlyUseAscii Whether to use only ASCII characters (true) or to also use ANSI escapes codes (false).
+         * @param p_useAnsiEscapeCodes Whether to use use ANSI escapes codes (true) or only ASCII characters (false).
          */
-        void SetProperties(const Pages& p_page, const bool& p_onlyUseAscii);
+        void SetProperties(const Pages& p_page, const bool& p_useAnsiEscapeCodes);
 
         /**
          * @brief Get the current page type.
@@ -307,7 +307,7 @@ namespace TerminalGames
         uint32_t m_maximumInputSize;
         uint32_t m_maximumFilledLineSize;
         Pages m_currentPage;
-        bool m_onlyUseASCII;
+        bool m_useAnsiEscapeCodes;
 
         /**
          * @brief A visual example of what some of the lower level function do:

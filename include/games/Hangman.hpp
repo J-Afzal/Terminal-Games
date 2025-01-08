@@ -16,9 +16,9 @@ namespace TerminalGames
         /**
          * @brief Construct a new Hangman object.
          *
-         * @param p_onlyUseAscii Whether to use only ASCII characters (true) or to also use ANSI escapes codes (false).
+         * @param p_useAnsiEscapeCodes Whether to use use ANSI escapes codes (true) or only ASCII characters (false).
          */
-        explicit Hangman(const bool& p_onlyUseAscii);
+        explicit Hangman(const bool& p_useAnsiEscapeCodes);
 
     private:
         /**

@@ -8,8 +8,8 @@
 #include <unordered_map>
 #include <vector>
 
-#include "Constants.hpp"
 #include "games/Game.hpp"
+#include "helpers/Constants.hpp"
 #include "helpers/PageBuilder.hpp"
 
 namespace TerminalGames
@@ -20,9 +20,9 @@ namespace TerminalGames
         /**
          * @brief Construct a new Battleships object.
          *
-         * @param p_onlyUseAscii Whether to use only ASCII characters (true) or to also use ANSI escapes codes (false).
+         * @param p_useAnsiEscapeCodes Whether to use use ANSI escapes codes (true) or only ASCII characters (false).
          */
-        explicit Battleships(const bool& p_onlyUseAscii);
+        explicit Battleships(const bool& p_useAnsiEscapeCodes);
 
     private:
         PageBuilder m_pageBuilder;

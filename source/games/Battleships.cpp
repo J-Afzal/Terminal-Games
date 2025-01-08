@@ -8,20 +8,21 @@
 #include <unordered_map>
 #include <vector>
 
-#include "Constants.hpp"
-#include "Exceptions.hpp"
 #include "games/Battleships.hpp"
+#include "helpers/Constants.hpp"
+#include "helpers/Exceptions.hpp"
+#include "helpers/Functions.hpp"
 #include "helpers/PageBuilder.hpp"
 #include "helpers/Terminal.hpp"
 
 namespace TerminalGames
 {
-    Battleships::Battleships(const bool& p_onlyUseAscii) :
+    Battleships::Battleships(const bool& p_useAnsiEscapeCodes) :
         m_computerSpeed(0),
         m_turnCount(0),
         m_isGameOver(false)
     {
-        m_pageBuilder.SetProperties(Pages::BATTLESHIPS, p_onlyUseAscii);
+        m_pageBuilder.SetProperties(Pages::BATTLESHIPS, p_useAnsiEscapeCodes);
         m_randomNumberGenerator.seed(std::chrono::system_clock::now().time_since_epoch().count());
     }
 
@@ -148,7 +149,7 @@ namespace TerminalGames
     {
         Terminal::PrintOutput(m_pageBuilder.GetGameOverPage(m_gameInfo));
 
-        if (Terminal::GetNextKeyPress() == 'q')
+        if (Terminal::GetNextKeyPress() == G_QUIT_KEY)
         {
             throw Exceptions::QuitGame();
         }

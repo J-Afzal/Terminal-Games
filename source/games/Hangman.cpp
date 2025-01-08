@@ -9,15 +9,16 @@
 #include <thread>
 #include <vector>
 
-#include "Constants.hpp"
-#include "Exceptions.hpp"
 #include "games/Hangman.hpp"
+#include "helpers/Constants.hpp"
+#include "helpers/Exceptions.hpp"
+#include "helpers/Functions.hpp"
 #include "helpers/PageBuilder.hpp"
 #include "helpers/Terminal.hpp"
 
 namespace TerminalGames
 {
-    Hangman::Hangman(const bool& p_onlyUseAscii) :
+    Hangman::Hangman(const bool& p_useAnsiEscapeCodes) :
         m_computerSpeed(0),
         m_errorCount(0),
         m_turnCount(0),
@@ -25,7 +26,7 @@ namespace TerminalGames
         m_hasWinner(false),
         m_userIsGuesser(false)
     {
-        m_pageBuilder.SetProperties(Pages::HANGMAN, p_onlyUseAscii);
+        m_pageBuilder.SetProperties(Pages::HANGMAN, p_useAnsiEscapeCodes);
         m_randomNumberGenerator.seed(std::chrono::system_clock::now().time_since_epoch().count());
     }
 
@@ -189,7 +190,7 @@ namespace TerminalGames
     {
         Terminal::PrintOutput(m_pageBuilder.GetGameOverPage(m_gameInfo));
 
-        if (Terminal::GetNextKeyPress() == 'q')
+        if (Terminal::GetNextKeyPress() == G_QUIT_KEY)
         {
             throw Exceptions::QuitGame();
         }
@@ -250,7 +251,7 @@ namespace TerminalGames
 
             std::getline(std::cin, input);
 
-            if (input == "q")
+            if (input[0] == G_QUIT_KEY)
             {
                 throw Exceptions::QuitGame();
             }

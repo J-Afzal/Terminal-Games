@@ -11,8 +11,8 @@
     #include "Windows.h"
 #endif
 
-#include "Constants.hpp"
-#include "Exceptions.hpp"
+#include "helpers/Constants.hpp"
+#include "helpers/Exceptions.hpp"
 #include "helpers/PageBuilder.hpp"
 #include "helpers/Terminal.hpp"
 
@@ -304,6 +304,18 @@ namespace TerminalGames
         const COORD CURSOR_POSITION(std::get<0>(p_coords), std::get<1>(p_coords));
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), CURSOR_POSITION);
 #endif
+    }
+
+    void Terminal::InitialiseTerminal()
+    {
+        Clear();
+        SetCursorVisibility(false);
+    }
+
+    void Terminal::ResetTerminal()
+    {
+        Clear();
+        SetCursorVisibility(true);
     }
 }
 

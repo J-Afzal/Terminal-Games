@@ -3,6 +3,7 @@
 #include <array>
 #include <cstdint>
 #include <string>
+#include <vector>
 
 #include "helpers/Functions.hpp"
 
@@ -20,7 +21,7 @@ namespace TerminalGames
      * @brief MainMenu
      */
     static const std::string G_MAIN_MENU_TOP_TITLE = "Main Menu";
-    static const std::string G_MAIN_MENU_BOTTOM_TITLE = "q = quit to home page";
+    static const std::string G_MAIN_MENU_BOTTOM_TITLE = "q = quit to homepage";
     static constexpr uint32_t G_MAIN_MENU_DISPLAY_WIDTH = 32;
     static constexpr uint32_t G_MAIN_MENU_DISPLAY_HEIGHT = 13;
 
