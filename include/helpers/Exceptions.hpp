@@ -5,6 +5,12 @@
 namespace TerminalGames::Exceptions
 {
     /**
+     * @brief Used to quit the program.
+     */
+    class QuitProgram : public std::exception
+    {};
+
+    /**
      * @brief Used to quit the main menu.
      */
     class QuitMainMenu : public std::exception

@@ -4,59 +4,37 @@
 #include <cstdint>
 #include <string>
 
+#include "helpers/Functions.hpp"
+
 namespace TerminalGames
 {
     /**
-     * @brief Some C++ functions are not supported by some compilers (usually because the function call fails with GNU 12.2.0
-     * within the CI workflow). The following functions are crudely implemented below for this project's specific use case.
+     * @brief Homepage
      */
-    // Should work for all std containers
-    template<typename T, typename U>
-    static T ImplementStdRangesFind(const T& p_begin, const T& p_end, const U& p_value) // NOLINT(bugprone-easily-swappable-parameters)
-    {
-        for (T i = p_begin; i < p_end; i++)
-            if (*i == p_value)
-                return i;
-
-        return p_end;
-    }
-
-    // Should work for all std containers
-    template<typename T, typename U>
-    static int32_t ImplementStdCount(const T& p_begin, const T& p_end, const U& p_value) // NOLINT(bugprone-easily-swappable-parameters)
-    {
-        int32_t count = 0;
-
-        for (T i = p_begin; i < p_end; i++)
-            if (*i == p_value)
-                ++count;
-
-        return count;
-    }
-
-    // Only works for single instance of {} in p_stringToFormat
-    static std::string ImplementStdFormat(const std::string& p_stringToFormat, const uint32_t& p_varToInsert)
-    {
-        const std::string FORMAT_IDENTIFIER = "{}";
-        const std::string BEFORE_STRING = p_stringToFormat.substr(0, p_stringToFormat.find(FORMAT_IDENTIFIER));
-        const std::string AFTER_STRING = p_stringToFormat.substr(p_stringToFormat.find(FORMAT_IDENTIFIER) + FORMAT_IDENTIFIER.size(), p_stringToFormat.size() - p_stringToFormat.find("{}"));
-
-        return BEFORE_STRING + std::to_string(p_varToInsert) + AFTER_STRING;
-    }
+    static const std::string G_HOMEPAGE_TOP_TITLE = "Terminal Games";
+    static const std::string G_HOMEPAGE_BOTTOM_TITLE = "q = quit program";
+    static constexpr uint32_t G_HOMEPAGE_DISPLAY_WIDTH = 40;
+    static constexpr uint32_t G_HOMEPAGE_DISPLAY_HEIGHT = 20;
 
     /**
      * @brief MainMenu
      */
+    static const std::string G_MAIN_MENU_TOP_TITLE = "Main Menu";
+    static const std::string G_MAIN_MENU_BOTTOM_TITLE = "q = quit to home page";
     static constexpr uint32_t G_MAIN_MENU_DISPLAY_WIDTH = 32;
     static constexpr uint32_t G_MAIN_MENU_DISPLAY_HEIGHT = 13;
 
     /**
      * @brief Tic Tac Toe
      */
+    static const std::string G_TICTACTOE_TOP_TITLE = "Tic Tac Toe";
+    static const std::string G_TICTACTOE_BOTTOM_TITLE = "q = quit to main menu";
     static constexpr uint32_t G_TICTACTOE_DISPLAY_WIDTH = 55;
     static constexpr uint32_t G_TICTACTOE_DISPLAY_HEIGHT = 19;
+
     static constexpr uint32_t G_TICTACTOE_BOARD_WIDTH = 3;
     static constexpr uint32_t G_TICTACTOE_BOARD_HEIGHT = 3;
+
     static constexpr uint32_t G_TICTACTOE_GRID_ELEMENT_WIDTH = 4;
     static constexpr uint32_t G_TICTACTOE_GRID_ELEMENT_HEIGHT = 2;
     static constexpr uint32_t G_TICTACTOE_GRID_LEFT_PAD = 3;
@@ -67,6 +45,8 @@ namespace TerminalGames
     /**
      * @brief Hangman
      */
+    static const std::string G_HANGMAN_TOP_TITLE = "Hangman";
+    static const std::string G_HANGMAN_BOTTOM_TITLE = "q = quit to main menu";
     static constexpr uint32_t G_HANGMAN_DISPLAY_WIDTH = 64;
     static constexpr uint32_t G_HANGMAN_DISPLAY_HEIGHT = 22;
 
@@ -83,6 +63,8 @@ namespace TerminalGames
     /**
      * @brief Battleships
      */
+    static const std::string G_BATTLESHIPS_TOP_TITLE = "Battleships";
+    static const std::string G_BATTLESHIPS_BOTTOM_TITLE = "q = quit to main menu";
     static constexpr uint32_t G_BATTLESHIPS_DISPLAY_WIDTH = 149;
     static constexpr uint32_t G_BATTLESHIPS_DISPLAY_HEIGHT = 38;
     static constexpr uint32_t G_BATTLESHIPS_BOARD_WIDTH = 10;
@@ -137,16 +119,14 @@ namespace TerminalGames
     // When highlighting what is currently selected in a menu
     static const std::string G_SELECTOR = ">";
 
-    // Bottom box titles
-    static const std::string G_MENU_BOTTOM_TITLE = "q = quit";
-    static const std::string G_GAME_BOTTOM_TITLE = "q = quit to main menu";
-
     // ANSI colour escape codes
     static constexpr uint32_t G_ANSI_COLOUR_ESCAPE_CODE_SIZE = 7;
     static constexpr char G_ANSI_COLOUR_ESCAPE_CODE_START = '\x1B';
-    static const std::string G_WHITE_ANSI_COLOUR_ESCAPE_CODE = "\x1B[1;37m";
     static const std::string G_RED_ANSI_COLOUR_ESCAPE_CODE = "\x1B[1;31m";
+    static const std::string G_GREEN_ANSI_COLOUR_ESCAPE_CODE = "\x1B[1;32m";
+    static const std::string G_YELLOW_ANSI_COLOUR_ESCAPE_CODE = "\x1B[1;33m";
     static const std::string G_BLUE_ANSI_COLOUR_ESCAPE_CODE = "\x1B[1;34m";
+    static const std::string G_WHITE_ANSI_COLOUR_ESCAPE_CODE = "\x1B[1;37m";
     static const std::string G_RESET_ANSI_COLOUR_ESCAPE_CODE = "\x1B[0m";
 
     // Extended ASCII characters for edges and corners of the page
