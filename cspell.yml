@@ -27,4 +27,5 @@ ignoreWords:
     - reflow
     - shellenv
     - tictactoe
+    - wasd
     - werror
