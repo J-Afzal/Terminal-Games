@@ -129,6 +129,14 @@ namespace TerminalGames
     static const std::string G_BLUE_ANSI_COLOUR_ESCAPE_CODE = "\x1B[1;34m";
     static const std::string G_WHITE_ANSI_COLOUR_ESCAPE_CODE = "\x1B[1;37m";
     static const std::string G_RESET_ANSI_COLOUR_ESCAPE_CODE = "\x1B[0m";
+    static const std::vector<std::string> G_ALL_ANSI_COLOUR_ESCAPE_CODES = {
+        G_RED_ANSI_COLOUR_ESCAPE_CODE,
+        G_GREEN_ANSI_COLOUR_ESCAPE_CODE,
+        G_YELLOW_ANSI_COLOUR_ESCAPE_CODE,
+        G_BLUE_ANSI_COLOUR_ESCAPE_CODE,
+        G_WHITE_ANSI_COLOUR_ESCAPE_CODE,
+        G_RESET_ANSI_COLOUR_ESCAPE_CODE,
+    };
 
     // Extended ASCII characters for edges and corners of the page
     static constexpr char G_HORIZONTAL_LINE = static_cast<char>(205);

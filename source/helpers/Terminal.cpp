@@ -18,6 +18,38 @@
 
 namespace TerminalGames
 {
+    bool Terminal::GetUserChoiceFromHomepage(const std::vector<std::string>& p_menus, const bool& p_useAnsiEscapeCodes)
+    {
+        // Yes option selected is at index 0 and No option selected is at index 1. Therefore, can convert the current selected
+        // index to a bool and invert it to get whether to use ANSI escape codes.
+        uint32_t currentSelection = static_cast<uint32_t>(!p_useAnsiEscapeCodes);
+
+        while (true)
+        {
+            PrintOutput(p_menus[currentSelection]);
+
+            switch (GetNextKeyPress())
+            {
+            case G_QUIT_KEY:
+                throw Exceptions::QuitProgram();
+
+            case G_ENTER_KEY:
+                return !static_cast<bool>(currentSelection);
+
+            case G_UP_ARROW_KEY:
+                currentSelection == 0 ? currentSelection = (p_menus.size() - 1) : --currentSelection;
+                break;
+
+            case G_DOWN_ARROW_KEY:
+                currentSelection == (p_menus.size() - 1) ? currentSelection = 0 : ++currentSelection;
+                break;
+
+            default:
+                break;
+            }
+        }
+    }
+
     uint32_t Terminal::GetUserChoiceFromMainMenus(const std::vector<std::string>& p_menus)
     {
         uint32_t currentSelection = 0;
@@ -59,7 +91,7 @@ namespace TerminalGames
             switch (GetNextKeyPress())
             {
             case G_QUIT_KEY:
-                throw Exceptions::QuitGame();
+                throw Exceptions::QuitGame(); // TODO: quit option menu (reset game, quit to mainmenu, quit program , cancel)
 
             case G_ENTER_KEY:
                 return currentSelection;
@@ -176,7 +208,7 @@ namespace TerminalGames
             {
             case G_QUIT_KEY:
                 SetCursorVisibility(false);
-                throw Exceptions::QuitGame();
+                throw Exceptions::QuitGame(); // TODO: quit option menu (reset game, quit to mainmenu, quit program , cancel)
 
             case G_BACKSPACE_KEY:
                 SetCursorVisibility(false);

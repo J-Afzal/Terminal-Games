@@ -37,6 +37,13 @@ namespace TerminalGames
 
         switch (m_currentPage)
         {
+        case Pages::HOMEPAGE:
+            m_topTitle = G_HOMEPAGE_TOP_TITLE;
+            m_bottomTitle = G_HOMEPAGE_BOTTOM_TITLE;
+            m_displayWidth = G_HOMEPAGE_DISPLAY_WIDTH;
+            m_displayHeight = G_HOMEPAGE_DISPLAY_HEIGHT;
+            break;
+
         case Pages::MAINMENU:
             m_topTitle = G_MAIN_MENU_TOP_TITLE;
             m_bottomTitle = G_MAIN_MENU_BOTTOM_TITLE;
@@ -76,6 +83,58 @@ namespace TerminalGames
     Pages PageBuilder::GetCurrentPageType() const
     {
         return m_currentPage;
+    }
+
+    std::vector<std::string> PageBuilder::GetOptionSelectionHomepages()
+    {
+        std::vector<std::string> output;
+
+        bool oldUseAnsiEscapeCodes = m_useAnsiEscapeCodes;
+        m_useAnsiEscapeCodes = true;
+
+#ifdef _WIN32
+        const std::string COMMON_TOP_STRING = GetTopBox() + GetTopLine() +
+                                              GetNewLineCentred("Platform: " + AddColour("Windows", Colours::GREEN)) + GetEmptyLine() +
+                                              GetNewLineCentred("Controls: " + AddColour("Enhanced", Colours::GREEN)) + GetEmptyLine() +
+                                              GetNewLineCentred("Instructions: Use the arrows keys") + GetNewLineCentred("to navigate and press enter to") + GetNewLineCentred("confirm a selection.") +
+                                              GetEmptyLine() + GetEmptyLine() + GetNewLineLeftJustified("Use ANSI colour escape codes?");
+
+        const std::string COMMON_BOTTOM_STRING = GetBottomLine() + GetBottomBox();
+
+        output.emplace_back(
+            COMMON_TOP_STRING +
+            GetNewLineLeftJustified("Yes", Colours::BLUE, G_SELECTOR) +
+            GetNewLineLeftJustified(std::string(G_SELECTOR.size() + 1, ' ') + "No") +
+            COMMON_BOTTOM_STRING);
+
+        output.emplace_back(RemoveColour(
+            COMMON_TOP_STRING +
+            GetNewLineLeftJustified(std::string(G_SELECTOR.size() + 1, ' ') + "Yes") +
+            GetNewLineLeftJustified("No", Colours::BLUE, G_SELECTOR) +
+            COMMON_BOTTOM_STRING));
+#else
+        const std::string COMMON_TOP_STRING = GetTopBox() + GetTopLine() +
+                                              GetNewLineCentred("Platform: " + AddColour("Windows", Colours::GREEN)) + GetEmptyLine() +
+                                              GetNewLineCentred("Controls: " + AddColour("Enhanced", Colours::GREEN)) + GetEmptyLine() +
+                                              GetNewLineCentred("Instructions: Enter one of the") + GetNewLineCentred("WASD keys to navigate, 'e' to") + GetNewLineCentred("to confirm a selection and 'z' to") + GetNewLineCentred("undo a selection in Battleships.") +
+                                              GetEmptyLine() + GetNewLineLeftJustified("Use ANSI colour escape codes?");
+
+        const std::string COMMON_BOTTOM_STRING = GetBottomLine() + GetBottomBox();
+
+        output.emplace_back(
+            COMMON_TOP_STRING +
+            GetNewLineLeftJustified("Yes", Colours::BLUE, G_SELECTOR) +
+            GetNewLineLeftJustified(std::string(G_SELECTOR.size() + 1, ' ') + "No") +
+            COMMON_BOTTOM_STRING);
+
+        output.emplace_back(RemoveColour(
+            COMMON_TOP_STRING +
+            GetNewLineLeftJustified(std::string(G_SELECTOR.size() + 1, ' ') + "Yes") +
+            GetNewLineLeftJustified("No", Colours::BLUE, G_SELECTOR) +
+            COMMON_BOTTOM_STRING));
+#endif
+        m_useAnsiEscapeCodes = oldUseAnsiEscapeCodes;
+        return output;
     }
 
     std::vector<std::string> PageBuilder::GetGameSelectionMainMenuPages(const std::vector<std::string>& p_gameNames) const
@@ -252,6 +311,14 @@ namespace TerminalGames
         }
     }
 
+    std::string PageBuilder::RemoveColour(const std::string& p_input)
+    {
+        std::string output = p_input;
+
+        for (const std::string& currentAnsiColourEscapeCode : G_ALL_ANSI_COLOUR_ESCAPE_CODES)
+            output = RemoveSubString(output, currentAnsiColourEscapeCode);
+
+        return output;
     }
 
     std::string PageBuilder::GetEmptyLine() const
@@ -748,6 +815,17 @@ namespace TerminalGames
         }
 
         output += std::string("   ") + (char)186 + "\n";
+
+        return output;
+    }
+
+    std::string PageBuilder::RemoveSubString(const std::string& p_string, const std::string& p_subString) // NOLINT(bugprone-easily-swappable-parameters)
+    {
+        const uint32_t SUB_STRING_LENGTH = p_subString.length();
+
+        std::string output = p_string;
+        for (std::string::size_type i = output.find(p_subString); i != std::string::npos; i = output.find(p_subString))
+            output.erase(i, SUB_STRING_LENGTH);
 
         return output;
     }

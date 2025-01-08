@@ -19,6 +19,17 @@ namespace TerminalGames
         Terminal() = delete;
 
         /**
+         * @brief Get the user choice from a list of homepage strings that are printed to the terminal.
+         *
+         * @param p_menus An array of strings used to print to the terminal. The string chosen depends on user input. The only
+         * difference between each string is the selected menu option.
+         * @param p_useAnsiEscapeCodes Whether to use use ANSI escapes codes (true) or only ASCII characters (false).
+         * @return true If to use ANSI escape codes
+         * @return false If to not use ANSI escape code (only use ASCII characters)
+         */
+        static bool GetUserChoiceFromHomepage(const std::vector<std::string>& p_menus, const bool& p_useAnsiEscapeCodes);
+
+        /**
          * @brief Get the user choice from a list of main menus strings that are printed to the terminal.
          *
          * @param p_menus An array of strings used to print to the terminal. The string chosen depends on user input. The only
@@ -85,5 +96,15 @@ namespace TerminalGames
          * @param p_coords The horizontal and vertical position to set the cursor to.
          */
         static void SetCursorPosition(const std::tuple<int16_t, int16_t>& p_coords);
+
+        /**
+         * @brief Initialises terminal for the program.
+         */
+        static void InitialiseTerminal();
+
+        /**
+         * @brief Reset terminal to its original state before the program was run.
+         */
+        static void ResetTerminal();
     };
 }

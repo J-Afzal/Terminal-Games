@@ -16,10 +16,11 @@ namespace TerminalGames
     enum class Pages : std::uint8_t
     {
         DEFAULT,
+        HOMEPAGE,
         MAINMENU,
         TICTACTOE,
         HANGMAN,
-        BATTLESHIPS
+        BATTLESHIPS,
     };
 
     /**
@@ -29,7 +30,9 @@ namespace TerminalGames
     {
         WHITE,
         RED,
-        BLUE
+        BLUE,
+        GREEN,
+        YELLOW,
     };
 
     /**
@@ -108,6 +111,13 @@ namespace TerminalGames
         Pages GetCurrentPageType() const;
 
         /**
+         * @brief Creates the pages for displaying the option selection home page screen.
+         *
+         * @return std::vector<std::string> Pages where each page has a different option selection.
+         */
+        std::vector<std::string> GetOptionSelectionHomepages();
+
+        /**
          * @brief Creates pages for displaying the main menu game selection screen.
          *
          * @param p_gameNames The name of the games that can be selected.
@@ -183,6 +193,14 @@ namespace TerminalGames
          * @return std::string The input text wrapped with ANSI colour escape codes.
          */
         std::string AddColour(const std::string& p_input, const Colours& p_colour) const;
+
+        /**
+         * @brief Removes colour from the input text by removing all ANSI colour escape codes.
+         *
+         * @param p_input The input text to be un-coloured.
+         * @return std::string The input stripped of ANSI colour escape codes.
+         */
+        static std::string RemoveColour(const std::string& p_input);
 
         /**
          * @brief Creates a new line on a page but with no input text.
@@ -300,8 +318,18 @@ namespace TerminalGames
          */
         std::string GetBattleshipsSubPage(const GameInfo& p_gameInfo) const;
 
+        /**
+         * @brief Remove all instances of a substring from a string.
+         *
+         * @param p_string The string to be checked.
+         * @param p_subString The substring to be removed.
+         * @return std::string The string with the substring removed.
+         */
+        static std::string RemoveSubString(const std::string& p_string, const std::string& p_subString); // NOLINT(bugprone-easily-swappable-parameters)
+
         // Member variables
         std::string m_topTitle;
+        std::string m_bottomTitle;
         uint32_t m_displayWidth;
         uint32_t m_displayHeight;
         uint32_t m_maximumInputSize;

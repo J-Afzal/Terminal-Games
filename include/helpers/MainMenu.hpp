@@ -73,6 +73,16 @@ namespace TerminalGames
 
     private:
         /**
+         * @brief Create option selection home pages.
+         */
+        void SetupHomepages();
+
+        /**
+         * @brief Create main menu game selection pages and game array.
+         */
+        void SetupMainMenuPagesAndGames();
+
+        /**
          * @brief Parses the passed in command line arguments.
          *
          * Usage: terminal-games [options]
@@ -92,6 +102,7 @@ namespace TerminalGames
         static bool ParseCommandLineArguments(const std::vector<std::string>& p_commandLineArguments);
 
         std::vector<std::unique_ptr<Game>> m_games;
+        std::vector<std::string> m_homepages;
         std::vector<std::string> m_mainMenus;
         bool m_useAnsiEscapeCodes;
     };
