@@ -114,7 +114,7 @@ namespace TerminalGames
             COMMON_BOTTOM_STRING));
 #else
         const std::string COMMON_TOP_STRING = GetTopBox() + GetTopLine() +
-                                              GetNewLineCentred("Platform: " + AddColour("Windows", Colours::GREEN)) + GetEmptyLine() +
+                                              GetNewLineCentred("Platform: " + AddColour("macOS or Linux", Colours::GREEN)) + GetEmptyLine() +
                                               GetNewLineCentred("Controls: " + AddColour("Enhanced", Colours::GREEN)) + GetEmptyLine() +
                                               GetNewLineCentred("Instructions: Enter one of the") + GetNewLineCentred("WASD keys to navigate, 'e' to") + GetNewLineCentred("to confirm a selection and 'z' to") + GetNewLineCentred("undo a selection in Battleships.") +
                                               GetEmptyLine() + GetNewLineLeftJustified("Use ANSI colour escape codes?");
