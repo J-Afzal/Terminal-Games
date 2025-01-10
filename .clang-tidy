@@ -3,6 +3,7 @@ Checks: "*, \
     -altera-*, \
     -android-*, \
     -boost-*, \
+    -bugprone-easily-swappable-parameters, \
     -cert-*, \
     -concurrency-*, \
     -darwin-*, \
@@ -29,8 +30,6 @@ Checks: "*, \
     -zircon-*"
 WarningsAsErrors: "*"
 CheckOptions:
-    - key: "readability-braces-around-statements.ShortStatementLines"
-      value: 2
     - key: "readability-inconsistent-declaration-parameter-name.Strict"
       value: "true"
     # Naming Conventions
