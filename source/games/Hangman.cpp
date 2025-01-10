@@ -11,7 +11,6 @@
 
 #include "games/Hangman.hpp"
 #include "helpers/Constants.hpp"
-#include "helpers/Exceptions.hpp"
 #include "helpers/Functions.hpp"
 #include "helpers/PageBuilder.hpp"
 #include "helpers/Terminal.hpp"
@@ -23,7 +22,9 @@ namespace TerminalGames
         m_errorCount(0),
         m_turnCount(0),
         m_currentGuess(0),
+        m_hasSavedGameSettings(false),
         m_hasWinner(false),
+        m_saveGameSettings(false),
         m_userIsGuesser(false)
     {
         m_pageBuilder.SetProperties(Pages::HANGMAN, p_useAnsiEscapeCodes);
@@ -36,30 +37,21 @@ namespace TerminalGames
         m_commandsRemaining = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
         m_currentGuess = 'A';
         m_incorrectGuesses.clear();
-        m_computerSpeedName = "N/A";
         m_currentGuessOfWord = "";
-        m_playerCount = "N/A";
         m_wordToBeGuessed = "";
         m_errorCount = 0;
         m_turnCount = 0;
         m_hasWinner = false;
     }
 
-    void Hangman::UpdateGameInfo()
-    {
-        m_gameInfo.m_hangmanGameInfo = {
-            .m_incorrectGuesses = m_incorrectGuesses,
-            .m_computerSpeedName = m_computerSpeedName,
-            .m_currentGuessOfWord = m_currentGuessOfWord,
-            .m_playerCount = m_playerCount,
-            .m_wordToBeGuessed = m_wordToBeGuessed,
-            .m_errorCount = m_errorCount,
-            .m_turnCount = m_turnCount,
-            .m_currentGuess = m_currentGuess};
-    }
-
     void Hangman::GetUserOptions()
     {
+        if (m_saveGameSettings && m_hasSavedGameSettings)
+            return;
+
+        m_computerSpeedName = "N/A";
+        m_playerCount = "N/A";
+
         GetPlayerCount();
 
         if (m_playerCount == "0  ")
@@ -97,6 +89,19 @@ namespace TerminalGames
         }
 
         UpdateGameInfo();
+    }
+
+    void Hangman::UpdateGameInfo()
+    {
+        m_gameInfo.m_hangmanGameInfo = {
+            .m_incorrectGuesses = m_incorrectGuesses,
+            .m_computerSpeedName = m_computerSpeedName,
+            .m_currentGuessOfWord = m_currentGuessOfWord,
+            .m_playerCount = m_playerCount,
+            .m_wordToBeGuessed = m_wordToBeGuessed,
+            .m_errorCount = m_errorCount,
+            .m_turnCount = m_turnCount,
+            .m_currentGuess = m_currentGuess};
     }
 
     bool Hangman::IsGameOver()
@@ -141,7 +146,8 @@ namespace TerminalGames
 
             if (keyPress == G_QUIT_KEY)
             {
-                throw Exceptions::QuitGame();
+                Terminal::GetUserChoiceFromQuitMenus(m_pageBuilder.GetQuitOptionSelectionPage());
+                continue;
             }
 
             if (keyPress == G_ENTER_KEY)
@@ -188,12 +194,18 @@ namespace TerminalGames
 
     void Hangman::GameOver()
     {
-        Terminal::PrintOutput(m_pageBuilder.GetGameOverPage(m_gameInfo));
+        Terminal::GetUserChoiceFromGameOverMenu(m_pageBuilder.GetGameOverPage(m_gameInfo), m_pageBuilder.GetQuitOptionSelectionPage());
+    }
 
-        if (Terminal::GetNextKeyPress() == G_QUIT_KEY)
-        {
-            throw Exceptions::QuitGame();
-        }
+    void Hangman::RestartGame()
+    {
+        m_saveGameSettings = true;
+    }
+
+    void Hangman::ResetGame()
+    {
+        m_saveGameSettings = false;
+        m_hasSavedGameSettings = false;
     }
 
     void Hangman::GetPlayerCount()
@@ -201,7 +213,8 @@ namespace TerminalGames
         UpdateGameInfo();
 
         const std::vector<std::string> MENUS = m_pageBuilder.GetPlayerCountOptionSelectionGamePages(m_gameInfo);
-        m_playerCount = std::to_string(Terminal::GetUserChoiceFromGameMenus(MENUS)) + "  ";
+        const std::vector<std::string> QUIT_MENUS = m_pageBuilder.GetQuitOptionSelectionPage();
+        m_playerCount = std::to_string(Terminal::GetUserChoiceFromGameMenus(MENUS, QUIT_MENUS)) + "  ";
     }
 
     void Hangman::GetUserPlayerChoice()
@@ -209,7 +222,8 @@ namespace TerminalGames
         UpdateGameInfo();
 
         const std::vector<std::string> MENUS = m_pageBuilder.GetUserPlayerChoiceOptionSelectionGamePages(m_gameInfo);
-        Terminal::GetUserChoiceFromGameMenus(MENUS) == 0 ? m_userIsGuesser = true : m_userIsGuesser = false;
+        const std::vector<std::string> QUIT_MENUS = m_pageBuilder.GetQuitOptionSelectionPage();
+        Terminal::GetUserChoiceFromGameMenus(MENUS, QUIT_MENUS) == 0 ? m_userIsGuesser = true : m_userIsGuesser = false;
     }
 
     void Hangman::GetComputerSpeed()
@@ -217,7 +231,8 @@ namespace TerminalGames
         UpdateGameInfo();
 
         const std::vector<std::string> MENUS = m_pageBuilder.GetComputerSpeedOptionSelectionGamePages(m_gameInfo);
-        m_computerSpeed = Terminal::GetUserChoiceFromGameMenus(MENUS);
+        const std::vector<std::string> QUIT_MENUS = m_pageBuilder.GetQuitOptionSelectionPage();
+        m_computerSpeed = Terminal::GetUserChoiceFromGameMenus(MENUS, QUIT_MENUS);
 
         if (m_computerSpeed == 0)
         {
@@ -253,7 +268,8 @@ namespace TerminalGames
 
             if (input[0] == G_QUIT_KEY)
             {
-                throw Exceptions::QuitGame();
+                Terminal::GetUserChoiceFromQuitMenus(m_pageBuilder.GetQuitOptionSelectionPage());
+                continue;
             }
 
             if (input.size() < G_HANGMAN_MINIMUM_WORD_SIZE || input.size() > G_HANGMAN_MAXIMUM_WORD_SIZE)

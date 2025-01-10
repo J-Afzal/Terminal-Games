@@ -40,7 +40,9 @@ namespace TerminalGames
         std::string m_playerCount;
         uint32_t m_computerSpeed;
         uint32_t m_turnCount;
+        bool m_hasSavedGameSettings;
         bool m_isGameOver;
+        bool m_saveGameSettings;
 
         /**
          * @brief See base class function for details.
@@ -50,12 +52,12 @@ namespace TerminalGames
         /**
          * @brief See base class function for details.
          */
-        void UpdateGameInfo() override;
+        void GetUserOptions() override;
 
         /**
          * @brief See base class function for details.
          */
-        void GetUserOptions() override;
+        void UpdateGameInfo() override;
 
         /**
          * @brief See base class function for details.
@@ -86,6 +88,16 @@ namespace TerminalGames
          * @brief See base class function for details.
          */
         void GameOver() override;
+
+        /**
+         * @brief See base class function for details.
+         */
+        void RestartGame() override;
+
+        /**
+         * @brief See base class function for details.
+         */
+        void ResetGame() override;
 
         /**
          * @brief Prompts the user to select how many players will be playing the game.

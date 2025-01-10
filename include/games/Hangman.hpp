@@ -21,6 +21,24 @@ namespace TerminalGames
         explicit Hangman(const bool& p_useAnsiEscapeCodes);
 
     private:
+        PageBuilder m_pageBuilder;
+        GameInfo m_gameInfo;
+        std::default_random_engine m_randomNumberGenerator;
+        std::vector<char> m_commandsRemaining;
+        std::vector<char> m_incorrectGuesses;
+        std::string m_computerSpeedName;
+        std::string m_currentGuessOfWord;
+        std::string m_playerCount;
+        std::string m_wordToBeGuessed;
+        uint32_t m_computerSpeed;
+        uint32_t m_errorCount;
+        uint32_t m_turnCount;
+        char m_currentGuess;
+        bool m_hasSavedGameSettings;
+        bool m_hasWinner;
+        bool m_saveGameSettings;
+        bool m_userIsGuesser;
+
         /**
          * @brief See base class function for details.
          */
@@ -29,12 +47,12 @@ namespace TerminalGames
         /**
          * @brief See base class function for details.
          */
-        void UpdateGameInfo() override;
+        void GetUserOptions() override;
 
         /**
          * @brief See base class function for details.
          */
-        void GetUserOptions() override;
+        void UpdateGameInfo() override;
 
         /**
          * @brief See base class function for details.
@@ -65,6 +83,16 @@ namespace TerminalGames
          * @brief See base class function for details.
          */
         void GameOver() override;
+
+        /**
+         * @brief See base class function for details.
+         */
+        void RestartGame() override;
+
+        /**
+         * @brief See base class function for details.
+         */
+        void ResetGame() override;
 
         /**
          * @brief Prompts the user to select how many players will be playing the game.
@@ -103,21 +131,5 @@ namespace TerminalGames
          * @param p_guess A single-letter to check.
          */
         void ExecuteGeneralCommand(const char& p_guess);
-
-        PageBuilder m_pageBuilder;
-        GameInfo m_gameInfo;
-        std::default_random_engine m_randomNumberGenerator;
-        std::vector<char> m_commandsRemaining;
-        std::vector<char> m_incorrectGuesses;
-        std::string m_computerSpeedName;
-        std::string m_currentGuessOfWord;
-        std::string m_playerCount;
-        std::string m_wordToBeGuessed;
-        uint32_t m_computerSpeed;
-        uint32_t m_errorCount;
-        uint32_t m_turnCount;
-        char m_currentGuess;
-        bool m_hasWinner;
-        bool m_userIsGuesser;
     };
 }

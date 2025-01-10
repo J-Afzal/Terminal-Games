@@ -69,11 +69,6 @@ namespace TerminalGames
                 Terminal::ResetTerminal();
                 return;
             }
-
-            catch (...)
-            {
-                return; // TODO: Create generic error page to display for all exceptions.
-            }
         }
     }
 

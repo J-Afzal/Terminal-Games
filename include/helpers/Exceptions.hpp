@@ -23,6 +23,18 @@ namespace TerminalGames::Exceptions
     {};
 
     /**
+     * @brief Used to restart a game with the same user options.
+     */
+    class RestartGame : public std::exception
+    {};
+
+    /**
+     * @brief Used to reset a game which prompts the user for new options.
+     */
+    class ResetGame : public std::exception
+    {};
+
+    /**
      * @brief Used for functionality that has not been implemented.
      */
     class NotImplementedError : public std::exception

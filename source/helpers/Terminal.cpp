@@ -80,7 +80,7 @@ namespace TerminalGames
         }
     }
 
-    uint32_t Terminal::GetUserChoiceFromGameMenus(const std::vector<std::string>& p_menus)
+    uint32_t Terminal::GetUserChoiceFromGameMenus(const std::vector<std::string>& p_menus, const std::vector<std::string>& p_quitOptionMenus)
     {
         uint32_t currentSelection = 0;
 
@@ -91,7 +91,8 @@ namespace TerminalGames
             switch (GetNextKeyPress())
             {
             case G_QUIT_KEY:
-                throw Exceptions::QuitGame(); // TODO: quit option menu (reset game, quit to mainmenu, quit program , cancel)
+                Terminal::GetUserChoiceFromQuitMenus(p_quitOptionMenus);
+                break;
 
             case G_ENTER_KEY:
                 return currentSelection;
@@ -208,7 +209,9 @@ namespace TerminalGames
             {
             case G_QUIT_KEY:
                 SetCursorVisibility(false);
-                throw Exceptions::QuitGame(); // TODO: quit option menu (reset game, quit to mainmenu, quit program , cancel)
+                Terminal::GetUserChoiceFromQuitMenus(p_pageBuilder.GetQuitOptionSelectionPage());
+                SetCursorVisibility(true);
+                break;
 
             case G_BACKSPACE_KEY:
                 SetCursorVisibility(false);
@@ -232,6 +235,76 @@ namespace TerminalGames
 
             case G_RIGHT_ARROW_KEY:
                 currentColumn == maxColumn ? currentColumn = 0 : ++currentColumn;
+                break;
+
+            default:
+                break;
+            }
+        }
+    }
+
+    void Terminal::GetUserChoiceFromGameOverMenu(const std::string& p_gameOverPage, const std::vector<std::string>& p_quitOptionMenus)
+    {
+        while (true)
+        {
+            PrintOutput(p_gameOverPage);
+
+            switch (GetNextKeyPress())
+            {
+            case G_QUIT_KEY:
+                GetUserChoiceFromQuitMenus(p_quitOptionMenus);
+                break;
+
+            case G_RESTART_KEY:
+                throw Exceptions::RestartGame();
+
+            default:
+                throw Exceptions::ResetGame();
+            }
+        }
+    }
+
+    void Terminal::GetUserChoiceFromQuitMenus(const std::vector<std::string>& p_menus)
+    {
+        uint32_t currentSelection = 0;
+
+        while (true)
+        {
+            PrintOutput(p_menus[currentSelection]);
+
+            switch (GetNextKeyPress())
+            {
+            case G_ENTER_KEY:
+                switch (currentSelection)
+                {
+                case G_RESTART_GAME_INDEX:
+                    throw Exceptions::RestartGame();
+
+                case G_RESET_GAME_INDEX:
+                    throw Exceptions::ResetGame();
+
+                case G_QUIT_GAME_INDEX:
+                    throw Exceptions::QuitGame();
+
+                case G_QUIT_MAIN_MENU_INDEX:
+                    throw Exceptions::QuitMainMenu();
+
+                case G_QUIT_PROGRAM_INDEX:
+                    throw Exceptions::QuitProgram();
+
+                case G_CANCEL_INDEX:
+                    return;
+
+                default:
+                    break;
+                }
+
+            case G_UP_ARROW_KEY:
+                currentSelection == 0 ? currentSelection = (p_menus.size() - 1) : --currentSelection;
+                break;
+
+            case G_DOWN_ARROW_KEY:
+                currentSelection == (p_menus.size() - 1) ? currentSelection = 0 : ++currentSelection;
                 break;
 
             default:
@@ -297,11 +370,11 @@ namespace TerminalGames
 
             switch (inputString[0])
             {
-            case G_ALTERNATIVE_BACKSPACE_KEY:
-                return G_BACKSPACE_KEY;
-
             case G_ALTERNATIVE_ENTER_KEY:
                 return G_ENTER_KEY;
+
+            case G_ALTERNATIVE_BACKSPACE_KEY:
+                return G_BACKSPACE_KEY;
 
             case G_ALTERNATIVE_UP_ARROW_KEY:
                 return G_UP_ARROW_KEY;

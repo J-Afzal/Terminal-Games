@@ -20,7 +20,9 @@ namespace TerminalGames
     Battleships::Battleships(const bool& p_useAnsiEscapeCodes) :
         m_computerSpeed(0),
         m_turnCount(0),
-        m_isGameOver(false)
+        m_hasSavedGameSettings(false),
+        m_isGameOver(false),
+        m_saveGameSettings(false)
     {
         m_pageBuilder.SetProperties(Pages::BATTLESHIPS, p_useAnsiEscapeCodes);
         m_randomNumberGenerator.seed(std::chrono::system_clock::now().time_since_epoch().count());
@@ -37,8 +39,6 @@ namespace TerminalGames
             {G_BATTLESHIPS_PATROL_BOAT_NAME, G_BATTLESHIPS_PATROL_BOAT_SIZE}
         };
         m_previousCommand = {0, 0};
-        m_computerSpeedName = "N/A    ";
-        m_playerCount = "N/A";
         m_turnCount = 0;
         m_isGameOver = false;
 
@@ -54,25 +54,17 @@ namespace TerminalGames
         }
     }
 
-    void Battleships::UpdateGameInfo()
-    {
-        m_gameInfo.m_battleshipsGameInfo = {
-            .m_boardOne = m_boardOne,
-            .m_boardTwo = m_boardTwo,
-            .m_shipsRemainingOne = m_shipsRemainingOne,
-            .m_shipsRemainingTwo = m_shipsRemainingTwo,
-            .m_computerSpeedName = m_computerSpeedName,
-            .m_currentPlayer = m_currentPlayer,
-            .m_playerCount = m_playerCount,
-            .m_turnCount = m_turnCount,
-            .m_isGameOver = m_isGameOver};
-    }
-
     void Battleships::GetUserOptions()
     {
-        GetPlayerCount();
+        if (!(m_saveGameSettings && m_hasSavedGameSettings))
+        {
+            m_computerSpeedName = "N/A    ";
+            m_playerCount = "N/A";
 
-        GetComputerSpeed();
+            GetPlayerCount();
+
+            GetComputerSpeed();
+        }
 
         if (m_playerCount == "1  ")
         {
@@ -87,6 +79,20 @@ namespace TerminalGames
         GetComputerShipPositions(m_boardTwo);
 
         UpdateGameInfo();
+    }
+
+    void Battleships::UpdateGameInfo()
+    {
+        m_gameInfo.m_battleshipsGameInfo = {
+            .m_boardOne = m_boardOne,
+            .m_boardTwo = m_boardTwo,
+            .m_shipsRemainingOne = m_shipsRemainingOne,
+            .m_shipsRemainingTwo = m_shipsRemainingTwo,
+            .m_computerSpeedName = m_computerSpeedName,
+            .m_currentPlayer = m_currentPlayer,
+            .m_playerCount = m_playerCount,
+            .m_turnCount = m_turnCount,
+            .m_isGameOver = m_isGameOver};
     }
 
     bool Battleships::IsGameOver()
@@ -147,12 +153,18 @@ namespace TerminalGames
 
     void Battleships::GameOver()
     {
-        Terminal::PrintOutput(m_pageBuilder.GetGameOverPage(m_gameInfo));
+        Terminal::GetUserChoiceFromGameOverMenu(m_pageBuilder.GetGameOverPage(m_gameInfo), m_pageBuilder.GetQuitOptionSelectionPage());
+    }
 
-        if (Terminal::GetNextKeyPress() == G_QUIT_KEY)
-        {
-            throw Exceptions::QuitGame();
-        }
+    void Battleships::RestartGame()
+    {
+        m_saveGameSettings = true;
+    }
+
+    void Battleships::ResetGame()
+    {
+        m_saveGameSettings = false;
+        m_hasSavedGameSettings = false;
     }
 
     void Battleships::GetPlayerCount()
@@ -160,7 +172,8 @@ namespace TerminalGames
         UpdateGameInfo();
 
         const std::vector<std::string> MENUS = m_pageBuilder.GetPlayerCountOptionSelectionGamePages(m_gameInfo);
-        m_playerCount = std::to_string(Terminal::GetUserChoiceFromGameMenus(MENUS)) + "  ";
+        const std::vector<std::string> QUIT_MENUS = m_pageBuilder.GetQuitOptionSelectionPage();
+        m_playerCount = std::to_string(Terminal::GetUserChoiceFromGameMenus(MENUS, QUIT_MENUS)) + "  ";
     }
 
     void Battleships::GetComputerSpeed()
@@ -168,7 +181,8 @@ namespace TerminalGames
         UpdateGameInfo();
 
         const std::vector<std::string> MENUS = m_pageBuilder.GetComputerSpeedOptionSelectionGamePages(m_gameInfo);
-        m_computerSpeed = Terminal::GetUserChoiceFromGameMenus(MENUS);
+        const std::vector<std::string> QUIT_MENUS = m_pageBuilder.GetQuitOptionSelectionPage();
+        m_computerSpeed = Terminal::GetUserChoiceFromGameMenus(MENUS, QUIT_MENUS);
 
         if (m_computerSpeed == 0)
         {

@@ -29,8 +29,8 @@ namespace TerminalGames
      * @brief Tic Tac Toe
      */
     static const std::string G_TICTACTOE_TOP_TITLE = "Tic Tac Toe";
-    static const std::string G_TICTACTOE_BOTTOM_TITLE = "q = quit to main menu";
-    static constexpr uint32_t G_TICTACTOE_DISPLAY_WIDTH = 55;
+    static const std::string G_TICTACTOE_BOTTOM_TITLE = "q = to show quit menu";
+    static constexpr uint32_t G_TICTACTOE_DISPLAY_WIDTH = 58;
     static constexpr uint32_t G_TICTACTOE_DISPLAY_HEIGHT = 19;
 
     static constexpr uint32_t G_TICTACTOE_BOARD_WIDTH = 3;
@@ -47,7 +47,7 @@ namespace TerminalGames
      * @brief Hangman
      */
     static const std::string G_HANGMAN_TOP_TITLE = "Hangman";
-    static const std::string G_HANGMAN_BOTTOM_TITLE = "q = quit to main menu";
+    static const std::string G_HANGMAN_BOTTOM_TITLE = "q = to show quit menu";
     static constexpr uint32_t G_HANGMAN_DISPLAY_WIDTH = 64;
     static constexpr uint32_t G_HANGMAN_DISPLAY_HEIGHT = 22;
 
@@ -65,11 +65,13 @@ namespace TerminalGames
      * @brief Battleships
      */
     static const std::string G_BATTLESHIPS_TOP_TITLE = "Battleships";
-    static const std::string G_BATTLESHIPS_BOTTOM_TITLE = "q = quit to main menu";
+    static const std::string G_BATTLESHIPS_BOTTOM_TITLE = "q = to show quit menu";
     static constexpr uint32_t G_BATTLESHIPS_DISPLAY_WIDTH = 149;
     static constexpr uint32_t G_BATTLESHIPS_DISPLAY_HEIGHT = 38;
+
     static constexpr uint32_t G_BATTLESHIPS_BOARD_WIDTH = 10;
     static constexpr uint32_t G_BATTLESHIPS_BOARD_HEIGHT = 10;
+
     static constexpr uint32_t G_BATTLESHIPS_GRID_ELEMENT_WIDTH = 4;
     static constexpr uint32_t G_BATTLESHIPS_GRID_ELEMENT_HEIGHT = 2;
     static constexpr uint32_t G_BATTLESHIPS_GRID_LEFT_PAD = 10;
@@ -117,7 +119,7 @@ namespace TerminalGames
     /**
      * @brief PageBuilder
      */
-    // When highlighting what is currently selected in a menu
+    // When highlighting what is currently selected in an option menu
     static const std::string G_SELECTOR = ">";
 
     // ANSI colour escape codes
@@ -137,6 +139,22 @@ namespace TerminalGames
         G_WHITE_ANSI_COLOUR_ESCAPE_CODE,
         G_RESET_ANSI_COLOUR_ESCAPE_CODE,
     };
+
+    static const std::vector<std::string> G_QUIT_MENU_OPTIONS = {
+        "Restart Game",
+        "Reset Game",
+        "Quit to Main Menu",
+        "Quit to Homepage",
+        "Quit Program",
+        "Cancel",
+    };
+
+    static constexpr uint32_t G_RESTART_GAME_INDEX = 0;
+    static constexpr uint32_t G_RESET_GAME_INDEX = 1;
+    static constexpr uint32_t G_QUIT_GAME_INDEX = 2;
+    static constexpr uint32_t G_QUIT_MAIN_MENU_INDEX = 3;
+    static constexpr uint32_t G_QUIT_PROGRAM_INDEX = 4;
+    static constexpr uint32_t G_CANCEL_INDEX = 5;
 
     // Extended ASCII characters for edges and corners of the page
     static constexpr char G_HORIZONTAL_LINE = static_cast<char>(205);
@@ -163,6 +181,8 @@ namespace TerminalGames
     static constexpr uint32_t G_LEFT_ARROW_KEY = 75;
     static constexpr uint32_t G_RIGHT_ARROW_KEY = 77;
     static constexpr uint32_t G_QUIT_KEY = 'q';
+    static constexpr uint32_t G_RESTART_KEY = 'r';
+
     // Cursor width while running on windows.
     static constexpr uint32_t G_CURSOR_WIDTH_PERCENTAGE = 100;
 
@@ -173,7 +193,6 @@ namespace TerminalGames
     static constexpr uint32_t G_ALTERNATIVE_DOWN_ARROW_KEY = 's';
     static constexpr uint32_t G_ALTERNATIVE_LEFT_ARROW_KEY = 'a';
     static constexpr uint32_t G_ALTERNATIVE_RIGHT_ARROW_KEY = 'd';
-    static constexpr uint32_t G_ALTERNATIVE_QUIT_KEY = 'q';
 
     /**
      * @brief Hangman word list for the computer

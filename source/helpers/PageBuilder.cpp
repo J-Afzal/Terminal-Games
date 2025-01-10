@@ -52,22 +52,22 @@ namespace TerminalGames
             break;
 
         case Pages::TICTACTOE:
-            m_topTitle = G_TICTACTOE_BOTTOM_TITLE;
-            m_bottomTitle = G_TICTACTOE_TOP_TITLE;
+            m_topTitle = G_TICTACTOE_TOP_TITLE;
+            m_bottomTitle = G_TICTACTOE_BOTTOM_TITLE;
             m_displayWidth = G_TICTACTOE_DISPLAY_WIDTH;
             m_displayHeight = G_TICTACTOE_DISPLAY_HEIGHT;
             break;
 
         case Pages::HANGMAN:
-            m_topTitle = G_HANGMAN_BOTTOM_TITLE;
-            m_bottomTitle = G_HANGMAN_TOP_TITLE;
+            m_topTitle = G_HANGMAN_TOP_TITLE;
+            m_bottomTitle = G_HANGMAN_BOTTOM_TITLE;
             m_displayWidth = G_HANGMAN_DISPLAY_WIDTH;
             m_displayHeight = G_HANGMAN_DISPLAY_HEIGHT;
             break;
 
         case Pages::BATTLESHIPS:
-            m_topTitle = G_BATTLESHIPS_BOTTOM_TITLE;
-            m_bottomTitle = G_BATTLESHIPS_TOP_TITLE;
+            m_topTitle = G_BATTLESHIPS_TOP_TITLE;
+            m_bottomTitle = G_BATTLESHIPS_BOTTOM_TITLE;
             m_displayWidth = G_BATTLESHIPS_DISPLAY_WIDTH;
             m_displayHeight = G_BATTLESHIPS_DISPLAY_HEIGHT;
             break;
@@ -89,7 +89,7 @@ namespace TerminalGames
     {
         std::vector<std::string> output;
 
-        bool oldUseAnsiEscapeCodes = m_useAnsiEscapeCodes;
+        const bool OLD_USE_ANSI_ESCAPE_CODES = m_useAnsiEscapeCodes;
         m_useAnsiEscapeCodes = true;
 
 #ifdef _WIN32
@@ -133,7 +133,7 @@ namespace TerminalGames
             GetNewLineLeftJustified("No", Colours::BLUE, G_SELECTOR) +
             COMMON_BOTTOM_STRING));
 #endif
-        m_useAnsiEscapeCodes = oldUseAnsiEscapeCodes;
+        m_useAnsiEscapeCodes = OLD_USE_ANSI_ESCAPE_CODES;
         return output;
     }
 
@@ -142,30 +142,7 @@ namespace TerminalGames
         const std::string COMMON_TOP_STRING = GetTopBox() + GetTopLine();
         const std::string COMMON_BOTTOM_STRING = GetBottomLine() + GetBottomBox();
 
-        std::vector<std::string> output(p_gameNames.size());
-
-        // Construct a page for each game selected.
-        for (uint32_t i = 0; i < p_gameNames.size(); i++)
-        {
-            std::string currentTopString = COMMON_TOP_STRING;
-
-            for (uint32_t j = 0; j < p_gameNames.size(); j++)
-            {
-                if (i == j)
-                    currentTopString += GetNewLineCentred(p_gameNames[j], Colours::BLUE, G_SELECTOR);
-
-                else
-                    currentTopString += GetNewLineCentred(p_gameNames[j]);
-
-                if (j != p_gameNames.size() - 1) // Don't add extra line on the last game option.
-                    currentTopString += GetEmptyLine();
-            }
-
-            output[i] = currentTopString;
-            output[i] += GetRemainingEmptyLines(currentTopString, COMMON_BOTTOM_STRING) + COMMON_BOTTOM_STRING;
-        }
-
-        return output;
+        return GetGeneralOptionSelectionPages(p_gameNames, COMMON_TOP_STRING, COMMON_BOTTOM_STRING, true, true);
     }
 
     std::vector<std::string> PageBuilder::GetPlayerCountOptionSelectionGamePages(const GameInfo& p_gameInfo) const
@@ -174,10 +151,10 @@ namespace TerminalGames
         {
         case Pages::TICTACTOE:
         case Pages::HANGMAN:
-            return GetOptionSelectionPages(p_gameInfo, "Please select the number of players:", {"0", "1", "2"});
+            return GetGameOptionSelectionPages(p_gameInfo, "Please select the number of players:", {"0", "1", "2"});
 
         case Pages::BATTLESHIPS:
-            return GetOptionSelectionPages(p_gameInfo, "Please select the number of players:", {"0", "1"});
+            return GetGameOptionSelectionPages(p_gameInfo, "Please select the number of players:", {"0", "1"});
 
         default:
             return {"The 'GetPlayerCountOptionSelectionGameDisplays' function does not support the current page type."};
@@ -189,10 +166,10 @@ namespace TerminalGames
         switch (m_currentPage)
         {
         case Pages::TICTACTOE:
-            return GetOptionSelectionPages(p_gameInfo, "Please select the player you would like to be:", {"PLAYER X", "PLAYER O"});
+            return GetGameOptionSelectionPages(p_gameInfo, "Please select the player you would like to be:", {"PLAYER X", "PLAYER O"});
 
         case Pages::HANGMAN:
-            return GetOptionSelectionPages(p_gameInfo, "Please select the player you would like to be:", {"GUESSER", "WORD SETTER"});
+            return GetGameOptionSelectionPages(p_gameInfo, "Please select the player you would like to be:", {"GUESSER", "WORD SETTER"});
 
         default:
             return {"The 'GetUserPlayerChoiceOptionSelectionGameDisplays' function does not support the current page type."};
@@ -206,7 +183,7 @@ namespace TerminalGames
         case Pages::TICTACTOE:
         case Pages::HANGMAN:
         case Pages::BATTLESHIPS:
-            return GetOptionSelectionPages(p_gameInfo, "Please select the computer speed:", {"INSTANT", "FAST", "SLOW"});
+            return GetGameOptionSelectionPages(p_gameInfo, "Please select the computer speed:", {"INSTANT", "FAST", "SLOW"});
 
         default:
             return {"The 'GetComputerSpeedOptionSelectionGameDisplays' function does not support the current page type."};
@@ -256,7 +233,7 @@ namespace TerminalGames
     std::string PageBuilder::GetGameOverPage(const GameInfo& p_gameInfo) const
     {
         std::string topString = GetTopBox() + GetTopLine() + GetGeneralGameSubPage(p_gameInfo) + GetEmptyLine() + GetNewLineCentred("GAME OVER") + GetEmptyLine();
-        const std::string BOTTOM_STRING = GetEmptyLine() + GetNewLineCentred("Press 'q' to quit OR any key to play again...") + GetBottomLine() + GetBottomBox();
+        const std::string BOTTOM_STRING = GetEmptyLine() + GetNewLineCentred("Press 'r' to restart game OR any key to reset game...") + GetBottomLine() + GetBottomBox();
 
         switch (m_currentPage)
         {
@@ -285,6 +262,13 @@ namespace TerminalGames
         }
 
         return topString + GetRemainingEmptyLines(topString, BOTTOM_STRING) + BOTTOM_STRING;
+    }
+
+    std::vector<std::string> PageBuilder::GetQuitOptionSelectionPage() const
+    {
+        const std::string COMMON_TOP_STRING = GetTopBox() + GetTopLine();
+        const std::string COMMON_BOTTOM_STRING = GetBottomLine() + GetBottomBox();
+        return GetGeneralOptionSelectionPages(G_QUIT_MENU_OPTIONS, COMMON_TOP_STRING, COMMON_BOTTOM_STRING, true, true);
     }
 
     std::string PageBuilder::AddColour(const std::string& p_input, const Colours& p_colour) const
@@ -431,30 +415,48 @@ namespace TerminalGames
         return output;
     }
 
-    std::vector<std::string> PageBuilder::GetOptionSelectionPages(const GameInfo& p_gameInfo, const std::string& p_message, const std::vector<std::string>& p_options) const
+    std::vector<std::string> PageBuilder::GetGameOptionSelectionPages(const GameInfo& p_gameInfo, const std::string& p_message, const std::vector<std::string>& p_options) const
     {
         const std::string COMMON_TOP_STRING = GetTopBox() + GetTopLine() + GetGeneralGameSubPage(p_gameInfo) + GetEmptyLine() + GetNewLineLeftJustified(p_message);
         const std::string COMMON_BOTTOM_STRING = GetBottomLine() + GetBottomBox();
 
+        return GetGeneralOptionSelectionPages(p_options, COMMON_TOP_STRING, COMMON_BOTTOM_STRING, false, false);
+    }
+
+    std::vector<std::string> PageBuilder::GetGeneralOptionSelectionPages(
+        const std::vector<std::string>& p_options,
+        const std::string& p_commonTopString,
+        const std::string& p_commonBottomString,
+        const bool& p_addEmptyLineBetweenOptions,
+        const bool& p_centerOptions) const
+    {
         std::vector<std::string> output(p_options.size());
 
         // Construct a page for each option selected.
         for (uint32_t i = 0; i < p_options.size(); i++)
         {
-            std::string currentTopString = COMMON_TOP_STRING;
+            std::string currentTopString = p_commonTopString;
 
             for (uint32_t j = 0; j < p_options.size(); j++)
             {
                 if (i == j)
-                    currentTopString += GetNewLineLeftJustified(p_options[j], Colours::BLUE, G_SELECTOR);
+                    if (p_centerOptions)
+                        currentTopString += GetNewLineCentred(p_options[j], Colours::BLUE, G_SELECTOR);
+                    else
+                        currentTopString += GetNewLineLeftJustified(p_options[j], Colours::BLUE, G_SELECTOR);
 
+                else if (p_centerOptions)
+                    currentTopString += GetNewLineCentred(p_options[j]);
                 else
-                    // + 1 to match above statement which will have an extra pad between option and selector
                     currentTopString += GetNewLineLeftJustified(std::string(G_SELECTOR.size() + 1, ' ') + p_options[j]);
+
+                if (p_addEmptyLineBetweenOptions)
+                    if (j != p_options.size() - 1) // Don't add extra line on the last option.
+                        currentTopString += GetEmptyLine();
             }
 
             output[i] = currentTopString;
-            output[i] += GetRemainingEmptyLines(currentTopString, COMMON_BOTTOM_STRING) + COMMON_BOTTOM_STRING;
+            output[i] += GetRemainingEmptyLines(currentTopString, p_commonBottomString) + p_commonBottomString;
         }
 
         return output;

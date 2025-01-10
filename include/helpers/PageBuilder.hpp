@@ -184,6 +184,13 @@ namespace TerminalGames
          */
         std::string GetGameOverPage(const GameInfo& p_gameInfo) const;
 
+        /**
+         * @brief Creates the quit option selection page.
+         *
+         * @return std::vector<std::string> Pages where each page has a different quit option selected.
+         */
+        std::vector<std::string> GetQuitOptionSelectionPage() const;
+
     private:
         /**
          * @brief Sets the colour of the input text using ANSI escape codes.
@@ -275,7 +282,7 @@ namespace TerminalGames
         std::string GetRemainingEmptyLines(const std::string& p_commonTopString, const std::string& p_commonBottomString) const;
 
         /**
-         * @brief Creates pages for displaying option selection screens for the given options.
+         * @brief Creates pages for displaying option selection screens for the given options within a game screen.
          *
          * @param p_gameInfo Information on the current state of the current game.
          * @param p_message The custom message to display.
@@ -284,7 +291,24 @@ namespace TerminalGames
          * @warning The message will be truncated if it is too long to be contained within a single line on the page.
          * @warning The page height will be allowed to extended pass the pre-defined page height to fit all the options provided.
          */
-        std::vector<std::string> GetOptionSelectionPages(const GameInfo& p_gameInfo, const std::string& p_message, const std::vector<std::string>& p_options) const;
+        std::vector<std::string> GetGameOptionSelectionPages(const GameInfo& p_gameInfo, const std::string& p_message, const std::vector<std::string>& p_options) const;
+
+        /**
+         * @brief Creates pages for displaying option selection screens for the given options.
+         *
+         * @param p_options The options for the option selection screen
+         * @param p_commonTopString The common string between all pages found above the options.
+         * @param p_commonBottomString The common string between all pages found below the options.
+         * @param p_addEmptyLineBetweenOptions Whether to add an empty line between the options (true) or not (false).
+         * @param p_centerOptions Whether to center the options (true) or left justify them (false).
+         * @return std::vector<std::string> Pages where each page has a different option selected.
+         */
+        std::vector<std::string> GetGeneralOptionSelectionPages(
+            const std::vector<std::string>& p_options,
+            const std::string& p_commonTopString,
+            const std::string& p_commonBottomString,
+            const bool& p_addEmptyLineBetweenOptions,
+            const bool& p_centerOptions) const;
 
         /**
          * @brief Wrapper function around the game specific sub-page functions.

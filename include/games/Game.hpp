@@ -1,5 +1,7 @@
 #pragma once
 
+#include "helpers/Exceptions.hpp"
+
 namespace TerminalGames
 {
     /**
@@ -51,30 +53,45 @@ namespace TerminalGames
          */
         virtual void Play() final
         {
+            ResetGame();
+
             while (true)
             {
-                SetupGame();
-
-                GetUserOptions();
-
-                while (!IsGameOver())
+                try
                 {
-                    if (IsCurrentTurnUsers())
-                        ExecuteUserCommand();
+                    SetupGame();
 
-                    else
-                        ExecuteComputerCommand();
+                    GetUserOptions();
+
+                    while (!IsGameOver())
+                    {
+                        if (IsCurrentTurnUsers())
+                            ExecuteUserCommand();
+
+                        else
+                            ExecuteComputerCommand();
+
+                        ToggleCurrentPlayer();
+
+                        UpdateGameInfo();
+                    }
 
                     ToggleCurrentPlayer();
 
                     UpdateGameInfo();
+
+                    GameOver();
                 }
 
-                ToggleCurrentPlayer();
+                catch (Exceptions::RestartGame& e)
+                {
+                    RestartGame();
+                }
 
-                UpdateGameInfo();
-
-                GameOver();
+                catch (Exceptions::ResetGame& e)
+                {
+                    ResetGame();
+                }
             }
         }
 
@@ -85,14 +102,14 @@ namespace TerminalGames
         virtual void SetupGame() = 0;
 
         /**
-         * @brief Updates the gameInfo struct (used by the PageBuilder class).
-         */
-        virtual void UpdateGameInfo() = 0;
-
-        /**
          * @brief Prompt the user for their choice on various game-related options.
          */
         virtual void GetUserOptions() = 0;
+
+        /**
+         * @brief Updates the gameInfo struct (used by the PageBuilder class).
+         */
+        virtual void UpdateGameInfo() = 0;
 
         /**
          * @brief Check whether the game is over.
@@ -123,5 +140,15 @@ namespace TerminalGames
          * @brief Display the game over message and prompt the user whether they would like to play again or quit the game.
          */
         virtual void GameOver() = 0;
+
+        /**
+         * @brief Update variables to allow for the game to be restarted with the same user options.
+         */
+        virtual void RestartGame() = 0;
+
+        /**
+         * @brief Update variables to allow for the game to be reset and so the user will be asked for new options.
+         */
+        virtual void ResetGame() = 0;
     };
 }
