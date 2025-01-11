@@ -9,7 +9,7 @@
 #include <vector>
 
 #include "games/Game.hpp"
-#include "helpers/Constants.hpp"
+#include "helpers/Globals.hpp"
 #include "helpers/PageBuilder.hpp"
 
 namespace TerminalGames
@@ -28,8 +28,8 @@ namespace TerminalGames
         PageBuilder m_pageBuilder;
         GameInfo m_gameInfo;
         std::default_random_engine m_randomNumberGenerator;
-        std::array<std::array<std::string, G_BATTLESHIPS_BOARD_WIDTH>, G_BATTLESHIPS_BOARD_HEIGHT> m_boardOne;
-        std::array<std::array<std::string, G_BATTLESHIPS_BOARD_WIDTH>, G_BATTLESHIPS_BOARD_HEIGHT> m_boardTwo;
+        std::array<std::array<std::string, Globals::G_BATTLESHIPS_BOARD_WIDTH>, Globals::G_BATTLESHIPS_BOARD_HEIGHT> m_boardOne;
+        std::array<std::array<std::string, Globals::G_BATTLESHIPS_BOARD_WIDTH>, Globals::G_BATTLESHIPS_BOARD_HEIGHT> m_boardTwo;
         std::vector<std::tuple<uint32_t, uint32_t>> m_commandsRemainingOne;
         std::vector<std::tuple<uint32_t, uint32_t>> m_commandsRemainingTwo;
         std::unordered_map<std::string, uint32_t> m_shipsRemainingOne;
@@ -134,7 +134,7 @@ namespace TerminalGames
          *
          * @param board The board containing the AI's ship positions.
          */
-        void GetComputerShipPositions(std::array<std::array<std::string, G_BATTLESHIPS_BOARD_WIDTH>, G_BATTLESHIPS_BOARD_HEIGHT>& p_board);
+        void GetComputerShipPositions(std::array<std::array<std::string, Globals::G_BATTLESHIPS_BOARD_WIDTH>, Globals::G_BATTLESHIPS_BOARD_HEIGHT>& p_board);
 
         /**
          * @brief Checks whether at least a single ship is present on a game board.
@@ -143,7 +143,7 @@ namespace TerminalGames
          * @return true If at least a single ship is present on the board.
          * @return false If no ships are present on the board
          */
-        static bool IsShipPresent(std::array<std::array<std::string, G_BATTLESHIPS_BOARD_WIDTH>, G_BATTLESHIPS_BOARD_HEIGHT>& p_board);
+        static bool IsShipPresent(std::array<std::array<std::string, Globals::G_BATTLESHIPS_BOARD_WIDTH>, Globals::G_BATTLESHIPS_BOARD_HEIGHT>& p_board);
 
         /**
          * @brief Checks whether the command is valid.
@@ -166,7 +166,7 @@ namespace TerminalGames
          * @param p_command The board row and column that should be attacked.
          */
         void ExecuteGeneralCommand(
-            std::array<std::array<std::string, G_BATTLESHIPS_BOARD_WIDTH>, G_BATTLESHIPS_BOARD_HEIGHT>& p_opponentBoard,
+            std::array<std::array<std::string, Globals::G_BATTLESHIPS_BOARD_WIDTH>, Globals::G_BATTLESHIPS_BOARD_HEIGHT>& p_opponentBoard,
             std::unordered_map<std::string, uint32_t>& p_opponentShipsRemaining,
             std::vector<std::tuple<uint32_t, uint32_t>>& p_commandsRemaining,
             const std::tuple<uint32_t, uint32_t>& p_command);

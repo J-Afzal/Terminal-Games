@@ -6,7 +6,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include "helpers/Constants.hpp"
+#include "helpers/Globals.hpp"
 
 namespace TerminalGames
 {
@@ -42,7 +42,7 @@ namespace TerminalGames
     {
         struct TicTacToeGameInfo
         {
-            std::array<std::array<std::string, G_TICTACTOE_BOARD_WIDTH>, G_TICTACTOE_BOARD_HEIGHT> m_gameGrid;
+            std::array<std::array<std::string, Globals::G_TICTACTOE_BOARD_WIDTH>, Globals::G_TICTACTOE_BOARD_HEIGHT> m_gameGrid;
             std::string m_computerSpeedName;
             std::string m_currentPlayer;
             std::string m_playerCount;
@@ -64,8 +64,8 @@ namespace TerminalGames
 
         struct BattleshipsGameInfo
         {
-            std::array<std::array<std::string, G_BATTLESHIPS_BOARD_WIDTH>, G_BATTLESHIPS_BOARD_HEIGHT> m_boardOne;
-            std::array<std::array<std::string, G_BATTLESHIPS_BOARD_WIDTH>, G_BATTLESHIPS_BOARD_HEIGHT> m_boardTwo;
+            std::array<std::array<std::string, Globals::G_BATTLESHIPS_BOARD_WIDTH>, Globals::G_BATTLESHIPS_BOARD_HEIGHT> m_boardOne;
+            std::array<std::array<std::string, Globals::G_BATTLESHIPS_BOARD_WIDTH>, Globals::G_BATTLESHIPS_BOARD_HEIGHT> m_boardTwo;
             std::unordered_map<std::string, uint32_t> m_shipsRemainingOne;
             std::unordered_map<std::string, uint32_t> m_shipsRemainingTwo;
             std::string m_computerSpeedName;

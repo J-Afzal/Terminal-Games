@@ -1,6 +1,6 @@
 #pragma once
 
-#include "helpers/Exceptions.hpp"
+#include "helpers/Globals.hpp"
 
 namespace TerminalGames
 {

@@ -8,7 +8,7 @@
 #include <vector>
 
 #include "games/Game.hpp"
-#include "helpers/Constants.hpp"
+#include "helpers/Globals.hpp"
 #include "helpers/PageBuilder.hpp"
 
 namespace TerminalGames
@@ -27,7 +27,7 @@ namespace TerminalGames
         PageBuilder m_pageBuilder;
         GameInfo m_gameInfo;
         std::default_random_engine m_randomNumberGenerator;
-        std::array<std::array<std::string, G_TICTACTOE_BOARD_WIDTH>, G_TICTACTOE_BOARD_HEIGHT> m_gameGrid;
+        std::array<std::array<std::string, Globals::G_TICTACTOE_BOARD_WIDTH>, Globals::G_TICTACTOE_BOARD_HEIGHT> m_gameGrid;
         std::vector<std::tuple<uint32_t, uint32_t>> m_commandsRemaining;
         std::tuple<uint32_t, uint32_t> m_previousCommand;
         std::string m_computerSpeedName;

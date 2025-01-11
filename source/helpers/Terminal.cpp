@@ -11,8 +11,7 @@
     #include "Windows.h"
 #endif
 
-#include "helpers/Constants.hpp"
-#include "helpers/Exceptions.hpp"
+#include "helpers/Globals.hpp"
 #include "helpers/PageBuilder.hpp"
 #include "helpers/Terminal.hpp"
 
@@ -30,17 +29,17 @@ namespace TerminalGames
 
             switch (GetNextKeyPress())
             {
-            case G_QUIT_KEY:
+            case Globals::G_QUIT_KEY:
                 throw Exceptions::QuitProgram();
 
-            case G_ENTER_KEY:
+            case Globals::G_ENTER_KEY:
                 return !static_cast<bool>(currentSelection);
 
-            case G_UP_ARROW_KEY:
+            case Globals::G_UP_ARROW_KEY:
                 currentSelection == 0 ? currentSelection = (p_menus.size() - 1) : --currentSelection;
                 break;
 
-            case G_DOWN_ARROW_KEY:
+            case Globals::G_DOWN_ARROW_KEY:
                 currentSelection == (p_menus.size() - 1) ? currentSelection = 0 : ++currentSelection;
                 break;
 
@@ -60,17 +59,17 @@ namespace TerminalGames
 
             switch (GetNextKeyPress())
             {
-            case G_QUIT_KEY:
+            case Globals::G_QUIT_KEY:
                 throw Exceptions::QuitMainMenu();
 
-            case G_ENTER_KEY:
+            case Globals::G_ENTER_KEY:
                 return currentSelection;
 
-            case G_UP_ARROW_KEY:
+            case Globals::G_UP_ARROW_KEY:
                 currentSelection == 0 ? currentSelection = (p_menus.size() - 1) : --currentSelection;
                 break;
 
-            case G_DOWN_ARROW_KEY:
+            case Globals::G_DOWN_ARROW_KEY:
                 currentSelection == (p_menus.size() - 1) ? currentSelection = 0 : ++currentSelection;
                 break;
 
@@ -90,18 +89,18 @@ namespace TerminalGames
 
             switch (GetNextKeyPress())
             {
-            case G_QUIT_KEY:
+            case Globals::G_QUIT_KEY:
                 Terminal::GetUserChoiceFromQuitMenus(p_quitOptionMenus);
                 break;
 
-            case G_ENTER_KEY:
+            case Globals::G_ENTER_KEY:
                 return currentSelection;
 
-            case G_UP_ARROW_KEY:
+            case Globals::G_UP_ARROW_KEY:
                 currentSelection == 0 ? currentSelection = (p_menus.size() - 1) : --currentSelection;
                 break;
 
-            case G_DOWN_ARROW_KEY:
+            case Globals::G_DOWN_ARROW_KEY:
                 currentSelection == (p_menus.size() - 1) ? currentSelection = 0 : ++currentSelection;
                 break;
 
@@ -128,13 +127,13 @@ namespace TerminalGames
         switch (p_pageBuilder.GetCurrentPageType())
         {
         case Pages::TICTACTOE:
-            maxColumn = G_TICTACTOE_BOARD_WIDTH - 1;
-            maxRow = G_TICTACTOE_BOARD_HEIGHT - 1;
+            maxColumn = Globals::G_TICTACTOE_BOARD_WIDTH - 1;
+            maxRow = Globals::G_TICTACTOE_BOARD_HEIGHT - 1;
             break;
 
         case Pages::BATTLESHIPS:
-            maxColumn = G_BATTLESHIPS_BOARD_WIDTH - 1;
-            maxRow = G_BATTLESHIPS_BOARD_HEIGHT - 1;
+            maxColumn = Globals::G_BATTLESHIPS_BOARD_WIDTH - 1;
+            maxRow = Globals::G_BATTLESHIPS_BOARD_HEIGHT - 1;
             break;
 
         default:
@@ -153,21 +152,21 @@ namespace TerminalGames
             switch (p_pageBuilder.GetCurrentPageType())
             {
             case Pages::TICTACTOE:
-                maxColumn = G_TICTACTOE_BOARD_WIDTH - 1;
-                maxRow = G_TICTACTOE_BOARD_HEIGHT - 1;
-                gridLeftPad = G_TICTACTOE_GRID_LEFT_PAD;
-                gridTopPad = G_TICTACTOE_GRID_TOP_PAD;
-                gridElementWidth = G_TICTACTOE_GRID_ELEMENT_WIDTH;
-                gridElementHeight = G_TICTACTOE_GRID_ELEMENT_HEIGHT;
+                maxColumn = Globals::G_TICTACTOE_BOARD_WIDTH - 1;
+                maxRow = Globals::G_TICTACTOE_BOARD_HEIGHT - 1;
+                gridLeftPad = Globals::G_TICTACTOE_GRID_LEFT_PAD;
+                gridTopPad = Globals::G_TICTACTOE_GRID_TOP_PAD;
+                gridElementWidth = Globals::G_TICTACTOE_GRID_ELEMENT_WIDTH;
+                gridElementHeight = Globals::G_TICTACTOE_GRID_ELEMENT_HEIGHT;
                 break;
 
             case Pages::BATTLESHIPS:
-                maxColumn = G_BATTLESHIPS_BOARD_WIDTH - 1;
-                maxRow = G_BATTLESHIPS_BOARD_HEIGHT - 1;
-                gridLeftPad = G_BATTLESHIPS_GRID_LEFT_PAD;
-                gridTopPad = G_BATTLESHIPS_GRID_TOP_PAD;
-                gridElementWidth = G_BATTLESHIPS_GRID_ELEMENT_WIDTH;
-                gridElementHeight = G_BATTLESHIPS_GRID_ELEMENT_HEIGHT;
+                maxColumn = Globals::G_BATTLESHIPS_BOARD_WIDTH - 1;
+                maxRow = Globals::G_BATTLESHIPS_BOARD_HEIGHT - 1;
+                gridLeftPad = Globals::G_BATTLESHIPS_GRID_LEFT_PAD;
+                gridTopPad = Globals::G_BATTLESHIPS_GRID_TOP_PAD;
+                gridElementWidth = Globals::G_BATTLESHIPS_GRID_ELEMENT_WIDTH;
+                gridElementHeight = Globals::G_BATTLESHIPS_GRID_ELEMENT_HEIGHT;
                 break;
 
             default:
@@ -207,33 +206,33 @@ namespace TerminalGames
 #endif
             switch (GetNextKeyPress())
             {
-            case G_QUIT_KEY:
+            case Globals::G_QUIT_KEY:
                 SetCursorVisibility(false);
                 Terminal::GetUserChoiceFromQuitMenus(p_pageBuilder.GetQuitOptionSelectionPage());
                 SetCursorVisibility(true);
                 break;
 
-            case G_BACKSPACE_KEY:
+            case Globals::G_BACKSPACE_KEY:
                 SetCursorVisibility(false);
                 throw Exceptions::BackspaceKeyPressed();
 
-            case G_ENTER_KEY:
+            case Globals::G_ENTER_KEY:
                 SetCursorVisibility(false);
                 return {currentRow, currentColumn};
 
-            case G_UP_ARROW_KEY:
+            case Globals::G_UP_ARROW_KEY:
                 currentRow == 0 ? currentRow = maxRow : --currentRow;
                 break;
 
-            case G_DOWN_ARROW_KEY:
+            case Globals::G_DOWN_ARROW_KEY:
                 currentRow == maxRow ? currentRow = 0 : ++currentRow;
                 break;
 
-            case G_LEFT_ARROW_KEY:
+            case Globals::G_LEFT_ARROW_KEY:
                 currentColumn == 0 ? currentColumn = maxColumn : --currentColumn;
                 break;
 
-            case G_RIGHT_ARROW_KEY:
+            case Globals::G_RIGHT_ARROW_KEY:
                 currentColumn == maxColumn ? currentColumn = 0 : ++currentColumn;
                 break;
 
@@ -251,11 +250,11 @@ namespace TerminalGames
 
             switch (GetNextKeyPress())
             {
-            case G_QUIT_KEY:
+            case Globals::G_QUIT_KEY:
                 GetUserChoiceFromQuitMenus(p_quitOptionMenus);
                 break;
 
-            case G_RESTART_KEY:
+            case Globals::G_RESTART_KEY:
                 throw Exceptions::RestartGame();
 
             default:
@@ -274,36 +273,36 @@ namespace TerminalGames
 
             switch (GetNextKeyPress())
             {
-            case G_ENTER_KEY:
+            case Globals::G_ENTER_KEY:
                 switch (currentSelection)
                 {
-                case G_RESTART_GAME_INDEX:
+                case Globals::G_RESTART_GAME_INDEX:
                     throw Exceptions::RestartGame();
 
-                case G_RESET_GAME_INDEX:
+                case Globals::G_RESET_GAME_INDEX:
                     throw Exceptions::ResetGame();
 
-                case G_QUIT_GAME_INDEX:
+                case Globals::G_QUIT_GAME_INDEX:
                     throw Exceptions::QuitGame();
 
-                case G_QUIT_MAIN_MENU_INDEX:
+                case Globals::G_QUIT_MAIN_MENU_INDEX:
                     throw Exceptions::QuitMainMenu();
 
-                case G_QUIT_PROGRAM_INDEX:
+                case Globals::G_QUIT_PROGRAM_INDEX:
                     throw Exceptions::QuitProgram();
 
-                case G_CANCEL_INDEX:
+                case Globals::G_CANCEL_INDEX:
                     return;
 
                 default:
                     break;
                 }
 
-            case G_UP_ARROW_KEY:
+            case Globals::G_UP_ARROW_KEY:
                 currentSelection == 0 ? currentSelection = (p_menus.size() - 1) : --currentSelection;
                 break;
 
-            case G_DOWN_ARROW_KEY:
+            case Globals::G_DOWN_ARROW_KEY:
                 currentSelection == (p_menus.size() - 1) ? currentSelection = 0 : ++currentSelection;
                 break;
 
@@ -370,23 +369,23 @@ namespace TerminalGames
 
             switch (inputString[0])
             {
-            case G_ALTERNATIVE_ENTER_KEY:
-                return G_ENTER_KEY;
+            case Globals::G_ALTERNATIVE_ENTER_KEY:
+                return Globals::G_ENTER_KEY;
 
-            case G_ALTERNATIVE_BACKSPACE_KEY:
-                return G_BACKSPACE_KEY;
+            case Globals::G_ALTERNATIVE_BACKSPACE_KEY:
+                return Globals::G_BACKSPACE_KEY;
 
-            case G_ALTERNATIVE_UP_ARROW_KEY:
-                return G_UP_ARROW_KEY;
+            case Globals::G_ALTERNATIVE_UP_ARROW_KEY:
+                return Globals::G_UP_ARROW_KEY;
 
-            case G_ALTERNATIVE_DOWN_ARROW_KEY:
-                return G_DOWN_ARROW_KEY;
+            case Globals::G_ALTERNATIVE_DOWN_ARROW_KEY:
+                return Globals::G_DOWN_ARROW_KEY;
 
-            case G_ALTERNATIVE_LEFT_ARROW_KEY:
-                return G_LEFT_ARROW_KEY;
+            case Globals::G_ALTERNATIVE_LEFT_ARROW_KEY:
+                return Globals::G_LEFT_ARROW_KEY;
 
-            case G_ALTERNATIVE_RIGHT_ARROW_KEY:
-                return G_RIGHT_ARROW_KEY;
+            case Globals::G_ALTERNATIVE_RIGHT_ARROW_KEY:
+                return Globals::G_RIGHT_ARROW_KEY;
 
             default:
                 return inputString[0];
@@ -398,7 +397,7 @@ namespace TerminalGames
     void Terminal::SetCursorVisibility(const bool& p_cursorVisibility)
     {
 #ifdef _WIN32
-        const CONSOLE_CURSOR_INFO CURSOR_INFO(G_CURSOR_WIDTH_PERCENTAGE, static_cast<int>(p_cursorVisibility));
+        const CONSOLE_CURSOR_INFO CURSOR_INFO(Globals::G_CURSOR_WIDTH_PERCENTAGE, static_cast<int>(p_cursorVisibility));
         SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &CURSOR_INFO);
 #endif
     }

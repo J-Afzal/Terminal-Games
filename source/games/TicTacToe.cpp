@@ -6,8 +6,7 @@
 #include <vector>
 
 #include "games/TicTacToe.hpp"
-#include "helpers/Constants.hpp"
-#include "helpers/Functions.hpp"
+#include "helpers/Globals.hpp"
 #include "helpers/PageBuilder.hpp"
 #include "helpers/Terminal.hpp"
 
@@ -32,9 +31,9 @@ namespace TerminalGames
         m_turnCount = 0;
         m_hasWinner = false;
 
-        for (uint32_t i = 0; i < G_TICTACTOE_BOARD_HEIGHT; i++)
+        for (uint32_t i = 0; i < Globals::G_TICTACTOE_BOARD_HEIGHT; i++)
         {
-            for (uint32_t j = 0; j < G_TICTACTOE_BOARD_WIDTH; j++)
+            for (uint32_t j = 0; j < Globals::G_TICTACTOE_BOARD_WIDTH; j++)
             {
                 m_gameGrid.at(i).at(j) = "   ";
                 m_commandsRemaining.emplace_back(i, j);
@@ -103,7 +102,7 @@ namespace TerminalGames
             return m_hasWinner;
         }
 
-        return m_turnCount == G_TICTACTOE_MAXIMUM_ERROR_COUNT;
+        return m_turnCount == Globals::G_TICTACTOE_MAXIMUM_ERROR_COUNT;
     }
 
     void TicTacToe::ToggleCurrentPlayer()
@@ -212,14 +211,14 @@ namespace TerminalGames
 
     bool TicTacToe::ValidateCommand(const std::tuple<uint32_t, uint32_t>& p_command)
     {
-        const auto COMMAND_FIND_LOCATION = ImplementStdRangesFind(m_commandsRemaining.begin(), m_commandsRemaining.end(), p_command);
+        const auto COMMAND_FIND_LOCATION = Globals::ImplementStdRangesFind(m_commandsRemaining.begin(), m_commandsRemaining.end(), p_command);
 
         return COMMAND_FIND_LOCATION != m_commandsRemaining.end();
     }
 
     void TicTacToe::ExecuteGeneralCommand(const std::tuple<uint32_t, uint32_t>& p_command)
     {
-        const auto COMMAND_FIND_LOCATION = ImplementStdRangesFind(m_commandsRemaining.begin(), m_commandsRemaining.end(), p_command);
+        const auto COMMAND_FIND_LOCATION = Globals::ImplementStdRangesFind(m_commandsRemaining.begin(), m_commandsRemaining.end(), p_command);
 
         m_gameGrid.at(std::get<0>(p_command)).at(std::get<1>(p_command)) = std::string(" ") + m_currentPlayer.back() + std::string(" ");
         m_commandsRemaining.erase(COMMAND_FIND_LOCATION);

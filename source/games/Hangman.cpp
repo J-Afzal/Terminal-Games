@@ -10,8 +10,7 @@
 #include <vector>
 
 #include "games/Hangman.hpp"
-#include "helpers/Constants.hpp"
-#include "helpers/Functions.hpp"
+#include "helpers/Globals.hpp"
 #include "helpers/PageBuilder.hpp"
 #include "helpers/Terminal.hpp"
 
@@ -33,7 +32,7 @@ namespace TerminalGames
 
     void Hangman::SetupGame()
     {
-        m_commandsRemaining.reserve(G_HANGMAN_NUMBER_OF_LETTERS_IN_THE_ALPHABET);
+        m_commandsRemaining.reserve(Globals::G_HANGMAN_NUMBER_OF_LETTERS_IN_THE_ALPHABET);
         m_commandsRemaining = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
         m_currentGuess = 'A';
         m_incorrectGuesses.clear();
@@ -106,7 +105,7 @@ namespace TerminalGames
 
     bool Hangman::IsGameOver()
     {
-        if (m_errorCount == G_HANGMAN_MAXIMUM_ERROR_COUNT)
+        if (m_errorCount == Globals::G_HANGMAN_MAXIMUM_ERROR_COUNT)
         {
             m_hasWinner = true;
             return m_hasWinner;
@@ -144,31 +143,31 @@ namespace TerminalGames
 
             keyPress = Terminal::GetNextKeyPress();
 
-            if (keyPress == G_QUIT_KEY)
+            if (keyPress == Globals::G_QUIT_KEY)
             {
                 Terminal::GetUserChoiceFromQuitMenus(m_pageBuilder.GetQuitOptionSelectionPage());
                 continue;
             }
 
-            if (keyPress == G_ENTER_KEY)
+            if (keyPress == Globals::G_ENTER_KEY)
             {
                 ExecuteGeneralCommand(m_commandsRemaining[currentSelection]);
                 return;
             }
 
-            if (keyPress == G_UP_ARROW_KEY)
+            if (keyPress == Globals::G_UP_ARROW_KEY)
             {
                 currentSelection == 0 ? currentSelection = m_commandsRemaining.size() - 1 : --currentSelection;
             }
 
-            else if (keyPress == G_DOWN_ARROW_KEY)
+            else if (keyPress == Globals::G_DOWN_ARROW_KEY)
             {
                 currentSelection == (m_commandsRemaining.size() - 1) ? currentSelection = 0 : ++currentSelection;
             }
 
             else
             {
-                auto commandFindLocation = ImplementStdRangesFind(m_commandsRemaining.begin(), m_commandsRemaining.end(), keyPress - G_HANGMAN_KEY_PRESS_CHAR_OFFSET);
+                auto commandFindLocation = Globals::ImplementStdRangesFind(m_commandsRemaining.begin(), m_commandsRemaining.end(), keyPress - Globals::G_HANGMAN_KEY_PRESS_CHAR_OFFSET);
 
                 if (commandFindLocation != m_commandsRemaining.end())
                 {
@@ -262,17 +261,17 @@ namespace TerminalGames
         {
             Terminal::PrintOutput(OUTPUT);
 
-            Terminal::SetCursorPosition({G_HANGMAN_GET_WORD_FROM_USER_COLUMN, G_HANGMAN_USER_INPUT_ROW});
+            Terminal::SetCursorPosition({Globals::G_HANGMAN_GET_WORD_FROM_USER_COLUMN, Globals::G_HANGMAN_USER_INPUT_ROW});
 
             std::getline(std::cin, input);
 
-            if (input[0] == G_QUIT_KEY)
+            if (input[0] == Globals::G_QUIT_KEY)
             {
                 Terminal::GetUserChoiceFromQuitMenus(m_pageBuilder.GetQuitOptionSelectionPage());
                 continue;
             }
 
-            if (input.size() < G_HANGMAN_MINIMUM_WORD_SIZE || input.size() > G_HANGMAN_MAXIMUM_WORD_SIZE)
+            if (input.size() < Globals::G_HANGMAN_MINIMUM_WORD_SIZE || input.size() > Globals::G_HANGMAN_MAXIMUM_WORD_SIZE)
             {
                 continue;
             }
@@ -290,7 +289,7 @@ namespace TerminalGames
 
     void Hangman::GetWordFromComputer()
     {
-        m_wordToBeGuessed = G_HANGMAN_COMPUTER_WORDS.at(m_randomNumberGenerator() % G_HANGMAN_COMPUTER_WORDS.size());
+        m_wordToBeGuessed = Globals::G_HANGMAN_COMPUTER_WORDS.at(m_randomNumberGenerator() % Globals::G_HANGMAN_COMPUTER_WORDS.size());
     }
 
     void Hangman::ExecuteGeneralCommand(const char& p_guess)
@@ -311,7 +310,7 @@ namespace TerminalGames
             m_errorCount++;
         }
 
-        m_commandsRemaining.erase(ImplementStdRangesFind(m_commandsRemaining.begin(), m_commandsRemaining.end(), p_guess));
+        m_commandsRemaining.erase(Globals::ImplementStdRangesFind(m_commandsRemaining.begin(), m_commandsRemaining.end(), p_guess));
         m_turnCount++;
     }
 }

@@ -10,12 +10,15 @@
 namespace TerminalGames
 {
     /**
-     * @brief Handles all terminal related tasks such as getting user input, outputting to the terminal, clearing the terminal,
-     * etc.
+     * @brief "Static" class that handles all terminal related tasks such as getting user input, outputting to the terminal,
+     * clearing the terminal, etc.
      */
     class Terminal
     {
     public:
+        /**
+         * @brief Disable constructing a Terminal object.
+         */
         Terminal() = delete;
 
         /**
