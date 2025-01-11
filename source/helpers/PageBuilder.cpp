@@ -122,12 +122,12 @@ namespace TerminalGames
         output.emplace_back(
             COMMON_TOP_STRING +
             GetNewLineLeftJustified("Yes", Colours::BLUE, Globals::G_SELECTOR) +
-            GetNewLineLeftJustified(std::string(G_SELECTOR.size() + 1, ' ') + "No") +
+            GetNewLineLeftJustified(std::string(Globals::G_SELECTOR.size() + 1, ' ') + "No") +
             COMMON_BOTTOM_STRING);
 
         output.emplace_back(RemoveColour(
             COMMON_TOP_STRING +
-            GetNewLineLeftJustified(std::string(G_SELECTOR.size() + 1, ' ') + "Yes") +
+            GetNewLineLeftJustified(std::string(Globals::G_SELECTOR.size() + 1, ' ') + "Yes") +
             GetNewLineLeftJustified("No", Colours::BLUE, Globals::G_SELECTOR) +
             COMMON_BOTTOM_STRING));
 #endif
