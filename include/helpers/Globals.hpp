@@ -2,15 +2,76 @@
 
 #include <array>
 #include <cstdint>
+#include <exception>
 #include <string>
+#include <vector>
 
-namespace TerminalGames
+namespace TerminalGames::Globals
 {
+    namespace Exceptions
+    {
+        /**
+         * @brief Used to quit the program.
+         */
+        class QuitProgram : public std::exception
+        {};
+
+        /**
+         * @brief Used to quit the main menu.
+         */
+        class QuitMainMenu : public std::exception
+        {};
+
+        /**
+         * @brief Used to quit a game.
+         */
+        class QuitGame : public std::exception
+        {};
+
+        /**
+         * @brief Used to reset a game which prompts the user for new options.
+         */
+        class ResetGame : public std::exception
+        {};
+
+        /**
+         * @brief Used to restart a game with the same user options.
+         */
+        class RestartGame : public std::exception
+        {};
+
+        /**
+         * @brief Used when the backspace key is pressed.
+         */
+        class BackspaceKeyPressed : public std::exception
+        {};
+
+        /**
+         * @brief Used when the hangman game words.txt file is not found.
+         */
+        class HangmanWordsNotFound : public std::exception
+        {};
+
+        /**
+         * @brief Used for functionality that has not been implemented.
+         */
+        class NotImplementedError : public std::exception
+        {};
+    }
+
     /**
-     * @brief Some C++ functions are not supported by some compilers (usually because the function call fails with GNU 12.2.0
-     * within the CI workflow). The following functions are crudely implemented below for this project's specific use case.
+     * @brief Implements std::ranges::find and it should work for all std containers.
+     * The std library version of this function is not supported by some compilers (usually because the function call fails
+     * with GNU 12.2.0 within the CI workflow). Therefore it has been crudely implemented here for this project's specific
+     * use case.
+     *
+     * @tparam T An std container.
+     * @tparam U The type being stored by the std container.
+     * @param p_begin The iterator returned from begin() function.
+     * @param p_end The iterator returned from end() function.
+     * @param p_value The value to find in the std container.
+     * @return T Returns an iterator to the found value. If the value is not found then p_end is returned.
      */
-    // Should work for all std containers
     template<typename T, typename U>
     static T ImplementStdRangesFind(const T& p_begin, const T& p_end, const U& p_value) // NOLINT(bugprone-easily-swappable-parameters)
     {
@@ -21,7 +82,19 @@ namespace TerminalGames
         return p_end;
     }
 
-    // Should work for all std containers
+    /**
+     * @brief Implements std::count and it should work for all std containers.
+     * The std library version of this function is not supported by some compilers (usually because the function call fails
+     * with GNU 12.2.0 within the CI workflow). Therefore it has been crudely implemented here for this project's specific
+     * use case.
+     *
+     * @tparam T An std container.
+     * @tparam U The type being stored by the std container.
+     * @param p_begin The iterator returned from begin() function.
+     * @param p_end The iterator returned from end() function.
+     * @param p_value The value to count in the std container.
+     * @return int32_t The number of occurrences of p_value in the input container.
+     */
     template<typename T, typename U>
     static int32_t ImplementStdCount(const T& p_begin, const T& p_end, const U& p_value) // NOLINT(bugprone-easily-swappable-parameters)
     {
@@ -34,7 +107,17 @@ namespace TerminalGames
         return count;
     }
 
-    // Only works for single instance of {} in p_stringToFormat
+    /**
+     * @brief Crude implementation of std::format which only works for a single instance of '{}' in p_stringToFormat and
+     * only a uint32_t as the variable to insert.
+     * The std library version of this function is not supported by some compilers (usually because the function call fails
+     * with GNU 12.2.0 within the CI workflow). Therefore it has been crudely implemented here for this project's specific
+     * use case.
+     *
+     * @param p_stringToFormat The string which contains the '{}' to format.
+     * @param p_varToInsert The integer to insert into the string.
+     * @return std::string p_stringToFormat with p_varToInsert inserted in place of '{}'.
+     */
     static std::string ImplementStdFormat(const std::string& p_stringToFormat, const uint32_t& p_varToInsert)
     {
         const std::string FORMAT_IDENTIFIER = "{}";
@@ -45,18 +128,32 @@ namespace TerminalGames
     }
 
     /**
-     * @brief MainMenu
+     * @brief Homepage
      */
+    inline static const std::string G_HOMEPAGE_TOP_TITLE = "Terminal Games";
+    inline static const std::string G_HOMEPAGE_BOTTOM_TITLE = "q = quit program";
+    static constexpr uint32_t G_HOMEPAGE_DISPLAY_WIDTH = 40;
+    static constexpr uint32_t G_HOMEPAGE_DISPLAY_HEIGHT = 20;
+
+    /**
+     * @brief Main Menu
+     */
+    inline static const std::string G_MAIN_MENU_TOP_TITLE = "Main Menu";
+    inline static const std::string G_MAIN_MENU_BOTTOM_TITLE = "q = quit to homepage";
     static constexpr uint32_t G_MAIN_MENU_DISPLAY_WIDTH = 32;
     static constexpr uint32_t G_MAIN_MENU_DISPLAY_HEIGHT = 13;
 
     /**
      * @brief Tic Tac Toe
      */
-    static constexpr uint32_t G_TICTACTOE_DISPLAY_WIDTH = 55;
+    inline static const std::string G_TICTACTOE_TOP_TITLE = "Tic Tac Toe";
+    inline static const std::string G_TICTACTOE_BOTTOM_TITLE = "q = to show quit menu";
+    static constexpr uint32_t G_TICTACTOE_DISPLAY_WIDTH = 58;
     static constexpr uint32_t G_TICTACTOE_DISPLAY_HEIGHT = 19;
+
     static constexpr uint32_t G_TICTACTOE_BOARD_WIDTH = 3;
     static constexpr uint32_t G_TICTACTOE_BOARD_HEIGHT = 3;
+
     static constexpr uint32_t G_TICTACTOE_GRID_ELEMENT_WIDTH = 4;
     static constexpr uint32_t G_TICTACTOE_GRID_ELEMENT_HEIGHT = 2;
     static constexpr uint32_t G_TICTACTOE_GRID_LEFT_PAD = 3;
@@ -67,6 +164,8 @@ namespace TerminalGames
     /**
      * @brief Hangman
      */
+    inline static const std::string G_HANGMAN_TOP_TITLE = "Hangman";
+    inline static const std::string G_HANGMAN_BOTTOM_TITLE = "q = to show quit menu";
     static constexpr uint32_t G_HANGMAN_DISPLAY_WIDTH = 64;
     static constexpr uint32_t G_HANGMAN_DISPLAY_HEIGHT = 22;
 
@@ -83,10 +182,14 @@ namespace TerminalGames
     /**
      * @brief Battleships
      */
+    inline static const std::string G_BATTLESHIPS_TOP_TITLE = "Battleships";
+    inline static const std::string G_BATTLESHIPS_BOTTOM_TITLE = "q = to show quit menu";
     static constexpr uint32_t G_BATTLESHIPS_DISPLAY_WIDTH = 149;
     static constexpr uint32_t G_BATTLESHIPS_DISPLAY_HEIGHT = 38;
+
     static constexpr uint32_t G_BATTLESHIPS_BOARD_WIDTH = 10;
     static constexpr uint32_t G_BATTLESHIPS_BOARD_HEIGHT = 10;
+
     static constexpr uint32_t G_BATTLESHIPS_GRID_ELEMENT_WIDTH = 4;
     static constexpr uint32_t G_BATTLESHIPS_GRID_ELEMENT_HEIGHT = 2;
     static constexpr uint32_t G_BATTLESHIPS_GRID_LEFT_PAD = 10;
@@ -100,54 +203,76 @@ namespace TerminalGames
     static constexpr uint32_t G_BATTLESHIPS_SUBMARINE_SIZE = 3;
     static constexpr uint32_t G_BATTLESHIPS_PATROL_BOAT_SIZE = 2;
 
-    static const std::string G_BATTLESHIPS_CARRIER_NAME = "Carrie";
-    static const std::string G_BATTLESHIPS_BATTLESHIP_NAME = "Battleship";
-    static const std::string G_BATTLESHIPS_DESTROYER_NAME = "Destroyer";
-    static const std::string G_BATTLESHIPS_SUBMARINE_NAME = "Submarine";
-    static const std::string G_BATTLESHIPS_PATROL_BOAT_NAME = "Patrol Boat";
+    inline static const std::string G_BATTLESHIPS_CARRIER_NAME = "Carrie";
+    inline static const std::string G_BATTLESHIPS_BATTLESHIP_NAME = "Battleship";
+    inline static const std::string G_BATTLESHIPS_DESTROYER_NAME = "Destroyer";
+    inline static const std::string G_BATTLESHIPS_SUBMARINE_NAME = "Submarine";
+    inline static const std::string G_BATTLESHIPS_PATROL_BOAT_NAME = "Patrol Boat";
 
-    static const std::string G_BATTLESHIPS_PLACED_SHIP {static_cast<char>(178)};
-    static const std::string G_BATTLESHIPS_SUCCESSFUL_ATTACK {static_cast<char>(176)};
-    static const std::string G_BATTLESHIPS_MISSED_ATTACK {static_cast<char>(250)};
+    inline static const std::string G_BATTLESHIPS_PLACED_SHIP {static_cast<char>(178)};
+    inline static const std::string G_BATTLESHIPS_SUCCESSFUL_ATTACK {static_cast<char>(176)};
+    inline static const std::string G_BATTLESHIPS_MISSED_ATTACK {static_cast<char>(250)};
 
-    static const std::array<std::string, G_BATTLESHIPS_SHIP_COUNT> G_BATTLESHIPS_SHIP_NAMES = {
+    inline static const std::array<std::string, G_BATTLESHIPS_SHIP_COUNT> G_BATTLESHIPS_SHIP_NAMES = {
         G_BATTLESHIPS_CARRIER_NAME,
         G_BATTLESHIPS_BATTLESHIP_NAME,
         G_BATTLESHIPS_DESTROYER_NAME,
         G_BATTLESHIPS_SUBMARINE_NAME,
         G_BATTLESHIPS_PATROL_BOAT_NAME};
 
-    static const std::array<uint32_t, G_BATTLESHIPS_SHIP_COUNT> G_BATTLESHIPS_SHIP_SIZES = {
+    inline static const std::array<uint32_t, G_BATTLESHIPS_SHIP_COUNT> G_BATTLESHIPS_SHIP_SIZES = {
         G_BATTLESHIPS_CARRIER_SIZE,
         G_BATTLESHIPS_BATTLESHIP_SIZE,
         G_BATTLESHIPS_DESTROYER_SIZE,
         G_BATTLESHIPS_SUBMARINE_SIZE,
         G_BATTLESHIPS_PATROL_BOAT_SIZE};
 
-    static const std::array<std::string, G_BATTLESHIPS_SHIP_COUNT> G_BATTLESHIPS_SHIP_INSTRUCTIONS = {
-        TerminalGames::ImplementStdFormat("Please enter the {} grid locations for the Carrier", G_BATTLESHIPS_CARRIER_SIZE),
-        TerminalGames::ImplementStdFormat("Please enter the {} grid locations for the Battleship", G_BATTLESHIPS_BATTLESHIP_SIZE),
-        TerminalGames::ImplementStdFormat("Please enter the {} grid locations for the Destroyer", G_BATTLESHIPS_DESTROYER_SIZE),
-        TerminalGames::ImplementStdFormat("Please enter the {} grid locations for the Submarine", G_BATTLESHIPS_SUBMARINE_SIZE),
-        TerminalGames::ImplementStdFormat("Please enter the {} grid locations for the Patrol Boat", G_BATTLESHIPS_PATROL_BOAT_SIZE)};
+    inline static const std::array<std::string, G_BATTLESHIPS_SHIP_COUNT> G_BATTLESHIPS_SHIP_INSTRUCTIONS = {
+        ImplementStdFormat("Please enter the {} grid locations for the Carrier", G_BATTLESHIPS_CARRIER_SIZE),
+        ImplementStdFormat("Please enter the {} grid locations for the Battleship", G_BATTLESHIPS_BATTLESHIP_SIZE),
+        ImplementStdFormat("Please enter the {} grid locations for the Destroyer", G_BATTLESHIPS_DESTROYER_SIZE),
+        ImplementStdFormat("Please enter the {} grid locations for the Submarine", G_BATTLESHIPS_SUBMARINE_SIZE),
+        ImplementStdFormat("Please enter the {} grid locations for the Patrol Boat", G_BATTLESHIPS_PATROL_BOAT_SIZE)};
 
     /**
      * @brief PageBuilder
      */
-    // When highlighting what is currently selected in a menu
-    static const std::string G_SELECTOR = ">";
-
-    // Bottom box titles
-    static const std::string G_MENU_BOTTOM_TITLE = "q = quit";
-    static const std::string G_GAME_BOTTOM_TITLE = "q = quit to main menu";
+    // When highlighting what is currently selected in an option menu
+    inline static const std::string G_SELECTOR = ">";
 
     // ANSI colour escape codes
     static constexpr uint32_t G_ANSI_COLOUR_ESCAPE_CODE_SIZE = 7;
     static constexpr char G_ANSI_COLOUR_ESCAPE_CODE_START = '\x1B';
-    static const std::string G_WHITE_ANSI_COLOUR_ESCAPE_CODE = "\x1B[1;37m";
-    static const std::string G_RED_ANSI_COLOUR_ESCAPE_CODE = "\x1B[1;31m";
-    static const std::string G_BLUE_ANSI_COLOUR_ESCAPE_CODE = "\x1B[1;34m";
-    static const std::string G_RESET_ANSI_COLOUR_ESCAPE_CODE = "\x1B[0m";
+    inline static const std::string G_RED_ANSI_COLOUR_ESCAPE_CODE = "\x1B[1;31m";
+    inline static const std::string G_GREEN_ANSI_COLOUR_ESCAPE_CODE = "\x1B[1;32m";
+    inline static const std::string G_YELLOW_ANSI_COLOUR_ESCAPE_CODE = "\x1B[1;33m";
+    inline static const std::string G_BLUE_ANSI_COLOUR_ESCAPE_CODE = "\x1B[1;34m";
+    inline static const std::string G_WHITE_ANSI_COLOUR_ESCAPE_CODE = "\x1B[1;37m";
+    inline static const std::string G_RESET_ANSI_COLOUR_ESCAPE_CODE = "\x1B[0m";
+    inline static const std::vector<std::string> G_ALL_ANSI_COLOUR_ESCAPE_CODES = {
+        G_RED_ANSI_COLOUR_ESCAPE_CODE,
+        G_GREEN_ANSI_COLOUR_ESCAPE_CODE,
+        G_YELLOW_ANSI_COLOUR_ESCAPE_CODE,
+        G_BLUE_ANSI_COLOUR_ESCAPE_CODE,
+        G_WHITE_ANSI_COLOUR_ESCAPE_CODE,
+        G_RESET_ANSI_COLOUR_ESCAPE_CODE,
+    };
+
+    inline static const std::vector<std::string> G_QUIT_MENU_OPTIONS = {
+        "Restart Game",
+        "Reset Game",
+        "Quit to Main Menu",
+        "Quit to Homepage",
+        "Quit Program",
+        "Cancel",
+    };
+
+    static constexpr uint32_t G_RESTART_GAME_INDEX = 0;
+    static constexpr uint32_t G_RESET_GAME_INDEX = 1;
+    static constexpr uint32_t G_QUIT_GAME_INDEX = 2;
+    static constexpr uint32_t G_QUIT_MAIN_MENU_INDEX = 3;
+    static constexpr uint32_t G_QUIT_PROGRAM_INDEX = 4;
+    static constexpr uint32_t G_CANCEL_INDEX = 5;
 
     // Extended ASCII characters for edges and corners of the page
     static constexpr char G_HORIZONTAL_LINE = static_cast<char>(205);
@@ -174,6 +299,8 @@ namespace TerminalGames
     static constexpr uint32_t G_LEFT_ARROW_KEY = 75;
     static constexpr uint32_t G_RIGHT_ARROW_KEY = 77;
     static constexpr uint32_t G_QUIT_KEY = 'q';
+    static constexpr uint32_t G_RESTART_KEY = 'r';
+
     // Cursor width while running on windows.
     static constexpr uint32_t G_CURSOR_WIDTH_PERCENTAGE = 100;
 
@@ -184,7 +311,6 @@ namespace TerminalGames
     static constexpr uint32_t G_ALTERNATIVE_DOWN_ARROW_KEY = 's';
     static constexpr uint32_t G_ALTERNATIVE_LEFT_ARROW_KEY = 'a';
     static constexpr uint32_t G_ALTERNATIVE_RIGHT_ARROW_KEY = 'd';
-    static constexpr uint32_t G_ALTERNATIVE_QUIT_KEY = 'q';
 
     /**
      * @brief Hangman word list for the computer
@@ -1162,5 +1288,6 @@ namespace TerminalGames
         "YOU",
         "YOUNG",
         "YOUR",
-        "YOURSELF"};
+        "YOURSELF",
+    };
 }

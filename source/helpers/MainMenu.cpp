@@ -1,13 +1,14 @@
+#include <cstdint>
 #include <cstdlib>
 #include <iostream>
 #include <memory>
 #include <string>
 #include <vector>
 
-#include "Exceptions.hpp"
 #include "games/Battleships.hpp"
 #include "games/Hangman.hpp"
 #include "games/TicTacToe.hpp"
+#include "helpers/Globals.hpp"
 #include "helpers/MainMenu.hpp"
 #include "helpers/PageBuilder.hpp"
 #include "helpers/Terminal.hpp"
@@ -15,55 +16,78 @@
 namespace TerminalGames
 {
     MainMenu::MainMenu(const std::vector<std::string>& p_commandLineArguments) :
-        m_onlyUseASCII(ParseCommandLineArguments(p_commandLineArguments)) {}
+        m_useAnsiEscapeCodes(ParseCommandLineArguments(p_commandLineArguments))
+    {
+        SetupHomepages();
+    }
 
-    MainMenu::MainMenu(const bool& p_onlyUseAscii) :
-        m_onlyUseASCII(p_onlyUseAscii) {}
+    MainMenu::MainMenu(const bool& p_useAnsiEscapeCodes) :
+        m_useAnsiEscapeCodes(p_useAnsiEscapeCodes)
+    {
+        SetupHomepages();
+    }
 
     MainMenu::~MainMenu()
     {
-        Terminal::SetCursorPosition({0, 0});
-        Terminal::SetCursorVisibility(true);
-        Terminal::Clear();
+        Terminal::ResetTerminal();
     }
 
     void MainMenu::Run()
     {
-        const PageBuilder PAGE_BUILDER(Pages::MAINMENU, m_onlyUseASCII);
-        const std::vector<std::string> MENUS({"Tic Tac Toe", "Hangman", "Battleships"});
-        m_mainMenus = PAGE_BUILDER.GetGameSelectionMainMenuPages(MENUS);
+        Terminal::InitialiseTerminal();
 
-        // The index of games in m_Games should match the index of the string in m_mainMenus which has the game selected. This
-        // is defined by the order of the input array to the previous line.
-        m_games.push_back(std::make_unique<TicTacToe>(m_onlyUseASCII));
-        m_games.push_back(std::make_unique<Hangman>(m_onlyUseASCII));
-        m_games.push_back(std::make_unique<Battleships>(m_onlyUseASCII));
+        uint32_t gameChoice = 0;
+        bool goToHomePage = true;
 
-        Terminal::SetCursorVisibility(false);
-        Terminal::SetCursorPosition({0, 0});
-
-        // Custom exceptions are used to return exit the games and the main menu.
         while (true)
         {
             try
             {
-                m_games[Terminal::GetUserChoiceFromMainMenus(m_mainMenus)]->Play();
+                if (goToHomePage)
+                {
+                    m_useAnsiEscapeCodes = Terminal::GetUserChoiceFromHomepage(m_homepages, m_useAnsiEscapeCodes);
+                    SetupMainMenuPagesAndGames();
+                }
+
+                gameChoice = Terminal::GetUserChoiceFromMainMenus(m_mainMenus);
+
+                m_games[gameChoice]->Play();
             }
 
-            catch (Exceptions::QuitMainMenu& e)
+            catch (Globals::Exceptions::QuitGame& e)
             {
+                goToHomePage = false;
+            }
+
+            catch (Globals::Exceptions::QuitMainMenu& e)
+            {
+                goToHomePage = true;
+            }
+
+            catch (Globals::Exceptions::QuitProgram& e)
+            {
+                Terminal::ResetTerminal();
                 return;
             }
-
-            catch (Exceptions::QuitGame& e)
-            {
-                continue;
-            }
         }
+    }
 
-        Terminal::Clear();
-        Terminal::SetCursorVisibility(true);
-        Terminal::SetCursorPosition({0, 0});
+    void MainMenu::SetupHomepages()
+    {
+        PageBuilder homePageBuilder(Pages::HOMEPAGE, m_useAnsiEscapeCodes);
+        m_homepages = homePageBuilder.GetOptionSelectionHomepages();
+    }
+
+    void MainMenu::SetupMainMenuPagesAndGames()
+    {
+        const PageBuilder MENUS_PAGE_BUILDER(Pages::MAINMENU, m_useAnsiEscapeCodes);
+        m_mainMenus = MENUS_PAGE_BUILDER.GetGameSelectionMainMenuPages({"Tic Tac Toe", "Hangman", "Battleships"});
+
+        // The order of games in m_Games should match the order of games in GetGameSelectionMainMenuPages function call.
+        m_games.clear();
+        m_games.emplace_back(std::make_unique<TicTacToe>(m_useAnsiEscapeCodes));
+        m_games.emplace_back(std::make_unique<Hangman>(m_useAnsiEscapeCodes));
+        m_games.emplace_back(std::make_unique<Battleships>(m_useAnsiEscapeCodes));
     }
 
     bool MainMenu::ParseCommandLineArguments(const std::vector<std::string>& p_commandLineArguments)
@@ -71,7 +95,7 @@ namespace TerminalGames
         for (const std::string& argument : p_commandLineArguments)
         {
             if (argument == "--a" || argument == "--ascii-only")
-                return true;
+                return false;
 
             if (argument == "--h" || argument == "--ascii-only")
             {
@@ -86,6 +110,6 @@ namespace TerminalGames
             }
         }
 
-        return false;
+        return true;
     }
 }

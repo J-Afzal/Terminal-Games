@@ -8,8 +8,8 @@
 #include <unordered_map>
 #include <vector>
 
-#include "Constants.hpp"
 #include "games/Game.hpp"
+#include "helpers/Globals.hpp"
 #include "helpers/PageBuilder.hpp"
 
 namespace TerminalGames
@@ -20,16 +20,16 @@ namespace TerminalGames
         /**
          * @brief Construct a new Battleships object.
          *
-         * @param p_onlyUseAscii Whether to use only ASCII characters (true) or to also use ANSI escapes codes (false).
+         * @param p_useAnsiEscapeCodes Whether to use use ANSI escapes codes (true) or only ASCII characters (false).
          */
-        explicit Battleships(const bool& p_onlyUseAscii);
+        explicit Battleships(const bool& p_useAnsiEscapeCodes);
 
     private:
         PageBuilder m_pageBuilder;
         GameInfo m_gameInfo;
         std::default_random_engine m_randomNumberGenerator;
-        std::array<std::array<std::string, G_BATTLESHIPS_BOARD_WIDTH>, G_BATTLESHIPS_BOARD_HEIGHT> m_boardOne;
-        std::array<std::array<std::string, G_BATTLESHIPS_BOARD_WIDTH>, G_BATTLESHIPS_BOARD_HEIGHT> m_boardTwo;
+        std::array<std::array<std::string, Globals::G_BATTLESHIPS_BOARD_WIDTH>, Globals::G_BATTLESHIPS_BOARD_HEIGHT> m_boardOne;
+        std::array<std::array<std::string, Globals::G_BATTLESHIPS_BOARD_WIDTH>, Globals::G_BATTLESHIPS_BOARD_HEIGHT> m_boardTwo;
         std::vector<std::tuple<uint32_t, uint32_t>> m_commandsRemainingOne;
         std::vector<std::tuple<uint32_t, uint32_t>> m_commandsRemainingTwo;
         std::unordered_map<std::string, uint32_t> m_shipsRemainingOne;
@@ -40,7 +40,9 @@ namespace TerminalGames
         std::string m_playerCount;
         uint32_t m_computerSpeed;
         uint32_t m_turnCount;
+        bool m_hasSavedGameSettings;
         bool m_isGameOver;
+        bool m_saveGameSettings;
 
         /**
          * @brief See base class function for details.
@@ -50,12 +52,12 @@ namespace TerminalGames
         /**
          * @brief See base class function for details.
          */
-        void UpdateGameInfo() override;
+        void GetUserOptions() override;
 
         /**
          * @brief See base class function for details.
          */
-        void GetUserOptions() override;
+        void UpdateGameInfo() override;
 
         /**
          * @brief See base class function for details.
@@ -86,6 +88,16 @@ namespace TerminalGames
          * @brief See base class function for details.
          */
         void GameOver() override;
+
+        /**
+         * @brief See base class function for details.
+         */
+        void RestartGame() override;
+
+        /**
+         * @brief See base class function for details.
+         */
+        void ResetGame() override;
 
         /**
          * @brief Prompts the user to select how many players will be playing the game.
@@ -122,7 +134,7 @@ namespace TerminalGames
          *
          * @param board The board containing the AI's ship positions.
          */
-        void GetComputerShipPositions(std::array<std::array<std::string, G_BATTLESHIPS_BOARD_WIDTH>, G_BATTLESHIPS_BOARD_HEIGHT>& p_board);
+        void GetComputerShipPositions(std::array<std::array<std::string, Globals::G_BATTLESHIPS_BOARD_WIDTH>, Globals::G_BATTLESHIPS_BOARD_HEIGHT>& p_board);
 
         /**
          * @brief Checks whether at least a single ship is present on a game board.
@@ -131,7 +143,7 @@ namespace TerminalGames
          * @return true If at least a single ship is present on the board.
          * @return false If no ships are present on the board
          */
-        static bool IsShipPresent(std::array<std::array<std::string, G_BATTLESHIPS_BOARD_WIDTH>, G_BATTLESHIPS_BOARD_HEIGHT>& p_board);
+        static bool IsShipPresent(std::array<std::array<std::string, Globals::G_BATTLESHIPS_BOARD_WIDTH>, Globals::G_BATTLESHIPS_BOARD_HEIGHT>& p_board);
 
         /**
          * @brief Checks whether the command is valid.
@@ -154,7 +166,7 @@ namespace TerminalGames
          * @param p_command The board row and column that should be attacked.
          */
         void ExecuteGeneralCommand(
-            std::array<std::array<std::string, G_BATTLESHIPS_BOARD_WIDTH>, G_BATTLESHIPS_BOARD_HEIGHT>& p_opponentBoard,
+            std::array<std::array<std::string, Globals::G_BATTLESHIPS_BOARD_WIDTH>, Globals::G_BATTLESHIPS_BOARD_HEIGHT>& p_opponentBoard,
             std::unordered_map<std::string, uint32_t>& p_opponentShipsRemaining,
             std::vector<std::tuple<uint32_t, uint32_t>>& p_commandsRemaining,
             const std::tuple<uint32_t, uint32_t>& p_command);

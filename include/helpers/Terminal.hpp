@@ -10,13 +10,27 @@
 namespace TerminalGames
 {
     /**
-     * @brief Handles all terminal related tasks such as getting user input, outputting to the terminal, clearing the terminal,
-     * etc.
+     * @brief "Static" class that handles all terminal related tasks such as getting user input, outputting to the terminal,
+     * clearing the terminal, etc.
      */
     class Terminal
     {
     public:
+        /**
+         * @brief Disable constructing a Terminal object.
+         */
         Terminal() = delete;
+
+        /**
+         * @brief Get the user choice from a list of homepage strings that are printed to the terminal.
+         *
+         * @param p_menus An array of strings used to print to the terminal. The string chosen depends on user input. The only
+         * difference between each string is the selected menu option.
+         * @param p_useAnsiEscapeCodes Whether to use use ANSI escapes codes (true) or only ASCII characters (false).
+         * @return true If to use ANSI escape codes
+         * @return false If to not use ANSI escape code (only use ASCII characters)
+         */
+        static bool GetUserChoiceFromHomepage(const std::vector<std::string>& p_menus, const bool& p_useAnsiEscapeCodes);
 
         /**
          * @brief Get the user choice from a list of main menus strings that are printed to the terminal.
@@ -32,9 +46,10 @@ namespace TerminalGames
          *
          * @param p_menus An array of strings used to print to the terminal. The string chosen depends on user input. The only
          * difference between each string is the selected menu option.
+         * @param p_quitOptionMenus The quit option selection pages returned from GetQuitOptionSelectionPage().
          * @return uint32_t The index of the menu string that the user selected.
          */
-        static uint32_t GetUserChoiceFromGameMenus(const std::vector<std::string>& p_menus);
+        static uint32_t GetUserChoiceFromGameMenus(const std::vector<std::string>& p_menus, const std::vector<std::string>& p_quitOptionMenus);
 
         /**
          * @brief Gets a user command based on the currently displayed game grid. Most of the parameters are to enable the
@@ -51,6 +66,23 @@ namespace TerminalGames
             const PageBuilder& p_pageBuilder,
             const GameInfo& p_gameInfo,
             const bool& p_displayGetUserCommandPage);
+
+        /**
+         * @brief Get the user choice whether to restart the game, reset the game or a choice from the
+         * GetUserChoiceFromQuitMenus() function.
+         *
+         * @param p_gameOverPage The game over page to display returned from GetGameOverPage().
+         * @param p_quitOptionMenus The quit option selection pages returned from GetQuitOptionSelectionPage().
+         */
+        static void GetUserChoiceFromGameOverMenu(const std::string& p_gameOverPage, const std::vector<std::string>& p_quitOptionMenus);
+
+        /**
+         * @brief Gets the user choice from the quit menu. All user choices result in a different custom exception being thrown
+         * except for the "Cancel" option which results in the function returning normally.
+         *
+         * @param p_menus The quit option selection pages returned from GetQuitOptionSelectionPage().
+         */
+        static void GetUserChoiceFromQuitMenus(const std::vector<std::string>& p_menus);
 
         /**
          * @brief Clears and then prints to the terminal.
@@ -85,5 +117,15 @@ namespace TerminalGames
          * @param p_coords The horizontal and vertical position to set the cursor to.
          */
         static void SetCursorPosition(const std::tuple<int16_t, int16_t>& p_coords);
+
+        /**
+         * @brief Initialises terminal for the program.
+         */
+        static void InitialiseTerminal();
+
+        /**
+         * @brief Reset terminal to its original state before the program was run.
+         */
+        static void ResetTerminal();
     };
 }

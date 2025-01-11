@@ -8,20 +8,21 @@
 #include <unordered_map>
 #include <vector>
 
-#include "Constants.hpp"
-#include "Exceptions.hpp"
 #include "games/Battleships.hpp"
+#include "helpers/Globals.hpp"
 #include "helpers/PageBuilder.hpp"
 #include "helpers/Terminal.hpp"
 
 namespace TerminalGames
 {
-    Battleships::Battleships(const bool& p_onlyUseAscii) :
+    Battleships::Battleships(const bool& p_useAnsiEscapeCodes) :
         m_computerSpeed(0),
         m_turnCount(0),
-        m_isGameOver(false)
+        m_hasSavedGameSettings(false),
+        m_isGameOver(false),
+        m_saveGameSettings(false)
     {
-        m_pageBuilder.SetProperties(Pages::BATTLESHIPS, p_onlyUseAscii);
+        m_pageBuilder.SetProperties(Pages::BATTLESHIPS, p_useAnsiEscapeCodes);
         m_randomNumberGenerator.seed(std::chrono::system_clock::now().time_since_epoch().count());
     }
 
@@ -29,21 +30,19 @@ namespace TerminalGames
     {
         m_randomNumberGenerator() % 2 == 0 ? m_currentPlayer = "Player One" : m_currentPlayer = "Player Two";
         m_shipsRemainingOne = m_shipsRemainingTwo = {
-            {G_BATTLESHIPS_CARRIER_NAME,     G_BATTLESHIPS_CARRIER_SIZE    },
-            {G_BATTLESHIPS_BATTLESHIP_NAME,  G_BATTLESHIPS_BATTLESHIP_SIZE },
-            {G_BATTLESHIPS_DESTROYER_NAME,   G_BATTLESHIPS_DESTROYER_SIZE  },
-            {G_BATTLESHIPS_SUBMARINE_NAME,   G_BATTLESHIPS_SUBMARINE_SIZE  },
-            {G_BATTLESHIPS_PATROL_BOAT_NAME, G_BATTLESHIPS_PATROL_BOAT_SIZE}
+            {Globals::G_BATTLESHIPS_CARRIER_NAME,     Globals::G_BATTLESHIPS_CARRIER_SIZE    },
+            {Globals::G_BATTLESHIPS_BATTLESHIP_NAME,  Globals::G_BATTLESHIPS_BATTLESHIP_SIZE },
+            {Globals::G_BATTLESHIPS_DESTROYER_NAME,   Globals::G_BATTLESHIPS_DESTROYER_SIZE  },
+            {Globals::G_BATTLESHIPS_SUBMARINE_NAME,   Globals::G_BATTLESHIPS_SUBMARINE_SIZE  },
+            {Globals::G_BATTLESHIPS_PATROL_BOAT_NAME, Globals::G_BATTLESHIPS_PATROL_BOAT_SIZE}
         };
         m_previousCommand = {0, 0};
-        m_computerSpeedName = "N/A    ";
-        m_playerCount = "N/A";
         m_turnCount = 0;
         m_isGameOver = false;
 
-        for (uint32_t i = 0; i < G_BATTLESHIPS_BOARD_HEIGHT; i++)
+        for (uint32_t i = 0; i < Globals::G_BATTLESHIPS_BOARD_HEIGHT; i++)
         {
-            for (uint32_t j = 0; j < G_BATTLESHIPS_BOARD_WIDTH; j++)
+            for (uint32_t j = 0; j < Globals::G_BATTLESHIPS_BOARD_WIDTH; j++)
             {
                 m_boardOne.at(i).at(j) = "   ";
                 m_boardTwo.at(i).at(j) = "   ";
@@ -53,25 +52,17 @@ namespace TerminalGames
         }
     }
 
-    void Battleships::UpdateGameInfo()
-    {
-        m_gameInfo.m_battleshipsGameInfo = {
-            .m_boardOne = m_boardOne,
-            .m_boardTwo = m_boardTwo,
-            .m_shipsRemainingOne = m_shipsRemainingOne,
-            .m_shipsRemainingTwo = m_shipsRemainingTwo,
-            .m_computerSpeedName = m_computerSpeedName,
-            .m_currentPlayer = m_currentPlayer,
-            .m_playerCount = m_playerCount,
-            .m_turnCount = m_turnCount,
-            .m_isGameOver = m_isGameOver};
-    }
-
     void Battleships::GetUserOptions()
     {
-        GetPlayerCount();
+        if (!(m_saveGameSettings && m_hasSavedGameSettings))
+        {
+            m_computerSpeedName = "N/A    ";
+            m_playerCount = "N/A";
 
-        GetComputerSpeed();
+            GetPlayerCount();
+
+            GetComputerSpeed();
+        }
 
         if (m_playerCount == "1  ")
         {
@@ -86,6 +77,20 @@ namespace TerminalGames
         GetComputerShipPositions(m_boardTwo);
 
         UpdateGameInfo();
+    }
+
+    void Battleships::UpdateGameInfo()
+    {
+        m_gameInfo.m_battleshipsGameInfo = {
+            .m_boardOne = m_boardOne,
+            .m_boardTwo = m_boardTwo,
+            .m_shipsRemainingOne = m_shipsRemainingOne,
+            .m_shipsRemainingTwo = m_shipsRemainingTwo,
+            .m_computerSpeedName = m_computerSpeedName,
+            .m_currentPlayer = m_currentPlayer,
+            .m_playerCount = m_playerCount,
+            .m_turnCount = m_turnCount,
+            .m_isGameOver = m_isGameOver};
     }
 
     bool Battleships::IsGameOver()
@@ -146,12 +151,18 @@ namespace TerminalGames
 
     void Battleships::GameOver()
     {
-        Terminal::PrintOutput(m_pageBuilder.GetGameOverPage(m_gameInfo));
+        Terminal::GetUserChoiceFromGameOverMenu(m_pageBuilder.GetGameOverPage(m_gameInfo), m_pageBuilder.GetQuitOptionSelectionPage());
+    }
 
-        if (Terminal::GetNextKeyPress() == 'q')
-        {
-            throw Exceptions::QuitGame();
-        }
+    void Battleships::RestartGame()
+    {
+        m_saveGameSettings = true;
+    }
+
+    void Battleships::ResetGame()
+    {
+        m_saveGameSettings = false;
+        m_hasSavedGameSettings = false;
     }
 
     void Battleships::GetPlayerCount()
@@ -159,7 +170,8 @@ namespace TerminalGames
         UpdateGameInfo();
 
         const std::vector<std::string> MENUS = m_pageBuilder.GetPlayerCountOptionSelectionGamePages(m_gameInfo);
-        m_playerCount = std::to_string(Terminal::GetUserChoiceFromGameMenus(MENUS)) + "  ";
+        const std::vector<std::string> QUIT_MENUS = m_pageBuilder.GetQuitOptionSelectionPage();
+        m_playerCount = std::to_string(Terminal::GetUserChoiceFromGameMenus(MENUS, QUIT_MENUS)) + "  ";
     }
 
     void Battleships::GetComputerSpeed()
@@ -167,7 +179,8 @@ namespace TerminalGames
         UpdateGameInfo();
 
         const std::vector<std::string> MENUS = m_pageBuilder.GetComputerSpeedOptionSelectionGamePages(m_gameInfo);
-        m_computerSpeed = Terminal::GetUserChoiceFromGameMenus(MENUS);
+        const std::vector<std::string> QUIT_MENUS = m_pageBuilder.GetQuitOptionSelectionPage();
+        m_computerSpeed = Terminal::GetUserChoiceFromGameMenus(MENUS, QUIT_MENUS);
 
         if (m_computerSpeed == 0)
         {
@@ -198,12 +211,12 @@ namespace TerminalGames
         std::tuple<bool, bool> shipIsHorizontalOrVertical = {false, false};
 
         // For each ship
-        for (uint32_t currentShip = 0; currentShip < G_BATTLESHIPS_SHIP_COUNT; currentShip++)
+        for (uint32_t currentShip = 0; currentShip < Globals::G_BATTLESHIPS_SHIP_COUNT; currentShip++)
         {
             std::vector<std::tuple<uint32_t, uint32_t>> currentShipPositions;
 
             // For each ship grid location (intentionally a signed int)
-            for (int32_t currentShipSize = 0; currentShipSize < G_BATTLESHIPS_SHIP_SIZES.at(currentShip); currentShipSize++)
+            for (int32_t currentShipSize = 0; currentShipSize < Globals::G_BATTLESHIPS_SHIP_SIZES.at(currentShip); currentShipSize++)
             {
                 // Set cursor position to the last known valid ship grid location selection
                 if (!currentShipPositions.empty())
@@ -223,7 +236,7 @@ namespace TerminalGames
                 {
                     try
                     {
-                        Terminal::PrintOutput(m_pageBuilder.GetPageWithMessage(m_gameInfo, G_BATTLESHIPS_SHIP_INSTRUCTIONS.at(currentShip)));
+                        Terminal::PrintOutput(m_pageBuilder.GetPageWithMessage(m_gameInfo, Globals::G_BATTLESHIPS_SHIP_INSTRUCTIONS.at(currentShip)));
 
                         const std::tuple<uint32_t, uint32_t> SELECTED_SHIP_GRID_LOCATION = Terminal::GetUserCommandFromGameGrid({startingRow, startingColumn}, m_pageBuilder, m_gameInfo, false);
 
@@ -232,7 +245,7 @@ namespace TerminalGames
                             currentShipPositions.push_back(SELECTED_SHIP_GRID_LOCATION);
 
                             // Place ship on selected grid location
-                            m_boardOne.at(std::get<0>(SELECTED_SHIP_GRID_LOCATION)).at(std::get<1>(SELECTED_SHIP_GRID_LOCATION)) = G_BATTLESHIPS_SHIP_NAMES.at(currentShip);
+                            m_boardOne.at(std::get<0>(SELECTED_SHIP_GRID_LOCATION)).at(std::get<1>(SELECTED_SHIP_GRID_LOCATION)) = Globals::G_BATTLESHIPS_SHIP_NAMES.at(currentShip);
 
                             UpdateGameInfo();
 
@@ -240,7 +253,7 @@ namespace TerminalGames
                         }
                     }
 
-                    catch (Exceptions::BackspaceKeyPressed& e)
+                    catch (Globals::Exceptions::BackspaceKeyPressed& e)
                     {
                         if (currentShipSize != 0)
                         {
@@ -248,7 +261,7 @@ namespace TerminalGames
                             m_boardOne.at(std::get<0>(currentShipPositions.back())).at(std::get<1>(currentShipPositions.back())) = "   ";
                             UpdateGameInfo();
                             currentShipPositions.pop_back();
-                            Terminal::PrintOutput(m_pageBuilder.GetPageWithMessage(m_gameInfo, G_BATTLESHIPS_SHIP_INSTRUCTIONS.at(currentShip)));
+                            Terminal::PrintOutput(m_pageBuilder.GetPageWithMessage(m_gameInfo, Globals::G_BATTLESHIPS_SHIP_INSTRUCTIONS.at(currentShip)));
 
                             // Go back one in for loop (and another -1 to account for increment)
                             currentShipSize -= 2;
@@ -326,10 +339,10 @@ namespace TerminalGames
         return true;
     }
 
-    void Battleships::GetComputerShipPositions(std::array<std::array<std::string, G_BATTLESHIPS_BOARD_WIDTH>, G_BATTLESHIPS_BOARD_HEIGHT>& p_board) // NOLINT(readability-function-cognitive-complexity)
+    void Battleships::GetComputerShipPositions(std::array<std::array<std::string, Globals::G_BATTLESHIPS_BOARD_WIDTH>, Globals::G_BATTLESHIPS_BOARD_HEIGHT>& p_board) // NOLINT(readability-function-cognitive-complexity)
     {
         // For each ship
-        for (uint32_t currentShip = 0; currentShip < G_BATTLESHIPS_SHIP_COUNT; currentShip++)
+        for (uint32_t currentShip = 0; currentShip < Globals::G_BATTLESHIPS_SHIP_COUNT; currentShip++)
         {
             while (true)
             {
@@ -344,12 +357,12 @@ namespace TerminalGames
                     // other column values will increment, then a max starting column value exists which is linked with the size
                     // of the ship. Therefore get a random value from 0 to the max starting column value.
 
-                    startingRow = m_randomNumberGenerator() % G_BATTLESHIPS_BOARD_HEIGHT; // Any row value allowed as ship is horizontal
+                    startingRow = m_randomNumberGenerator() % Globals::G_BATTLESHIPS_BOARD_HEIGHT; // Any row value allowed as ship is horizontal
 
-                    startingColumn = m_randomNumberGenerator() % (G_BATTLESHIPS_BOARD_WIDTH - G_BATTLESHIPS_SHIP_SIZES.at(currentShip));
+                    startingColumn = m_randomNumberGenerator() % (Globals::G_BATTLESHIPS_BOARD_WIDTH - Globals::G_BATTLESHIPS_SHIP_SIZES.at(currentShip));
 
                     // Column values increment by one
-                    for (uint32_t i = 0; i < G_BATTLESHIPS_SHIP_SIZES.at(currentShip); i++)
+                    for (uint32_t i = 0; i < Globals::G_BATTLESHIPS_SHIP_SIZES.at(currentShip); i++)
                     {
                         shipPositions.emplace_back(startingRow, startingColumn + i);
                     }
@@ -361,12 +374,12 @@ namespace TerminalGames
                     // row values will increment, then a max starting row value exists which is linked with the size of the
                     // ship. Therefore get a random value from 0 to the max starting row value.
 
-                    startingRow = m_randomNumberGenerator() % (G_BATTLESHIPS_BOARD_HEIGHT - G_BATTLESHIPS_SHIP_SIZES.at(currentShip));
+                    startingRow = m_randomNumberGenerator() % (Globals::G_BATTLESHIPS_BOARD_HEIGHT - Globals::G_BATTLESHIPS_SHIP_SIZES.at(currentShip));
 
-                    startingColumn = m_randomNumberGenerator() % G_BATTLESHIPS_BOARD_WIDTH; // Any column value allowed as ship is vertical
+                    startingColumn = m_randomNumberGenerator() % Globals::G_BATTLESHIPS_BOARD_WIDTH; // Any column value allowed as ship is vertical
 
                     // Row values increment by one
-                    for (uint32_t j = 0; j < G_BATTLESHIPS_SHIP_SIZES.at(currentShip); j++)
+                    for (uint32_t j = 0; j < Globals::G_BATTLESHIPS_SHIP_SIZES.at(currentShip); j++)
                     {
                         shipPositions.emplace_back(startingRow + j, startingColumn);
                     }
@@ -376,12 +389,12 @@ namespace TerminalGames
                 bool locationIsAlreadyOccupied = false;
                 for (std::tuple<uint32_t, uint32_t> currentPosition : shipPositions)
                 {
-                    const auto CURRENT_POSITION_FIND_LOCATION = ImplementStdRangesFind(
-                        G_BATTLESHIPS_SHIP_NAMES.begin(),
-                        G_BATTLESHIPS_SHIP_NAMES.end(),
+                    const auto CURRENT_POSITION_FIND_LOCATION = Globals::ImplementStdRangesFind(
+                        Globals::G_BATTLESHIPS_SHIP_NAMES.begin(),
+                        Globals::G_BATTLESHIPS_SHIP_NAMES.end(),
                         p_board.at(std::get<0>(currentPosition)).at(std::get<1>(currentPosition)));
 
-                    if (CURRENT_POSITION_FIND_LOCATION != G_BATTLESHIPS_SHIP_NAMES.end())
+                    if (CURRENT_POSITION_FIND_LOCATION != Globals::G_BATTLESHIPS_SHIP_NAMES.end())
                     {
                         locationIsAlreadyOccupied = true;
                         break;
@@ -393,7 +406,7 @@ namespace TerminalGames
                 {
                     for (std::tuple<uint32_t, uint32_t> currentPosition : shipPositions)
                     {
-                        p_board.at(std::get<0>(currentPosition)).at(std::get<1>(currentPosition)) = G_BATTLESHIPS_SHIP_NAMES.at(currentShip);
+                        p_board.at(std::get<0>(currentPosition)).at(std::get<1>(currentPosition)) = Globals::G_BATTLESHIPS_SHIP_NAMES.at(currentShip);
                     }
 
                     break; // Go to next ship to place
@@ -402,15 +415,15 @@ namespace TerminalGames
         }
     }
 
-    bool Battleships::IsShipPresent(std::array<std::array<std::string, G_BATTLESHIPS_BOARD_WIDTH>, G_BATTLESHIPS_BOARD_HEIGHT>& p_board)
+    bool Battleships::IsShipPresent(std::array<std::array<std::string, Globals::G_BATTLESHIPS_BOARD_WIDTH>, Globals::G_BATTLESHIPS_BOARD_HEIGHT>& p_board)
     {
-        for (const std::array<std::string, G_BATTLESHIPS_BOARD_WIDTH>& currentRow : p_board)
+        for (const std::array<std::string, Globals::G_BATTLESHIPS_BOARD_WIDTH>& currentRow : p_board)
         {
             for (const std::string& currentValue : currentRow)
             {
-                const auto CURRENT_VALUE_FIND_LOCATION = ImplementStdRangesFind(G_BATTLESHIPS_SHIP_NAMES.begin(), G_BATTLESHIPS_SHIP_NAMES.end(), currentValue);
+                const auto CURRENT_VALUE_FIND_LOCATION = Globals::ImplementStdRangesFind(Globals::G_BATTLESHIPS_SHIP_NAMES.begin(), Globals::G_BATTLESHIPS_SHIP_NAMES.end(), currentValue);
 
-                if (CURRENT_VALUE_FIND_LOCATION != G_BATTLESHIPS_SHIP_NAMES.end())
+                if (CURRENT_VALUE_FIND_LOCATION != Globals::G_BATTLESHIPS_SHIP_NAMES.end())
                 {
                     return true;
                 }
@@ -422,32 +435,32 @@ namespace TerminalGames
 
     bool Battleships::ValidateCommand(const std::vector<std::tuple<uint32_t, uint32_t>>& p_commandsRemaining, const std::tuple<uint32_t, uint32_t>& p_command)
     {
-        const auto COMMAND_FIND_LOCATION = ImplementStdRangesFind(p_commandsRemaining.begin(), p_commandsRemaining.end(), p_command);
+        const auto COMMAND_FIND_LOCATION = Globals::ImplementStdRangesFind(p_commandsRemaining.begin(), p_commandsRemaining.end(), p_command);
 
         return COMMAND_FIND_LOCATION != p_commandsRemaining.end();
     }
 
     void Battleships::ExecuteGeneralCommand(
-        std::array<std::array<std::string, G_BATTLESHIPS_BOARD_WIDTH>, G_BATTLESHIPS_BOARD_HEIGHT>& p_opponentBoard,
+        std::array<std::array<std::string, Globals::G_BATTLESHIPS_BOARD_WIDTH>, Globals::G_BATTLESHIPS_BOARD_HEIGHT>& p_opponentBoard,
         std::unordered_map<std::string, uint32_t>& p_opponentShipsRemaining,
         std::vector<std::tuple<uint32_t, uint32_t>>& p_commandsRemaining,
         const std::tuple<uint32_t, uint32_t>& p_command)
     {
-        const auto COMMAND_FIND_LOCATION = ImplementStdRangesFind(p_commandsRemaining.begin(), p_commandsRemaining.end(), p_command);
+        const auto COMMAND_FIND_LOCATION = Globals::ImplementStdRangesFind(p_commandsRemaining.begin(), p_commandsRemaining.end(), p_command);
         const uint32_t ROW = std::get<0>(p_command);
         const uint32_t COLUMN = std::get<1>(p_command);
 
-        const auto CURRENT_VALUE_FIND_LOCATION = ImplementStdRangesFind(G_BATTLESHIPS_SHIP_NAMES.begin(), G_BATTLESHIPS_SHIP_NAMES.end(), p_opponentBoard.at(ROW).at(COLUMN));
+        const auto CURRENT_VALUE_FIND_LOCATION = Globals::ImplementStdRangesFind(Globals::G_BATTLESHIPS_SHIP_NAMES.begin(), Globals::G_BATTLESHIPS_SHIP_NAMES.end(), p_opponentBoard.at(ROW).at(COLUMN));
 
-        if (CURRENT_VALUE_FIND_LOCATION != G_BATTLESHIPS_SHIP_NAMES.end())
+        if (CURRENT_VALUE_FIND_LOCATION != Globals::G_BATTLESHIPS_SHIP_NAMES.end())
         {
             p_opponentShipsRemaining.at(p_opponentBoard.at(ROW).at(COLUMN))--;
-            p_opponentBoard.at(ROW).at(COLUMN) = G_BATTLESHIPS_SUCCESSFUL_ATTACK + p_opponentBoard.at(ROW).at(COLUMN).at(1) + G_BATTLESHIPS_SUCCESSFUL_ATTACK;
+            p_opponentBoard.at(ROW).at(COLUMN) = Globals::G_BATTLESHIPS_SUCCESSFUL_ATTACK + p_opponentBoard.at(ROW).at(COLUMN).at(1) + Globals::G_BATTLESHIPS_SUCCESSFUL_ATTACK;
         }
 
         else
         {
-            p_opponentBoard.at(ROW).at(COLUMN) = " " + G_BATTLESHIPS_MISSED_ATTACK + " ";
+            p_opponentBoard.at(ROW).at(COLUMN) = " " + Globals::G_BATTLESHIPS_MISSED_ATTACK + " ";
         }
 
         p_commandsRemaining.erase(COMMAND_FIND_LOCATION);

@@ -5,20 +5,21 @@
 #include <tuple>
 #include <vector>
 
-#include "Constants.hpp"
-#include "Exceptions.hpp"
 #include "games/TicTacToe.hpp"
+#include "helpers/Globals.hpp"
 #include "helpers/PageBuilder.hpp"
 #include "helpers/Terminal.hpp"
 
 namespace TerminalGames
 {
-    TicTacToe::TicTacToe(const bool& p_onlyUseAscii) :
+    TicTacToe::TicTacToe(const bool& p_useAnsiEscapeCodes) :
         m_computerSpeed(0),
         m_turnCount(0),
-        m_hasWinner(false)
+        m_hasSavedGameSettings(false),
+        m_hasWinner(false),
+        m_saveGameSettings(false)
     {
-        m_pageBuilder.SetProperties(Pages::TICTACTOE, p_onlyUseAscii);
+        m_pageBuilder.SetProperties(Pages::TICTACTOE, p_useAnsiEscapeCodes);
         m_randomNumberGenerator.seed(std::chrono::system_clock::now().time_since_epoch().count());
     }
 
@@ -27,35 +28,30 @@ namespace TerminalGames
         m_randomNumberGenerator() % 2 == 0 ? m_currentPlayer = "Player X" : m_currentPlayer = "Player O";
         m_commandsRemaining.clear();
         m_previousCommand = {0, 0};
-        m_computerSpeedName = "N/A";
-        m_playerCount = "N/A";
-        m_userPlayerChoice = " ";
         m_turnCount = 0;
         m_hasWinner = false;
 
-        for (uint32_t i = 0; i < G_TICTACTOE_BOARD_HEIGHT; i++)
+        for (uint32_t i = 0; i < Globals::G_TICTACTOE_BOARD_HEIGHT; i++)
         {
-            for (uint32_t j = 0; j < G_TICTACTOE_BOARD_WIDTH; j++)
+            for (uint32_t j = 0; j < Globals::G_TICTACTOE_BOARD_WIDTH; j++)
             {
                 m_gameGrid.at(i).at(j) = "   ";
                 m_commandsRemaining.emplace_back(i, j);
             }
         }
-    }
 
-    void TicTacToe::UpdateGameInfo()
-    {
-        m_gameInfo.m_ticTacToeGameInfo = {
-            .m_gameGrid = m_gameGrid,
-            .m_computerSpeedName = m_computerSpeedName,
-            .m_currentPlayer = m_currentPlayer,
-            .m_playerCount = m_playerCount,
-            .m_turnCount = m_turnCount,
-            .m_hasWinner = m_hasWinner};
+        UpdateGameInfo();
     }
 
     void TicTacToe::GetUserOptions()
     {
+        if (m_saveGameSettings && m_hasSavedGameSettings)
+            return;
+
+        m_computerSpeedName = "N/A";
+        m_playerCount = "N/A";
+        m_userPlayerChoice = " ";
+
         GetPlayerCount();
 
         // If only one human user, then ask them which player they want to be (X or O)
@@ -71,6 +67,19 @@ namespace TerminalGames
         }
 
         UpdateGameInfo();
+
+        m_hasSavedGameSettings = true;
+    }
+
+    void TicTacToe::UpdateGameInfo()
+    {
+        m_gameInfo.m_ticTacToeGameInfo = {
+            .m_gameGrid = m_gameGrid,
+            .m_computerSpeedName = m_computerSpeedName,
+            .m_currentPlayer = m_currentPlayer,
+            .m_playerCount = m_playerCount,
+            .m_turnCount = m_turnCount,
+            .m_hasWinner = m_hasWinner};
     }
 
     bool TicTacToe::IsGameOver()
@@ -93,7 +102,7 @@ namespace TerminalGames
             return m_hasWinner;
         }
 
-        return m_turnCount == G_TICTACTOE_MAXIMUM_ERROR_COUNT;
+        return m_turnCount == Globals::G_TICTACTOE_MAXIMUM_ERROR_COUNT;
     }
 
     void TicTacToe::ToggleCurrentPlayer()
@@ -144,12 +153,18 @@ namespace TerminalGames
 
     void TicTacToe::GameOver()
     {
-        Terminal::PrintOutput(m_pageBuilder.GetGameOverPage(m_gameInfo));
+        Terminal::GetUserChoiceFromGameOverMenu(m_pageBuilder.GetGameOverPage(m_gameInfo), m_pageBuilder.GetQuitOptionSelectionPage());
+    }
 
-        if (Terminal::GetNextKeyPress() == 'q')
-        {
-            throw Exceptions::QuitGame();
-        }
+    void TicTacToe::RestartGame()
+    {
+        m_saveGameSettings = true;
+    }
+
+    void TicTacToe::ResetGame()
+    {
+        m_saveGameSettings = false;
+        m_hasSavedGameSettings = false;
     }
 
     void TicTacToe::GetPlayerCount()
@@ -157,7 +172,8 @@ namespace TerminalGames
         UpdateGameInfo();
 
         const std::vector<std::string> MENUS = m_pageBuilder.GetPlayerCountOptionSelectionGamePages(m_gameInfo);
-        m_playerCount = std::to_string(Terminal::GetUserChoiceFromGameMenus(MENUS)) + "  ";
+        const std::vector<std::string> QUIT_MENUS = m_pageBuilder.GetQuitOptionSelectionPage();
+        m_playerCount = std::to_string(Terminal::GetUserChoiceFromGameMenus(MENUS, QUIT_MENUS)) + "  ";
     }
 
     void TicTacToe::GetUserPlayerChoice()
@@ -165,7 +181,8 @@ namespace TerminalGames
         UpdateGameInfo();
 
         const std::vector<std::string> MENUS = m_pageBuilder.GetUserPlayerChoiceOptionSelectionGamePages(m_gameInfo);
-        Terminal::GetUserChoiceFromGameMenus(MENUS) == 0 ? m_userPlayerChoice = "Player X" : m_userPlayerChoice = "Player O";
+        const std::vector<std::string> QUIT_MENUS = m_pageBuilder.GetQuitOptionSelectionPage();
+        Terminal::GetUserChoiceFromGameMenus(MENUS, QUIT_MENUS) == 0 ? m_userPlayerChoice = "Player X" : m_userPlayerChoice = "Player O";
     }
 
     void TicTacToe::GetComputerSpeed()
@@ -173,7 +190,8 @@ namespace TerminalGames
         UpdateGameInfo();
 
         const std::vector<std::string> MENUS = m_pageBuilder.GetComputerSpeedOptionSelectionGamePages(m_gameInfo);
-        m_computerSpeed = Terminal::GetUserChoiceFromGameMenus(MENUS);
+        const std::vector<std::string> QUIT_MENUS = m_pageBuilder.GetQuitOptionSelectionPage();
+        m_computerSpeed = Terminal::GetUserChoiceFromGameMenus(MENUS, QUIT_MENUS);
 
         if (m_computerSpeed == 0)
         {
@@ -193,14 +211,14 @@ namespace TerminalGames
 
     bool TicTacToe::ValidateCommand(const std::tuple<uint32_t, uint32_t>& p_command)
     {
-        const auto COMMAND_FIND_LOCATION = ImplementStdRangesFind(m_commandsRemaining.begin(), m_commandsRemaining.end(), p_command);
+        const auto COMMAND_FIND_LOCATION = Globals::ImplementStdRangesFind(m_commandsRemaining.begin(), m_commandsRemaining.end(), p_command);
 
         return COMMAND_FIND_LOCATION != m_commandsRemaining.end();
     }
 
     void TicTacToe::ExecuteGeneralCommand(const std::tuple<uint32_t, uint32_t>& p_command)
     {
-        const auto COMMAND_FIND_LOCATION = ImplementStdRangesFind(m_commandsRemaining.begin(), m_commandsRemaining.end(), p_command);
+        const auto COMMAND_FIND_LOCATION = Globals::ImplementStdRangesFind(m_commandsRemaining.begin(), m_commandsRemaining.end(), p_command);
 
         m_gameGrid.at(std::get<0>(p_command)).at(std::get<1>(p_command)) = std::string(" ") + m_currentPlayer.back() + std::string(" ");
         m_commandsRemaining.erase(COMMAND_FIND_LOCATION);

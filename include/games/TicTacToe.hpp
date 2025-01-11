@@ -7,8 +7,8 @@
 #include <tuple>
 #include <vector>
 
-#include "Constants.hpp"
 #include "games/Game.hpp"
+#include "helpers/Globals.hpp"
 #include "helpers/PageBuilder.hpp"
 
 namespace TerminalGames
@@ -19,15 +19,15 @@ namespace TerminalGames
         /**
          * @brief Construct a new Tic Tac Toe object.
          *
-         * @param p_onlyUseAscii Whether to use only ASCII characters (true) or to also use ANSI escapes codes (false).
+         * @param p_useAnsiEscapeCodes Whether to use use ANSI escapes codes (true) or only ASCII characters (false).
          */
-        explicit TicTacToe(const bool& p_onlyUseAscii);
+        explicit TicTacToe(const bool& p_useAnsiEscapeCodes);
 
     private:
         PageBuilder m_pageBuilder;
         GameInfo m_gameInfo;
         std::default_random_engine m_randomNumberGenerator;
-        std::array<std::array<std::string, G_TICTACTOE_BOARD_WIDTH>, G_TICTACTOE_BOARD_HEIGHT> m_gameGrid;
+        std::array<std::array<std::string, Globals::G_TICTACTOE_BOARD_WIDTH>, Globals::G_TICTACTOE_BOARD_HEIGHT> m_gameGrid;
         std::vector<std::tuple<uint32_t, uint32_t>> m_commandsRemaining;
         std::tuple<uint32_t, uint32_t> m_previousCommand;
         std::string m_computerSpeedName;
@@ -36,7 +36,9 @@ namespace TerminalGames
         std::string m_userPlayerChoice;
         uint32_t m_computerSpeed;
         uint32_t m_turnCount;
+        bool m_hasSavedGameSettings;
         bool m_hasWinner;
+        bool m_saveGameSettings;
 
         /**
          * @brief See base class function for details.
@@ -46,12 +48,12 @@ namespace TerminalGames
         /**
          * @brief See base class function for details.
          */
-        void UpdateGameInfo() override;
+        void GetUserOptions() override;
 
         /**
          * @brief See base class function for details.
          */
-        void GetUserOptions() override;
+        void UpdateGameInfo() override;
 
         /**
          * @brief See base class function for details.
@@ -82,6 +84,16 @@ namespace TerminalGames
          * @brief See base class function for details.
          */
         void GameOver() override;
+
+        /**
+         * @brief See base class function for details.
+         */
+        void RestartGame() override;
+
+        /**
+         * @brief See base class function for details.
+         */
+        void ResetGame() override;
 
         /**
          * @brief Prompts the user to select how many players will be playing the game.
