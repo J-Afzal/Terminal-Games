@@ -83,12 +83,12 @@ namespace TerminalGames
                     GameOver();
                 }
 
-                catch (Exceptions::RestartGame& e)
+                catch (Globals::Exceptions::RestartGame& e)
                 {
                     RestartGame();
                 }
 
-                catch (Exceptions::ResetGame& e)
+                catch (Globals::Exceptions::ResetGame& e)
                 {
                     ResetGame();
                 }

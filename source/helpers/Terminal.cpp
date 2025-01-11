@@ -30,7 +30,7 @@ namespace TerminalGames
             switch (GetNextKeyPress())
             {
             case Globals::G_QUIT_KEY:
-                throw Exceptions::QuitProgram();
+                throw Globals::Exceptions::QuitProgram();
 
             case Globals::G_ENTER_KEY:
                 return !static_cast<bool>(currentSelection);
@@ -60,7 +60,7 @@ namespace TerminalGames
             switch (GetNextKeyPress())
             {
             case Globals::G_QUIT_KEY:
-                throw Exceptions::QuitMainMenu();
+                throw Globals::Exceptions::QuitMainMenu();
 
             case Globals::G_ENTER_KEY:
                 return currentSelection;
@@ -214,7 +214,7 @@ namespace TerminalGames
 
             case Globals::G_BACKSPACE_KEY:
                 SetCursorVisibility(false);
-                throw Exceptions::BackspaceKeyPressed();
+                throw Globals::Exceptions::BackspaceKeyPressed();
 
             case Globals::G_ENTER_KEY:
                 SetCursorVisibility(false);
@@ -255,10 +255,10 @@ namespace TerminalGames
                 break;
 
             case Globals::G_RESTART_KEY:
-                throw Exceptions::RestartGame();
+                throw Globals::Exceptions::RestartGame();
 
             default:
-                throw Exceptions::ResetGame();
+                throw Globals::Exceptions::ResetGame();
             }
         }
     }
@@ -277,19 +277,19 @@ namespace TerminalGames
                 switch (currentSelection)
                 {
                 case Globals::G_RESTART_GAME_INDEX:
-                    throw Exceptions::RestartGame();
+                    throw Globals::Exceptions::RestartGame();
 
                 case Globals::G_RESET_GAME_INDEX:
-                    throw Exceptions::ResetGame();
+                    throw Globals::Exceptions::ResetGame();
 
                 case Globals::G_QUIT_GAME_INDEX:
-                    throw Exceptions::QuitGame();
+                    throw Globals::Exceptions::QuitGame();
 
                 case Globals::G_QUIT_MAIN_MENU_INDEX:
-                    throw Exceptions::QuitMainMenu();
+                    throw Globals::Exceptions::QuitMainMenu();
 
                 case Globals::G_QUIT_PROGRAM_INDEX:
-                    throw Exceptions::QuitProgram();
+                    throw Globals::Exceptions::QuitProgram();
 
                 case Globals::G_CANCEL_INDEX:
                     return;

@@ -54,17 +54,17 @@ namespace TerminalGames
                 m_games[gameChoice]->Play();
             }
 
-            catch (Exceptions::QuitGame& e)
+            catch (Globals::Exceptions::QuitGame& e)
             {
                 goToHomePage = false;
             }
 
-            catch (Exceptions::QuitMainMenu& e)
+            catch (Globals::Exceptions::QuitMainMenu& e)
             {
                 goToHomePage = true;
             }
 
-            catch (Exceptions::QuitProgram& e)
+            catch (Globals::Exceptions::QuitProgram& e)
             {
                 Terminal::ResetTerminal();
                 return;

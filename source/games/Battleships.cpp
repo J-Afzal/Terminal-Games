@@ -253,7 +253,7 @@ namespace TerminalGames
                         }
                     }
 
-                    catch (Exceptions::BackspaceKeyPressed& e)
+                    catch (Globals::Exceptions::BackspaceKeyPressed& e)
                     {
                         if (currentShipSize != 0)
                         {

@@ -71,7 +71,7 @@ namespace TerminalGames
             break;
 
         default:
-            throw Exceptions::NotImplementedError();
+            throw Globals::Exceptions::NotImplementedError();
         }
 
         m_maximumInputSize = m_displayWidth - Globals::G_MINIMUM_LEFT_VERTICAL_LINE_SIZE - Globals::G_MINIMUM_LEFT_PADDING_SIZE - Globals::G_MINIMUM_RIGHT_PADDING_SIZE - Globals::G_MINIMUM_RIGHT_VERTICAL_LINE_SIZE;
