@@ -37,16 +37,33 @@ terminal-games options:
 
 ## General Information
 
-**Feature:** Pressing the `q` key on most screens within `terminal-games` will quit to the main menu, if within a game, and quit
-the program, if within the main menu.
+There is extensive use of ANSI colour escape codes which can be toggled off on the homepage if your terminal does not support
+them. All major platforms (macOS, Linux and Windows) are supported however due to the use of `Windows.h` the user experience is
+much better on Windows.
+
+### Homepage
+
+**Feature:** Can select whether to use ANSI colour escape codes.
+
+![Homepage With ANSI Colour Escape Codes](./resources/screenshots/HomepageANSI.png "Homepage With ANSI Colour Escape Codes")
+
+![Homepage Without ANSI Colour Escape Codes](./resources/screenshots/HomepageASCII.png "Homepage Without ANSI Colour Escape Codes")
+
+### Main Menu
 
 ![Main Menu](./resources/screenshots/MainMenu.png "Main Menu")
+
+### Quit Menu
+
+**Feature:** Pressing the `q` key on any game screen will show the quit menu.
+
+![Quit Menu](./resources/screenshots/QuitMenu.png "Quit Menu")
 
 ### Tic Tac Toe
 
 **Supports:** 2 players (user vs user), 1 player (user vs computer) and 0 players (computer vs computer).
 
-**Features:** The arrow keys can be used to navigate the board.
+**Features:** The arrow keys on Windows or the `WASD` keys on other platforms can be used to navigate the board.
 
 **Note:** The computer's choices are random.
 
@@ -59,11 +76,11 @@ the program, if within the main menu.
 **Constraints:** The word to be guessed must be 3-14 characters long and can only contain letters. Only a single letter can be
 guessed at a time.
 
-**Features:** When guessing, you can use the up/down arrow keys to scroll through the available letters, or press a letter key
-to select it (please note that pressing q here will quit to the main menu).
+**Features:** When guessing, you can use the up/down arrow keys on Windows or the `W`/`S` keys on other platforms to scroll
+through the available letters, or press a letter key to select it (please note that pressing q here will show the quit menu).
 
 **Note:** The computer's choices are random both when guessing letters and when selecting a word to be guessed from the
-`./resources/words.txt` file.
+`G_HANGMAN_COMPUTER_WORDS` variable in `Globals.hpp`.
 
 ![Hangman](./resources/screenshots/Hangman.png "Hangman")
 
@@ -71,9 +88,10 @@ to select it (please note that pressing q here will quit to the main menu).
 
 **Supports:** 1 player (user vs computer) and 0 players (computer vs computer).
 
-**Features:** The arrow keys can be used to navigate the board. Selecting ship positions can be done in either an incrementing
-or decrementing order with respect to the co-ordinates. Backspace can be used to undo a ship co-ordinate selection for a ship
-that has not been completely placed on the board.
+**Features:** The arrow keys on Windows or the `WASD` on other platforms can be used to navigate the board. Selecting ship
+positions can be done in either an incrementing or decrementing order with respect to the co-ordinates. Backspace on Windows or
+the `Z` key on other platforms can be used to undo a ship co-ordinate selection for a ship that has not been completely placed
+on the board.
 
 **Note:** The computer's choices are random for both selecting where to place ships and where to attack.
 
