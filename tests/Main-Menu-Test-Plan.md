@@ -1,6 +1,6 @@
 # Main Menu Test Plan
 
-## Initial Homepage Load
+## Initial Page
 
 1. Run MainMenu via CLI constructor with no options set:
 
@@ -112,8 +112,8 @@
 
 ## Toggling ANSI Colour Escape Codes
 
-1. Starting from homepage state with "Yes" selected (i.e. step 1 from [Initial Homepage Load](#initial-homepage-load) section)
-   press `Enter` on Windows or enter "e" on macOS/Linux:
+1. Starting from the homepage state with "Yes" selected (i.e. step 1 from [Initial Homepage Load](#initial-homepage-load)
+   section) press `Enter` on Windows or enter "e" on macOS/Linux:
 
     ```text
     ╔══════════════════════════════╗
@@ -170,3 +170,5 @@
 1. Press `q` on Windows or enter "q" on macOS/Linux. Confirm Tic Tac Toe is selected. Select Battleships by pressing the down
    arrow key on Windows or entering "s" on macOS/Linux. Press `Enter` on Windows or enter "e" on macOS/Linux. Confirm
    Battleships game is launched.
+
+<!-- TODO: Cli args -->
