@@ -18,7 +18,7 @@ namespace TerminalGames
     {
     public:
         /**
-         * @brief Construct a new Battleships object.
+         * @brief Constructs a new Battleships object.
          *
          * @param p_useAnsiEscapeCodes Whether to use use ANSI escapes codes (true) or only ASCII characters (false).
          */
@@ -40,9 +40,9 @@ namespace TerminalGames
         std::string m_playerCount;
         uint32_t m_computerSpeed;
         uint32_t m_turnCount;
-        bool m_hasSavedGameSettings;
+        bool m_hasSavedGameOptions;
         bool m_isGameOver;
-        bool m_saveGameSettings;
+        bool m_saveGameOptions;
 
         /**
          * @brief See base class function for details.
@@ -116,9 +116,9 @@ namespace TerminalGames
         void GetUserShipPositions();
 
         /**
-         * @brief
+         * @brief TODO
          *
-         * @param p_currentShipPositions
+         * @param p_currentShipGridLocations
          * @param p_selectedShipGridLocation
          * @param p_shipIsHorizontalOrVertical
          * @return true If ship position is valid.
@@ -127,7 +127,8 @@ namespace TerminalGames
         bool ValidateUserShipPosition(
             const std::vector<std::tuple<uint32_t, uint32_t>>& p_currentShipPositions,
             const std::tuple<uint32_t, uint32_t>& p_selectedShipGridLocation,
-            std::tuple<bool, bool>& p_shipIsHorizontalOrVertical);
+            bool& p_shipIsHorizontal,
+            bool& p_shipIsVertical);
 
         /**
          * @brief Randomly place all ships on the board.

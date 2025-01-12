@@ -90,48 +90,54 @@ namespace TerminalGames
         const bool OLD_USE_ANSI_ESCAPE_CODES = m_useAnsiEscapeCodes;
         m_useAnsiEscapeCodes = true;
 
-#ifdef _WIN32
-        const std::string COMMON_TOP_STRING = GetTopBox() + GetTopLine() +
-                                              GetNewLineCentred("Platform: " + AddColour("Windows", Colours::GREEN)) + GetEmptyLine() +
-                                              GetNewLineCentred("Controls: " + AddColour("Enhanced", Colours::GREEN)) + GetEmptyLine() +
-                                              GetNewLineCentred("Instructions: Use the arrows keys") + GetNewLineCentred("to navigate and press enter to") + GetNewLineCentred("confirm a selection.") +
-                                              GetEmptyLine() + GetEmptyLine() + GetNewLineLeftJustified("Use ANSI colour escape codes?");
+        if (Globals::G_PLATFORM_IS_WINDOWS)
+        {
+            const std::string COMMON_TOP_STRING = GetTopBox() + GetTopLine() +
+                                                  GetNewLineCentred("Platform: " + AddColour("Windows", Colours::GREEN)) + GetEmptyLine() +
+                                                  GetNewLineCentred("Controls: " + AddColour("Enhanced", Colours::GREEN)) + GetEmptyLine() +
+                                                  GetNewLineCentred("Instructions: Use the arrows keys") + GetNewLineCentred("to navigate and press enter to") + GetNewLineCentred("confirm a selection.") +
+                                                  GetEmptyLine() + GetEmptyLine() + GetNewLineLeftJustified("Use ANSI colour escape codes?");
 
-        const std::string COMMON_BOTTOM_STRING = GetBottomLine() + GetBottomBox();
+            const std::string COMMON_BOTTOM_STRING = GetBottomLine() + GetBottomBox();
 
-        output.emplace_back(
-            COMMON_TOP_STRING +
-            GetNewLineLeftJustified("Yes", Colours::BLUE, Globals::G_SELECTOR) +
-            GetNewLineLeftJustified(std::string(Globals::G_SELECTOR.size() + 1, ' ') + "No") +
-            COMMON_BOTTOM_STRING);
+            output.emplace_back(
+                COMMON_TOP_STRING +
+                GetNewLineLeftJustified("Yes", Colours::BLUE, Globals::G_SELECTOR) +
+                GetNewLineLeftJustified(std::string(Globals::G_SELECTOR.size() + 1, ' ') + "No") +
+                COMMON_BOTTOM_STRING);
 
-        output.emplace_back(RemoveColour(
-            COMMON_TOP_STRING +
-            GetNewLineLeftJustified(std::string(Globals::G_SELECTOR.size() + 1, ' ') + "Yes") +
-            GetNewLineLeftJustified("No", Colours::BLUE, Globals::G_SELECTOR) +
-            COMMON_BOTTOM_STRING));
-#else
-        const std::string COMMON_TOP_STRING = GetTopBox() + GetTopLine() +
-                                              GetNewLineCentred("Platform: " + AddColour("macOS or Linux", Colours::GREEN)) + GetEmptyLine() +
-                                              GetNewLineCentred("Controls: " + AddColour("Enhanced", Colours::GREEN)) + GetEmptyLine() +
-                                              GetNewLineCentred("Instructions: Enter one of the") + GetNewLineCentred("WASD keys to navigate, 'e' to") + GetNewLineCentred("to confirm a selection and 'z' to") + GetNewLineCentred("undo a selection in Battleships.") +
-                                              GetEmptyLine() + GetNewLineLeftJustified("Use ANSI colour escape codes?");
+            output.emplace_back(RemoveColour(
+                COMMON_TOP_STRING +
+                GetNewLineLeftJustified(std::string(Globals::G_SELECTOR.size() + 1, ' ') + "Yes") +
+                GetNewLineLeftJustified("No", Colours::BLUE, Globals::G_SELECTOR) +
+                COMMON_BOTTOM_STRING));
+        }
 
-        const std::string COMMON_BOTTOM_STRING = GetBottomLine() + GetBottomBox();
+        else
+        {
+            const std::string COMMON_TOP_STRING = GetTopBox() + GetTopLine() +
+                                                  GetNewLineCentred("Platform: " + AddColour("macOS or Linux", Colours::GREEN)) + GetEmptyLine() +
+                                                  GetNewLineCentred("Controls: " + AddColour("Enhanced", Colours::GREEN)) + GetEmptyLine() +
+                                                  GetNewLineCentred("Instructions: Enter one of the") + GetNewLineCentred("WASD keys to navigate, 'e' to") + GetNewLineCentred("to confirm a selection and 'z' to") + GetNewLineCentred("undo a selection in Battleships.") +
+                                                  GetEmptyLine() + GetNewLineLeftJustified("Use ANSI colour escape codes?");
 
-        output.emplace_back(
-            COMMON_TOP_STRING +
-            GetNewLineLeftJustified("Yes", Colours::BLUE, Globals::G_SELECTOR) +
-            GetNewLineLeftJustified(std::string(Globals::G_SELECTOR.size() + 1, ' ') + "No") +
-            COMMON_BOTTOM_STRING);
+            const std::string COMMON_BOTTOM_STRING = GetBottomLine() + GetBottomBox();
 
-        output.emplace_back(RemoveColour(
-            COMMON_TOP_STRING +
-            GetNewLineLeftJustified(std::string(Globals::G_SELECTOR.size() + 1, ' ') + "Yes") +
-            GetNewLineLeftJustified("No", Colours::BLUE, Globals::G_SELECTOR) +
-            COMMON_BOTTOM_STRING));
-#endif
+            output.emplace_back(
+                COMMON_TOP_STRING +
+                GetNewLineLeftJustified("Yes", Colours::BLUE, Globals::G_SELECTOR) +
+                GetNewLineLeftJustified(std::string(Globals::G_SELECTOR.size() + 1, ' ') + "No") +
+                COMMON_BOTTOM_STRING);
+
+            output.emplace_back(RemoveColour(
+                COMMON_TOP_STRING +
+                GetNewLineLeftJustified(std::string(Globals::G_SELECTOR.size() + 1, ' ') + "Yes") +
+                GetNewLineLeftJustified("No", Colours::BLUE, Globals::G_SELECTOR) +
+                COMMON_BOTTOM_STRING));
+        }
+
         m_useAnsiEscapeCodes = OLD_USE_ANSI_ESCAPE_CODES;
+
         return output;
     }
 
@@ -149,10 +155,10 @@ namespace TerminalGames
         {
         case Pages::TICTACTOE:
         case Pages::HANGMAN:
-            return GetGameOptionSelectionPages(p_gameInfo, "Please select the number of players:", {"0", "1", "2"});
+            return GetGameOptionSelectionPages(p_gameInfo, "Please select the number of players:", Globals::G_GAME_MAX_TWO_PLAYERS_OPTIONS);
 
         case Pages::BATTLESHIPS:
-            return GetGameOptionSelectionPages(p_gameInfo, "Please select the number of players:", {"0", "1"});
+            return GetGameOptionSelectionPages(p_gameInfo, "Please select the number of players:", Globals::G_GAME_MAX_ONE_PLAYER_OPTIONS);
 
         default:
             return {"The 'GetPlayerCountOptionSelectionGameDisplays' function does not support the current page type."};
@@ -164,10 +170,10 @@ namespace TerminalGames
         switch (m_currentPage)
         {
         case Pages::TICTACTOE:
-            return GetGameOptionSelectionPages(p_gameInfo, "Please select the player you would like to be:", {"PLAYER X", "PLAYER O"});
+            return GetGameOptionSelectionPages(p_gameInfo, "Please select the player you would like to be:", Globals::G_TICTACTOE_PLAYER_CHOICE_OPTIONS);
 
         case Pages::HANGMAN:
-            return GetGameOptionSelectionPages(p_gameInfo, "Please select the player you would like to be:", {"GUESSER", "WORD SETTER"});
+            return GetGameOptionSelectionPages(p_gameInfo, "Please select the player you would like to be:", Globals::G_HANGMAN_PLAYER_CHOICE_OPTIONS);
 
         default:
             return {"The 'GetUserPlayerChoiceOptionSelectionGameDisplays' function does not support the current page type."};
@@ -181,7 +187,7 @@ namespace TerminalGames
         case Pages::TICTACTOE:
         case Pages::HANGMAN:
         case Pages::BATTLESHIPS:
-            return GetGameOptionSelectionPages(p_gameInfo, "Please select the computer speed:", {"INSTANT", "FAST", "SLOW"});
+            return GetGameOptionSelectionPages(p_gameInfo, "Please select the computer speed:", Globals::G_GAME_COMPUTER_SPEED_OPTIONS);
 
         default:
             return {"The 'GetComputerSpeedOptionSelectionGameDisplays' function does not support the current page type."};
@@ -244,7 +250,7 @@ namespace TerminalGames
             break;
 
         case Pages::HANGMAN:
-            if (p_gameInfo.m_hangmanGameInfo.m_errorCount == Globals::G_HANGMAN_MAXIMUM_ERROR_COUNT)
+            if (p_gameInfo.m_hangmanGameInfo.m_incorrectGuesses.size() == Globals::G_HANGMAN_MAXIMUM_ERROR_COUNT)
                 topString += GetNewLineCentred("The word setter has won! The game lasted " + std::to_string(p_gameInfo.m_hangmanGameInfo.m_turnCount) + " turns!");
 
             else
@@ -306,11 +312,11 @@ namespace TerminalGames
     std::string PageBuilder::GetEmptyLine() const
     {
         std::string output;
-        output += Globals::G_VERTICAL_LINE;
+        output += Globals::G_PAGE_VERTICAL_LINE;
 
         output.insert(output.size(), m_maximumFilledLineSize, ' ');
 
-        return output + Globals::G_VERTICAL_LINE + "\n";
+        return output + Globals::G_PAGE_VERTICAL_LINE + "\n";
     }
 
     std::string PageBuilder::GetNewLineCentred(const std::string& p_input, const Colours& p_colour, const std::string& p_selector) const
@@ -333,12 +339,12 @@ namespace TerminalGames
         const uint32_t RIGHT_PADDING_SIZE = static_cast<uint32_t>(floor(static_cast<double>(m_maximumInputSize - (INPUT_TRIMMED_SIZE - SELECTOR_SIZE)) / DIVISOR));
 
         std::string output;
-        output += Globals::G_VERTICAL_LINE;
+        output += Globals::G_PAGE_VERTICAL_LINE;
         output.insert(output.size(), Globals::G_MINIMUM_LEFT_PADDING_SIZE + LEFT_PADDING_SIZE, ' ');
         output += AddColour(INPUT_TRIMMED, p_colour);
         output.insert(output.size(), RIGHT_PADDING_SIZE + Globals::G_MINIMUM_RIGHT_PADDING_SIZE, ' ');
 
-        return output + Globals::G_VERTICAL_LINE + "\n";
+        return output + Globals::G_PAGE_VERTICAL_LINE + "\n";
     }
 
     std::string PageBuilder::GetNewLineLeftJustified(const std::string& p_input, const Colours& p_colour, const std::string& p_selector) const
@@ -351,7 +357,7 @@ namespace TerminalGames
         const uint32_t INPUT_SIZE = static_cast<uint32_t>(INPUT.size()) - (ANSI_COLOUR_ESCAPE_CODE_COUNT * Globals::G_ANSI_COLOUR_ESCAPE_CODE_SIZE);
 
         std::string output;
-        output += Globals::G_VERTICAL_LINE;
+        output += Globals::G_PAGE_VERTICAL_LINE;
         output.insert(output.size(), Globals::G_MINIMUM_LEFT_PADDING_SIZE, ' ');
 
         if (INPUT_SIZE > m_maximumInputSize)
@@ -366,27 +372,27 @@ namespace TerminalGames
             output.insert(output.size(), m_maximumInputSize + Globals::G_MINIMUM_RIGHT_PADDING_SIZE - INPUT_SIZE, ' ');
         }
 
-        return output + Globals::G_VERTICAL_LINE + "\n";
+        return output + Globals::G_PAGE_VERTICAL_LINE + "\n";
     }
 
     std::string PageBuilder::GetTopLine() const
     {
         std::string output;
-        output += Globals::G_TOP_LEFT_CORNER;
+        output += Globals::G_PAGE_TOP_LEFT_CORNER;
 
-        output.insert(output.size(), m_maximumFilledLineSize, Globals::G_HORIZONTAL_LINE);
+        output.insert(output.size(), m_maximumFilledLineSize, Globals::G_PAGE_HORIZONTAL_LINE);
 
-        return output + Globals::G_TOP_RIGHT_CORNER + "\n";
+        return output + Globals::G_PAGE_TOP_RIGHT_CORNER + "\n";
     }
 
     std::string PageBuilder::GetBottomLine() const
     {
         std::string output;
-        output += Globals::G_BOTTOM_LEFT_CORNER;
+        output += Globals::G_PAGE_BOTTOM_LEFT_CORNER;
 
-        output.insert(output.size(), m_maximumFilledLineSize, Globals::G_HORIZONTAL_LINE);
+        output.insert(output.size(), m_maximumFilledLineSize, Globals::G_PAGE_HORIZONTAL_LINE);
 
-        return output + Globals::G_BOTTOM_RIGHT_CORNER + "\n";
+        return output + Globals::G_PAGE_BOTTOM_RIGHT_CORNER + "\n";
     }
 
     std::string PageBuilder::GetTopBox() const
@@ -478,32 +484,33 @@ namespace TerminalGames
         }
     }
 
-    // NOLINTBEGIN
-    std::string PageBuilder::GetTicTacToeSubPage(const GameInfo& gameInfo) const
+    std::string PageBuilder::GetTicTacToeSubPage(const GameInfo& p_gameInfo) const
     {
-        const std::array<std::array<std::string, Globals::G_TICTACTOE_BOARD_WIDTH>, Globals::G_TICTACTOE_BOARD_HEIGHT> gameGrid = gameInfo.m_ticTacToeGameInfo.m_gameGrid;
-        const std::string playerCount = gameInfo.m_ticTacToeGameInfo.m_playerCount, computerSpeedName = gameInfo.m_ticTacToeGameInfo.m_computerSpeedName;
+        const std::array<std::array<std::string, Globals::G_TICTACTOE_BOARD_WIDTH>, Globals::G_TICTACTOE_BOARD_HEIGHT> GAME_GRID = p_gameInfo.m_ticTacToeGameInfo.m_gameGrid;
+        const std::string PLAYER_COUNT = p_gameInfo.m_ticTacToeGameInfo.m_playerCount;
+        const std::string COMPUTER_SPEED_NAME = p_gameInfo.m_ticTacToeGameInfo.m_computerSpeedName;
 
         std::string output;
 
-        output += GetNewLineLeftJustified(gameGrid[0][0] + char(179) + gameGrid[0][1] + char(179) + gameGrid[0][2]);
+        output += GetNewLineLeftJustified(GAME_GRID[0][0] + Globals::G_GRID_VERTICAL_LINE + GAME_GRID[0][1] + Globals::G_GRID_VERTICAL_LINE + GAME_GRID[0][2]);
 
-        output += GetNewLineLeftJustified(std::string("") + (char)196 + (char)196 + (char)196 + (char)197 + (char)196 + (char)196 + (char)196 + char(197) + (char)196 + (char)196 + (char)196 + "         # of Players = " + playerCount);
+        output += GetNewLineLeftJustified(std::string("") + Globals::G_GRID_HORIZONTAL_LINE + Globals::G_GRID_HORIZONTAL_LINE + Globals::G_GRID_HORIZONTAL_LINE + Globals::G_GRID_INTERSECTION + Globals::G_GRID_HORIZONTAL_LINE + Globals::G_GRID_HORIZONTAL_LINE + Globals::G_GRID_HORIZONTAL_LINE + Globals::G_GRID_INTERSECTION + Globals::G_GRID_HORIZONTAL_LINE + Globals::G_GRID_HORIZONTAL_LINE + Globals::G_GRID_HORIZONTAL_LINE + "         # of Players = " + PLAYER_COUNT);
 
-        output += GetNewLineLeftJustified(gameGrid[1][0] + char(179) + gameGrid[1][1] + char(179) + gameGrid[1][2]);
+        output += GetNewLineLeftJustified(GAME_GRID[1][0] + Globals::G_GRID_VERTICAL_LINE + GAME_GRID[1][1] + Globals::G_GRID_VERTICAL_LINE + GAME_GRID[1][2]);
 
-        output += GetNewLineLeftJustified(std::string("") + (char)196 + (char)196 + (char)196 + (char)197 + (char)196 + (char)196 + (char)196 + char(197) + (char)196 + (char)196 + (char)196 + "        Computer Speed = " + computerSpeedName);
+        output += GetNewLineLeftJustified(std::string("") + Globals::G_GRID_HORIZONTAL_LINE + Globals::G_GRID_HORIZONTAL_LINE + Globals::G_GRID_HORIZONTAL_LINE + Globals::G_GRID_INTERSECTION + Globals::G_GRID_HORIZONTAL_LINE + Globals::G_GRID_HORIZONTAL_LINE + Globals::G_GRID_HORIZONTAL_LINE + Globals::G_GRID_INTERSECTION + Globals::G_GRID_HORIZONTAL_LINE + Globals::G_GRID_HORIZONTAL_LINE + Globals::G_GRID_HORIZONTAL_LINE + "        Computer Speed = " + COMPUTER_SPEED_NAME);
 
-        output += GetNewLineLeftJustified(gameGrid[2][0] + char(179) + gameGrid[2][1] + char(179) + gameGrid[2][2]);
+        output += GetNewLineLeftJustified(GAME_GRID[2][0] + Globals::G_GRID_VERTICAL_LINE + GAME_GRID[2][1] + Globals::G_GRID_VERTICAL_LINE + GAME_GRID[2][2]);
 
         return output;
     }
 
+    // NOLINTBEGIN
     std::string PageBuilder::GetHangmanSubPage(const GameInfo& gameInfo) const
     {
         const std::vector<char> incorrectGuesses = gameInfo.m_hangmanGameInfo.m_incorrectGuesses;
         const std::string currentGuessOfWord = gameInfo.m_hangmanGameInfo.m_currentGuessOfWord, wordToBeGuessed = gameInfo.m_hangmanGameInfo.m_wordToBeGuessed, playerCount = gameInfo.m_hangmanGameInfo.m_playerCount, computerSpeedName = gameInfo.m_hangmanGameInfo.m_computerSpeedName;
-        const uint32_t errorCount = gameInfo.m_hangmanGameInfo.m_errorCount;
+        const uint32_t errorCount = gameInfo.m_hangmanGameInfo.m_incorrectGuesses.size();
 
         std::string output;
 
@@ -819,7 +826,7 @@ namespace TerminalGames
         return output;
     }
 
-    std::string PageBuilder::RemoveSubString(const std::string& p_string, const std::string& p_subString) // NOLINT(bugprone-easily-swappable-parameters)
+    std::string PageBuilder::RemoveSubString(const std::string& p_string, const std::string& p_subString)
     {
         const uint32_t SUB_STRING_LENGTH = p_subString.length();
 

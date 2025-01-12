@@ -11,7 +11,7 @@ namespace TerminalGames
     {
     public:
         /**
-         * @brief Construct a new Game object
+         * @brief Constructs a new Game object
          */
         Game() = default;
 
@@ -62,6 +62,8 @@ namespace TerminalGames
                     SetupGame();
 
                     GetUserOptions();
+
+                    UpdateGameInfo();
 
                     while (!IsGameOver())
                     {

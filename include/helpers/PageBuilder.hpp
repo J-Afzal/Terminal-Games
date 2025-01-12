@@ -57,7 +57,6 @@ namespace TerminalGames
             std::string m_currentGuessOfWord;
             std::string m_playerCount;
             std::string m_wordToBeGuessed;
-            uint32_t m_errorCount;
             uint32_t m_turnCount;
             char m_currentGuess;
         } m_hangmanGameInfo;
@@ -83,12 +82,12 @@ namespace TerminalGames
     {
     public:
         /**
-         * @brief Construct a new StringBuilder object.
+         * @brief Constructs a new StringBuilder object.
          */
         explicit PageBuilder();
 
         /**
-         * @brief Construct a new StringBuilder object.
+         * @brief Constructs a new StringBuilder object.
          *
          * @param p_page Which page type to configure the PageBuilder for.
          * @param p_useAnsiEscapeCodes Whether to use use ANSI escapes codes (true) or only ASCII characters (false).
@@ -349,7 +348,7 @@ namespace TerminalGames
          * @param p_subString The substring to be removed.
          * @return std::string The string with the substring removed.
          */
-        static std::string RemoveSubString(const std::string& p_string, const std::string& p_subString); // NOLINT(bugprone-easily-swappable-parameters)
+        static std::string RemoveSubString(const std::string& p_string, const std::string& p_subString);
 
         // Member variables
         std::string m_topTitle;

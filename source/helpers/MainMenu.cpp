@@ -97,7 +97,7 @@ namespace TerminalGames
             if (argument == "--a" || argument == "--ascii-only")
                 return false;
 
-            if (argument == "--h" || argument == "--ascii-only")
+            if (argument == "--h" || argument == "--help")
             {
                 std::string helpMessage = "\nUsage: terminal-games [options]";
                 helpMessage += "\n\nOPTIONS:";

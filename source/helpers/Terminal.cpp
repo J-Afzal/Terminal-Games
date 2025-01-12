@@ -110,100 +110,77 @@ namespace TerminalGames
         }
     }
 
-    std::tuple<uint32_t, uint32_t> Terminal::GetUserCommandFromGameGrid(
+    std::tuple<uint32_t, uint32_t> Terminal::GetUserCommandFromGameGrid( // NOLINT(readability-function-cognitive-complexity)
         const std::tuple<uint32_t, uint32_t>& p_startingGridLocation,
         const PageBuilder& p_pageBuilder,
         const GameInfo& p_gameInfo,
         const bool& p_displayGetUserCommandPage)
     {
-        if (p_displayGetUserCommandPage)
-            PrintOutput(p_pageBuilder.GetUserCommandPage(p_gameInfo));
-
+        const Pages CURRENT_PAGE_TYPE = p_pageBuilder.GetCurrentPageType();
         uint32_t currentRow = std::get<0>(p_startingGridLocation);
         uint32_t currentColumn = std::get<1>(p_startingGridLocation);
         uint32_t maxRow = 0;
         uint32_t maxColumn = 0;
+        uint32_t gridElementWidth = 0;
+        uint32_t gridElementHeight = 0;
+        uint32_t gridLeftPad = 0;
+        uint32_t gridTopPad = 0;
 
-        switch (p_pageBuilder.GetCurrentPageType())
+        switch (CURRENT_PAGE_TYPE)
         {
         case Pages::TICTACTOE:
-            maxColumn = Globals::G_TICTACTOE_BOARD_WIDTH - 1;
-            maxRow = Globals::G_TICTACTOE_BOARD_HEIGHT - 1;
+            maxColumn = Globals::G_TICTACTOE_BOARD_WIDTH - 1; // -1 to account for zero-indexing
+            maxRow = Globals::G_TICTACTOE_BOARD_HEIGHT - 1;   // -1 to account for zero-indexing
+            gridLeftPad = Globals::G_TICTACTOE_GRID_LEFT_PAD;
+            gridTopPad = Globals::G_TICTACTOE_GRID_TOP_PAD;
+            gridElementWidth = Globals::G_TICTACTOE_GRID_ELEMENT_WIDTH + 1;   // +1 to account for the grid divider '|'
+            gridElementHeight = Globals::G_TICTACTOE_GRID_ELEMENT_HEIGHT + 1; // +1 to account for the grid divider '───'
             break;
 
         case Pages::BATTLESHIPS:
-            maxColumn = Globals::G_BATTLESHIPS_BOARD_WIDTH - 1;
-            maxRow = Globals::G_BATTLESHIPS_BOARD_HEIGHT - 1;
+            maxColumn = Globals::G_BATTLESHIPS_BOARD_WIDTH - 1; // -1 to account for zero-indexing
+            maxRow = Globals::G_BATTLESHIPS_BOARD_HEIGHT - 1;   // -1 to account for zero-indexing
+            gridLeftPad = Globals::G_BATTLESHIPS_GRID_LEFT_PAD;
+            gridTopPad = Globals::G_BATTLESHIPS_GRID_TOP_PAD;
+            gridElementWidth = Globals::G_BATTLESHIPS_GRID_ELEMENT_WIDTH + 1;   // +1 to account for the grid divider '|'
+            gridElementHeight = Globals::G_BATTLESHIPS_GRID_ELEMENT_HEIGHT + 1; // +1 to account for the grid divider '───'
             break;
 
         default:
-            break;
+            throw Globals::Exceptions::NotImplementedError();
         }
+
+        if (p_displayGetUserCommandPage)
+            PrintOutput(p_pageBuilder.GetUserCommandPage(p_gameInfo));
 
         while (true)
         {
-#ifdef _WIN32
-
-            uint32_t gridLeftPad = 0;
-            uint32_t gridTopPad = 0;
-            uint32_t gridElementWidth = 0;
-            uint32_t gridElementHeight = 0;
-
-            switch (p_pageBuilder.GetCurrentPageType())
+            if (Globals::G_PLATFORM_IS_WINDOWS)
             {
-            case Pages::TICTACTOE:
-                maxColumn = Globals::G_TICTACTOE_BOARD_WIDTH - 1;
-                maxRow = Globals::G_TICTACTOE_BOARD_HEIGHT - 1;
-                gridLeftPad = Globals::G_TICTACTOE_GRID_LEFT_PAD;
-                gridTopPad = Globals::G_TICTACTOE_GRID_TOP_PAD;
-                gridElementWidth = Globals::G_TICTACTOE_GRID_ELEMENT_WIDTH;
-                gridElementHeight = Globals::G_TICTACTOE_GRID_ELEMENT_HEIGHT;
-                break;
-
-            case Pages::BATTLESHIPS:
-                maxColumn = Globals::G_BATTLESHIPS_BOARD_WIDTH - 1;
-                maxRow = Globals::G_BATTLESHIPS_BOARD_HEIGHT - 1;
-                gridLeftPad = Globals::G_BATTLESHIPS_GRID_LEFT_PAD;
-                gridTopPad = Globals::G_BATTLESHIPS_GRID_TOP_PAD;
-                gridElementWidth = Globals::G_BATTLESHIPS_GRID_ELEMENT_WIDTH;
-                gridElementHeight = Globals::G_BATTLESHIPS_GRID_ELEMENT_HEIGHT;
-                break;
-
-            default:
-                break;
+                SetCursorVisibility(true);
+                SetCursorPosition(static_cast<int16_t>(gridLeftPad + (currentColumn * gridElementWidth)), static_cast<int16_t>(gridTopPad + (currentRow * gridElementHeight)));
             }
-            SetCursorVisibility(true);
-            SetCursorPosition({static_cast<int16_t>(gridLeftPad + (currentColumn * gridElementWidth)), static_cast<int16_t>(gridTopPad + (currentRow * gridElementHeight))});
-#else
-            GameInfo currentGameInfo = p_gameInfo;
 
-            switch (p_pageBuilder.GetCurrentPageType())
+            else
             {
-            case Pages::TICTACTOE:
-                currentGameInfo.m_ticTacToeGameInfo.m_gameGrid.at(currentRow).at(currentColumn).at(0) = '#';
-                currentGameInfo.m_ticTacToeGameInfo.m_gameGrid.at(currentRow).at(currentColumn).at(2) = '#';
-                break;
+                GameInfo currentGameInfo = p_gameInfo;
 
-            case Pages::BATTLESHIPS:
+                if (CURRENT_PAGE_TYPE == Pages::TICTACTOE)
+                    currentGameInfo.m_ticTacToeGameInfo.m_gameGrid.at(currentRow).at(currentColumn) = Globals::ImplementStdFormat(Globals::G_TICTACTOE_GRID_SELECTED_FORMAT_STRING, currentGameInfo.m_ticTacToeGameInfo.m_gameGrid.at(currentRow).at(currentColumn).at(1));
+
+                if (CURRENT_PAGE_TYPE == Pages::BATTLESHIPS)
+                {
+                    if (p_displayGetUserCommandPage)
+                        currentGameInfo.m_battleshipsGameInfo.m_boardTwo.at(currentRow).at(currentColumn) = Globals::ImplementStdFormat(Globals::G_BATTLESHIPS_GRID_SELECTED_FORMAT_STRING, currentGameInfo.m_battleshipsGameInfo.m_boardTwo.at(currentRow).at(currentColumn).at(1));
+
+                    else
+                        currentGameInfo.m_battleshipsGameInfo.m_boardOne.at(currentRow).at(currentColumn) = Globals::ImplementStdFormat(Globals::G_BATTLESHIPS_GRID_SELECTED_FORMAT_STRING, currentGameInfo.m_battleshipsGameInfo.m_boardOne.at(currentRow).at(currentColumn).at(1));
+                }
+
                 if (p_displayGetUserCommandPage)
-                {
-                    currentGameInfo.m_battleshipsGameInfo.m_boardTwo.at(currentRow).at(currentColumn).at(0) = '#';
-                    currentGameInfo.m_battleshipsGameInfo.m_boardTwo.at(currentRow).at(currentColumn).at(2) = '#';
-                }
-
-                else
-                {
-                    currentGameInfo.m_battleshipsGameInfo.m_boardOne.at(currentRow).at(currentColumn).at(0) = '#';
-                    currentGameInfo.m_battleshipsGameInfo.m_boardOne.at(currentRow).at(currentColumn).at(2) = '#';
-                }
-                break;
-
-            default:
-                break;
+                    PrintOutput(p_pageBuilder.GetUserCommandPage(currentGameInfo));
             }
 
-            PrintOutput(p_pageBuilder.GetUserCommandPage(currentGameInfo));
-#endif
             switch (GetNextKeyPress())
             {
             case Globals::G_QUIT_KEY:
@@ -402,10 +379,10 @@ namespace TerminalGames
 #endif
     }
 
-    void Terminal::SetCursorPosition(const std::tuple<int16_t, int16_t>& p_coords)
+    void Terminal::SetCursorPosition(const int16_t& p_xCoord, const int16_t& p_yCoord)
     {
 #ifdef _WIN32
-        const COORD CURSOR_POSITION(std::get<0>(p_coords), std::get<1>(p_coords));
+        const COORD CURSOR_POSITION(p_xCoord, p_yCoord);
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), CURSOR_POSITION);
 #endif
     }
