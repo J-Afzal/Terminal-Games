@@ -153,8 +153,8 @@ PointerAlignment: Left
 PPIndentWidth: 4
 QualifierAlignment: Custom
 QualifierOrder:
-    - inline
     - static
+    - inline
     - volatile
     - restrict
     - friend
