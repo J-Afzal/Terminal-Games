@@ -53,19 +53,19 @@ namespace TerminalGames
                 GetComputerSpeed();
 
             if (m_playerCount == "1")
+            {
+                GetComputerSpeed();
                 GetUserPlayerChoice();
+            }
+
+            m_hasSavedGameOptions = true;
         }
 
-        if (m_userPlayerChoice == Globals::G_HANGMAN_WORD_SETTER)
-        {
-            GetComputerSpeed();
+        if (m_userPlayerChoice == Globals::G_HANGMAN_WORD_SETTER || m_playerCount == "2")
             GetWordFromUser();
-        }
 
         else
-        {
             GetWordFromComputer();
-        }
 
         m_currentGuessOfWord.insert(0, m_wordToBeGuessed.size(), Globals::G_HANGMAN_HIDDEN_LETTER);
     }
@@ -80,6 +80,7 @@ namespace TerminalGames
             .m_wordToBeGuessed = m_wordToBeGuessed,
             .m_turnCount = m_turnCount,
             .m_currentGuess = m_currentGuess,
+            .m_hasWinner = m_hasWinner,
         };
     }
 
@@ -103,7 +104,7 @@ namespace TerminalGames
 
     bool Hangman::IsCurrentTurnUsers()
     {
-        return m_userPlayerChoice == Globals::G_HANGMAN_GUESSER;
+        return m_userPlayerChoice == Globals::G_HANGMAN_GUESSER || m_playerCount == "2";
     }
 
     void Hangman::ExecuteUserCommand()

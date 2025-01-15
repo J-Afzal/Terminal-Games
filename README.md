@@ -73,7 +73,7 @@ much better on Windows.
 
 **Supports:** 2 players (user vs user), 1 player (user vs computer) and 0 players (computer vs computer).
 
-**Constraints:** The word to be guessed must be 3-14 characters long and can only contain letters. Only a single letter can be
+**Constraints:** The word to be guessed must be 3-16 characters long and can only contain letters. Only a single letter can be
 guessed at a time.
 
 **Features:** When guessing, you can use the up/down arrow keys on Windows or the `W`/`S` keys on other platforms to scroll

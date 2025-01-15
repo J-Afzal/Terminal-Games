@@ -117,14 +117,15 @@ namespace TerminalGames
         const bool& p_displayGetUserCommandPage)
     {
         const Pages CURRENT_PAGE_TYPE = p_pageBuilder.GetCurrentPageType();
+        PageBuilder pageBuilder = p_pageBuilder;
         uint32_t currentRow = std::get<0>(p_startingGridLocation);
         uint32_t currentColumn = std::get<1>(p_startingGridLocation);
         uint32_t maxRow = 0;
         uint32_t maxColumn = 0;
-        uint32_t gridElementWidth = 0;
-        uint32_t gridElementHeight = 0;
         uint32_t gridLeftPad = 0;
         uint32_t gridTopPad = 0;
+        uint32_t gridElementWidth = 0;
+        uint32_t gridElementHeight = 0;
 
         switch (CURRENT_PAGE_TYPE)
         {
@@ -151,7 +152,7 @@ namespace TerminalGames
         }
 
         if (p_displayGetUserCommandPage)
-            PrintOutput(p_pageBuilder.GetUserCommandPage(p_gameInfo));
+            PrintOutput(pageBuilder.GetUserCommandPage(p_gameInfo));
 
         while (true)
         {
@@ -178,14 +179,14 @@ namespace TerminalGames
                 }
 
                 if (p_displayGetUserCommandPage)
-                    PrintOutput(p_pageBuilder.GetUserCommandPage(currentGameInfo));
+                    PrintOutput(pageBuilder.GetUserCommandPage(currentGameInfo));
             }
 
             switch (GetNextKeyPress())
             {
             case Globals::G_QUIT_KEY:
                 SetCursorVisibility(false);
-                Terminal::GetUserChoiceFromQuitMenus(p_pageBuilder.GetQuitOptionSelectionPage());
+                Terminal::GetUserChoiceFromQuitMenus(pageBuilder.GetQuitOptionSelectionPage());
                 SetCursorVisibility(true);
                 break;
 

@@ -3,6 +3,7 @@
 #include <array>
 #include <cstdint>
 #include <exception>
+#include <sstream>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -125,7 +126,10 @@ namespace TerminalGames::Globals
         const std::string BEFORE_STRING = p_stringToFormat.substr(0, p_stringToFormat.find(FORMAT_IDENTIFIER));
         const std::string AFTER_STRING = p_stringToFormat.substr(p_stringToFormat.find(FORMAT_IDENTIFIER) + FORMAT_IDENTIFIER.size(), p_stringToFormat.size() - p_stringToFormat.find("{}"));
 
-        return BEFORE_STRING + std::string(1, p_varToInsert) + AFTER_STRING;
+        std::ostringstream buffer;
+        buffer << BEFORE_STRING << p_varToInsert << AFTER_STRING;
+
+        return buffer.str();
     }
 
     /**
@@ -138,154 +142,19 @@ namespace TerminalGames::Globals
 #endif
 
     /**
-     * @brief Homepage
-     */
-    static inline const std::string G_HOMEPAGE_TOP_TITLE = "Terminal Games";
-    static inline const std::string G_HOMEPAGE_BOTTOM_TITLE = "q = quit program";
-    static constexpr uint32_t G_HOMEPAGE_DISPLAY_WIDTH = 40;
-    static constexpr uint32_t G_HOMEPAGE_DISPLAY_HEIGHT = 20;
-
-    /**
-     * @brief Main Menu
-     */
-    static inline const std::string G_MAIN_MENU_TOP_TITLE = "Main Menu";
-    static inline const std::string G_MAIN_MENU_BOTTOM_TITLE = "q = quit to homepage";
-    static constexpr uint32_t G_MAIN_MENU_DISPLAY_WIDTH = 32;
-    static constexpr uint32_t G_MAIN_MENU_DISPLAY_HEIGHT = 13;
-
-    /**
-     * @brief Game
-     */
-    static inline const std::string G_GAME_UNKNOWN_OPTION = "N/A";
-    static inline const std::vector<std::string> G_GAME_COMPUTER_SPEED_OPTIONS = {"INSTANT", "FAST", "SLOW"};
-    static inline const std::vector<std::string> G_GAME_MAX_TWO_PLAYERS_OPTIONS = {"0", "1", "2"};
-    static inline const std::vector<std::string> G_GAME_MAX_ONE_PLAYER_OPTIONS = {"0", "1"};
-
-    /**
-     * @brief Tic Tac Toe
-     */
-    static inline const std::string G_TICTACTOE_TOP_TITLE = "Tic Tac Toe";
-    static inline const std::string G_TICTACTOE_BOTTOM_TITLE = "q = show quit menu";
-    static constexpr uint32_t G_TICTACTOE_DISPLAY_WIDTH = 58;
-    static constexpr uint32_t G_TICTACTOE_DISPLAY_HEIGHT = 19;
-
-    static constexpr uint32_t G_TICTACTOE_BOARD_WIDTH = 3;
-    static constexpr uint32_t G_TICTACTOE_BOARD_HEIGHT = 3;
-
-    static constexpr uint32_t G_TICTACTOE_GRID_ELEMENT_WIDTH = 3;
-    static constexpr uint32_t G_TICTACTOE_GRID_ELEMENT_HEIGHT = 1;
-    static constexpr uint32_t G_TICTACTOE_GRID_LEFT_PAD = 3;
-    static constexpr uint32_t G_TICTACTOE_GRID_TOP_PAD = 4;
-    static inline const std::string G_TICTACTOE_EMPTY_GRID_VALUE(Globals::G_TICTACTOE_GRID_ELEMENT_WIDTH, ' ');
-    static inline const std::string G_TICTACTOE_GRID_OCCUPIED_FORMAT_STRING = " {} ";
-    static inline const std::string G_TICTACTOE_GRID_SELECTED_FORMAT_STRING = "#{}#";
-
-    static constexpr uint32_t G_TICTACTOE_MAXIMUM_ERROR_COUNT = G_TICTACTOE_BOARD_WIDTH * G_TICTACTOE_BOARD_HEIGHT;
-    static inline const std::string G_TICTACTOE_PLAYER_X = "Player X";
-    static inline const std::string G_TICTACTOE_PLAYER_O = "Player O";
-    static inline const std::vector<std::string> G_TICTACTOE_PLAYER_CHOICE_OPTIONS = {G_TICTACTOE_PLAYER_X, G_TICTACTOE_PLAYER_O};
-
-    /**
-     * @brief Hangman
-     */
-    static inline const std::string G_HANGMAN_TOP_TITLE = "Hangman";
-    static inline const std::string G_HANGMAN_BOTTOM_TITLE = "q = show quit menu";
-    static constexpr uint32_t G_HANGMAN_DISPLAY_WIDTH = 64;
-    static constexpr uint32_t G_HANGMAN_DISPLAY_HEIGHT = 22;
-
-    static constexpr uint32_t G_HANGMAN_MINIMUM_WORD_SIZE = 3;
-    static constexpr uint32_t G_HANGMAN_MAXIMUM_WORD_SIZE = 14;
-    static constexpr uint32_t G_HANGMAN_MAXIMUM_ERROR_COUNT = 10;
-    static constexpr uint32_t G_HANGMAN_KEY_PRESS_CHAR_OFFSET = 32;
-    static inline const std::vector<char> G_HANGMAN_LETTERS_OF_THE_ALPHABET = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
-    static constexpr char G_HANGMAN_HIDDEN_LETTER = '_';
-
-    static constexpr uint32_t G_HANGMAN_USER_INPUT_ROW = 13;
-    static constexpr uint32_t G_HANGMAN_GET_WORD_FROM_USER_COLUMN = 39;
-    static constexpr uint32_t G_HANGMAN_GET_USER_COMMAND_COLUMN = 41;
-
-    static inline const std::string G_HANGMAN_GUESSER = "GUESSER";
-    static inline const std::string G_HANGMAN_WORD_SETTER = "WORD SETTER";
-    static inline const std::vector<std::string> G_HANGMAN_PLAYER_CHOICE_OPTIONS = {G_HANGMAN_GUESSER, G_HANGMAN_WORD_SETTER};
-
-    /**
-     * @brief Battleships
-     */
-    static inline const std::string G_BATTLESHIPS_TOP_TITLE = "Battleships";
-    static inline const std::string G_BATTLESHIPS_BOTTOM_TITLE = "q = show quit menu";
-    static constexpr uint32_t G_BATTLESHIPS_DISPLAY_WIDTH = 149;
-    static constexpr uint32_t G_BATTLESHIPS_DISPLAY_HEIGHT = 38;
-
-    static constexpr uint32_t G_BATTLESHIPS_BOARD_WIDTH = 10;
-    static constexpr uint32_t G_BATTLESHIPS_BOARD_HEIGHT = 10;
-
-    static constexpr uint32_t G_BATTLESHIPS_GRID_ELEMENT_WIDTH = 4;
-    static constexpr uint32_t G_BATTLESHIPS_GRID_ELEMENT_HEIGHT = 2;
-    static constexpr uint32_t G_BATTLESHIPS_GRID_LEFT_PAD = 10;
-    static constexpr uint32_t G_BATTLESHIPS_GRID_TOP_PAD = 8;
-    static inline const std::string G_BATTLESHIPS_EMPTY_GRID_VALUE(Globals::G_BATTLESHIPS_GRID_ELEMENT_WIDTH, ' ');
-
-    static inline const std::string G_BATTLESHIPS_PLACED_SHIP {static_cast<char>(178)};
-    static inline const std::string G_BATTLESHIPS_SUCCESSFUL_ATTACK {static_cast<char>(176)};
-    static inline const std::string G_BATTLESHIPS_MISSED_ATTACK {static_cast<char>(250)};
-
-    static inline const std::string G_BATTLESHIPS_GRID_SELECTED_FORMAT_STRING = "#{}#";
-
-    static inline const std::string G_BATTLESHIPS_PLAYER_ONE = "Player One";
-    static inline const std::string G_BATTLESHIPS_PLAYER_TWO = "Player Two";
-    static inline const std::vector<std::string> G_BATTLESHIPS_PLAYER_CHOICE_OPTIONS = {G_BATTLESHIPS_PLAYER_ONE, G_BATTLESHIPS_PLAYER_TWO};
-
-    static constexpr uint32_t G_BATTLESHIPS_SHIP_COUNT = 5;
-
-    static constexpr uint32_t G_BATTLESHIPS_CARRIER_SIZE = 5;
-    static constexpr uint32_t G_BATTLESHIPS_BATTLESHIP_SIZE = 4;
-    static constexpr uint32_t G_BATTLESHIPS_DESTROYER_SIZE = 3;
-    static constexpr uint32_t G_BATTLESHIPS_SUBMARINE_SIZE = 3;
-    static constexpr uint32_t G_BATTLESHIPS_PATROL_BOAT_SIZE = 2;
-
-    static inline const std::string G_BATTLESHIPS_CARRIER_NAME = "Carrier";
-    static inline const std::string G_BATTLESHIPS_BATTLESHIP_NAME = "Battleship";
-    static inline const std::string G_BATTLESHIPS_DESTROYER_NAME = "Destroyer";
-    static inline const std::string G_BATTLESHIPS_SUBMARINE_NAME = "Submarine";
-    static inline const std::string G_BATTLESHIPS_PATROL_BOAT_NAME = "Patrol Boat";
-
-    static inline const std::unordered_map<std::string, uint32_t> G_BATTLESHIPS_STARTING_SHIP_REMAINING = {
-        {Globals::G_BATTLESHIPS_CARRIER_NAME,     Globals::G_BATTLESHIPS_CARRIER_SIZE    },
-        {Globals::G_BATTLESHIPS_BATTLESHIP_NAME,  Globals::G_BATTLESHIPS_BATTLESHIP_SIZE },
-        {Globals::G_BATTLESHIPS_DESTROYER_NAME,   Globals::G_BATTLESHIPS_DESTROYER_SIZE  },
-        {Globals::G_BATTLESHIPS_SUBMARINE_NAME,   Globals::G_BATTLESHIPS_SUBMARINE_SIZE  },
-        {Globals::G_BATTLESHIPS_PATROL_BOAT_NAME, Globals::G_BATTLESHIPS_PATROL_BOAT_SIZE},
-    };
-
-    static inline const std::array<std::string, G_BATTLESHIPS_SHIP_COUNT> G_BATTLESHIPS_SHIP_NAMES = {
-        G_BATTLESHIPS_CARRIER_NAME,
-        G_BATTLESHIPS_BATTLESHIP_NAME,
-        G_BATTLESHIPS_DESTROYER_NAME,
-        G_BATTLESHIPS_SUBMARINE_NAME,
-        G_BATTLESHIPS_PATROL_BOAT_NAME,
-    };
-
-    static inline const std::array<uint32_t, G_BATTLESHIPS_SHIP_COUNT> G_BATTLESHIPS_SHIP_SIZES = {
-        G_BATTLESHIPS_CARRIER_SIZE,
-        G_BATTLESHIPS_BATTLESHIP_SIZE,
-        G_BATTLESHIPS_DESTROYER_SIZE,
-        G_BATTLESHIPS_SUBMARINE_SIZE,
-        G_BATTLESHIPS_PATROL_BOAT_SIZE,
-    };
-
-    static inline const std::array<std::string, G_BATTLESHIPS_SHIP_COUNT> G_BATTLESHIPS_SHIP_INSTRUCTIONS = {
-        ImplementStdFormat("Please enter the {} grid locations for the Carrier", G_BATTLESHIPS_CARRIER_SIZE),
-        ImplementStdFormat("Please enter the {} grid locations for the Battleship", G_BATTLESHIPS_BATTLESHIP_SIZE),
-        ImplementStdFormat("Please enter the {} grid locations for the Destroyer", G_BATTLESHIPS_DESTROYER_SIZE),
-        ImplementStdFormat("Please enter the {} grid locations for the Submarine", G_BATTLESHIPS_SUBMARINE_SIZE),
-        ImplementStdFormat("Please enter the {} grid locations for the Patrol Boat", G_BATTLESHIPS_PATROL_BOAT_SIZE),
-    };
-
-    /**
      * @brief PageBuilder
      */
-    // When highlighting what is currently selected in an option menu
-    static inline const std::string G_SELECTOR = ">";
+    // Extended ASCII characters for edges and corners of the page
+    static inline const std::string G_PAGE_HORIZONTAL_LINE = std::string(1, static_cast<char>(205));
+    static inline const std::string G_PAGE_VERTICAL_LINE = std::string(1, static_cast<char>(186));
+    static inline const std::string G_PAGE_TOP_RIGHT_CORNER = std::string(1, static_cast<char>(187));
+    static inline const std::string G_PAGE_BOTTOM_RIGHT_CORNER = std::string(1, static_cast<char>(188));
+    static inline const std::string G_PAGE_BOTTOM_LEFT_CORNER = std::string(1, static_cast<char>(200));
+    static inline const std::string G_PAGE_TOP_LEFT_CORNER = std::string(1, static_cast<char>(201));
+
+    static inline const std::string G_GRID_HORIZONTAL_LINE = std::string(1, static_cast<char>(196));
+    static inline const std::string G_GRID_INTERSECTION = std::string(1, static_cast<char>(197));
+    static inline const std::string G_GRID_VERTICAL_LINE = std::string(1, static_cast<char>(179));
 
     // ANSI colour escape codes
     static constexpr uint32_t G_ANSI_COLOUR_ESCAPE_CODE_SIZE = 7;
@@ -305,6 +174,15 @@ namespace TerminalGames::Globals
         G_RESET_ANSI_COLOUR_ESCAPE_CODE,
     };
 
+    // Padding
+    static constexpr uint32_t G_MINIMUM_LEFT_VERTICAL_LINE_SIZE = 1;
+    static constexpr uint32_t G_MINIMUM_LEFT_PADDING_SIZE = 1;
+    static constexpr uint32_t G_MINIMUM_RIGHT_PADDING_SIZE = 1;
+    static constexpr uint32_t G_MINIMUM_RIGHT_VERTICAL_LINE_SIZE = 1;
+
+    // When highlighting what is currently selected in an option menu
+    static inline const std::string G_SELECTOR = ">";
+
     // Quit menu
     static constexpr uint32_t G_RESTART_GAME_INDEX = 0;
     static constexpr uint32_t G_RESET_GAME_INDEX = 1;
@@ -320,24 +198,6 @@ namespace TerminalGames::Globals
         "Quit Program",
         "Cancel",
     };
-
-    // Extended ASCII characters for edges and corners of the page
-    static constexpr char G_PAGE_HORIZONTAL_LINE = static_cast<char>(205);
-    static constexpr char G_PAGE_VERTICAL_LINE = static_cast<char>(186);
-    static constexpr char G_PAGE_TOP_RIGHT_CORNER = static_cast<char>(187);
-    static constexpr char G_PAGE_BOTTOM_RIGHT_CORNER = static_cast<char>(188);
-    static constexpr char G_PAGE_BOTTOM_LEFT_CORNER = static_cast<char>(200);
-    static constexpr char G_PAGE_TOP_LEFT_CORNER = static_cast<char>(201);
-
-    static constexpr char G_GRID_HORIZONTAL_LINE = static_cast<char>(196);
-    static constexpr char G_GRID_INTERSECTION = static_cast<char>(197);
-    static constexpr char G_GRID_VERTICAL_LINE = static_cast<char>(179);
-
-    // Padding
-    static constexpr uint32_t G_MINIMUM_LEFT_VERTICAL_LINE_SIZE = 1;
-    static constexpr uint32_t G_MINIMUM_LEFT_PADDING_SIZE = 1;
-    static constexpr uint32_t G_MINIMUM_RIGHT_PADDING_SIZE = 1;
-    static constexpr uint32_t G_MINIMUM_RIGHT_VERTICAL_LINE_SIZE = 1;
 
     /**
      * @brief Terminal
@@ -362,6 +222,162 @@ namespace TerminalGames::Globals
     static constexpr uint32_t G_ALTERNATIVE_DOWN_ARROW_KEY = 's';
     static constexpr uint32_t G_ALTERNATIVE_LEFT_ARROW_KEY = 'a';
     static constexpr uint32_t G_ALTERNATIVE_RIGHT_ARROW_KEY = 'd';
+
+    /**
+     * @brief Homepage
+     */
+    static inline const std::string G_HOMEPAGE_TOP_TITLE = "Terminal Games";
+    static inline const std::string G_HOMEPAGE_BOTTOM_TITLE = "q = quit program";
+    static constexpr uint32_t G_HOMEPAGE_DISPLAY_WIDTH = 40;
+    static constexpr uint32_t G_HOMEPAGE_DISPLAY_HEIGHT = 20;
+
+    /**
+     * @brief Main Menu
+     */
+    static inline const std::string G_MAIN_MENU_TOP_TITLE = "Main Menu";
+    static inline const std::string G_MAIN_MENU_BOTTOM_TITLE = "q = quit to homepage";
+    static constexpr uint32_t G_MAIN_MENU_DISPLAY_WIDTH = 32;
+    static constexpr uint32_t G_MAIN_MENU_DISPLAY_HEIGHT = 13;
+
+    /**
+     * @brief Game
+     */
+    static inline const std::string G_GAME_UNKNOWN_OPTION = "N/A";
+    static inline const std::vector<std::string> G_GAME_COMPUTER_SPEED_OPTIONS = {"INSTANT", "FAST", "SLOW"};
+    static inline const std::vector<std::string> G_GAME_MAX_TWO_PLAYERS_OPTIONS = {"0", "1", "2"};
+    static inline const std::vector<std::string> G_GAME_MAX_ONE_PLAYER_OPTIONS = {"0", "1"};
+    static inline const std::string G_GAME_EMPTY_LINE;
+    static inline const std::string G_GAME_NUMBER_OF_PLAYERS = "# of Players = ";
+    static inline const std::string G_GAME_COMPUTER_SPEED = "Computer Speed = ";
+
+    /**
+     * @brief Tic Tac Toe
+     */
+    static inline const std::string G_TICTACTOE_TOP_TITLE = "Tic Tac Toe";
+    static inline const std::string G_TICTACTOE_BOTTOM_TITLE = "q = show quit menu";
+    static constexpr uint32_t G_TICTACTOE_DISPLAY_WIDTH = 57;
+    static constexpr uint32_t G_TICTACTOE_DISPLAY_HEIGHT = 19;
+
+    static constexpr uint32_t G_TICTACTOE_BOARD_WIDTH = 3;
+    static constexpr uint32_t G_TICTACTOE_BOARD_HEIGHT = 3;
+
+    static constexpr uint32_t G_TICTACTOE_GRID_ELEMENT_WIDTH = 3;
+    static constexpr uint32_t G_TICTACTOE_GRID_ELEMENT_HEIGHT = 1;
+    static constexpr uint32_t G_TICTACTOE_GRID_LEFT_PAD = 3;
+    static constexpr uint32_t G_TICTACTOE_GRID_TOP_PAD = 4;
+    static inline const std::string G_TICTACTOE_GRID_ROW_VALUE_DIVIDER(G_TICTACTOE_GRID_ELEMENT_WIDTH, Globals::G_GRID_HORIZONTAL_LINE[0]);
+    static inline const std::string G_TICTACTOE_EMPTY_GRID_VALUE(Globals::G_TICTACTOE_GRID_ELEMENT_WIDTH, ' ');
+    static inline const std::string G_TICTACTOE_GRID_OCCUPIED_FORMAT_STRING = " {} ";
+    static inline const std::string G_TICTACTOE_GRID_SELECTED_FORMAT_STRING = "#{}#";
+
+    static constexpr uint32_t G_TICTACTOE_MAXIMUM_ERROR_COUNT = G_TICTACTOE_BOARD_WIDTH * G_TICTACTOE_BOARD_HEIGHT;
+
+    static inline const std::string G_TICTACTOE_PLAYER_X = "Player X";
+    static inline const std::string G_TICTACTOE_PLAYER_O = "Player O";
+    static inline const std::vector<std::string> G_TICTACTOE_PLAYER_CHOICE_OPTIONS = {G_TICTACTOE_PLAYER_X, G_TICTACTOE_PLAYER_O};
+
+    /**
+     * @brief Hangman
+     */
+    static inline const std::string G_HANGMAN_TOP_TITLE = "Hangman";
+    static inline const std::string G_HANGMAN_BOTTOM_TITLE = "q = show quit menu";
+    static constexpr uint32_t G_HANGMAN_DISPLAY_WIDTH = 67;
+    static constexpr uint32_t G_HANGMAN_DISPLAY_HEIGHT = 22;
+
+    static constexpr uint32_t G_HANGMAN_MINIMUM_WORD_SIZE = 3;
+    static constexpr uint32_t G_HANGMAN_MAXIMUM_WORD_SIZE = 16;
+    static constexpr uint32_t G_HANGMAN_KEY_PRESS_CHAR_OFFSET = 32;
+    static inline const std::vector<char> G_HANGMAN_LETTERS_OF_THE_ALPHABET = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+    static constexpr char G_HANGMAN_HIDDEN_LETTER = '_';
+
+    static constexpr uint32_t G_HANGMAN_USER_INPUT_ROW = 13;
+    static constexpr uint32_t G_HANGMAN_GET_WORD_FROM_USER_COLUMN = 39;
+    static constexpr uint32_t G_HANGMAN_GET_USER_COMMAND_COLUMN = 41;
+
+    static constexpr uint32_t G_HANGMAN_MAXIMUM_ERROR_COUNT = 10;
+
+    static inline const std::string G_HANGMAN_GUESSER = "GUESSER";
+    static inline const std::string G_HANGMAN_WORD_SETTER = "WORD SETTER";
+    static inline const std::vector<std::string> G_HANGMAN_PLAYER_CHOICE_OPTIONS = {G_HANGMAN_GUESSER, G_HANGMAN_WORD_SETTER};
+
+    static inline const std::string G_HANGMAN_WORD_TO_GUESSED_FORMAT_STRING = "(The word was {})";
+    static inline const std::string G_HANGMAN_INCORRECT_GUESSES_TITLE = "Incorrect Guesses";
+    static inline const std::string G_HANGMAN_INCORRECT_GUESSES_PADDING = "   ";
+    static constexpr uint32_t G_HANGMAN_INCORRECT_GUESSES_FIRST_LINE_LAST_INDEX = 4;
+    static constexpr uint32_t G_HANGMAN_INCORRECT_GUESSES_SECOND_LINE_LAST_INDEX = 9;
+
+    /**
+     * @brief Battleships
+     */
+    static inline const std::string G_BATTLESHIPS_TOP_TITLE = "Battleships";
+    static inline const std::string G_BATTLESHIPS_BOTTOM_TITLE = "q = show quit menu";
+    static constexpr uint32_t G_BATTLESHIPS_DISPLAY_WIDTH = 149;
+    static constexpr uint32_t G_BATTLESHIPS_DISPLAY_HEIGHT = 38;
+
+    static constexpr uint32_t G_BATTLESHIPS_BOARD_WIDTH = 10;
+    static constexpr uint32_t G_BATTLESHIPS_BOARD_HEIGHT = 10;
+
+    static constexpr uint32_t G_BATTLESHIPS_GRID_ELEMENT_WIDTH = 4;
+    static constexpr uint32_t G_BATTLESHIPS_GRID_ELEMENT_HEIGHT = 2;
+    static constexpr uint32_t G_BATTLESHIPS_GRID_LEFT_PAD = 10;
+    static constexpr uint32_t G_BATTLESHIPS_GRID_TOP_PAD = 8;
+    static inline const std::string G_BATTLESHIPS_EMPTY_GRID_VALUE(Globals::G_BATTLESHIPS_GRID_ELEMENT_WIDTH, ' ');
+    static inline const std::string G_BATTLESHIPS_GRID_OCCUPIED_FORMAT_STRING = " {} ";
+    static inline const std::string G_BATTLESHIPS_GRID_SELECTED_FORMAT_STRING = "#{}#";
+
+    static inline const std::string G_BATTLESHIPS_PLACED_SHIP(1, static_cast<char>(178));
+    static inline const std::string G_BATTLESHIPS_SUCCESSFUL_ATTACK(1, static_cast<char>(176));
+    static inline const std::string G_BATTLESHIPS_MISSED_ATTACK(1, static_cast<char>(250));
+
+    static inline const std::string G_BATTLESHIPS_PLAYER_ONE = "Player One";
+    static inline const std::string G_BATTLESHIPS_PLAYER_TWO = "Player Two";
+    static inline const std::vector<std::string> G_BATTLESHIPS_PLAYER_CHOICE_OPTIONS = {G_BATTLESHIPS_PLAYER_ONE, G_BATTLESHIPS_PLAYER_TWO};
+
+    static constexpr uint32_t G_BATTLESHIPS_SHIP_COUNT = 5;
+
+    static constexpr uint32_t G_BATTLESHIPS_CARRIER_SIZE = 5;
+    static constexpr uint32_t G_BATTLESHIPS_BATTLESHIP_SIZE = 4;
+    static constexpr uint32_t G_BATTLESHIPS_DESTROYER_SIZE = 3;
+    static constexpr uint32_t G_BATTLESHIPS_SUBMARINE_SIZE = 3;
+    static constexpr uint32_t G_BATTLESHIPS_PATROL_BOAT_SIZE = 2;
+
+    static inline const std::string G_BATTLESHIPS_CARRIER_NAME = "Carrier";
+    static inline const std::string G_BATTLESHIPS_BATTLESHIP_NAME = "Battleship";
+    static inline const std::string G_BATTLESHIPS_DESTROYER_NAME = "Destroyer";
+    static inline const std::string G_BATTLESHIPS_SUBMARINE_NAME = "Submarine";
+    static inline const std::string G_BATTLESHIPS_PATROL_BOAT_NAME = "Patrol Boat";
+
+    static inline const std::array<std::string, G_BATTLESHIPS_SHIP_COUNT> G_BATTLESHIPS_SHIP_INSTRUCTIONS = {
+        ImplementStdFormat("Please enter the {} grid locations for the Carrier", G_BATTLESHIPS_CARRIER_SIZE),
+        ImplementStdFormat("Please enter the {} grid locations for the Battleship", G_BATTLESHIPS_BATTLESHIP_SIZE),
+        ImplementStdFormat("Please enter the {} grid locations for the Destroyer", G_BATTLESHIPS_DESTROYER_SIZE),
+        ImplementStdFormat("Please enter the {} grid locations for the Submarine", G_BATTLESHIPS_SUBMARINE_SIZE),
+        ImplementStdFormat("Please enter the {} grid locations for the Patrol Boat", G_BATTLESHIPS_PATROL_BOAT_SIZE),
+    };
+
+    static inline const std::array<std::string, G_BATTLESHIPS_SHIP_COUNT> G_BATTLESHIPS_SHIP_NAMES = {
+        G_BATTLESHIPS_CARRIER_NAME,
+        G_BATTLESHIPS_BATTLESHIP_NAME,
+        G_BATTLESHIPS_DESTROYER_NAME,
+        G_BATTLESHIPS_SUBMARINE_NAME,
+        G_BATTLESHIPS_PATROL_BOAT_NAME,
+    };
+
+    static inline const std::array<uint32_t, G_BATTLESHIPS_SHIP_COUNT> G_BATTLESHIPS_SHIP_SIZES = {
+        G_BATTLESHIPS_CARRIER_SIZE,
+        G_BATTLESHIPS_BATTLESHIP_SIZE,
+        G_BATTLESHIPS_DESTROYER_SIZE,
+        G_BATTLESHIPS_SUBMARINE_SIZE,
+        G_BATTLESHIPS_PATROL_BOAT_SIZE,
+    };
+
+    static inline const std::unordered_map<std::string, uint32_t> G_BATTLESHIPS_STARTING_SHIP_REMAINING = {
+        {Globals::G_BATTLESHIPS_CARRIER_NAME,     Globals::G_BATTLESHIPS_CARRIER_SIZE    },
+        {Globals::G_BATTLESHIPS_BATTLESHIP_NAME,  Globals::G_BATTLESHIPS_BATTLESHIP_SIZE },
+        {Globals::G_BATTLESHIPS_DESTROYER_NAME,   Globals::G_BATTLESHIPS_DESTROYER_SIZE  },
+        {Globals::G_BATTLESHIPS_SUBMARINE_NAME,   Globals::G_BATTLESHIPS_SUBMARINE_SIZE  },
+        {Globals::G_BATTLESHIPS_PATROL_BOAT_NAME, Globals::G_BATTLESHIPS_PATROL_BOAT_SIZE},
+    };
 
     /**
      * @brief Hangman word list for the computer
@@ -1109,8 +1125,6 @@ namespace TerminalGames::Globals
         "SET",
         "SEVEN",
         "SEVERAL",
-        "SEX",
-        "SEXUAL",
         "SHAKE",
         "SHARE",
         "SHE",

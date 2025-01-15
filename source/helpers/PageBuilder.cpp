@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <array>
 #include <cmath>
 #include <cstdint>
@@ -12,16 +13,14 @@ namespace TerminalGames
     PageBuilder::PageBuilder() :
         m_displayWidth(0),
         m_displayHeight(0),
-        m_maximumInputSize(0),
-        m_maximumFilledLineSize(0),
+        m_maximumLineSize(0),
         m_useAnsiEscapeCodes(false),
         m_currentPage(Pages::DEFAULT) {}
 
     PageBuilder::PageBuilder(const Pages& p_page, const bool& p_useAnsiEscapeCodes) :
         m_displayWidth(0),
         m_displayHeight(0),
-        m_maximumInputSize(0),
-        m_maximumFilledLineSize(0),
+        m_maximumLineSize(0),
         m_useAnsiEscapeCodes(false),
         m_currentPage(Pages::DEFAULT)
     {
@@ -74,8 +73,7 @@ namespace TerminalGames
             throw Globals::Exceptions::NotImplementedError();
         }
 
-        m_maximumInputSize = m_displayWidth - Globals::G_MINIMUM_LEFT_VERTICAL_LINE_SIZE - Globals::G_MINIMUM_LEFT_PADDING_SIZE - Globals::G_MINIMUM_RIGHT_PADDING_SIZE - Globals::G_MINIMUM_RIGHT_VERTICAL_LINE_SIZE;
-        m_maximumFilledLineSize = m_displayWidth - Globals::G_MINIMUM_LEFT_VERTICAL_LINE_SIZE - Globals::G_MINIMUM_RIGHT_VERTICAL_LINE_SIZE;
+        m_maximumLineSize = m_displayWidth - Globals::G_MINIMUM_LEFT_VERTICAL_LINE_SIZE - Globals::G_MINIMUM_LEFT_PADDING_SIZE - Globals::G_MINIMUM_RIGHT_PADDING_SIZE - Globals::G_MINIMUM_RIGHT_VERTICAL_LINE_SIZE;
     }
 
     Pages PageBuilder::GetCurrentPageType() const
@@ -149,7 +147,7 @@ namespace TerminalGames
         return GetGeneralOptionSelectionPages(p_gameNames, COMMON_TOP_STRING, COMMON_BOTTOM_STRING, true, true);
     }
 
-    std::vector<std::string> PageBuilder::GetPlayerCountOptionSelectionGamePages(const GameInfo& p_gameInfo) const
+    std::vector<std::string> PageBuilder::GetPlayerCountOptionSelectionGamePages(const GameInfo& p_gameInfo)
     {
         switch (m_currentPage)
         {
@@ -165,7 +163,7 @@ namespace TerminalGames
         }
     }
 
-    std::vector<std::string> PageBuilder::GetUserPlayerChoiceOptionSelectionGamePages(const GameInfo& p_gameInfo) const
+    std::vector<std::string> PageBuilder::GetUserPlayerChoiceOptionSelectionGamePages(const GameInfo& p_gameInfo)
     {
         switch (m_currentPage)
         {
@@ -180,7 +178,7 @@ namespace TerminalGames
         }
     }
 
-    std::vector<std::string> PageBuilder::GetComputerSpeedOptionSelectionGamePages(const GameInfo& p_gameInfo) const
+    std::vector<std::string> PageBuilder::GetComputerSpeedOptionSelectionGamePages(const GameInfo& p_gameInfo)
     {
         switch (m_currentPage)
         {
@@ -194,7 +192,7 @@ namespace TerminalGames
         }
     }
 
-    std::string PageBuilder::GetPageWithMessage(const GameInfo& p_gameInfo, const std::string& p_message) const
+    std::string PageBuilder::GetPageWithMessage(const GameInfo& p_gameInfo, const std::string& p_message)
     {
         const std::string COMMON_TOP_STRING = GetTopBox() + GetTopLine() + GetGeneralGameSubPage(p_gameInfo) + GetEmptyLine() + GetNewLineLeftJustified(p_message);
         const std::string COMMON_BOTTOM_STRING = GetBottomLine() + GetBottomBox();
@@ -202,7 +200,7 @@ namespace TerminalGames
         return COMMON_TOP_STRING + GetRemainingEmptyLines(COMMON_TOP_STRING, COMMON_BOTTOM_STRING) + COMMON_BOTTOM_STRING;
     }
 
-    std::string PageBuilder::GetUserCommandPage(const GameInfo& p_gameInfo) const
+    std::string PageBuilder::GetUserCommandPage(const GameInfo& p_gameInfo)
     {
         switch (m_currentPage)
         {
@@ -220,7 +218,7 @@ namespace TerminalGames
         }
     }
 
-    std::string PageBuilder::GetComputerCommandPage(const GameInfo& p_gameInfo) const
+    std::string PageBuilder::GetComputerCommandPage(const GameInfo& p_gameInfo)
     {
         switch (m_currentPage)
         {
@@ -234,7 +232,7 @@ namespace TerminalGames
         }
     }
 
-    std::string PageBuilder::GetGameOverPage(const GameInfo& p_gameInfo) const
+    std::string PageBuilder::GetGameOverPage(const GameInfo& p_gameInfo)
     {
         std::string topString = GetTopBox() + GetTopLine() + GetGeneralGameSubPage(p_gameInfo) + GetEmptyLine() + GetNewLineCentred("GAME OVER") + GetEmptyLine();
         const std::string BOTTOM_STRING = GetEmptyLine() + GetNewLineCentred("Press 'r' to restart game OR any key to reset game...") + GetBottomLine() + GetBottomBox();
@@ -314,9 +312,9 @@ namespace TerminalGames
         std::string output;
         output += Globals::G_PAGE_VERTICAL_LINE;
 
-        output.insert(output.size(), m_maximumFilledLineSize, ' ');
+        output.insert(output.size(), m_maximumLineSize + Globals::G_MINIMUM_LEFT_PADDING_SIZE + Globals::G_MINIMUM_RIGHT_PADDING_SIZE, ' ');
 
-        return output + Globals::G_PAGE_VERTICAL_LINE + "\n";
+        return output + Globals::G_PAGE_VERTICAL_LINE + '\n';
     }
 
     std::string PageBuilder::GetNewLineCentred(const std::string& p_input, const Colours& p_colour, const std::string& p_selector) const
@@ -332,11 +330,11 @@ namespace TerminalGames
         const uint32_t SELECTOR_ANSI_COLOUR_ESCAPE_CODE_COUNT = Globals::ImplementStdCount(p_selector.begin(), p_selector.end(), Globals::G_ANSI_COLOUR_ESCAPE_CODE_START);
         const uint32_t SELECTOR_SIZE = static_cast<uint32_t>(p_selector.size()) - (SELECTOR_ANSI_COLOUR_ESCAPE_CODE_COUNT * Globals::G_ANSI_COLOUR_ESCAPE_CODE_SIZE);
 
-        const std::string INPUT_TRIMMED = INPUT_WITH_SELECTOR_SIZE > m_maximumInputSize ? INPUT_WITH_SELECTOR.substr(0, m_maximumInputSize) : INPUT_WITH_SELECTOR;
+        const std::string INPUT_TRIMMED = INPUT_WITH_SELECTOR_SIZE > m_maximumLineSize ? INPUT_WITH_SELECTOR.substr(0, m_maximumLineSize) : INPUT_WITH_SELECTOR;
         const uint32_t INPUT_TRIMMED_SIZE = static_cast<uint32_t>(INPUT_TRIMMED.size()) - (INPUT_WITH_SELECTOR_ANSI_COLOUR_ESCAPE_CODE_COUNT * Globals::G_ANSI_COLOUR_ESCAPE_CODE_SIZE);
 
-        const uint32_t LEFT_PADDING_SIZE = static_cast<uint32_t>(ceil(static_cast<double>(m_maximumInputSize - (INPUT_TRIMMED_SIZE - SELECTOR_SIZE)) / DIVISOR) - SELECTOR_SIZE);
-        const uint32_t RIGHT_PADDING_SIZE = static_cast<uint32_t>(floor(static_cast<double>(m_maximumInputSize - (INPUT_TRIMMED_SIZE - SELECTOR_SIZE)) / DIVISOR));
+        const uint32_t LEFT_PADDING_SIZE = static_cast<uint32_t>(ceil(static_cast<double>(m_maximumLineSize - (INPUT_TRIMMED_SIZE - SELECTOR_SIZE)) / DIVISOR) - SELECTOR_SIZE);
+        const uint32_t RIGHT_PADDING_SIZE = static_cast<uint32_t>(floor(static_cast<double>(m_maximumLineSize - (INPUT_TRIMMED_SIZE - SELECTOR_SIZE)) / DIVISOR));
 
         std::string output;
         output += Globals::G_PAGE_VERTICAL_LINE;
@@ -344,7 +342,7 @@ namespace TerminalGames
         output += AddColour(INPUT_TRIMMED, p_colour);
         output.insert(output.size(), RIGHT_PADDING_SIZE + Globals::G_MINIMUM_RIGHT_PADDING_SIZE, ' ');
 
-        return output + Globals::G_PAGE_VERTICAL_LINE + "\n";
+        return output + Globals::G_PAGE_VERTICAL_LINE + '\n';
     }
 
     std::string PageBuilder::GetNewLineLeftJustified(const std::string& p_input, const Colours& p_colour, const std::string& p_selector) const
@@ -360,19 +358,19 @@ namespace TerminalGames
         output += Globals::G_PAGE_VERTICAL_LINE;
         output.insert(output.size(), Globals::G_MINIMUM_LEFT_PADDING_SIZE, ' ');
 
-        if (INPUT_SIZE > m_maximumInputSize)
+        if (INPUT_SIZE > m_maximumLineSize)
         {
-            output += AddColour(INPUT.substr(0, m_maximumInputSize), p_colour);
+            output += AddColour(INPUT.substr(0, m_maximumLineSize), p_colour);
             output.insert(output.size(), Globals::G_MINIMUM_RIGHT_PADDING_SIZE, ' ');
         }
 
         else
         {
             output += AddColour(INPUT, p_colour);
-            output.insert(output.size(), m_maximumInputSize + Globals::G_MINIMUM_RIGHT_PADDING_SIZE - INPUT_SIZE, ' ');
+            output.insert(output.size(), m_maximumLineSize + Globals::G_MINIMUM_RIGHT_PADDING_SIZE - INPUT_SIZE, ' ');
         }
 
-        return output + Globals::G_PAGE_VERTICAL_LINE + "\n";
+        return output + Globals::G_PAGE_VERTICAL_LINE + '\n';
     }
 
     std::string PageBuilder::GetTopLine() const
@@ -380,9 +378,9 @@ namespace TerminalGames
         std::string output;
         output += Globals::G_PAGE_TOP_LEFT_CORNER;
 
-        output.insert(output.size(), m_maximumFilledLineSize, Globals::G_PAGE_HORIZONTAL_LINE);
+        output.insert(output.size(), m_maximumLineSize + Globals::G_MINIMUM_LEFT_PADDING_SIZE + Globals::G_MINIMUM_RIGHT_PADDING_SIZE, Globals::G_PAGE_HORIZONTAL_LINE[0]);
 
-        return output + Globals::G_PAGE_TOP_RIGHT_CORNER + "\n";
+        return output + Globals::G_PAGE_TOP_RIGHT_CORNER + '\n';
     }
 
     std::string PageBuilder::GetBottomLine() const
@@ -390,9 +388,9 @@ namespace TerminalGames
         std::string output;
         output += Globals::G_PAGE_BOTTOM_LEFT_CORNER;
 
-        output.insert(output.size(), m_maximumFilledLineSize, Globals::G_PAGE_HORIZONTAL_LINE);
+        output.insert(output.size(), m_maximumLineSize + Globals::G_MINIMUM_LEFT_PADDING_SIZE + Globals::G_MINIMUM_RIGHT_PADDING_SIZE, Globals::G_PAGE_HORIZONTAL_LINE[0]);
 
-        return output + Globals::G_PAGE_BOTTOM_RIGHT_CORNER + "\n";
+        return output + Globals::G_PAGE_BOTTOM_RIGHT_CORNER + '\n';
     }
 
     std::string PageBuilder::GetTopBox() const
@@ -419,7 +417,7 @@ namespace TerminalGames
         return output;
     }
 
-    std::vector<std::string> PageBuilder::GetGameOptionSelectionPages(const GameInfo& p_gameInfo, const std::string& p_message, const std::vector<std::string>& p_options) const
+    std::vector<std::string> PageBuilder::GetGameOptionSelectionPages(const GameInfo& p_gameInfo, const std::string& p_message, const std::vector<std::string>& p_options)
     {
         const std::string COMMON_TOP_STRING = GetTopBox() + GetTopLine() + GetGeneralGameSubPage(p_gameInfo) + GetEmptyLine() + GetNewLineLeftJustified(p_message);
         const std::string COMMON_BOTTOM_STRING = GetBottomLine() + GetBottomBox();
@@ -466,7 +464,7 @@ namespace TerminalGames
         return output;
     }
 
-    std::string PageBuilder::GetGeneralGameSubPage(const GameInfo& p_gameInfo) const
+    std::string PageBuilder::GetGeneralGameSubPage(const GameInfo& p_gameInfo)
     {
         switch (m_currentPage)
         {
@@ -484,81 +482,164 @@ namespace TerminalGames
         }
     }
 
-    std::string PageBuilder::GetTicTacToeSubPage(const GameInfo& p_gameInfo) const
+    std::string PageBuilder::GetTicTacToeSubPage(const GameInfo& p_gameInfo)
     {
-        const std::array<std::array<std::string, Globals::G_TICTACTOE_BOARD_WIDTH>, Globals::G_TICTACTOE_BOARD_HEIGHT> GAME_GRID = p_gameInfo.m_ticTacToeGameInfo.m_gameGrid;
-        const std::string PLAYER_COUNT = p_gameInfo.m_ticTacToeGameInfo.m_playerCount;
-        const std::string COMPUTER_SPEED_NAME = p_gameInfo.m_ticTacToeGameInfo.m_computerSpeedName;
+        // leftGridLines and RIGHT_GRID_STRINGS vectors must equal GRID_HEIGHT in length.
+        // Also LEFT_GRID_SIZE + RIGHT_GRID_SIZE must equal G_TICTACTOE_DISPLAY_WIDTH - (numberOfGrids * (Globals::G_MINIMUM_LEFT_VERTICAL_LINE_SIZE - Globals::G_MINIMUM_LEFT_PADDING_SIZE - Globals::G_MINIMUM_RIGHT_PADDING_SIZE - Globals::G_MINIMUM_RIGHT_VERTICAL_LINE_SIZE))
+        const uint32_t LEFT_GRID_SIZE = 11;
+        const uint32_t RIGHT_GRID_SIZE = 38;
+        const uint32_t GRID_HEIGHT = 5;
 
-        std::string output;
+        // Tic Tac Toe board section
+        std::vector<std::string> leftGridLines;
+        for (uint32_t i = 0; i < Globals::G_TICTACTOE_BOARD_HEIGHT; i++)
+        {
+            std::string currentRow;
+            std::string currentRowDivider;
 
-        output += GetNewLineLeftJustified(GAME_GRID[0][0] + Globals::G_GRID_VERTICAL_LINE + GAME_GRID[0][1] + Globals::G_GRID_VERTICAL_LINE + GAME_GRID[0][2]);
+            for (uint32_t j = 0; j < Globals::G_TICTACTOE_BOARD_WIDTH; j++)
+            {
+                currentRow += p_gameInfo.m_ticTacToeGameInfo.m_gameGrid.at(i).at(j);
+                currentRowDivider += Globals::G_TICTACTOE_GRID_ROW_VALUE_DIVIDER;
 
-        output += GetNewLineLeftJustified(std::string("") + Globals::G_GRID_HORIZONTAL_LINE + Globals::G_GRID_HORIZONTAL_LINE + Globals::G_GRID_HORIZONTAL_LINE + Globals::G_GRID_INTERSECTION + Globals::G_GRID_HORIZONTAL_LINE + Globals::G_GRID_HORIZONTAL_LINE + Globals::G_GRID_HORIZONTAL_LINE + Globals::G_GRID_INTERSECTION + Globals::G_GRID_HORIZONTAL_LINE + Globals::G_GRID_HORIZONTAL_LINE + Globals::G_GRID_HORIZONTAL_LINE + "         # of Players = " + PLAYER_COUNT);
+                // Skip on last value
+                if (j != Globals::G_TICTACTOE_BOARD_WIDTH - 1)
+                {
+                    currentRow += Globals::G_GRID_VERTICAL_LINE;
+                    currentRowDivider += Globals::G_GRID_INTERSECTION;
+                }
+            }
 
-        output += GetNewLineLeftJustified(GAME_GRID[1][0] + Globals::G_GRID_VERTICAL_LINE + GAME_GRID[1][1] + Globals::G_GRID_VERTICAL_LINE + GAME_GRID[1][2]);
+            leftGridLines.emplace_back(currentRow);
+            leftGridLines.emplace_back(currentRowDivider);
+        }
 
-        output += GetNewLineLeftJustified(std::string("") + Globals::G_GRID_HORIZONTAL_LINE + Globals::G_GRID_HORIZONTAL_LINE + Globals::G_GRID_HORIZONTAL_LINE + Globals::G_GRID_INTERSECTION + Globals::G_GRID_HORIZONTAL_LINE + Globals::G_GRID_HORIZONTAL_LINE + Globals::G_GRID_HORIZONTAL_LINE + Globals::G_GRID_INTERSECTION + Globals::G_GRID_HORIZONTAL_LINE + Globals::G_GRID_HORIZONTAL_LINE + Globals::G_GRID_HORIZONTAL_LINE + "        Computer Speed = " + COMPUTER_SPEED_NAME);
+        // Game options section
+        const std::vector<std::string> RIGHT_GRID_LINES = {
+            Globals::G_GAME_EMPTY_LINE,
+            Globals::G_GAME_NUMBER_OF_PLAYERS + p_gameInfo.m_ticTacToeGameInfo.m_playerCount,
+            Globals::G_GAME_EMPTY_LINE,
+            Globals::G_GAME_COMPUTER_SPEED + p_gameInfo.m_ticTacToeGameInfo.m_computerSpeedName,
+            Globals::G_GAME_EMPTY_LINE,
+        };
 
-        output += GetNewLineLeftJustified(GAME_GRID[2][0] + Globals::G_GRID_VERTICAL_LINE + GAME_GRID[2][1] + Globals::G_GRID_VERTICAL_LINE + GAME_GRID[2][2]);
+        return GetGridLayout({LEFT_GRID_SIZE, RIGHT_GRID_SIZE}, {leftGridLines, RIGHT_GRID_LINES}, GRID_HEIGHT);
+    }
+
+    std::string PageBuilder::GetHangmanSubPage(const GameInfo& p_gameInfo)
+    {
+        // leftGridLines, MIDDLE_GRID_LINES and RIGHT_GRID_STRINGS vectors must equal GRID_HEIGHT in length.
+        // Also LEFT_GRID_SIZE + MIDDLE_GRID_SIZE + RIGHT_GRID_SIZE must equal G_HANGMAN_DISPLAY_WIDTH - (numberOfGrids * Globals::G_MINIMUM_LEFT_VERTICAL_LINE_SIZE - Globals::G_MINIMUM_LEFT_PADDING_SIZE - Globals::G_MINIMUM_RIGHT_PADDING_SIZE - Globals::G_MINIMUM_RIGHT_VERTICAL_LINE_SIZE))
+        const uint32_t LEFT_GRID_SIZE = 14;
+        const uint32_t MIDDLE_GRID_SIZE = 24;
+        const uint32_t RIGHT_GRID_SIZE = 17;
+        const uint32_t GRID_HEIGHT = 7;
+
+        // Hangman state section
+        // TODO(Main): left grid lines
+        std::vector<std::string> leftGridLines = {
+            Globals::G_GAME_EMPTY_LINE,
+            Globals::G_GAME_EMPTY_LINE,
+            Globals::G_GAME_EMPTY_LINE,
+            Globals::G_GAME_EMPTY_LINE,
+            Globals::G_GAME_EMPTY_LINE,
+            Globals::G_GAME_EMPTY_LINE,
+            Globals::G_GAME_EMPTY_LINE,
+        };
+
+        // Game options section
+        const std::vector<std::string> MIDDLE_GRID_LINES = {
+            Globals::G_GAME_EMPTY_LINE,
+            Globals::G_GAME_EMPTY_LINE,
+            Globals::G_GAME_NUMBER_OF_PLAYERS + p_gameInfo.m_hangmanGameInfo.m_playerCount,
+            Globals::G_GAME_EMPTY_LINE,
+            Globals::G_GAME_COMPUTER_SPEED + p_gameInfo.m_hangmanGameInfo.m_computerSpeedName,
+            Globals::G_GAME_EMPTY_LINE,
+            Globals::G_GAME_EMPTY_LINE,
+        };
+
+        // Incorrect Guesses section
+        std::vector<std::string> rightGridLines;
+        std::string currentLine;
+
+        rightGridLines.emplace_back(Globals::G_GAME_EMPTY_LINE);
+        rightGridLines.emplace_back(Globals::G_HANGMAN_INCORRECT_GUESSES_TITLE);
+
+        for (uint32_t i = 0; i < p_gameInfo.m_hangmanGameInfo.m_incorrectGuesses.size(); i++)
+        {
+            currentLine += p_gameInfo.m_hangmanGameInfo.m_incorrectGuesses.at(i);
+
+            // Skip adding space on last value on each line
+            if (i != Globals::G_HANGMAN_INCORRECT_GUESSES_FIRST_LINE_LAST_INDEX && i != Globals::G_HANGMAN_INCORRECT_GUESSES_SECOND_LINE_LAST_INDEX)
+                currentLine += Globals::G_HANGMAN_INCORRECT_GUESSES_PADDING;
+
+            else
+            {
+                rightGridLines.emplace_back(currentLine);
+                rightGridLines.emplace_back(Globals::G_GAME_EMPTY_LINE);
+                currentLine.clear();
+            }
+        }
+
+        if (!currentLine.empty())
+            rightGridLines.emplace_back(currentLine);
+
+        // Adding required number of empty lines to meet GRID_HEIGHT
+        const uint32_t REMAINING_LINES_TO_ADD = GRID_HEIGHT - rightGridLines.size();
+        for (uint32_t i = 0; i < REMAINING_LINES_TO_ADD; i++)
+            rightGridLines.emplace_back(Globals::G_GAME_EMPTY_LINE);
+
+        std::string output = GetGridLayout({LEFT_GRID_SIZE, MIDDLE_GRID_SIZE, RIGHT_GRID_SIZE}, {leftGridLines, MIDDLE_GRID_LINES, rightGridLines}, GRID_HEIGHT);
+
+        // Current guess of word and word to be guessed section
+        std::string currentGuessOfWord;
+        for (const char& letter : p_gameInfo.m_hangmanGameInfo.m_currentGuessOfWord)
+        {
+            currentGuessOfWord += letter;
+            currentGuessOfWord += ' ';
+        }
+
+        if (p_gameInfo.m_hangmanGameInfo.m_hasWinner)
+            output += GetNewLineLeftJustified(currentGuessOfWord + Globals::ImplementStdFormat(Globals::G_HANGMAN_WORD_TO_GUESSED_FORMAT_STRING, p_gameInfo.m_hangmanGameInfo.m_wordToBeGuessed));
+        else
+            output += GetNewLineLeftJustified(currentGuessOfWord);
 
         return output;
+
+        // const std::vector<char> incorrectGuesses = gameInfo.m_hangmanGameInfo.m_incorrectGuesses;
+        // const std::string currentGuessOfWord = gameInfo.m_hangmanGameInfo.m_currentGuessOfWord, wordToBeGuessed = gameInfo.m_hangmanGameInfo.m_wordToBeGuessed, playerCount = gameInfo.m_hangmanGameInfo.m_playerCount, computerSpeedName = gameInfo.m_hangmanGameInfo.m_computerSpeedName;
+        // const uint32_t errorCount = gameInfo.m_hangmanGameInfo.m_incorrectGuesses.size();
+
+        // std::string output;
+
+        // // Hangman State
+        // if (errorCount == 0)
+        //     output += GetEmptyLine() + GetEmptyLine() + GetNewLineLeftJustified("                   # of Players = " + playerCount) + GetEmptyLine() + GetNewLineLeftJustified("                   Computer Speed = " + computerSpeedName) + GetEmptyLine() + GetEmptyLine();
+        // else if (errorCount == 1)
+        //     output += GetEmptyLine() + GetNewLineLeftJustified("                                          Incorrect Guesses") + GetNewLineLeftJustified("                   # of Players = " + playerCount) + GetNewLineLeftJustified(std::string("                                          ") + incorrectGuesses[0]) + GetNewLineLeftJustified("                   Computer Speed = " + computerSpeedName) + GetEmptyLine() + GetNewLineLeftJustified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196);
+        // else if (errorCount == 2)
+        //     output += GetEmptyLine() + GetNewLineLeftJustified(std::string("     ") + (char)179 + "                                    Incorrect Guesses") + GetNewLineLeftJustified(std::string("     ") + (char)179 + "             # of Players = " + playerCount) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "                                    " + incorrectGuesses[0] + "   " + incorrectGuesses[1]) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "             Computer Speed = " + computerSpeedName) + GetNewLineLeftJustified(std::string("     ") + (char)179) + GetNewLineLeftJustified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)196 + (char)193 + (char)196 + (char)196 + (char)196 + (char)196);
+        // else if (errorCount == 3)
+        //     output += GetNewLineLeftJustified(std::string("     ") + (char)218 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "                                    Incorrect Guesses") + GetNewLineLeftJustified(std::string("     ") + (char)179 + "             # of Players = " + playerCount) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "                                    " + incorrectGuesses[0] + "   " + incorrectGuesses[1] + "   " + incorrectGuesses[2]) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "             Computer Speed = " + computerSpeedName) + GetNewLineLeftJustified(std::string("     ") + (char)179) + GetNewLineLeftJustified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)196 + (char)193 + (char)196 + (char)196 + (char)196 + (char)196);
+        // else if (errorCount == 4)
+        //     output += GetNewLineLeftJustified(std::string("     ") + (char)218 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)191) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "       " + (char)179 + "                            Incorrect Guesses") + GetNewLineLeftJustified(std::string("     ") + (char)179 + "             # of Players = " + playerCount) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "                                    " + incorrectGuesses[0] + "   " + incorrectGuesses[1] + "   " + incorrectGuesses[2] + "   " + incorrectGuesses[3]) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "             Computer Speed = " + computerSpeedName) + GetNewLineLeftJustified(std::string("     ") + (char)179) + GetNewLineLeftJustified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)196 + (char)193 + (char)196 + (char)196 + (char)196 + (char)196);
+        // else if (errorCount == 5)
+        //     output += GetNewLineLeftJustified(std::string("     ") + (char)218 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)191) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "       " + (char)179 + "                            Incorrect Guesses") + GetNewLineLeftJustified(std::string("     ") + (char)179 + "       O     # of Players = " + playerCount) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "                                    " + incorrectGuesses[0] + "   " + incorrectGuesses[1] + "   " + incorrectGuesses[2] + "   " + incorrectGuesses[3] + "   " + incorrectGuesses[4]) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "             Computer Speed = " + computerSpeedName + "                       ") + GetNewLineLeftJustified(std::string("     ") + (char)179) + GetNewLineLeftJustified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)196 + (char)193 + (char)196 + (char)196 + (char)196 + (char)196);
+        // else if (errorCount == 6)
+        //     output += GetNewLineLeftJustified(std::string("     ") + (char)218 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)191) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "       " + (char)179 + "                            Incorrect Guesses") + GetNewLineLeftJustified(std::string("     ") + (char)179 + "       O     # of Players = " + playerCount) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "       " + (char)179 + "                            " + incorrectGuesses[0] + "   " + incorrectGuesses[1] + "   " + incorrectGuesses[2] + "   " + incorrectGuesses[3] + "   " + incorrectGuesses[4]) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "             Computer Speed = " + computerSpeedName) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "                                    " + incorrectGuesses[5]) + GetNewLineLeftJustified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)196 + (char)193 + (char)196 + (char)196 + (char)196 + (char)196);
+        // else if (errorCount == 7)
+        //     output += GetNewLineLeftJustified(std::string("     ") + (char)218 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)191) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "       " + (char)179 + "                            Incorrect Guesses") + GetNewLineLeftJustified(std::string("     ") + (char)179 + "       O     # of Players = " + playerCount) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "       " + (char)179 + "                            " + incorrectGuesses[0] + "   " + incorrectGuesses[1] + "   " + incorrectGuesses[2] + "   " + incorrectGuesses[3] + "   " + incorrectGuesses[4]) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "      /      Computer Speed = " + computerSpeedName) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "                                    " + incorrectGuesses[5] + "   " + incorrectGuesses[6]) + GetNewLineLeftJustified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)196 + (char)193 + (char)196 + (char)196 + (char)196 + (char)196);
+        // else if (errorCount == 8)
+        //     output += GetNewLineLeftJustified(std::string("     ") + (char)218 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)191) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "       " + (char)179 + "                            Incorrect Guesses") + GetNewLineLeftJustified(std::string("     ") + (char)179 + "       O     # of Players = " + playerCount) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "       " + (char)179 + "                            " + incorrectGuesses[0] + "   " + incorrectGuesses[1] + "   " + incorrectGuesses[2] + "   " + incorrectGuesses[3] + "   " + incorrectGuesses[4]) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "      / \\    Computer Speed = " + computerSpeedName) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "                                    " + incorrectGuesses[5] + "   " + incorrectGuesses[6] + "   " + incorrectGuesses[7]) + GetNewLineLeftJustified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)196 + (char)193 + (char)196 + (char)196 + (char)196 + (char)196);
+        // else if (errorCount == 9)
+        //     output += GetNewLineLeftJustified(std::string("     ") + (char)218 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)191) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "       " + (char)179 + "                            Incorrect Guesses") + GetNewLineLeftJustified(std::string("     ") + (char)179 + "       O     # of Players = " + playerCount) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "      /" + (char)179 + "                            " + incorrectGuesses[0] + "   " + incorrectGuesses[1] + "   " + incorrectGuesses[2] + "   " + incorrectGuesses[3] + "   " + incorrectGuesses[4]) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "      / \\    Computer Speed = " + computerSpeedName) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "                                    " + incorrectGuesses[5] + "   " + incorrectGuesses[6] + "   " + incorrectGuesses[7] + "   " + incorrectGuesses[8]) + GetNewLineLeftJustified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)196 + (char)193 + (char)196 + (char)196 + (char)196 + (char)196);
+        // else if (errorCount == 10)
+        //     output += GetNewLineLeftJustified(std::string("     ") + (char)218 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)191) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "       " + (char)179 + "                            Incorrect Guesses") + GetNewLineLeftJustified(std::string("     ") + (char)179 + "       O     # of Players = " + playerCount) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "      /" + (char)179 + "\\                           " + incorrectGuesses[0] + "   " + incorrectGuesses[1] + "   " + incorrectGuesses[2] + "   " + incorrectGuesses[3] + "   " + incorrectGuesses[4]) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "      / \\    Computer Speed = " + computerSpeedName) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "                                    " + incorrectGuesses[5] + "   " + incorrectGuesses[6] + "   " + incorrectGuesses[7] + "   " + incorrectGuesses[8] + "   " + incorrectGuesses[9]) + GetNewLineLeftJustified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)196 + (char)193 + (char)196 + (char)196 + (char)196 + (char)196);
     }
 
     // NOLINTBEGIN
-    std::string PageBuilder::GetHangmanSubPage(const GameInfo& gameInfo) const
-    {
-        const std::vector<char> incorrectGuesses = gameInfo.m_hangmanGameInfo.m_incorrectGuesses;
-        const std::string currentGuessOfWord = gameInfo.m_hangmanGameInfo.m_currentGuessOfWord, wordToBeGuessed = gameInfo.m_hangmanGameInfo.m_wordToBeGuessed, playerCount = gameInfo.m_hangmanGameInfo.m_playerCount, computerSpeedName = gameInfo.m_hangmanGameInfo.m_computerSpeedName;
-        const uint32_t errorCount = gameInfo.m_hangmanGameInfo.m_incorrectGuesses.size();
 
-        std::string output;
-
-        // Hangman State
-        if (errorCount == 0)
-            output += GetEmptyLine() + GetEmptyLine() + GetNewLineLeftJustified("                   # of Players = " + playerCount) + GetEmptyLine() + GetNewLineLeftJustified("                   Computer Speed = " + computerSpeedName) + GetEmptyLine() + GetEmptyLine();
-        else if (errorCount == 1)
-            output += GetEmptyLine() + GetNewLineLeftJustified("                                          Incorrect Guesses") + GetNewLineLeftJustified("                   # of Players = " + playerCount) + GetNewLineLeftJustified(std::string("                                          ") + incorrectGuesses[0]) + GetNewLineLeftJustified("                   Computer Speed = " + computerSpeedName) + GetEmptyLine() + GetNewLineLeftJustified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196);
-        else if (errorCount == 2)
-            output += GetEmptyLine() + GetNewLineLeftJustified(std::string("     ") + (char)179 + "                                    Incorrect Guesses") + GetNewLineLeftJustified(std::string("     ") + (char)179 + "             # of Players = " + playerCount) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "                                    " + incorrectGuesses[0] + "   " + incorrectGuesses[1]) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "             Computer Speed = " + computerSpeedName) + GetNewLineLeftJustified(std::string("     ") + (char)179) + GetNewLineLeftJustified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)196 + (char)193 + (char)196 + (char)196 + (char)196 + (char)196);
-        else if (errorCount == 3)
-            output += GetNewLineLeftJustified(std::string("     ") + (char)218 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "                                    Incorrect Guesses") + GetNewLineLeftJustified(std::string("     ") + (char)179 + "             # of Players = " + playerCount) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "                                    " + incorrectGuesses[0] + "   " + incorrectGuesses[1] + "   " + incorrectGuesses[2]) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "             Computer Speed = " + computerSpeedName) + GetNewLineLeftJustified(std::string("     ") + (char)179) + GetNewLineLeftJustified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)196 + (char)193 + (char)196 + (char)196 + (char)196 + (char)196);
-        else if (errorCount == 4)
-            output += GetNewLineLeftJustified(std::string("     ") + (char)218 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)191) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "       " + (char)179 + "                            Incorrect Guesses") + GetNewLineLeftJustified(std::string("     ") + (char)179 + "             # of Players = " + playerCount) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "                                    " + incorrectGuesses[0] + "   " + incorrectGuesses[1] + "   " + incorrectGuesses[2] + "   " + incorrectGuesses[3]) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "             Computer Speed = " + computerSpeedName) + GetNewLineLeftJustified(std::string("     ") + (char)179) + GetNewLineLeftJustified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)196 + (char)193 + (char)196 + (char)196 + (char)196 + (char)196);
-        else if (errorCount == 5)
-            output += GetNewLineLeftJustified(std::string("     ") + (char)218 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)191) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "       " + (char)179 + "                            Incorrect Guesses") + GetNewLineLeftJustified(std::string("     ") + (char)179 + "       O     # of Players = " + playerCount) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "                                    " + incorrectGuesses[0] + "   " + incorrectGuesses[1] + "   " + incorrectGuesses[2] + "   " + incorrectGuesses[3] + "   " + incorrectGuesses[4]) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "             Computer Speed = " + computerSpeedName + "                       ") + GetNewLineLeftJustified(std::string("     ") + (char)179) + GetNewLineLeftJustified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)196 + (char)193 + (char)196 + (char)196 + (char)196 + (char)196);
-        else if (errorCount == 6)
-            output += GetNewLineLeftJustified(std::string("     ") + (char)218 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)191) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "       " + (char)179 + "                            Incorrect Guesses") + GetNewLineLeftJustified(std::string("     ") + (char)179 + "       O     # of Players = " + playerCount) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "       " + (char)179 + "                            " + incorrectGuesses[0] + "   " + incorrectGuesses[1] + "   " + incorrectGuesses[2] + "   " + incorrectGuesses[3] + "   " + incorrectGuesses[4]) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "             Computer Speed = " + computerSpeedName) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "                                    " + incorrectGuesses[5]) + GetNewLineLeftJustified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)196 + (char)193 + (char)196 + (char)196 + (char)196 + (char)196);
-        else if (errorCount == 7)
-            output += GetNewLineLeftJustified(std::string("     ") + (char)218 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)191) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "       " + (char)179 + "                            Incorrect Guesses") + GetNewLineLeftJustified(std::string("     ") + (char)179 + "       O     # of Players = " + playerCount) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "       " + (char)179 + "                            " + incorrectGuesses[0] + "   " + incorrectGuesses[1] + "   " + incorrectGuesses[2] + "   " + incorrectGuesses[3] + "   " + incorrectGuesses[4]) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "      /      Computer Speed = " + computerSpeedName) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "                                    " + incorrectGuesses[5] + "   " + incorrectGuesses[6]) + GetNewLineLeftJustified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)196 + (char)193 + (char)196 + (char)196 + (char)196 + (char)196);
-        else if (errorCount == 8)
-            output += GetNewLineLeftJustified(std::string("     ") + (char)218 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)191) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "       " + (char)179 + "                            Incorrect Guesses") + GetNewLineLeftJustified(std::string("     ") + (char)179 + "       O     # of Players = " + playerCount) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "       " + (char)179 + "                            " + incorrectGuesses[0] + "   " + incorrectGuesses[1] + "   " + incorrectGuesses[2] + "   " + incorrectGuesses[3] + "   " + incorrectGuesses[4]) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "      / \\    Computer Speed = " + computerSpeedName) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "                                    " + incorrectGuesses[5] + "   " + incorrectGuesses[6] + "   " + incorrectGuesses[7]) + GetNewLineLeftJustified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)196 + (char)193 + (char)196 + (char)196 + (char)196 + (char)196);
-        else if (errorCount == 9)
-            output += GetNewLineLeftJustified(std::string("     ") + (char)218 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)191) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "       " + (char)179 + "                            Incorrect Guesses") + GetNewLineLeftJustified(std::string("     ") + (char)179 + "       O     # of Players = " + playerCount) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "      /" + (char)179 + "                            " + incorrectGuesses[0] + "   " + incorrectGuesses[1] + "   " + incorrectGuesses[2] + "   " + incorrectGuesses[3] + "   " + incorrectGuesses[4]) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "      / \\    Computer Speed = " + computerSpeedName) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "                                    " + incorrectGuesses[5] + "   " + incorrectGuesses[6] + "   " + incorrectGuesses[7] + "   " + incorrectGuesses[8]) + GetNewLineLeftJustified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)196 + (char)193 + (char)196 + (char)196 + (char)196 + (char)196);
-        else if (errorCount == 10)
-            output += GetNewLineLeftJustified(std::string("     ") + (char)218 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)196 + (char)191) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "       " + (char)179 + "                            Incorrect Guesses") + GetNewLineLeftJustified(std::string("     ") + (char)179 + "       O     # of Players = " + playerCount) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "      /" + (char)179 + "\\                           " + incorrectGuesses[0] + "   " + incorrectGuesses[1] + "   " + incorrectGuesses[2] + "   " + incorrectGuesses[3] + "   " + incorrectGuesses[4]) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "      / \\    Computer Speed = " + computerSpeedName) + GetNewLineLeftJustified(std::string("     ") + (char)179 + "                                    " + incorrectGuesses[5] + "   " + incorrectGuesses[6] + "   " + incorrectGuesses[7] + "   " + incorrectGuesses[8] + "   " + incorrectGuesses[9]) + GetNewLineLeftJustified(std::string(" ") + (char)196 + (char)196 + (char)196 + (char)196 + (char)193 + (char)196 + (char)196 + (char)196 + (char)196);
-
-        // Word to be guessed, and thus current guess of word, are limited to a size in between 3 and 14
-        output += (char)186;
-
-        for (char i : currentGuessOfWord)
-            output += std::string(" ") + i;
-
-        if (errorCount == 10) // show what the word to be guessed was
-        {
-            output += "   (The word was " + wordToBeGuessed + ")";
-            output.insert(output.size(), (62 - 18 - wordToBeGuessed.size() * 3), ' ');
-        }
-
-        else // do not show it
-            output.insert(output.size(), (62 - wordToBeGuessed.size() * 2), ' ');
-
-        output += (char)186;
-
-        return output + "\n";
-    }
-
-    std::string PageBuilder::GetBattleshipsSubPage(const GameInfo& gameInfo) const
+    std::string PageBuilder::GetBattleshipsSubPage(const GameInfo& gameInfo)
     {
         const std::array<std::array<std::string, 10>, 10> boardOne = gameInfo.m_battleshipsGameInfo.m_boardOne, boardTwo = gameInfo.m_battleshipsGameInfo.m_boardTwo;
         const std::unordered_map<std::string, uint32_t> shipsRemainingOne = gameInfo.m_battleshipsGameInfo.m_shipsRemainingOne, shipsRemainingTwo = gameInfo.m_battleshipsGameInfo.m_shipsRemainingTwo;
@@ -585,7 +666,7 @@ namespace TerminalGames
             if (i == 0)
                 output.insert(output.size(), "                                                   ");
         }
-        output += std::string("   ") + (char)186 + "\n";
+        output += std::string("   ") + (char)186 + '\n';
 
         output += (char)186 + std::string("   ");
         for (uint32_t i = 0; i < 2; i++)
@@ -595,7 +676,7 @@ namespace TerminalGames
             if (i == 0)
                 output += "                                                   ";
         }
-        output += std::string("   ") + (char)186 + "\n";
+        output += std::string("   ") + (char)186 + '\n';
 
         // Main parts of both boards and centre information
         for (uint32_t i = 0; i < 10; i++)
@@ -672,7 +753,7 @@ namespace TerminalGames
                 output += (char)197;
                 output.insert(output.size(), 3, (char)196);
             }
-            output += (char)180 + std::string("   ") + (char)186 + "\n";
+            output += (char)180 + std::string("   ") + (char)186 + '\n';
 
             // Second Line
             // Player one left outer box edge and number co-ord
@@ -801,7 +882,7 @@ namespace TerminalGames
 
                 output += (char)179;
             }
-            output += std::string("   ") + (char)186 + "\n";
+            output += std::string("   ") + (char)186 + '\n';
         }
 
         // Bottom row of both boards
@@ -821,14 +902,49 @@ namespace TerminalGames
                 output += "                                                   ";
         }
 
-        output += std::string("   ") + (char)186 + "\n";
+        output += std::string("   ") + (char)186 + '\n';
+
+        return output;
+    }
+
+    // NOLINTEND
+
+    std::string PageBuilder::GetGridLayout(const std::vector<uint32_t>& p_gridSizes, const std::vector<std::vector<std::string>>& p_gridLines, const uint32_t& p_numberOfLines)
+    {
+        const uint32_t OLD_MAXIMUM_LINE_SIZE = m_maximumLineSize;
+
+        std::string output;
+
+        for (uint32_t currentLineNumber = 0; currentLineNumber < p_numberOfLines; currentLineNumber++)
+        {
+            std::string currentLine;
+
+            for (uint32_t currentGridSize = 0; currentGridSize < p_gridSizes.size(); currentGridSize++)
+            {
+                m_maximumLineSize = p_gridSizes[currentGridSize];
+                currentLine += GetNewLineCentred(p_gridLines[currentGridSize][currentLineNumber]);
+            }
+
+            // Remove the vertical lines created between grids and all new lines
+            std::ranges::replace(currentLine.begin(), currentLine.end(), Globals::G_PAGE_VERTICAL_LINE[0], ' ');
+            std::erase(currentLine, '\n');
+
+            // Re-add the vertical lines to the start/end and re-add a single newline to the end
+            currentLine[0] = Globals::G_PAGE_VERTICAL_LINE[0];
+            currentLine[currentLine.size() - 1] = Globals::G_PAGE_VERTICAL_LINE[0];
+            currentLine += '\n';
+
+            output += currentLine;
+        }
+
+        m_maximumLineSize = OLD_MAXIMUM_LINE_SIZE;
 
         return output;
     }
 
     std::string PageBuilder::RemoveSubString(const std::string& p_string, const std::string& p_subString)
     {
-        const uint32_t SUB_STRING_LENGTH = p_subString.length();
+        const uint32_t SUB_STRING_LENGTH = p_subString.size();
 
         std::string output = p_string;
         for (std::string::size_type i = output.find(p_subString); i != std::string::npos; i = output.find(p_subString))
@@ -836,6 +952,4 @@ namespace TerminalGames
 
         return output;
     }
-
-    // NOLINTEND
 }
