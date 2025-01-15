@@ -30,7 +30,7 @@ jobs:
                   Install-BuildDependencies -Platform "${{ matrix.os }}" -Verbose
 
             - name: Configure CMake
-              run: cmake -S . -B ./build -G "Ninja"
+              run: cmake -S . -B ./build -G "Ninja" -D "CI_CD=TRUE"
 
             - name: Build Project
               run: cmake --build ./build --config Release

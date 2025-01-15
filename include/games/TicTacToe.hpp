@@ -17,7 +17,7 @@ namespace TerminalGames
     {
     public:
         /**
-         * @brief Construct a new Tic Tac Toe object.
+         * @brief Constructs a new Tic Tac Toe object.
          *
          * @param p_useAnsiEscapeCodes Whether to use use ANSI escapes codes (true) or only ASCII characters (false).
          */
@@ -36,9 +36,9 @@ namespace TerminalGames
         std::string m_userPlayerChoice;
         uint32_t m_computerSpeed;
         uint32_t m_turnCount;
-        bool m_hasSavedGameSettings;
+        bool m_hasSavedGameOptions;
         bool m_hasWinner;
-        bool m_saveGameSettings;
+        bool m_saveGameOptions;
 
         /**
          * @brief See base class function for details.

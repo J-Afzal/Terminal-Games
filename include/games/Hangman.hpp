@@ -14,7 +14,7 @@ namespace TerminalGames
     {
     public:
         /**
-         * @brief Construct a new Hangman object.
+         * @brief Constructs a new Hangman object.
          *
          * @param p_useAnsiEscapeCodes Whether to use use ANSI escapes codes (true) or only ASCII characters (false).
          */
@@ -29,15 +29,14 @@ namespace TerminalGames
         std::string m_computerSpeedName;
         std::string m_currentGuessOfWord;
         std::string m_playerCount;
+        std::string m_userPlayerChoice;
         std::string m_wordToBeGuessed;
         uint32_t m_computerSpeed;
-        uint32_t m_errorCount;
         uint32_t m_turnCount;
         char m_currentGuess;
-        bool m_hasSavedGameSettings;
+        bool m_hasSavedGameOptions;
         bool m_hasWinner;
-        bool m_saveGameSettings;
-        bool m_userIsGuesser;
+        bool m_saveGameOptions;
 
         /**
          * @brief See base class function for details.

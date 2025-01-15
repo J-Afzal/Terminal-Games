@@ -8,16 +8,18 @@ SET(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # Executable names used by the CI/CD workflows
-IF(APPLE)
-    SET(executable_name "terminal-games-macos-latest")
-ENDIF()
-
-IF(UNIX AND NOT APPLE)
-    SET(executable_name "terminal-games-ubuntu-latest")
-ENDIF()
-
-IF(WIN32)
-    SET(executable_name "terminal-games-windows-latest")
+IF(CI_CD)
+    IF(APPLE)
+        SET(executable_name "terminal-games-macos-latest")
+    ELSEIF(UNIX AND NOT APPLE)
+        SET(executable_name "terminal-games-ubuntu-latest")
+    ELSEIF(WIN32)
+        SET(executable_name "terminal-games-windows-latest")
+    ELSE()
+        SET(executable_name "terminal-games")
+    ENDIF()
+ELSE()
+    SET(executable_name "terminal-games")
 ENDIF()
 
 ADD_EXECUTABLE(

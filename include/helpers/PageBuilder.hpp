@@ -57,9 +57,9 @@ namespace TerminalGames
             std::string m_currentGuessOfWord;
             std::string m_playerCount;
             std::string m_wordToBeGuessed;
-            uint32_t m_errorCount;
             uint32_t m_turnCount;
             char m_currentGuess;
+            bool m_hasWinner;
         } m_hangmanGameInfo;
 
         struct BattleshipsGameInfo
@@ -83,12 +83,12 @@ namespace TerminalGames
     {
     public:
         /**
-         * @brief Construct a new StringBuilder object.
+         * @brief Constructs a new StringBuilder object.
          */
         explicit PageBuilder();
 
         /**
-         * @brief Construct a new StringBuilder object.
+         * @brief Constructs a new StringBuilder object.
          *
          * @param p_page Which page type to configure the PageBuilder for.
          * @param p_useAnsiEscapeCodes Whether to use use ANSI escapes codes (true) or only ASCII characters (false).
@@ -131,7 +131,7 @@ namespace TerminalGames
          * @param p_gameInfo Information on the current state of the current game.
          * @return std::vector<std::string> Pages where each page has a different number of players selected.
          */
-        std::vector<std::string> GetPlayerCountOptionSelectionGamePages(const GameInfo& p_gameInfo) const;
+        std::vector<std::string> GetPlayerCountOptionSelectionGamePages(const GameInfo& p_gameInfo);
 
         /**
          * @brief Creates pages for displaying option selection screen for the user player choice for a game.
@@ -139,7 +139,7 @@ namespace TerminalGames
          * @param p_gameInfo Information on the current state of the current game.
          * @return std::vector<std::string> Pages where each page has a player choice selected.
          */
-        std::vector<std::string> GetUserPlayerChoiceOptionSelectionGamePages(const GameInfo& p_gameInfo) const;
+        std::vector<std::string> GetUserPlayerChoiceOptionSelectionGamePages(const GameInfo& p_gameInfo);
 
         /**
          * @brief Creates pages for displaying option selection screen for the computer speed for a game.
@@ -147,7 +147,7 @@ namespace TerminalGames
          * @param p_gameInfo Information on the current state of the current game.
          * @return std::vector<std::string> Pages where each page has a different computer speed selected.
          */
-        std::vector<std::string> GetComputerSpeedOptionSelectionGamePages(const GameInfo& p_gameInfo) const;
+        std::vector<std::string> GetComputerSpeedOptionSelectionGamePages(const GameInfo& p_gameInfo);
 
         /**
          * @brief Creates a general game page with a custom message for use during a game.
@@ -157,7 +157,7 @@ namespace TerminalGames
          * @return std::string A page with the current state of the game and a custom message.
          * @warning The message will be truncated if it is too long to be contained within a single line on the page.
          */
-        std::string GetPageWithMessage(const GameInfo& p_gameInfo, const std::string& p_message) const;
+        std::string GetPageWithMessage(const GameInfo& p_gameInfo, const std::string& p_message);
 
         /**
          * @brief Creates the user command page which prompts the user to enter a command during a game.
@@ -165,7 +165,7 @@ namespace TerminalGames
          * @param p_gameInfo Information on the current state of the current game.
          * @return std::string A page with the current state of the game and a prompt to the user to enter a command.
          */
-        std::string GetUserCommandPage(const GameInfo& p_gameInfo) const;
+        std::string GetUserCommandPage(const GameInfo& p_gameInfo);
 
         /**
          * @brief Creates the computer command page for when the computer is entering their command.
@@ -173,7 +173,7 @@ namespace TerminalGames
          * @param p_gameInfo Information on the current state of the current game.
          * @return std::string A page with the current state of the game and a message that the computer is entering their command.
          */
-        std::string GetComputerCommandPage(const GameInfo& p_gameInfo) const;
+        std::string GetComputerCommandPage(const GameInfo& p_gameInfo);
 
         /**
          * @brief Creates the game over page.
@@ -182,7 +182,7 @@ namespace TerminalGames
          * @return std::string A page with the final state of the game and a message on who won, how many turns took place, and
          * how to quit the game or play again.
          */
-        std::string GetGameOverPage(const GameInfo& p_gameInfo) const;
+        std::string GetGameOverPage(const GameInfo& p_gameInfo);
 
         /**
          * @brief Creates the quit option selection page.
@@ -291,7 +291,7 @@ namespace TerminalGames
          * @warning The message will be truncated if it is too long to be contained within a single line on the page.
          * @warning The page height will be allowed to extended pass the pre-defined page height to fit all the options provided.
          */
-        std::vector<std::string> GetGameOptionSelectionPages(const GameInfo& p_gameInfo, const std::string& p_message, const std::vector<std::string>& p_options) const;
+        std::vector<std::string> GetGameOptionSelectionPages(const GameInfo& p_gameInfo, const std::string& p_message, const std::vector<std::string>& p_options);
 
         /**
          * @brief Creates pages for displaying option selection screens for the given options.
@@ -316,7 +316,7 @@ namespace TerminalGames
          * @param p_gameInfo Information on the current state of the current game.
          * @return std::string The subpage containing the current state of the current game.
          */
-        std::string GetGeneralGameSubPage(const GameInfo& p_gameInfo) const;
+        std::string GetGeneralGameSubPage(const GameInfo& p_gameInfo);
 
         /**
          * @brief Creates the subpage containing the current state of the TicTacToe game.
@@ -324,7 +324,7 @@ namespace TerminalGames
          * @param p_gameInfo Information on the current state of the current game.
          * @return std::string The subpage containing the current state of the TicTacToe game.
          */
-        std::string GetTicTacToeSubPage(const GameInfo& p_gameInfo) const;
+        std::string GetTicTacToeSubPage(const GameInfo& p_gameInfo);
 
         /**
          * @brief Creates the subpage containing the current state of the Hangman game.
@@ -332,7 +332,7 @@ namespace TerminalGames
          * @param p_gameInfo Information on the current state of the current game.
          * @return std::string The subpage containing the current state of the Hangman game.
          */
-        std::string GetHangmanSubPage(const GameInfo& p_gameInfo) const;
+        std::string GetHangmanSubPage(const GameInfo& p_gameInfo);
 
         /**
          * @brief Creates the subpage containing the current state of the Battleships game.
@@ -340,24 +340,33 @@ namespace TerminalGames
          * @param p_gameInfo Information on the current state of the current game.
          * @return std::string The subpage containing the current state of the Battleships game.
          */
-        std::string GetBattleshipsSubPage(const GameInfo& p_gameInfo) const;
+        std::string GetBattleshipsSubPage(const GameInfo& p_gameInfo);
+
+        /**
+         * @brief TODO
+         *
+         * @param p_gridSizes
+         * @param p_gridLines
+         * @param p_numberOfLines
+         * @return std::string
+         */
+        std::string GetGridLayout(const std::vector<uint32_t>& p_gridSizes, const std::vector<std::vector<std::string>>& p_gridLines, const uint32_t& p_numberOfLines);
 
         /**
          * @brief Remove all instances of a substring from a string.
          *
          * @param p_string The string to be checked.
          * @param p_subString The substring to be removed.
-         * @return std::string The string with the substring removed.
+         * @return std::string p_string with all instances of p_subString removed.
          */
-        static std::string RemoveSubString(const std::string& p_string, const std::string& p_subString); // NOLINT(bugprone-easily-swappable-parameters)
+        static std::string RemoveSubString(const std::string& p_string, const std::string& p_subString);
 
         // Member variables
         std::string m_topTitle;
         std::string m_bottomTitle;
         uint32_t m_displayWidth;
         uint32_t m_displayHeight;
-        uint32_t m_maximumInputSize;
-        uint32_t m_maximumFilledLineSize;
+        uint32_t m_maximumLineSize;
         Pages m_currentPage;
         bool m_useAnsiEscapeCodes;
 

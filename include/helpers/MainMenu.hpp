@@ -15,14 +15,14 @@ namespace TerminalGames
     {
     public:
         /**
-         * @brief Construct a new MainMenu object (for CLI use).
+         * @brief Constructs a new MainMenu object (for CLI use).
          *
          * @param p_commandLineArguments List of all command line arguments
          */
         explicit MainMenu(const std::vector<std::string>& p_commandLineArguments);
 
         /**
-         * @brief Construct a new MainMenu object.
+         * @brief Constructs a new MainMenu object.
          *
          * @param p_useAnsiEscapeCodes Whether to use use ANSI escapes codes (true) or only ASCII characters (false).
          */
