@@ -145,51 +145,54 @@ namespace TerminalGames::Globals
      * @brief PageBuilder
      */
     // Extended ASCII characters for edges and corners of the page
-    static inline const std::string G_PAGE_HORIZONTAL_LINE = std::string(1, static_cast<char>(205));
-    static inline const std::string G_PAGE_VERTICAL_LINE = std::string(1, static_cast<char>(186));
-    static inline const std::string G_PAGE_TOP_RIGHT_CORNER = std::string(1, static_cast<char>(187));
-    static inline const std::string G_PAGE_BOTTOM_RIGHT_CORNER = std::string(1, static_cast<char>(188));
-    static inline const std::string G_PAGE_BOTTOM_LEFT_CORNER = std::string(1, static_cast<char>(200));
-    static inline const std::string G_PAGE_TOP_LEFT_CORNER = std::string(1, static_cast<char>(201));
+    static constexpr char G_PAGE_HORIZONTAL_LINE = 205;
+    static constexpr char G_PAGE_VERTICAL_LINE = 186;
+    static constexpr char G_PAGE_TOP_RIGHT_CORNER = 187;
+    static constexpr char G_PAGE_BOTTOM_RIGHT_CORNER = 188;
+    static constexpr char G_PAGE_BOTTOM_LEFT_CORNER = 200;
+    static constexpr char G_PAGE_TOP_LEFT_CORNER = 201;
 
-    static inline const std::string G_GRID_HORIZONTAL_LINE = std::string(1, static_cast<char>(196));
-    static inline const std::string G_GRID_INTERSECTION = std::string(1, static_cast<char>(197));
-    static inline const std::string G_GRID_VERTICAL_LINE = std::string(1, static_cast<char>(179));
+    static constexpr char G_PAGE_GRID_HORIZONTAL_LINE = 196;
+    static constexpr char G_PAGE_GRID_VERTICAL_LINE = 179;
+    static constexpr char G_PAGE_GRID_INTERSECTION = 197;
+    static constexpr char G_PAGE_GRID_UPSIDE_DOWN_T = 193;
+    static constexpr char G_PAGE_GRID_TOP_LEFT = 218;
+    static constexpr char G_PAGE_GRID_TOP_RIGHT = 191;
+
+    // Padding
+    static constexpr uint32_t G_PAGE_MINIMUM_LEFT_VERTICAL_LINE_SIZE = 1;
+    static constexpr uint32_t G_PAGE_MINIMUM_LEFT_PADDING_SIZE = 1;
+    static constexpr uint32_t G_PAGE_MINIMUM_RIGHT_PADDING_SIZE = 1;
+    static constexpr uint32_t G_PAGE_MINIMUM_RIGHT_VERTICAL_LINE_SIZE = 1;
+
+    // When highlighting what is currently selected in an option menu
+    static inline const std::string G_PAGE_SELECTOR = ">";
 
     // ANSI colour escape codes
     static constexpr uint32_t G_ANSI_COLOUR_ESCAPE_CODE_SIZE = 7;
     static constexpr char G_ANSI_COLOUR_ESCAPE_CODE_START = '\x1B';
-    static inline const std::string G_RED_ANSI_COLOUR_ESCAPE_CODE = "\x1B[1;31m";
-    static inline const std::string G_GREEN_ANSI_COLOUR_ESCAPE_CODE = "\x1B[1;32m";
-    static inline const std::string G_YELLOW_ANSI_COLOUR_ESCAPE_CODE = "\x1B[1;33m";
-    static inline const std::string G_BLUE_ANSI_COLOUR_ESCAPE_CODE = "\x1B[1;34m";
-    static inline const std::string G_WHITE_ANSI_COLOUR_ESCAPE_CODE = "\x1B[1;37m";
-    static inline const std::string G_RESET_ANSI_COLOUR_ESCAPE_CODE = "\x1B[0m";
-    static inline const std::vector<std::string> G_ALL_ANSI_COLOUR_ESCAPE_CODES = {
-        G_RED_ANSI_COLOUR_ESCAPE_CODE,
-        G_GREEN_ANSI_COLOUR_ESCAPE_CODE,
-        G_YELLOW_ANSI_COLOUR_ESCAPE_CODE,
-        G_BLUE_ANSI_COLOUR_ESCAPE_CODE,
-        G_WHITE_ANSI_COLOUR_ESCAPE_CODE,
-        G_RESET_ANSI_COLOUR_ESCAPE_CODE,
+    static inline const std::string G_ANSI_RED_COLOUR_ESCAPE_CODE = "\x1B[1;31m";
+    static inline const std::string G_ANSI_GREEN_COLOUR_ESCAPE_CODE = "\x1B[1;32m";
+    static inline const std::string G_ANSI_YELLOW_COLOUR_ESCAPE_CODE = "\x1B[1;33m";
+    static inline const std::string G_ANSI_BLUE_COLOUR_ESCAPE_CODE = "\x1B[1;34m";
+    static inline const std::string G_ANSI_WHITE_COLOUR_ESCAPE_CODE = "\x1B[1;37m";
+    static inline const std::string G_ANSI_RESET_COLOUR_ESCAPE_CODE = "\x1B[0m";
+    static inline const std::vector<std::string> G_ANSI_ALL_COLOUR_ESCAPE_CODES = {
+        G_ANSI_RED_COLOUR_ESCAPE_CODE,
+        G_ANSI_GREEN_COLOUR_ESCAPE_CODE,
+        G_ANSI_YELLOW_COLOUR_ESCAPE_CODE,
+        G_ANSI_BLUE_COLOUR_ESCAPE_CODE,
+        G_ANSI_WHITE_COLOUR_ESCAPE_CODE,
+        G_ANSI_RESET_COLOUR_ESCAPE_CODE,
     };
 
-    // Padding
-    static constexpr uint32_t G_MINIMUM_LEFT_VERTICAL_LINE_SIZE = 1;
-    static constexpr uint32_t G_MINIMUM_LEFT_PADDING_SIZE = 1;
-    static constexpr uint32_t G_MINIMUM_RIGHT_PADDING_SIZE = 1;
-    static constexpr uint32_t G_MINIMUM_RIGHT_VERTICAL_LINE_SIZE = 1;
-
-    // When highlighting what is currently selected in an option menu
-    static inline const std::string G_SELECTOR = ">";
-
     // Quit menu
-    static constexpr uint32_t G_RESTART_GAME_INDEX = 0;
-    static constexpr uint32_t G_RESET_GAME_INDEX = 1;
-    static constexpr uint32_t G_QUIT_GAME_INDEX = 2;
-    static constexpr uint32_t G_QUIT_MAIN_MENU_INDEX = 3;
-    static constexpr uint32_t G_QUIT_PROGRAM_INDEX = 4;
-    static constexpr uint32_t G_CANCEL_INDEX = 5;
+    static constexpr uint32_t G_QUIT_MENU_RESTART_GAME_INDEX = 0;
+    static constexpr uint32_t G_QUIT_MENU_RESET_GAME_INDEX = 1;
+    static constexpr uint32_t G_QUIT_MENU_QUIT_GAME_INDEX = 2;
+    static constexpr uint32_t G_QUIT_MENU_QUIT_MAIN_MENU_INDEX = 3;
+    static constexpr uint32_t G_QUIT_MENU_QUIT_PROGRAM_INDEX = 4;
+    static constexpr uint32_t G_QUIT_MENU_CANCEL_INDEX = 5;
     static inline const std::vector<std::string> G_QUIT_MENU_OPTIONS = {
         "Restart Game",
         "Reset Game",
@@ -203,25 +206,25 @@ namespace TerminalGames::Globals
      * @brief Terminal
      */
     // Keyboard values when getting user input on Windows
-    static constexpr uint32_t G_ENTER_KEY = '\r';
-    static constexpr uint32_t G_BACKSPACE_KEY = 8;
-    static constexpr uint32_t G_UP_ARROW_KEY = 72;
-    static constexpr uint32_t G_DOWN_ARROW_KEY = 80;
-    static constexpr uint32_t G_LEFT_ARROW_KEY = 75;
-    static constexpr uint32_t G_RIGHT_ARROW_KEY = 77;
-    static constexpr uint32_t G_QUIT_KEY = 'q';
-    static constexpr uint32_t G_RESTART_KEY = 'r';
+    static constexpr uint32_t G_TERMINAL_ENTER_KEY = '\r';
+    static constexpr uint32_t G_TERMINAL_BACKSPACE_KEY = 8;
+    static constexpr uint32_t G_TERMINAL_UP_ARROW_KEY = 72;
+    static constexpr uint32_t G_TERMINAL_DOWN_ARROW_KEY = 80;
+    static constexpr uint32_t G_TERMINAL_LEFT_ARROW_KEY = 75;
+    static constexpr uint32_t G_TERMINAL_RIGHT_ARROW_KEY = 77;
+    static constexpr uint32_t G_TERMINAL_QUIT_KEY = 'q';
+    static constexpr uint32_t G_TERMINAL_RESTART_KEY = 'r';
 
     // Cursor width while running on windows.
-    static constexpr uint32_t G_CURSOR_WIDTH_PERCENTAGE = 100;
+    static constexpr uint32_t G_TERMINAL_CURSOR_WIDTH_PERCENTAGE = 100;
 
     // Keyboard values when getting user input on other platforms
-    static constexpr uint32_t G_ALTERNATIVE_ENTER_KEY = 'e';
-    static constexpr uint32_t G_ALTERNATIVE_BACKSPACE_KEY = 'z';
-    static constexpr uint32_t G_ALTERNATIVE_UP_ARROW_KEY = 'w';
-    static constexpr uint32_t G_ALTERNATIVE_DOWN_ARROW_KEY = 's';
-    static constexpr uint32_t G_ALTERNATIVE_LEFT_ARROW_KEY = 'a';
-    static constexpr uint32_t G_ALTERNATIVE_RIGHT_ARROW_KEY = 'd';
+    static constexpr uint32_t G_TERMINAL_ALTERNATIVE_ENTER_KEY = 'e';
+    static constexpr uint32_t G_TERMINAL_ALTERNATIVE_BACKSPACE_KEY = 'z';
+    static constexpr uint32_t G_TERMINAL_ALTERNATIVE_UP_ARROW_KEY = 'w';
+    static constexpr uint32_t G_TERMINAL_ALTERNATIVE_DOWN_ARROW_KEY = 's';
+    static constexpr uint32_t G_TERMINAL_ALTERNATIVE_LEFT_ARROW_KEY = 'a';
+    static constexpr uint32_t G_TERMINAL_ALTERNATIVE_RIGHT_ARROW_KEY = 'd';
 
     /**
      * @brief Homepage
@@ -243,12 +246,11 @@ namespace TerminalGames::Globals
      * @brief Game
      */
     static inline const std::string G_GAME_UNKNOWN_OPTION = "N/A";
+    static inline const std::string G_GAME_NUMBER_OF_PLAYERS = "# of Players = ";
+    static inline const std::string G_GAME_COMPUTER_SPEED = "Computer Speed = ";
     static inline const std::vector<std::string> G_GAME_COMPUTER_SPEED_OPTIONS = {"INSTANT", "FAST", "SLOW"};
     static inline const std::vector<std::string> G_GAME_MAX_TWO_PLAYERS_OPTIONS = {"0", "1", "2"};
     static inline const std::vector<std::string> G_GAME_MAX_ONE_PLAYER_OPTIONS = {"0", "1"};
-    static inline const std::string G_GAME_EMPTY_LINE;
-    static inline const std::string G_GAME_NUMBER_OF_PLAYERS = "# of Players = ";
-    static inline const std::string G_GAME_COMPUTER_SPEED = "Computer Speed = ";
 
     /**
      * @brief Tic Tac Toe
@@ -265,8 +267,8 @@ namespace TerminalGames::Globals
     static constexpr uint32_t G_TICTACTOE_GRID_ELEMENT_HEIGHT = 1;
     static constexpr uint32_t G_TICTACTOE_GRID_LEFT_PAD = 3;
     static constexpr uint32_t G_TICTACTOE_GRID_TOP_PAD = 4;
-    static inline const std::string G_TICTACTOE_GRID_ROW_VALUE_DIVIDER(G_TICTACTOE_GRID_ELEMENT_WIDTH, Globals::G_GRID_HORIZONTAL_LINE[0]);
-    static inline const std::string G_TICTACTOE_EMPTY_GRID_VALUE(Globals::G_TICTACTOE_GRID_ELEMENT_WIDTH, ' ');
+    static inline const std::string G_TICTACTOE_GRID_ROW_VALUE_DIVIDER(G_TICTACTOE_GRID_ELEMENT_WIDTH, G_PAGE_HORIZONTAL_LINE);
+    static inline const std::string G_TICTACTOE_EMPTY_GRID_VALUE(G_TICTACTOE_GRID_ELEMENT_WIDTH, ' ');
     static inline const std::string G_TICTACTOE_GRID_OCCUPIED_FORMAT_STRING = " {} ";
     static inline const std::string G_TICTACTOE_GRID_SELECTED_FORMAT_STRING = "#{}#";
 
@@ -306,6 +308,13 @@ namespace TerminalGames::Globals
     static constexpr uint32_t G_HANGMAN_INCORRECT_GUESSES_FIRST_LINE_LAST_INDEX = 4;
     static constexpr uint32_t G_HANGMAN_INCORRECT_GUESSES_SECOND_LINE_LAST_INDEX = 9;
 
+    static constexpr uint32_t G_HANGMAN_GALLOWS_BASE_WIDTH = 7;
+    static constexpr uint32_t G_HANGMAN_GALLOWS_BASE_WIDTH_HALF = 3;
+    static inline const std::string G_HANGMAN_GALLOWS_BASE_INITIAL(G_HANGMAN_GALLOWS_BASE_WIDTH, G_PAGE_GRID_HORIZONTAL_LINE);
+    static inline const std::string G_HANGMAN_GALLOWS_BASE_HALF(G_HANGMAN_GALLOWS_BASE_WIDTH_HALF, G_PAGE_GRID_HORIZONTAL_LINE);
+    static inline const std::string G_HANGMAN_GALLOWS_BASE = G_HANGMAN_GALLOWS_BASE_HALF + G_PAGE_GRID_UPSIDE_DOWN_T + G_HANGMAN_GALLOWS_BASE_HALF;
+    static inline const std::string G_HANGMAN_GALLOWS_TOP(G_HANGMAN_GALLOWS_BASE_WIDTH, G_PAGE_GRID_HORIZONTAL_LINE);
+
     /**
      * @brief Battleships
      */
@@ -321,13 +330,13 @@ namespace TerminalGames::Globals
     static constexpr uint32_t G_BATTLESHIPS_GRID_ELEMENT_HEIGHT = 2;
     static constexpr uint32_t G_BATTLESHIPS_GRID_LEFT_PAD = 10;
     static constexpr uint32_t G_BATTLESHIPS_GRID_TOP_PAD = 8;
-    static inline const std::string G_BATTLESHIPS_EMPTY_GRID_VALUE(Globals::G_BATTLESHIPS_GRID_ELEMENT_WIDTH, ' ');
+    static inline const std::string G_BATTLESHIPS_EMPTY_GRID_VALUE(G_BATTLESHIPS_GRID_ELEMENT_WIDTH, ' ');
     static inline const std::string G_BATTLESHIPS_GRID_OCCUPIED_FORMAT_STRING = " {} ";
     static inline const std::string G_BATTLESHIPS_GRID_SELECTED_FORMAT_STRING = "#{}#";
 
-    static inline const std::string G_BATTLESHIPS_PLACED_SHIP(1, static_cast<char>(178));
-    static inline const std::string G_BATTLESHIPS_SUCCESSFUL_ATTACK(1, static_cast<char>(176));
-    static inline const std::string G_BATTLESHIPS_MISSED_ATTACK(1, static_cast<char>(250));
+    static constexpr char G_BATTLESHIPS_PLACED_SHIP = 178;
+    static constexpr char G_BATTLESHIPS_SUCCESSFUL_ATTACK = 176;
+    static constexpr char G_BATTLESHIPS_MISSED_ATTACK = 250;
 
     static inline const std::string G_BATTLESHIPS_PLAYER_ONE = "Player One";
     static inline const std::string G_BATTLESHIPS_PLAYER_TWO = "Player Two";
@@ -372,18 +381,18 @@ namespace TerminalGames::Globals
     };
 
     static inline const std::unordered_map<std::string, uint32_t> G_BATTLESHIPS_STARTING_SHIP_REMAINING = {
-        {Globals::G_BATTLESHIPS_CARRIER_NAME,     Globals::G_BATTLESHIPS_CARRIER_SIZE    },
-        {Globals::G_BATTLESHIPS_BATTLESHIP_NAME,  Globals::G_BATTLESHIPS_BATTLESHIP_SIZE },
-        {Globals::G_BATTLESHIPS_DESTROYER_NAME,   Globals::G_BATTLESHIPS_DESTROYER_SIZE  },
-        {Globals::G_BATTLESHIPS_SUBMARINE_NAME,   Globals::G_BATTLESHIPS_SUBMARINE_SIZE  },
-        {Globals::G_BATTLESHIPS_PATROL_BOAT_NAME, Globals::G_BATTLESHIPS_PATROL_BOAT_SIZE},
+        {G_BATTLESHIPS_CARRIER_NAME,     G_BATTLESHIPS_CARRIER_SIZE    },
+        {G_BATTLESHIPS_BATTLESHIP_NAME,  G_BATTLESHIPS_BATTLESHIP_SIZE },
+        {G_BATTLESHIPS_DESTROYER_NAME,   G_BATTLESHIPS_DESTROYER_SIZE  },
+        {G_BATTLESHIPS_SUBMARINE_NAME,   G_BATTLESHIPS_SUBMARINE_SIZE  },
+        {G_BATTLESHIPS_PATROL_BOAT_NAME, G_BATTLESHIPS_PATROL_BOAT_SIZE},
     };
 
     /**
      * @brief Hangman word list for the computer
      */
-    static constexpr uint32_t G_NUMBER_OF_WORDS = 972;
-    static inline const std::array<std::string, G_NUMBER_OF_WORDS> G_HANGMAN_COMPUTER_WORDS = {
+    static constexpr uint32_t G_HANGMAN_NUMBER_OF_COMPUTER_WORDS = 972;
+    static inline const std::array<std::string, G_HANGMAN_NUMBER_OF_COMPUTER_WORDS> G_HANGMAN_COMPUTER_WORDS = {
         "ABILITY",
         "ABLE",
         "ABOUT",

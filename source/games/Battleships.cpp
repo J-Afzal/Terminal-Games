@@ -421,7 +421,7 @@ namespace TerminalGames
         }
 
         else // Miss
-            p_opponentBoard.at(ROW).at(COLUMN) = " " + Globals::G_BATTLESHIPS_MISSED_ATTACK + " ";
+            p_opponentBoard.at(ROW).at(COLUMN) = " " + std::string(1, Globals::G_BATTLESHIPS_MISSED_ATTACK) + " ";
 
         p_commandsRemaining.erase(Globals::ImplementStdRangesFind(p_commandsRemaining.begin(), p_commandsRemaining.end(), p_command));
 

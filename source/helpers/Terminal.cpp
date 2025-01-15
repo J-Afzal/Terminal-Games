@@ -29,17 +29,17 @@ namespace TerminalGames
 
             switch (GetNextKeyPress())
             {
-            case Globals::G_QUIT_KEY:
+            case Globals::G_TERMINAL_QUIT_KEY:
                 throw Globals::Exceptions::QuitProgram();
 
-            case Globals::G_ENTER_KEY:
+            case Globals::G_TERMINAL_ENTER_KEY:
                 return !static_cast<bool>(currentSelection);
 
-            case Globals::G_UP_ARROW_KEY:
+            case Globals::G_TERMINAL_UP_ARROW_KEY:
                 currentSelection == 0 ? currentSelection = (p_menus.size() - 1) : --currentSelection;
                 break;
 
-            case Globals::G_DOWN_ARROW_KEY:
+            case Globals::G_TERMINAL_DOWN_ARROW_KEY:
                 currentSelection == (p_menus.size() - 1) ? currentSelection = 0 : ++currentSelection;
                 break;
 
@@ -59,17 +59,17 @@ namespace TerminalGames
 
             switch (GetNextKeyPress())
             {
-            case Globals::G_QUIT_KEY:
+            case Globals::G_TERMINAL_QUIT_KEY:
                 throw Globals::Exceptions::QuitMainMenu();
 
-            case Globals::G_ENTER_KEY:
+            case Globals::G_TERMINAL_ENTER_KEY:
                 return currentSelection;
 
-            case Globals::G_UP_ARROW_KEY:
+            case Globals::G_TERMINAL_UP_ARROW_KEY:
                 currentSelection == 0 ? currentSelection = (p_menus.size() - 1) : --currentSelection;
                 break;
 
-            case Globals::G_DOWN_ARROW_KEY:
+            case Globals::G_TERMINAL_DOWN_ARROW_KEY:
                 currentSelection == (p_menus.size() - 1) ? currentSelection = 0 : ++currentSelection;
                 break;
 
@@ -89,18 +89,18 @@ namespace TerminalGames
 
             switch (GetNextKeyPress())
             {
-            case Globals::G_QUIT_KEY:
+            case Globals::G_TERMINAL_QUIT_KEY:
                 Terminal::GetUserChoiceFromQuitMenus(p_quitOptionMenus);
                 break;
 
-            case Globals::G_ENTER_KEY:
+            case Globals::G_TERMINAL_ENTER_KEY:
                 return currentSelection;
 
-            case Globals::G_UP_ARROW_KEY:
+            case Globals::G_TERMINAL_UP_ARROW_KEY:
                 currentSelection == 0 ? currentSelection = (p_menus.size() - 1) : --currentSelection;
                 break;
 
-            case Globals::G_DOWN_ARROW_KEY:
+            case Globals::G_TERMINAL_DOWN_ARROW_KEY:
                 currentSelection == (p_menus.size() - 1) ? currentSelection = 0 : ++currentSelection;
                 break;
 
@@ -110,7 +110,8 @@ namespace TerminalGames
         }
     }
 
-    std::tuple<uint32_t, uint32_t> Terminal::GetUserCommandFromGameGrid( // NOLINT(readability-function-cognitive-complexity)
+    // TODO: make two versions. one for windows and one for non windows and one orchestrator with if to decide which to call
+    std::tuple<uint32_t, uint32_t> Terminal::GetUserCommandFromGameGrid(
         const std::tuple<uint32_t, uint32_t>& p_startingGridLocation,
         const PageBuilder& p_pageBuilder,
         const GameInfo& p_gameInfo,
@@ -184,33 +185,33 @@ namespace TerminalGames
 
             switch (GetNextKeyPress())
             {
-            case Globals::G_QUIT_KEY:
+            case Globals::G_TERMINAL_QUIT_KEY:
                 SetCursorVisibility(false);
                 Terminal::GetUserChoiceFromQuitMenus(pageBuilder.GetQuitOptionSelectionPage());
                 SetCursorVisibility(true);
                 break;
 
-            case Globals::G_BACKSPACE_KEY:
+            case Globals::G_TERMINAL_BACKSPACE_KEY:
                 SetCursorVisibility(false);
                 throw Globals::Exceptions::BackspaceKeyPressed();
 
-            case Globals::G_ENTER_KEY:
+            case Globals::G_TERMINAL_ENTER_KEY:
                 SetCursorVisibility(false);
                 return {currentRow, currentColumn};
 
-            case Globals::G_UP_ARROW_KEY:
+            case Globals::G_TERMINAL_UP_ARROW_KEY:
                 currentRow == 0 ? currentRow = maxRow : --currentRow;
                 break;
 
-            case Globals::G_DOWN_ARROW_KEY:
+            case Globals::G_TERMINAL_DOWN_ARROW_KEY:
                 currentRow == maxRow ? currentRow = 0 : ++currentRow;
                 break;
 
-            case Globals::G_LEFT_ARROW_KEY:
+            case Globals::G_TERMINAL_LEFT_ARROW_KEY:
                 currentColumn == 0 ? currentColumn = maxColumn : --currentColumn;
                 break;
 
-            case Globals::G_RIGHT_ARROW_KEY:
+            case Globals::G_TERMINAL_RIGHT_ARROW_KEY:
                 currentColumn == maxColumn ? currentColumn = 0 : ++currentColumn;
                 break;
 
@@ -228,11 +229,11 @@ namespace TerminalGames
 
             switch (GetNextKeyPress())
             {
-            case Globals::G_QUIT_KEY:
+            case Globals::G_TERMINAL_QUIT_KEY:
                 GetUserChoiceFromQuitMenus(p_quitOptionMenus);
                 break;
 
-            case Globals::G_RESTART_KEY:
+            case Globals::G_TERMINAL_RESTART_KEY:
                 throw Globals::Exceptions::RestartGame();
 
             default:
@@ -251,36 +252,36 @@ namespace TerminalGames
 
             switch (GetNextKeyPress())
             {
-            case Globals::G_ENTER_KEY:
+            case Globals::G_TERMINAL_ENTER_KEY:
                 switch (currentSelection)
                 {
-                case Globals::G_RESTART_GAME_INDEX:
+                case Globals::G_QUIT_MENU_RESTART_GAME_INDEX:
                     throw Globals::Exceptions::RestartGame();
 
-                case Globals::G_RESET_GAME_INDEX:
+                case Globals::G_QUIT_MENU_RESET_GAME_INDEX:
                     throw Globals::Exceptions::ResetGame();
 
-                case Globals::G_QUIT_GAME_INDEX:
+                case Globals::G_QUIT_MENU_QUIT_GAME_INDEX:
                     throw Globals::Exceptions::QuitGame();
 
-                case Globals::G_QUIT_MAIN_MENU_INDEX:
+                case Globals::G_QUIT_MENU_QUIT_MAIN_MENU_INDEX:
                     throw Globals::Exceptions::QuitMainMenu();
 
-                case Globals::G_QUIT_PROGRAM_INDEX:
+                case Globals::G_QUIT_MENU_QUIT_PROGRAM_INDEX:
                     throw Globals::Exceptions::QuitProgram();
 
-                case Globals::G_CANCEL_INDEX:
+                case Globals::G_QUIT_MENU_CANCEL_INDEX:
                     return;
 
                 default:
                     break;
                 }
 
-            case Globals::G_UP_ARROW_KEY:
+            case Globals::G_TERMINAL_UP_ARROW_KEY:
                 currentSelection == 0 ? currentSelection = (p_menus.size() - 1) : --currentSelection;
                 break;
 
-            case Globals::G_DOWN_ARROW_KEY:
+            case Globals::G_TERMINAL_DOWN_ARROW_KEY:
                 currentSelection == (p_menus.size() - 1) ? currentSelection = 0 : ++currentSelection;
                 break;
 
@@ -347,23 +348,23 @@ namespace TerminalGames
 
             switch (inputString[0])
             {
-            case Globals::G_ALTERNATIVE_ENTER_KEY:
-                return Globals::G_ENTER_KEY;
+            case Globals::G_TERMINAL_ALTERNATIVE_ENTER_KEY:
+                return Globals::G_TERMINAL_ENTER_KEY;
 
-            case Globals::G_ALTERNATIVE_BACKSPACE_KEY:
-                return Globals::G_BACKSPACE_KEY;
+            case Globals::G_TERMINAL_ALTERNATIVE_BACKSPACE_KEY:
+                return Globals::G_TERMINAL_BACKSPACE_KEY;
 
-            case Globals::G_ALTERNATIVE_UP_ARROW_KEY:
-                return Globals::G_UP_ARROW_KEY;
+            case Globals::G_TERMINAL_ALTERNATIVE_UP_ARROW_KEY:
+                return Globals::G_TERMINAL_UP_ARROW_KEY;
 
-            case Globals::G_ALTERNATIVE_DOWN_ARROW_KEY:
-                return Globals::G_DOWN_ARROW_KEY;
+            case Globals::G_TERMINAL_ALTERNATIVE_DOWN_ARROW_KEY:
+                return Globals::G_TERMINAL_DOWN_ARROW_KEY;
 
-            case Globals::G_ALTERNATIVE_LEFT_ARROW_KEY:
-                return Globals::G_LEFT_ARROW_KEY;
+            case Globals::G_TERMINAL_ALTERNATIVE_LEFT_ARROW_KEY:
+                return Globals::G_TERMINAL_LEFT_ARROW_KEY;
 
-            case Globals::G_ALTERNATIVE_RIGHT_ARROW_KEY:
-                return Globals::G_RIGHT_ARROW_KEY;
+            case Globals::G_TERMINAL_ALTERNATIVE_RIGHT_ARROW_KEY:
+                return Globals::G_TERMINAL_RIGHT_ARROW_KEY;
 
             default:
                 return inputString[0];
@@ -375,7 +376,7 @@ namespace TerminalGames
     void Terminal::SetCursorVisibility(const bool& p_cursorVisibility)
     {
 #ifdef _WIN32
-        const CONSOLE_CURSOR_INFO CURSOR_INFO(Globals::G_CURSOR_WIDTH_PERCENTAGE, static_cast<int>(p_cursorVisibility));
+        const CONSOLE_CURSOR_INFO CURSOR_INFO(Globals::G_TERMINAL_CURSOR_WIDTH_PERCENTAGE, static_cast<int>(p_cursorVisibility));
         SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &CURSOR_INFO);
 #endif
     }

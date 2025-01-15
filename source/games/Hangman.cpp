@@ -122,19 +122,19 @@ namespace TerminalGames
 
             switch (keyPress)
             {
-            case Globals::G_QUIT_KEY:
+            case Globals::G_TERMINAL_QUIT_KEY:
                 Terminal::GetUserChoiceFromQuitMenus(m_pageBuilder.GetQuitOptionSelectionPage());
                 continue;
 
-            case Globals::G_ENTER_KEY:
+            case Globals::G_TERMINAL_ENTER_KEY:
                 ExecuteGeneralCommand(m_commandsRemaining[currentSelection]);
                 return;
 
-            case Globals::G_UP_ARROW_KEY:
+            case Globals::G_TERMINAL_UP_ARROW_KEY:
                 currentSelection == 0 ? currentSelection = m_commandsRemaining.size() - 1 : --currentSelection;
                 break;
 
-            case Globals::G_DOWN_ARROW_KEY:
+            case Globals::G_TERMINAL_DOWN_ARROW_KEY:
                 currentSelection == (m_commandsRemaining.size() - 1) ? currentSelection = 0 : ++currentSelection;
                 break;
 
@@ -218,7 +218,7 @@ namespace TerminalGames
 
             std::getline(std::cin, input);
 
-            if (input[0] == Globals::G_QUIT_KEY)
+            if (input[0] == Globals::G_TERMINAL_QUIT_KEY)
             {
                 Terminal::GetUserChoiceFromQuitMenus(m_pageBuilder.GetQuitOptionSelectionPage());
                 continue;
