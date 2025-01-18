@@ -49,12 +49,6 @@ namespace TerminalGames::Globals
         {};
 
         /**
-         * @brief Used when the hangman game words.txt file is not found.
-         */
-        class HangmanWordsNotFound : public std::exception
-        {};
-
-        /**
          * @brief Used for functionality that has not been implemented.
          */
         class NotImplementedError : public std::exception
@@ -132,8 +126,16 @@ namespace TerminalGames::Globals
         return buffer.str();
     }
 
+    static std::string RepeatString(const uint32_t& p_numberOfRepetitions, const std::string& p_stringToRepeat)
+    {
+        std::ostringstream buffer;
+        for (uint32_t currentRepetition = 0; currentRepetition < p_numberOfRepetitions; currentRepetition++)
+            buffer << p_stringToRepeat;
+        return buffer.str();
+    }
+
     /**
-     * @brief Platforms
+     * @brief Platform
      */
 #ifdef _WIN32
     static constexpr bool G_PLATFORM_IS_WINDOWS = true;
@@ -145,19 +147,25 @@ namespace TerminalGames::Globals
      * @brief PageBuilder
      */
     // Extended ASCII characters for edges and corners of the page
-    static constexpr char G_PAGE_HORIZONTAL_LINE = 205;
-    static constexpr char G_PAGE_VERTICAL_LINE = 186;
-    static constexpr char G_PAGE_TOP_RIGHT_CORNER = 187;
-    static constexpr char G_PAGE_BOTTOM_RIGHT_CORNER = 188;
-    static constexpr char G_PAGE_BOTTOM_LEFT_CORNER = 200;
-    static constexpr char G_PAGE_TOP_LEFT_CORNER = 201;
+    static constexpr char G_PAGE_HORIZONTAL_LINE = static_cast<char>(205);
+    static constexpr char G_PAGE_VERTICAL_LINE = static_cast<char>(186);
+    static constexpr char G_PAGE_TOP_RIGHT_CORNER = static_cast<char>(187);
+    static constexpr char G_PAGE_BOTTOM_RIGHT_CORNER = static_cast<char>(188);
+    static constexpr char G_PAGE_BOTTOM_LEFT_CORNER = static_cast<char>(200);
+    static constexpr char G_PAGE_TOP_LEFT_CORNER = static_cast<char>(201);
 
-    static constexpr char G_PAGE_GRID_HORIZONTAL_LINE = 196;
-    static constexpr char G_PAGE_GRID_VERTICAL_LINE = 179;
-    static constexpr char G_PAGE_GRID_INTERSECTION = 197;
-    static constexpr char G_PAGE_GRID_UPSIDE_DOWN_T = 193;
-    static constexpr char G_PAGE_GRID_TOP_LEFT = 218;
-    static constexpr char G_PAGE_GRID_TOP_RIGHT = 191;
+    // Extended ASCII characters for grids
+    static constexpr char G_PAGE_GRID_HORIZONTAL_LINE = static_cast<char>(196);
+    static constexpr char G_PAGE_GRID_VERTICAL_LINE = static_cast<char>(179);
+    static constexpr char G_PAGE_GRID_INTERSECTION = static_cast<char>(197);
+    static constexpr char G_PAGE_GRID_UPSIDE_DOWN_T = static_cast<char>(193);
+    static constexpr char G_PAGE_GRID_T = static_cast<char>(194);
+    static constexpr char G_PAGE_GRID_LEFT_SIDEWAYS_T = static_cast<char>(195);
+    static constexpr char G_PAGE_GRID_RIGHT_SIDEWAYS_T = static_cast<char>(180);
+    static constexpr char G_PAGE_GRID_TOP_LEFT = static_cast<char>(218);
+    static constexpr char G_PAGE_GRID_TOP_RIGHT = static_cast<char>(191);
+    static constexpr char G_PAGE_GRID_BOTTOM_LEFT = static_cast<char>(192);
+    static constexpr char G_PAGE_GRID_BOTTOM_RIGHT = static_cast<char>(217);
 
     // Padding
     static constexpr uint32_t G_PAGE_MINIMUM_LEFT_VERTICAL_LINE_SIZE = 1;
@@ -267,9 +275,11 @@ namespace TerminalGames::Globals
     static constexpr uint32_t G_TICTACTOE_GRID_ELEMENT_HEIGHT = 1;
     static constexpr uint32_t G_TICTACTOE_GRID_LEFT_PAD = 3;
     static constexpr uint32_t G_TICTACTOE_GRID_TOP_PAD = 4;
-    static inline const std::string G_TICTACTOE_GRID_ROW_VALUE_DIVIDER(G_TICTACTOE_GRID_ELEMENT_WIDTH, G_PAGE_HORIZONTAL_LINE);
+
+    static inline const std::string G_TICTACTOE_GRID_ROW_VALUE_DIVIDER(G_TICTACTOE_GRID_ELEMENT_WIDTH, G_PAGE_GRID_HORIZONTAL_LINE);
     static inline const std::string G_TICTACTOE_EMPTY_GRID_VALUE(G_TICTACTOE_GRID_ELEMENT_WIDTH, ' ');
-    static inline const std::string G_TICTACTOE_GRID_OCCUPIED_FORMAT_STRING = " {} ";
+    static inline const std::string G_TICTACTOE_GRID_PLAYER_X_OCCUPIED = " X ";
+    static inline const std::string G_TICTACTOE_GRID_PLAYER_O_OCCUPIED = " O ";
     static inline const std::string G_TICTACTOE_GRID_SELECTED_FORMAT_STRING = "#{}#";
 
     static constexpr uint32_t G_TICTACTOE_MAXIMUM_ERROR_COUNT = G_TICTACTOE_BOARD_WIDTH * G_TICTACTOE_BOARD_HEIGHT;
@@ -283,7 +293,7 @@ namespace TerminalGames::Globals
      */
     static inline const std::string G_HANGMAN_TOP_TITLE = "Hangman";
     static inline const std::string G_HANGMAN_BOTTOM_TITLE = "q = show quit menu";
-    static constexpr uint32_t G_HANGMAN_DISPLAY_WIDTH = 67;
+    static constexpr uint32_t G_HANGMAN_DISPLAY_WIDTH = 62;
     static constexpr uint32_t G_HANGMAN_DISPLAY_HEIGHT = 22;
 
     static constexpr uint32_t G_HANGMAN_MINIMUM_WORD_SIZE = 3;
@@ -298,16 +308,6 @@ namespace TerminalGames::Globals
 
     static constexpr uint32_t G_HANGMAN_MAXIMUM_ERROR_COUNT = 10;
 
-    static inline const std::string G_HANGMAN_GUESSER = "GUESSER";
-    static inline const std::string G_HANGMAN_WORD_SETTER = "WORD SETTER";
-    static inline const std::vector<std::string> G_HANGMAN_PLAYER_CHOICE_OPTIONS = {G_HANGMAN_GUESSER, G_HANGMAN_WORD_SETTER};
-
-    static inline const std::string G_HANGMAN_WORD_TO_GUESSED_FORMAT_STRING = "(The word was {})";
-    static inline const std::string G_HANGMAN_INCORRECT_GUESSES_TITLE = "Incorrect Guesses";
-    static inline const std::string G_HANGMAN_INCORRECT_GUESSES_PADDING = "   ";
-    static constexpr uint32_t G_HANGMAN_INCORRECT_GUESSES_FIRST_LINE_LAST_INDEX = 4;
-    static constexpr uint32_t G_HANGMAN_INCORRECT_GUESSES_SECOND_LINE_LAST_INDEX = 9;
-
     static constexpr uint32_t G_HANGMAN_GALLOWS_BASE_WIDTH = 7;
     static constexpr uint32_t G_HANGMAN_GALLOWS_BASE_WIDTH_HALF = 3;
     static inline const std::string G_HANGMAN_GALLOWS_BASE_INITIAL(G_HANGMAN_GALLOWS_BASE_WIDTH, G_PAGE_GRID_HORIZONTAL_LINE);
@@ -315,28 +315,56 @@ namespace TerminalGames::Globals
     static inline const std::string G_HANGMAN_GALLOWS_BASE = G_HANGMAN_GALLOWS_BASE_HALF + G_PAGE_GRID_UPSIDE_DOWN_T + G_HANGMAN_GALLOWS_BASE_HALF;
     static inline const std::string G_HANGMAN_GALLOWS_TOP(G_HANGMAN_GALLOWS_BASE_WIDTH, G_PAGE_GRID_HORIZONTAL_LINE);
 
+    static inline const std::string G_HANGMAN_INCORRECT_GUESSES_TITLE = "Incorrect Guesses";
+    static inline const std::string G_HANGMAN_INCORRECT_GUESSES_PADDING = "   ";
+    static constexpr uint32_t G_HANGMAN_INCORRECT_GUESSES_FIRST_LINE_LAST_INDEX = 4;
+    static constexpr uint32_t G_HANGMAN_INCORRECT_GUESSES_SECOND_LINE_LAST_INDEX = 9;
+
+    static inline const std::string G_HANGMAN_WORD_TO_BE_GUESSED_START = "(The word was ";
+    static inline const std::string G_HANGMAN_WORD_TO_BE_GUESSED_END = ")";
+
+    static inline const std::string G_HANGMAN_GUESSER = "GUESSER";
+    static inline const std::string G_HANGMAN_WORD_SETTER = "WORD SETTER";
+    static inline const std::vector<std::string> G_HANGMAN_PLAYER_CHOICE_OPTIONS = {G_HANGMAN_GUESSER, G_HANGMAN_WORD_SETTER};
+
     /**
      * @brief Battleships
      */
     static inline const std::string G_BATTLESHIPS_TOP_TITLE = "Battleships";
     static inline const std::string G_BATTLESHIPS_BOTTOM_TITLE = "q = show quit menu";
-    static constexpr uint32_t G_BATTLESHIPS_DISPLAY_WIDTH = 149;
+    static constexpr uint32_t G_BATTLESHIPS_DISPLAY_WIDTH = 142;
     static constexpr uint32_t G_BATTLESHIPS_DISPLAY_HEIGHT = 38;
 
     static constexpr uint32_t G_BATTLESHIPS_BOARD_WIDTH = 10;
     static constexpr uint32_t G_BATTLESHIPS_BOARD_HEIGHT = 10;
 
-    static constexpr uint32_t G_BATTLESHIPS_GRID_ELEMENT_WIDTH = 4;
-    static constexpr uint32_t G_BATTLESHIPS_GRID_ELEMENT_HEIGHT = 2;
-    static constexpr uint32_t G_BATTLESHIPS_GRID_LEFT_PAD = 10;
+    static constexpr uint32_t G_BATTLESHIPS_GRID_ELEMENT_WIDTH = 3;
+    static constexpr uint32_t G_BATTLESHIPS_GRID_ELEMENT_HEIGHT = 1;
+    static constexpr uint32_t G_BATTLESHIPS_GRID_LEFT_PAD = 8;
     static constexpr uint32_t G_BATTLESHIPS_GRID_TOP_PAD = 8;
-    static inline const std::string G_BATTLESHIPS_EMPTY_GRID_VALUE(G_BATTLESHIPS_GRID_ELEMENT_WIDTH, ' ');
-    static inline const std::string G_BATTLESHIPS_GRID_OCCUPIED_FORMAT_STRING = " {} ";
+
+    static inline const std::string G_BATTLESHIPS_GRID_ITEM_HORIZONTAL_LINE(G_BATTLESHIPS_GRID_ELEMENT_WIDTH, G_PAGE_GRID_HORIZONTAL_LINE);
+
+    static inline const std::string G_BATTLESHIPS_GRID_TOP_LINE_TOP_LEFT = std::string(1, G_PAGE_GRID_TOP_LEFT) + G_BATTLESHIPS_GRID_ITEM_HORIZONTAL_LINE;
+    static inline const std::string G_BATTLESHIPS_GRID_TOP_LINE_MIDDLE = std::string(1, G_PAGE_GRID_T) + G_BATTLESHIPS_GRID_ITEM_HORIZONTAL_LINE;
+
+    static inline const std::string G_BATTLESHIPS_GRID_MIDDLE_LINE_LEFT = std::string(1, G_PAGE_GRID_LEFT_SIDEWAYS_T) + G_BATTLESHIPS_GRID_ITEM_HORIZONTAL_LINE;
+    static inline const std::string G_BATTLESHIPS_GRID_MIDDLE_LINE_MIDDLE = std::string(1, G_PAGE_GRID_INTERSECTION) + G_BATTLESHIPS_GRID_ITEM_HORIZONTAL_LINE;
+
+    static inline const std::string G_BATTLESHIPS_GRID_BOTTOM_LINE_BOTTOM_LEFT = std::string(1, G_PAGE_GRID_BOTTOM_LEFT) + G_BATTLESHIPS_GRID_ITEM_HORIZONTAL_LINE;
+    static inline const std::string G_BATTLESHIPS_GRID_BOTTOM_LINE_MIDDLE = std::string(1, G_PAGE_GRID_UPSIDE_DOWN_T) + G_BATTLESHIPS_GRID_ITEM_HORIZONTAL_LINE;
+
+    static inline const std::string G_BATTLESHIPS_GRID_TOP_LINE = G_BATTLESHIPS_GRID_TOP_LINE_TOP_LEFT + RepeatString(G_BATTLESHIPS_BOARD_WIDTH, G_BATTLESHIPS_GRID_TOP_LINE_MIDDLE) + std::string(1, G_PAGE_GRID_TOP_RIGHT);
+    static inline const std::string G_BATTLESHIPS_GRID_MIDDLE_LINE = G_BATTLESHIPS_GRID_MIDDLE_LINE_LEFT + RepeatString(G_BATTLESHIPS_BOARD_WIDTH, G_BATTLESHIPS_GRID_MIDDLE_LINE_MIDDLE) + std::string(1, G_PAGE_GRID_RIGHT_SIDEWAYS_T);
+    static inline const std::string G_BATTLESHIPS_GRID_BOTTOM_LINE = G_BATTLESHIPS_GRID_BOTTOM_LINE_BOTTOM_LEFT + RepeatString(G_BATTLESHIPS_BOARD_WIDTH, G_BATTLESHIPS_GRID_BOTTOM_LINE_MIDDLE) + std::string(1, G_PAGE_GRID_BOTTOM_RIGHT);
+
     static inline const std::string G_BATTLESHIPS_GRID_SELECTED_FORMAT_STRING = "#{}#";
 
-    static constexpr char G_BATTLESHIPS_PLACED_SHIP = 178;
-    static constexpr char G_BATTLESHIPS_SUCCESSFUL_ATTACK = 176;
-    static constexpr char G_BATTLESHIPS_MISSED_ATTACK = 250;
+    static inline const std::string G_BATTLESHIPS_EMPTY_GRID_VALUE = std::string(G_BATTLESHIPS_GRID_ELEMENT_WIDTH, ' ');
+    static inline const std::string G_BATTLESHIPS_MISSED_ATTACK = std::string(" ") + static_cast<char>(250) + " ";
+    static inline const std::string G_BATTLESHIPS_SHIP_PRESENT = std::string(G_BATTLESHIPS_GRID_ELEMENT_WIDTH, static_cast<char>(178));
+    static inline const std::string G_BATTLESHIPS_SUCCESSFUL_ATTACK = std::string(G_BATTLESHIPS_GRID_ELEMENT_WIDTH, static_cast<char>(176));
+    static constexpr uint32_t G_BATTLESHIPS_LETTER_OFFSET = 65;
 
     static inline const std::string G_BATTLESHIPS_PLAYER_ONE = "Player One";
     static inline const std::string G_BATTLESHIPS_PLAYER_TWO = "Player Two";
@@ -356,12 +384,18 @@ namespace TerminalGames::Globals
     static inline const std::string G_BATTLESHIPS_SUBMARINE_NAME = "Submarine";
     static inline const std::string G_BATTLESHIPS_PATROL_BOAT_NAME = "Patrol Boat";
 
+    static inline const std::string G_BATTLESHIPS_CARRIER_PLACED_NAME = G_BATTLESHIPS_SHIP_PRESENT + G_BATTLESHIPS_CARRIER_NAME;
+    static inline const std::string G_BATTLESHIPS_BATTLESHIP_PLACED_NAME = G_BATTLESHIPS_SHIP_PRESENT + G_BATTLESHIPS_BATTLESHIP_NAME;
+    static inline const std::string G_BATTLESHIPS_DESTROYER_PLACED_NAME = G_BATTLESHIPS_SHIP_PRESENT + G_BATTLESHIPS_DESTROYER_NAME;
+    static inline const std::string G_BATTLESHIPS_SUBMARINE_PLACED_NAME = G_BATTLESHIPS_SHIP_PRESENT + G_BATTLESHIPS_SUBMARINE_NAME;
+    static inline const std::string G_BATTLESHIPS_PATROL_BOAT_PLACED_NAME = G_BATTLESHIPS_SHIP_PRESENT + G_BATTLESHIPS_PATROL_BOAT_NAME;
+
     static inline const std::array<std::string, G_BATTLESHIPS_SHIP_COUNT> G_BATTLESHIPS_SHIP_INSTRUCTIONS = {
-        ImplementStdFormat("Please enter the {} grid locations for the Carrier", G_BATTLESHIPS_CARRIER_SIZE),
-        ImplementStdFormat("Please enter the {} grid locations for the Battleship", G_BATTLESHIPS_BATTLESHIP_SIZE),
-        ImplementStdFormat("Please enter the {} grid locations for the Destroyer", G_BATTLESHIPS_DESTROYER_SIZE),
-        ImplementStdFormat("Please enter the {} grid locations for the Submarine", G_BATTLESHIPS_SUBMARINE_SIZE),
-        ImplementStdFormat("Please enter the {} grid locations for the Patrol Boat", G_BATTLESHIPS_PATROL_BOAT_SIZE),
+        "Please enter the " + std::to_string(G_BATTLESHIPS_CARRIER_SIZE) + " grid locations for the Carrier",
+        "Please enter the " + std::to_string(G_BATTLESHIPS_BATTLESHIP_SIZE) + " grid locations for the Battleship",
+        "Please enter the " + std::to_string(G_BATTLESHIPS_DESTROYER_SIZE) + " grid locations for the Destroyer",
+        "Please enter the " + std::to_string(G_BATTLESHIPS_SUBMARINE_SIZE) + " grid locations for the Submarine",
+        "Please enter the " + std::to_string(G_BATTLESHIPS_PATROL_BOAT_SIZE) + " grid locations for the Patrol Boat",
     };
 
     static inline const std::array<std::string, G_BATTLESHIPS_SHIP_COUNT> G_BATTLESHIPS_SHIP_NAMES = {
@@ -370,6 +404,14 @@ namespace TerminalGames::Globals
         G_BATTLESHIPS_DESTROYER_NAME,
         G_BATTLESHIPS_SUBMARINE_NAME,
         G_BATTLESHIPS_PATROL_BOAT_NAME,
+    };
+
+    static inline const std::array<std::string, G_BATTLESHIPS_SHIP_COUNT> G_BATTLESHIPS_SHIP_PLACED_NAMES = {
+        G_BATTLESHIPS_CARRIER_PLACED_NAME,
+        G_BATTLESHIPS_BATTLESHIP_PLACED_NAME,
+        G_BATTLESHIPS_DESTROYER_PLACED_NAME,
+        G_BATTLESHIPS_SUBMARINE_PLACED_NAME,
+        G_BATTLESHIPS_PATROL_BOAT_PLACED_NAME,
     };
 
     static inline const std::array<uint32_t, G_BATTLESHIPS_SHIP_COUNT> G_BATTLESHIPS_SHIP_SIZES = {
@@ -381,11 +423,11 @@ namespace TerminalGames::Globals
     };
 
     static inline const std::unordered_map<std::string, uint32_t> G_BATTLESHIPS_STARTING_SHIP_REMAINING = {
-        {G_BATTLESHIPS_CARRIER_NAME,     G_BATTLESHIPS_CARRIER_SIZE    },
-        {G_BATTLESHIPS_BATTLESHIP_NAME,  G_BATTLESHIPS_BATTLESHIP_SIZE },
-        {G_BATTLESHIPS_DESTROYER_NAME,   G_BATTLESHIPS_DESTROYER_SIZE  },
-        {G_BATTLESHIPS_SUBMARINE_NAME,   G_BATTLESHIPS_SUBMARINE_SIZE  },
-        {G_BATTLESHIPS_PATROL_BOAT_NAME, G_BATTLESHIPS_PATROL_BOAT_SIZE},
+        {G_BATTLESHIPS_CARRIER_PLACED_NAME,     G_BATTLESHIPS_CARRIER_SIZE    },
+        {G_BATTLESHIPS_BATTLESHIP_PLACED_NAME,  G_BATTLESHIPS_BATTLESHIP_SIZE },
+        {G_BATTLESHIPS_DESTROYER_PLACED_NAME,   G_BATTLESHIPS_DESTROYER_SIZE  },
+        {G_BATTLESHIPS_SUBMARINE_PLACED_NAME,   G_BATTLESHIPS_SUBMARINE_SIZE  },
+        {G_BATTLESHIPS_PATROL_BOAT_PLACED_NAME, G_BATTLESHIPS_PATROL_BOAT_SIZE},
     };
 
     /**

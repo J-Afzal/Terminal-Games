@@ -14,6 +14,8 @@ namespace TerminalGames
         m_displayWidth(0),
         m_displayHeight(0),
         m_maximumLineSize(0),
+        m_minimumLeftPadding(0),
+        m_minimumRightPadding(0),
         m_useAnsiEscapeCodes(false),
         m_currentPage(Pages::DEFAULT) {}
 
@@ -21,6 +23,8 @@ namespace TerminalGames
         m_displayWidth(0),
         m_displayHeight(0),
         m_maximumLineSize(0),
+        m_minimumLeftPadding(0),
+        m_minimumRightPadding(0),
         m_useAnsiEscapeCodes(false),
         m_currentPage(Pages::DEFAULT)
     {
@@ -73,7 +77,9 @@ namespace TerminalGames
             throw Globals::Exceptions::NotImplementedError();
         }
 
-        m_maximumLineSize = m_displayWidth - Globals::G_PAGE_MINIMUM_LEFT_VERTICAL_LINE_SIZE - Globals::G_PAGE_MINIMUM_LEFT_PADDING_SIZE - Globals::G_PAGE_MINIMUM_RIGHT_PADDING_SIZE - Globals::G_PAGE_MINIMUM_RIGHT_VERTICAL_LINE_SIZE;
+        m_minimumLeftPadding = Globals::G_PAGE_MINIMUM_LEFT_PADDING_SIZE;
+        m_minimumRightPadding = Globals::G_PAGE_MINIMUM_RIGHT_PADDING_SIZE;
+        m_maximumLineSize = m_displayWidth - Globals::G_PAGE_MINIMUM_LEFT_VERTICAL_LINE_SIZE - m_minimumLeftPadding - m_minimumRightPadding - Globals::G_PAGE_MINIMUM_RIGHT_VERTICAL_LINE_SIZE;
     }
 
     Pages PageBuilder::GetCurrentPageType() const
@@ -144,7 +150,7 @@ namespace TerminalGames
         const std::string COMMON_TOP_STRING = GetTopBox() + GetTopLine();
         const std::string COMMON_BOTTOM_STRING = GetBottomLine() + GetBottomBox();
 
-        return GetGeneralOptionSelectionPages(p_gameNames, COMMON_TOP_STRING, COMMON_BOTTOM_STRING, true, true);
+        return GetGeneralOptionSelectionPages(p_gameNames, COMMON_TOP_STRING, COMMON_BOTTOM_STRING, true, true, true);
     }
 
     std::vector<std::string> PageBuilder::GetPlayerCountOptionSelectionGamePages(const GameInfo& p_gameInfo)
@@ -270,7 +276,7 @@ namespace TerminalGames
     {
         const std::string COMMON_TOP_STRING = GetTopBox() + GetTopLine();
         const std::string COMMON_BOTTOM_STRING = GetBottomLine() + GetBottomBox();
-        return GetGeneralOptionSelectionPages(Globals::G_QUIT_MENU_OPTIONS, COMMON_TOP_STRING, COMMON_BOTTOM_STRING, true, true);
+        return GetGeneralOptionSelectionPages(Globals::G_QUIT_MENU_OPTIONS, COMMON_TOP_STRING, COMMON_BOTTOM_STRING, true, true, true);
     }
 
     std::string PageBuilder::AddColour(const std::string& p_input, const Colours& p_colour) const
@@ -312,7 +318,7 @@ namespace TerminalGames
         std::string output;
         output += Globals::G_PAGE_VERTICAL_LINE;
 
-        output.insert(output.size(), m_maximumLineSize + Globals::G_PAGE_MINIMUM_LEFT_PADDING_SIZE + Globals::G_PAGE_MINIMUM_RIGHT_PADDING_SIZE, ' ');
+        output.insert(output.size(), m_maximumLineSize + m_minimumLeftPadding + m_minimumRightPadding, ' ');
 
         return output + Globals::G_PAGE_VERTICAL_LINE + '\n';
     }
@@ -338,9 +344,9 @@ namespace TerminalGames
 
         std::string output;
         output += Globals::G_PAGE_VERTICAL_LINE;
-        output.insert(output.size(), Globals::G_PAGE_MINIMUM_LEFT_PADDING_SIZE + LEFT_PADDING_SIZE, ' ');
+        output.insert(output.size(), m_minimumLeftPadding + LEFT_PADDING_SIZE, ' ');
         output += AddColour(INPUT_TRIMMED, p_colour);
-        output.insert(output.size(), RIGHT_PADDING_SIZE + Globals::G_PAGE_MINIMUM_RIGHT_PADDING_SIZE, ' ');
+        output.insert(output.size(), RIGHT_PADDING_SIZE + m_minimumRightPadding, ' ');
 
         return output + Globals::G_PAGE_VERTICAL_LINE + '\n';
     }
@@ -356,18 +362,18 @@ namespace TerminalGames
 
         std::string output;
         output += Globals::G_PAGE_VERTICAL_LINE;
-        output.insert(output.size(), Globals::G_PAGE_MINIMUM_LEFT_PADDING_SIZE, ' ');
+        output.insert(output.size(), m_minimumLeftPadding, ' ');
 
         if (INPUT_SIZE > m_maximumLineSize)
         {
             output += AddColour(INPUT.substr(0, m_maximumLineSize), p_colour);
-            output.insert(output.size(), Globals::G_PAGE_MINIMUM_RIGHT_PADDING_SIZE, ' ');
+            output.insert(output.size(), m_minimumRightPadding, ' ');
         }
 
         else
         {
             output += AddColour(INPUT, p_colour);
-            output.insert(output.size(), m_maximumLineSize + Globals::G_PAGE_MINIMUM_RIGHT_PADDING_SIZE - INPUT_SIZE, ' ');
+            output.insert(output.size(), m_maximumLineSize + m_minimumRightPadding - INPUT_SIZE, ' ');
         }
 
         return output + Globals::G_PAGE_VERTICAL_LINE + '\n';
@@ -378,7 +384,7 @@ namespace TerminalGames
         std::string output;
         output += Globals::G_PAGE_TOP_LEFT_CORNER;
 
-        output.insert(output.size(), m_maximumLineSize + Globals::G_PAGE_MINIMUM_LEFT_PADDING_SIZE + Globals::G_PAGE_MINIMUM_RIGHT_PADDING_SIZE, Globals::G_PAGE_HORIZONTAL_LINE);
+        output.insert(output.size(), m_maximumLineSize + m_minimumLeftPadding + m_minimumRightPadding, Globals::G_PAGE_HORIZONTAL_LINE);
 
         return output + Globals::G_PAGE_TOP_RIGHT_CORNER + '\n';
     }
@@ -388,7 +394,7 @@ namespace TerminalGames
         std::string output;
         output += Globals::G_PAGE_BOTTOM_LEFT_CORNER;
 
-        output.insert(output.size(), m_maximumLineSize + Globals::G_PAGE_MINIMUM_LEFT_PADDING_SIZE + Globals::G_PAGE_MINIMUM_RIGHT_PADDING_SIZE, Globals::G_PAGE_HORIZONTAL_LINE);
+        output.insert(output.size(), m_maximumLineSize + m_minimumLeftPadding + m_minimumRightPadding, Globals::G_PAGE_HORIZONTAL_LINE);
 
         return output + Globals::G_PAGE_BOTTOM_RIGHT_CORNER + '\n';
     }
@@ -411,7 +417,7 @@ namespace TerminalGames
         const uint32_t EMPTY_LINES_TO_ADD_COUNT = REMAINING_LINE_COUNT < 0 ? 0 : REMAINING_LINE_COUNT;
 
         std::string output;
-        for (uint32_t i = 0; i < EMPTY_LINES_TO_ADD_COUNT; i++)
+        for (uint32_t emptyLineCount = 0; emptyLineCount < EMPTY_LINES_TO_ADD_COUNT; emptyLineCount++)
             output += GetEmptyLine();
 
         return output;
@@ -422,7 +428,7 @@ namespace TerminalGames
         const std::string COMMON_TOP_STRING = GetTopBox() + GetTopLine() + GetGeneralGameSubPage(p_gameInfo) + GetEmptyLine() + GetNewLineLeftJustified(p_message);
         const std::string COMMON_BOTTOM_STRING = GetBottomLine() + GetBottomBox();
 
-        return GetGeneralOptionSelectionPages(p_options, COMMON_TOP_STRING, COMMON_BOTTOM_STRING, false, false);
+        return GetGeneralOptionSelectionPages(p_options, COMMON_TOP_STRING, COMMON_BOTTOM_STRING, false, false, false);
     }
 
     std::vector<std::string> PageBuilder::GetGeneralOptionSelectionPages(
@@ -430,35 +436,63 @@ namespace TerminalGames
         const std::string& p_commonTopString,
         const std::string& p_commonBottomString,
         const bool& p_addEmptyLineBetweenOptions,
-        const bool& p_centerOptions) const
+        const bool& p_centerOptionsHorizontally,
+        const bool& p_centerOptionsVertically) const
     {
+        const double DIVISOR = 2;
+        const uint32_t EMPTY_LINES_BEFORE_OPTIONS = static_cast<uint32_t>(floor(static_cast<double>(m_displayHeight - Globals::ImplementStdCount(p_commonTopString.begin(), p_commonTopString.end(), '\n') - Globals::ImplementStdCount(p_commonBottomString.begin(), p_commonBottomString.end(), '\n') - (2 * p_options.size() - 1)) / DIVISOR));
+        const uint32_t EMPTY_LINES_AFTER_OPTIONS = static_cast<uint32_t>(ceil(static_cast<double>(m_displayHeight - Globals::ImplementStdCount(p_commonTopString.begin(), p_commonTopString.end(), '\n') - Globals::ImplementStdCount(p_commonBottomString.begin(), p_commonBottomString.end(), '\n') - (2 * p_options.size() - 1)) / DIVISOR));
+
         std::vector<std::string> output(p_options.size());
 
         // Construct a page for each option selected.
-        for (uint32_t i = 0; i < p_options.size(); i++)
+        for (uint32_t currentOptionSelected = 0; currentOptionSelected < p_options.size(); currentOptionSelected++)
         {
             std::string currentTopString(p_commonTopString);
 
-            for (uint32_t j = 0; j < p_options.size(); j++)
-            {
-                if (i == j)
-                    if (p_centerOptions)
-                        currentTopString += GetNewLineCentred(p_options[j], Colours::BLUE, Globals::G_PAGE_SELECTOR);
-                    else
-                        currentTopString += GetNewLineLeftJustified(p_options[j], Colours::BLUE, Globals::G_PAGE_SELECTOR);
+            if (p_centerOptionsVertically)
+                for (uint32_t emptyLineCount = 0; emptyLineCount < EMPTY_LINES_BEFORE_OPTIONS; emptyLineCount++)
+                    currentTopString += GetEmptyLine();
 
-                else if (p_centerOptions)
-                    currentTopString += GetNewLineCentred(p_options[j]);
+            for (uint32_t currentOption = 0; currentOption < p_options.size(); currentOption++)
+            {
+                if (currentOption == currentOptionSelected)
+                {
+                    if (p_centerOptionsHorizontally)
+                        currentTopString += GetNewLineCentred(p_options[currentOption], Colours::BLUE, Globals::G_PAGE_SELECTOR);
+                    else
+                        currentTopString += GetNewLineLeftJustified(p_options[currentOption], Colours::BLUE, Globals::G_PAGE_SELECTOR);
+                }
+
+                else if (p_centerOptionsHorizontally)
+                {
+                    currentTopString += GetNewLineCentred(p_options[currentOption]);
+                }
+
                 else
-                    currentTopString += GetNewLineLeftJustified(std::string(Globals::G_PAGE_SELECTOR.size() + 1, ' ') + p_options[j]);
+                {
+                    currentTopString += GetNewLineLeftJustified(std::string(Globals::G_PAGE_SELECTOR.size() + 1, ' ') + p_options[currentOption]);
+                }
 
                 if (p_addEmptyLineBetweenOptions)
-                    if (j != p_options.size() - 1) // Don't add extra line on the last option.
+                    if (currentOption != p_options.size() - 1) // Don't add extra line on the last option.
                         currentTopString += GetEmptyLine();
             }
 
-            output[i] = currentTopString;
-            output[i] += GetRemainingEmptyLines(currentTopString, p_commonBottomString) + p_commonBottomString;
+            if (p_centerOptionsVertically)
+            {
+                output[currentOptionSelected] = currentTopString;
+
+                for (uint32_t emptyLineCount = 0; emptyLineCount < EMPTY_LINES_AFTER_OPTIONS; emptyLineCount++)
+                    output[currentOptionSelected] += GetEmptyLine();
+
+                output[currentOptionSelected] += p_commonBottomString;
+            }
+
+            else
+            {
+                output[currentOptionSelected] = currentTopString + GetRemainingEmptyLines(currentTopString, p_commonBottomString) + p_commonBottomString;
+            }
         }
 
         return output;
@@ -485,25 +519,25 @@ namespace TerminalGames
     std::string PageBuilder::GetTicTacToeSubPage(const GameInfo& p_gameInfo)
     {
         // leftGridLines and RIGHT_GRID_STRINGS vectors must equal GRID_HEIGHT in length.
-        // Also LEFT_GRID_SIZE + RIGHT_GRID_SIZE must equal G_TICTACTOE_DISPLAY_WIDTH - (numberOfGrids * (Globals::G_PAGE_MINIMUM_LEFT_VERTICAL_LINE_SIZE - Globals::G_PAGE_MINIMUM_LEFT_PADDING_SIZE - Globals::G_PAGE_MINIMUM_RIGHT_PADDING_SIZE - Globals::G_PAGE_MINIMUM_RIGHT_VERTICAL_LINE_SIZE))
+        // Also LEFT_GRID_SIZE + RIGHT_GRID_SIZE must equal G_TICTACTOE_DISPLAY_WIDTH - (numberOfGrids * (Globals::G_PAGE_MINIMUM_LEFT_VERTICAL_LINE_SIZE - Globals::G_PAGE_MINIMUM_RIGHT_VERTICAL_LINE_SIZE))
         const uint32_t LEFT_GRID_SIZE = 11;
-        const uint32_t RIGHT_GRID_SIZE = 38;
+        const uint32_t RIGHT_GRID_SIZE = 40;
         const uint32_t GRID_HEIGHT = 5;
 
         // Tic Tac Toe board section
         std::vector<std::string> leftGridLines;
-        for (uint32_t i = 0; i < Globals::G_TICTACTOE_BOARD_HEIGHT; i++)
+        for (uint32_t row = 0; row < Globals::G_TICTACTOE_BOARD_HEIGHT; row++)
         {
             std::string currentRow;
             std::string currentRowDivider;
 
-            for (uint32_t j = 0; j < Globals::G_TICTACTOE_BOARD_WIDTH; j++)
+            for (uint32_t column = 0; column < Globals::G_TICTACTOE_BOARD_WIDTH; column++)
             {
-                currentRow += p_gameInfo.m_ticTacToeGameInfo.m_gameGrid.at(i).at(j);
+                currentRow += p_gameInfo.m_ticTacToeGameInfo.m_gameGrid.at(row).at(column);
                 currentRowDivider += Globals::G_TICTACTOE_GRID_ROW_VALUE_DIVIDER;
 
                 // Skip on last value
-                if (j != Globals::G_TICTACTOE_BOARD_WIDTH - 1)
+                if (column != Globals::G_TICTACTOE_BOARD_WIDTH - 1)
                 {
                     currentRow += Globals::G_PAGE_GRID_VERTICAL_LINE;
                     currentRowDivider += Globals::G_PAGE_GRID_INTERSECTION;
@@ -529,8 +563,8 @@ namespace TerminalGames
     std::string PageBuilder::GetHangmanSubPage(const GameInfo& p_gameInfo)
     {
         // leftGridLines, MIDDLE_GRID_LINES and RIGHT_GRID_STRINGS vectors must equal GRID_HEIGHT in length.
-        // Also LEFT_GRID_SIZE + MIDDLE_GRID_SIZE + RIGHT_GRID_SIZE must equal G_HANGMAN_DISPLAY_WIDTH - (numberOfGrids * Globals::G_PAGE_MINIMUM_LEFT_VERTICAL_LINE_SIZE - Globals::G_PAGE_MINIMUM_LEFT_PADDING_SIZE - Globals::G_PAGE_MINIMUM_RIGHT_PADDING_SIZE - Globals::G_PAGE_MINIMUM_RIGHT_VERTICAL_LINE_SIZE))
-        const uint32_t LEFT_GRID_SIZE = 14;
+        // Also LEFT_GRID_SIZE + MIDDLE_GRID_SIZE + RIGHT_GRID_SIZE must equal G_HANGMAN_DISPLAY_WIDTH - (numberOfGrids * Globals::G_PAGE_MINIMUM_LEFT_VERTICAL_LINE_SIZE - Globals::G_PAGE_MINIMUM_RIGHT_VERTICAL_LINE_SIZE))
+        const uint32_t LEFT_GRID_SIZE = 13;
         const uint32_t MIDDLE_GRID_SIZE = 24;
         const uint32_t RIGHT_GRID_SIZE = 17;
         const uint32_t GRID_HEIGHT = 7;
@@ -559,116 +593,116 @@ namespace TerminalGames
                 "",
                 "",
                 "",
-                Globals::G_HANGMAN_GALLOWS_BASE_INITIAL + "     ",
+                Globals::G_HANGMAN_GALLOWS_BASE_INITIAL + "       ",
             };
             break;
 
         case 2:
             leftGridLines = {
                 "",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                Globals::G_HANGMAN_GALLOWS_BASE + "     ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
+                Globals::G_HANGMAN_GALLOWS_BASE + "       ",
             };
             break;
 
         case 3:
             leftGridLines = {
-                "    " + std::string(1, Globals::G_PAGE_GRID_TOP_LEFT) + Globals::G_HANGMAN_GALLOWS_TOP + "  ",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                Globals::G_HANGMAN_GALLOWS_BASE + "     ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_TOP_LEFT) + Globals::G_HANGMAN_GALLOWS_TOP + "  ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
+                Globals::G_HANGMAN_GALLOWS_BASE + "       ",
             };
             break;
 
         case 4:
             leftGridLines = {
-                "    " + std::string(1, Globals::G_PAGE_GRID_TOP_LEFT) + Globals::G_HANGMAN_GALLOWS_TOP + Globals::G_PAGE_GRID_TOP_RIGHT + " ",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       " + Globals::G_PAGE_GRID_VERTICAL_LINE + " ",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                Globals::G_HANGMAN_GALLOWS_BASE + "     ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_TOP_LEFT) + Globals::G_HANGMAN_GALLOWS_TOP + Globals::G_PAGE_GRID_TOP_RIGHT + " ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       " + Globals::G_PAGE_GRID_VERTICAL_LINE + " ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
+                Globals::G_HANGMAN_GALLOWS_BASE + "       ",
             };
             break;
 
         case 5:
             leftGridLines = {
-                "    " + std::string(1, Globals::G_PAGE_GRID_TOP_LEFT) + Globals::G_HANGMAN_GALLOWS_TOP + Globals::G_PAGE_GRID_TOP_RIGHT + " ",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       " + Globals::G_PAGE_GRID_VERTICAL_LINE + " ",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       O ",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                Globals::G_HANGMAN_GALLOWS_BASE + "     ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_TOP_LEFT) + Globals::G_HANGMAN_GALLOWS_TOP + Globals::G_PAGE_GRID_TOP_RIGHT + " ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       " + Globals::G_PAGE_GRID_VERTICAL_LINE + " ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       O ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
+                Globals::G_HANGMAN_GALLOWS_BASE + "       ",
             };
             break;
 
         case 6:
             leftGridLines = {
-                "    " + std::string(1, Globals::G_PAGE_GRID_TOP_LEFT) + Globals::G_HANGMAN_GALLOWS_TOP + Globals::G_PAGE_GRID_TOP_RIGHT + " ",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       " + Globals::G_PAGE_GRID_VERTICAL_LINE + " ",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       O ",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       | ",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                Globals::G_HANGMAN_GALLOWS_BASE + "     ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_TOP_LEFT) + Globals::G_HANGMAN_GALLOWS_TOP + Globals::G_PAGE_GRID_TOP_RIGHT + " ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       " + Globals::G_PAGE_GRID_VERTICAL_LINE + " ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       O ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       | ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
+                Globals::G_HANGMAN_GALLOWS_BASE + "       ",
             };
             break;
 
         case 7:
             leftGridLines = {
-                "    " + std::string(1, Globals::G_PAGE_GRID_TOP_LEFT) + Globals::G_HANGMAN_GALLOWS_TOP + Globals::G_PAGE_GRID_TOP_RIGHT + " ",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       " + Globals::G_PAGE_GRID_VERTICAL_LINE + " ",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       O ",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "      /| ",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                Globals::G_HANGMAN_GALLOWS_BASE + "     ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_TOP_LEFT) + Globals::G_HANGMAN_GALLOWS_TOP + Globals::G_PAGE_GRID_TOP_RIGHT + " ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       " + Globals::G_PAGE_GRID_VERTICAL_LINE + " ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       O ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       | ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "      /  ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
+                Globals::G_HANGMAN_GALLOWS_BASE + "       ",
             };
             break;
 
         case 8:
             leftGridLines = {
-                "    " + std::string(1, Globals::G_PAGE_GRID_TOP_LEFT) + Globals::G_HANGMAN_GALLOWS_TOP + Globals::G_PAGE_GRID_TOP_RIGHT + " ",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       " + Globals::G_PAGE_GRID_VERTICAL_LINE + " ",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       O ",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "      /|\\",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                Globals::G_HANGMAN_GALLOWS_BASE + "     ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_TOP_LEFT) + Globals::G_HANGMAN_GALLOWS_TOP + Globals::G_PAGE_GRID_TOP_RIGHT + " ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       " + Globals::G_PAGE_GRID_VERTICAL_LINE + " ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       O ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       | ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "      / \\",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
+                Globals::G_HANGMAN_GALLOWS_BASE + "       ",
             };
             break;
 
         case 9:
             leftGridLines = {
-                "    " + std::string(1, Globals::G_PAGE_GRID_TOP_LEFT) + Globals::G_HANGMAN_GALLOWS_TOP + Globals::G_PAGE_GRID_TOP_RIGHT + " ",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       " + Globals::G_PAGE_GRID_VERTICAL_LINE + " ",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       O ",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "      /|\\",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "      /  ",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                Globals::G_HANGMAN_GALLOWS_BASE + "     ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_TOP_LEFT) + Globals::G_HANGMAN_GALLOWS_TOP + Globals::G_PAGE_GRID_TOP_RIGHT + " ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       " + Globals::G_PAGE_GRID_VERTICAL_LINE + " ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       O ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "      /|  ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "      / \\",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
+                Globals::G_HANGMAN_GALLOWS_BASE + "       ",
             };
             break;
 
         case 10:
         default:
             leftGridLines = {
-                "    " + std::string(1, Globals::G_PAGE_GRID_TOP_LEFT) + Globals::G_HANGMAN_GALLOWS_TOP + Globals::G_PAGE_GRID_TOP_RIGHT + " ",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       " + Globals::G_PAGE_GRID_VERTICAL_LINE + " ",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       O ",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "      /|\\",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "      / \\",
-                "    " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                Globals::G_HANGMAN_GALLOWS_BASE + "     ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_TOP_LEFT) + Globals::G_HANGMAN_GALLOWS_TOP + Globals::G_PAGE_GRID_TOP_RIGHT + " ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       " + Globals::G_PAGE_GRID_VERTICAL_LINE + " ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       O ",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "      /|\\",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "      / \\",
+                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
+                Globals::G_HANGMAN_GALLOWS_BASE + "       ",
             };
             break;
         }
@@ -691,12 +725,12 @@ namespace TerminalGames
         rightGridLines.emplace_back("");
         rightGridLines.emplace_back(Globals::G_HANGMAN_INCORRECT_GUESSES_TITLE);
 
-        for (uint32_t i = 0; i < p_gameInfo.m_hangmanGameInfo.m_incorrectGuesses.size(); i++)
+        for (uint32_t letterIndex = 0; letterIndex < p_gameInfo.m_hangmanGameInfo.m_incorrectGuesses.size(); letterIndex++)
         {
-            currentLine += p_gameInfo.m_hangmanGameInfo.m_incorrectGuesses.at(i);
+            currentLine += p_gameInfo.m_hangmanGameInfo.m_incorrectGuesses.at(letterIndex);
 
             // Skip adding space on last value on each line
-            if (i != Globals::G_HANGMAN_INCORRECT_GUESSES_FIRST_LINE_LAST_INDEX && i != Globals::G_HANGMAN_INCORRECT_GUESSES_SECOND_LINE_LAST_INDEX)
+            if (letterIndex != Globals::G_HANGMAN_INCORRECT_GUESSES_FIRST_LINE_LAST_INDEX && letterIndex != Globals::G_HANGMAN_INCORRECT_GUESSES_SECOND_LINE_LAST_INDEX)
                 currentLine += Globals::G_HANGMAN_INCORRECT_GUESSES_PADDING;
 
             else
@@ -712,7 +746,7 @@ namespace TerminalGames
 
         // Adding required number of empty lines to meet GRID_HEIGHT
         const uint32_t REMAINING_LINES_TO_ADD = GRID_HEIGHT - rightGridLines.size();
-        for (uint32_t i = 0; i < REMAINING_LINES_TO_ADD; i++)
+        for (uint32_t emptyLineCount = 0; emptyLineCount < REMAINING_LINES_TO_ADD; emptyLineCount++)
             rightGridLines.emplace_back("");
 
         std::string output = GetGridLayout({LEFT_GRID_SIZE, MIDDLE_GRID_SIZE, RIGHT_GRID_SIZE}, {leftGridLines, MIDDLE_GRID_LINES, rightGridLines}, GRID_HEIGHT);
@@ -726,288 +760,147 @@ namespace TerminalGames
         }
 
         if (p_gameInfo.m_hangmanGameInfo.m_hasWinner)
-            output += GetNewLineLeftJustified(currentGuessOfWord + Globals::ImplementStdFormat(Globals::G_HANGMAN_WORD_TO_GUESSED_FORMAT_STRING, p_gameInfo.m_hangmanGameInfo.m_wordToBeGuessed));
+            output += GetNewLineLeftJustified(currentGuessOfWord + Globals::G_HANGMAN_WORD_TO_BE_GUESSED_START + p_gameInfo.m_hangmanGameInfo.m_wordToBeGuessed + Globals::G_HANGMAN_WORD_TO_BE_GUESSED_END);
         else
             output += GetNewLineLeftJustified(currentGuessOfWord);
 
         return output;
     }
 
-    // NOLINTBEGIN
-
-    std::string PageBuilder::GetBattleshipsSubPage(const GameInfo& gameInfo)
+    std::string PageBuilder::GetBattleshipsSubPage(const GameInfo& p_gameInfo) // NOLINT(readability-function-cognitive-complexity)
     {
-        const std::array<std::array<std::string, 10>, 10> boardOne = gameInfo.m_battleshipsGameInfo.m_boardOne, boardTwo = gameInfo.m_battleshipsGameInfo.m_boardTwo;
-        const std::unordered_map<std::string, uint32_t> shipsRemainingOne = gameInfo.m_battleshipsGameInfo.m_shipsRemainingOne, shipsRemainingTwo = gameInfo.m_battleshipsGameInfo.m_shipsRemainingTwo;
-        const std::string playerCount = gameInfo.m_battleshipsGameInfo.m_playerCount, computerSpeedName = gameInfo.m_battleshipsGameInfo.m_computerSpeedName;
-        const bool isGameOver = gameInfo.m_battleshipsGameInfo.m_isGameOver;
+        // leftGridLines, MIDDLE_GRID_LINES and RIGHT_GRID_STRINGS vectors must equal GRID_HEIGHT in length.
+        // Also LEFT_GRID_SIZE + MIDDLE_GRID_SIZE + RIGHT_GRID_SIZE must equal G_BATTLESHIPS_DISPLAY_WIDTH - (numberOfGrids * Globals::G_PAGE_MINIMUM_LEFT_VERTICAL_LINE_SIZE - m_minimumLeftPadding - m_minimumRightPadding - Globals::G_PAGE_MINIMUM_RIGHT_VERTICAL_LINE_SIZE))
+        const uint32_t LEFT_GRID_SIZE = 45;
+        const uint32_t MIDDLE_GRID_SIZE = 44;
+        const uint32_t RIGHT_GRID_SIZE = 45;
+        const uint32_t GRID_HEIGHT = 24;
 
-        std::string output;
+        std::string commonGridAlphabetAxis = std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + Globals::G_BATTLESHIPS_EMPTY_GRID_VALUE;
 
-        // Top row and letter co-ordinates of both boards
-        output += GetNewLineLeftJustified("                    Player One                                                                                       Player Two");
+        for (uint32_t currentLetterOffset = 0; currentLetterOffset < Globals::G_BATTLESHIPS_BOARD_WIDTH; currentLetterOffset++)
+            commonGridAlphabetAxis += std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + " " + static_cast<char>(Globals::G_BATTLESHIPS_LETTER_OFFSET + currentLetterOffset) + " ";
 
-        output += (char)186 + std::string("   ");
-        for (uint32_t i = 0; i < 2; i++)
+        commonGridAlphabetAxis += std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE);
+
+        std::vector<std::string> leftGridLines = {Globals::G_BATTLESHIPS_PLAYER_ONE, Globals::G_BATTLESHIPS_GRID_TOP_LINE, commonGridAlphabetAxis, Globals::G_BATTLESHIPS_GRID_MIDDLE_LINE};
+        std::vector<std::string> rightGridLines = {Globals::G_BATTLESHIPS_PLAYER_TWO, Globals::G_BATTLESHIPS_GRID_TOP_LINE, commonGridAlphabetAxis, Globals::G_BATTLESHIPS_GRID_MIDDLE_LINE};
+
+        // Assuming both board are the same size
+        for (uint32_t row = 0; row < p_gameInfo.m_battleshipsGameInfo.m_boardOne.size(); row++)
         {
-            output += (char)218;
-            output.insert(output.size(), 3, (char)196);
-            for (uint32_t j = 0; j < 10; j++)
+            std::string currentLeftGridValueLine = std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + " " + std::to_string(row) + " ";
+            std::string currentRightGridValueLine = std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + " " + std::to_string(row) + " ";
+
+            for (uint32_t column = 0; column < p_gameInfo.m_battleshipsGameInfo.m_boardOne.at(row).size(); column++)
             {
-                output += (char)194;
-                output.insert(output.size(), 3, (char)196);
-            }
-            output += (char)191;
+                // Don't include the ship name instead only its state
+                currentLeftGridValueLine += Globals::G_PAGE_GRID_VERTICAL_LINE + p_gameInfo.m_battleshipsGameInfo.m_boardOne.at(row).at(column).substr(0, Globals::G_BATTLESHIPS_GRID_ELEMENT_WIDTH);
 
-            if (i == 0)
-                output.insert(output.size(), "                                                   ");
-        }
-        output += std::string("   ") + (char)186 + '\n';
-
-        output += (char)186 + std::string("   ");
-        for (uint32_t i = 0; i < 2; i++)
-        {
-            output += (char)179 + std::string("   ") + (char)179 + " A " + (char)179 + " B " + (char)179 + " C " + (char)179 + " D " + (char)179 + " E " + (char)179 + " F " + (char)179 + " G " + (char)179 + " H " + (char)179 + " I " + (char)179 + " J " + (char)179;
-
-            if (i == 0)
-                output += "                                                   ";
-        }
-        output += std::string("   ") + (char)186 + '\n';
-
-        // Main parts of both boards and centre information
-        for (uint32_t i = 0; i < 10; i++)
-        {
-            // First Line
-            // Left outer box edge
-            output += (char)186 + std::string("   ");
-
-            // Player One Board horizontal dividers
-            output += (char)195;
-            output.insert(output.size(), 3, (char)196);
-            for (uint32_t j = 0; j < 10; j++)
-            {
-                output += (char)197;
-                output.insert(output.size(), 3, (char)196);
-            }
-            output += (char)180;
-
-            // Centre information
-            if (i == 3)
-                output += "   Carrier                               Carrier   ";
-            else if (i == 5) // Battleship
-            {
-                output += "   ";
-                for (uint32_t j = 0; j < 4; j++, output += " ")
-                {
-                    if (j < shipsRemainingOne.at(Globals::G_BATTLESHIPS_BATTLESHIP_NAME))
-                        output.insert(output.size(), 3, (char)178);
-                    else
-                        output.insert(output.size(), 3, (char)176);
-                }
-                output += "              ";
-                for (uint32_t j = 0; j < 4; j++, output += " ")
-                {
-                    if (j < (4 - shipsRemainingTwo.at(Globals::G_BATTLESHIPS_BATTLESHIP_NAME)))
-                        output.insert(output.size(), 3, (char)176);
-                    else
-                        output.insert(output.size(), 3, (char)178);
-                }
-                output += "  ";
-            }
-            else if (i == 6)
-                output += "   Destroyer                           Destroyer   ";
-            else if (i == 8) // Submarine
-            {
-                output += "   ";
-                for (uint32_t j = 0; j < 3; j++, output += " ")
-                {
-                    if (j < shipsRemainingOne.at(Globals::G_BATTLESHIPS_SUBMARINE_NAME))
-                        output.insert(output.size(), 3, (char)178);
-                    else
-                        output.insert(output.size(), 3, (char)176);
-                }
-                output += "                      ";
-                for (uint32_t j = 0; j < 3; j++, output += " ")
-                {
-                    if (j < (3 - shipsRemainingTwo.at(Globals::G_BATTLESHIPS_SUBMARINE_NAME)))
-                        output.insert(output.size(), 3, (char)176);
-                    else
-                        output.insert(output.size(), 3, (char)178);
-                }
-                output += "  ";
-            }
-            else if (i == 9)
-                output += "   Patrol Boat                       Patrol Boat   ";
-            else
-                output += "                                                   ";
-
-            // Player Two Board horizontal dividers
-            output += (char)195;
-            output.insert(output.size(), 3, (char)196);
-            for (uint32_t j = 0; j < 10; j++)
-            {
-                output += (char)197;
-                output.insert(output.size(), 3, (char)196);
-            }
-            output += (char)180 + std::string("   ") + (char)186 + '\n';
-
-            // Second Line
-            // Player one left outer box edge and number co-ord
-            output += (char)186 + std::string("   ") + (char)179 + " " + std::to_string(i) + " " + (char)179;
-
-            // Player One board ships (always shown)
-            for (uint32_t j = 0; j < 10; j++)
-            {
-                output += boardOne[i][j];
-
-                output += (char)179;
-            }
-
-            // Centre Information
-            if (i == 0)
-                output += "                 # of Players = " + playerCount + "                ";
-            else if (i == 1)
-                output += "                 Computer Speed = " + computerSpeedName + "                ";
-            else if (i == 3) // Carrier
-            {
-                output += "   ";
-                for (uint32_t j = 0; j < 5; j++, output += " ")
-                {
-                    if (j < shipsRemainingOne.at(Globals::G_BATTLESHIPS_CARRIER_NAME))
-                        output.insert(output.size(), 3, (char)178);
-                    else
-                        output.insert(output.size(), 3, (char)176);
-                }
-                output += "      ";
-                for (uint32_t j = 0; j < 5; j++, output += " ")
-                {
-                    if (j < (5 - shipsRemainingTwo.at(Globals::G_BATTLESHIPS_CARRIER_NAME)))
-                        output.insert(output.size(), 3, (char)176);
-                    else
-                        output.insert(output.size(), 3, (char)178);
-                }
-                output += "  ";
-            }
-            else if (i == 4)
-                output += "   Battleship                         Battleship   ";
-            else if (i == 6) // Destroyer
-            {
-                output += "   ";
-                for (uint32_t j = 0; j < 3; j++, output += " ")
-                {
-                    if (j < shipsRemainingOne.at(Globals::G_BATTLESHIPS_DESTROYER_NAME))
-                        output.insert(output.size(), 3, (char)178);
-                    else
-                        output.insert(output.size(), 3, (char)176);
-                }
-                output += "                      ";
-                for (uint32_t j = 0; j < 3; j++, output += " ")
-                {
-                    if (j < (3 - shipsRemainingTwo.at(Globals::G_BATTLESHIPS_DESTROYER_NAME)))
-                        output.insert(output.size(), 3, (char)176);
-                    else
-                        output.insert(output.size(), 3, (char)178);
-                }
-                output += "  ";
-            }
-            else if (i == 7)
-                output += "   Submarine                           Submarine   ";
-            else if (i == 9) // Patrol Boat
-            {
-                output += "   ";
-                for (uint32_t j = 0; j < 2; j++, output += " ")
-                {
-                    if (j < shipsRemainingOne.at(Globals::G_BATTLESHIPS_PATROL_BOAT_NAME))
-                        output.insert(output.size(), 3, (char)178);
-                    else
-                        output.insert(output.size(), 3, (char)176);
-                }
-                output += "                              ";
-                for (uint32_t j = 0; j < 2; j++, output += " ")
-                {
-                    if (j < (2 - shipsRemainingTwo.at(Globals::G_BATTLESHIPS_PATROL_BOAT_NAME)))
-                        output.insert(output.size(), 3, (char)176);
-                    else
-                        output.insert(output.size(), 3, (char)178);
-                }
-                output += "  ";
-            }
-            else
-                output += "                                                   ";
-
-            // Player Two left outer box edge and number co-ord
-            output += (char)179 + std::string(" ") + std::to_string(i) + " " + (char)179;
-
-            // Player Two board ships
-            for (uint32_t j = 0; j < 10; j++)
-            {
-                if (isGameOver || playerCount == "0  ")
-                {
-                    output += boardTwo[i][j];
-                }
-
-                else if (boardTwo[i][j].find(Globals::G_BATTLESHIPS_SUCCESSFUL_ATTACK) != std::string::npos)
-                {
-                    if (boardTwo[i][j].find('#') != std::string::npos)
-                    {
-                        output += '#' + boardTwo[i][j][1] + "#";
-                    }
-
-                    else
-                    {
-                        output.insert(output.size(), 3, (char)176);
-                    }
-                }
-
-                else if (boardTwo[i][j].find(Globals::G_BATTLESHIPS_MISSED_ATTACK) != std::string::npos)
-                {
-                    if (boardTwo[i][j].find('#') != std::string::npos)
-                    {
-                    }
-
-                    else
-                    {
-                        output += std::string(" ") + (char)250 + " ";
-                    }
-                }
-
-                else if (boardTwo[i][j].find('#') != std::string::npos)
-                    output += boardTwo[i][j];
+                // Only show player two board if game is over, or if not game over then only if zero player game, or if not game
+                // over and not zero player game (i.e. one player game) then only if grid value is does not have a ship present
+                // (i.e. only if grid value is empty, missed attack or successful attack).
+                if (p_gameInfo.m_battleshipsGameInfo.m_isGameOver || p_gameInfo.m_battleshipsGameInfo.m_playerCount != "1" || p_gameInfo.m_battleshipsGameInfo.m_boardTwo.at(row).at(column).substr(0, Globals::G_BATTLESHIPS_GRID_ELEMENT_WIDTH) != Globals::G_BATTLESHIPS_SHIP_PRESENT)
+                    currentRightGridValueLine += Globals::G_PAGE_GRID_VERTICAL_LINE + p_gameInfo.m_battleshipsGameInfo.m_boardTwo.at(row).at(column).substr(0, Globals::G_BATTLESHIPS_GRID_ELEMENT_WIDTH);
                 else
-                    output += "   ";
-
-                output += (char)179;
+                    currentRightGridValueLine += Globals::G_PAGE_GRID_VERTICAL_LINE + Globals::G_BATTLESHIPS_EMPTY_GRID_VALUE;
             }
-            output += std::string("   ") + (char)186 + '\n';
-        }
 
-        // Bottom row of both boards
-        output += (char)186 + std::string("   ");
-        for (uint32_t i = 0; i < 2; i++)
-        {
-            output += (char)192;
-            output.insert(output.size(), 3, (char)196);
-            for (uint32_t j = 0; j < 10; j++)
+            currentLeftGridValueLine += std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE);
+            currentRightGridValueLine += std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE);
+
+            leftGridLines.emplace_back(currentLeftGridValueLine);
+            rightGridLines.emplace_back(currentRightGridValueLine);
+
+            // Skip on last row
+            if (row != p_gameInfo.m_battleshipsGameInfo.m_boardOne.size() - 1)
             {
-                output += (char)193;
-                output.insert(output.size(), 3, (char)196);
+                leftGridLines.emplace_back(Globals::G_BATTLESHIPS_GRID_MIDDLE_LINE);
+                rightGridLines.emplace_back(Globals::G_BATTLESHIPS_GRID_MIDDLE_LINE);
             }
-            output += (char)217;
 
-            if (i == 0)
-                output += "                                                   ";
+            else
+            {
+                leftGridLines.emplace_back(Globals::G_BATTLESHIPS_GRID_BOTTOM_LINE);
+                rightGridLines.emplace_back(Globals::G_BATTLESHIPS_GRID_BOTTOM_LINE);
+            }
         }
 
-        output += std::string("   ") + (char)186 + '\n';
+        std::vector<std::string> middleGridLines = {
+            "",
+            "",
+            "",
+            "",
+            Globals::G_GAME_NUMBER_OF_PLAYERS + p_gameInfo.m_battleshipsGameInfo.m_playerCount,
+            "",
+            Globals::G_GAME_COMPUTER_SPEED + p_gameInfo.m_battleshipsGameInfo.m_computerSpeedName,
+            "",
+            "",
+        };
 
-        return output;
+        for (uint32_t currentShip = 0; currentShip < Globals::G_BATTLESHIPS_SHIP_NAMES.size(); currentShip++)
+        {
+            // TODO(Main): hide player two with similar conditions as before
+
+            std::string currentShipHealthLine;
+
+            // Player one
+            for (uint32_t currentShipHealthSquare = 0; currentShipHealthSquare < Globals::G_BATTLESHIPS_SHIP_SIZES.at(currentShip); currentShipHealthSquare++)
+            {
+                if (currentShipHealthSquare < p_gameInfo.m_battleshipsGameInfo.m_shipsRemainingOne.at(Globals::G_BATTLESHIPS_SHIP_PLACED_NAMES.at(currentShip)))
+                    currentShipHealthLine += Globals::G_BATTLESHIPS_SHIP_PRESENT;
+                else
+                    currentShipHealthLine += Globals::G_BATTLESHIPS_SUCCESSFUL_ATTACK;
+
+                // Skip on last iteration
+                if (currentShipHealthSquare != Globals::G_BATTLESHIPS_SHIP_SIZES.at(currentShip) - 1)
+                    currentShipHealthLine += ' ';
+            }
+
+            std::string currentShipHealthTitle;
+
+            if (p_gameInfo.m_battleshipsGameInfo.m_isGameOver || p_gameInfo.m_battleshipsGameInfo.m_playerCount != "1")
+            {
+                currentShipHealthTitle = Globals::G_BATTLESHIPS_SHIP_NAMES.at(currentShip) + std::string(MIDDLE_GRID_SIZE - (2 * Globals::G_BATTLESHIPS_SHIP_NAMES.at(currentShip).size()), ' ') + Globals::G_BATTLESHIPS_SHIP_NAMES.at(currentShip);
+
+                currentShipHealthLine += std::string(MIDDLE_GRID_SIZE - (2 * Globals::G_BATTLESHIPS_SHIP_SIZES.at(currentShip) * Globals::G_BATTLESHIPS_GRID_ELEMENT_WIDTH) - (2 * (Globals::G_BATTLESHIPS_SHIP_SIZES.at(currentShip) - 1)), ' ');
+
+                // Player Two
+                for (uint32_t currentShipHealthSquare = 0; currentShipHealthSquare < Globals::G_BATTLESHIPS_SHIP_SIZES.at(currentShip); currentShipHealthSquare++)
+                {
+                    if (currentShipHealthSquare < (Globals::G_BATTLESHIPS_SHIP_SIZES.at(currentShip) - p_gameInfo.m_battleshipsGameInfo.m_shipsRemainingTwo.at(Globals::G_BATTLESHIPS_SHIP_PLACED_NAMES.at(currentShip))))
+                        currentShipHealthLine += Globals::G_BATTLESHIPS_SUCCESSFUL_ATTACK;
+                    else
+                        currentShipHealthLine += Globals::G_BATTLESHIPS_SHIP_PRESENT;
+
+                    // Skip on last iteration
+                    if (currentShipHealthSquare != Globals::G_BATTLESHIPS_SHIP_SIZES.at(currentShip) - 1)
+                        currentShipHealthLine += ' ';
+                }
+            }
+
+            else
+            {
+                currentShipHealthTitle = Globals::G_BATTLESHIPS_SHIP_NAMES.at(currentShip) + std::string(MIDDLE_GRID_SIZE - Globals::G_BATTLESHIPS_SHIP_NAMES.at(currentShip).size(), ' ');
+                currentShipHealthLine += std::string(MIDDLE_GRID_SIZE - (Globals::G_BATTLESHIPS_SHIP_SIZES.at(currentShip) * Globals::G_BATTLESHIPS_GRID_ELEMENT_WIDTH) - (Globals::G_BATTLESHIPS_SHIP_SIZES.at(currentShip) - 1), ' ');
+            }
+
+            middleGridLines.emplace_back(currentShipHealthTitle);
+            middleGridLines.emplace_back(currentShipHealthLine);
+            middleGridLines.emplace_back("");
+        }
+
+        return GetGridLayout({LEFT_GRID_SIZE, MIDDLE_GRID_SIZE, RIGHT_GRID_SIZE}, {leftGridLines, middleGridLines, rightGridLines}, GRID_HEIGHT);
     }
-
-    // NOLINTEND
 
     std::string PageBuilder::GetGridLayout(const std::vector<uint32_t>& p_gridSizes, const std::vector<std::vector<std::string>>& p_gridLines, const uint32_t& p_numberOfLines)
     {
         const uint32_t OLD_MAXIMUM_LINE_SIZE = m_maximumLineSize;
+        const uint32_t OLD_MINIMUM_LEFT_PADDING = m_minimumLeftPadding;
+        const uint32_t OLD_MINIMUM_RIGHT_PADDING = m_minimumRightPadding;
+
+        m_minimumLeftPadding = 0;
+        m_minimumRightPadding = 0;
 
         std::string output;
 
@@ -1026,14 +919,16 @@ namespace TerminalGames
             std::erase(currentLine, '\n');
 
             // Re-add the vertical lines to the start/end and re-add a single newline to the end
-            currentLine[0] = Globals::G_PAGE_VERTICAL_LINE;
-            currentLine[currentLine.size() - 1] = Globals::G_PAGE_VERTICAL_LINE;
+            currentLine = Globals::G_PAGE_VERTICAL_LINE + currentLine;
+            currentLine += Globals::G_PAGE_VERTICAL_LINE;
             currentLine += '\n';
 
             output += currentLine;
         }
 
         m_maximumLineSize = OLD_MAXIMUM_LINE_SIZE;
+        m_minimumLeftPadding = OLD_MINIMUM_LEFT_PADDING;
+        m_minimumRightPadding = OLD_MINIMUM_RIGHT_PADDING;
 
         return output;
     }
@@ -1043,8 +938,8 @@ namespace TerminalGames
         const uint32_t SUB_STRING_LENGTH = p_subString.size();
 
         std::string output(p_string);
-        for (std::string::size_type i = output.find(p_subString); i != std::string::npos; i = output.find(p_subString))
-            output.erase(i, SUB_STRING_LENGTH);
+        for (std::string::size_type currentSubStringLocation = output.find(p_subString); currentSubStringLocation != std::string::npos; currentSubStringLocation = output.find(p_subString))
+            output.erase(currentSubStringLocation, SUB_STRING_LENGTH);
 
         return output;
     }

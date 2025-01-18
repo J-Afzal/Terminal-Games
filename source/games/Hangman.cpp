@@ -245,12 +245,15 @@ namespace TerminalGames
     void Hangman::ExecuteGeneralCommand(const char& p_guess)
     {
         bool isGuessCorrect = false;
+
         for (uint32_t i = 0; i < m_wordToBeGuessed.size(); i++)
+        {
             if (m_wordToBeGuessed[i] == p_guess)
             {
                 isGuessCorrect = true;
                 m_currentGuessOfWord[i] = p_guess;
             }
+        }
 
         if (!isGuessCorrect)
             m_incorrectGuesses.push_back(p_guess);

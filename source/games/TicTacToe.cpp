@@ -185,8 +185,14 @@ namespace TerminalGames
     void TicTacToe::ExecuteGeneralCommand(const std::tuple<uint32_t, uint32_t>& p_command)
     {
         const auto COMMAND_FIND_LOCATION = Globals::ImplementStdRangesFind(m_commandsRemaining.begin(), m_commandsRemaining.end(), p_command);
+        const uint32_t ROW = std::get<0>(p_command);
+        const uint32_t COLUMN = std::get<1>(p_command);
 
-        m_gameGrid.at(std::get<0>(p_command)).at(std::get<1>(p_command)) = Globals::ImplementStdFormat(Globals::G_TICTACTOE_GRID_OCCUPIED_FORMAT_STRING, m_currentPlayer.back());
+        if (m_currentPlayer == Globals::G_TICTACTOE_PLAYER_X)
+            m_gameGrid.at(ROW).at(COLUMN) = Globals::G_TICTACTOE_GRID_PLAYER_X_OCCUPIED;
+        else
+            m_gameGrid.at(ROW).at(COLUMN) = Globals::G_TICTACTOE_GRID_PLAYER_O_OCCUPIED;
+
         m_commandsRemaining.erase(COMMAND_FIND_LOCATION);
         m_turnCount++;
     }

@@ -300,7 +300,8 @@ namespace TerminalGames
          * @param p_commonTopString The common string between all pages found above the options.
          * @param p_commonBottomString The common string between all pages found below the options.
          * @param p_addEmptyLineBetweenOptions Whether to add an empty line between the options (true) or not (false).
-         * @param p_centerOptions Whether to center the options (true) or left justify them (false).
+         * @param p_centerOptionsHorizontally Whether to center the options horizontally (true) or left justify them (false).
+         * @param p_centerOptionsVertically Whether to center the options vertically (true) or left justify them (false).
          * @return std::vector<std::string> Pages where each page has a different option selected.
          */
         std::vector<std::string> GetGeneralOptionSelectionPages(
@@ -308,7 +309,8 @@ namespace TerminalGames
             const std::string& p_commonTopString,
             const std::string& p_commonBottomString,
             const bool& p_addEmptyLineBetweenOptions,
-            const bool& p_centerOptions) const;
+            const bool& p_centerOptionsHorizontally,
+            const bool& p_centerOptionsVertically) const;
 
         /**
          * @brief Wrapper function around the game specific sub-page functions.
@@ -367,42 +369,48 @@ namespace TerminalGames
         uint32_t m_displayWidth;
         uint32_t m_displayHeight;
         uint32_t m_maximumLineSize;
+        uint32_t m_minimumLeftPadding;
+        uint32_t m_minimumRightPadding;
         Pages m_currentPage;
         bool m_useAnsiEscapeCodes;
 
         /**
-         * @brief A visual example of what some of the lower level function do:
+         * @brief A visual example of what some of the lower level functions do:
          *
          * The whole page would be returned by GetGameOverPage()
          *
-         * ╔═════════════════════════════════════════════════════╗   <- AddTopLine()                         <-
-         * ║                     Tic Tac Toe                     ║   <- AddNewLineCentred("Tic Tac Toe")     <- AddTopBox()
-         * ╚═════════════════════════════════════════════════════╝   <- AddBottomLine()                      <-
-         * ╔═════════════════════════════════════════════════════╗   <- AddTopLine()
-         * ║  O │ O │ X                                          ║                                                                            <-
-         * ║ ───┼───┼───          # of Players = 0               ║                                                                            <-
-         * ║  O │ X │ O                                          ║                                                                            <- GetGeneralGameSubPage() -> GetTicTacToeSubPage()
-         * ║ ───┼───┼───     Computer Difficulty = EASY          ║   <- AddNewLineLeftJustified("───┼───┼───     Computer Difficulty = EASY") <-
-         * ║  O │ X │ X                                          ║                                                                            <-
-         * ║                                                     ║   <- AddEmptyLine()
-         * ║                      GAME OVER                      ║   <- AddNewLineCentred("GAME OVER")
-         * ║                                                     ║
-         * ║     Player O has won! The game lasted 9 turns.      ║   <- AddNewLineCentred("Player O has won! The game lasted 9 turns.")
-         * ║                                                     ║
-         * ║     Press 'Q' to quit OR Enter to play again...     ║   <- AddNewLineCentred("Press 'Q' to quit OR Enter to play again...")
-         * ╚═════════════════════════════════════════════════════╝   <- AddBottomLine()
-         * ╔═════════════════════════════════════════════════════╗   <- AddTopLine()                                   <-
-         * ║                q = quit to main menu                ║   <- AddNewLineCentred("q = quit to main menu")     <- AddBottomBox()
-         * ╚═════════════════════════════════════════════════════╝   <- AddBottomLine()                                <-
+         * ╔═══════════════════════════════════════════════════════╗   <- AddTopLine()                     <-                                        <-
+         * ║                      Tic Tac Toe                      ║   <- AddNewLineCentred("Tic Tac Toe") <- AddTopBox()                            <-
+         * ╚═══════════════════════════════════════════════════════╝   <- AddBottomLine()                  <-                                        <-
+         * ╔═══════════════════════════════════════════════════════╗   <- AddTopLine()                                                               <-
+         * ║  O │ X │ O                                            ║    <-                                                                           <-
+         * ║ ───┼───┼───              # of Players = 0             ║    <-                                                                           <-
+         * ║  O │ O │                                              ║    <- GetGeneralGameSubPage() <- GetTicTacToeSubPage()                          <-
+         * ║ ───┼───┼───          Computer Speed = INSTANT         ║    <-                                                                           <-
+         * ║  X │ X │ X                                            ║    <-                                                                           <-
+         * ║                                                       ║   <- AddEmptyLine()                                                             <- GetGameOverPage()
+         * ║                       GAME OVER                       ║   <- AddNewLineCentred("GAME OVER")                                             <-
+         * ║                                                       ║   <- AddEmptyLine()                                                             <-
+         * ║       Player X has won! The game lasted 8 turns.      ║   <- AddNewLineCentred("Player X has won! The game lasted 8 turns.")            <-
+         * ║                                                       ║   <- AddEmptyLine()                                                             <-
+         * ║ Press 'r' to restart game OR any key to reset game... ║   <- AddNewLineCentred("Press 'r' to restart game OR any key to reset game...") <-
+         * ╚═══════════════════════════════════════════════════════╝   <- AddBottomLine()                                                            <-
+         * ╔═══════════════════════════════════════════════════════╗   <- AddTopLine()                            <-                                 <-
+         * ║                   q = show quit menu                  ║   <- AddNewLineCentred("q = show quit menu") <- AddBottomBox()                  <-
+         * ╚═══════════════════════════════════════════════════════╝   <- AddBottomLine()                         <-                                 <-
          *
          *  ^---------------------------------------------------^
-         *                    = displayWidth = 55
+         *                    = displayWidth = 57
          *
          * In this example:
          *      m_topTitle = "Tic Tac Toe"
-         *      m_bottomTitle = "q = quit to main menu"
-         *      m_displayWidth = 55
+         *      m_bottomTitle = "q = show quit menu"
+         *      m_displayWidth = 57
          *      m_displayHeight = 19
+         *      m_maximumLineSize = 53
+         *      m_minimumLeftPadding = 1
+         *      m_minimumRightPadding = 1
+         *      m_currentPage = Pages::TICTACTOE
          */
     };
 }

@@ -107,7 +107,7 @@ function Test-CodeUsingClang {
     (clang-format --version) | ForEach-Object { "##[debug]$_" } | Write-Verbose
 
     Write-Output "##[section]Retrieving all files to test against clang-tidy and clang-format..."
-    $filesToTest = Get-FilteredFilePathsToTest -FileExtensionFilter "Include" -FileExtensions @("cpp", "hpp")
+    $filesToTest = Get-FilteredFilePathsToTest -FileExtensionFilter "Include" -FileExtensions @("cpp", "hpp") -Verbose
 
     $filesWithErrors = @()
 
@@ -118,13 +118,13 @@ function Test-CodeUsingClang {
         Write-Output "##[section]Running clang-tidy against '$file'..."
         (clang-tidy $file -p ./build 2>&1) | ForEach-Object { "##[debug]$_" } | Write-Verbose
 
-        if (Assert-ExternalCommandError -Verbose) {
+        if (Assert-ExternalCommandError) {
 
             if ($FixClangTidyErrors) {
                 Write-Verbose "##[debug]Fixing clang-tidy issues in '$file'..."
                 (clang-tidy --fix $file -p ./build 2>&1) | ForEach-Object { "##[debug]$_" } | Write-Verbose
 
-                if (Assert-ExternalCommandError -Verbose) {
+                if (Assert-ExternalCommandError) {
                     Write-Verbose "##[debug]clang-tidy issues still exist in '$file'..."
                     $filesWithErrors += $file
                 }
@@ -142,13 +142,13 @@ function Test-CodeUsingClang {
         Write-Output "##[section]Running clang-format against '$file'..."
         (clang-format --Werror --dry-run $file 2>&1) | ForEach-Object { "##[debug]$_" } | Write-Verbose
 
-        if (Assert-ExternalCommandError -Verbose) {
+        if (Assert-ExternalCommandError) {
 
             if ($FixClangFormatErrors) {
                 Write-Verbose "##[debug]Fixing clang-format issues in '$file'..."
                 (clang-format --Werror --i $file 2>&1) | ForEach-Object { "##[debug]$_" } | Write-Verbose
 
-                if (Assert-ExternalCommandError -Verbose) {
+                if (Assert-ExternalCommandError) {
                     Write-Verbose "##[debug]clang-format issues still exist in '$file'..."
                     $filesWithErrors += $file
                 }
@@ -202,8 +202,11 @@ function Test-CodeUsingCSpell {
 
     Write-Output "##[section]Running Test-CodeUsingCSpell..."
 
+    Write-Verbose "##[debug]Using the following cspell version..."
+    (npx cspell --version) | ForEach-Object { "##[debug]$_" } | Write-Verbose
+
     Write-Output "##[section]Retrieving all files to test against cspell..."
-    $filesToTest = Get-FilteredFilePathsToTest -FileExtensionFilter "Exclude" -FileExtensions @("ico", "png") -FileNameFilter "Exclude" @("package-lock")
+    $filesToTest = Get-FilteredFilePathsToTest -FileExtensionFilter "Exclude" -FileExtensions @("ico", "png") -FileNameFilter "Exclude" @("package-lock") -Verbose
 
     $filesWithErrors = @()
 
@@ -213,7 +216,7 @@ function Test-CodeUsingCSpell {
 
         (npx -c "cspell --unique --show-context --no-progress --no-summary $file") | ForEach-Object { "##[debug]$_" } | Write-Verbose
 
-        if (Assert-ExternalCommandError -Verbose) {
+        if (Assert-ExternalCommandError) {
             $filesWithErrors += $file
         }
     }
@@ -254,8 +257,11 @@ function Test-CodeUsingPrettier {
 
     Write-Output "##[section]Running Test-CodeUsingPrettier..."
 
+    Write-Verbose "##[debug]Using the following prettier version..."
+    (npx prettier --version) | ForEach-Object { "##[debug]$_" } | Write-Verbose
+
     Write-Output "##[section]Retrieving all files to test against prettier..."
-    $filesToTest = Get-FilteredFilePathsToTest -FileExtensionFilter "Include" -FileExtensions @("clang-format", "clang-tidy", "json", "md", "yml") -FileNameFilter "Exclude" @("package-lock")
+    $filesToTest = Get-FilteredFilePathsToTest -FileExtensionFilter "Include" -FileExtensions @("clang-format", "clang-tidy", "json", "md", "yml") -FileNameFilter "Exclude" @("package-lock") -Verbose
 
     $filesWithErrors = @()
 
@@ -265,7 +271,7 @@ function Test-CodeUsingPrettier {
 
         (npx -c "prettier $file --debug-check") | ForEach-Object { "##[debug]$_" } | Write-Verbose
 
-        if (Assert-ExternalCommandError -Verbose) {
+        if (Assert-ExternalCommandError) {
             $filesWithErrors += $file
         }
     }
@@ -307,7 +313,7 @@ function Test-CodeUsingPSScriptAnalyzer {
     Write-Output "##[section]Running Test-CodeUsingPSScriptAnalyzer..."
 
     Write-Output "##[section]Retrieving all files to test against PSScriptAnalyzer..."
-    $filesToTest = Get-FilteredFilePathsToTest -FileExtensionFilter "Include" -FileExtensions @("ps1", "psd1", "psm1")
+    $filesToTest = Get-FilteredFilePathsToTest -FileExtensionFilter "Include" -FileExtensions @("ps1", "psd1", "psm1") -Verbose
 
     $filesWithErrors = @()
 
@@ -629,6 +635,7 @@ function Test-CSpellConfigurationFile {
         Write-Output "##[section]All cspell.yml tests passed!"
     }
 }
+
 <#
     .SYNOPSIS
     Lints the .gitattributes file.

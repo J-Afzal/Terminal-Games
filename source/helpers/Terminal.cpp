@@ -110,8 +110,8 @@ namespace TerminalGames
         }
     }
 
-    // TODO: make two versions. one for windows and one for non windows and one orchestrator with if to decide which to call
-    std::tuple<uint32_t, uint32_t> Terminal::GetUserCommandFromGameGrid(
+    // TODO(Main): make two versions. one for windows and one for non windows and one orchestrator with if to decide which to call
+    std::tuple<uint32_t, uint32_t> Terminal::GetUserCommandFromGameGrid( // NOLINT(readability-function-cognitive-complexity)
         const std::tuple<uint32_t, uint32_t>& p_startingGridLocation,
         const PageBuilder& p_pageBuilder,
         const GameInfo& p_gameInfo,
@@ -153,7 +153,11 @@ namespace TerminalGames
         }
 
         if (p_displayGetUserCommandPage)
+        {
             PrintOutput(pageBuilder.GetUserCommandPage(p_gameInfo));
+            if (CURRENT_PAGE_TYPE == Pages::BATTLESHIPS)
+                gridLeftPad = Globals::G_BATTLESHIPS_GRID_LEFT_PAD + 97; // To move to player two board // TODO: Global? and remove jan-k
+        }
 
         while (true)
         {
