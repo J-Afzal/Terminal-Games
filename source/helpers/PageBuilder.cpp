@@ -585,7 +585,7 @@ namespace TerminalGames
         const uint32_t GRID_HEIGHT = 7;
 
         // Hangman state section
-        const std::vector<std::string>& LEFT_GRID_LINES = Globals::G_HANGMAN_STATES[p_gameInfo.m_hangmanGameInfo.m_incorrectGuesses.size()];
+        const std::vector<std::string> LEFT_GRID_LINES = Globals::G_HANGMAN_STATES[p_gameInfo.m_hangmanGameInfo.m_incorrectGuesses.size()];
 
         // Game options section
         const std::vector<std::string> MIDDLE_GRID_LINES = {
@@ -667,11 +667,13 @@ namespace TerminalGames
         const uint32_t RIGHT_GRID_SIZE = 45;
         const uint32_t GRID_HEIGHT = 24;
 
+        const std::string SINGLE_SPACE(1, ' ');
+
         std::string commonGridAlphabetAxis = Globals::G_PAGE_GRID_VERTICAL_LINE + Globals::G_BATTLESHIPS_EMPTY_GRID_VALUE;
 
-        for (uint32_t currentLetterOffset = 0; currentLetterOffset < Globals::G_BATTLESHIPS_BOARD_WIDTH; currentLetterOffset++)
+        for (uint32_t currentLetter = Globals::G_BATTLESHIPS_LETTER_OFFSET; (currentLetter - Globals::G_BATTLESHIPS_LETTER_OFFSET) < Globals::G_BATTLESHIPS_BOARD_WIDTH; currentLetter++)
         {
-            commonGridAlphabetAxis += Globals::G_PAGE_GRID_VERTICAL_LINE + ' ' + static_cast<char>(Globals::G_BATTLESHIPS_LETTER_OFFSET + currentLetterOffset) + ' ';
+            commonGridAlphabetAxis += Globals::G_PAGE_GRID_VERTICAL_LINE + SINGLE_SPACE + static_cast<char>(currentLetter) + SINGLE_SPACE;
         }
 
         commonGridAlphabetAxis += Globals::G_PAGE_GRID_VERTICAL_LINE;
@@ -682,8 +684,8 @@ namespace TerminalGames
         // Assuming both board are the same size
         for (uint32_t row = 0; row < p_gameInfo.m_battleshipsGameInfo.m_boardOne.size(); row++)
         {
-            std::string currentLeftGridValueLine = Globals::G_PAGE_GRID_VERTICAL_LINE + " " + std::to_string(row) + ' ';
-            std::string currentRightGridValueLine = Globals::G_PAGE_GRID_VERTICAL_LINE + " " + std::to_string(row) + ' ';
+            std::string currentLeftGridValueLine = Globals::G_PAGE_GRID_VERTICAL_LINE + SINGLE_SPACE + std::to_string(row) + SINGLE_SPACE;
+            std::string currentRightGridValueLine = Globals::G_PAGE_GRID_VERTICAL_LINE + SINGLE_SPACE + std::to_string(row) + SINGLE_SPACE;
 
             for (uint32_t column = 0; column < p_gameInfo.m_battleshipsGameInfo.m_boardOne.at(row).size(); column++)
             {
@@ -756,7 +758,7 @@ namespace TerminalGames
                 // Skip on last iteration
                 if (currentShipHealthSquare != Globals::G_BATTLESHIPS_SHIP_SIZES.at(currentShip) - 1)
                 {
-                    currentShipHealthLine += ' ';
+                    currentShipHealthLine += SINGLE_SPACE;
                 }
             }
 
@@ -784,7 +786,7 @@ namespace TerminalGames
                     // Skip on last iteration
                     if (currentShipHealthSquare != Globals::G_BATTLESHIPS_SHIP_SIZES.at(currentShip) - 1)
                     {
-                        currentShipHealthLine += ' ';
+                        currentShipHealthLine += SINGLE_SPACE;
                     }
                 }
             }

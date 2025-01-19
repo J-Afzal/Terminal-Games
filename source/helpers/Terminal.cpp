@@ -175,19 +175,19 @@ namespace TerminalGames
 
                 if (CURRENT_PAGE_TYPE == Pages::TICTACTOE)
                 {
-                    //currentGameInfo.m_ticTacToeGameInfo.m_gameGrid.at(currentRow).at(currentColumn) = Globals::ImplementStdFormat(Globals::G_TICTACTOE_GRID_SELECTED_FORMAT_STRING, currentGameInfo.m_ticTacToeGameInfo.m_gameGrid.at(currentRow).at(currentColumn).at(1));
+                    // currentGameInfo.m_ticTacToeGameInfo.m_gameGrid.at(currentRow).at(currentColumn) = Globals::ImplementStdFormat(Globals::G_TICTACTOE_GRID_SELECTED_FORMAT_STRING, currentGameInfo.m_ticTacToeGameInfo.m_gameGrid.at(currentRow).at(currentColumn).at(1));
                 }
 
                 if (CURRENT_PAGE_TYPE == Pages::BATTLESHIPS)
                 {
                     if (p_displayGetUserCommandPage)
                     {
-                        //currentGameInfo.m_battleshipsGameInfo.m_boardTwo.at(currentRow).at(currentColumn) = Globals::ImplementStdFormat(Globals::G_BATTLESHIPS_GRID_SELECTED_FORMAT_STRING, currentGameInfo.m_battleshipsGameInfo.m_boardTwo.at(currentRow).at(currentColumn).at(1));
+                        // currentGameInfo.m_battleshipsGameInfo.m_boardTwo.at(currentRow).at(currentColumn) = Globals::ImplementStdFormat(Globals::G_BATTLESHIPS_GRID_SELECTED_FORMAT_STRING, currentGameInfo.m_battleshipsGameInfo.m_boardTwo.at(currentRow).at(currentColumn).at(1));
                     }
 
                     else
                     {
-                        //currentGameInfo.m_battleshipsGameInfo.m_boardOne.at(currentRow).at(currentColumn) = Globals::ImplementStdFormat(Globals::G_BATTLESHIPS_GRID_SELECTED_FORMAT_STRING, currentGameInfo.m_battleshipsGameInfo.m_boardOne.at(currentRow).at(currentColumn).at(1));
+                        // currentGameInfo.m_battleshipsGameInfo.m_boardOne.at(currentRow).at(currentColumn) = Globals::ImplementStdFormat(Globals::G_BATTLESHIPS_GRID_SELECTED_FORMAT_STRING, currentGameInfo.m_battleshipsGameInfo.m_boardOne.at(currentRow).at(currentColumn).at(1));
                     }
                 }
 

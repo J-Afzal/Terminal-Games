@@ -134,7 +134,7 @@ namespace TerminalGames::Globals
      * @param p_string The string to be checked and edited.
      * @param p_subString The substring to be removed.
      */
-    static constexpr void RemoveSubString(std::string& p_string, const std::string& p_subString) // TODO(Main): string view
+    static constexpr void RemoveSubString(std::string& p_string, const std::string& p_subString)
     {
         const uint32_t SUB_STRING_LENGTH = p_subString.size();
         for (std::string::size_type currentSubStringLocation = p_string.find(p_subString); currentSubStringLocation != std::string::npos; currentSubStringLocation = p_string.find(p_subString))
