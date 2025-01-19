@@ -32,17 +32,21 @@ namespace TerminalGames
         m_hasWinner = false;
 
         for (uint32_t row = 0; row < Globals::G_TICTACTOE_BOARD_HEIGHT; row++)
+        {
             for (uint32_t column = 0; column < Globals::G_TICTACTOE_BOARD_WIDTH; column++)
             {
                 m_gameGrid.at(row).at(column) = Globals::G_TICTACTOE_EMPTY_GRID_VALUE;
                 m_commandsRemaining.emplace_back(row, column);
             }
+        }
     }
 
     void TicTacToe::GetUserOptions()
     {
         if (m_saveGameOptions && m_hasSavedGameOptions)
+        {
             return;
+        }
 
         m_computerSpeedName = Globals::G_GAME_UNKNOWN_OPTION;
         m_playerCount = Globals::G_GAME_UNKNOWN_OPTION;
@@ -51,10 +55,14 @@ namespace TerminalGames
         GetPlayerCount();
 
         if (m_playerCount == "0" || m_playerCount == "1")
+        {
             GetComputerSpeed();
+        }
 
         if (m_playerCount == "1")
+        {
             GetUserPlayerChoice();
+        }
 
         m_hasSavedGameOptions = true;
     }
@@ -128,7 +136,9 @@ namespace TerminalGames
         const std::tuple<uint32_t, uint32_t> SELECTED_COMMAND = m_commandsRemaining[m_randomNumberGenerator() % m_commandsRemaining.size()];
 
         if (ValidateCommand(SELECTED_COMMAND))
+        {
             ExecuteGeneralCommand(SELECTED_COMMAND);
+        }
     }
 
     void TicTacToe::GameOver()
@@ -189,9 +199,14 @@ namespace TerminalGames
         const uint32_t COLUMN = std::get<1>(p_command);
 
         if (m_currentPlayer == Globals::G_TICTACTOE_PLAYER_X)
+        {
             m_gameGrid.at(ROW).at(COLUMN) = Globals::G_TICTACTOE_GRID_PLAYER_X_OCCUPIED;
+        }
+
         else
+        {
             m_gameGrid.at(ROW).at(COLUMN) = Globals::G_TICTACTOE_GRID_PLAYER_O_OCCUPIED;
+        }
 
         m_commandsRemaining.erase(COMMAND_FIND_LOCATION);
         m_turnCount++;

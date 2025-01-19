@@ -38,6 +38,7 @@ namespace TerminalGames
         m_isGameOver = false;
 
         for (uint32_t row = 0; row < Globals::G_BATTLESHIPS_BOARD_HEIGHT; row++)
+        {
             for (uint32_t column = 0; column < Globals::G_BATTLESHIPS_BOARD_WIDTH; column++)
             {
                 m_boardOne.at(row).at(column) = Globals::G_BATTLESHIPS_EMPTY_GRID_VALUE;
@@ -45,6 +46,7 @@ namespace TerminalGames
                 m_commandsRemainingOne.emplace_back(row, column);
                 m_commandsRemainingTwo.emplace_back(row, column);
             }
+        }
     }
 
     void Battleships::GetUserOptions()
@@ -61,9 +63,14 @@ namespace TerminalGames
         }
 
         if (m_playerCount == "1")
+        {
             GetUserShipPositions();
+        }
+
         else
+        {
             GetComputerShipPositions(m_boardOne);
+        }
 
         GetComputerShipPositions(m_boardTwo);
     }
@@ -122,13 +129,17 @@ namespace TerminalGames
     {
         Terminal::PrintOutput(m_pageBuilder.GetComputerCommandPage(m_gameInfo));
 
-        std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::seconds(m_computerSpeed));
+        std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::seconds(m_computerSpeed)); // TODO(Main): is this the cause of the perf drop???
 
         if (m_currentPlayer == Globals::G_BATTLESHIPS_PLAYER_ONE)
+        {
             ExecuteGeneralCommand(m_boardTwo, m_shipsRemainingTwo, m_commandsRemainingOne, m_commandsRemainingOne[m_randomNumberGenerator() % m_commandsRemainingOne.size()]);
+        }
 
         else
+        {
             ExecuteGeneralCommand(m_boardOne, m_shipsRemainingOne, m_commandsRemainingTwo, m_commandsRemainingTwo[m_randomNumberGenerator() % m_commandsRemainingTwo.size()]);
+        }
     }
 
     void Battleships::GameOver()
@@ -268,11 +279,15 @@ namespace TerminalGames
         const uint32_t SELECTED_SHIP_GRID_COLUMN = std::get<1>(p_selectedShipGridLocation);
 
         if (m_boardOne.at(SELECTED_SHIP_GRID_ROW).at(SELECTED_SHIP_GRID_COLUMN) != Globals::G_BATTLESHIPS_EMPTY_GRID_VALUE)
+        {
             return false;
+        }
 
         // If this is empty then this is the first ship grid location selection so it is automatically valid
         if (p_currentShipPositions.empty())
+        {
             return true;
+        }
 
         // As selected grid locations are added incrementally only the previous selection needs to be checked against the
         // current selection
@@ -284,14 +299,18 @@ namespace TerminalGames
 
         // Prevent selection of a diagonal grid location relative to the previous selection
         if (!ROWS_ARE_THE_SAME && !COLUMNS_ARE_THE_SAME)
+        {
             return false;
+        }
 
         const int32_t ROW_DIFFERENCE_TO_PREVIOUS_SELECTION = std::abs(static_cast<int>(SELECTED_SHIP_GRID_ROW) - static_cast<int>(PREVIOUS_SELECTED_SHIP_GRID_ROW));
         const int32_t COLUMN_DIFFERENCE_TO_PREVIOUS_SELECTION = std::abs(static_cast<int>(SELECTED_SHIP_GRID_COLUMN) - static_cast<int>(PREVIOUS_SELECTED_SHIP_GRID_COLUMN));
 
         // Only allow adjacents grid locations relative to the previous selection
         if ((ROW_DIFFERENCE_TO_PREVIOUS_SELECTION > 1) || (COLUMN_DIFFERENCE_TO_PREVIOUS_SELECTION > 1))
+        {
             return false;
+        }
 
         // If there has only been one selection yet this selection is automatically valid. Also as there have now been two
         // selections we can determine whether the ship is being placed horizontally or vertically.
@@ -304,11 +323,15 @@ namespace TerminalGames
 
         // If ship is known to be horizontal then rows must be the same
         if (p_shipIsHorizontal && !ROWS_ARE_THE_SAME)
+        {
             return false;
+        }
 
         // If ship is known to be vertical then columns must be the same
         if (p_shipIsVertical && !COLUMNS_ARE_THE_SAME)
+        {
             return false;
+        }
 
         return true;
     }
@@ -343,7 +366,9 @@ namespace TerminalGames
                     for (uint32_t columnIncrement = 0; columnIncrement < Globals::G_BATTLESHIPS_SHIP_SIZES.at(currentShip); columnIncrement++)
                     {
                         if (p_board.at(startingRow).at(startingColumn + columnIncrement) == Globals::G_BATTLESHIPS_EMPTY_GRID_VALUE)
+                        {
                             shipPositions.emplace_back(startingRow, startingColumn + columnIncrement);
+                        }
 
                         else
                         {
@@ -367,7 +392,9 @@ namespace TerminalGames
                     for (uint32_t rowIncrement = 0; rowIncrement < Globals::G_BATTLESHIPS_SHIP_SIZES.at(currentShip); rowIncrement++)
                     {
                         if (p_board.at(startingRow + rowIncrement).at(startingColumn) == Globals::G_BATTLESHIPS_EMPTY_GRID_VALUE)
+                        {
                             shipPositions.emplace_back(startingRow + rowIncrement, startingColumn);
+                        }
 
                         else
                         {
@@ -378,21 +405,31 @@ namespace TerminalGames
                 }
 
                 if (!locationIsAlreadyOccupied)
+                {
                     break;
+                }
             }
 
             // Place ship
             for (std::tuple<uint32_t, uint32_t> currentShipPosition : shipPositions)
+            {
                 p_board.at(std::get<0>(currentShipPosition)).at(std::get<1>(currentShipPosition)) = Globals::G_BATTLESHIPS_SHIP_PLACED_NAMES.at(currentShip);
+            }
         }
     }
 
     bool Battleships::IsShipPresent(std::array<std::array<std::string, Globals::G_BATTLESHIPS_BOARD_WIDTH>, Globals::G_BATTLESHIPS_BOARD_HEIGHT>& p_board)
     {
         for (const std::array<std::string, Globals::G_BATTLESHIPS_BOARD_WIDTH>& currentRow : p_board)
+        {
             for (const std::string& currentBoardValue : currentRow)
+            {
                 if (Globals::ImplementStdRangesFind(Globals::G_BATTLESHIPS_SHIP_PLACED_NAMES.begin(), Globals::G_BATTLESHIPS_SHIP_PLACED_NAMES.end(), currentBoardValue) != Globals::G_BATTLESHIPS_SHIP_PLACED_NAMES.end())
+                {
                     return true;
+                }
+            }
+        }
 
         return false;
     }
@@ -422,7 +459,9 @@ namespace TerminalGames
         }
 
         else // Miss
+        {
             p_opponentBoard.at(ROW).at(COLUMN) = Globals::G_BATTLESHIPS_MISSED_ATTACK + p_opponentBoard.at(ROW).at(COLUMN).substr(Globals::G_BATTLESHIPS_GRID_ELEMENT_WIDTH, p_opponentBoard.at(ROW).at(COLUMN).size() - 1);
+        }
 
         p_commandsRemaining.erase(COMMAND_FIND_LOCATION);
         m_turnCount++;

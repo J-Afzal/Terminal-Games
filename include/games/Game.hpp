@@ -68,10 +68,14 @@ namespace TerminalGames
                     while (!IsGameOver())
                     {
                         if (IsCurrentTurnUsers())
+                        {
                             ExecuteUserCommand();
+                        }
 
                         else
+                        {
                             ExecuteComputerCommand();
+                        }
 
                         ToggleCurrentPlayer();
 

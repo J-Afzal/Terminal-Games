@@ -156,7 +156,9 @@ namespace TerminalGames
         {
             PrintOutput(pageBuilder.GetUserCommandPage(p_gameInfo));
             if (CURRENT_PAGE_TYPE == Pages::BATTLESHIPS)
-                gridLeftPad = Globals::G_BATTLESHIPS_GRID_LEFT_PAD + 97; // To move to player two board // TODO: Global? and remove jan-k
+            {
+                gridLeftPad = Globals::G_BATTLESHIPS_GRID_LEFT_PAD + 93; // To move to player two board // TODO: Global? and remove jan-k
+            }
         }
 
         while (true)
@@ -172,19 +174,27 @@ namespace TerminalGames
                 GameInfo currentGameInfo = p_gameInfo;
 
                 if (CURRENT_PAGE_TYPE == Pages::TICTACTOE)
+                {
                     currentGameInfo.m_ticTacToeGameInfo.m_gameGrid.at(currentRow).at(currentColumn) = Globals::ImplementStdFormat(Globals::G_TICTACTOE_GRID_SELECTED_FORMAT_STRING, currentGameInfo.m_ticTacToeGameInfo.m_gameGrid.at(currentRow).at(currentColumn).at(1));
+                }
 
                 if (CURRENT_PAGE_TYPE == Pages::BATTLESHIPS)
                 {
                     if (p_displayGetUserCommandPage)
+                    {
                         currentGameInfo.m_battleshipsGameInfo.m_boardTwo.at(currentRow).at(currentColumn) = Globals::ImplementStdFormat(Globals::G_BATTLESHIPS_GRID_SELECTED_FORMAT_STRING, currentGameInfo.m_battleshipsGameInfo.m_boardTwo.at(currentRow).at(currentColumn).at(1));
+                    }
 
                     else
+                    {
                         currentGameInfo.m_battleshipsGameInfo.m_boardOne.at(currentRow).at(currentColumn) = Globals::ImplementStdFormat(Globals::G_BATTLESHIPS_GRID_SELECTED_FORMAT_STRING, currentGameInfo.m_battleshipsGameInfo.m_boardOne.at(currentRow).at(currentColumn).at(1));
+                    }
                 }
 
                 if (p_displayGetUserCommandPage)
+                {
                     PrintOutput(pageBuilder.GetUserCommandPage(currentGameInfo));
+                }
             }
 
             switch (GetNextKeyPress())
@@ -312,21 +322,29 @@ namespace TerminalGames
 
         HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
         if (hStdOut == INVALID_HANDLE_VALUE)
+        {
             std::exit(1);
+        }
 
         // Get the number of cells in the current buffer
         if (!static_cast<bool>(GetConsoleScreenBufferInfo(hStdOut, &consoleScreenBufferInfo)))
+        {
             std::exit(2);
+        }
 
         cellCount = consoleScreenBufferInfo.dwSize.X * consoleScreenBufferInfo.dwSize.Y;
 
         // Fill the entire buffer with spaces
         if (!FillConsoleOutputCharacter(hStdOut, ' ', cellCount, HOME_COORDS, &count))
+        {
             std::exit(3);
+        }
 
         // Fill the entire buffer with the current colors and attributes
         if (!static_cast<bool>(FillConsoleOutputAttribute(hStdOut, consoleScreenBufferInfo.wAttributes, cellCount, HOME_COORDS, &count)))
+        {
             std::exit(4);
+        }
 
         // Move the cursor home
         SetConsoleCursorPosition(hStdOut, HOME_COORDS);
@@ -348,7 +366,9 @@ namespace TerminalGames
             std::getline(std::cin, inputString);
 
             if (inputString.size() != 1)
+            {
                 continue;
+            }
 
             switch (inputString[0])
             {

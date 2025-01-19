@@ -95,7 +95,9 @@ namespace TerminalGames
         for (const std::string& argument : p_commandLineArguments)
         {
             if (argument == "--a" || argument == "--ascii-only")
+            {
                 return false;
+            }
 
             if (argument == "--h" || argument == "--help")
             {

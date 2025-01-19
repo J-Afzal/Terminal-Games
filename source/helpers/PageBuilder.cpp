@@ -107,12 +107,12 @@ namespace TerminalGames
             output.emplace_back(
                 COMMON_TOP_STRING +
                 GetNewLineLeftJustified("Yes", Colours::BLUE, Globals::G_PAGE_SELECTOR) +
-                GetNewLineLeftJustified(std::string(Globals::G_PAGE_SELECTOR.size() + 1, ' ') + "No") +
+                GetNewLineLeftJustified(Globals::G_PAGE_SELECTOR_ABSENT_PADDING + "No") +
                 COMMON_BOTTOM_STRING);
 
             output.emplace_back(RemoveColour(
                 COMMON_TOP_STRING +
-                GetNewLineLeftJustified(std::string(Globals::G_PAGE_SELECTOR.size() + 1, ' ') + "Yes") +
+                GetNewLineLeftJustified(Globals::G_PAGE_SELECTOR_ABSENT_PADDING + "Yes") +
                 GetNewLineLeftJustified("No", Colours::BLUE, Globals::G_PAGE_SELECTOR) +
                 COMMON_BOTTOM_STRING));
         }
@@ -130,12 +130,12 @@ namespace TerminalGames
             output.emplace_back(
                 COMMON_TOP_STRING +
                 GetNewLineLeftJustified("Yes", Colours::BLUE, Globals::G_PAGE_SELECTOR) +
-                GetNewLineLeftJustified(std::string(Globals::G_PAGE_SELECTOR.size() + 1, ' ') + "No") +
+                GetNewLineLeftJustified(Globals::G_PAGE_SELECTOR_ABSENT_PADDING + "No") +
                 COMMON_BOTTOM_STRING);
 
             output.emplace_back(RemoveColour(
                 COMMON_TOP_STRING +
-                GetNewLineLeftJustified(std::string(Globals::G_PAGE_SELECTOR.size() + 1, ' ') + "Yes") +
+                GetNewLineLeftJustified(Globals::G_PAGE_SELECTOR_ABSENT_PADDING + "Yes") +
                 GetNewLineLeftJustified("No", Colours::BLUE, Globals::G_PAGE_SELECTOR) +
                 COMMON_BOTTOM_STRING));
         }
@@ -214,7 +214,7 @@ namespace TerminalGames
             return GetPageWithMessage(p_gameInfo, p_gameInfo.m_ticTacToeGameInfo.m_currentPlayer + ", please enter your next command!");
 
         case Pages::HANGMAN:
-            return GetPageWithMessage(p_gameInfo, "Guesser, please enter your next guess: " + AddColour(std::string() + p_gameInfo.m_hangmanGameInfo.m_currentGuess, Colours::BLUE));
+            return GetPageWithMessage(p_gameInfo, "Guesser, please enter your next guess: " + AddColour(std::string(1, p_gameInfo.m_hangmanGameInfo.m_currentGuess), Colours::BLUE));
 
         case Pages::BATTLESHIPS:
             return GetPageWithMessage(p_gameInfo, p_gameInfo.m_battleshipsGameInfo.m_currentPlayer + ", please enter your next command!");
@@ -247,18 +247,26 @@ namespace TerminalGames
         {
         case Pages::TICTACTOE:
             if (p_gameInfo.m_ticTacToeGameInfo.m_hasWinner) // This game can be drawn unlike the others.
+            {
                 topString += GetNewLineCentred(p_gameInfo.m_ticTacToeGameInfo.m_currentPlayer + " has won! The game lasted " + std::to_string(p_gameInfo.m_ticTacToeGameInfo.m_turnCount) + " turns.");
+            }
 
             else
+            {
                 topString += GetNewLineCentred("The game is a draw! The game lasted " + std::to_string(p_gameInfo.m_ticTacToeGameInfo.m_turnCount) + " turns.");
+            }
             break;
 
         case Pages::HANGMAN:
             if (p_gameInfo.m_hangmanGameInfo.m_incorrectGuesses.size() == Globals::G_HANGMAN_MAXIMUM_ERROR_COUNT)
+            {
                 topString += GetNewLineCentred("The word setter has won! The game lasted " + std::to_string(p_gameInfo.m_hangmanGameInfo.m_turnCount) + " turns!");
+            }
 
             else
+            {
                 topString += GetNewLineCentred("The guesser has won! The game lasted " + std::to_string(p_gameInfo.m_hangmanGameInfo.m_turnCount) + " turns.");
+            }
             break;
 
         case Pages::BATTLESHIPS:
@@ -282,25 +290,11 @@ namespace TerminalGames
     std::string PageBuilder::AddColour(const std::string& p_input, const Colours& p_colour) const
     {
         if (!m_useAnsiEscapeCodes)
-            return p_input;
-
-        switch (p_colour)
         {
-        case Colours::RED:
-            return Globals::G_ANSI_RED_COLOUR_ESCAPE_CODE + p_input + Globals::G_ANSI_WHITE_COLOUR_ESCAPE_CODE;
-
-        case Colours::BLUE:
-            return Globals::G_ANSI_BLUE_COLOUR_ESCAPE_CODE + p_input + Globals::G_ANSI_WHITE_COLOUR_ESCAPE_CODE;
-
-        case Colours::GREEN:
-            return Globals::G_ANSI_GREEN_COLOUR_ESCAPE_CODE + p_input + Globals::G_ANSI_WHITE_COLOUR_ESCAPE_CODE;
-
-        case Colours::YELLOW:
-            return Globals::G_ANSI_YELLOW_COLOUR_ESCAPE_CODE + p_input + Globals::G_ANSI_WHITE_COLOUR_ESCAPE_CODE;
-
-        default:
-            return p_input; // Text is already white
+            return p_input;
         }
+
+        return Globals::G_ANSI_ALL_COLOUR_ESCAPE_CODES.at(static_cast<uint8_t>(p_colour));
     }
 
     std::string PageBuilder::RemoveColour(const std::string& p_input)
@@ -308,7 +302,9 @@ namespace TerminalGames
         std::string output = p_input;
 
         for (const std::string& currentAnsiColourEscapeCode : Globals::G_ANSI_ALL_COLOUR_ESCAPE_CODES)
-            output = RemoveSubString(output, currentAnsiColourEscapeCode);
+        {
+            Globals::RemoveSubString(output, currentAnsiColourEscapeCode);
+        }
 
         return output;
     }
@@ -329,7 +325,7 @@ namespace TerminalGames
 
         // ANSI colour escape codes when within a string take up *** characters but visually have zero width. Thus, exclude them
         // from all padding calculations.
-        const std::string INPUT_WITH_SELECTOR = p_selector.empty() ? p_input : p_selector + " " + p_input;
+        const std::string INPUT_WITH_SELECTOR = p_selector.empty() ? p_input : p_selector + ' ' + p_input;
         const uint32_t INPUT_WITH_SELECTOR_ANSI_COLOUR_ESCAPE_CODE_COUNT = Globals::ImplementStdCount(INPUT_WITH_SELECTOR.begin(), INPUT_WITH_SELECTOR.end(), Globals::G_ANSI_COLOUR_ESCAPE_CODE_START);
         const uint32_t INPUT_WITH_SELECTOR_SIZE = static_cast<uint32_t>(INPUT_WITH_SELECTOR.size()) - (INPUT_WITH_SELECTOR_ANSI_COLOUR_ESCAPE_CODE_COUNT * Globals::G_ANSI_COLOUR_ESCAPE_CODE_SIZE);
 
@@ -353,7 +349,7 @@ namespace TerminalGames
 
     std::string PageBuilder::GetNewLineLeftJustified(const std::string& p_input, const Colours& p_colour, const std::string& p_selector) const
     {
-        const std::string INPUT = p_selector.empty() ? p_input : p_selector + " " + p_input;
+        const std::string INPUT = p_selector.empty() ? p_input : p_selector + ' ' + p_input;
 
         // ANSI colour escape codes when within a string take up *** characters but visually have zero width. Thus, exclude them
         // from all padding calculations.
@@ -418,7 +414,9 @@ namespace TerminalGames
 
         std::string output;
         for (uint32_t emptyLineCount = 0; emptyLineCount < EMPTY_LINES_TO_ADD_COUNT; emptyLineCount++)
+        {
             output += GetEmptyLine();
+        }
 
         return output;
     }
@@ -431,7 +429,7 @@ namespace TerminalGames
         return GetGeneralOptionSelectionPages(p_options, COMMON_TOP_STRING, COMMON_BOTTOM_STRING, false, false, false);
     }
 
-    std::vector<std::string> PageBuilder::GetGeneralOptionSelectionPages(
+    std::vector<std::string> PageBuilder::GetGeneralOptionSelectionPages( // NOLINT(readability-function-cognitive-complexity)
         const std::vector<std::string>& p_options,
         const std::string& p_commonTopString,
         const std::string& p_commonBottomString,
@@ -451,17 +449,26 @@ namespace TerminalGames
             std::string currentTopString(p_commonTopString);
 
             if (p_centerOptionsVertically)
+            {
                 for (uint32_t emptyLineCount = 0; emptyLineCount < EMPTY_LINES_BEFORE_OPTIONS; emptyLineCount++)
+                {
                     currentTopString += GetEmptyLine();
+                }
+            }
 
             for (uint32_t currentOption = 0; currentOption < p_options.size(); currentOption++)
             {
                 if (currentOption == currentOptionSelected)
                 {
                     if (p_centerOptionsHorizontally)
+                    {
                         currentTopString += GetNewLineCentred(p_options[currentOption], Colours::BLUE, Globals::G_PAGE_SELECTOR);
+                    }
+
                     else
+                    {
                         currentTopString += GetNewLineLeftJustified(p_options[currentOption], Colours::BLUE, Globals::G_PAGE_SELECTOR);
+                    }
                 }
 
                 else if (p_centerOptionsHorizontally)
@@ -471,12 +478,16 @@ namespace TerminalGames
 
                 else
                 {
-                    currentTopString += GetNewLineLeftJustified(std::string(Globals::G_PAGE_SELECTOR.size() + 1, ' ') + p_options[currentOption]);
+                    currentTopString += GetNewLineLeftJustified(Globals::G_PAGE_SELECTOR_ABSENT_PADDING + p_options[currentOption]);
                 }
 
                 if (p_addEmptyLineBetweenOptions)
+                {
                     if (currentOption != p_options.size() - 1) // Don't add extra line on the last option.
+                    {
                         currentTopString += GetEmptyLine();
+                    }
+                }
             }
 
             if (p_centerOptionsVertically)
@@ -484,14 +495,18 @@ namespace TerminalGames
                 output[currentOptionSelected] = currentTopString;
 
                 for (uint32_t emptyLineCount = 0; emptyLineCount < EMPTY_LINES_AFTER_OPTIONS; emptyLineCount++)
+                {
                     output[currentOptionSelected] += GetEmptyLine();
+                }
 
                 output[currentOptionSelected] += p_commonBottomString;
             }
 
             else
             {
-                output[currentOptionSelected] = currentTopString + GetRemainingEmptyLines(currentTopString, p_commonBottomString) + p_commonBottomString;
+                output[currentOptionSelected] = currentTopString;
+                output[currentOptionSelected] += GetRemainingEmptyLines(currentTopString, p_commonBottomString);
+                output[currentOptionSelected] += p_commonBottomString;
             }
         }
 
@@ -570,142 +585,7 @@ namespace TerminalGames
         const uint32_t GRID_HEIGHT = 7;
 
         // Hangman state section
-        std::vector<std::string> leftGridLines;
-        switch (p_gameInfo.m_hangmanGameInfo.m_incorrectGuesses.size())
-        {
-        case 0:
-            leftGridLines = {
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-            };
-            break;
-
-        case 1:
-            leftGridLines = {
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                Globals::G_HANGMAN_GALLOWS_BASE_INITIAL + "       ",
-            };
-            break;
-
-        case 2:
-            leftGridLines = {
-                "",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                Globals::G_HANGMAN_GALLOWS_BASE + "       ",
-            };
-            break;
-
-        case 3:
-            leftGridLines = {
-                "   " + std::string(1, Globals::G_PAGE_GRID_TOP_LEFT) + Globals::G_HANGMAN_GALLOWS_TOP + "  ",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                Globals::G_HANGMAN_GALLOWS_BASE + "       ",
-            };
-            break;
-
-        case 4:
-            leftGridLines = {
-                "   " + std::string(1, Globals::G_PAGE_GRID_TOP_LEFT) + Globals::G_HANGMAN_GALLOWS_TOP + Globals::G_PAGE_GRID_TOP_RIGHT + " ",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       " + Globals::G_PAGE_GRID_VERTICAL_LINE + " ",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                Globals::G_HANGMAN_GALLOWS_BASE + "       ",
-            };
-            break;
-
-        case 5:
-            leftGridLines = {
-                "   " + std::string(1, Globals::G_PAGE_GRID_TOP_LEFT) + Globals::G_HANGMAN_GALLOWS_TOP + Globals::G_PAGE_GRID_TOP_RIGHT + " ",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       " + Globals::G_PAGE_GRID_VERTICAL_LINE + " ",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       O ",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                Globals::G_HANGMAN_GALLOWS_BASE + "       ",
-            };
-            break;
-
-        case 6:
-            leftGridLines = {
-                "   " + std::string(1, Globals::G_PAGE_GRID_TOP_LEFT) + Globals::G_HANGMAN_GALLOWS_TOP + Globals::G_PAGE_GRID_TOP_RIGHT + " ",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       " + Globals::G_PAGE_GRID_VERTICAL_LINE + " ",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       O ",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       | ",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                Globals::G_HANGMAN_GALLOWS_BASE + "       ",
-            };
-            break;
-
-        case 7:
-            leftGridLines = {
-                "   " + std::string(1, Globals::G_PAGE_GRID_TOP_LEFT) + Globals::G_HANGMAN_GALLOWS_TOP + Globals::G_PAGE_GRID_TOP_RIGHT + " ",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       " + Globals::G_PAGE_GRID_VERTICAL_LINE + " ",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       O ",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       | ",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "      /  ",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                Globals::G_HANGMAN_GALLOWS_BASE + "       ",
-            };
-            break;
-
-        case 8:
-            leftGridLines = {
-                "   " + std::string(1, Globals::G_PAGE_GRID_TOP_LEFT) + Globals::G_HANGMAN_GALLOWS_TOP + Globals::G_PAGE_GRID_TOP_RIGHT + " ",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       " + Globals::G_PAGE_GRID_VERTICAL_LINE + " ",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       O ",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       | ",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "      / \\",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                Globals::G_HANGMAN_GALLOWS_BASE + "       ",
-            };
-            break;
-
-        case 9:
-            leftGridLines = {
-                "   " + std::string(1, Globals::G_PAGE_GRID_TOP_LEFT) + Globals::G_HANGMAN_GALLOWS_TOP + Globals::G_PAGE_GRID_TOP_RIGHT + " ",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       " + Globals::G_PAGE_GRID_VERTICAL_LINE + " ",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       O ",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "      /|  ",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "      / \\",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                Globals::G_HANGMAN_GALLOWS_BASE + "       ",
-            };
-            break;
-
-        case 10:
-        default:
-            leftGridLines = {
-                "   " + std::string(1, Globals::G_PAGE_GRID_TOP_LEFT) + Globals::G_HANGMAN_GALLOWS_TOP + Globals::G_PAGE_GRID_TOP_RIGHT + " ",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       " + Globals::G_PAGE_GRID_VERTICAL_LINE + " ",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "       O ",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "      /|\\",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "      / \\",
-                "   " + std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + "         ",
-                Globals::G_HANGMAN_GALLOWS_BASE + "       ",
-            };
-            break;
-        }
+        const std::vector<std::string>& LEFT_GRID_LINES = Globals::G_HANGMAN_STATES[p_gameInfo.m_hangmanGameInfo.m_incorrectGuesses.size()];
 
         // Game options section
         const std::vector<std::string> MIDDLE_GRID_LINES = {
@@ -731,7 +611,9 @@ namespace TerminalGames
 
             // Skip adding space on last value on each line
             if (letterIndex != Globals::G_HANGMAN_INCORRECT_GUESSES_FIRST_LINE_LAST_INDEX && letterIndex != Globals::G_HANGMAN_INCORRECT_GUESSES_SECOND_LINE_LAST_INDEX)
+            {
                 currentLine += Globals::G_HANGMAN_INCORRECT_GUESSES_PADDING;
+            }
 
             else
             {
@@ -742,14 +624,18 @@ namespace TerminalGames
         }
 
         if (!currentLine.empty())
+        {
             rightGridLines.emplace_back(currentLine);
+        }
 
         // Adding required number of empty lines to meet GRID_HEIGHT
         const uint32_t REMAINING_LINES_TO_ADD = GRID_HEIGHT - rightGridLines.size();
         for (uint32_t emptyLineCount = 0; emptyLineCount < REMAINING_LINES_TO_ADD; emptyLineCount++)
+        {
             rightGridLines.emplace_back("");
+        }
 
-        std::string output = GetGridLayout({LEFT_GRID_SIZE, MIDDLE_GRID_SIZE, RIGHT_GRID_SIZE}, {leftGridLines, MIDDLE_GRID_LINES, rightGridLines}, GRID_HEIGHT);
+        std::string output = GetGridLayout({LEFT_GRID_SIZE, MIDDLE_GRID_SIZE, RIGHT_GRID_SIZE}, {LEFT_GRID_LINES, MIDDLE_GRID_LINES, rightGridLines}, GRID_HEIGHT);
 
         // Current guess of word and word to be guessed section
         std::string currentGuessOfWord;
@@ -760,9 +646,14 @@ namespace TerminalGames
         }
 
         if (p_gameInfo.m_hangmanGameInfo.m_hasWinner)
+        {
             output += GetNewLineLeftJustified(currentGuessOfWord + Globals::G_HANGMAN_WORD_TO_BE_GUESSED_START + p_gameInfo.m_hangmanGameInfo.m_wordToBeGuessed + Globals::G_HANGMAN_WORD_TO_BE_GUESSED_END);
+        }
+
         else
+        {
             output += GetNewLineLeftJustified(currentGuessOfWord);
+        }
 
         return output;
     }
@@ -776,12 +667,14 @@ namespace TerminalGames
         const uint32_t RIGHT_GRID_SIZE = 45;
         const uint32_t GRID_HEIGHT = 24;
 
-        std::string commonGridAlphabetAxis = std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + Globals::G_BATTLESHIPS_EMPTY_GRID_VALUE;
+        std::string commonGridAlphabetAxis = Globals::G_PAGE_GRID_VERTICAL_LINE + Globals::G_BATTLESHIPS_EMPTY_GRID_VALUE;
 
         for (uint32_t currentLetterOffset = 0; currentLetterOffset < Globals::G_BATTLESHIPS_BOARD_WIDTH; currentLetterOffset++)
-            commonGridAlphabetAxis += std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + " " + static_cast<char>(Globals::G_BATTLESHIPS_LETTER_OFFSET + currentLetterOffset) + " ";
+        {
+            commonGridAlphabetAxis += Globals::G_PAGE_GRID_VERTICAL_LINE + ' ' + static_cast<char>(Globals::G_BATTLESHIPS_LETTER_OFFSET + currentLetterOffset) + ' ';
+        }
 
-        commonGridAlphabetAxis += std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE);
+        commonGridAlphabetAxis += Globals::G_PAGE_GRID_VERTICAL_LINE;
 
         std::vector<std::string> leftGridLines = {Globals::G_BATTLESHIPS_PLAYER_ONE, Globals::G_BATTLESHIPS_GRID_TOP_LINE, commonGridAlphabetAxis, Globals::G_BATTLESHIPS_GRID_MIDDLE_LINE};
         std::vector<std::string> rightGridLines = {Globals::G_BATTLESHIPS_PLAYER_TWO, Globals::G_BATTLESHIPS_GRID_TOP_LINE, commonGridAlphabetAxis, Globals::G_BATTLESHIPS_GRID_MIDDLE_LINE};
@@ -789,8 +682,8 @@ namespace TerminalGames
         // Assuming both board are the same size
         for (uint32_t row = 0; row < p_gameInfo.m_battleshipsGameInfo.m_boardOne.size(); row++)
         {
-            std::string currentLeftGridValueLine = std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + " " + std::to_string(row) + " ";
-            std::string currentRightGridValueLine = std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE) + " " + std::to_string(row) + " ";
+            std::string currentLeftGridValueLine = Globals::G_PAGE_GRID_VERTICAL_LINE + " " + std::to_string(row) + ' ';
+            std::string currentRightGridValueLine = Globals::G_PAGE_GRID_VERTICAL_LINE + " " + std::to_string(row) + ' ';
 
             for (uint32_t column = 0; column < p_gameInfo.m_battleshipsGameInfo.m_boardOne.at(row).size(); column++)
             {
@@ -801,13 +694,18 @@ namespace TerminalGames
                 // over and not zero player game (i.e. one player game) then only if grid value is does not have a ship present
                 // (i.e. only if grid value is empty, missed attack or successful attack).
                 if (p_gameInfo.m_battleshipsGameInfo.m_isGameOver || p_gameInfo.m_battleshipsGameInfo.m_playerCount != "1" || p_gameInfo.m_battleshipsGameInfo.m_boardTwo.at(row).at(column).substr(0, Globals::G_BATTLESHIPS_GRID_ELEMENT_WIDTH) != Globals::G_BATTLESHIPS_SHIP_PRESENT)
+                {
                     currentRightGridValueLine += Globals::G_PAGE_GRID_VERTICAL_LINE + p_gameInfo.m_battleshipsGameInfo.m_boardTwo.at(row).at(column).substr(0, Globals::G_BATTLESHIPS_GRID_ELEMENT_WIDTH);
+                }
+
                 else
+                {
                     currentRightGridValueLine += Globals::G_PAGE_GRID_VERTICAL_LINE + Globals::G_BATTLESHIPS_EMPTY_GRID_VALUE;
+                }
             }
 
-            currentLeftGridValueLine += std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE);
-            currentRightGridValueLine += std::string(1, Globals::G_PAGE_GRID_VERTICAL_LINE);
+            currentLeftGridValueLine += Globals::G_PAGE_GRID_VERTICAL_LINE;
+            currentRightGridValueLine += Globals::G_PAGE_GRID_VERTICAL_LINE;
 
             leftGridLines.emplace_back(currentLeftGridValueLine);
             rightGridLines.emplace_back(currentRightGridValueLine);
@@ -840,21 +738,26 @@ namespace TerminalGames
 
         for (uint32_t currentShip = 0; currentShip < Globals::G_BATTLESHIPS_SHIP_NAMES.size(); currentShip++)
         {
-            // TODO(Main): hide player two with similar conditions as before
-
             std::string currentShipHealthLine;
 
             // Player one
             for (uint32_t currentShipHealthSquare = 0; currentShipHealthSquare < Globals::G_BATTLESHIPS_SHIP_SIZES.at(currentShip); currentShipHealthSquare++)
             {
                 if (currentShipHealthSquare < p_gameInfo.m_battleshipsGameInfo.m_shipsRemainingOne.at(Globals::G_BATTLESHIPS_SHIP_PLACED_NAMES.at(currentShip)))
+                {
                     currentShipHealthLine += Globals::G_BATTLESHIPS_SHIP_PRESENT;
+                }
+
                 else
+                {
                     currentShipHealthLine += Globals::G_BATTLESHIPS_SUCCESSFUL_ATTACK;
+                }
 
                 // Skip on last iteration
                 if (currentShipHealthSquare != Globals::G_BATTLESHIPS_SHIP_SIZES.at(currentShip) - 1)
+                {
                     currentShipHealthLine += ' ';
+                }
             }
 
             std::string currentShipHealthTitle;
@@ -869,13 +772,20 @@ namespace TerminalGames
                 for (uint32_t currentShipHealthSquare = 0; currentShipHealthSquare < Globals::G_BATTLESHIPS_SHIP_SIZES.at(currentShip); currentShipHealthSquare++)
                 {
                     if (currentShipHealthSquare < (Globals::G_BATTLESHIPS_SHIP_SIZES.at(currentShip) - p_gameInfo.m_battleshipsGameInfo.m_shipsRemainingTwo.at(Globals::G_BATTLESHIPS_SHIP_PLACED_NAMES.at(currentShip))))
+                    {
                         currentShipHealthLine += Globals::G_BATTLESHIPS_SUCCESSFUL_ATTACK;
+                    }
+
                     else
+                    {
                         currentShipHealthLine += Globals::G_BATTLESHIPS_SHIP_PRESENT;
+                    }
 
                     // Skip on last iteration
                     if (currentShipHealthSquare != Globals::G_BATTLESHIPS_SHIP_SIZES.at(currentShip) - 1)
+                    {
                         currentShipHealthLine += ' ';
+                    }
                 }
             }
 
@@ -919,7 +829,8 @@ namespace TerminalGames
             std::erase(currentLine, '\n');
 
             // Re-add the vertical lines to the start/end and re-add a single newline to the end
-            currentLine = Globals::G_PAGE_VERTICAL_LINE + currentLine;
+            currentLine = Globals::G_PAGE_VERTICAL_LINE;
+            currentLine += currentLine;
             currentLine += Globals::G_PAGE_VERTICAL_LINE;
             currentLine += '\n';
 
@@ -929,17 +840,6 @@ namespace TerminalGames
         m_maximumLineSize = OLD_MAXIMUM_LINE_SIZE;
         m_minimumLeftPadding = OLD_MINIMUM_LEFT_PADDING;
         m_minimumRightPadding = OLD_MINIMUM_RIGHT_PADDING;
-
-        return output;
-    }
-
-    std::string PageBuilder::RemoveSubString(const std::string& p_string, const std::string& p_subString)
-    {
-        const uint32_t SUB_STRING_LENGTH = p_subString.size();
-
-        std::string output(p_string);
-        for (std::string::size_type currentSubStringLocation = output.find(p_subString); currentSubStringLocation != std::string::npos; currentSubStringLocation = output.find(p_subString))
-            output.erase(currentSubStringLocation, SUB_STRING_LENGTH);
 
         return output;
     }

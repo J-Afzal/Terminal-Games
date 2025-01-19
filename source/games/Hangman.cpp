@@ -50,7 +50,9 @@ namespace TerminalGames
             GetPlayerCount();
 
             if (m_playerCount == "0")
+            {
                 GetComputerSpeed();
+            }
 
             if (m_playerCount == "1")
             {
@@ -62,10 +64,14 @@ namespace TerminalGames
         }
 
         if (m_userPlayerChoice == Globals::G_HANGMAN_WORD_SETTER || m_playerCount == "2")
+        {
             GetWordFromUser();
+        }
 
         else
+        {
             GetWordFromComputer();
+        }
 
         m_currentGuessOfWord.insert(0, m_wordToBeGuessed.size(), Globals::G_HANGMAN_HIDDEN_LETTER);
     }
@@ -93,8 +99,12 @@ namespace TerminalGames
         }
 
         for (uint32_t i = 0; i < m_wordToBeGuessed.size(); i++)
+        {
             if (m_wordToBeGuessed[i] != m_currentGuessOfWord[i])
+            {
                 return false;
+            }
+        }
 
         m_hasWinner = true;
         return m_hasWinner;
@@ -143,7 +153,9 @@ namespace TerminalGames
                 const auto COMMAND_FIND_LOCATION = Globals::ImplementStdRangesFind(m_commandsRemaining.begin(), m_commandsRemaining.end(), keyPress - Globals::G_HANGMAN_KEY_PRESS_CHAR_OFFSET);
 
                 if (COMMAND_FIND_LOCATION != m_commandsRemaining.end())
+                {
                     currentSelection = static_cast<uint32_t>(std::distance(m_commandsRemaining.begin(), COMMAND_FIND_LOCATION));
+                }
             }
             }
         }
@@ -225,7 +237,9 @@ namespace TerminalGames
             }
 
             if (input.size() < Globals::G_HANGMAN_MINIMUM_WORD_SIZE || input.size() > Globals::G_HANGMAN_MAXIMUM_WORD_SIZE)
+            {
                 continue;
+            }
 
             std::ranges::transform(input.begin(), input.end(), input.begin(), ::toupper);
 
@@ -256,7 +270,9 @@ namespace TerminalGames
         }
 
         if (!isGuessCorrect)
+        {
             m_incorrectGuesses.push_back(p_guess);
+        }
 
         m_commandsRemaining.erase(Globals::ImplementStdRangesFind(m_commandsRemaining.begin(), m_commandsRemaining.end(), p_guess));
         m_turnCount++;

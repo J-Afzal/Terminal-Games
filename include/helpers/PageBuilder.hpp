@@ -15,7 +15,7 @@ namespace TerminalGames
      */
     enum class Pages : std::uint8_t
     {
-        DEFAULT,
+        DEFAULT = 0,
         HOMEPAGE,
         MAINMENU,
         TICTACTOE,
@@ -28,11 +28,12 @@ namespace TerminalGames
      */
     enum class Colours : std::uint8_t
     {
-        WHITE,
+        WHITE = 0,
         RED,
         BLUE,
         GREEN,
         YELLOW,
+        RESET
     };
 
     /**
@@ -353,15 +354,6 @@ namespace TerminalGames
          * @return std::string
          */
         std::string GetGridLayout(const std::vector<uint32_t>& p_gridSizes, const std::vector<std::vector<std::string>>& p_gridLines, const uint32_t& p_numberOfLines);
-
-        /**
-         * @brief Remove all instances of a substring from a string.
-         *
-         * @param p_string The string to be checked.
-         * @param p_subString The substring to be removed.
-         * @return std::string p_string with all instances of p_subString removed.
-         */
-        static std::string RemoveSubString(const std::string& p_string, const std::string& p_subString);
 
         // Member variables
         std::string m_topTitle;
