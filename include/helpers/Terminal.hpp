@@ -68,6 +68,36 @@ namespace TerminalGames
             const bool& p_displayGetUserCommandPage);
 
         /**
+         * @brief TODO
+         *
+         * @param p_startingGridLocation
+         * @param p_pageBuilder
+         * @param p_gameInfo
+         * @param p_displayGetUserCommandPage
+         * @return std::tuple<uint32_t, uint32_t>
+         */
+        static std::tuple<uint32_t, uint32_t> GetUserCommandFromGameGridWindows(
+            const std::tuple<uint32_t, uint32_t>& p_startingGridLocation,
+            const PageBuilder& p_pageBuilder,
+            const GameInfo& p_gameInfo,
+            const bool& p_displayGetUserCommandPage);
+
+        /**
+         * @brief TODO
+         *
+         * @param p_startingGridLocation
+         * @param p_pageBuilder
+         * @param p_gameInfo
+         * @param p_displayGetUserCommandPage
+         * @return std::tuple<uint32_t, uint32_t>
+         */
+        static std::tuple<uint32_t, uint32_t> GetUserCommandFromGameGridNonWindows(
+            const std::tuple<uint32_t, uint32_t>& p_startingGridLocation,
+            const PageBuilder& p_pageBuilder,
+            const GameInfo& p_gameInfo,
+            const bool& p_displayGetUserCommandPage);
+
+        /**
          * @brief Get the user choice whether to restart the game, reset the game or a choice from the
          * GetUserChoiceFromQuitMenus() function.
          *

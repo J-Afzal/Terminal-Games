@@ -460,7 +460,8 @@ namespace TerminalGames::Globals
 
     static inline const uint32_t G_BATTLESHIPS_GRID_ELEMENT_WIDTH = 3;
     static inline const uint32_t G_BATTLESHIPS_GRID_ELEMENT_HEIGHT = 1;
-    static inline const uint32_t G_BATTLESHIPS_GRID_LEFT_PAD = 8;
+    static inline const uint32_t G_BATTLESHIPS_GRID_PLAYER_ONE_BOARD_LEFT_PAD = 8;
+    static inline const uint32_t G_BATTLESHIPS_GRID_PLAYER_TWO_BOARD_LEFT_PAD = 101;
     static inline const uint32_t G_BATTLESHIPS_GRID_TOP_PAD = 8;
 
     static inline const std::string G_BATTLESHIPS_GRID_ITEM_HORIZONTAL_LINE = std::string(G_BATTLESHIPS_GRID_ELEMENT_WIDTH, G_PAGE_GRID_HORIZONTAL_LINE);
