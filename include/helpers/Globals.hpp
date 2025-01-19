@@ -112,29 +112,6 @@ namespace TerminalGames::Globals
     }
 
     /**
-     * @brief Crude implementation of std::format which only works for a single instance of '{}' in p_stringToFormat.
-     * The std library version of this function is not supported by some compilers (usually because the function call fails
-     * with GNU 12.2.0 within the CI workflow). Therefore it has been crudely implemented here for this project's specific
-     * use case.
-     *
-     * @param p_stringToFormat The string which contains the '{}' to format.
-     * @param p_varToInsert The variable to insert into the string.
-     * @return std::string p_stringToFormat with p_varToInsert inserted in place of '{}'.
-     */
-    template<typename T>
-    static constexpr std::string ImplementStdFormat(const std::string_view& p_stringToFormat, const T& p_varToInsert) // TODO(Main) delete this
-    {
-        const std::string_view FORMAT_IDENTIFIER = "{}";
-        const std::string_view BEFORE_STRING = p_stringToFormat.substr(0, p_stringToFormat.find(FORMAT_IDENTIFIER));
-        const std::string_view AFTER_STRING = p_stringToFormat.substr(p_stringToFormat.find(FORMAT_IDENTIFIER) + FORMAT_IDENTIFIER.size(), p_stringToFormat.size() - p_stringToFormat.find(FORMAT_IDENTIFIER));
-
-        std::ostringstream buffer;
-        buffer << BEFORE_STRING << p_varToInsert << AFTER_STRING;
-
-        return buffer.str();
-    }
-
-    /**
      * @brief TODO
      *
      * @param p_numberOfRepetitions
@@ -317,7 +294,6 @@ namespace TerminalGames::Globals
     static inline const std::string G_TICTACTOE_EMPTY_GRID_VALUE = std::string(G_TICTACTOE_GRID_ELEMENT_WIDTH, ' ');
     static inline const std::string G_TICTACTOE_GRID_PLAYER_X_OCCUPIED = " X ";
     static inline const std::string G_TICTACTOE_GRID_PLAYER_O_OCCUPIED = " O ";
-    static inline const std::string G_TICTACTOE_GRID_SELECTED_FORMAT_STRING = "#{}#";
 
     static inline const uint32_t G_TICTACTOE_MAXIMUM_ERROR_COUNT = G_TICTACTOE_BOARD_WIDTH * G_TICTACTOE_BOARD_HEIGHT;
 
@@ -500,8 +476,6 @@ namespace TerminalGames::Globals
     static inline const std::string G_BATTLESHIPS_GRID_TOP_LINE = G_BATTLESHIPS_GRID_TOP_LINE_TOP_LEFT + RepeatElement(G_BATTLESHIPS_BOARD_WIDTH, G_BATTLESHIPS_GRID_TOP_LINE_MIDDLE) + std::string(1, G_PAGE_GRID_TOP_RIGHT);
     static inline const std::string G_BATTLESHIPS_GRID_MIDDLE_LINE = G_BATTLESHIPS_GRID_MIDDLE_LINE_LEFT + RepeatElement(G_BATTLESHIPS_BOARD_WIDTH, G_BATTLESHIPS_GRID_MIDDLE_LINE_MIDDLE) + std::string(1, G_PAGE_GRID_RIGHT_SIDEWAYS_T);
     static inline const std::string G_BATTLESHIPS_GRID_BOTTOM_LINE = G_BATTLESHIPS_GRID_BOTTOM_LINE_BOTTOM_LEFT + RepeatElement(G_BATTLESHIPS_BOARD_WIDTH, G_BATTLESHIPS_GRID_BOTTOM_LINE_MIDDLE) + std::string(1, G_PAGE_GRID_BOTTOM_RIGHT);
-
-    static inline const std::string G_BATTLESHIPS_GRID_SELECTED_FORMAT_STRING = "#{}#";
 
     static inline const std::string G_BATTLESHIPS_EMPTY_GRID_VALUE = std::string(G_BATTLESHIPS_GRID_ELEMENT_WIDTH, ' ');
     static inline const std::string G_BATTLESHIPS_MISSED_ATTACK = std::string(" ") + static_cast<char>(250) + ' ';
