@@ -101,13 +101,7 @@ namespace TerminalGames
 
             if (argument == "--h" || argument == "--help")
             {
-                std::string helpMessage = "\nUsage: terminal-games [options]";
-                helpMessage += "\n\nOPTIONS:";
-                helpMessage += "\n\nGeneric Options:";
-                helpMessage += "\n\n  --h --help        Display available options.";
-                helpMessage += "\n\nterminal-games options:";
-                helpMessage += "\n\n  --a --ascii-only  Only use ASCII characters (this removes all colour).\n\n";
-                std::cout << helpMessage;
+                std::cout << Globals::G_MAIN_MENU_CLI_HELP_MESSAGE;
                 exit(1);
             }
         }

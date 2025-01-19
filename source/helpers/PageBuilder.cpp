@@ -89,7 +89,7 @@ namespace TerminalGames
 
     std::vector<std::string> PageBuilder::GetOptionSelectionHomepages()
     {
-        std::vector<std::string> output;
+        std::vector<std::string> output(Globals::G_GAME_TWO_OPTIONS);
 
         const bool OLD_USE_ANSI_ESCAPE_CODES = m_useAnsiEscapeCodes;
         m_useAnsiEscapeCodes = true;
@@ -104,17 +104,9 @@ namespace TerminalGames
 
             const std::string COMMON_BOTTOM_STRING = GetBottomLine() + GetBottomBox();
 
-            output.emplace_back(
-                COMMON_TOP_STRING +
-                GetNewLineLeftJustified("Yes", Colours::BLUE, Globals::G_PAGE_SELECTOR) +
-                GetNewLineLeftJustified(Globals::G_PAGE_SELECTOR_ABSENT_PADDING + "No") +
-                COMMON_BOTTOM_STRING);
+            output[0] = COMMON_TOP_STRING + GetNewLineLeftJustified("Yes", Colours::BLUE, Globals::G_PAGE_SELECTOR) + GetNewLineLeftJustified(Globals::G_PAGE_SELECTOR_ABSENT_PADDING + "No") + COMMON_BOTTOM_STRING;
 
-            output.emplace_back(RemoveColour(
-                COMMON_TOP_STRING +
-                GetNewLineLeftJustified(Globals::G_PAGE_SELECTOR_ABSENT_PADDING + "Yes") +
-                GetNewLineLeftJustified("No", Colours::BLUE, Globals::G_PAGE_SELECTOR) +
-                COMMON_BOTTOM_STRING));
+            output[1] = RemoveColour(COMMON_TOP_STRING + GetNewLineLeftJustified(Globals::G_PAGE_SELECTOR_ABSENT_PADDING + "Yes") + GetNewLineLeftJustified("No", Colours::BLUE, Globals::G_PAGE_SELECTOR) + COMMON_BOTTOM_STRING);
         }
 
         else
@@ -127,17 +119,9 @@ namespace TerminalGames
 
             const std::string COMMON_BOTTOM_STRING = GetBottomLine() + GetBottomBox();
 
-            output.emplace_back(
-                COMMON_TOP_STRING +
-                GetNewLineLeftJustified("Yes", Colours::BLUE, Globals::G_PAGE_SELECTOR) +
-                GetNewLineLeftJustified(Globals::G_PAGE_SELECTOR_ABSENT_PADDING + "No") +
-                COMMON_BOTTOM_STRING);
+            output[0] = COMMON_TOP_STRING + GetNewLineLeftJustified("Yes", Colours::BLUE, Globals::G_PAGE_SELECTOR) + GetNewLineLeftJustified(Globals::G_PAGE_SELECTOR_ABSENT_PADDING + "No") +COMMON_BOTTOM_STRING;
 
-            output.emplace_back(RemoveColour(
-                COMMON_TOP_STRING +
-                GetNewLineLeftJustified(Globals::G_PAGE_SELECTOR_ABSENT_PADDING + "Yes") +
-                GetNewLineLeftJustified("No", Colours::BLUE, Globals::G_PAGE_SELECTOR) +
-                COMMON_BOTTOM_STRING));
+            output[1] = RemoveColour(COMMON_TOP_STRING + GetNewLineLeftJustified(Globals::G_PAGE_SELECTOR_ABSENT_PADDING + "Yes") + GetNewLineLeftJustified("No", Colours::BLUE, Globals::G_PAGE_SELECTOR) + COMMON_BOTTOM_STRING);
         }
 
         m_useAnsiEscapeCodes = OLD_USE_ANSI_ESCAPE_CODES;
@@ -294,7 +278,7 @@ namespace TerminalGames
             return p_input;
         }
 
-        return Globals::G_ANSI_ALL_COLOUR_ESCAPE_CODES.at(static_cast<uint8_t>(p_colour));
+        return Globals::G_ANSI_ALL_COLOUR_ESCAPE_CODES.at(static_cast<uint8_t>(p_colour)) + p_input + Globals::G_ANSI_WHITE_COLOUR_ESCAPE_CODE;
     }
 
     std::string PageBuilder::RemoveColour(const std::string& p_input)
@@ -312,10 +296,10 @@ namespace TerminalGames
     std::string PageBuilder::GetEmptyLine() const
     {
         std::string output;
+        output.reserve(m_displayWidth + 2 * Globals::G_ANSI_COLOUR_ESCAPE_CODE_SIZE);
+
         output += Globals::G_PAGE_VERTICAL_LINE;
-
         output.insert(output.size(), m_maximumLineSize + m_minimumLeftPadding + m_minimumRightPadding, ' ');
-
         return output + Globals::G_PAGE_VERTICAL_LINE + '\n';
     }
 
@@ -339,11 +323,12 @@ namespace TerminalGames
         const uint32_t RIGHT_PADDING_SIZE = static_cast<uint32_t>(floor(static_cast<double>(m_maximumLineSize - (INPUT_TRIMMED_SIZE - SELECTOR_SIZE)) / DIVISOR));
 
         std::string output;
+        output.reserve(m_displayWidth + 4 * Globals::G_ANSI_COLOUR_ESCAPE_CODE_SIZE);
+
         output += Globals::G_PAGE_VERTICAL_LINE;
         output.insert(output.size(), m_minimumLeftPadding + LEFT_PADDING_SIZE, ' ');
         output += AddColour(INPUT_TRIMMED, p_colour);
         output.insert(output.size(), RIGHT_PADDING_SIZE + m_minimumRightPadding, ' ');
-
         return output + Globals::G_PAGE_VERTICAL_LINE + '\n';
     }
 
@@ -357,6 +342,8 @@ namespace TerminalGames
         const uint32_t INPUT_SIZE = static_cast<uint32_t>(INPUT.size()) - (ANSI_COLOUR_ESCAPE_CODE_COUNT * Globals::G_ANSI_COLOUR_ESCAPE_CODE_SIZE);
 
         std::string output;
+        output.reserve(m_displayWidth + 4 * Globals::G_ANSI_COLOUR_ESCAPE_CODE_SIZE);
+
         output += Globals::G_PAGE_VERTICAL_LINE;
         output.insert(output.size(), m_minimumLeftPadding, ' ');
 
@@ -378,20 +365,20 @@ namespace TerminalGames
     std::string PageBuilder::GetTopLine() const
     {
         std::string output;
+        output.reserve(m_displayWidth);
+
         output += Globals::G_PAGE_TOP_LEFT_CORNER;
-
         output.insert(output.size(), m_maximumLineSize + m_minimumLeftPadding + m_minimumRightPadding, Globals::G_PAGE_HORIZONTAL_LINE);
-
         return output + Globals::G_PAGE_TOP_RIGHT_CORNER + '\n';
     }
 
     std::string PageBuilder::GetBottomLine() const
     {
         std::string output;
+        output.reserve(m_displayWidth);
+
         output += Globals::G_PAGE_BOTTOM_LEFT_CORNER;
-
         output.insert(output.size(), m_maximumLineSize + m_minimumLeftPadding + m_minimumRightPadding, Globals::G_PAGE_HORIZONTAL_LINE);
-
         return output + Globals::G_PAGE_BOTTOM_RIGHT_CORNER + '\n';
     }
 
@@ -402,8 +389,8 @@ namespace TerminalGames
 
     std::string PageBuilder::GetBottomBox() const
     {
-        // Globals::G_ANSI_RESET_COLOUR_ESCAPE_CODE used to unset any ANSI colour escape code. If the program unexpectedly crashes the
-        // user's terminal will not be affected.
+        // Globals::G_ANSI_RESET_COLOUR_ESCAPE_CODE used to unset any ANSI colour escape code. If the program unexpectedly
+        // crashes the user's terminal will not be affected.
         return GetTopLine() + GetNewLineCentred(m_bottomTitle, Colours::RED) + GetBottomLine() + Globals::G_ANSI_RESET_COLOUR_ESCAPE_CODE;
     }
 
@@ -413,6 +400,7 @@ namespace TerminalGames
         const uint32_t EMPTY_LINES_TO_ADD_COUNT = REMAINING_LINE_COUNT < 0 ? 0 : REMAINING_LINE_COUNT;
 
         std::string output;
+        output.reserve(m_displayWidth * EMPTY_LINES_TO_ADD_COUNT);
         for (uint32_t emptyLineCount = 0; emptyLineCount < EMPTY_LINES_TO_ADD_COUNT; emptyLineCount++)
         {
             output += GetEmptyLine();
@@ -446,7 +434,7 @@ namespace TerminalGames
         // Construct a page for each option selected.
         for (uint32_t currentOptionSelected = 0; currentOptionSelected < p_options.size(); currentOptionSelected++)
         {
-            std::string currentTopString(p_commonTopString);
+            std::string currentTopString = p_commonTopString;
 
             if (p_centerOptionsVertically)
             {
@@ -545,6 +533,8 @@ namespace TerminalGames
         {
             std::string currentRow;
             std::string currentRowDivider;
+            currentRow.reserve(LEFT_GRID_SIZE);
+            currentRowDivider.reserve(LEFT_GRID_SIZE);
 
             for (uint32_t column = 0; column < Globals::G_TICTACTOE_BOARD_WIDTH; column++)
             {
@@ -601,6 +591,7 @@ namespace TerminalGames
         // Incorrect Guesses section
         std::vector<std::string> rightGridLines;
         std::string currentLine;
+        currentLine.reserve(RIGHT_GRID_SIZE);
 
         rightGridLines.emplace_back("");
         rightGridLines.emplace_back(Globals::G_HANGMAN_INCORRECT_GUESSES_TITLE);
@@ -639,6 +630,7 @@ namespace TerminalGames
 
         // Current guess of word and word to be guessed section
         std::string currentGuessOfWord;
+        currentGuessOfWord.reserve(2 * p_gameInfo.m_hangmanGameInfo.m_currentGuessOfWord.size());
         for (const char& letter : p_gameInfo.m_hangmanGameInfo.m_currentGuessOfWord)
         {
             currentGuessOfWord += letter;
@@ -669,11 +661,18 @@ namespace TerminalGames
 
         const std::string SINGLE_SPACE(1, ' ');
 
-        std::string commonGridAlphabetAxis = Globals::G_PAGE_GRID_VERTICAL_LINE + Globals::G_BATTLESHIPS_EMPTY_GRID_VALUE;
+        std::string commonGridAlphabetAxis;
+        commonGridAlphabetAxis.reserve(LEFT_GRID_SIZE);
+
+        commonGridAlphabetAxis += Globals::G_PAGE_GRID_VERTICAL_LINE;
+        commonGridAlphabetAxis += Globals::G_BATTLESHIPS_EMPTY_GRID_VALUE;
 
         for (uint32_t currentLetter = Globals::G_BATTLESHIPS_LETTER_OFFSET; (currentLetter - Globals::G_BATTLESHIPS_LETTER_OFFSET) < Globals::G_BATTLESHIPS_BOARD_WIDTH; currentLetter++)
         {
-            commonGridAlphabetAxis += Globals::G_PAGE_GRID_VERTICAL_LINE + SINGLE_SPACE + static_cast<char>(currentLetter) + SINGLE_SPACE;
+            commonGridAlphabetAxis += Globals::G_PAGE_GRID_VERTICAL_LINE;
+            commonGridAlphabetAxis += SINGLE_SPACE;
+            commonGridAlphabetAxis += static_cast<char>(currentLetter);
+            commonGridAlphabetAxis += SINGLE_SPACE;
         }
 
         commonGridAlphabetAxis += Globals::G_PAGE_GRID_VERTICAL_LINE;
@@ -684,8 +683,14 @@ namespace TerminalGames
         // Assuming both board are the same size
         for (uint32_t row = 0; row < p_gameInfo.m_battleshipsGameInfo.m_boardOne.size(); row++)
         {
-            std::string currentLeftGridValueLine = Globals::G_PAGE_GRID_VERTICAL_LINE + SINGLE_SPACE + std::to_string(row) + SINGLE_SPACE;
-            std::string currentRightGridValueLine = Globals::G_PAGE_GRID_VERTICAL_LINE + SINGLE_SPACE + std::to_string(row) + SINGLE_SPACE;
+            std::string currentLeftGridValueLine;
+            currentLeftGridValueLine.reserve(LEFT_GRID_SIZE);
+            currentLeftGridValueLine += Globals::G_PAGE_GRID_VERTICAL_LINE;
+            currentLeftGridValueLine += SINGLE_SPACE;
+            currentLeftGridValueLine += std::to_string(row);
+            currentLeftGridValueLine += SINGLE_SPACE;
+
+            std::string currentRightGridValueLine = currentLeftGridValueLine;
 
             for (uint32_t column = 0; column < p_gameInfo.m_battleshipsGameInfo.m_boardOne.at(row).size(); column++)
             {
@@ -741,6 +746,7 @@ namespace TerminalGames
         for (uint32_t currentShip = 0; currentShip < Globals::G_BATTLESHIPS_SHIP_NAMES.size(); currentShip++)
         {
             std::string currentShipHealthLine;
+            currentShipHealthLine.reserve(MIDDLE_GRID_SIZE);
 
             // Player one
             for (uint32_t currentShipHealthSquare = 0; currentShipHealthSquare < Globals::G_BATTLESHIPS_SHIP_SIZES.at(currentShip); currentShipHealthSquare++)
@@ -763,6 +769,7 @@ namespace TerminalGames
             }
 
             std::string currentShipHealthTitle;
+            currentShipHealthTitle.reserve(MIDDLE_GRID_SIZE);
 
             if (p_gameInfo.m_battleshipsGameInfo.m_isGameOver || p_gameInfo.m_battleshipsGameInfo.m_playerCount != "1")
             {
@@ -819,6 +826,7 @@ namespace TerminalGames
         for (uint32_t currentLineNumber = 0; currentLineNumber < p_numberOfLines; currentLineNumber++)
         {
             std::string currentLine;
+            currentLine.reserve(m_displayWidth);
 
             for (uint32_t currentGridSize = 0; currentGridSize < p_gridSizes.size(); currentGridSize++)
             {

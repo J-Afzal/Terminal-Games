@@ -261,6 +261,7 @@ namespace TerminalGames::Globals
     static inline const std::string G_MAIN_MENU_BOTTOM_TITLE = "q = quit to homepage";
     static inline const uint32_t G_MAIN_MENU_DISPLAY_WIDTH = 32;
     static inline const uint32_t G_MAIN_MENU_DISPLAY_HEIGHT = 13;
+    static inline const std::string G_MAIN_MENU_CLI_HELP_MESSAGE = "\nUsage: terminal-games [options]\n\nOPTIONS:\n\nGeneric Options:\n\n  --h --help        Display available options.\n\nterminal-games options:\n\n  --a --ascii-only  Only use ASCII characters (this removes all colour).\n\n";
 
     /**
      * @brief Game

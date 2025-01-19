@@ -221,6 +221,7 @@ namespace TerminalGames
         UpdateGameInfo();
 
         std::string input;
+        input.reserve(Globals::G_HANGMAN_MAXIMUM_WORD_SIZE + 1);
 
         while (true)
         {
