@@ -839,12 +839,10 @@ namespace TerminalGames
             std::erase(currentLine, '\n');
 
             // Re-add the vertical lines to the start/end and re-add a single newline to the end
-            currentLine = Globals::G_PAGE_VERTICAL_LINE;
-            currentLine += currentLine;
-            currentLine += Globals::G_PAGE_VERTICAL_LINE;
-            currentLine += '\n';
-
+            output += Globals::G_PAGE_VERTICAL_LINE;
             output += currentLine;
+            output += Globals::G_PAGE_VERTICAL_LINE;
+            output += '\n';
         }
 
         m_maximumLineSize = OLD_MAXIMUM_LINE_SIZE;
