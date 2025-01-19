@@ -521,7 +521,7 @@ namespace TerminalGames
 
     std::string PageBuilder::GetTicTacToeSubPage(const GameInfo& p_gameInfo)
     {
-        // leftGridLines and RIGHT_GRID_STRINGS vectors must equal GRID_HEIGHT in length.
+        // leftGridLines and RIGHT_GRID_STRINGS vectors must equal GRID_HEIGHT in size.
         // Also LEFT_GRID_SIZE + RIGHT_GRID_SIZE must equal G_TICTACTOE_DISPLAY_WIDTH - (numberOfGrids * (Globals::G_PAGE_MINIMUM_LEFT_VERTICAL_LINE_SIZE - Globals::G_PAGE_MINIMUM_RIGHT_VERTICAL_LINE_SIZE))
         const uint32_t LEFT_GRID_SIZE = 11;
         const uint32_t RIGHT_GRID_SIZE = 40;
@@ -567,8 +567,8 @@ namespace TerminalGames
 
     std::string PageBuilder::GetHangmanSubPage(const GameInfo& p_gameInfo)
     {
-        // leftGridLines, MIDDLE_GRID_LINES and RIGHT_GRID_STRINGS vectors must equal GRID_HEIGHT in length.
-        // Also LEFT_GRID_SIZE + MIDDLE_GRID_SIZE + RIGHT_GRID_SIZE must equal G_HANGMAN_DISPLAY_WIDTH - (numberOfGrids * Globals::G_PAGE_MINIMUM_LEFT_VERTICAL_LINE_SIZE - Globals::G_PAGE_MINIMUM_RIGHT_VERTICAL_LINE_SIZE))
+        // leftGridLines, MIDDLE_GRID_LINES and rightGridLines vectors must equal GRID_HEIGHT in size.
+        // Also LEFT_GRID_SIZE + MIDDLE_GRID_SIZE + RIGHT_GRID_SIZE must equal G_HANGMAN_DISPLAY_WIDTH - (numberOfGrids * (Globals::G_PAGE_MINIMUM_LEFT_VERTICAL_LINE_SIZE - Globals::G_PAGE_MINIMUM_RIGHT_VERTICAL_LINE_SIZE))
         const uint32_t LEFT_GRID_SIZE = 13;
         const uint32_t MIDDLE_GRID_SIZE = 24;
         const uint32_t RIGHT_GRID_SIZE = 17;
@@ -626,7 +626,7 @@ namespace TerminalGames
             rightGridLines.emplace_back("");
         }
 
-        std::string output = GetGridLayout({LEFT_GRID_SIZE, MIDDLE_GRID_SIZE, RIGHT_GRID_SIZE}, {LEFT_GRID_LINES, MIDDLE_GRID_LINES, rightGridLines}, GRID_HEIGHT);
+        std::string output = GetGridLayout({LEFT_GRID_SIZE, MIDDLE_GRID_SIZE, RIGHT_GRID_SIZE}, {leftGridLines, MIDDLE_GRID_LINES, rightGridLines}, GRID_HEIGHT);
 
         // Current guess of word and word to be guessed section
         std::string currentGuessOfWord;
@@ -652,8 +652,8 @@ namespace TerminalGames
 
     std::string PageBuilder::GetBattleshipsSubPage(const GameInfo& p_gameInfo) // NOLINT(readability-function-cognitive-complexity)
     {
-        // leftGridLines, MIDDLE_GRID_LINES and RIGHT_GRID_STRINGS vectors must equal GRID_HEIGHT in length.
-        // Also LEFT_GRID_SIZE + MIDDLE_GRID_SIZE + RIGHT_GRID_SIZE must equal G_BATTLESHIPS_DISPLAY_WIDTH - (numberOfGrids * Globals::G_PAGE_MINIMUM_LEFT_VERTICAL_LINE_SIZE - m_minimumLeftPadding - m_minimumRightPadding - Globals::G_PAGE_MINIMUM_RIGHT_VERTICAL_LINE_SIZE))
+        // leftGridLines, middleGridLines and rightGridLines vectors must equal GRID_HEIGHT in size.
+        // Also LEFT_GRID_SIZE + MIDDLE_GRID_SIZE + RIGHT_GRID_SIZE must equal G_BATTLESHIPS_DISPLAY_WIDTH - (numberOfGrids * Globals::G_PAGE_MINIMUM_LEFT_VERTICAL_LINE_SIZE - Globals::G_PAGE_MINIMUM_RIGHT_VERTICAL_LINE_SIZE))
         const uint32_t LEFT_GRID_SIZE = 45;
         const uint32_t MIDDLE_GRID_SIZE = 44;
         const uint32_t RIGHT_GRID_SIZE = 45;
