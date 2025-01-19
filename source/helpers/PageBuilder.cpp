@@ -296,7 +296,7 @@ namespace TerminalGames
     std::string PageBuilder::GetEmptyLine() const
     {
         std::string output;
-        output.reserve(m_displayWidth + 2 * Globals::G_ANSI_COLOUR_ESCAPE_CODE_SIZE);
+        output.reserve(m_displayWidth + (2 * Globals::G_ANSI_COLOUR_ESCAPE_CODE_SIZE));
 
         output += Globals::G_PAGE_VERTICAL_LINE;
         output.insert(output.size(), m_maximumLineSize + m_minimumLeftPadding + m_minimumRightPadding, ' ');
@@ -323,7 +323,7 @@ namespace TerminalGames
         const uint32_t RIGHT_PADDING_SIZE = static_cast<uint32_t>(floor(static_cast<double>(m_maximumLineSize - (INPUT_TRIMMED_SIZE - SELECTOR_SIZE)) / DIVISOR));
 
         std::string output;
-        output.reserve(m_displayWidth + 4 * Globals::G_ANSI_COLOUR_ESCAPE_CODE_SIZE);
+        output.reserve(m_displayWidth + (4 * Globals::G_ANSI_COLOUR_ESCAPE_CODE_SIZE));
 
         output += Globals::G_PAGE_VERTICAL_LINE;
         output.insert(output.size(), m_minimumLeftPadding + LEFT_PADDING_SIZE, ' ');
@@ -342,7 +342,7 @@ namespace TerminalGames
         const uint32_t INPUT_SIZE = static_cast<uint32_t>(INPUT.size()) - (ANSI_COLOUR_ESCAPE_CODE_COUNT * Globals::G_ANSI_COLOUR_ESCAPE_CODE_SIZE);
 
         std::string output;
-        output.reserve(m_displayWidth + 4 * Globals::G_ANSI_COLOUR_ESCAPE_CODE_SIZE);
+        output.reserve(m_displayWidth + (4 * Globals::G_ANSI_COLOUR_ESCAPE_CODE_SIZE));
 
         output += Globals::G_PAGE_VERTICAL_LINE;
         output.insert(output.size(), m_minimumLeftPadding, ' ');
@@ -400,7 +400,7 @@ namespace TerminalGames
         const uint32_t EMPTY_LINES_TO_ADD_COUNT = REMAINING_LINE_COUNT < 0 ? 0 : REMAINING_LINE_COUNT;
 
         std::string output;
-        output.reserve(m_displayWidth * EMPTY_LINES_TO_ADD_COUNT);
+        output.reserve(static_cast<size_t>(m_displayWidth * EMPTY_LINES_TO_ADD_COUNT));
         for (uint32_t emptyLineCount = 0; emptyLineCount < EMPTY_LINES_TO_ADD_COUNT; emptyLineCount++)
         {
             output += GetEmptyLine();
@@ -575,7 +575,7 @@ namespace TerminalGames
         const uint32_t GRID_HEIGHT = 7;
 
         // Hangman state section
-        const std::vector<std::string> LEFT_GRID_LINES = Globals::G_HANGMAN_STATES[p_gameInfo.m_hangmanGameInfo.m_incorrectGuesses.size()];
+        const std::vector<std::string>& leftGridLines = Globals::G_HANGMAN_STATES[p_gameInfo.m_hangmanGameInfo.m_incorrectGuesses.size()];
 
         // Game options section
         const std::vector<std::string> MIDDLE_GRID_LINES = {

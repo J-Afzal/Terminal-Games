@@ -25,7 +25,7 @@ namespace TerminalGames
 
     void TicTacToe::SetupGame()
     {
-        m_currentPlayer = Globals::G_TICTACTOE_PLAYER_CHOICE_OPTIONS[m_randomNumberGenerator() % 2];
+        m_currentPlayer = Globals::G_TICTACTOE_PLAYER_CHOICE_OPTIONS.at(m_randomNumberGenerator() % 2);
         m_commandsRemaining.clear();
         m_previousCommand = {0, 0};
         m_turnCount = 0;

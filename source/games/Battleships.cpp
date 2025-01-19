@@ -28,7 +28,7 @@ namespace TerminalGames
 
     void Battleships::SetupGame()
     {
-        m_currentPlayer = Globals::G_BATTLESHIPS_PLAYER_CHOICE_OPTIONS[m_randomNumberGenerator() % 2];
+        m_currentPlayer = Globals::G_BATTLESHIPS_PLAYER_CHOICE_OPTIONS.at(m_randomNumberGenerator() % 2);
         m_shipsRemainingOne = Globals::G_BATTLESHIPS_STARTING_SHIP_REMAINING;
         m_shipsRemainingTwo = Globals::G_BATTLESHIPS_STARTING_SHIP_REMAINING;
         m_commandsRemainingOne.clear();
