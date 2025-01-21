@@ -122,7 +122,6 @@ namespace TerminalGames
         }
 
         return GetUserCommandFromGameGridNonWindows(p_startingGridLocation, p_pageBuilder, p_gameInfo, p_displayGetUserCommandPage);
-
     }
 
     std::tuple<uint32_t, uint32_t> Terminal::GetUserCommandFromGameGridWindows(

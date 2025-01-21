@@ -176,6 +176,11 @@ namespace TerminalGames::Globals
     static inline const char G_PAGE_GRID_BOTTOM_LEFT = static_cast<char>(192);
     static inline const char G_PAGE_GRID_BOTTOM_RIGHT = static_cast<char>(217);
 
+    // Misc extended ASCII characters
+    static inline const char G_PAGE_CENTRAL_DOT = static_cast<char>(250);
+    static inline const char G_PAGE_LIGHT_HASH = static_cast<char>(176);
+    static inline const char G_PAGE_DARK_HASH = static_cast<char>(178);
+
     // Padding
     static inline const uint32_t G_PAGE_MINIMUM_LEFT_VERTICAL_LINE_SIZE = 1;
     static inline const uint32_t G_PAGE_MINIMUM_LEFT_PADDING_SIZE = 1;
@@ -480,9 +485,9 @@ namespace TerminalGames::Globals
     static inline const std::string G_BATTLESHIPS_GRID_BOTTOM_LINE = G_BATTLESHIPS_GRID_BOTTOM_LINE_BOTTOM_LEFT + RepeatElement(G_BATTLESHIPS_BOARD_WIDTH, G_BATTLESHIPS_GRID_BOTTOM_LINE_MIDDLE) + std::string(1, G_PAGE_GRID_BOTTOM_RIGHT);
 
     static inline const std::string G_BATTLESHIPS_EMPTY_GRID_VALUE = std::string(G_BATTLESHIPS_GRID_ELEMENT_WIDTH, ' ');
-    static inline const std::string G_BATTLESHIPS_MISSED_ATTACK = std::string(" ") + static_cast<char>(250) + ' ';
-    static inline const std::string G_BATTLESHIPS_SHIP_PRESENT = std::string(G_BATTLESHIPS_GRID_ELEMENT_WIDTH, static_cast<char>(178));
-    static inline const std::string G_BATTLESHIPS_SUCCESSFUL_ATTACK = std::string(G_BATTLESHIPS_GRID_ELEMENT_WIDTH, static_cast<char>(176)); // TODO(Main): move this to main char list?
+    static inline const std::string G_BATTLESHIPS_MISSED_ATTACK = std::string(1, ' ') + G_PAGE_CENTRAL_DOT + ' ';
+    static inline const std::string G_BATTLESHIPS_SHIP_PRESENT = std::string(G_BATTLESHIPS_GRID_ELEMENT_WIDTH, G_PAGE_DARK_HASH);
+    static inline const std::string G_BATTLESHIPS_SUCCESSFUL_ATTACK = std::string(G_BATTLESHIPS_GRID_ELEMENT_WIDTH, G_PAGE_LIGHT_HASH);
     static inline const uint32_t G_BATTLESHIPS_LETTER_OFFSET = 65;
 
     static inline const std::string G_BATTLESHIPS_PLAYER_ONE = "Player One";
