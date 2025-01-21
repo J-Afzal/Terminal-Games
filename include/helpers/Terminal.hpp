@@ -52,14 +52,14 @@ namespace TerminalGames
         static uint32_t GetUserChoiceFromGameMenus(const std::vector<std::string>& p_menus, const std::vector<std::string>& p_quitOptionMenus);
 
         /**
-         * @brief Gets a user command based on the currently displayed game grid. Most of the parameters are to enable the
-         * correct alignment of the cursor for different game grid sizes.
+         * @brief Gets a user command based on the currently displayed game grid (wrapper function around the platform-specific
+         * GetUserCommandFromGameGrid functions).
          *
          * @param p_startingGridLocation The initial row and column to place the cursor.
          * @param p_pageBuilder The page builder object to allow for refreshing the screen.
          * @param p_gameInfo The game info object to pass to the page builder object.
          * @param p_displayGetUserCommandPage Whether to display the get user command page.
-         * @return std::tuple<uint32_t, uint32_t> The user command from the user in the for <row, column>.
+         * @return std::tuple<uint32_t, uint32_t> The user command from the user in the form (row, column).
          */
         static std::tuple<uint32_t, uint32_t> GetUserCommandFromGameGrid(
             const std::tuple<uint32_t, uint32_t>& p_startingGridLocation,
@@ -68,13 +68,13 @@ namespace TerminalGames
             const bool& p_displayGetUserCommandPage);
 
         /**
-         * @brief TODO
+         * @brief (Windows) Gets a user command based on the currently displayed game grid.
          *
-         * @param p_startingGridLocation
-         * @param p_pageBuilder
-         * @param p_gameInfo
-         * @param p_displayGetUserCommandPage
-         * @return std::tuple<uint32_t, uint32_t>
+         * @param p_startingGridLocation The initial row and column to place the cursor.
+         * @param p_pageBuilder The page builder object to allow for refreshing the screen.
+         * @param p_gameInfo The game info object to pass to the page builder object.
+         * @param p_displayGetUserCommandPage Whether to display the get user command page.
+         * @return std::tuple<uint32_t, uint32_t> The user command from the user in the form (row, column).
          */
         static std::tuple<uint32_t, uint32_t> GetUserCommandFromGameGridWindows(
             const std::tuple<uint32_t, uint32_t>& p_startingGridLocation,
@@ -83,13 +83,13 @@ namespace TerminalGames
             const bool& p_displayGetUserCommandPage);
 
         /**
-         * @brief TODO
+         * @brief (Non-window) Gets a user command based on the currently displayed game grid.
          *
-         * @param p_startingGridLocation
-         * @param p_pageBuilder
-         * @param p_gameInfo
-         * @param p_displayGetUserCommandPage
-         * @return std::tuple<uint32_t, uint32_t>
+         * @param p_startingGridLocation The initial row and column to place the cursor.
+         * @param p_pageBuilder The page builder object to allow for refreshing the screen.
+         * @param p_gameInfo The game info object to pass to the page builder object.
+         * @param p_displayGetUserCommandPage Whether to display the get user command page.
+         * @return std::tuple<uint32_t, uint32_t> The user command from the user in the form (row, column).
          */
         static std::tuple<uint32_t, uint32_t> GetUserCommandFromGameGridNonWindows(
             const std::tuple<uint32_t, uint32_t>& p_startingGridLocation,

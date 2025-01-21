@@ -812,7 +812,7 @@ namespace TerminalGames
         return GetGridLayout({LEFT_GRID_SIZE, MIDDLE_GRID_SIZE, RIGHT_GRID_SIZE}, {leftGridLines, middleGridLines, rightGridLines}, GRID_HEIGHT);
     }
 
-    std::string PageBuilder::GetGridLayout(const std::vector<uint32_t>& p_gridSizes, const std::vector<std::vector<std::string>>& p_gridLines, const uint32_t& p_numberOfLines)
+    std::string PageBuilder::GetGridLayout(const std::vector<uint32_t>& p_gridColumnWidths, const std::vector<std::vector<std::string>>& p_gridColumnLines, const uint32_t& p_gridColumnHeight)
     {
         const uint32_t OLD_MAXIMUM_LINE_SIZE = m_maximumLineSize;
         const uint32_t OLD_MINIMUM_LEFT_PADDING = m_minimumLeftPadding;
@@ -823,15 +823,15 @@ namespace TerminalGames
 
         std::string output;
 
-        for (uint32_t currentLineNumber = 0; currentLineNumber < p_numberOfLines; currentLineNumber++)
+        for (uint32_t currentLineNumber = 0; currentLineNumber < p_gridColumnHeight; currentLineNumber++)
         {
             std::string currentLine;
             currentLine.reserve(m_displayWidth);
 
-            for (uint32_t currentGridSize = 0; currentGridSize < p_gridSizes.size(); currentGridSize++)
+            for (uint32_t currentGridSize = 0; currentGridSize < p_gridColumnWidths.size(); currentGridSize++)
             {
-                m_maximumLineSize = p_gridSizes[currentGridSize];
-                currentLine += GetNewLineCentred(p_gridLines[currentGridSize][currentLineNumber]);
+                m_maximumLineSize = p_gridColumnWidths[currentGridSize];
+                currentLine += GetNewLineCentred(p_gridColumnLines[currentGridSize][currentLineNumber]);
             }
 
             // Remove the vertical lines created between grids and all new lines

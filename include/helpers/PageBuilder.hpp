@@ -346,14 +346,19 @@ namespace TerminalGames
         std::string GetBattleshipsSubPage(const GameInfo& p_gameInfo);
 
         /**
-         * @brief TODO
+         * @brief Calculates a grid layout based on the grid content in p_gridColumnLines and the grid sizes in
+         * p_gridColumnWidths. Only columns can be defined and all content is centred within its grid column.
          *
-         * @param p_gridSizes
-         * @param p_gridLines
-         * @param p_numberOfLines
+         * @param p_gridColumnWidths The width of each grid column.
+         * @param p_gridColumnLines The content of each grid column where each grid column is an element in p_gridColumnLines.
+         * @param p_gridColumnHeight The height of the grid columns (i.e. the number of lines within each grid column). Note
+         * that this must be the same for all grid columns.
+         * @warning p_gridColumnWidths.size() must be equal to p_gridColumnLines.size()
+         * @warning The length all elements in p_gridColumnLines (i.e. p_gridColumnLines[x].size()) must be equal to
+         * p_gridColumnHeight.
          * @return std::string
          */
-        std::string GetGridLayout(const std::vector<uint32_t>& p_gridSizes, const std::vector<std::vector<std::string>>& p_gridLines, const uint32_t& p_numberOfLines);
+        std::string GetGridLayout(const std::vector<uint32_t>& p_gridColumnWidths, const std::vector<std::vector<std::string>>& p_gridColumnLines, const uint32_t& p_gridColumnHeight);
 
         // Member variables
         std::string m_topTitle;

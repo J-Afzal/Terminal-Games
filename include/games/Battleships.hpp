@@ -116,11 +116,12 @@ namespace TerminalGames
         void GetUserShipPositions();
 
         /**
-         * @brief TODO
+         * @brief Validates whether (true) or not (false) p_selectedShipGridLocation is a valid grid location to place a ship.
          *
-         * @param p_currentShipGridLocations
-         * @param p_selectedShipGridLocation
-         * @param p_shipIsHorizontalOrVertical
+         * @param p_currentShipGridLocations The grid locations selected for the current ship.
+         * @param p_selectedShipGridLocation The grid location to validate.
+         * @param p_shipIsHorizontal Whether the ship is being placed horizontally (true) or not (false)
+         * @param p_shipIsVertical Whether the ship is being placed vertically (true) or not (false)
          * @return true If ship position is valid.
          * @return false If the ship position is invalid.
          */

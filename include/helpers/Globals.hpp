@@ -112,24 +112,24 @@ namespace TerminalGames::Globals
     }
 
     /**
-     * @brief TODO
+     * @brief Repeats the p_stringToRepeat p_numberOfRepetitions number of times.
      *
-     * @param p_numberOfRepetitions
-     * @param p_charToRepeat
-     * @return std::string
+     * @param p_numberOfRepetitions The number of times to repeat p_stringToRepeat.
+     * @param p_stringToRepeat The string to repeat.
+     * @return std::string p_stringToRepeat repeated p_numberOfRepetitions number of times.
      */
-    static std::string RepeatElement(const uint32_t& p_numberOfRepetitions, const std::string& p_charToRepeat)
+    static std::string RepeatString(const uint32_t& p_numberOfRepetitions, const std::string& p_stringToRepeat)
     {
         std::ostringstream buffer;
         for (uint32_t currentRepetition = 0; currentRepetition < p_numberOfRepetitions; currentRepetition++)
         {
-            buffer << p_charToRepeat;
+            buffer << p_stringToRepeat;
         }
         return buffer.str();
     }
 
     /**
-     * @brief Remove all instances of a substring from a string.
+     * @brief Remove all instances of a p_subString from p_string.
      *
      * @param p_string The string to be checked and edited.
      * @param p_subString The substring to be removed.
@@ -480,9 +480,9 @@ namespace TerminalGames::Globals
     static inline const std::string G_BATTLESHIPS_GRID_BOTTOM_LINE_BOTTOM_LEFT = std::string(1, G_PAGE_GRID_BOTTOM_LEFT) + G_BATTLESHIPS_GRID_ITEM_HORIZONTAL_LINE;
     static inline const std::string G_BATTLESHIPS_GRID_BOTTOM_LINE_MIDDLE = std::string(1, G_PAGE_GRID_UPSIDE_DOWN_T) + G_BATTLESHIPS_GRID_ITEM_HORIZONTAL_LINE;
 
-    static inline const std::string G_BATTLESHIPS_GRID_TOP_LINE = G_BATTLESHIPS_GRID_TOP_LINE_TOP_LEFT + RepeatElement(G_BATTLESHIPS_BOARD_WIDTH, G_BATTLESHIPS_GRID_TOP_LINE_MIDDLE) + std::string(1, G_PAGE_GRID_TOP_RIGHT);
-    static inline const std::string G_BATTLESHIPS_GRID_MIDDLE_LINE = G_BATTLESHIPS_GRID_MIDDLE_LINE_LEFT + RepeatElement(G_BATTLESHIPS_BOARD_WIDTH, G_BATTLESHIPS_GRID_MIDDLE_LINE_MIDDLE) + std::string(1, G_PAGE_GRID_RIGHT_SIDEWAYS_T);
-    static inline const std::string G_BATTLESHIPS_GRID_BOTTOM_LINE = G_BATTLESHIPS_GRID_BOTTOM_LINE_BOTTOM_LEFT + RepeatElement(G_BATTLESHIPS_BOARD_WIDTH, G_BATTLESHIPS_GRID_BOTTOM_LINE_MIDDLE) + std::string(1, G_PAGE_GRID_BOTTOM_RIGHT);
+    static inline const std::string G_BATTLESHIPS_GRID_TOP_LINE = G_BATTLESHIPS_GRID_TOP_LINE_TOP_LEFT + RepeatString(G_BATTLESHIPS_BOARD_WIDTH, G_BATTLESHIPS_GRID_TOP_LINE_MIDDLE) + std::string(1, G_PAGE_GRID_TOP_RIGHT);
+    static inline const std::string G_BATTLESHIPS_GRID_MIDDLE_LINE = G_BATTLESHIPS_GRID_MIDDLE_LINE_LEFT + RepeatString(G_BATTLESHIPS_BOARD_WIDTH, G_BATTLESHIPS_GRID_MIDDLE_LINE_MIDDLE) + std::string(1, G_PAGE_GRID_RIGHT_SIDEWAYS_T);
+    static inline const std::string G_BATTLESHIPS_GRID_BOTTOM_LINE = G_BATTLESHIPS_GRID_BOTTOM_LINE_BOTTOM_LEFT + RepeatString(G_BATTLESHIPS_BOARD_WIDTH, G_BATTLESHIPS_GRID_BOTTOM_LINE_MIDDLE) + std::string(1, G_PAGE_GRID_BOTTOM_RIGHT);
 
     static inline const std::string G_BATTLESHIPS_EMPTY_GRID_VALUE = std::string(G_BATTLESHIPS_GRID_ELEMENT_WIDTH, ' ');
     static inline const std::string G_BATTLESHIPS_MISSED_ATTACK = std::string(1, ' ') + G_PAGE_CENTRAL_DOT + ' ';
