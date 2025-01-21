@@ -400,7 +400,7 @@ namespace TerminalGames
         const uint32_t EMPTY_LINES_TO_ADD_COUNT = REMAINING_LINE_COUNT < 0 ? 0 : REMAINING_LINE_COUNT;
 
         std::string output;
-        output.reserve(m_displayWidth * EMPTY_LINES_TO_ADD_COUNT);
+        output.reserve(m_displayWidth * EMPTY_LINES_TO_ADD_COUNT); // NOLINT(bugprone-implicit-widening-of-multiplication-result)
         for (uint32_t emptyLineCount = 0; emptyLineCount < EMPTY_LINES_TO_ADD_COUNT; emptyLineCount++)
         {
             output += GetEmptyLine();
@@ -417,7 +417,7 @@ namespace TerminalGames
         return GetGeneralOptionSelectionPages(p_options, COMMON_TOP_STRING, COMMON_BOTTOM_STRING, false, false, false);
     }
 
-    std::vector<std::string> PageBuilder::GetGeneralOptionSelectionPages(
+    std::vector<std::string> PageBuilder::GetGeneralOptionSelectionPages( // NOLINT(readability-function-cognitive-complexity)
         const std::vector<std::string>& p_options,
         const std::string& p_commonTopString,
         const std::string& p_commonBottomString,
@@ -650,7 +650,7 @@ namespace TerminalGames
         return output;
     }
 
-    std::string PageBuilder::GetBattleshipsSubPage(const GameInfo& p_gameInfo)
+    std::string PageBuilder::GetBattleshipsSubPage(const GameInfo& p_gameInfo) // NOLINT(readability-function-cognitive-complexity)
     {
         // leftGridLines, middleGridLines and rightGridLines vectors must equal GRID_HEIGHT in size.
         // Also LEFT_GRID_SIZE + MIDDLE_GRID_SIZE + RIGHT_GRID_SIZE must equal G_BATTLESHIPS_DISPLAY_WIDTH - (numberOfGrids * Globals::G_PAGE_MINIMUM_LEFT_VERTICAL_LINE_SIZE - Globals::G_PAGE_MINIMUM_RIGHT_VERTICAL_LINE_SIZE))
