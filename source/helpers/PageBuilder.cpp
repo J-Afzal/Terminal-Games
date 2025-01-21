@@ -119,7 +119,7 @@ namespace TerminalGames
 
             const std::string COMMON_BOTTOM_STRING = GetBottomLine() + GetBottomBox();
 
-            output[0] = COMMON_TOP_STRING + GetNewLineLeftJustified("Yes", Colours::BLUE, Globals::G_PAGE_SELECTOR) + GetNewLineLeftJustified(Globals::G_PAGE_SELECTOR_ABSENT_PADDING + "No") +COMMON_BOTTOM_STRING;
+            output[0] = COMMON_TOP_STRING + GetNewLineLeftJustified("Yes", Colours::BLUE, Globals::G_PAGE_SELECTOR) + GetNewLineLeftJustified(Globals::G_PAGE_SELECTOR_ABSENT_PADDING + "No") + COMMON_BOTTOM_STRING;
 
             output[1] = RemoveColour(COMMON_TOP_STRING + GetNewLineLeftJustified(Globals::G_PAGE_SELECTOR_ABSENT_PADDING + "Yes") + GetNewLineLeftJustified("No", Colours::BLUE, Globals::G_PAGE_SELECTOR) + COMMON_BOTTOM_STRING);
         }
@@ -400,7 +400,7 @@ namespace TerminalGames
         const uint32_t EMPTY_LINES_TO_ADD_COUNT = REMAINING_LINE_COUNT < 0 ? 0 : REMAINING_LINE_COUNT;
 
         std::string output;
-        output.reserve(static_cast<size_t>(m_displayWidth * EMPTY_LINES_TO_ADD_COUNT));
+        output.reserve(m_displayWidth * EMPTY_LINES_TO_ADD_COUNT);
         for (uint32_t emptyLineCount = 0; emptyLineCount < EMPTY_LINES_TO_ADD_COUNT; emptyLineCount++)
         {
             output += GetEmptyLine();

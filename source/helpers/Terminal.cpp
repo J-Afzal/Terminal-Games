@@ -121,10 +121,8 @@ namespace TerminalGames
             return GetUserCommandFromGameGridWindows(p_startingGridLocation, p_pageBuilder, p_gameInfo, p_displayGetUserCommandPage);
         }
 
-        else
-        {
-            return GetUserCommandFromGameGridNonWindows(p_startingGridLocation, p_pageBuilder, p_gameInfo, p_displayGetUserCommandPage);
-        }
+        return GetUserCommandFromGameGridNonWindows(p_startingGridLocation, p_pageBuilder, p_gameInfo, p_displayGetUserCommandPage);
+
     }
 
     std::tuple<uint32_t, uint32_t> Terminal::GetUserCommandFromGameGridWindows(
@@ -248,7 +246,7 @@ namespace TerminalGames
             throw Globals::Exceptions::NotImplementedError();
         }
 
-        while(true)
+        while (true)
         {
             GameInfo currentGameInfo = p_gameInfo;
 
@@ -257,17 +255,14 @@ namespace TerminalGames
                 currentGameInfo.m_ticTacToeGameInfo.m_gameGrid.at(currentRow).at(currentColumn) = "#" + std::string(1, currentGameInfo.m_ticTacToeGameInfo.m_gameGrid.at(currentRow).at(currentColumn).at(1)) + "#";
             }
 
-            if (CURRENT_PAGE_TYPE == Pages::BATTLESHIPS)
+            else if (CURRENT_PAGE_TYPE == Pages::BATTLESHIPS && p_displayGetUserCommandPage)
             {
-                if (p_displayGetUserCommandPage)
-                {
-                    currentGameInfo.m_battleshipsGameInfo.m_boardTwo.at(currentRow).at(currentColumn) = "#" + std::string(1, currentGameInfo.m_battleshipsGameInfo.m_boardTwo.at(currentRow).at(currentColumn).at(0)) + "#";
-                }
+                currentGameInfo.m_battleshipsGameInfo.m_boardTwo.at(currentRow).at(currentColumn) = "#" + std::string(1, currentGameInfo.m_battleshipsGameInfo.m_boardTwo.at(currentRow).at(currentColumn).at(0)) + "#";
+            }
 
-                else
-                {
-                    currentGameInfo.m_battleshipsGameInfo.m_boardOne.at(currentRow).at(currentColumn) = "#" + std::string(1, currentGameInfo.m_battleshipsGameInfo.m_boardOne.at(currentRow).at(currentColumn).at(0)) + "#";
-                }
+            else if (CURRENT_PAGE_TYPE == Pages::BATTLESHIPS)
+            {
+                currentGameInfo.m_battleshipsGameInfo.m_boardOne.at(currentRow).at(currentColumn) = "#" + std::string(1, currentGameInfo.m_battleshipsGameInfo.m_boardOne.at(currentRow).at(currentColumn).at(0)) + "#";
             }
 
             if (p_displayGetUserCommandPage)
