@@ -15,9 +15,9 @@ namespace TerminalGames
     TicTacToe::TicTacToe(const bool& p_useAnsiEscapeCodes) :
         m_computerSpeed(0),
         m_turnCount(0),
-        m_hasSavedGameSettings(false),
+        m_hasSavedGameOptions(false),
         m_hasWinner(false),
-        m_saveGameSettings(false)
+        m_saveGameOptions(false)
     {
         m_pageBuilder.SetProperties(Pages::TICTACTOE, p_useAnsiEscapeCodes);
         m_randomNumberGenerator.seed(std::chrono::system_clock::now().time_since_epoch().count());
@@ -25,50 +25,46 @@ namespace TerminalGames
 
     void TicTacToe::SetupGame()
     {
-        m_randomNumberGenerator() % 2 == 0 ? m_currentPlayer = "Player X" : m_currentPlayer = "Player O";
+        m_currentPlayer = Globals::G_TICTACTOE_PLAYER_CHOICE_OPTIONS.at(m_randomNumberGenerator() % 2);
         m_commandsRemaining.clear();
         m_previousCommand = {0, 0};
         m_turnCount = 0;
         m_hasWinner = false;
 
-        for (uint32_t i = 0; i < Globals::G_TICTACTOE_BOARD_HEIGHT; i++)
+        for (uint32_t row = 0; row < Globals::G_TICTACTOE_BOARD_HEIGHT; row++)
         {
-            for (uint32_t j = 0; j < Globals::G_TICTACTOE_BOARD_WIDTH; j++)
+            for (uint32_t column = 0; column < Globals::G_TICTACTOE_BOARD_WIDTH; column++)
             {
-                m_gameGrid.at(i).at(j) = "   ";
-                m_commandsRemaining.emplace_back(i, j);
+                m_gameGrid.at(row).at(column) = Globals::G_TICTACTOE_EMPTY_GRID_VALUE;
+                m_commandsRemaining.emplace_back(row, column);
             }
         }
-
-        UpdateGameInfo();
     }
 
     void TicTacToe::GetUserOptions()
     {
-        if (m_saveGameSettings && m_hasSavedGameSettings)
+        if (m_saveGameOptions && m_hasSavedGameOptions)
+        {
             return;
+        }
 
-        m_computerSpeedName = "N/A";
-        m_playerCount = "N/A";
-        m_userPlayerChoice = " ";
+        m_computerSpeedName = Globals::G_GAME_UNKNOWN_OPTION;
+        m_playerCount = Globals::G_GAME_UNKNOWN_OPTION;
+        m_userPlayerChoice = Globals::G_GAME_UNKNOWN_OPTION;
 
         GetPlayerCount();
 
-        // If only one human user, then ask them which player they want to be (X or O)
-        if (m_playerCount == "1  ")
-        {
-            GetUserPlayerChoice();
-        }
-
-        // If computer involved get computer difficulty and speed
-        if (m_playerCount != "2  ") // i.e. = 0 or = 1
+        if (m_playerCount == "0" || m_playerCount == "1")
         {
             GetComputerSpeed();
         }
 
-        UpdateGameInfo();
+        if (m_playerCount == "1")
+        {
+            GetUserPlayerChoice();
+        }
 
-        m_hasSavedGameSettings = true;
+        m_hasSavedGameOptions = true;
     }
 
     void TicTacToe::UpdateGameInfo()
@@ -79,24 +75,25 @@ namespace TerminalGames
             .m_currentPlayer = m_currentPlayer,
             .m_playerCount = m_playerCount,
             .m_turnCount = m_turnCount,
-            .m_hasWinner = m_hasWinner};
+            .m_hasWinner = m_hasWinner,
+        };
     }
 
     bool TicTacToe::IsGameOver()
     {
         // Check horizontals
-        if ((m_gameGrid[0][0] != "   " && m_gameGrid[0][0] == m_gameGrid[0][1] && m_gameGrid[0][1] == m_gameGrid[0][2]) ||
-            (m_gameGrid[1][0] != "   " && m_gameGrid[1][0] == m_gameGrid[1][1] && m_gameGrid[1][1] == m_gameGrid[1][2]) ||
-            (m_gameGrid[2][0] != "   " && m_gameGrid[2][0] == m_gameGrid[2][1] && m_gameGrid[2][1] == m_gameGrid[2][2]) ||
+        if ((m_gameGrid[0][0] != Globals::G_TICTACTOE_EMPTY_GRID_VALUE && m_gameGrid[0][0] == m_gameGrid[0][1] && m_gameGrid[0][1] == m_gameGrid[0][2]) ||
+            (m_gameGrid[1][0] != Globals::G_TICTACTOE_EMPTY_GRID_VALUE && m_gameGrid[1][0] == m_gameGrid[1][1] && m_gameGrid[1][1] == m_gameGrid[1][2]) ||
+            (m_gameGrid[2][0] != Globals::G_TICTACTOE_EMPTY_GRID_VALUE && m_gameGrid[2][0] == m_gameGrid[2][1] && m_gameGrid[2][1] == m_gameGrid[2][2]) ||
 
             // Check verticals
-            (m_gameGrid[0][0] != "   " && m_gameGrid[0][0] == m_gameGrid[1][0] && m_gameGrid[1][0] == m_gameGrid[2][0]) ||
-            (m_gameGrid[0][1] != "   " && m_gameGrid[0][1] == m_gameGrid[1][1] && m_gameGrid[1][1] == m_gameGrid[2][1]) ||
-            (m_gameGrid[0][2] != "   " && m_gameGrid[0][2] == m_gameGrid[1][2] && m_gameGrid[1][2] == m_gameGrid[2][2]) ||
+            (m_gameGrid[0][0] != Globals::G_TICTACTOE_EMPTY_GRID_VALUE && m_gameGrid[0][0] == m_gameGrid[1][0] && m_gameGrid[1][0] == m_gameGrid[2][0]) ||
+            (m_gameGrid[0][1] != Globals::G_TICTACTOE_EMPTY_GRID_VALUE && m_gameGrid[0][1] == m_gameGrid[1][1] && m_gameGrid[1][1] == m_gameGrid[2][1]) ||
+            (m_gameGrid[0][2] != Globals::G_TICTACTOE_EMPTY_GRID_VALUE && m_gameGrid[0][2] == m_gameGrid[1][2] && m_gameGrid[1][2] == m_gameGrid[2][2]) ||
 
             // Check diagonals
-            (m_gameGrid[0][0] != "   " && m_gameGrid[0][0] == m_gameGrid[1][1] && m_gameGrid[1][1] == m_gameGrid[2][2]) ||
-            (m_gameGrid[2][0] != "   " && m_gameGrid[2][0] == m_gameGrid[1][1] && m_gameGrid[1][1] == m_gameGrid[0][2]))
+            (m_gameGrid[0][0] != Globals::G_TICTACTOE_EMPTY_GRID_VALUE && m_gameGrid[0][0] == m_gameGrid[1][1] && m_gameGrid[1][1] == m_gameGrid[2][2]) ||
+            (m_gameGrid[2][0] != Globals::G_TICTACTOE_EMPTY_GRID_VALUE && m_gameGrid[2][0] == m_gameGrid[1][1] && m_gameGrid[1][1] == m_gameGrid[0][2]))
         {
             m_hasWinner = true;
             return m_hasWinner;
@@ -107,15 +104,12 @@ namespace TerminalGames
 
     void TicTacToe::ToggleCurrentPlayer()
     {
-        m_currentPlayer == "Player X" ? m_currentPlayer = "Player O" : m_currentPlayer = "Player X";
+        m_currentPlayer == Globals::G_TICTACTOE_PLAYER_X ? m_currentPlayer = Globals::G_TICTACTOE_PLAYER_O : m_currentPlayer = Globals::G_TICTACTOE_PLAYER_X;
     }
 
     bool TicTacToe::IsCurrentTurnUsers()
     {
-        // If it is two player game then next turn will always be the user's turn, if not then
-        // check if the current player is the same as the user's choice. For a zero player game
-        // m_UserPlayerChoice = ' ' and so this will always return false.
-        return m_playerCount == "2  " || m_currentPlayer == m_userPlayerChoice;
+        return m_playerCount == "2" || m_currentPlayer == m_userPlayerChoice;
     }
 
     void TicTacToe::ExecuteUserCommand()
@@ -137,17 +131,13 @@ namespace TerminalGames
     {
         Terminal::PrintOutput(m_pageBuilder.GetComputerCommandPage(m_gameInfo));
 
-        if (m_computerSpeed != 0)
-        {
-            std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::seconds(m_computerSpeed));
-        }
+        std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::seconds(m_computerSpeed));
 
         const std::tuple<uint32_t, uint32_t> SELECTED_COMMAND = m_commandsRemaining[m_randomNumberGenerator() % m_commandsRemaining.size()];
 
         if (ValidateCommand(SELECTED_COMMAND))
         {
             ExecuteGeneralCommand(SELECTED_COMMAND);
-            return;
         }
     }
 
@@ -158,13 +148,13 @@ namespace TerminalGames
 
     void TicTacToe::RestartGame()
     {
-        m_saveGameSettings = true;
+        m_saveGameOptions = true;
     }
 
     void TicTacToe::ResetGame()
     {
-        m_saveGameSettings = false;
-        m_hasSavedGameSettings = false;
+        m_saveGameOptions = false;
+        m_hasSavedGameOptions = false;
     }
 
     void TicTacToe::GetPlayerCount()
@@ -173,7 +163,7 @@ namespace TerminalGames
 
         const std::vector<std::string> MENUS = m_pageBuilder.GetPlayerCountOptionSelectionGamePages(m_gameInfo);
         const std::vector<std::string> QUIT_MENUS = m_pageBuilder.GetQuitOptionSelectionPage();
-        m_playerCount = std::to_string(Terminal::GetUserChoiceFromGameMenus(MENUS, QUIT_MENUS)) + "  ";
+        m_playerCount = Globals::G_GAME_MAX_TWO_PLAYERS_OPTIONS[Terminal::GetUserChoiceFromGameMenus(MENUS, QUIT_MENUS)];
     }
 
     void TicTacToe::GetUserPlayerChoice()
@@ -182,7 +172,7 @@ namespace TerminalGames
 
         const std::vector<std::string> MENUS = m_pageBuilder.GetUserPlayerChoiceOptionSelectionGamePages(m_gameInfo);
         const std::vector<std::string> QUIT_MENUS = m_pageBuilder.GetQuitOptionSelectionPage();
-        Terminal::GetUserChoiceFromGameMenus(MENUS, QUIT_MENUS) == 0 ? m_userPlayerChoice = "Player X" : m_userPlayerChoice = "Player O";
+        m_userPlayerChoice = Globals::G_TICTACTOE_PLAYER_CHOICE_OPTIONS[Terminal::GetUserChoiceFromGameMenus(MENUS, QUIT_MENUS)];
     }
 
     void TicTacToe::GetComputerSpeed()
@@ -192,21 +182,7 @@ namespace TerminalGames
         const std::vector<std::string> MENUS = m_pageBuilder.GetComputerSpeedOptionSelectionGamePages(m_gameInfo);
         const std::vector<std::string> QUIT_MENUS = m_pageBuilder.GetQuitOptionSelectionPage();
         m_computerSpeed = Terminal::GetUserChoiceFromGameMenus(MENUS, QUIT_MENUS);
-
-        if (m_computerSpeed == 0)
-        {
-            m_computerSpeedName = "INSTANT";
-        }
-
-        else if (m_computerSpeed == 1)
-        {
-            m_computerSpeedName = "FAST";
-        }
-
-        else // == 2
-        {
-            m_computerSpeedName = "SLOW";
-        }
+        m_computerSpeedName = Globals::G_GAME_COMPUTER_SPEED_OPTIONS[m_computerSpeed];
     }
 
     bool TicTacToe::ValidateCommand(const std::tuple<uint32_t, uint32_t>& p_command)
@@ -219,8 +195,19 @@ namespace TerminalGames
     void TicTacToe::ExecuteGeneralCommand(const std::tuple<uint32_t, uint32_t>& p_command)
     {
         const auto COMMAND_FIND_LOCATION = Globals::ImplementStdRangesFind(m_commandsRemaining.begin(), m_commandsRemaining.end(), p_command);
+        const uint32_t ROW = std::get<0>(p_command);
+        const uint32_t COLUMN = std::get<1>(p_command);
 
-        m_gameGrid.at(std::get<0>(p_command)).at(std::get<1>(p_command)) = std::string(" ") + m_currentPlayer.back() + std::string(" ");
+        if (m_currentPlayer == Globals::G_TICTACTOE_PLAYER_X)
+        {
+            m_gameGrid.at(ROW).at(COLUMN) = Globals::G_TICTACTOE_GRID_PLAYER_X_OCCUPIED;
+        }
+
+        else
+        {
+            m_gameGrid.at(ROW).at(COLUMN) = Globals::G_TICTACTOE_GRID_PLAYER_O_OCCUPIED;
+        }
+
         m_commandsRemaining.erase(COMMAND_FIND_LOCATION);
         m_turnCount++;
     }

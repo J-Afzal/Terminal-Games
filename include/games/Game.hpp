@@ -11,7 +11,7 @@ namespace TerminalGames
     {
     public:
         /**
-         * @brief Construct a new Game object
+         * @brief Constructs a new Game object
          */
         Game() = default;
 
@@ -63,13 +63,19 @@ namespace TerminalGames
 
                     GetUserOptions();
 
+                    UpdateGameInfo();
+
                     while (!IsGameOver())
                     {
                         if (IsCurrentTurnUsers())
+                        {
                             ExecuteUserCommand();
+                        }
 
                         else
+                        {
                             ExecuteComputerCommand();
+                        }
 
                         ToggleCurrentPlayer();
 

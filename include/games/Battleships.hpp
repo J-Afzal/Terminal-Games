@@ -18,7 +18,7 @@ namespace TerminalGames
     {
     public:
         /**
-         * @brief Construct a new Battleships object.
+         * @brief Constructs a new Battleships object.
          *
          * @param p_useAnsiEscapeCodes Whether to use use ANSI escapes codes (true) or only ASCII characters (false).
          */
@@ -40,9 +40,9 @@ namespace TerminalGames
         std::string m_playerCount;
         uint32_t m_computerSpeed;
         uint32_t m_turnCount;
-        bool m_hasSavedGameSettings;
+        bool m_hasSavedGameOptions;
         bool m_isGameOver;
-        bool m_saveGameSettings;
+        bool m_saveGameOptions;
 
         /**
          * @brief See base class function for details.
@@ -116,18 +116,20 @@ namespace TerminalGames
         void GetUserShipPositions();
 
         /**
-         * @brief
+         * @brief Validates whether (true) or not (false) p_selectedShipGridLocation is a valid grid location to place a ship.
          *
-         * @param p_currentShipPositions
-         * @param p_selectedShipGridLocation
-         * @param p_shipIsHorizontalOrVertical
+         * @param p_currentShipGridLocations The grid locations selected for the current ship.
+         * @param p_selectedShipGridLocation The grid location to validate.
+         * @param p_shipIsHorizontal Whether the ship is being placed horizontally (true) or not (false)
+         * @param p_shipIsVertical Whether the ship is being placed vertically (true) or not (false)
          * @return true If ship position is valid.
          * @return false If the ship position is invalid.
          */
         bool ValidateUserShipPosition(
             const std::vector<std::tuple<uint32_t, uint32_t>>& p_currentShipPositions,
             const std::tuple<uint32_t, uint32_t>& p_selectedShipGridLocation,
-            std::tuple<bool, bool>& p_shipIsHorizontalOrVertical);
+            bool& p_shipIsHorizontal,
+            bool& p_shipIsVertical);
 
         /**
          * @brief Randomly place all ships on the board.

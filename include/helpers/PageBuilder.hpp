@@ -15,7 +15,7 @@ namespace TerminalGames
      */
     enum class Pages : std::uint8_t
     {
-        DEFAULT,
+        DEFAULT = 0,
         HOMEPAGE,
         MAINMENU,
         TICTACTOE,
@@ -28,11 +28,12 @@ namespace TerminalGames
      */
     enum class Colours : std::uint8_t
     {
-        WHITE,
+        WHITE = 0,
         RED,
         BLUE,
         GREEN,
         YELLOW,
+        RESET
     };
 
     /**
@@ -57,9 +58,9 @@ namespace TerminalGames
             std::string m_currentGuessOfWord;
             std::string m_playerCount;
             std::string m_wordToBeGuessed;
-            uint32_t m_errorCount;
             uint32_t m_turnCount;
             char m_currentGuess;
+            bool m_hasWinner;
         } m_hangmanGameInfo;
 
         struct BattleshipsGameInfo
@@ -83,12 +84,12 @@ namespace TerminalGames
     {
     public:
         /**
-         * @brief Construct a new StringBuilder object.
+         * @brief Constructs a new StringBuilder object.
          */
         explicit PageBuilder();
 
         /**
-         * @brief Construct a new StringBuilder object.
+         * @brief Constructs a new StringBuilder object.
          *
          * @param p_page Which page type to configure the PageBuilder for.
          * @param p_useAnsiEscapeCodes Whether to use use ANSI escapes codes (true) or only ASCII characters (false).
@@ -131,7 +132,7 @@ namespace TerminalGames
          * @param p_gameInfo Information on the current state of the current game.
          * @return std::vector<std::string> Pages where each page has a different number of players selected.
          */
-        std::vector<std::string> GetPlayerCountOptionSelectionGamePages(const GameInfo& p_gameInfo) const;
+        std::vector<std::string> GetPlayerCountOptionSelectionGamePages(const GameInfo& p_gameInfo);
 
         /**
          * @brief Creates pages for displaying option selection screen for the user player choice for a game.
@@ -139,7 +140,7 @@ namespace TerminalGames
          * @param p_gameInfo Information on the current state of the current game.
          * @return std::vector<std::string> Pages where each page has a player choice selected.
          */
-        std::vector<std::string> GetUserPlayerChoiceOptionSelectionGamePages(const GameInfo& p_gameInfo) const;
+        std::vector<std::string> GetUserPlayerChoiceOptionSelectionGamePages(const GameInfo& p_gameInfo);
 
         /**
          * @brief Creates pages for displaying option selection screen for the computer speed for a game.
@@ -147,7 +148,7 @@ namespace TerminalGames
          * @param p_gameInfo Information on the current state of the current game.
          * @return std::vector<std::string> Pages where each page has a different computer speed selected.
          */
-        std::vector<std::string> GetComputerSpeedOptionSelectionGamePages(const GameInfo& p_gameInfo) const;
+        std::vector<std::string> GetComputerSpeedOptionSelectionGamePages(const GameInfo& p_gameInfo);
 
         /**
          * @brief Creates a general game page with a custom message for use during a game.
@@ -157,7 +158,7 @@ namespace TerminalGames
          * @return std::string A page with the current state of the game and a custom message.
          * @warning The message will be truncated if it is too long to be contained within a single line on the page.
          */
-        std::string GetPageWithMessage(const GameInfo& p_gameInfo, const std::string& p_message) const;
+        std::string GetPageWithMessage(const GameInfo& p_gameInfo, const std::string& p_message);
 
         /**
          * @brief Creates the user command page which prompts the user to enter a command during a game.
@@ -165,7 +166,7 @@ namespace TerminalGames
          * @param p_gameInfo Information on the current state of the current game.
          * @return std::string A page with the current state of the game and a prompt to the user to enter a command.
          */
-        std::string GetUserCommandPage(const GameInfo& p_gameInfo) const;
+        std::string GetUserCommandPage(const GameInfo& p_gameInfo);
 
         /**
          * @brief Creates the computer command page for when the computer is entering their command.
@@ -173,7 +174,7 @@ namespace TerminalGames
          * @param p_gameInfo Information on the current state of the current game.
          * @return std::string A page with the current state of the game and a message that the computer is entering their command.
          */
-        std::string GetComputerCommandPage(const GameInfo& p_gameInfo) const;
+        std::string GetComputerCommandPage(const GameInfo& p_gameInfo);
 
         /**
          * @brief Creates the game over page.
@@ -182,7 +183,7 @@ namespace TerminalGames
          * @return std::string A page with the final state of the game and a message on who won, how many turns took place, and
          * how to quit the game or play again.
          */
-        std::string GetGameOverPage(const GameInfo& p_gameInfo) const;
+        std::string GetGameOverPage(const GameInfo& p_gameInfo);
 
         /**
          * @brief Creates the quit option selection page.
@@ -291,7 +292,7 @@ namespace TerminalGames
          * @warning The message will be truncated if it is too long to be contained within a single line on the page.
          * @warning The page height will be allowed to extended pass the pre-defined page height to fit all the options provided.
          */
-        std::vector<std::string> GetGameOptionSelectionPages(const GameInfo& p_gameInfo, const std::string& p_message, const std::vector<std::string>& p_options) const;
+        std::vector<std::string> GetGameOptionSelectionPages(const GameInfo& p_gameInfo, const std::string& p_message, const std::vector<std::string>& p_options);
 
         /**
          * @brief Creates pages for displaying option selection screens for the given options.
@@ -300,7 +301,8 @@ namespace TerminalGames
          * @param p_commonTopString The common string between all pages found above the options.
          * @param p_commonBottomString The common string between all pages found below the options.
          * @param p_addEmptyLineBetweenOptions Whether to add an empty line between the options (true) or not (false).
-         * @param p_centerOptions Whether to center the options (true) or left justify them (false).
+         * @param p_centerOptionsHorizontally Whether to center the options horizontally (true) or left justify them (false).
+         * @param p_centerOptionsVertically Whether to center the options vertically (true) or left justify them (false).
          * @return std::vector<std::string> Pages where each page has a different option selected.
          */
         std::vector<std::string> GetGeneralOptionSelectionPages(
@@ -308,7 +310,8 @@ namespace TerminalGames
             const std::string& p_commonTopString,
             const std::string& p_commonBottomString,
             const bool& p_addEmptyLineBetweenOptions,
-            const bool& p_centerOptions) const;
+            const bool& p_centerOptionsHorizontally,
+            const bool& p_centerOptionsVertically) const;
 
         /**
          * @brief Wrapper function around the game specific sub-page functions.
@@ -316,7 +319,7 @@ namespace TerminalGames
          * @param p_gameInfo Information on the current state of the current game.
          * @return std::string The subpage containing the current state of the current game.
          */
-        std::string GetGeneralGameSubPage(const GameInfo& p_gameInfo) const;
+        std::string GetGeneralGameSubPage(const GameInfo& p_gameInfo);
 
         /**
          * @brief Creates the subpage containing the current state of the TicTacToe game.
@@ -324,7 +327,7 @@ namespace TerminalGames
          * @param p_gameInfo Information on the current state of the current game.
          * @return std::string The subpage containing the current state of the TicTacToe game.
          */
-        std::string GetTicTacToeSubPage(const GameInfo& p_gameInfo) const;
+        std::string GetTicTacToeSubPage(const GameInfo& p_gameInfo);
 
         /**
          * @brief Creates the subpage containing the current state of the Hangman game.
@@ -332,7 +335,7 @@ namespace TerminalGames
          * @param p_gameInfo Information on the current state of the current game.
          * @return std::string The subpage containing the current state of the Hangman game.
          */
-        std::string GetHangmanSubPage(const GameInfo& p_gameInfo) const;
+        std::string GetHangmanSubPage(const GameInfo& p_gameInfo);
 
         /**
          * @brief Creates the subpage containing the current state of the Battleships game.
@@ -340,60 +343,71 @@ namespace TerminalGames
          * @param p_gameInfo Information on the current state of the current game.
          * @return std::string The subpage containing the current state of the Battleships game.
          */
-        std::string GetBattleshipsSubPage(const GameInfo& p_gameInfo) const;
+        std::string GetBattleshipsSubPage(const GameInfo& p_gameInfo);
 
         /**
-         * @brief Remove all instances of a substring from a string.
+         * @brief Calculates a grid layout based on the grid content in p_gridColumnLines and the grid sizes in
+         * p_gridColumnWidths. Only columns can be defined and all content is centred within its grid column.
          *
-         * @param p_string The string to be checked.
-         * @param p_subString The substring to be removed.
-         * @return std::string The string with the substring removed.
+         * @param p_gridColumnWidths The width of each grid column.
+         * @param p_gridColumnLines The content of each grid column where each grid column is an element in p_gridColumnLines.
+         * @param p_gridColumnHeight The height of the grid columns (i.e. the number of lines within each grid column). Note
+         * that this must be the same for all grid columns.
+         * @warning p_gridColumnWidths.size() must be equal to p_gridColumnLines.size()
+         * @warning The length all elements in p_gridColumnLines (i.e. p_gridColumnLines[x].size()) must be equal to
+         * p_gridColumnHeight.
+         * @return std::string
          */
-        static std::string RemoveSubString(const std::string& p_string, const std::string& p_subString); // NOLINT(bugprone-easily-swappable-parameters)
+        std::string GetGridLayout(const std::vector<uint32_t>& p_gridColumnWidths, const std::vector<std::vector<std::string>>& p_gridColumnLines, const uint32_t& p_gridColumnHeight);
 
         // Member variables
         std::string m_topTitle;
         std::string m_bottomTitle;
         uint32_t m_displayWidth;
         uint32_t m_displayHeight;
-        uint32_t m_maximumInputSize;
-        uint32_t m_maximumFilledLineSize;
+        uint32_t m_maximumLineSize;
+        uint32_t m_minimumLeftPadding;
+        uint32_t m_minimumRightPadding;
         Pages m_currentPage;
         bool m_useAnsiEscapeCodes;
 
         /**
-         * @brief A visual example of what some of the lower level function do:
+         * @brief A visual example of what some of the lower level functions do:
          *
          * The whole page would be returned by GetGameOverPage()
          *
-         * ╔═════════════════════════════════════════════════════╗   <- AddTopLine()                         <-
-         * ║                     Tic Tac Toe                     ║   <- AddNewLineCentred("Tic Tac Toe")     <- AddTopBox()
-         * ╚═════════════════════════════════════════════════════╝   <- AddBottomLine()                      <-
-         * ╔═════════════════════════════════════════════════════╗   <- AddTopLine()
-         * ║  O │ O │ X                                          ║                                                                            <-
-         * ║ ───┼───┼───          # of Players = 0               ║                                                                            <-
-         * ║  O │ X │ O                                          ║                                                                            <- GetGeneralGameSubPage() -> GetTicTacToeSubPage()
-         * ║ ───┼───┼───     Computer Difficulty = EASY          ║   <- AddNewLineLeftJustified("───┼───┼───     Computer Difficulty = EASY") <-
-         * ║  O │ X │ X                                          ║                                                                            <-
-         * ║                                                     ║   <- AddEmptyLine()
-         * ║                      GAME OVER                      ║   <- AddNewLineCentred("GAME OVER")
-         * ║                                                     ║
-         * ║     Player O has won! The game lasted 9 turns.      ║   <- AddNewLineCentred("Player O has won! The game lasted 9 turns.")
-         * ║                                                     ║
-         * ║     Press 'Q' to quit OR Enter to play again...     ║   <- AddNewLineCentred("Press 'Q' to quit OR Enter to play again...")
-         * ╚═════════════════════════════════════════════════════╝   <- AddBottomLine()
-         * ╔═════════════════════════════════════════════════════╗   <- AddTopLine()                                   <-
-         * ║                q = quit to main menu                ║   <- AddNewLineCentred("q = quit to main menu")     <- AddBottomBox()
-         * ╚═════════════════════════════════════════════════════╝   <- AddBottomLine()                                <-
+         * ╔═══════════════════════════════════════════════════════╗   <- AddTopLine()                     <-                                        <-
+         * ║                      Tic Tac Toe                      ║   <- AddNewLineCentred("Tic Tac Toe") <- AddTopBox()                            <-
+         * ╚═══════════════════════════════════════════════════════╝   <- AddBottomLine()                  <-                                        <-
+         * ╔═══════════════════════════════════════════════════════╗   <- AddTopLine()                                                               <-
+         * ║  O │ X │ O                                            ║    <-                                                                           <-
+         * ║ ───┼───┼───              # of Players = 0             ║    <-                                                                           <-
+         * ║  O │ O │                                              ║    <- GetGeneralGameSubPage() <- GetTicTacToeSubPage()                          <-
+         * ║ ───┼───┼───          Computer Speed = INSTANT         ║    <-                                                                           <-
+         * ║  X │ X │ X                                            ║    <-                                                                           <-
+         * ║                                                       ║   <- AddEmptyLine()                                                             <- GetGameOverPage()
+         * ║                       GAME OVER                       ║   <- AddNewLineCentred("GAME OVER")                                             <-
+         * ║                                                       ║   <- AddEmptyLine()                                                             <-
+         * ║       Player X has won! The game lasted 8 turns.      ║   <- AddNewLineCentred("Player X has won! The game lasted 8 turns.")            <-
+         * ║                                                       ║   <- AddEmptyLine()                                                             <-
+         * ║ Press 'r' to restart game OR any key to reset game... ║   <- AddNewLineCentred("Press 'r' to restart game OR any key to reset game...") <-
+         * ╚═══════════════════════════════════════════════════════╝   <- AddBottomLine()                                                            <-
+         * ╔═══════════════════════════════════════════════════════╗   <- AddTopLine()                            <-                                 <-
+         * ║                   q = show quit menu                  ║   <- AddNewLineCentred("q = show quit menu") <- AddBottomBox()                  <-
+         * ╚═══════════════════════════════════════════════════════╝   <- AddBottomLine()                         <-                                 <-
          *
          *  ^---------------------------------------------------^
-         *                    = displayWidth = 55
+         *                    = displayWidth = 57
          *
          * In this example:
          *      m_topTitle = "Tic Tac Toe"
-         *      m_bottomTitle = "q = quit to main menu"
-         *      m_displayWidth = 55
+         *      m_bottomTitle = "q = show quit menu"
+         *      m_displayWidth = 57
          *      m_displayHeight = 19
+         *      m_maximumLineSize = 53
+         *      m_minimumLeftPadding = 1
+         *      m_minimumRightPadding = 1
+         *      m_currentPage = Pages::TICTACTOE
          */
     };
 }
