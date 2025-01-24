@@ -10,6 +10,7 @@
 .clang-tidy     text
 .gitattributes  text
 .gitignore      text
+.gitmodules     text
 .prettierignore text
 
 # Documents
