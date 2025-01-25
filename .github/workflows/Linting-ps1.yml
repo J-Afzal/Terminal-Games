@@ -88,16 +88,11 @@ jobs:
                   Import-Module ${{ inputs.path_to_linters_submodule_root }}/linters-ps1/Linters.psd1
                   Test-PrettierIgnoreFile -Verbose
 
-            - name: Run cspell
-              if: (success() || failure()) && steps.dependencies.outcome == 'success' && inputs.run_cspell_linter
-              run: |
-                  Get-ChildItem -Force
-                  cd ./submodules/Linters
-                  Get-ChildItem -Force
-                  cd ../..
-
-                  Import-Module ${{ inputs.path_to_linters_submodule_root }}/linters-ps1/Linters.psd1
-                  Test-CodeUsingCSpell -Verbose
+            # - name: Run cspell
+            #   if: (success() || failure()) && steps.dependencies.outcome == 'success' && inputs.run_cspell_linter
+            #   run: |
+            #       Import-Module ${{ inputs.path_to_linters_submodule_root }}/linters-ps1/Linters.psd1
+            #       Test-CodeUsingCSpell -Verbose
 
             # - name: Run prettier
             #   if: (success() || failure()) && steps.dependencies.outcome == 'success' && inputs.run_prettier_linter
@@ -105,11 +100,11 @@ jobs:
             #       Import-Module ${{ inputs.path_to_linters_submodule_root }}/linters-ps1/Linters.psd1
             #       Test-CodeUsingPrettier -Verbose
 
-            # - name: Run PSScriptAnalyzer
-            #   if: (success() || failure()) && steps.dependencies.outcome == 'success' && inputs.run_psscript_analyzer_linter
-            #   run: |
-            #       Import-Module ${{ inputs.path_to_linters_submodule_root }}/linters-ps1/Linters.psd1
-            #       Test-CodeUsingPSScriptAnalyzer -Verbose
+            - name: Run PSScriptAnalyzer
+              if: (success() || failure()) && steps.dependencies.outcome == 'success' && inputs.run_psscript_analyzer_linter
+              run: |
+                  Import-Module ${{ inputs.path_to_linters_submodule_root }}/linters-ps1/Linters.psd1
+                  Test-CodeUsingPSScriptAnalyzer -Verbose
 
             # - name: Run clang tools
             #   if: (success() || failure()) && steps.dependencies.outcome == 'success' && inputs.run_clang_tools_linter
