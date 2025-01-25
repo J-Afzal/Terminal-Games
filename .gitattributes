@@ -9,7 +9,6 @@
 .gitattributes  text
 .gitignore      text
 .gitmodules     text
-.prettierignore text
 
 # Documents
 *.md            text        diff=markdown
