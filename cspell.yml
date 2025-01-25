@@ -7,25 +7,15 @@ ignorePaths:
     - .vs/
     - .vscode/
     - build/
-    - node_modules/
     - package-lock.json
 words:
+    - afzal
     - bugprone
     - linters
 ignoreWords:
-    - altera
     - choco
     - defenses
-    - hicpp
-    - linuxbrew
-    - linuxkernel
-    - llvmlibc
-    - nodiscard
     - nolint
     - noncommercially
-    - openmp
-    - reflow
-    - shellenv
     - tictactoe
     - wasd
-    - werror
