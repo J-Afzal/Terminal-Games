@@ -9,7 +9,7 @@ ignorePaths:
     - build/
     - package-lock.json
 words:
-    - Afzal
+    - afzal
     - bugprone
     - linters
 ignoreWords:
