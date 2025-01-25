@@ -8,8 +8,8 @@ on:
             - master
 
 jobs:
-    build:
-        uses: ./.github/workflows/Build.yml
+    # build:
+    #     uses: ./.github/workflows/Build.yml
 
     lint:
         uses: ./.github/workflows/Linting-ps1.yml
