@@ -5,7 +5,7 @@ run-name: CD - ${{ github.run_number }} - ${{ github.ref }}
 on:
     push:
         branches:
-            - master
+            - main
 
 jobs:
     build:
@@ -25,10 +25,7 @@ jobs:
               with:
                   pattern: terminal-games-*
 
-            - name: Set release tag name
-              run: echo "tag=terminal-games-$(date +%Y-%m-%d)-(${{ github.run_number }})" >> $GITHUB_ENV
-
             - name: Create new release
-              run: gh release create "${{ env.tag }}" ./terminal-games-macos-latest/terminal-games-macos-latest ./terminal-games-ubuntu-latest/terminal-games-ubuntu-latest ./terminal-games-windows-latest/terminal-games-windows-latest.exe --generate-notes --latest
+              run: gh release create "terminal-games-$(date +%Y-%m-%d)-(${{ github.run_number }})" ./terminal-games-macos-latest/terminal-games-macos-latest ./terminal-games-ubuntu-latest/terminal-games-ubuntu-latest ./terminal-games-windows-latest/terminal-games-windows-latest.exe --generate-notes --latest
               env:
                   GH_TOKEN: ${{ github.token }}
