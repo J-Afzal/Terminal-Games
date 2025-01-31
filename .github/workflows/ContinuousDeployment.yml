@@ -24,13 +24,15 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
-
             - uses: actions/download-artifact@v4
               with:
                   pattern: terminal-games-*
 
             - name: Delete any releases with todays date
               run: |
+                $ErrorActionPreference = "Stop"
+                $InformationPreference = "Continue"
+
                 Write-Information "##[command]Getting current tags..."
                 $currentTags = git tag
 
