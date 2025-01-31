@@ -3,6 +3,9 @@ name: Continuous Deployment
 run-name: CD - ${{ github.run_number }} - ${{ github.ref }}
 
 on:
+    pull_request:
+        branches:
+            - master
     push:
         branches:
             - master
@@ -26,6 +29,6 @@ jobs:
                   pattern: terminal-games-*
 
             - name: Create new release
-              run: gh release create "terminal-games-$(date +%Y-%m-%d)-(${{ github.run_number }})" ./terminal-games-macos-latest/terminal-games-macos-latest ./terminal-games-ubuntu-latest/terminal-games-ubuntu-latest ./terminal-games-windows-latest/terminal-games-windows-latest.exe --generate-notes --latest
+              run: gh release create "terminal-games-$(date +%Y-%m-%d)" ./terminal-games-macos-latest/terminal-games-macos-latest ./terminal-games-ubuntu-latest/terminal-games-ubuntu-latest ./terminal-games-windows-latest/terminal-games-windows-latest.exe --generate-notes --latest --draft
               env:
                   GH_TOKEN: ${{ github.token }}
