@@ -19,21 +19,40 @@ jobs:
         runs-on: ubuntu-latest
         defaults:
             run:
-                shell: bash
+                shell: pwsh
 
         steps:
             - uses: actions/checkout@v4
+
 
             - uses: actions/download-artifact@v4
               with:
                   pattern: terminal-games-*
 
-            - name: Delete any releases with current tag
-              run: gh release delete "terminal-games-$(date +%Y-%m-%d)" --cleanup-tag --yes
+            - name: Delete any releases with todays date
+              run: |
+                Write-Information "##[command]Getting current tags..."
+                $currentTags = git tag
+
+                Write-Information "##[debug]Current tags are:"
+                $currentTags | ForEach-Object { "    ##[debug]$_" }
+
+                Write-Information "##[command]Check if todays tag already exists..."
+                $releaseExistsToday = $false
+                $currentDate = Get-Date -Format "yyyy-MM-dd"
+                $currentTags | ForEach-Object { if ($_.Contains($currentDate) { $releaseExistsToday = $true } }
+
+                if ($releaseExistsToday) {
+                    Write-Information "##[command]Deleting todays tags..."
+                    gh release delete "terminal-games-$currentDate" --cleanup-tag --yes
+                }
+
               env:
                   GH_TOKEN: ${{ github.token }}
 
-            # - name: Create new release
-            #   run: gh release create "terminal-games-$(date +%Y-%m-%d)" ./terminal-games-macos-latest/terminal-games-macos-latest ./terminal-games-ubuntu-latest/terminal-games-ubuntu-latest ./terminal-games-windows-latest/terminal-games-windows-latest.exe --generate-notes --latest --draft
-            #   env:
-            #       GH_TOKEN: ${{ github.token }}
+            - name: Create new release
+              run: |
+                $currentDate = Get-Date -Format "yyyy-MM-dd"
+                gh release create "terminal-games-$currentDate" ./terminal-games-macos-latest/terminal-games-macos-latest ./terminal-games-ubuntu-latest/terminal-games-ubuntu-latest ./terminal-games-windows-latest/terminal-games-windows-latest.exe --generate-notes --latest --title "Terminal Games $currentDate" --draft
+              env:
+                  GH_TOKEN: ${{ github.token }}
