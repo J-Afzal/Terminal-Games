@@ -28,9 +28,12 @@ jobs:
               with:
                   pattern: terminal-games-*
 
-            - name: Create new release
-              run: gh release create "terminal-games-$(date +%Y-%m-%d)" ./terminal-games-macos-latest/terminal-games-macos-latest ./terminal-games-ubuntu-latest/terminal-games-ubuntu-latest ./terminal-games-windows-latest/terminal-games-windows-latest.exe --generate-notes --latest --draft
+            - name: Delete any releases with current tag
+              run: gh release delete "terminal-games-$(date +%Y-%m-%d)" --cleanup-tag --yes
               env:
                   GH_TOKEN: ${{ github.token }}
 
-                  
+            # - name: Create new release
+            #   run: gh release create "terminal-games-$(date +%Y-%m-%d)" ./terminal-games-macos-latest/terminal-games-macos-latest ./terminal-games-ubuntu-latest/terminal-games-ubuntu-latest ./terminal-games-windows-latest/terminal-games-windows-latest.exe --generate-notes --latest --draft
+            #   env:
+            #       GH_TOKEN: ${{ github.token }}
