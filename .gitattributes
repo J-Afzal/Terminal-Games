@@ -6,6 +6,7 @@
 *.hpp           text        diff=cpp
 
 # Config
+.editorconfig   text
 .gitattributes  text
 .gitignore      text
 .gitmodules     text
