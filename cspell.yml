@@ -1,0 +1,21 @@
+version: "0.2"
+language: en-gb
+dictionaries:
+    - cpp
+    - powershell
+ignorePaths:
+    - .vs/
+    - .vscode/
+    - build/
+    - package-lock.json
+words:
+    - afzal
+    - bugprone
+    - linters
+ignoreWords:
+    - choco
+    - defenses
+    - nolint
+    - noncommercially
+    - tictactoe
+    - wasd

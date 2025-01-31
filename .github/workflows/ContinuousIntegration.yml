@@ -8,6 +8,9 @@ on:
             - master
 
 jobs:
+    build:
+        uses: ./.github/workflows/Build.yml
+
     lint:
         uses: J-Afzal/Linters/.github/workflows/Linting-PowerShell.yml@main
         with:
