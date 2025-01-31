@@ -40,7 +40,7 @@ jobs:
                 Write-Information "##[command]Check if todays tag already exists..."
                 $releaseExistsToday = $false
                 $currentDate = Get-Date -Format "yyyy-MM-dd"
-                $currentTags | ForEach-Object { if ($_.Contains($currentDate) { $releaseExistsToday = $true } }
+                $currentTags | ForEach-Object { if ($_.Contains($currentDate)) { $releaseExistsToday = $true } }
 
                 if ($releaseExistsToday) {
                     Write-Information "##[command]Deleting todays tags..."
