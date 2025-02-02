@@ -142,8 +142,6 @@ On windows, clang-tidy and clang-format can be installed using the `LLVM-x.x.x-w
 
 <!--
 
-    Adjust awesome doxygen themes with all the exta stuff and custom colours theme
-
     Add build to CI with artifact to check against what has been comitted. Maybe add flag for C++ project steps only?
     Add publish to GH pages in CD (test in CI first)
     Update readme to link to GH pages docs and provide screenshot?
