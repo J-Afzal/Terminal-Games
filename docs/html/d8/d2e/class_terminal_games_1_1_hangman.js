@@ -31,8 +31,8 @@ var class_terminal_games_1_1_hangman =
     [ "m_wordToBeGuessed", "d8/d2e/class_terminal_games_1_1_hangman.html#ae6c0d1bd9739daf4b463f769cd00b416", null ],
     [ "m_computerSpeed", "d8/d2e/class_terminal_games_1_1_hangman.html#a6c4c553e08f03b956d3c108a10dcd24a", null ],
     [ "m_turnCount", "d8/d2e/class_terminal_games_1_1_hangman.html#a17652cfdc2332ddab57a55e4d80a77a1", null ],
-    [ "m_currentGuess", "d8/d2e/class_terminal_games_1_1_hangman.html#ab2293b20310485b118307840ee4c0f2f", null ],
+    [ "m_currentLetterSelected", "d8/d2e/class_terminal_games_1_1_hangman.html#afbb8d316bb1461e934320b2ad9c38a6d", null ],
     [ "m_hasSavedGameOptions", "d8/d2e/class_terminal_games_1_1_hangman.html#ac78b26d584d8927fded07c72ee99a19b", null ],
-    [ "m_hasWinner", "d8/d2e/class_terminal_games_1_1_hangman.html#a79f6991cdb269e6aa412dce659a4c9c1", null ],
+    [ "m_isGameOver", "d8/d2e/class_terminal_games_1_1_hangman.html#a7a3cb32010bf0fb2d86fc5962e2f3814", null ],
     [ "m_saveGameOptions", "d8/d2e/class_terminal_games_1_1_hangman.html#adafbb6823958523606dcba0de797f36c", null ]
 ];

@@ -38,6 +38,7 @@ var NAVTREE =
     [ "Development Setup", "index.html#autotoc_md10", [
       [ "Notes", "index.html#autotoc_md11", null ]
     ] ],
+    [ "Bug List", "de/da5/bug.html", null ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [
@@ -70,9 +71,9 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "annotated.html",
-"d5/d50/namespace_terminal_games_1_1_globals.html#a790201d6bfc3aef83d2aef669cddd2a5",
-"d8/d2e/class_terminal_games_1_1_hangman.html#a1cc15208b6ab059e8b63be2f54364b8a",
-"namespacemembers_enum.html"
+"d5/d50/namespace_terminal_games_1_1_globals.html#a76f385a948348d16291817b61bac2a11",
+"d8/d2e/class_terminal_games_1_1_hangman.html",
+"index.html#autotoc_md5"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

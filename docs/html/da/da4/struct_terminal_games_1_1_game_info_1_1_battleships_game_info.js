@@ -1,9 +1,9 @@
 var struct_terminal_games_1_1_game_info_1_1_battleships_game_info =
 [
-    [ "m_boardOne", "da/da4/struct_terminal_games_1_1_game_info_1_1_battleships_game_info.html#ad1805f9434646c1d79bbd986bc77c4f3", null ],
-    [ "m_boardTwo", "da/da4/struct_terminal_games_1_1_game_info_1_1_battleships_game_info.html#a329448f5b878b3a3608b8a0f51c038d9", null ],
-    [ "m_shipsRemainingOne", "da/da4/struct_terminal_games_1_1_game_info_1_1_battleships_game_info.html#a880a2200837aa56139106589843b5483", null ],
-    [ "m_shipsRemainingTwo", "da/da4/struct_terminal_games_1_1_game_info_1_1_battleships_game_info.html#a500866db811d2feb4d751af542b8dabc", null ],
+    [ "m_boardPlayerOne", "da/da4/struct_terminal_games_1_1_game_info_1_1_battleships_game_info.html#ada87f13f2b7b3fa775449c91698306d7", null ],
+    [ "m_boardPlayerTwo", "da/da4/struct_terminal_games_1_1_game_info_1_1_battleships_game_info.html#a3408aee303668a7185cedf94ed85dc26", null ],
+    [ "m_shipsRemainingPlayerOne", "da/da4/struct_terminal_games_1_1_game_info_1_1_battleships_game_info.html#a4b5efa5de736fa1abd1e7cd020a67e76", null ],
+    [ "m_shipsRemainingPlayerTwo", "da/da4/struct_terminal_games_1_1_game_info_1_1_battleships_game_info.html#abc85137751850650879027ad9d38b877", null ],
     [ "m_computerSpeedName", "da/da4/struct_terminal_games_1_1_game_info_1_1_battleships_game_info.html#a1129babde6439864662a95d1e8572c91", null ],
     [ "m_currentPlayer", "da/da4/struct_terminal_games_1_1_game_info_1_1_battleships_game_info.html#a822dbb6078c09fea2b830340cffca425", null ],
     [ "m_playerCount", "da/da4/struct_terminal_games_1_1_game_info_1_1_battleships_game_info.html#af86af785171e1cda28b6f0decc68f70d", null ],

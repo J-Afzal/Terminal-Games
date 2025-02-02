@@ -21,7 +21,7 @@ var class_terminal_games_1_1_tic_tac_toe =
     [ "m_pageBuilder", "d4/da0/class_terminal_games_1_1_tic_tac_toe.html#aaaea009cf739aeb3e1c64270c851ddc1", null ],
     [ "m_gameInfo", "d4/da0/class_terminal_games_1_1_tic_tac_toe.html#a8bacfd61c42c283e5e4b4587c59e329e", null ],
     [ "m_randomNumberGenerator", "d4/da0/class_terminal_games_1_1_tic_tac_toe.html#af004005d5ee1a53b2b757ea8e0a56b25", null ],
-    [ "m_gameGrid", "d4/da0/class_terminal_games_1_1_tic_tac_toe.html#a4f218f6fe412d910bc2feb33b9597c68", null ],
+    [ "m_gameGrid", "d4/da0/class_terminal_games_1_1_tic_tac_toe.html#aca497b77060281cd11e02db085b5094d", null ],
     [ "m_commandsRemaining", "d4/da0/class_terminal_games_1_1_tic_tac_toe.html#a72e08ac9fe8b9dab87130898a07b591b", null ],
     [ "m_previousCommand", "d4/da0/class_terminal_games_1_1_tic_tac_toe.html#a49cc214759df799306da9d00f9c76d72", null ],
     [ "m_computerSpeedName", "d4/da0/class_terminal_games_1_1_tic_tac_toe.html#aa422f0c1b9cad163234c7cec36b7d5d9", null ],

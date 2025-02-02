@@ -1,9 +1,9 @@
 var class_terminal_games_1_1_game =
 [
     [ "Game", "d7/db1/class_terminal_games_1_1_game.html#ad54de0cb4c9528a4a9efa9a2a3b70ff9", null ],
+    [ "~Game", "d7/db1/class_terminal_games_1_1_game.html#a1afac3cd8ced2f27035e3031bd1311cd", null ],
     [ "Game", "d7/db1/class_terminal_games_1_1_game.html#a990ec85527e09aa0d999714d661c1cee", null ],
     [ "Game", "d7/db1/class_terminal_games_1_1_game.html#a0ff77c3074d5f300fe962e5f5eede5f8", null ],
-    [ "~Game", "d7/db1/class_terminal_games_1_1_game.html#a1afac3cd8ced2f27035e3031bd1311cd", null ],
     [ "operator=", "d7/db1/class_terminal_games_1_1_game.html#a333ae552180cc24ff602294270483b1b", null ],
     [ "operator=", "d7/db1/class_terminal_games_1_1_game.html#a1f6c10d764d07dcfa6ec5f78fc59cb81", null ],
     [ "Play", "d7/db1/class_terminal_games_1_1_game.html#af1cada30b87c7a37ad6c7c9ef778b231", null ],
