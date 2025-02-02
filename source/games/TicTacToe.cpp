@@ -12,12 +12,11 @@
 
 namespace TerminalGames
 {
-    TicTacToe::TicTacToe(const bool& p_useAnsiEscapeCodes) :
-        m_computerSpeed(0),
-        m_turnCount(0),
-        m_hasSavedGameOptions(false),
-        m_hasWinner(false),
-        m_saveGameOptions(false)
+    TicTacToe::TicTacToe(const bool &p_useAnsiEscapeCodes) : m_computerSpeed(0),
+                                                             m_turnCount(0),
+                                                             m_hasSavedGameOptions(false),
+                                                             m_hasWinner(false),
+                                                             m_saveGameOptions(false)
     {
         m_pageBuilder.SetProperties(Pages::TICTACTOE, p_useAnsiEscapeCodes);
         m_randomNumberGenerator.seed(std::chrono::system_clock::now().time_since_epoch().count());
@@ -31,9 +30,9 @@ namespace TerminalGames
         m_turnCount = 0;
         m_hasWinner = false;
 
-        for (uint32_t row = 0; row < Globals::G_TICTACTOE_BOARD_HEIGHT; row++)
+        for (uint32_t row = 0; row < Globals::G_TICTACTOE_GRID_HEIGHT; row++)
         {
-            for (uint32_t column = 0; column < Globals::G_TICTACTOE_BOARD_WIDTH; column++)
+            for (uint32_t column = 0; column < Globals::G_TICTACTOE_GRID_WIDTH; column++)
             {
                 m_gameGrid.at(row).at(column) = Globals::G_TICTACTOE_EMPTY_GRID_VALUE;
                 m_commandsRemaining.emplace_back(row, column);
@@ -185,14 +184,14 @@ namespace TerminalGames
         m_computerSpeedName = Globals::G_GAME_COMPUTER_SPEED_OPTIONS[m_computerSpeed];
     }
 
-    bool TicTacToe::ValidateCommand(const std::tuple<uint32_t, uint32_t>& p_command)
+    bool TicTacToe::ValidateCommand(const std::tuple<uint32_t, uint32_t> &p_command)
     {
         const auto COMMAND_FIND_LOCATION = Globals::ImplementStdRangesFind(m_commandsRemaining.begin(), m_commandsRemaining.end(), p_command);
 
         return COMMAND_FIND_LOCATION != m_commandsRemaining.end();
     }
 
-    void TicTacToe::ExecuteGeneralCommand(const std::tuple<uint32_t, uint32_t>& p_command)
+    void TicTacToe::ExecuteGeneralCommand(const std::tuple<uint32_t, uint32_t> &p_command)
     {
         const auto COMMAND_FIND_LOCATION = Globals::ImplementStdRangesFind(m_commandsRemaining.begin(), m_commandsRemaining.end(), p_command);
         const uint32_t ROW = std::get<0>(p_command);

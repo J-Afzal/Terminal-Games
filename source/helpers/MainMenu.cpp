@@ -15,14 +15,14 @@
 
 namespace TerminalGames
 {
-    MainMenu::MainMenu(const std::vector<std::string>& p_commandLineArguments) :
-        m_useAnsiEscapeCodes(ParseCommandLineArguments(p_commandLineArguments))
+    MainMenu::MainMenu(const bool& p_useAnsiEscapeCodes) :
+        m_useAnsiEscapeCodes(p_useAnsiEscapeCodes)
     {
         SetupHomepages();
     }
 
-    MainMenu::MainMenu(const bool& p_useAnsiEscapeCodes) :
-        m_useAnsiEscapeCodes(p_useAnsiEscapeCodes)
+    MainMenu::MainMenu(const std::vector<std::string>& p_commandLineArguments) :
+        m_useAnsiEscapeCodes(ParseCommandLineArguments(p_commandLineArguments))
     {
         SetupHomepages();
     }

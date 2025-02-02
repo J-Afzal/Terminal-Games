@@ -16,13 +16,12 @@
 
 namespace TerminalGames
 {
-    Hangman::Hangman(const bool& p_useAnsiEscapeCodes) :
-        m_computerSpeed(0),
-        m_turnCount(0),
-        m_currentGuess(0),
-        m_hasSavedGameOptions(false),
-        m_hasWinner(false),
-        m_saveGameOptions(false)
+    Hangman::Hangman(const bool &p_useAnsiEscapeCodes) : m_computerSpeed(0),
+                                                         m_turnCount(0),
+                                                         m_currentLetterSelected(0),
+                                                         m_hasSavedGameOptions(false),
+                                                         m_isGameOver(false),
+                                                         m_saveGameOptions(false)
     {
         m_pageBuilder.SetProperties(Pages::HANGMAN, p_useAnsiEscapeCodes);
         m_randomNumberGenerator.seed(std::chrono::system_clock::now().time_since_epoch().count());
@@ -30,13 +29,13 @@ namespace TerminalGames
 
     void Hangman::SetupGame()
     {
-        m_commandsRemaining = Globals::G_HANGMAN_LETTERS_OF_THE_ALPHABET;
-        m_currentGuess = Globals::G_HANGMAN_LETTERS_OF_THE_ALPHABET[0];
+        m_commandsRemaining = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+        m_currentLetterSelected = 'A';
         m_incorrectGuesses.clear();
         m_currentGuessOfWord = "";
         m_wordToBeGuessed = "";
         m_turnCount = 0;
-        m_hasWinner = false;
+        m_isGameOver = false;
     }
 
     void Hangman::GetUserOptions()
@@ -85,8 +84,8 @@ namespace TerminalGames
             .m_playerCount = m_playerCount,
             .m_wordToBeGuessed = m_wordToBeGuessed,
             .m_turnCount = m_turnCount,
-            .m_currentGuess = m_currentGuess,
-            .m_hasWinner = m_hasWinner,
+            .m_currentLetterSelected = m_currentLetterSelected,
+            .m_isGameOver = m_isGameOver,
         };
     }
 
@@ -94,8 +93,8 @@ namespace TerminalGames
     {
         if (m_incorrectGuesses.size() == Globals::G_HANGMAN_MAXIMUM_ERROR_COUNT)
         {
-            m_hasWinner = true;
-            return m_hasWinner;
+            m_isGameOver = true;
+            return m_isGameOver;
         }
 
         for (uint32_t i = 0; i < m_wordToBeGuessed.size(); i++)
@@ -106,8 +105,8 @@ namespace TerminalGames
             }
         }
 
-        m_hasWinner = true;
-        return m_hasWinner;
+        m_isGameOver = true;
+        return m_isGameOver;
     }
 
     void Hangman::ToggleCurrentPlayer() {}
@@ -124,7 +123,7 @@ namespace TerminalGames
 
         while (true)
         {
-            m_gameInfo.m_hangmanGameInfo.m_currentGuess = m_commandsRemaining[currentSelection];
+            m_gameInfo.m_hangmanGameInfo.m_currentLetterSelected = m_commandsRemaining[currentSelection];
 
             Terminal::PrintOutput(m_pageBuilder.GetUserCommandPage(m_gameInfo));
 
@@ -257,7 +256,7 @@ namespace TerminalGames
         m_wordToBeGuessed = Globals::G_HANGMAN_COMPUTER_WORDS.at(m_randomNumberGenerator() % Globals::G_HANGMAN_COMPUTER_WORDS.size());
     }
 
-    void Hangman::ExecuteGeneralCommand(const char& p_guess)
+    void Hangman::ExecuteGeneralCommand(const char &p_guess)
     {
         bool isGuessCorrect = false;
 

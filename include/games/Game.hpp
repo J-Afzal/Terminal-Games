@@ -2,54 +2,59 @@
 
 #include "helpers/Globals.hpp"
 
+/**
+ * @namespace TerminalGames
+ * @brief Contains all Terminal-Games objects.
+ */
 namespace TerminalGames
 {
     /**
+     * @class Game
      * @brief Base class for all games.
      */
     class Game
     {
     public:
         /**
-         * @brief Constructs a new Game object
+         * @brief Constructs a new Game object.
          */
         Game() = default;
+
+        /**
+         * @brief Destructs the Game object.
+         */
+        virtual ~Game() = default;
 
         /**
          * @brief Disable constructing a new Game object using copy constructor.
          *
          * @param p_game The game to copy.
          */
-        Game(const Game& p_game) = delete;
+        Game(const Game &p_game) = delete;
 
         /**
          * @brief Disable constructing a new Game object using move constructor.
          *
          * @param p_game The game to copy.
          */
-        Game(const Game&& p_game) = delete;
+        Game(const Game &&p_game) = delete;
 
         /**
          * @brief Disable constructing a new Game object using copy assignment operator.
          *
          * @param p_game The game to copy.
          */
-        Game& operator=(const Game& p_game) = delete;
+        Game &operator=(const Game &p_game) = delete;
 
         /**
          * @brief Disable constructing a new Game object using move assignment operator.
          *
          * @param p_game The game to copy.
          */
-        Game& operator=(const Game&& p_game) = delete;
+        Game &operator=(const Game &&p_game) = delete;
 
         /**
-         * @brief Destroy the Game object
-         */
-        virtual ~Game() = default;
-
-        /**
-         * @brief The orchestration loop for all games.
+         * @brief The main orchestration loop for all games.
          */
         virtual void Play() final
         {
@@ -89,12 +94,12 @@ namespace TerminalGames
                     GameOver();
                 }
 
-                catch (Globals::Exceptions::RestartGame& e)
+                catch (Globals::Exceptions::RestartGame &e)
                 {
                     RestartGame();
                 }
 
-                catch (Globals::Exceptions::ResetGame& e)
+                catch (Globals::Exceptions::ResetGame &e)
                 {
                     ResetGame();
                 }
@@ -113,7 +118,7 @@ namespace TerminalGames
         virtual void GetUserOptions() = 0;
 
         /**
-         * @brief Updates the gameInfo struct (used by the PageBuilder class).
+         * @brief Updates GameInfo to match the current state of the game.
          */
         virtual void UpdateGameInfo() = 0;
 

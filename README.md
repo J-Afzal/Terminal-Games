@@ -32,7 +32,7 @@ Generic Options:
 
 terminal-games options:
 
-  --a --ascii-only  Only use ASCII characters (this removes all colour).
+  --a --ascii-only  Only use extended ASCII characters (this removes all colour).
 ```
 
 ## General Information
@@ -142,22 +142,30 @@ On windows, clang-tidy and clang-format can be installed using the `LLVM-x.x.x-w
 
 <!--
 
-TODO - Terminal Games
+    Adjust awesome doxygen themes with all the exta stuff and custom colours theme
 
-Doxygen
-    Add build to CI with artifact to check.
-    Add build and publish to CD and publish to GH pages (maybe commit to repo but make sure no infinite loop)
-    Update readme to link to GH pages docs
+    Add build to CI with artifact to check against what has been comitted. Maybe add flag for C++ project steps only?
+    Add publish to GH pages in CD (test in CI first)
+    Update readme to link to GH pages docs and provide screenshot?
 
 -----
 
-zig build system???
 Performance profile code to see where performance lost in battleships
 
 ------
 
-unit test all the things
+change master to main
 
-change master to main?
+------
+
+unit test all the things in terminal games
+
+------
+
+unit test all the things in linters
+
+------
+
+linters unit testing
 
 -->
