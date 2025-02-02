@@ -26,7 +26,7 @@ namespace TerminalGames
          *
          * @param p_useAnsiEscapeCodes Whether to use use ANSI escapes codes (true) or only extended ASCII characters (false).
          */
-        explicit Hangman(const bool &p_useAnsiEscapeCodes);
+        explicit Hangman(const bool& p_useAnsiEscapeCodes);
 
     private:
         /**
@@ -102,7 +102,7 @@ namespace TerminalGames
          *
          * @param p_guess A single-letter to check against the word to be guessed.
          */
-        void ExecuteGeneralCommand(const char &p_guess);
+        void ExecuteGeneralCommand(const char& p_guess);
 
         /**
          * @brief Used to build pages required by the game.

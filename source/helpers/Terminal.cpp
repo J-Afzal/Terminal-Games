@@ -7,8 +7,8 @@
 #include <vector>
 
 #ifdef _WIN32
-#include "conio.h"
-#include "Windows.h"
+    #include "conio.h"
+    #include "Windows.h"
 #endif
 
 #include "helpers/Globals.hpp"
@@ -17,7 +17,7 @@
 
 namespace TerminalGames
 {
-    bool Terminal::GetUserChoiceFromHomepage(const std::vector<std::string> &p_menus, const bool &p_useAnsiEscapeCodes)
+    bool Terminal::GetUserChoiceFromHomepage(const std::vector<std::string>& p_menus, const bool& p_useAnsiEscapeCodes)
     {
         // Yes option selected is at index 0 and No option selected is at index 1. Therefore, can convert the current selected
         // index to a bool and invert it to get whether to use ANSI escape codes.
@@ -49,7 +49,7 @@ namespace TerminalGames
         }
     }
 
-    uint32_t Terminal::GetUserChoiceFromMainMenus(const std::vector<std::string> &p_menus)
+    uint32_t Terminal::GetUserChoiceFromMainMenus(const std::vector<std::string>& p_menus)
     {
         uint32_t currentSelection = 0;
 
@@ -79,7 +79,7 @@ namespace TerminalGames
         }
     }
 
-    uint32_t Terminal::GetUserChoiceFromGameMenus(const std::vector<std::string> &p_menus, const std::vector<std::string> &p_quitOptionMenus)
+    uint32_t Terminal::GetUserChoiceFromGameMenus(const std::vector<std::string>& p_menus, const std::vector<std::string>& p_quitOptionMenus)
     {
         uint32_t currentSelection = 0;
 
@@ -111,10 +111,10 @@ namespace TerminalGames
     }
 
     std::tuple<uint32_t, uint32_t> Terminal::GetUserCommandFromGameGrid(
-        const std::tuple<uint32_t, uint32_t> &p_startingGridLocation,
-        const PageBuilder &p_pageBuilder,
-        const GameInfo &p_gameInfo,
-        const bool &p_displayGetUserCommandPage)
+        const std::tuple<uint32_t, uint32_t>& p_startingGridLocation,
+        const PageBuilder& p_pageBuilder,
+        const GameInfo& p_gameInfo,
+        const bool& p_displayGetUserCommandPage)
     {
         if (Globals::G_PLATFORM_IS_WINDOWS)
         {
@@ -125,10 +125,10 @@ namespace TerminalGames
     }
 
     std::tuple<uint32_t, uint32_t> Terminal::GetUserCommandFromGameGridWindows(
-        const std::tuple<uint32_t, uint32_t> &p_startingGridLocation,
-        const PageBuilder &p_pageBuilder,
-        const GameInfo &p_gameInfo,
-        const bool &p_displayGetUserCommandPage)
+        const std::tuple<uint32_t, uint32_t>& p_startingGridLocation,
+        const PageBuilder& p_pageBuilder,
+        const GameInfo& p_gameInfo,
+        const bool& p_displayGetUserCommandPage)
     {
         PageBuilder pageBuilder = p_pageBuilder;
         uint32_t currentRow = std::get<0>(p_startingGridLocation);
@@ -217,10 +217,10 @@ namespace TerminalGames
     }
 
     std::tuple<uint32_t, uint32_t> Terminal::GetUserCommandFromGameGridNonWindows(
-        const std::tuple<uint32_t, uint32_t> &p_startingGridLocation,
-        const PageBuilder &p_pageBuilder,
-        const GameInfo &p_gameInfo,
-        const bool &p_displayGetUserCommandPage)
+        const std::tuple<uint32_t, uint32_t>& p_startingGridLocation,
+        const PageBuilder& p_pageBuilder,
+        const GameInfo& p_gameInfo,
+        const bool& p_displayGetUserCommandPage)
     {
         const Pages CURRENT_PAGE_TYPE = p_pageBuilder.GetCurrentPageType();
         PageBuilder pageBuilder = p_pageBuilder;
@@ -307,7 +307,7 @@ namespace TerminalGames
         }
     }
 
-    void Terminal::GetUserChoiceFromGameOverMenu(const std::string &p_gameOverPage, const std::vector<std::string> &p_quitOptionMenus)
+    void Terminal::GetUserChoiceFromGameOverMenu(const std::string& p_gameOverPage, const std::vector<std::string>& p_quitOptionMenus)
     {
         while (true)
         {
@@ -328,7 +328,7 @@ namespace TerminalGames
         }
     }
 
-    void Terminal::GetUserChoiceFromQuitMenus(const std::vector<std::string> &p_menus)
+    void Terminal::GetUserChoiceFromQuitMenus(const std::vector<std::string>& p_menus)
     {
         uint32_t currentSelection = 0;
 
@@ -377,7 +377,7 @@ namespace TerminalGames
         }
     }
 
-    void Terminal::PrintOutput(const std::string &p_output)
+    void Terminal::PrintOutput(const std::string& p_output)
     {
         Clear();
         std::cout << p_output;
@@ -469,7 +469,7 @@ namespace TerminalGames
 #endif
     }
 
-    void Terminal::SetCursorVisibility(const bool &p_cursorVisibility)
+    void Terminal::SetCursorVisibility(const bool& p_cursorVisibility)
     {
 #ifdef _WIN32
         const CONSOLE_CURSOR_INFO CURSOR_INFO(Globals::G_TERMINAL_CURSOR_WIDTH_PERCENTAGE, static_cast<int>(p_cursorVisibility));
@@ -477,7 +477,7 @@ namespace TerminalGames
 #endif
     }
 
-    void Terminal::SetCursorPosition(const int16_t &p_xCoord, const int16_t &p_yCoord)
+    void Terminal::SetCursorPosition(const int16_t& p_xCoord, const int16_t& p_yCoord)
     {
 #ifdef _WIN32
         const COORD CURSOR_POSITION(p_xCoord, p_yCoord);

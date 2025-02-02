@@ -16,12 +16,13 @@
 
 namespace TerminalGames
 {
-    Hangman::Hangman(const bool &p_useAnsiEscapeCodes) : m_computerSpeed(0),
-                                                         m_turnCount(0),
-                                                         m_currentLetterSelected(0),
-                                                         m_hasSavedGameOptions(false),
-                                                         m_isGameOver(false),
-                                                         m_saveGameOptions(false)
+    Hangman::Hangman(const bool& p_useAnsiEscapeCodes) :
+        m_computerSpeed(0),
+        m_turnCount(0),
+        m_currentLetterSelected(0),
+        m_hasSavedGameOptions(false),
+        m_isGameOver(false),
+        m_saveGameOptions(false)
     {
         m_pageBuilder.SetProperties(Pages::HANGMAN, p_useAnsiEscapeCodes);
         m_randomNumberGenerator.seed(std::chrono::system_clock::now().time_since_epoch().count());
@@ -256,7 +257,7 @@ namespace TerminalGames
         m_wordToBeGuessed = Globals::G_HANGMAN_COMPUTER_WORDS.at(m_randomNumberGenerator() % Globals::G_HANGMAN_COMPUTER_WORDS.size());
     }
 
-    void Hangman::ExecuteGeneralCommand(const char &p_guess)
+    void Hangman::ExecuteGeneralCommand(const char& p_guess)
     {
         bool isGuessCorrect = false;
 

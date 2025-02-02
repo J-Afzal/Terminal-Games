@@ -10,26 +10,28 @@
 
 namespace TerminalGames
 {
-    PageBuilder::PageBuilder() : m_pageWidth(0),
-                                 m_pageHeight(0),
-                                 m_lineMaximumCharacterCount(0),
-                                 m_minimumLeftPadding(0),
-                                 m_minimumRightPadding(0),
-                                 m_useAnsiEscapeCodes(false),
-                                 m_currentPage(Pages::DEFAULT) {}
+    PageBuilder::PageBuilder() :
+        m_pageWidth(0),
+        m_pageHeight(0),
+        m_lineMaximumCharacterCount(0),
+        m_minimumLeftPadding(0),
+        m_minimumRightPadding(0),
+        m_useAnsiEscapeCodes(false),
+        m_currentPage(Pages::DEFAULT) {}
 
-    PageBuilder::PageBuilder(const Pages &p_page, const bool &p_useAnsiEscapeCodes) : m_pageWidth(0),
-                                                                                      m_pageHeight(0),
-                                                                                      m_lineMaximumCharacterCount(0),
-                                                                                      m_minimumLeftPadding(0),
-                                                                                      m_minimumRightPadding(0),
-                                                                                      m_useAnsiEscapeCodes(false),
-                                                                                      m_currentPage(Pages::DEFAULT)
+    PageBuilder::PageBuilder(const Pages& p_page, const bool& p_useAnsiEscapeCodes) :
+        m_pageWidth(0),
+        m_pageHeight(0),
+        m_lineMaximumCharacterCount(0),
+        m_minimumLeftPadding(0),
+        m_minimumRightPadding(0),
+        m_useAnsiEscapeCodes(false),
+        m_currentPage(Pages::DEFAULT)
     {
         SetProperties(p_page, p_useAnsiEscapeCodes);
     }
 
-    void PageBuilder::SetProperties(const Pages &p_page, const bool &p_useAnsiEscapeCodes)
+    void PageBuilder::SetProperties(const Pages& p_page, const bool& p_useAnsiEscapeCodes)
     {
         m_currentPage = p_page;
         m_useAnsiEscapeCodes = p_useAnsiEscapeCodes;
@@ -127,7 +129,7 @@ namespace TerminalGames
         return output;
     }
 
-    std::vector<std::string> PageBuilder::GetGameSelectionMainMenuPages(const std::vector<std::string> &p_gameNames) const
+    std::vector<std::string> PageBuilder::GetGameSelectionMainMenuPages(const std::vector<std::string>& p_gameNames) const
     {
         const std::string COMMON_TOP_STRING = GetTopBox() + GetTopLine();
         const std::string COMMON_BOTTOM_STRING = GetBottomLine() + GetBottomBox();
@@ -135,7 +137,7 @@ namespace TerminalGames
         return GetGeneralOptionSelectionPages(p_gameNames, COMMON_TOP_STRING, COMMON_BOTTOM_STRING, true, true, true);
     }
 
-    std::vector<std::string> PageBuilder::GetPlayerCountOptionSelectionGamePages(const GameInfo &p_gameInfo)
+    std::vector<std::string> PageBuilder::GetPlayerCountOptionSelectionGamePages(const GameInfo& p_gameInfo)
     {
         switch (m_currentPage)
         {
@@ -151,7 +153,7 @@ namespace TerminalGames
         }
     }
 
-    std::vector<std::string> PageBuilder::GetUserPlayerChoiceOptionSelectionGamePages(const GameInfo &p_gameInfo)
+    std::vector<std::string> PageBuilder::GetUserPlayerChoiceOptionSelectionGamePages(const GameInfo& p_gameInfo)
     {
         switch (m_currentPage)
         {
@@ -166,7 +168,7 @@ namespace TerminalGames
         }
     }
 
-    std::vector<std::string> PageBuilder::GetComputerSpeedOptionSelectionGamePages(const GameInfo &p_gameInfo)
+    std::vector<std::string> PageBuilder::GetComputerSpeedOptionSelectionGamePages(const GameInfo& p_gameInfo)
     {
         switch (m_currentPage)
         {
@@ -180,7 +182,7 @@ namespace TerminalGames
         }
     }
 
-    std::string PageBuilder::GetPageWithMessage(const GameInfo &p_gameInfo, const std::string &p_message)
+    std::string PageBuilder::GetPageWithMessage(const GameInfo& p_gameInfo, const std::string& p_message)
     {
         const std::string COMMON_TOP_STRING = GetTopBox() + GetTopLine() + GetGeneralGameSubPage(p_gameInfo) + GetEmptyLine() + GetNewLineLeftJustified(p_message);
         const std::string COMMON_BOTTOM_STRING = GetBottomLine() + GetBottomBox();
@@ -188,7 +190,7 @@ namespace TerminalGames
         return COMMON_TOP_STRING + GetRemainingEmptyLines(COMMON_TOP_STRING, COMMON_BOTTOM_STRING) + COMMON_BOTTOM_STRING;
     }
 
-    std::string PageBuilder::GetUserCommandPage(const GameInfo &p_gameInfo)
+    std::string PageBuilder::GetUserCommandPage(const GameInfo& p_gameInfo)
     {
         switch (m_currentPage)
         {
@@ -206,7 +208,7 @@ namespace TerminalGames
         }
     }
 
-    std::string PageBuilder::GetComputerCommandPage(const GameInfo &p_gameInfo)
+    std::string PageBuilder::GetComputerCommandPage(const GameInfo& p_gameInfo)
     {
         switch (m_currentPage)
         {
@@ -220,7 +222,7 @@ namespace TerminalGames
         }
     }
 
-    std::string PageBuilder::GetGameOverPage(const GameInfo &p_gameInfo)
+    std::string PageBuilder::GetGameOverPage(const GameInfo& p_gameInfo)
     {
         std::string topString = GetTopBox() + GetTopLine() + GetGeneralGameSubPage(p_gameInfo) + GetEmptyLine() + GetNewLineCentred("GAME OVER") + GetEmptyLine();
         const std::string BOTTOM_STRING = GetEmptyLine() + GetNewLineCentred("Press 'r' to restart game OR any key to reset game...") + GetBottomLine() + GetBottomBox();
@@ -269,7 +271,7 @@ namespace TerminalGames
         return GetGeneralOptionSelectionPages(Globals::G_QUIT_MENU_OPTIONS, COMMON_TOP_STRING, COMMON_BOTTOM_STRING, true, true, true);
     }
 
-    std::string PageBuilder::AddColour(const std::string &p_input, const Globals::Colours &p_colour) const
+    std::string PageBuilder::AddColour(const std::string& p_input, const Globals::Colours& p_colour) const
     {
         if (!m_useAnsiEscapeCodes)
         {
@@ -279,11 +281,11 @@ namespace TerminalGames
         return Globals::G_PAGE_ANSI_ALL_COLOUR_ESCAPE_CODES.at(static_cast<uint8_t>(p_colour)) + p_input + Globals::G_PAGE_ANSI_WHITE_COLOUR_ESCAPE_CODE;
     }
 
-    std::string PageBuilder::RemoveColour(const std::string &p_input)
+    std::string PageBuilder::RemoveColour(const std::string& p_input)
     {
         std::string output = p_input;
 
-        for (const std::string &currentAnsiColourEscapeCode : Globals::G_PAGE_ANSI_ALL_COLOUR_ESCAPE_CODES)
+        for (const std::string& currentAnsiColourEscapeCode : Globals::G_PAGE_ANSI_ALL_COLOUR_ESCAPE_CODES)
         {
             Globals::RemoveSubString(output, currentAnsiColourEscapeCode);
         }
@@ -301,7 +303,7 @@ namespace TerminalGames
         return output + Globals::G_PAGE_VERTICAL_LINE + '\n';
     }
 
-    std::string PageBuilder::GetNewLineCentred(const std::string &p_input, const Globals::Colours &p_colour, const std::string &p_selector) const
+    std::string PageBuilder::GetNewLineCentred(const std::string& p_input, const Globals::Colours& p_colour, const std::string& p_selector) const
     {
         static const double DIVISOR = 2;
 
@@ -330,7 +332,7 @@ namespace TerminalGames
         return output + Globals::G_PAGE_VERTICAL_LINE + '\n';
     }
 
-    std::string PageBuilder::GetNewLineLeftJustified(const std::string &p_input, const Globals::Colours &p_colour, const std::string &p_selector) const
+    std::string PageBuilder::GetNewLineLeftJustified(const std::string& p_input, const Globals::Colours& p_colour, const std::string& p_selector) const
     {
         const std::string INPUT = p_selector.empty() ? p_input : p_selector + ' ' + p_input;
 
@@ -392,7 +394,7 @@ namespace TerminalGames
         return GetTopLine() + GetNewLineCentred(m_bottomTitle, Globals::Colours::RED) + GetBottomLine() + Globals::G_PAGE_ANSI_RESET_COLOUR_ESCAPE_CODE;
     }
 
-    std::string PageBuilder::GetRemainingEmptyLines(const std::string &p_commonTopString, const std::string &p_commonBottomString) const
+    std::string PageBuilder::GetRemainingEmptyLines(const std::string& p_commonTopString, const std::string& p_commonBottomString) const
     {
         const int32_t REMAINING_LINE_COUNT = static_cast<int32_t>(m_pageHeight) - Globals::ImplementStdCount(p_commonTopString.begin(), p_commonTopString.end(), '\n') - Globals::ImplementStdCount(p_commonBottomString.begin(), p_commonBottomString.end(), '\n');
         const uint32_t EMPTY_LINES_TO_ADD_COUNT = REMAINING_LINE_COUNT < 0 ? 0 : REMAINING_LINE_COUNT;
@@ -408,12 +410,12 @@ namespace TerminalGames
     }
 
     std::vector<std::string> PageBuilder::GetGeneralOptionSelectionPages( // NOLINT(readability-function-cognitive-complexity)
-        const std::vector<std::string> &p_options,
-        const std::string &p_commonTopString,
-        const std::string &p_commonBottomString,
-        const bool &p_addEmptyLineBetweenOptions,
-        const bool &p_centerOptionsHorizontally,
-        const bool &p_centerOptionsVertically) const
+        const std::vector<std::string>& p_options,
+        const std::string& p_commonTopString,
+        const std::string& p_commonBottomString,
+        const bool& p_addEmptyLineBetweenOptions,
+        const bool& p_centerOptionsHorizontally,
+        const bool& p_centerOptionsVertically) const
     {
         const double DIVISOR = 2;
         const uint32_t EMPTY_LINES_BEFORE_OPTIONS = static_cast<uint32_t>(floor(static_cast<double>(m_pageHeight - Globals::ImplementStdCount(p_commonTopString.begin(), p_commonTopString.end(), '\n') - Globals::ImplementStdCount(p_commonBottomString.begin(), p_commonBottomString.end(), '\n') - (2 * p_options.size() - 1)) / DIVISOR));
@@ -491,7 +493,7 @@ namespace TerminalGames
         return output;
     }
 
-    std::vector<std::string> PageBuilder::GetGameOptionSelectionPages(const GameInfo &p_gameInfo, const std::string &p_message, const std::vector<std::string> &p_options)
+    std::vector<std::string> PageBuilder::GetGameOptionSelectionPages(const GameInfo& p_gameInfo, const std::string& p_message, const std::vector<std::string>& p_options)
     {
         const std::string COMMON_TOP_STRING = GetTopBox() + GetTopLine() + GetGeneralGameSubPage(p_gameInfo) + GetEmptyLine() + GetNewLineLeftJustified(p_message);
         const std::string COMMON_BOTTOM_STRING = GetBottomLine() + GetBottomBox();
@@ -499,7 +501,7 @@ namespace TerminalGames
         return GetGeneralOptionSelectionPages(p_options, COMMON_TOP_STRING, COMMON_BOTTOM_STRING, false, false, false);
     }
 
-    std::string PageBuilder::GetGeneralGameSubPage(const GameInfo &p_gameInfo)
+    std::string PageBuilder::GetGeneralGameSubPage(const GameInfo& p_gameInfo)
     {
         switch (m_currentPage)
         {
@@ -517,7 +519,7 @@ namespace TerminalGames
         }
     }
 
-    std::string PageBuilder::GetTicTacToeSubPage(const GameInfo &p_gameInfo)
+    std::string PageBuilder::GetTicTacToeSubPage(const GameInfo& p_gameInfo)
     {
         // leftGridLines and RIGHT_GRID_STRINGS vectors must equal GRID_HEIGHT in size.
         // Also LEFT_GRID_SIZE + RIGHT_GRID_SIZE must equal G_TICTACTOE_DISPLAY_WIDTH - (numberOfGrids * (Globals::G_PAGE_MINIMUM_LEFT_VERTICAL_LINE_SIZE - Globals::G_PAGE_MINIMUM_RIGHT_VERTICAL_LINE_SIZE))
@@ -563,7 +565,7 @@ namespace TerminalGames
         return GetGridLayout({LEFT_GRID_SIZE, RIGHT_GRID_SIZE}, {leftGridLines, RIGHT_GRID_LINES}, GRID_HEIGHT);
     }
 
-    std::string PageBuilder::GetHangmanSubPage(const GameInfo &p_gameInfo)
+    std::string PageBuilder::GetHangmanSubPage(const GameInfo& p_gameInfo)
     {
         // leftGridLines, MIDDLE_GRID_LINES and rightGridLines vectors must equal GRID_HEIGHT in size.
         // Also LEFT_GRID_SIZE + MIDDLE_GRID_SIZE + RIGHT_GRID_SIZE must equal G_HANGMAN_DISPLAY_WIDTH - (numberOfGrids * (Globals::G_PAGE_MINIMUM_LEFT_VERTICAL_LINE_SIZE - Globals::G_PAGE_MINIMUM_RIGHT_VERTICAL_LINE_SIZE))
@@ -573,7 +575,7 @@ namespace TerminalGames
         const uint32_t GRID_HEIGHT = 7;
 
         // Hangman state section
-        const std::vector<std::string> &leftGridLines = Globals::G_HANGMAN_STATES[p_gameInfo.m_hangmanGameInfo.m_incorrectGuesses.size()];
+        const std::vector<std::string>& leftGridLines = Globals::G_HANGMAN_STATES[p_gameInfo.m_hangmanGameInfo.m_incorrectGuesses.size()];
 
         // Game options section
         const std::vector<std::string> MIDDLE_GRID_LINES = {
@@ -629,7 +631,7 @@ namespace TerminalGames
         // Current guess of word and word to be guessed section
         std::string currentGuessOfWord;
         currentGuessOfWord.reserve(2 * p_gameInfo.m_hangmanGameInfo.m_currentGuessOfWord.size());
-        for (const char &letter : p_gameInfo.m_hangmanGameInfo.m_currentGuessOfWord)
+        for (const char& letter : p_gameInfo.m_hangmanGameInfo.m_currentGuessOfWord)
         {
             currentGuessOfWord += letter;
             currentGuessOfWord += ' ';
@@ -648,7 +650,7 @@ namespace TerminalGames
         return output;
     }
 
-    std::string PageBuilder::GetBattleshipsSubPage(const GameInfo &p_gameInfo) // NOLINT(readability-function-cognitive-complexity)
+    std::string PageBuilder::GetBattleshipsSubPage(const GameInfo& p_gameInfo) // NOLINT(readability-function-cognitive-complexity)
     {
         // leftGridLines, middleGridLines and rightGridLines vectors must equal GRID_HEIGHT in size.
         // Also LEFT_GRID_SIZE + MIDDLE_GRID_SIZE + RIGHT_GRID_SIZE must equal G_BATTLESHIPS_DISPLAY_WIDTH - (numberOfGrids * Globals::G_PAGE_MINIMUM_LEFT_VERTICAL_LINE_SIZE - Globals::G_PAGE_MINIMUM_RIGHT_VERTICAL_LINE_SIZE))
@@ -810,7 +812,7 @@ namespace TerminalGames
         return GetGridLayout({LEFT_GRID_SIZE, MIDDLE_GRID_SIZE, RIGHT_GRID_SIZE}, {leftGridLines, middleGridLines, rightGridLines}, GRID_HEIGHT);
     }
 
-    std::string PageBuilder::GetGridLayout(const std::vector<uint32_t> &p_gridColumnWidths, const std::vector<std::vector<std::string>> &p_gridColumnLines, const uint32_t &p_gridColumnHeight)
+    std::string PageBuilder::GetGridLayout(const std::vector<uint32_t>& p_gridColumnWidths, const std::vector<std::vector<std::string>>& p_gridColumnLines, const uint32_t& p_gridColumnHeight)
     {
         const uint32_t OLD_MAXIMUM_LINE_SIZE = m_lineMaximumCharacterCount;
         const uint32_t OLD_MINIMUM_LEFT_PADDING = m_minimumLeftPadding;

@@ -24,14 +24,14 @@ namespace TerminalGames
          *
          * @param p_useAnsiEscapeCodes Whether to use use ANSI escapes codes (true) or only extended ASCII characters (false).
          */
-        explicit MainMenu(const bool &p_useAnsiEscapeCodes);
+        explicit MainMenu(const bool& p_useAnsiEscapeCodes);
 
         /**
          * @brief Constructs a new MainMenu object (for CLI use).
          *
          * @param p_commandLineArguments List of all command line arguments.
          */
-        explicit MainMenu(const std::vector<std::string> &p_commandLineArguments);
+        explicit MainMenu(const std::vector<std::string>& p_commandLineArguments);
 
         /**
          * @brief Destructs a MainMenu object.
@@ -53,28 +53,28 @@ namespace TerminalGames
          *
          * @param p_mainMenu The MainMenu to copy.
          */
-        MainMenu(const MainMenu &p_mainMenu) = delete;
+        MainMenu(const MainMenu& p_mainMenu) = delete;
 
         /**
          * @brief Disable constructing a new MainMenu object using move constructor.
          *
          * @param p_mainMenu The MainMenu to copy.
          */
-        MainMenu(const MainMenu &&p_mainMenu) = delete;
+        MainMenu(const MainMenu&& p_mainMenu) = delete;
 
         /**
          * @brief Disable constructing a new MainMenu object using copy assignment operator.
          *
          * @param p_mainMenu The MainMenu to copy.
          */
-        MainMenu &operator=(const MainMenu &p_mainMenu) = delete;
+        MainMenu& operator=(const MainMenu& p_mainMenu) = delete;
 
         /**
          * @brief Disable constructing a new MainMenu object using move assignment operator.
          *
          * @param p_mainMenu The MainMenu to copy.
          */
-        MainMenu &operator=(const MainMenu &&p_mainMenu) = delete;
+        MainMenu& operator=(const MainMenu&& p_mainMenu) = delete;
 
     private:
         /**
@@ -104,7 +104,7 @@ namespace TerminalGames
          *
          * @param p_commandLineArguments The command line arguments.
          */
-        static bool ParseCommandLineArguments(const std::vector<std::string> &p_commandLineArguments);
+        static bool ParseCommandLineArguments(const std::vector<std::string>& p_commandLineArguments);
 
         /**
          * @brief Games that can be selected and played.

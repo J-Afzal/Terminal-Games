@@ -29,7 +29,7 @@ namespace TerminalGames
          *
          * @param p_useAnsiEscapeCodes Whether to use use ANSI escapes codes (true) or only extended ASCII characters (false).
          */
-        explicit TicTacToe(const bool &p_useAnsiEscapeCodes);
+        explicit TicTacToe(const bool& p_useAnsiEscapeCodes);
 
     private:
         /**
@@ -96,14 +96,14 @@ namespace TerminalGames
          * @return `true` If the command is valid.
          * @return `false` If the command is not valid.
          */
-        bool ValidateCommand(const std::tuple<uint32_t, uint32_t> &p_command);
+        bool ValidateCommand(const std::tuple<uint32_t, uint32_t>& p_command);
 
         /**
          * @brief Executes the command against the game grid.
          *
          * @param p_command The command in the form of `<row, column>`.
          */
-        void ExecuteGeneralCommand(const std::tuple<uint32_t, uint32_t> &p_command);
+        void ExecuteGeneralCommand(const std::tuple<uint32_t, uint32_t>& p_command);
 
         /**
          * @brief Used to build pages required by the game.

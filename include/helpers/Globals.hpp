@@ -83,8 +83,8 @@ namespace TerminalGames::Globals
      * @warning Don't use this. Just use the built-in `std::ranges::find`. This has been crudely implemented as
      * `std::ranges::find` was not supported by the ubuntu-latest compilers in the CI workflow.
      */
-    template <typename T, typename U>
-    static constexpr T ImplementStdRangesFind(const T &p_begin, const T &p_end, const U &p_value)
+    template<typename T, typename U>
+    static constexpr T ImplementStdRangesFind(const T& p_begin, const T& p_end, const U& p_value)
     {
         for (T i = p_begin; i < p_end; i++)
         {
@@ -109,8 +109,8 @@ namespace TerminalGames::Globals
      * @warning Don't use this. Just use the built-in `std::count`. This has been crudely implemented as `std::count` was not
      * supported by the ubuntu-latest compilers in the CI workflow.
      */
-    template <typename T, typename U>
-    static constexpr int32_t ImplementStdCount(const T &p_begin, const T &p_end, const U &p_value)
+    template<typename T, typename U>
+    static constexpr int32_t ImplementStdCount(const T& p_begin, const T& p_end, const U& p_value)
     {
         int32_t count = 0;
 
@@ -132,7 +132,7 @@ namespace TerminalGames::Globals
      * @param p_stringToRepeat The string to repeat.
      * @return `std::string` The input `p_stringToRepeat` repeated `p_numberOfRepetitions` number of times.
      */
-    static std::string RepeatString(const uint32_t &p_numberOfRepetitions, const std::string &p_stringToRepeat)
+    static std::string RepeatString(const uint32_t& p_numberOfRepetitions, const std::string& p_stringToRepeat)
     {
         std::ostringstream buffer;
         for (uint32_t currentRepetition = 0; currentRepetition < p_numberOfRepetitions; currentRepetition++)
@@ -148,7 +148,7 @@ namespace TerminalGames::Globals
      * @param p_string The string to be checked and edited.
      * @param p_subString The substring to be removed.
      */
-    static constexpr void RemoveSubString(std::string &p_string, const std::string &p_subString)
+    static constexpr void RemoveSubString(std::string& p_string, const std::string& p_subString)
     {
         const uint32_t SUB_STRING_LENGTH = p_subString.size();
         for (std::string::size_type currentSubStringLocation = p_string.find(p_subString); currentSubStringLocation != std::string::npos; currentSubStringLocation = p_string.find(p_subString))
@@ -469,104 +469,105 @@ namespace TerminalGames::Globals
     ///@{
     static inline const std::vector<std::vector<std::string>> G_HANGMAN_STATES = {
         {
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-        },
+         "",
+         "",
+         "",
+         "",
+         "",
+         "",
+         "",
+         },
         {
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            Globals::G_HANGMAN_GALLOWS_BASE_INITIAL,
-        },
+         "",
+         "",
+         "",
+         "",
+         "",
+         "",
+         Globals::G_HANGMAN_GALLOWS_BASE_INITIAL,
+         },
         {
-            "",
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
-            Globals::G_HANGMAN_GALLOWS_BASE,
-        },
+         "",
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
+         Globals::G_HANGMAN_GALLOWS_BASE,
+         },
         {
-            Globals::G_HANGMAN_GALLOWS_TOP_BEAM_INITIAL,
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
-            Globals::G_HANGMAN_GALLOWS_BASE,
-        },
+         Globals::G_HANGMAN_GALLOWS_TOP_BEAM_INITIAL,
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
+         Globals::G_HANGMAN_GALLOWS_BASE,
+         },
         {
-            Globals::G_HANGMAN_GALLOWS_TOP_BEAM,
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_ROPE,
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
-            Globals::G_HANGMAN_GALLOWS_BASE,
-        },
+         Globals::G_HANGMAN_GALLOWS_TOP_BEAM,
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_ROPE,
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
+         Globals::G_HANGMAN_GALLOWS_BASE,
+         },
         {
-            Globals::G_HANGMAN_GALLOWS_TOP_BEAM,
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_ROPE,
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM + "       O ",
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
-            Globals::G_HANGMAN_GALLOWS_BASE,
-        },
+         Globals::G_HANGMAN_GALLOWS_TOP_BEAM,
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_ROPE,
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM + "       O ",
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
+         Globals::G_HANGMAN_GALLOWS_BASE,
+         },
         {
-            Globals::G_HANGMAN_GALLOWS_TOP_BEAM,
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_ROPE,
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM + "       O ",
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM + "       | ",
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
-            Globals::G_HANGMAN_GALLOWS_BASE,
-        },
+         Globals::G_HANGMAN_GALLOWS_TOP_BEAM,
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_ROPE,
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM + "       O ",
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM + "       | ",
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
+         Globals::G_HANGMAN_GALLOWS_BASE,
+         },
         {
-            Globals::G_HANGMAN_GALLOWS_TOP_BEAM,
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_ROPE,
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM + "       O ",
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM + "       | ",
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM + "      /  ",
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
-            Globals::G_HANGMAN_GALLOWS_BASE,
-        },
+         Globals::G_HANGMAN_GALLOWS_TOP_BEAM,
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_ROPE,
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM + "       O ",
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM + "       | ",
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM + "      /  ",
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
+         Globals::G_HANGMAN_GALLOWS_BASE,
+         },
         {
-            Globals::G_HANGMAN_GALLOWS_TOP_BEAM,
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_ROPE,
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM + "       O ",
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM + "       | ",
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM + "      / \\",
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
-            Globals::G_HANGMAN_GALLOWS_BASE,
-        },
+         Globals::G_HANGMAN_GALLOWS_TOP_BEAM,
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_ROPE,
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM + "       O ",
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM + "       | ",
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM + "      / \\",
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
+         Globals::G_HANGMAN_GALLOWS_BASE,
+         },
         {
-            Globals::G_HANGMAN_GALLOWS_TOP_BEAM,
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_ROPE,
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM + "       O ",
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM + "      /|  ",
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM + "      / \\",
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
-            Globals::G_HANGMAN_GALLOWS_BASE,
-        },
+         Globals::G_HANGMAN_GALLOWS_TOP_BEAM,
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_ROPE,
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM + "       O ",
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM + "      /|  ",
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM + "      / \\",
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
+         Globals::G_HANGMAN_GALLOWS_BASE,
+         },
         {
-            Globals::G_HANGMAN_GALLOWS_TOP_BEAM,
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_ROPE,
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM + "       O ",
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM + "      /|\\",
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM + "      / \\",
-            Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
-            Globals::G_HANGMAN_GALLOWS_BASE,
-        }};
+         Globals::G_HANGMAN_GALLOWS_TOP_BEAM,
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_ROPE,
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM + "       O ",
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM + "      /|\\",
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM + "      / \\",
+         Globals::G_HANGMAN_GALLOWS_VERTICAL_BEAM_WITH_PADDING,
+         Globals::G_HANGMAN_GALLOWS_BASE,
+         }
+    };
 
     static inline const std::string G_HANGMAN_INCORRECT_GUESSES_TITLE = "Incorrect Guesses";
     static inline const std::string G_HANGMAN_INCORRECT_GUESSES_PADDING = "   ";

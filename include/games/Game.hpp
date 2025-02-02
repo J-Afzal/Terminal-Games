@@ -30,28 +30,28 @@ namespace TerminalGames
          *
          * @param p_game The game to copy.
          */
-        Game(const Game &p_game) = delete;
+        Game(const Game& p_game) = delete;
 
         /**
          * @brief Disable constructing a new Game object using move constructor.
          *
          * @param p_game The game to copy.
          */
-        Game(const Game &&p_game) = delete;
+        Game(const Game&& p_game) = delete;
 
         /**
          * @brief Disable constructing a new Game object using copy assignment operator.
          *
          * @param p_game The game to copy.
          */
-        Game &operator=(const Game &p_game) = delete;
+        Game& operator=(const Game& p_game) = delete;
 
         /**
          * @brief Disable constructing a new Game object using move assignment operator.
          *
          * @param p_game The game to copy.
          */
-        Game &operator=(const Game &&p_game) = delete;
+        Game& operator=(const Game&& p_game) = delete;
 
         /**
          * @brief The main orchestration loop for all games.
@@ -94,12 +94,12 @@ namespace TerminalGames
                     GameOver();
                 }
 
-                catch (Globals::Exceptions::RestartGame &e)
+                catch (Globals::Exceptions::RestartGame& e)
                 {
                     RestartGame();
                 }
 
-                catch (Globals::Exceptions::ResetGame &e)
+                catch (Globals::Exceptions::ResetGame& e)
                 {
                     ResetGame();
                 }
