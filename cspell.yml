@@ -7,15 +7,22 @@ ignorePaths:
     - .vs/
     - .vscode/
     - build/
+    - docs/html/
     - package-lock.json
 words:
     - afzal
     - bugprone
+    - doxyfile
     - linters
 ignoreWords:
     - choco
+    - darkmode
     - defenses
+    - doxygenversion
+    - logosize
+    - mathjax
     - nolint
     - noncommercially
+    - projectbrief
     - tictactoe
     - wasd
