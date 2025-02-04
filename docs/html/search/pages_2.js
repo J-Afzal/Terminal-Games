@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['list_0',['Bug List',['../de/da5/bug.html',1,'']]]
+  ['list_0',['Bug List',['../bug.html',1,'']]]
 ];

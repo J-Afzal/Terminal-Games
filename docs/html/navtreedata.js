@@ -38,7 +38,7 @@ var NAVTREE =
     [ "Development Setup", "index.html#autotoc_md10", [
       [ "Notes", "index.html#autotoc_md11", null ]
     ] ],
-    [ "Bug List", "de/da5/bug.html", null ],
+    [ "Bug List", "bug.html", null ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [
@@ -59,21 +59,16 @@ var NAVTREE =
       ] ]
     ] ],
     [ "Files", "files.html", [
-      [ "File List", "files.html", "files_dup" ],
-      [ "File Members", "globals.html", [
-        [ "All", "globals.html", null ],
-        [ "Functions", "globals_func.html", null ]
-      ] ]
+      [ "File List", "files.html", "files_dup" ]
     ] ]
   ] ]
 ];
 
 var NAVTREEINDEX =
 [
-"annotated.html",
-"d5/d50/namespace_terminal_games_1_1_globals.html#a76f385a948348d16291817b61bac2a11",
-"d8/d2e/class_terminal_games_1_1_hangman.html",
-"index.html#autotoc_md5"
+"_battleships_8hpp_source.html",
+"class_terminal_games_1_1_page_builder.html#a07afd631e2f03fb4c9a3f88d7763ad7a",
+"namespace_terminal_games_1_1_globals.html#a2b230ca843e4eea74204a2e21e8c3f8b"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

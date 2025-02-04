@@ -103,6 +103,8 @@ namespace TerminalGames
          *   --a --ascii-only  Only use extended ASCII characters (this removes all colour).
          *
          * @param p_commandLineArguments The command line arguments.
+         * @return true If to use use ANSI escapes codes
+         * @return false If to only use extended ASCII characters
          */
         static bool ParseCommandLineArguments(const std::vector<std::string>& p_commandLineArguments);
 

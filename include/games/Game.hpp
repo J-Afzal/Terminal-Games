@@ -124,6 +124,8 @@ namespace TerminalGames
 
         /**
          * @brief Check whether the game is over.
+         * @return true If the game is over.
+         * @return false If the game is NOT over.
          */
         virtual bool IsGameOver() = 0;
 
@@ -134,6 +136,8 @@ namespace TerminalGames
 
         /**
          * @brief Check whether the current turn should be executed by the user.
+         * @return true If the current turn is the users'.
+         * @return false If the current turn is NOT the users'.
          */
         virtual bool IsCurrentTurnUsers() = 0;
 

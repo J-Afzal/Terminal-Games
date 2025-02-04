@@ -254,12 +254,17 @@ namespace TerminalGames::Globals
      */
     enum class Colours : std::uint8_t
     {
+        /**
+         * @brief Supported ANSI escape colour.
+         */
+        ///@{
         WHITE = 0,
         RED,
         BLUE,
         GREEN,
         YELLOW,
-        RESET
+        RESET,
+        ///@}
     };
 
     /**

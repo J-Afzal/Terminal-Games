@@ -33,11 +33,7 @@ namespace TerminalGames
         explicit Battleships(const bool& p_useAnsiEscapeCodes);
 
     private:
-        /**
-         * @brief See base class function for details.
-         */
-        ///@{
-        void SetupGame() override;
+         void SetupGame() override;
 
         void GetUserOptions() override;
 
@@ -50,7 +46,7 @@ namespace TerminalGames
         bool IsCurrentTurnUsers() override;
 
         /**
-         * @brief See base class function for details.
+         * @brief Prompt the user to enter their command for the current turn.
          * @warning This function does not catch any exceptions thrown by `Terminal::GetUserCommandFromGameGrid()`.
          * @bug If the user presses the `Globals::G_TERMINAL_BACKSPACE_KEY` the thrown exception
          * `Globals::Exceptions::BackspaceKeyPressed` will never be caught and the program will crash.
@@ -60,7 +56,7 @@ namespace TerminalGames
         void ExecuteComputerCommand() override;
 
         /**
-         * @brief See base class function for details.
+         * @brief Display the game over message and prompt the user whether they would like to play again or quit the game.
          * @warning This function does not catch any exceptions thrown by `Terminal::GetUserChoiceFromGameOverMenu()`.
          */
         void GameOver() override;
@@ -68,7 +64,6 @@ namespace TerminalGames
         void RestartGame() override;
 
         void ResetGame() override;
-        ///@}
 
         /**
          * @brief Prompts the user to select how many players will be playing the game.

@@ -19,12 +19,17 @@ namespace TerminalGames
      */
     enum class Pages : std::uint8_t
     {
+        /**
+         * @brief Page supported by PageBuilder.
+         */
+        ///@{
         DEFAULT = 0,
         HOMEPAGE,
         MAINMENU,
         TICTACTOE,
         HANGMAN,
         BATTLESHIPS,
+        ///@}
     };
 
     /**
