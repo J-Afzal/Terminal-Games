@@ -33,7 +33,7 @@ namespace TerminalGames
         explicit Battleships(const bool& p_useAnsiEscapeCodes);
 
     private:
-         void SetupGame() override;
+        void SetupGame() override;
 
         void GetUserOptions() override;
 
