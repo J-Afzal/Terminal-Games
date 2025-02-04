@@ -17,6 +17,9 @@ jobs:
     release:
         needs: build
         runs-on: ubuntu-latest
+        permissions:
+            pages: write
+            id-token: write
         defaults:
             run:
                 shell: pwsh
