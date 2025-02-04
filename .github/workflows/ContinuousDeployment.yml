@@ -27,7 +27,7 @@ jobs:
 
             - name: Create new release
               run: |
-                  $currentDate = Get-Date -Format "yyyy-MM-dd"
+                  $currentDate = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
                   gh release create "terminal-games-$currentDate" ./terminal-games-macos-latest/terminal-games-macos-latest ./terminal-games-ubuntu-latest/terminal-games-ubuntu-latest ./terminal-games-windows-latest/terminal-games-windows-latest.exe --generate-notes --latest --title "Terminal Games $currentDate" --draft
               env:
                   GH_TOKEN: ${{ github.token }}
