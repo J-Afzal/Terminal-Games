@@ -41,7 +41,8 @@ jobs:
             #   env:
             #       GH_TOKEN: ${{ github.token }}
 
-            - uses: actions/upload-artifact@v4
+            - name: Upload doxygen documentation artifacts
+              uses: actions/upload-artifact@v4
               with:
                 name: doxygen-docs
                 path: ./docs/html/
