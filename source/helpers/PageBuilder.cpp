@@ -332,6 +332,25 @@ namespace TerminalGames
         return output + Globals::G_PAGE_VERTICAL_LINE + '\n';
     }
 
+    std::string PageBuilder::GetNewLineCentredOptimised(const std::string& p_input) const
+    {
+        static const double DIVISOR = 2;
+
+        const uint32_t LEFT_PADDING_SIZE = static_cast<uint32_t>(ceil(static_cast<double>(m_lineMaximumCharacterCount - p_input.size()) / DIVISOR));
+        const uint32_t RIGHT_PADDING_SIZE = static_cast<uint32_t>(floor(static_cast<double>(m_lineMaximumCharacterCount - p_input.size()) / DIVISOR));
+
+        std::string output;
+        output.reserve(m_pageWidth + (2 * Globals::G_PAGE_ANSI_COLOUR_ESCAPE_CODE_SIZE));
+
+        output += Globals::G_PAGE_VERTICAL_LINE;
+        output.insert(output.size(), m_minimumLeftPadding + LEFT_PADDING_SIZE, ' ');
+        output += p_input;
+        output.insert(output.size(), RIGHT_PADDING_SIZE + m_minimumRightPadding, ' ');
+        output += Globals::G_PAGE_VERTICAL_LINE;
+        output += '\n';
+        return output;
+    }
+
     std::string PageBuilder::GetNewLineLeftJustified(const std::string& p_input, const Globals::Colours& p_colour, const std::string& p_selector) const
     {
         const std::string INPUT = p_selector.empty() ? p_input : p_selector + ' ' + p_input;
@@ -831,7 +850,7 @@ namespace TerminalGames
             for (uint32_t currentGridSize = 0; currentGridSize < p_gridColumnWidths.size(); currentGridSize++)
             {
                 m_lineMaximumCharacterCount = p_gridColumnWidths[currentGridSize];
-                currentLine += GetNewLineCentred(p_gridColumnLines[currentGridSize][currentLineNumber]);
+                currentLine += GetNewLineCentredOptimised(p_gridColumnLines[currentGridSize][currentLineNumber]);
             }
 
             // Remove the vertical lines created between grids and all new lines

@@ -269,6 +269,18 @@ namespace TerminalGames
         std::string GetNewLineCentred(const std::string& p_input, const Globals::Colours& p_colour = Globals::Colours::WHITE, const std::string& p_selector = "") const;
 
         /**
+         * @brief Creates a new line on a page with `p_input` automatically centred. If the spacing on the sides is unequal, the
+         * left side will always have the higher amount of spacing. This is a simplified more performant version of
+         * GetNewLineCentred.
+         *
+         * @param p_input The text to display on the new line.
+         * @return `std::string` A new line with the input text centred.
+         * @warning Unexpected behaviour will occur if  `p_input` is too long to be contained within a single line on the page.
+         * @warning Unexpected behaviour will occur if `p_input` is coloured (i.e. it contins ANSI colour escape codes).
+         */
+        std::string GetNewLineCentredOptimised(const std::string& p_input) const;
+        
+        /**
          * @brief Creates a new line on a page with `p_input` automatically left justified (with one space padding on to the
          * left page edge). With an optional parameters of `p_colour` to colour the input text and `p_selector` used when
          * creating option selection pages.
