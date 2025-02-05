@@ -20,8 +20,8 @@ ignoreWords:
     - darkmode
     - defenses
     - doxygenversion
-    - logosize
     - ilammy
+    - logosize
     - mathjax
     - mdfile
     - memb
