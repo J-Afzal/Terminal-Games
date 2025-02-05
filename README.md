@@ -35,6 +35,12 @@ terminal-games options:
   --a --ascii-only  Only use extended ASCII characters (this removes all colour).
 ```
 
+## Documentation
+
+Checkout the GitHub pages-hosted [documentation page](https://J-Afzal.github.io/Terminal-Games) built using doxygen.
+
+![Documentation Homepage](./resources/screenshots/DocumentationHomepage.png)
+
 ## General Information
 
 There is extensive use of ANSI colour escape codes which can be toggled off on the homepage if your terminal does not support
@@ -142,11 +148,6 @@ On windows, clang-tidy and clang-format can be installed using the `LLVM-x.x.x-w
 
 <!--
 
-    Add publish to GH pages in CD (test in CI first)
-    Update readme to link to GH pages docs and provide screenshot?
-
------
-
 Performance profile code to see where performance lost in battleships
 
 ------
@@ -159,10 +160,6 @@ unit test all the things in terminal games
 
 ------
 
-unit test all the things in linters
-
-------
-
-linters unit testing
+unit test all the things in linters (ci workflow unit test? create sample repo?)
 
 -->
