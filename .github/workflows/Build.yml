@@ -23,7 +23,13 @@ jobs:
               if: ${{ matrix.os }} == 'windows-latest'
 
             - name: Configure CMake
-              run: cmake -S . -B ./build -D "CMAKE_BUILD_TYPE=Release" -D "CI_CD=TRUE"
+              run: |
+                  if ("${{ matrix.os }}" == "windows-latest") {
+                      cmake -S . -B ./build -G "NMake Makefiles" -D "CMAKE_BUILD_TYPE=Release" -D "CI_CD=TRUE"
+                  }
+                  else {
+                      cmake -S . -B ./build -D "CMAKE_BUILD_TYPE=Release" -D "CI_CD=TRUE"
+                  }
 
             - name: Build Project
               run: cmake --build ./build --config Release

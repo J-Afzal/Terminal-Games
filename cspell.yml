@@ -21,6 +21,7 @@ ignoreWords:
     - defenses
     - doxygenversion
     - logosize
+    - ilammy
     - mathjax
     - mdfile
     - memb
