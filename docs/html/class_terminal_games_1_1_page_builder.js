@@ -18,6 +18,7 @@ var class_terminal_games_1_1_page_builder =
     [ "RemoveColour", "class_terminal_games_1_1_page_builder.html#a492a3e160932f6eeeaa5b9b40860963b", null ],
     [ "GetEmptyLine", "class_terminal_games_1_1_page_builder.html#a34427281ba7b91a8bbcb77e43e19df44", null ],
     [ "GetNewLineCentred", "class_terminal_games_1_1_page_builder.html#ab89bd4676b0ea8e8e517f47859204a73", null ],
+    [ "GetNewLineCentredOptimised", "class_terminal_games_1_1_page_builder.html#a215141b7b9d90e1b8591db1170eba33f", null ],
     [ "GetNewLineLeftJustified", "class_terminal_games_1_1_page_builder.html#a81b1d7adad764f5e302e002da2f6a224", null ],
     [ "GetTopLine", "class_terminal_games_1_1_page_builder.html#a5055217505491d1aa1401a3ddc056ab0", null ],
     [ "GetBottomLine", "class_terminal_games_1_1_page_builder.html#a9b8f4ffad1818d672cfc5e5ed6b66ef1", null ],

@@ -1,5 +1,7 @@
 var NAVTREEINDEX2 =
 {
+"namespace_terminal_games_1_1_globals.html#a21f21dc67bfce66a9c0ac88fe70105ea":[6,0,0,0,61],
+"namespace_terminal_games_1_1_globals.html#a284bbbd224ee5976a6838f1e16a5ff04":[6,0,0,0,65],
 "namespace_terminal_games_1_1_globals.html#a2accff9e109a46ee20f61e69e588966b":[6,0,0,0,67],
 "namespace_terminal_games_1_1_globals.html#a2b230ca843e4eea74204a2e21e8c3f8b":[6,0,0,0,122],
 "namespace_terminal_games_1_1_globals.html#a2ba49c03a41912ed82d0fdc9931025b7":[6,0,0,0,33],

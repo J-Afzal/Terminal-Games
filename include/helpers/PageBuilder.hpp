@@ -279,7 +279,7 @@ namespace TerminalGames
          * @warning Unexpected behaviour will occur if `p_input` is coloured (i.e. it contins ANSI colour escape codes).
          */
         std::string GetNewLineCentredOptimised(const std::string& p_input) const;
-        
+
         /**
          * @brief Creates a new line on a page with `p_input` automatically left justified (with one space padding on to the
          * left page edge). With an optional parameters of `p_colour` to colour the input text and `p_selector` used when
