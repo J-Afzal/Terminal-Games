@@ -2,18 +2,28 @@
 
 #include "helpers/Globals.hpp"
 
+/**
+ * @namespace TerminalGames
+ * @brief Contains all Terminal-Games objects.
+ */
 namespace TerminalGames
 {
     /**
+     * @class Game
      * @brief Base class for all games.
      */
     class Game
     {
     public:
         /**
-         * @brief Constructs a new Game object
+         * @brief Constructs a new Game object.
          */
         Game() = default;
+
+        /**
+         * @brief Destructs the Game object.
+         */
+        virtual ~Game() = default;
 
         /**
          * @brief Disable constructing a new Game object using copy constructor.
@@ -44,12 +54,7 @@ namespace TerminalGames
         Game& operator=(const Game&& p_game) = delete;
 
         /**
-         * @brief Destroy the Game object
-         */
-        virtual ~Game() = default;
-
-        /**
-         * @brief The orchestration loop for all games.
+         * @brief The main orchestration loop for all games.
          */
         virtual void Play() final
         {
@@ -113,12 +118,14 @@ namespace TerminalGames
         virtual void GetUserOptions() = 0;
 
         /**
-         * @brief Updates the gameInfo struct (used by the PageBuilder class).
+         * @brief Updates GameInfo to match the current state of the game.
          */
         virtual void UpdateGameInfo() = 0;
 
         /**
          * @brief Check whether the game is over.
+         * @return true If the game is over.
+         * @return false If the game is NOT over.
          */
         virtual bool IsGameOver() = 0;
 
@@ -129,6 +136,8 @@ namespace TerminalGames
 
         /**
          * @brief Check whether the current turn should be executed by the user.
+         * @return true If the current turn is the users'.
+         * @return false If the current turn is NOT the users'.
          */
         virtual bool IsCurrentTurnUsers() = 0;
 

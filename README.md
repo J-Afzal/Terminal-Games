@@ -32,8 +32,14 @@ Generic Options:
 
 terminal-games options:
 
-  --a --ascii-only  Only use ASCII characters (this removes all colour).
+  --a --ascii-only  Only use extended ASCII characters (this removes all colour).
 ```
+
+## Documentation
+
+Checkout the GitHub pages-hosted [documentation page](https://J-Afzal.github.io/Terminal-Games) built using doxygen.
+
+![Documentation Homepage](./resources/screenshots/DocumentationHomepage.png)
 
 ## General Information
 
@@ -142,22 +148,18 @@ On windows, clang-tidy and clang-format can be installed using the `LLVM-x.x.x-w
 
 <!--
 
-TODO - Terminal Games
-
-Doxygen
-    Add build to CI with artifact to check.
-    Add build and publish to CD and publish to GH pages (maybe commit to repo but make sure no infinite loop)
-    Update readme to link to GH pages docs
-
------
-
-zig build system???
 Performance profile code to see where performance lost in battleships
 
 ------
 
-unit test all the things
+change master to main
 
-change master to main?
+------
+
+unit test all the things in terminal games
+
+------
+
+unit test all the things in linters (ci workflow unit test? create sample repo?)
 
 -->

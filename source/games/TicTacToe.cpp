@@ -31,9 +31,9 @@ namespace TerminalGames
         m_turnCount = 0;
         m_hasWinner = false;
 
-        for (uint32_t row = 0; row < Globals::G_TICTACTOE_BOARD_HEIGHT; row++)
+        for (uint32_t row = 0; row < Globals::G_TICTACTOE_GRID_HEIGHT; row++)
         {
-            for (uint32_t column = 0; column < Globals::G_TICTACTOE_BOARD_WIDTH; column++)
+            for (uint32_t column = 0; column < Globals::G_TICTACTOE_GRID_WIDTH; column++)
             {
                 m_gameGrid.at(row).at(column) = Globals::G_TICTACTOE_EMPTY_GRID_VALUE;
                 m_commandsRemaining.emplace_back(row, column);

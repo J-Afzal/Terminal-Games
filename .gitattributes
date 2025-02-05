@@ -10,6 +10,7 @@
 .gitattributes  text
 .gitignore      text
 .gitmodules     text
+Doxyfile        text
 
 # Documents
 *.md            text        diff=markdown
@@ -20,6 +21,12 @@ LICENSE         text
 # Graphics
 *.ico           binary
 *.png           binary
+*.svg           text
 
 # Serialisation
 *.yml           text
+
+# Web
+*.css             text diff=css
+*.html            text diff=html
+*.js              text

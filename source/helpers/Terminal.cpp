@@ -144,8 +144,8 @@ namespace TerminalGames
         {
         case Pages::TICTACTOE:
         {
-            maxColumn = Globals::G_TICTACTOE_BOARD_WIDTH - 1; // -1 to account for zero-indexing
-            maxRow = Globals::G_TICTACTOE_BOARD_HEIGHT - 1;   // -1 to account for zero-indexing
+            maxColumn = Globals::G_TICTACTOE_GRID_WIDTH - 1; // -1 to account for zero-indexing
+            maxRow = Globals::G_TICTACTOE_GRID_HEIGHT - 1;   // -1 to account for zero-indexing
             gridLeftPad = Globals::G_TICTACTOE_GRID_LEFT_PAD;
             gridTopPad = Globals::G_TICTACTOE_GRID_TOP_PAD;
             gridElementWidth = Globals::G_TICTACTOE_GRID_ELEMENT_WIDTH + 1;   // +1 to account for the grid divider '|'
@@ -232,8 +232,8 @@ namespace TerminalGames
         switch (CURRENT_PAGE_TYPE)
         {
         case Pages::TICTACTOE:
-            maxColumn = Globals::G_TICTACTOE_BOARD_WIDTH - 1; // -1 to account for zero-indexing
-            maxRow = Globals::G_TICTACTOE_BOARD_HEIGHT - 1;   // -1 to account for zero-indexing
+            maxColumn = Globals::G_TICTACTOE_GRID_WIDTH - 1; // -1 to account for zero-indexing
+            maxRow = Globals::G_TICTACTOE_GRID_HEIGHT - 1;   // -1 to account for zero-indexing
             break;
 
         case Pages::BATTLESHIPS:
@@ -256,12 +256,12 @@ namespace TerminalGames
 
             else if (CURRENT_PAGE_TYPE == Pages::BATTLESHIPS && p_displayGetUserCommandPage)
             {
-                currentGameInfo.m_battleshipsGameInfo.m_boardTwo.at(currentRow).at(currentColumn) = "#" + std::string(1, currentGameInfo.m_battleshipsGameInfo.m_boardTwo.at(currentRow).at(currentColumn).at(0)) + "#";
+                currentGameInfo.m_battleshipsGameInfo.m_boardPlayerTwo.at(currentRow).at(currentColumn) = "#" + std::string(1, currentGameInfo.m_battleshipsGameInfo.m_boardPlayerTwo.at(currentRow).at(currentColumn).at(0)) + "#";
             }
 
             else if (CURRENT_PAGE_TYPE == Pages::BATTLESHIPS)
             {
-                currentGameInfo.m_battleshipsGameInfo.m_boardOne.at(currentRow).at(currentColumn) = "#" + std::string(1, currentGameInfo.m_battleshipsGameInfo.m_boardOne.at(currentRow).at(currentColumn).at(0)) + "#";
+                currentGameInfo.m_battleshipsGameInfo.m_boardPlayerOne.at(currentRow).at(currentColumn) = "#" + std::string(1, currentGameInfo.m_battleshipsGameInfo.m_boardPlayerOne.at(currentRow).at(currentColumn).at(0)) + "#";
             }
 
             if (p_displayGetUserCommandPage)

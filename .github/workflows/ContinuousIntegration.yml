@@ -16,3 +16,4 @@ jobs:
         with:
             path_to_linters_submodule_root: "./submodules/Linters"
             path_back_to_repository_root: "../.."
+            run_cpp_linters: true
