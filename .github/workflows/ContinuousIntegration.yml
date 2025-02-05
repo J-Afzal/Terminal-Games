@@ -5,7 +5,7 @@ run-name: CI - ${{ github.run_number }} - ${{ github.head_ref }}
 on:
     pull_request:
         branches:
-            - master
+            - main
 
 jobs:
     build:
