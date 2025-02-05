@@ -3,9 +3,6 @@ name: Continuous Deployment
 run-name: CD - ${{ github.run_number }} - ${{ github.ref }}
 
 on:
-    pull_request:
-        branches:
-            - master
     push:
         branches:
             - master
@@ -36,9 +33,8 @@ jobs:
 
             - name: Create new release
               run: |
-                  ############################## TODO: remove draft below
                   $currentDate = Get-Date -Format "yyyy-MM-dd_HH-mm-ss"
-                  gh release create "terminal-games-$currentDate" ./terminal-games-macos-latest/terminal-games-macos-latest ./terminal-games-ubuntu-latest/terminal-games-ubuntu-latest ./terminal-games-windows-latest/terminal-games-windows-latest.exe --generate-notes --latest --title "Terminal Games $currentDate" --draft
+                  gh release create "terminal-games-$currentDate" ./terminal-games-macos-latest/terminal-games-macos-latest ./terminal-games-ubuntu-latest/terminal-games-ubuntu-latest ./terminal-games-windows-latest/terminal-games-windows-latest.exe --generate-notes --latest --title "Terminal Games $currentDate"
               env:
                   GH_TOKEN: ${{ github.token }}
 
