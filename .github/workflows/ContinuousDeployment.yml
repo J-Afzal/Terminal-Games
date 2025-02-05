@@ -22,15 +22,18 @@ jobs:
                 shell: pwsh
 
         steps:
-            - uses: actions/checkout@v4
+            - name: Checkout repository
+              uses: actions/checkout@v4
 
-            - uses: actions/download-artifact@v4
+            - name: Download built executable artifacts
+              uses: actions/download-artifact@v4
               with:
                   pattern: terminal-games-*
 
             - name: Create new release
               run: |
-                  $currentDate = Get-Date -Format "yyyy-MM-dd"
+                  ############################## TODO: remove draft below
+                  $currentDate = Get-Date -Format "yyyy-MM-dd_HH-mm-ss"
                   gh release create "terminal-games-$currentDate" ./terminal-games-macos-latest/terminal-games-macos-latest ./terminal-games-ubuntu-latest/terminal-games-ubuntu-latest ./terminal-games-windows-latest/terminal-games-windows-latest.exe --generate-notes --latest --title "Terminal Games $currentDate" --draft
               env:
                   GH_TOKEN: ${{ github.token }}
