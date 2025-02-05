@@ -148,10 +148,6 @@ On windows, clang-tidy and clang-format can be installed using the `LLVM-x.x.x-w
 
 <!--
 
-Performance profile code to see where performance lost in battleships
-
-------
-
 change master to main
 
 ------

@@ -180,6 +180,9 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:ab89bd4676b0ea8e8e517f47859204a73" id="r_ab89bd4676b0ea8e8e517f47859204a73"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab89bd4676b0ea8e8e517f47859204a73">GetNewLineCentred</a> (const std::string &amp;p_input, const <a class="el" href="namespace_terminal_games_1_1_globals.html#ab6533648b7355440d8761fab3f16a175">Globals::Colours</a> &amp;p_colour=<a class="el" href="namespace_terminal_games_1_1_globals.html#ab6533648b7355440d8761fab3f16a175ab5bf627e448384cf3a4c35121ca6008d">Globals::Colours::WHITE</a>, const std::string &amp;p_selector=&quot;&quot;) const</td></tr>
 <tr class="memdesc:ab89bd4676b0ea8e8e517f47859204a73"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new line on a page with <code>p_input</code> automatically centred. If the spacing on the sides is unequal, the left side will always have the higher amount of spacing. With an optional parameters of <code>p_colour</code> to colour the input text and <code>p_selector</code> used when creating option selection pages.  <br /></td></tr>
 <tr class="separator:ab89bd4676b0ea8e8e517f47859204a73"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a215141b7b9d90e1b8591db1170eba33f" id="r_a215141b7b9d90e1b8591db1170eba33f"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a215141b7b9d90e1b8591db1170eba33f">GetNewLineCentredOptimised</a> (const std::string &amp;p_input) const</td></tr>
+<tr class="memdesc:a215141b7b9d90e1b8591db1170eba33f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new line on a page with <code>p_input</code> automatically centred. If the spacing on the sides is unequal, the left side will always have the higher amount of spacing. This is a simplified more performant version of GetNewLineCentred.  <br /></td></tr>
+<tr class="separator:a215141b7b9d90e1b8591db1170eba33f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a81b1d7adad764f5e302e002da2f6a224" id="r_a81b1d7adad764f5e302e002da2f6a224"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a81b1d7adad764f5e302e002da2f6a224">GetNewLineLeftJustified</a> (const std::string &amp;p_input, const <a class="el" href="namespace_terminal_games_1_1_globals.html#ab6533648b7355440d8761fab3f16a175">Globals::Colours</a> &amp;p_colour=<a class="el" href="namespace_terminal_games_1_1_globals.html#ab6533648b7355440d8761fab3f16a175ab5bf627e448384cf3a4c35121ca6008d">Globals::Colours::WHITE</a>, const std::string &amp;p_selector=&quot;&quot;) const</td></tr>
 <tr class="memdesc:a81b1d7adad764f5e302e002da2f6a224"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new line on a page with <code>p_input</code> automatically left justified (with one space padding on to the left page edge). With an optional parameters of <code>p_colour</code> to colour the input text and <code>p_selector</code> used when creating option selection pages.  <br /></td></tr>
 <tr class="separator:a81b1d7adad764f5e302e002da2f6a224"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -768,6 +771,43 @@ uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>m_minimumRightPad
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>std::string</code> A new line with the input text centred. </dd></dl>
 <dl class="section warning"><dt>Warning</dt><dd><code>p_input</code> will be truncated if it is too long to be contained within a single line on the page. </dd>
+<dd>
+Unexpected behaviour will occur if <code>p_input</code> is coloured (i.e. it contins ANSI colour escape codes). </dd></dl>
+
+</div>
+</div>
+<a id="a215141b7b9d90e1b8591db1170eba33f" name="a215141b7b9d90e1b8591db1170eba33f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a215141b7b9d90e1b8591db1170eba33f">&#9670;&#160;</a></span>GetNewLineCentredOptimised()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string TerminalGames::PageBuilder::GetNewLineCentredOptimised </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>p_input</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Creates a new line on a page with <code>p_input</code> automatically centred. If the spacing on the sides is unequal, the left side will always have the higher amount of spacing. This is a simplified more performant version of GetNewLineCentred. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p_input</td><td>The text to display on the new line. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>std::string</code> A new line with the input text centred. </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>Unexpected behaviour will occur if <code>p_input</code> is too long to be contained within a single line on the page. </dd>
 <dd>
 Unexpected behaviour will occur if <code>p_input</code> is coloured (i.e. it contins ANSI colour escape codes). </dd></dl>
 
