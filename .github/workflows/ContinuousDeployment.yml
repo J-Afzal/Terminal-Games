@@ -17,9 +17,9 @@ jobs:
     release:
         needs: build
         runs-on: ubuntu-latest
-        permissions:
-            pages: write
-            id-token: write
+        # permissions:
+        #     pages: write
+        #     id-token: write
         defaults:
             run:
                 shell: pwsh
@@ -40,3 +40,15 @@ jobs:
                   gh release create "terminal-games-$currentDate" ./terminal-games-macos-latest/terminal-games-macos-latest ./terminal-games-ubuntu-latest/terminal-games-ubuntu-latest ./terminal-games-windows-latest/terminal-games-windows-latest.exe --generate-notes --latest --title "Terminal Games $currentDate" --draft
               env:
                   GH_TOKEN: ${{ github.token }}
+
+            - name: Upload doxygen documentation artifacts
+              uses: actions/upload-pages-artifact@v3
+              with:
+                  name: doxygen-docs
+                  path: ./docs/html/
+
+            - name: Release GitHub pages
+              uses: actions/deploy-pages@v4
+              with:
+                  artifact_name: doxygen-docs
+                  token: ${{ github.token }}
