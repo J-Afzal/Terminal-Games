@@ -26,17 +26,18 @@ var NAVTREE =
 [
   [ "Terminal Games", "index.html", [
     [ "Getting Started", "index.html#autotoc_md1", null ],
-    [ "General Information", "index.html#autotoc_md2", [
-      [ "Homepage", "index.html#autotoc_md3", null ],
-      [ "Main Menu", "index.html#autotoc_md4", null ],
-      [ "Quit Menu", "index.html#autotoc_md5", null ],
-      [ "Tic Tac Toe", "index.html#autotoc_md6", null ],
-      [ "Hangman", "index.html#autotoc_md7", null ],
-      [ "Battleships", "index.html#autotoc_md8", null ]
+    [ "Documentation", "index.html#autotoc_md2", null ],
+    [ "General Information", "index.html#autotoc_md3", [
+      [ "Homepage", "index.html#autotoc_md4", null ],
+      [ "Main Menu", "index.html#autotoc_md5", null ],
+      [ "Quit Menu", "index.html#autotoc_md6", null ],
+      [ "Tic Tac Toe", "index.html#autotoc_md7", null ],
+      [ "Hangman", "index.html#autotoc_md8", null ],
+      [ "Battleships", "index.html#autotoc_md9", null ]
     ] ],
-    [ "CI / CD", "index.html#autotoc_md9", null ],
-    [ "Development Setup", "index.html#autotoc_md10", [
-      [ "Notes", "index.html#autotoc_md11", null ]
+    [ "CI / CD", "index.html#autotoc_md10", null ],
+    [ "Development Setup", "index.html#autotoc_md11", [
+      [ "Notes", "index.html#autotoc_md12", null ]
     ] ],
     [ "Bug List", "bug.html", null ],
     [ "Namespaces", "namespaces.html", [
@@ -68,7 +69,7 @@ var NAVTREEINDEX =
 [
 "_battleships_8hpp_source.html",
 "class_terminal_games_1_1_page_builder.html#a07afd631e2f03fb4c9a3f88d7763ad7a",
-"namespace_terminal_games_1_1_globals.html#a2b230ca843e4eea74204a2e21e8c3f8b"
+"namespace_terminal_games_1_1_globals.html#a2accff9e109a46ee20f61e69e588966b"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

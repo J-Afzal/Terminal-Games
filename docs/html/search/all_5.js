@@ -181,7 +181,7 @@ var searchData=
   ['gameinfo_178',['GameInfo',['../struct_terminal_games_1_1_game_info.html',1,'TerminalGames']]],
   ['gameover_179',['GameOver',['../class_terminal_games_1_1_battleships.html#a25e3b4fb44ee9b91524ddb0288617955',1,'TerminalGames::Battleships::GameOver()'],['../class_terminal_games_1_1_game.html#af08091f6c2dc90a8d329398022d0e3ab',1,'TerminalGames::Game::GameOver()'],['../class_terminal_games_1_1_hangman.html#a61c9235b2dc52bdb223a06b589767c09',1,'TerminalGames::Hangman::GameOver()'],['../class_terminal_games_1_1_tic_tac_toe.html#a52e82f2aab0efa3b1cf7ccd9cd107d41',1,'TerminalGames::TicTacToe::GameOver()']]],
   ['games_180',['Terminal Games',['../index.html',1,'']]],
-  ['general_20information_181',['General Information',['../index.html#autotoc_md2',1,'']]],
+  ['general_20information_181',['General Information',['../index.html#autotoc_md3',1,'']]],
   ['getbattleshipssubpage_182',['GetBattleshipsSubPage',['../class_terminal_games_1_1_page_builder.html#a93c78ec870561f7b7496811323fd4632',1,'TerminalGames::PageBuilder']]],
   ['getbottombox_183',['GetBottomBox',['../class_terminal_games_1_1_page_builder.html#a7a2791e21e700690f12d5ff55cdda5b7',1,'TerminalGames::PageBuilder']]],
   ['getbottomline_184',['GetBottomLine',['../class_terminal_games_1_1_page_builder.html#a9b8f4ffad1818d672cfc5e5ed6b66ef1',1,'TerminalGames::PageBuilder']]],
