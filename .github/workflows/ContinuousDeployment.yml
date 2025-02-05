@@ -11,11 +11,11 @@ on:
             - master
 
 jobs:
-    build:
-        uses: ./.github/workflows/Build.yml
+    # build:
+    #     uses: ./.github/workflows/Build.yml
 
     release:
-        needs: build
+        # needs: build
         runs-on: ubuntu-latest
         permissions:
             pages: write
@@ -28,10 +28,10 @@ jobs:
             - name: Checkout repository
               uses: actions/checkout@v4
 
-            - name: Download built executable artifacts
-              uses: actions/download-artifact@v4
-              with:
-                  pattern: terminal-games-*
+            # - name: Download built executable artifacts
+            #   uses: actions/download-artifact@v4
+            #   with:
+            #       pattern: terminal-games-*
 
             # - name: Create new release
             #   run: |
@@ -42,7 +42,7 @@ jobs:
             #       GH_TOKEN: ${{ github.token }}
 
             - name: Upload doxygen documentation artifacts
-              uses: actions/upload-artifact@v4
+              uses: actions/upload-pages-artifact@v3
               with:
                 name: doxygen-docs
                 path: ./docs/html/
@@ -50,5 +50,5 @@ jobs:
             - name: Release GitHub pages
               uses: actions/deploy-pages@v4
               with:
-                  token: ${{ github.token }}
                   artifact_name: doxygen-docs
+                  token: ${{ github.token }}
