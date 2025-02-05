@@ -145,13 +145,3 @@ opening the folder through the `Developer PowerShell for VS` (otherwise you may 
 On windows, clang-tidy and clang-format can be installed using the `LLVM-x.x.x-win64.exe` binary from the
 [LLVM release page](https://github.com/llvm/llvm-project/releases/tag/llvmorg-19.1.6) or from
 [chocolatey](https://community.chocolatey.org/packages/llvm) using `choco install llvm -y`.
-
-<!--
-
-unit test all the things in terminal games
-
-------
-
-unit test all the things in linters (ci workflow unit test? create sample repo?)
-
--->
