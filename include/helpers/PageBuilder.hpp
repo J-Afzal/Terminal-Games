@@ -275,8 +275,8 @@ namespace TerminalGames
          *
          * @param p_input The text to display on the new line.
          * @return `std::string` A new line with the input text centred.
-         * @warning Unexpected behaviour will occur if  `p_input` is too long to be contained within a single line on the page.
-         * @warning Unexpected behaviour will occur if `p_input` is coloured (i.e. it contins ANSI colour escape codes).
+         * @warning Unexpected behaviour will occur if  `p_input` is too long to be contained within a single line on the page
+         * or if `p_input` is coloured (i.e. it contins ANSI colour escape codes).
          */
         std::string GetNewLineCentredOptimised(const std::string& p_input) const;
 

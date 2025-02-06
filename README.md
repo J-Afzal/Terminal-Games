@@ -111,7 +111,7 @@ on the board.
 The continuous integration workflow runs against all commits on pull requests, builds the code, runs unit tests and performs
 linting checks.
 
-The continuous deployment workflow runs against all commits to master, builds the code and deploys the executables as a release.
+The continuous deployment workflow runs against all commits to main, builds the code and deploys the executables as a release.
 
 ## Development Setup
 
@@ -145,17 +145,3 @@ opening the folder through the `Developer PowerShell for VS` (otherwise you may 
 On windows, clang-tidy and clang-format can be installed using the `LLVM-x.x.x-win64.exe` binary from the
 [LLVM release page](https://github.com/llvm/llvm-project/releases/tag/llvmorg-19.1.6) or from
 [chocolatey](https://community.chocolatey.org/packages/llvm) using `choco install llvm -y`.
-
-<!--
-
-change master to main
-
-------
-
-unit test all the things in terminal games
-
-------
-
-unit test all the things in linters (ci workflow unit test? create sample repo?)
-
--->
