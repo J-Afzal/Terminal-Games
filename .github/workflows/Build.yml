@@ -21,7 +21,7 @@ jobs:
               with:
                   submodules: true
 
-            - uses: ilammy/msvc-dev-cmd@v1 # TODO: is this needed? Linked to the NMake Makefiles if
+            - uses: ilammy/msvc-dev-cmd@v1
               if: ${{ matrix.os }} == 'windows-latest'
 
             - name: Build Terminal Games
