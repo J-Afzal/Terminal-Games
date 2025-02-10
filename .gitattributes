@@ -23,6 +23,10 @@ LICENSE         text
 *.png           binary
 *.svg           text
 
+# Scripts
+*.psd1          text
+*.psm1          text
+
 # Serialisation
 *.yml           text
 
