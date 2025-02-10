@@ -1,0 +1,44 @@
+name: Release
+
+on: workflow_call
+
+jobs:
+    release:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+            pages: write
+            id-token: write
+        defaults:
+            run:
+                shell: pwsh
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Download built artifacts
+              uses: actions/download-artifact@v4
+              with:
+                  pattern: terminal-games-*
+
+            - name: Create new release
+              run: |
+                  $releaseTitle = "Terminal Games"
+                  $sharedName = "terminal-games"
+                  $currentDateTime = Get-Date -Format "yyyy-MM-dd_HH-mm-ss"
+                  gh release create "$sharedName-$currentDateTime" ./$sharedName-macos-latest/$sharedName-macos-latest ./$sharedName-ubuntu-latest/$sharedName-ubuntu-latest ./$sharedName-windows-latest/$sharedName-windows-latest.exe --generate-notes --latest --title "$releaseTitle $currentDateTime"
+              env:
+                  GH_TOKEN: ${{ github.token }}
+
+            - name: Upload doxygen documentation artifacts
+              uses: actions/upload-pages-artifact@v3
+              with:
+                  name: doxygen-docs
+                  path: ./docs/html/
+
+            - name: Release GitHub pages
+              uses: actions/deploy-pages@v4
+              with:
+                  artifact_name: doxygen-docs
+                  token: ${{ github.token }}
