@@ -24,6 +24,17 @@ jobs:
 
             - name: Create new release
               run: |
+                  ls
+
+                  cd ./$sharedName-macos-latest
+                  ls
+
+                  cd ./$sharedName-ubuntu-latest
+                  ls
+
+                  cd ./$sharedName-windows-latest
+                  ls
+
                   $releaseTitle = "Terminal Games"
                   $sharedName = "terminal-games"
                   $currentDateTime = Get-Date -Format "yyyy-MM-dd_HH-mm-ss"
