@@ -27,7 +27,7 @@ jobs:
                   $releaseTitle = "Terminal Games"
                   $sharedName = "terminal-games"
                   $currentDateTime = Get-Date -Format "yyyy-MM-dd_HH-mm-ss"
-                  gh release create "$sharedName-$currentDateTime" ./$sharedName-macos-latest/$sharedName ./$sharedName-ubuntu-latest/$sharedName ./$sharedName-windows-latest/$sharedName.exe --generate-notes --latest --title "$releaseTitle $currentDateTime"
+                  gh release create "$sharedName-$currentDateTime" ./$sharedName-macos-latest/ ./$sharedName-ubuntu-latest/ ./$sharedName-windows-latest/ --generate-notes --latest --title "$releaseTitle $currentDateTime" --draft
               env:
                   GH_TOKEN: ${{ github.token }}
 
