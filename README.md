@@ -4,22 +4,32 @@ Simple games that run in the terminal.
 
 ## Getting Started
 
-CMake can be used to build the project:
+Binaries can be found in [Releases](https://github.com/J-Afzal/Terminal-Games/releases) or, if preferred, CMake can be used to
+build the project from source either through the PowerShell helper function:
 
 ```text
-git clone https://github.com/J-Afzal/Terminal-Games.git
+Import-Module ./modules/Build.psd1
+
+Build-CppCodeUsingCMake -Platform windows-latest -BuildType Release -BuildDirectory build -Parallel 8 -Verbose
+
+./build/terminal-games OR ./build/terminal-games.exe
+```
+
+or manually:
+
+```text
+git clone --recurse-submodules https://github.com/J-Afzal/Terminal-Games.git
 cd Terminal-Games
 cmake -S . -B ./build -D "CMAKE_BUILD_TYPE=Release"
 cmake --build ./build --config Release
+
+./build/terminal-games OR ./build/terminal-games.exe
 ```
 
-The executable can be called from the command line:
+> [!WARNING]
+> If on Windows make sure to add -G "NMake Makefiles" otherwise the executable may not be in the expected location.
 
-```text
-./build/terminal-games
-```
-
-Here are the full list of options:
+Here are the full list of options for Terminal Games:
 
 ```text
 Usage: terminal-games [options]

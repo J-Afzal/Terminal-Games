@@ -23,10 +23,14 @@ LICENSE         text
 *.png           binary
 *.svg           text
 
+# Scripts
+*.psd1          text
+*.psm1          text
+
 # Serialisation
 *.yml           text
 
 # Web
-*.css             text diff=css
-*.html            text diff=html
-*.js              text
+*.css           text      diff=css
+*.html          text      diff=html
+*.js            text
