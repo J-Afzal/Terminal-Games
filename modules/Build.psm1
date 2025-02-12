@@ -71,11 +71,14 @@ function Assert-ExternalCommandError {
     .PARAMETER BuildDirectory
     Specifies the directory to build in to relative to the repository root.
 
+    .PARAMETER Parallel
+    Specifies the option to specify a parallel build level. They map to corresponding options of the native build tool.
+
     .PARAMETER CleanBuild
     Specifies whether to delete the build folders (including OpenCV build folder) before building.
 
-    .PARAMETER Parallel
-    Specifies the option to specify a parallel build level. They map to corresponding options of the native build tool.
+    .PARAMETER ConfigureOnly
+    Specifies whether to only configure CMake or the to do the full build as well.
 
     .INPUTS
     None.
@@ -85,7 +88,7 @@ function Assert-ExternalCommandError {
 
     .EXAMPLE
     Import-Module ./modules/Build.psd1
-    Build-CppCodeUsingCMake -Platform macos-latest -BuildType Release -BuildDirectory build -CleanBuild -Parallel 8 -Verbose
+    Build-CppCodeUsingCMake -Platform macos-latest -BuildType Release -BuildDirectory build -Parallel 8 -CleanBuild -ConfigureOnly -Verbose
 #>
 
 function Build-CppCodeUsingCMake {
@@ -107,12 +110,16 @@ function Build-CppCodeUsingCMake {
         $BuildDirectory,
 
         [Parameter(Position = 3, Mandatory = $false)]
+        [int]
+        $Parallel = 1,
+
+        [Parameter(Position = 4, Mandatory = $false)]
         [switch]
         $CleanBuild = $false,
 
-        [Parameter(Position = 4, Mandatory = $false)]
-        [int]
-        $Parallel = 1
+        [Parameter(Position = 5, Mandatory = $false)]
+        [switch]
+        $ConfigureOnly = $false
     )
 
     Write-Verbose "##[debug]Running Build-CppCodeUsingCMake..."
@@ -120,8 +127,9 @@ function Build-CppCodeUsingCMake {
     Write-Verbose "##[debug]    Platform: $Platform"
     Write-Verbose "##[debug]    BuildType: $BuildType"
     Write-Verbose "##[debug]    BuildDirectory: $BuildDirectory"
-    Write-Verbose "##[debug]    CleanBuild: $CleanBuild"
     Write-Verbose "##[debug]    Parallel: $Parallel"
+    Write-Verbose "##[debug]    CleanBuild: $CleanBuild"
+    Write-Verbose "##[debug]    ConfigureOnly: $ConfigureOnly"
 
     if ($CleanBuild) {
         if (Test-Path -LiteralPath ./$BuildDirectory/) {
@@ -148,8 +156,10 @@ function Build-CppCodeUsingCMake {
 
     Write-Information "##[command]Building Terminal Games..."
 
-    & cmake --build ./$BuildDirectory --config $BuildType --parallel $Parallel
-    Assert-ExternalCommandError -ThrowError
+    if (-Not $ConfigureOnly) {
+        cmake --build ./$BuildDirectory --config $BuildType --parallel $Parallel
+        Assert-ExternalCommandError -ThrowError
+    }
 
     Write-Information "##[section]Terminal Games has been successfully built!"
 }
