@@ -26,34 +26,6 @@ namespace TerminalGames
         virtual ~Game() = default;
 
         /**
-         * @brief Disable constructing a new Game object using copy constructor.
-         *
-         * @param p_game The game to copy.
-         */
-        Game(const Game& p_game) = delete;
-
-        /**
-         * @brief Disable constructing a new Game object using move constructor.
-         *
-         * @param p_game The game to copy.
-         */
-        Game(const Game&& p_game) = delete;
-
-        /**
-         * @brief Disable constructing a new Game object using copy assignment operator.
-         *
-         * @param p_game The game to copy.
-         */
-        Game& operator=(const Game& p_game) = delete;
-
-        /**
-         * @brief Disable constructing a new Game object using move assignment operator.
-         *
-         * @param p_game The game to copy.
-         */
-        Game& operator=(const Game&& p_game) = delete;
-
-        /**
          * @brief The main orchestration loop for all games.
          */
         virtual void Play() final
@@ -105,6 +77,34 @@ namespace TerminalGames
                 }
             }
         }
+
+        /**
+         * @brief Disable constructing a new Game object using copy constructor.
+         *
+         * @param p_game The game to copy.
+         */
+        Game(const Game& p_game) = delete;
+
+        /**
+         * @brief Disable constructing a new Game object using move constructor.
+         *
+         * @param p_game The game to copy.
+         */
+        Game(const Game&& p_game) = delete;
+
+        /**
+         * @brief Disable constructing a new Game object using copy assignment operator.
+         *
+         * @param p_game The game to copy.
+         */
+        Game& operator=(const Game& p_game) = delete;
+
+        /**
+         * @brief Disable constructing a new Game object using move assignment operator.
+         *
+         * @param p_game The game to copy.
+         */
+        Game& operator=(const Game&& p_game) = delete;
 
     private:
         /**
