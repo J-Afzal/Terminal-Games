@@ -8,6 +8,7 @@
 #include <vector>
 
 #include "games/Game.hpp"
+#include "helpers/GameInformation.hpp"
 #include "helpers/Globals.hpp"
 #include "helpers/PageBuilder.hpp"
 
@@ -25,7 +26,7 @@ namespace TerminalGames
     {
     public:
         /**
-         * @brief Constructs a new TicTacToe object.
+         * @brief Constructs a new %TicTacToe object.
          *
          * @param p_useAnsiEscapeCodes Whether to use use ANSI escapes codes (true) or only extended ASCII characters (false).
          */
@@ -36,7 +37,7 @@ namespace TerminalGames
 
         void GetUserOptions() override;
 
-        void UpdateGameInfo() override;
+        void UpdateGameInformation() override;
 
         bool IsGameOver() override;
 
@@ -108,7 +109,7 @@ namespace TerminalGames
         /**
          * @brief Used to package up the current state of the game so it can be used by m_pageBuilder.
          */
-        GameInfo m_gameInfo;
+        GameInformation m_gameInformation;
 
         /**
          * @brief Used to randomly choose the player to start the game and to randomly decide the computer's next command.

@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "games/Game.hpp"
+#include "helpers/GameInformation.hpp"
 #include "helpers/PageBuilder.hpp"
 
 /**
@@ -22,7 +23,7 @@ namespace TerminalGames
     {
     public:
         /**
-         * @brief Constructs a new Hangman object.
+         * @brief Constructs a new %Hangman object.
          *
          * @param p_useAnsiEscapeCodes Whether to use use ANSI escapes codes (true) or only extended ASCII characters (false).
          */
@@ -33,7 +34,7 @@ namespace TerminalGames
 
         void GetUserOptions() override;
 
-        void UpdateGameInfo() override;
+        void UpdateGameInformation() override;
 
         bool IsGameOver() override;
 
@@ -107,7 +108,7 @@ namespace TerminalGames
         /**
          * @brief Used to package up the current state of the game so it can be used by m_pageBuilder.
          */
-        GameInfo m_gameInfo;
+        GameInformation m_gameInformation;
 
         /**
          * @brief  Used to randomly select the word to be guessed from `Globals::G_HANGMAN_COMPUTER_WORDS` when the computer is

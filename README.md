@@ -15,6 +15,10 @@ Build-CppCodeUsingCMake -Platform windows-latest -BuildType Release -BuildDirect
 ./build/terminal-games OR ./build/terminal-games.exe
 ```
 
+> [!WARNING]
+> If on Windows make sure to run the above within a Visual Studio Developer Command Prompt otherwise you may see errors around
+> `cl.exe` not being found.
+
 or manually:
 
 ```text
@@ -38,16 +42,16 @@ OPTIONS:
 
 Generic Options:
 
-  --h --help        Display available options.
+  -h --help         Display available options.
 
-terminal-games options:
+Optional Options:
 
   --a --ascii-only  Only use extended ASCII characters (this removes all colour).
 ```
 
 ## Documentation
 
-Checkout the GitHub pages-hosted [documentation page](https://J-Afzal.github.io/Terminal-Games) built using doxygen.
+Checkout the [documentation page](https://J-Afzal.github.io/Terminal-Games) built using Doxygen and hosted using Github pages.
 
 ![Documentation Homepage](./resources/screenshots/DocumentationHomepage.png)
 
@@ -125,7 +129,7 @@ The continuous deployment workflow runs against all commits to main, builds the 
 
 ## Development Setup
 
-For development a few extra tools are needed to check for linting issues locally. For this clone the repo with the
+For development a few extra tools are needed to check for linting issues locally which include the
 [`Linters`](https://github.com/J-Afzal/Linters) submodule:
 
 ```text
@@ -143,15 +147,15 @@ The development dependencies are:
 
 All linting helper functions can be found in the [`Linters`](https://github.com/J-Afzal/Linters) submodule.
 
-### Notes
-
-Any generator can be used to build the project but to run `clang-tidy`/`clang-format` CMake must be configured using a generator
-that creates a `compile_commands.json` file in the build directory before running `clang-tidy`/`clang-format` (e.g.
-`-G "Ninja"`, `-G "NMake Makefiles"`, etc)
-
-On Windows, Visual Studio 2022 can be used by opening the folder as a CMake project and Visual Studio Code can be used by
-opening the folder through the `Developer PowerShell for VS` (otherwise you may see errors around cl.exe not being found).
+Any generator can be used to build the project but to prior to running `clang-tidy`/`clang-format` CMake must be configured
+using a generator that creates a `compile_commands.json` file in the build directory (e.g. `-G "Ninja"`, `-G "NMake Makefiles"`,
+etc)
 
 On windows, clang-tidy and clang-format can be installed using the `LLVM-x.x.x-win64.exe` binary from the
 [LLVM release page](https://github.com/llvm/llvm-project/releases/tag/llvmorg-19.1.6) or from
 [chocolatey](https://community.chocolatey.org/packages/llvm) using `choco install llvm -y`.
+
+### IDE
+
+On Windows, Visual Studio 2022 can be used by opening the folder as a CMake project and Visual Studio Code can be used by
+opening the folder through the `Developer PowerShell for VS` (otherwise you may see errors around cl.exe not being found).

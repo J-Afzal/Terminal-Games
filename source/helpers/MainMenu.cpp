@@ -22,8 +22,23 @@ namespace TerminalGames
     }
 
     MainMenu::MainMenu(const std::vector<std::string>& p_commandLineArguments) :
-        m_useAnsiEscapeCodes(ParseCommandLineArguments(p_commandLineArguments))
+        m_useAnsiEscapeCodes(true)
     {
+        for (const std::string& argument : p_commandLineArguments)
+        {
+            if (argument == "--a" || argument == "--ascii-only")
+            {
+                m_useAnsiEscapeCodes = false;
+                break;
+            }
+
+            if (argument == "-h" || argument == "--help")
+            {
+                std::cout << Globals::G_MAIN_MENU_CLI_HELP_MESSAGE;
+                exit(1);
+            }
+        }
+
         SetupHomepages();
     }
 
@@ -88,24 +103,5 @@ namespace TerminalGames
         m_games.emplace_back(std::make_unique<TicTacToe>(m_useAnsiEscapeCodes));
         m_games.emplace_back(std::make_unique<Hangman>(m_useAnsiEscapeCodes));
         m_games.emplace_back(std::make_unique<Battleships>(m_useAnsiEscapeCodes));
-    }
-
-    bool MainMenu::ParseCommandLineArguments(const std::vector<std::string>& p_commandLineArguments)
-    {
-        for (const std::string& argument : p_commandLineArguments)
-        {
-            if (argument == "--a" || argument == "--ascii-only")
-            {
-                return false;
-            }
-
-            if (argument == "--h" || argument == "--help")
-            {
-                std::cout << Globals::G_MAIN_MENU_CLI_HELP_MESSAGE;
-                exit(1);
-            }
-        }
-
-        return true;
     }
 }

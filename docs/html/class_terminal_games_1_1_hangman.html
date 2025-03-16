@@ -134,7 +134,7 @@ Inheritance diagram for TerminalGames::Hangman:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a59fc17a1348fa64a436ca60dcc8b199c" id="r_a59fc17a1348fa64a436ca60dcc8b199c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a59fc17a1348fa64a436ca60dcc8b199c">Hangman</a> (const bool &amp;p_useAnsiEscapeCodes)</td></tr>
-<tr class="memdesc:a59fc17a1348fa64a436ca60dcc8b199c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a new <a class="el" href="class_terminal_games_1_1_hangman.html" title="Implementation of the Hangman game: https://en.wikipedia.org/wiki/Hangman_(game)">Hangman</a> object.  <br /></td></tr>
+<tr class="memdesc:a59fc17a1348fa64a436ca60dcc8b199c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a new Hangman object.  <br /></td></tr>
 <tr class="separator:a59fc17a1348fa64a436ca60dcc8b199c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af1cada30b87c7a37ad6c7c9ef778b231" id="r_af1cada30b87c7a37ad6c7c9ef778b231"><td class="memItemLeft" align="right" valign="top"><a id="af1cada30b87c7a37ad6c7c9ef778b231" name="af1cada30b87c7a37ad6c7c9ef778b231"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>Play</b> () final</td></tr>
@@ -149,9 +149,9 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:a75f034310c3c87d49f0b85a9ecf6f082" id="r_a75f034310c3c87d49f0b85a9ecf6f082"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a75f034310c3c87d49f0b85a9ecf6f082">GetUserOptions</a> () override</td></tr>
 <tr class="memdesc:a75f034310c3c87d49f0b85a9ecf6f082"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prompt the user for their choice on various game-related options.  <br /></td></tr>
 <tr class="separator:a75f034310c3c87d49f0b85a9ecf6f082"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a75503954bd4df354240cec43c032ede2" id="r_a75503954bd4df354240cec43c032ede2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a75503954bd4df354240cec43c032ede2">UpdateGameInfo</a> () override</td></tr>
-<tr class="memdesc:a75503954bd4df354240cec43c032ede2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates <a class="el" href="struct_terminal_games_1_1_game_info.html" title="Used by game objects to package themselves into a format that can be used by PageBuilder to construct...">GameInfo</a> to match the current state of the game.  <br /></td></tr>
-<tr class="separator:a75503954bd4df354240cec43c032ede2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c0b29a6a2b88e3d6a376d190b99ff1a" id="r_a2c0b29a6a2b88e3d6a376d190b99ff1a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2c0b29a6a2b88e3d6a376d190b99ff1a">UpdateGameInformation</a> () override</td></tr>
+<tr class="memdesc:a2c0b29a6a2b88e3d6a376d190b99ff1a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates <a class="el" href="struct_terminal_games_1_1_game_information.html" title="Used by game objects to package themselves into a format that can be used by PageBuilder to construct...">GameInformation</a> to match the current state of the game.  <br /></td></tr>
+<tr class="separator:a2c0b29a6a2b88e3d6a376d190b99ff1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a33bcc8e19786162d7094ede6333ba091" id="r_a33bcc8e19786162d7094ede6333ba091"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a33bcc8e19786162d7094ede6333ba091">IsGameOver</a> () override</td></tr>
 <tr class="memdesc:a33bcc8e19786162d7094ede6333ba091"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check whether the game is over.  <br /></td></tr>
 <tr class="separator:a33bcc8e19786162d7094ede6333ba091"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -202,10 +202,10 @@ Private Attributes</h2></td></tr>
 <a class="el" href="class_terminal_games_1_1_page_builder.html">PageBuilder</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m_pageBuilder</b></td></tr>
 <tr class="memdesc:a7832ef8e36434e3c08142221742d70b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used to build pages required by the game. <br /></td></tr>
 <tr class="separator:a7832ef8e36434e3c08142221742d70b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4a661fba01eb197671c9a925b568ba58" id="r_a4a661fba01eb197671c9a925b568ba58"><td class="memItemLeft" align="right" valign="top"><a id="a4a661fba01eb197671c9a925b568ba58" name="a4a661fba01eb197671c9a925b568ba58"></a>
-<a class="el" href="struct_terminal_games_1_1_game_info.html">GameInfo</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m_gameInfo</b></td></tr>
-<tr class="memdesc:a4a661fba01eb197671c9a925b568ba58"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used to package up the current state of the game so it can be used by m_pageBuilder. <br /></td></tr>
-<tr class="separator:a4a661fba01eb197671c9a925b568ba58"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8f6924df6c576fd0541ceb282b8db44" id="r_ab8f6924df6c576fd0541ceb282b8db44"><td class="memItemLeft" align="right" valign="top"><a id="ab8f6924df6c576fd0541ceb282b8db44" name="ab8f6924df6c576fd0541ceb282b8db44"></a>
+<a class="el" href="struct_terminal_games_1_1_game_information.html">GameInformation</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m_gameInformation</b></td></tr>
+<tr class="memdesc:ab8f6924df6c576fd0541ceb282b8db44"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used to package up the current state of the game so it can be used by m_pageBuilder. <br /></td></tr>
+<tr class="separator:ab8f6924df6c576fd0541ceb282b8db44"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abff67d4b048e7fc12b3cf64655b52168" id="r_abff67d4b048e7fc12b3cf64655b52168"><td class="memItemLeft" align="right" valign="top"><a id="abff67d4b048e7fc12b3cf64655b52168" name="abff67d4b048e7fc12b3cf64655b52168"></a>
 std::default_random_engine&#160;</td><td class="memItemRight" valign="bottom"><b>m_randomNumberGenerator</b></td></tr>
 <tr class="memdesc:abff67d4b048e7fc12b3cf64655b52168"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used to randomly select the word to be guessed from <code><a class="el" href="namespace_terminal_games_1_1_globals.html#a0edcf2f95ea5b55b4179364d21ca3c11" title="Hangman computer word list for when the computer is asked to chose a word to be guessed.">Globals::G_HANGMAN_COMPUTER_WORDS</a></code> when the computer is the word setter and used to randomly select a letter to guess when the computer is the guesser. <br /></td></tr>
@@ -289,7 +289,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>m_saveGameOptions</b>
 </table>
 </div><div class="memdoc">
 
-<p>Constructs a new <a class="el" href="class_terminal_games_1_1_hangman.html" title="Implementation of the Hangman game: https://en.wikipedia.org/wiki/Hangman_(game)">Hangman</a> object. </p>
+<p>Constructs a new Hangman object. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">p_useAnsiEscapeCodes</td><td>Whether to use use ANSI escapes codes (true) or only extended ASCII characters (false). </td></tr>
@@ -358,8 +358,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>m_saveGameOptions</b>
 
 </div>
 </div>
-<a id="a75503954bd4df354240cec43c032ede2" name="a75503954bd4df354240cec43c032ede2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a75503954bd4df354240cec43c032ede2">&#9670;&#160;</a></span>UpdateGameInfo()</h2>
+<a id="a2c0b29a6a2b88e3d6a376d190b99ff1a" name="a2c0b29a6a2b88e3d6a376d190b99ff1a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c0b29a6a2b88e3d6a376d190b99ff1a">&#9670;&#160;</a></span>UpdateGameInformation()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -368,7 +368,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>m_saveGameOptions</b>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void TerminalGames::Hangman::UpdateGameInfo </td>
+          <td class="memname">void TerminalGames::Hangman::UpdateGameInformation </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
@@ -381,9 +381,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>m_saveGameOptions</b>
 </table>
 </div><div class="memdoc">
 
-<p>Updates <a class="el" href="struct_terminal_games_1_1_game_info.html" title="Used by game objects to package themselves into a format that can be used by PageBuilder to construct...">GameInfo</a> to match the current state of the game. </p>
+<p>Updates <a class="el" href="struct_terminal_games_1_1_game_information.html" title="Used by game objects to package themselves into a format that can be used by PageBuilder to construct...">GameInformation</a> to match the current state of the game. </p>
 
-<p>Implements <a class="el" href="class_terminal_games_1_1_game.html#abab7e396ade10790ca37554fbe9a6701">TerminalGames::Game</a>.</p>
+<p>Implements <a class="el" href="class_terminal_games_1_1_game.html#a7dccd5d9d5b1ade77c98f1ffc00c235b">TerminalGames::Game</a>.</p>
 
 </div>
 </div>
@@ -782,7 +782,7 @@ false If the current turn is NOT the users'. </dd></dl>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespace_terminal_games.html">TerminalGames</a></li><li class="navelem"><a class="el" href="class_terminal_games_1_1_hangman.html">Hangman</a></li>
-    <li class="footer">Generated on Mon Feb 17 2025 for Terminal Games by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2 </li>
+    <li class="footer">Generated on Sun Mar 16 2025 for Terminal Games by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2 </li>
   </ul>
 </div>
 </body>

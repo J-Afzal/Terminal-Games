@@ -134,7 +134,7 @@ Inheritance diagram for TerminalGames::TicTacToe:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a36896191fb3af466fcac726a1d9c077a" id="r_a36896191fb3af466fcac726a1d9c077a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a36896191fb3af466fcac726a1d9c077a">TicTacToe</a> (const bool &amp;p_useAnsiEscapeCodes)</td></tr>
-<tr class="memdesc:a36896191fb3af466fcac726a1d9c077a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a new <a class="el" href="class_terminal_games_1_1_tic_tac_toe.html" title="Implementation of the Tic-Tac-Toe game: https://en.wikipedia.org/wiki/Tic-tac-toe.">TicTacToe</a> object.  <br /></td></tr>
+<tr class="memdesc:a36896191fb3af466fcac726a1d9c077a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a new TicTacToe object.  <br /></td></tr>
 <tr class="separator:a36896191fb3af466fcac726a1d9c077a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af1cada30b87c7a37ad6c7c9ef778b231" id="r_af1cada30b87c7a37ad6c7c9ef778b231"><td class="memItemLeft" align="right" valign="top"><a id="af1cada30b87c7a37ad6c7c9ef778b231" name="af1cada30b87c7a37ad6c7c9ef778b231"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>Play</b> () final</td></tr>
@@ -149,9 +149,9 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:a0a5bc87586e4560792dbe24f05493cfa" id="r_a0a5bc87586e4560792dbe24f05493cfa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0a5bc87586e4560792dbe24f05493cfa">GetUserOptions</a> () override</td></tr>
 <tr class="memdesc:a0a5bc87586e4560792dbe24f05493cfa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prompt the user for their choice on various game-related options.  <br /></td></tr>
 <tr class="separator:a0a5bc87586e4560792dbe24f05493cfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aca447044aac32c5255a5186502b3dcca" id="r_aca447044aac32c5255a5186502b3dcca"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aca447044aac32c5255a5186502b3dcca">UpdateGameInfo</a> () override</td></tr>
-<tr class="memdesc:aca447044aac32c5255a5186502b3dcca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates <a class="el" href="struct_terminal_games_1_1_game_info.html" title="Used by game objects to package themselves into a format that can be used by PageBuilder to construct...">GameInfo</a> to match the current state of the game.  <br /></td></tr>
-<tr class="separator:aca447044aac32c5255a5186502b3dcca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf1d7140a98270dc918a3ba85b02de8f" id="r_aaf1d7140a98270dc918a3ba85b02de8f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaf1d7140a98270dc918a3ba85b02de8f">UpdateGameInformation</a> () override</td></tr>
+<tr class="memdesc:aaf1d7140a98270dc918a3ba85b02de8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates <a class="el" href="struct_terminal_games_1_1_game_information.html" title="Used by game objects to package themselves into a format that can be used by PageBuilder to construct...">GameInformation</a> to match the current state of the game.  <br /></td></tr>
+<tr class="separator:aaf1d7140a98270dc918a3ba85b02de8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4a259179b1d00196c1368e1fb9acf5eb" id="r_a4a259179b1d00196c1368e1fb9acf5eb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4a259179b1d00196c1368e1fb9acf5eb">IsGameOver</a> () override</td></tr>
 <tr class="memdesc:a4a259179b1d00196c1368e1fb9acf5eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check whether the game is over.  <br /></td></tr>
 <tr class="separator:a4a259179b1d00196c1368e1fb9acf5eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -198,10 +198,10 @@ Private Attributes</h2></td></tr>
 <a class="el" href="class_terminal_games_1_1_page_builder.html">PageBuilder</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m_pageBuilder</b></td></tr>
 <tr class="memdesc:aaaea009cf739aeb3e1c64270c851ddc1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used to build pages required by the game. <br /></td></tr>
 <tr class="separator:aaaea009cf739aeb3e1c64270c851ddc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8bacfd61c42c283e5e4b4587c59e329e" id="r_a8bacfd61c42c283e5e4b4587c59e329e"><td class="memItemLeft" align="right" valign="top"><a id="a8bacfd61c42c283e5e4b4587c59e329e" name="a8bacfd61c42c283e5e4b4587c59e329e"></a>
-<a class="el" href="struct_terminal_games_1_1_game_info.html">GameInfo</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m_gameInfo</b></td></tr>
-<tr class="memdesc:a8bacfd61c42c283e5e4b4587c59e329e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used to package up the current state of the game so it can be used by m_pageBuilder. <br /></td></tr>
-<tr class="separator:a8bacfd61c42c283e5e4b4587c59e329e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67a500b26b66023180c1876746d2461a" id="r_a67a500b26b66023180c1876746d2461a"><td class="memItemLeft" align="right" valign="top"><a id="a67a500b26b66023180c1876746d2461a" name="a67a500b26b66023180c1876746d2461a"></a>
+<a class="el" href="struct_terminal_games_1_1_game_information.html">GameInformation</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m_gameInformation</b></td></tr>
+<tr class="memdesc:a67a500b26b66023180c1876746d2461a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used to package up the current state of the game so it can be used by m_pageBuilder. <br /></td></tr>
+<tr class="separator:a67a500b26b66023180c1876746d2461a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af004005d5ee1a53b2b757ea8e0a56b25" id="r_af004005d5ee1a53b2b757ea8e0a56b25"><td class="memItemLeft" align="right" valign="top"><a id="af004005d5ee1a53b2b757ea8e0a56b25" name="af004005d5ee1a53b2b757ea8e0a56b25"></a>
 std::default_random_engine&#160;</td><td class="memItemRight" valign="bottom"><b>m_randomNumberGenerator</b></td></tr>
 <tr class="memdesc:af004005d5ee1a53b2b757ea8e0a56b25"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used to randomly choose the player to start the game and to randomly decide the computer's next command. <br /></td></tr>
@@ -281,7 +281,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>m_saveGameOptions</b>
 </table>
 </div><div class="memdoc">
 
-<p>Constructs a new <a class="el" href="class_terminal_games_1_1_tic_tac_toe.html" title="Implementation of the Tic-Tac-Toe game: https://en.wikipedia.org/wiki/Tic-tac-toe.">TicTacToe</a> object. </p>
+<p>Constructs a new TicTacToe object. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">p_useAnsiEscapeCodes</td><td>Whether to use use ANSI escapes codes (true) or only extended ASCII characters (false). </td></tr>
@@ -350,8 +350,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>m_saveGameOptions</b>
 
 </div>
 </div>
-<a id="aca447044aac32c5255a5186502b3dcca" name="aca447044aac32c5255a5186502b3dcca"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aca447044aac32c5255a5186502b3dcca">&#9670;&#160;</a></span>UpdateGameInfo()</h2>
+<a id="aaf1d7140a98270dc918a3ba85b02de8f" name="aaf1d7140a98270dc918a3ba85b02de8f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf1d7140a98270dc918a3ba85b02de8f">&#9670;&#160;</a></span>UpdateGameInformation()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -360,7 +360,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>m_saveGameOptions</b>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void TerminalGames::TicTacToe::UpdateGameInfo </td>
+          <td class="memname">void TerminalGames::TicTacToe::UpdateGameInformation </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
@@ -373,9 +373,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>m_saveGameOptions</b>
 </table>
 </div><div class="memdoc">
 
-<p>Updates <a class="el" href="struct_terminal_games_1_1_game_info.html" title="Used by game objects to package themselves into a format that can be used by PageBuilder to construct...">GameInfo</a> to match the current state of the game. </p>
+<p>Updates <a class="el" href="struct_terminal_games_1_1_game_information.html" title="Used by game objects to package themselves into a format that can be used by PageBuilder to construct...">GameInformation</a> to match the current state of the game. </p>
 
-<p>Implements <a class="el" href="class_terminal_games_1_1_game.html#abab7e396ade10790ca37554fbe9a6701">TerminalGames::Game</a>.</p>
+<p>Implements <a class="el" href="class_terminal_games_1_1_game.html#a7dccd5d9d5b1ade77c98f1ffc00c235b">TerminalGames::Game</a>.</p>
 
 </div>
 </div>
@@ -496,7 +496,7 @@ false If the current turn is NOT the users'. </dd></dl>
 </div><div class="memdoc">
 
 <p>Prompt the user to enter their command for the current turn. </p>
-<dl class="section warning"><dt>Warning</dt><dd>This function does not catch any exceptions thrown by <code><a class="el" href="class_terminal_games_1_1_terminal.html#a7073a097fa998beccfd138fd051d4462" title="Gets a user command based on the currently displayed game grid (wrapper function around the platform-...">Terminal::GetUserCommandFromGameGrid()</a></code>. </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>This function does not catch any exceptions thrown by <code><a class="el" href="class_terminal_games_1_1_terminal.html#aac75362f1b339fa1b50dc8e38afa8989" title="Gets a user command based on the currently displayed game grid (wrapper function around the platform-...">Terminal::GetUserCommandFromGameGrid()</a></code>. </dd></dl>
 <dl class="bug"><dt><b><a class="el" href="bug.html#_bug000002">Bug</a></b></dt><dd>If the user presses the <code><a class="el" href="namespace_terminal_games_1_1_globals.html#ad1578073d396f9ef02f11744bb72ff54" title="Keyboard values when getting user input on Windows.">Globals::G_TERMINAL_BACKSPACE_KEY</a></code> the thrown exception <code><a class="el" href="class_terminal_games_1_1_globals_1_1_exceptions_1_1_backspace_key_pressed.html" title="Used when the backspace key is pressed.">Globals::Exceptions::BackspaceKeyPressed</a></code> will never be caught and the program will crash. </dd></dl>
 
 <p>Implements <a class="el" href="class_terminal_games_1_1_game.html#a285f4730bba2940c4ddceb15d2d1ea71">TerminalGames::Game</a>.</p>
@@ -783,7 +783,7 @@ false If the current turn is NOT the users'. </dd></dl>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespace_terminal_games.html">TerminalGames</a></li><li class="navelem"><a class="el" href="class_terminal_games_1_1_tic_tac_toe.html">TicTacToe</a></li>
-    <li class="footer">Generated on Mon Feb 17 2025 for Terminal Games by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2 </li>
+    <li class="footer">Generated on Sun Mar 16 2025 for Terminal Games by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2 </li>
   </ul>
 </div>
 </body>

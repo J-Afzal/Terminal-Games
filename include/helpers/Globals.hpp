@@ -167,6 +167,11 @@ namespace TerminalGames::Globals
 #endif
 
     /**
+     * @brief CLI help message.
+     */
+    static inline const std::string G_MAIN_MENU_CLI_HELP_MESSAGE = "\nUsage: terminal-games [options]\n\nOPTIONS:\n\nGeneric Options:\n\n  -h --help         Display available options.\n\nOptional Options:\n\n  --a --ascii-only  Only use extended ASCII characters (this removes all colour).\n\n";
+
+    /**
      * @brief Extended ASCII characters for edges and corners of the page.
      */
     ///@{
@@ -367,12 +372,6 @@ namespace TerminalGames::Globals
      * @brief The cursor width while running on windows.
      */
     static inline const uint32_t G_TERMINAL_CURSOR_WIDTH_PERCENTAGE = 100;
-
-    /**
-     * @brief CLI help message.
-     */
-
-    static inline const std::string G_MAIN_MENU_CLI_HELP_MESSAGE = "\nUsage: terminal-games [options]\n\nOPTIONS:\n\nGeneric Options:\n\n  --h --help        Display available options.\n\nterminal-games options:\n\n  --a --ascii-only  Only use extended ASCII characters (this removes all colour).\n\n";
 
     /**
      * @brief Used by multiple games or an attribute not specific to one game.

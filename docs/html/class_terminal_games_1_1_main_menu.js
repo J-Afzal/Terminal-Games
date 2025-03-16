@@ -11,7 +11,6 @@ var class_terminal_games_1_1_main_menu =
     [ "operator=", "class_terminal_games_1_1_main_menu.html#a6fa50748b717444139a74170cf4260b6", null ],
     [ "SetupHomepages", "class_terminal_games_1_1_main_menu.html#a2d95f3165c6f0d4ed50a708ef5712295", null ],
     [ "SetupMainMenuPagesAndGames", "class_terminal_games_1_1_main_menu.html#a4e49332fc732562d08dca8c090052eb3", null ],
-    [ "ParseCommandLineArguments", "class_terminal_games_1_1_main_menu.html#a4ecdf28113bcaf0c9fad9a15edaeaac7", null ],
     [ "m_games", "class_terminal_games_1_1_main_menu.html#ad596da9c5ab402d3568e474cb01e51d6", null ],
     [ "m_homepages", "class_terminal_games_1_1_main_menu.html#aa70f2d73d006a9504cb5a83daba4b4a1", null ],
     [ "m_mainMenus", "class_terminal_games_1_1_main_menu.html#a0d9976af135214d852e015e9f67211f0", null ],

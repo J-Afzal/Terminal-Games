@@ -16,12 +16,12 @@ namespace TerminalGames
     {
     public:
         /**
-         * @brief Constructs a new Game object.
+         * @brief Constructs a new %Game object.
          */
         Game() = default;
 
         /**
-         * @brief Destructs the Game object.
+         * @brief Destructs the %Game object.
          */
         virtual ~Game() = default;
 
@@ -40,7 +40,7 @@ namespace TerminalGames
 
                     GetUserOptions();
 
-                    UpdateGameInfo();
+                    UpdateGameInformation();
 
                     while (!IsGameOver())
                     {
@@ -56,12 +56,12 @@ namespace TerminalGames
 
                         ToggleCurrentPlayer();
 
-                        UpdateGameInfo();
+                        UpdateGameInformation();
                     }
 
                     ToggleCurrentPlayer();
 
-                    UpdateGameInfo();
+                    UpdateGameInformation();
 
                     GameOver();
                 }
@@ -79,30 +79,30 @@ namespace TerminalGames
         }
 
         /**
-         * @brief Disable constructing a new Game object using copy constructor.
+         * @brief Disable constructing a new %Game object using copy constructor.
          *
-         * @param p_game The game to copy.
+         * @param p_game The %Game to copy.
          */
         Game(const Game& p_game) = delete;
 
         /**
-         * @brief Disable constructing a new Game object using move constructor.
+         * @brief Disable constructing a new %Game object using move constructor.
          *
-         * @param p_game The game to copy.
+         * @param p_game The %Game to copy.
          */
         Game(const Game&& p_game) = delete;
 
         /**
-         * @brief Disable constructing a new Game object using copy assignment operator.
+         * @brief Disable constructing a new %Game object using copy assignment operator.
          *
-         * @param p_game The game to copy.
+         * @param p_game The %Game to copy.
          */
         Game& operator=(const Game& p_game) = delete;
 
         /**
-         * @brief Disable constructing a new Game object using move assignment operator.
+         * @brief Disable constructing a new %Game object using move assignment operator.
          *
-         * @param p_game The game to copy.
+         * @param p_game The %Game to copy.
          */
         Game& operator=(const Game&& p_game) = delete;
 
@@ -118,9 +118,9 @@ namespace TerminalGames
         virtual void GetUserOptions() = 0;
 
         /**
-         * @brief Updates GameInfo to match the current state of the game.
+         * @brief Updates GameInformation to match the current state of the game.
          */
-        virtual void UpdateGameInfo() = 0;
+        virtual void UpdateGameInformation() = 0;
 
         /**
          * @brief Check whether the game is over.

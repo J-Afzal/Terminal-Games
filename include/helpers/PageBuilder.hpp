@@ -1,11 +1,10 @@
 #pragma once
 
-#include <array>
 #include <cstdint>
 #include <string>
-#include <unordered_map>
 #include <vector>
 
+#include "helpers/GameInformation.hpp"
 #include "helpers/Globals.hpp"
 
 /**
@@ -30,84 +29,6 @@ namespace TerminalGames
         HANGMAN,
         BATTLESHIPS,
         ///@}
-    };
-
-    /**
-     * @brief Used by game objects to package themselves into a format that can be used by PageBuilder to construct a sub-page
-     * for the current state of the game.
-     */
-    struct GameInfo
-    {
-        /**
-         * @brief Used to package the TicTacToe current game state.
-         */
-        struct TicTacToeGameInfo
-        {
-            /**
-             * @brief Refer to the member data documentation in TicTacToe.
-             */
-            ///@{
-            std::array<std::array<std::string, Globals::G_TICTACTOE_GRID_WIDTH>, Globals::G_TICTACTOE_GRID_HEIGHT> m_gameGrid;
-            std::string m_computerSpeedName;
-            std::string m_currentPlayer;
-            std::string m_playerCount;
-            uint32_t m_turnCount;
-            bool m_hasWinner;
-            ///@}
-        }
-        /**
-         * @brief Used to package the TicTacToe current game state.
-         */
-        m_ticTacToeGameInfo;
-
-        /**
-         * @brief Used to package the Hangman current game state.
-         */
-        struct HangmanGameInfo
-        {
-            /**
-             * @brief Refer to the member data documentation in Hangman.
-             */
-            ///@{
-            std::vector<char> m_incorrectGuesses;
-            std::string m_computerSpeedName;
-            std::string m_currentGuessOfWord;
-            std::string m_playerCount;
-            std::string m_wordToBeGuessed;
-            uint32_t m_turnCount;
-            char m_currentLetterSelected;
-            bool m_isGameOver;
-            ///@}
-        }
-        /**
-         * @brief Used to package the Hangman current game state.
-         */
-        m_hangmanGameInfo;
-
-        /**
-         * @brief Used to package the Battleships current game state.
-         */
-        struct BattleshipsGameInfo
-        {
-            /**
-             * @brief Refer to the member data documentation in Battleships.
-             */
-            ///@{
-            std::array<std::array<std::string, Globals::G_BATTLESHIPS_BOARD_WIDTH>, Globals::G_BATTLESHIPS_BOARD_HEIGHT> m_boardPlayerOne;
-            std::array<std::array<std::string, Globals::G_BATTLESHIPS_BOARD_WIDTH>, Globals::G_BATTLESHIPS_BOARD_HEIGHT> m_boardPlayerTwo;
-            std::unordered_map<std::string, uint32_t> m_shipsRemainingPlayerOne;
-            std::unordered_map<std::string, uint32_t> m_shipsRemainingPlayerTwo;
-            std::string m_computerSpeedName;
-            std::string m_currentPlayer;
-            std::string m_playerCount;
-            uint32_t m_turnCount;
-            bool m_isGameOver;
-            ///@}
-        }
-        /**
-         * @brief Used to package the Battleships current game state.
-         */
-        m_battleshipsGameInfo;
     };
 
     /**
@@ -165,62 +86,62 @@ namespace TerminalGames
         /**
          * @brief Creates the pages for displaying the number of players playing the game option selection page.
          *
-         * @param p_gameInfo Information on the current state of the current game.
+         * @param p_gameInformation Information on the current state of the current game.
          * @return `std::vector<std::string>` %Pages where each page has a different number of players selected.
          */
-        std::vector<std::string> GetPlayerCountOptionSelectionGamePages(const GameInfo& p_gameInfo);
+        std::vector<std::string> GetPlayerCountOptionSelectionGamePages(const GameInformation& p_gameInformation);
 
         /**
          * @brief Creates the pages for displaying the user player choice for a game option selection page.
          *
-         * @param p_gameInfo Information on the current state of the current game.
+         * @param p_gameInformation Information on the current state of the current game.
          * @return` std::vector<std::string>` %Pages where each page has a different player choice selected.
          */
-        std::vector<std::string> GetUserPlayerChoiceOptionSelectionGamePages(const GameInfo& p_gameInfo);
+        std::vector<std::string> GetUserPlayerChoiceOptionSelectionGamePages(const GameInformation& p_gameInformation);
 
         /**
          * @brief Creates the pages for displaying the computer speed for a game option selection page.
          *
-         * @param p_gameInfo Information on the current state of the current game.
+         * @param p_gameInformation Information on the current state of the current game.
          * @return `std::vector<std::string>` %Pages where each page has a different computer speed selected.
          */
-        std::vector<std::string> GetComputerSpeedOptionSelectionGamePages(const GameInfo& p_gameInfo);
+        std::vector<std::string> GetComputerSpeedOptionSelectionGamePages(const GameInformation& p_gameInformation);
 
         /**
          * @brief Creates a general game page with a custom message to display on the page.
          *
-         * @param p_gameInfo Information on the current state of the current game.
+         * @param p_gameInformation Information on the current state of the current game.
          * @param p_message The custom message to display.
          * @return `std::string` A page with the current state of the game and a custom message.
          * @warning The message will be truncated if it is too long to be contained within a single line on the page.
          */
-        std::string GetPageWithMessage(const GameInfo& p_gameInfo, const std::string& p_message);
+        std::string GetPageWithMessage(const GameInformation& p_gameInformation, const std::string& p_message);
 
         /**
          * @brief Creates the game user command page which should prompt the user to enter a command.
          *
-         * @param p_gameInfo Information on the current state of the current game.
+         * @param p_gameInformation Information on the current state of the current game.
          * @return `std::string` A page with the current state of the game and a prompt to the user to enter a command.
          */
-        std::string GetUserCommandPage(const GameInfo& p_gameInfo);
+        std::string GetUserCommandPage(const GameInformation& p_gameInformation);
 
         /**
          * @brief Creates the computer command page for when the computer is entering their command.
          *
-         * @param p_gameInfo Information on the current state of the current game.
+         * @param p_gameInformation Information on the current state of the current game.
          * @return `std::string` A page with the current state of the game and a message that the computer is entering their
          * command.
          */
-        std::string GetComputerCommandPage(const GameInfo& p_gameInfo);
+        std::string GetComputerCommandPage(const GameInformation& p_gameInformation);
 
         /**
          * @brief Creates the game over page.
          *
-         * @param p_gameInfo Information on the current state of the current game.
+         * @param p_gameInformation Information on the current state of the current game.
          * @return `std::string` A page with the final state of the game, a message on who won, how many turns took place, and
          * how to quit the game or play again.
          */
-        std::string GetGameOverPage(const GameInfo& p_gameInfo);
+        std::string GetGameOverPage(const GameInformation& p_gameInformation);
 
         /**
          * @brief Creates the quit option selection page.
@@ -353,7 +274,7 @@ namespace TerminalGames
         /**
          * @brief Creates the pages for displaying the option selection page for the given options *within a game page*.
          *
-         * @param p_gameInfo Information on the current state of the current game.
+         * @param p_gameInformation Information on the current state of the current game.
          * @param p_message The custom message to display.
          * @param p_options The selectable options to display.
          * @return `std::vector<std::string>` %Pages where each page has a different option selected.
@@ -361,39 +282,39 @@ namespace TerminalGames
          * @warning The page height will be allowed to extended pass the pre-defined page height (i.e. `m_pageHeight`) to fit
          * all of the options provided.
          */
-        std::vector<std::string> GetGameOptionSelectionPages(const GameInfo& p_gameInfo, const std::string& p_message, const std::vector<std::string>& p_options);
+        std::vector<std::string> GetGameOptionSelectionPages(const GameInformation& p_gameInformation, const std::string& p_message, const std::vector<std::string>& p_options);
 
         /**
          * @brief Wrapper function around the game specific game sub-page functions.
          *
-         * @param p_gameInfo Information on the current state of the current game.
+         * @param p_gameInformation Information on the current state of the current game.
          * @return `std::string` The sub-page containing the current state of the current game.
          */
-        std::string GetGeneralGameSubPage(const GameInfo& p_gameInfo);
+        std::string GetGeneralGameSubPage(const GameInformation& p_gameInformation);
 
         /**
          * @brief Creates the sub-page containing the current state of the TicTacToe game.
          *
-         * @param p_gameInfo Information on the current state of the current game.
+         * @param p_gameInformation Information on the current state of the current game.
          * @return `std::string` The sub-page containing the current state of the TicTacToe game.
          */
-        std::string GetTicTacToeSubPage(const GameInfo& p_gameInfo);
+        std::string GetTicTacToeSubPage(const GameInformation& p_gameInformation);
 
         /**
          * @brief Creates the sub-page containing the current state of the Hangman game.
          *
-         * @param p_gameInfo Information on the current state of the current game.
+         * @param p_gameInformation Information on the current state of the current game.
          * @return `std::string` The sub-page containing the current state of the Hangman game.
          */
-        std::string GetHangmanSubPage(const GameInfo& p_gameInfo);
+        std::string GetHangmanSubPage(const GameInformation& p_gameInformation);
 
         /**
          * @brief Creates the sub-page containing the current state of the Battleships game.
          *
-         * @param p_gameInfo Information on the current state of the current game.
+         * @param p_gameInformation Information on the current state of the current game.
          * @return `std::string` The sub-page containing the current state of the Battleships game.
          */
-        std::string GetBattleshipsSubPage(const GameInfo& p_gameInfo);
+        std::string GetBattleshipsSubPage(const GameInformation& p_gameInformation);
 
         /**
          * @brief Calculates a grid layout based on the grid content in `p_gridColumnLines` and the grid sizes in

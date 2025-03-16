@@ -113,21 +113,21 @@ namespace TerminalGames
     std::tuple<uint32_t, uint32_t> Terminal::GetUserCommandFromGameGrid(
         const std::tuple<uint32_t, uint32_t>& p_startingGridLocation,
         const PageBuilder& p_pageBuilder,
-        const GameInfo& p_gameInfo,
+        const GameInformation& p_gameInformation,
         const bool& p_displayGetUserCommandPage)
     {
         if (Globals::G_PLATFORM_IS_WINDOWS)
         {
-            return GetUserCommandFromGameGridWindows(p_startingGridLocation, p_pageBuilder, p_gameInfo, p_displayGetUserCommandPage);
+            return GetUserCommandFromGameGridWindows(p_startingGridLocation, p_pageBuilder, p_gameInformation, p_displayGetUserCommandPage);
         }
 
-        return GetUserCommandFromGameGridNonWindows(p_startingGridLocation, p_pageBuilder, p_gameInfo, p_displayGetUserCommandPage);
+        return GetUserCommandFromGameGridNonWindows(p_startingGridLocation, p_pageBuilder, p_gameInformation, p_displayGetUserCommandPage);
     }
 
     std::tuple<uint32_t, uint32_t> Terminal::GetUserCommandFromGameGridWindows(
         const std::tuple<uint32_t, uint32_t>& p_startingGridLocation,
         const PageBuilder& p_pageBuilder,
-        const GameInfo& p_gameInfo,
+        const GameInformation& p_gameInformation,
         const bool& p_displayGetUserCommandPage)
     {
         PageBuilder pageBuilder = p_pageBuilder;
@@ -170,7 +170,7 @@ namespace TerminalGames
 
         if (p_displayGetUserCommandPage)
         {
-            PrintOutput(pageBuilder.GetUserCommandPage(p_gameInfo));
+            PrintOutput(pageBuilder.GetUserCommandPage(p_gameInformation));
         }
 
         while (true)
@@ -219,7 +219,7 @@ namespace TerminalGames
     std::tuple<uint32_t, uint32_t> Terminal::GetUserCommandFromGameGridNonWindows(
         const std::tuple<uint32_t, uint32_t>& p_startingGridLocation,
         const PageBuilder& p_pageBuilder,
-        const GameInfo& p_gameInfo,
+        const GameInformation& p_gameInformation,
         const bool& p_displayGetUserCommandPage)
     {
         const Pages CURRENT_PAGE_TYPE = p_pageBuilder.GetCurrentPageType();
@@ -247,26 +247,26 @@ namespace TerminalGames
 
         while (true)
         {
-            GameInfo currentGameInfo = p_gameInfo;
+            GameInformation currentGameInformation = p_gameInformation;
 
             if (CURRENT_PAGE_TYPE == Pages::TICTACTOE)
             {
-                currentGameInfo.m_ticTacToeGameInfo.m_gameGrid.at(currentRow).at(currentColumn) = "#" + std::string(1, currentGameInfo.m_ticTacToeGameInfo.m_gameGrid.at(currentRow).at(currentColumn).at(1)) + "#";
+                currentGameInformation.m_ticTacToeGameInformation.m_gameGrid.at(currentRow).at(currentColumn) = "#" + std::string(1, currentGameInformation.m_ticTacToeGameInformation.m_gameGrid.at(currentRow).at(currentColumn).at(1)) + "#";
             }
 
             else if (CURRENT_PAGE_TYPE == Pages::BATTLESHIPS && p_displayGetUserCommandPage)
             {
-                currentGameInfo.m_battleshipsGameInfo.m_boardPlayerTwo.at(currentRow).at(currentColumn) = "#" + std::string(1, currentGameInfo.m_battleshipsGameInfo.m_boardPlayerTwo.at(currentRow).at(currentColumn).at(0)) + "#";
+                currentGameInformation.m_battleshipsGameInformation.m_boardPlayerTwo.at(currentRow).at(currentColumn) = "#" + std::string(1, currentGameInformation.m_battleshipsGameInformation.m_boardPlayerTwo.at(currentRow).at(currentColumn).at(0)) + "#";
             }
 
             else if (CURRENT_PAGE_TYPE == Pages::BATTLESHIPS)
             {
-                currentGameInfo.m_battleshipsGameInfo.m_boardPlayerOne.at(currentRow).at(currentColumn) = "#" + std::string(1, currentGameInfo.m_battleshipsGameInfo.m_boardPlayerOne.at(currentRow).at(currentColumn).at(0)) + "#";
+                currentGameInformation.m_battleshipsGameInformation.m_boardPlayerOne.at(currentRow).at(currentColumn) = "#" + std::string(1, currentGameInformation.m_battleshipsGameInformation.m_boardPlayerOne.at(currentRow).at(currentColumn).at(0)) + "#";
             }
 
             if (p_displayGetUserCommandPage)
             {
-                PrintOutput(pageBuilder.GetUserCommandPage(currentGameInfo));
+                PrintOutput(pageBuilder.GetUserCommandPage(currentGameInformation));
             }
 
             switch (GetNextKeyPress())
@@ -472,7 +472,7 @@ namespace TerminalGames
     void Terminal::SetCursorVisibility(const bool& p_cursorVisibility)
     {
 #ifdef _WIN32
-        const CONSOLE_CURSOR_INFO CURSOR_INFO(Globals::G_TERMINAL_CURSOR_WIDTH_PERCENTAGE, static_cast<int>(p_cursorVisibility));
+        const CONSOLE_CURSOR_INFO CURSOR_INFO(Globals::G_TERMINAL_CURSOR_WIDTH_PERCENTAGE, static_cast<int32_t>(p_cursorVisibility));
         SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &CURSOR_INFO);
 #endif
     }

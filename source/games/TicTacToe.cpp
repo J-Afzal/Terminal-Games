@@ -67,9 +67,9 @@ namespace TerminalGames
         m_hasSavedGameOptions = true;
     }
 
-    void TicTacToe::UpdateGameInfo()
+    void TicTacToe::UpdateGameInformation()
     {
-        m_gameInfo.m_ticTacToeGameInfo = {
+        m_gameInformation.m_ticTacToeGameInformation = {
             .m_gameGrid = m_gameGrid,
             .m_computerSpeedName = m_computerSpeedName,
             .m_currentPlayer = m_currentPlayer,
@@ -116,7 +116,7 @@ namespace TerminalGames
     {
         while (true)
         {
-            const std::tuple<uint32_t, uint32_t> SELECTED_COMMAND = Terminal::GetUserCommandFromGameGrid(m_previousCommand, m_pageBuilder, m_gameInfo, true);
+            const std::tuple<uint32_t, uint32_t> SELECTED_COMMAND = Terminal::GetUserCommandFromGameGrid(m_previousCommand, m_pageBuilder, m_gameInformation, true);
 
             if (ValidateCommand(SELECTED_COMMAND))
             {
@@ -129,7 +129,7 @@ namespace TerminalGames
 
     void TicTacToe::ExecuteComputerCommand()
     {
-        Terminal::PrintOutput(m_pageBuilder.GetComputerCommandPage(m_gameInfo));
+        Terminal::PrintOutput(m_pageBuilder.GetComputerCommandPage(m_gameInformation));
 
         std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::seconds(m_computerSpeed));
 
@@ -143,7 +143,7 @@ namespace TerminalGames
 
     void TicTacToe::GameOver()
     {
-        Terminal::GetUserChoiceFromGameOverMenu(m_pageBuilder.GetGameOverPage(m_gameInfo), m_pageBuilder.GetQuitOptionSelectionPage());
+        Terminal::GetUserChoiceFromGameOverMenu(m_pageBuilder.GetGameOverPage(m_gameInformation), m_pageBuilder.GetQuitOptionSelectionPage());
     }
 
     void TicTacToe::RestartGame()
@@ -159,27 +159,27 @@ namespace TerminalGames
 
     void TicTacToe::GetPlayerCount()
     {
-        UpdateGameInfo();
+        UpdateGameInformation();
 
-        const std::vector<std::string> MENUS = m_pageBuilder.GetPlayerCountOptionSelectionGamePages(m_gameInfo);
+        const std::vector<std::string> MENUS = m_pageBuilder.GetPlayerCountOptionSelectionGamePages(m_gameInformation);
         const std::vector<std::string> QUIT_MENUS = m_pageBuilder.GetQuitOptionSelectionPage();
         m_playerCount = Globals::G_GAME_MAX_TWO_PLAYERS_OPTIONS[Terminal::GetUserChoiceFromGameMenus(MENUS, QUIT_MENUS)];
     }
 
     void TicTacToe::GetUserPlayerChoice()
     {
-        UpdateGameInfo();
+        UpdateGameInformation();
 
-        const std::vector<std::string> MENUS = m_pageBuilder.GetUserPlayerChoiceOptionSelectionGamePages(m_gameInfo);
+        const std::vector<std::string> MENUS = m_pageBuilder.GetUserPlayerChoiceOptionSelectionGamePages(m_gameInformation);
         const std::vector<std::string> QUIT_MENUS = m_pageBuilder.GetQuitOptionSelectionPage();
         m_userPlayerChoice = Globals::G_TICTACTOE_PLAYER_CHOICE_OPTIONS[Terminal::GetUserChoiceFromGameMenus(MENUS, QUIT_MENUS)];
     }
 
     void TicTacToe::GetComputerSpeed()
     {
-        UpdateGameInfo();
+        UpdateGameInformation();
 
-        const std::vector<std::string> MENUS = m_pageBuilder.GetComputerSpeedOptionSelectionGamePages(m_gameInfo);
+        const std::vector<std::string> MENUS = m_pageBuilder.GetComputerSpeedOptionSelectionGamePages(m_gameInformation);
         const std::vector<std::string> QUIT_MENUS = m_pageBuilder.GetQuitOptionSelectionPage();
         m_computerSpeed = Terminal::GetUserChoiceFromGameMenus(MENUS, QUIT_MENUS);
         m_computerSpeedName = Globals::G_GAME_COMPUTER_SPEED_OPTIONS[m_computerSpeed];

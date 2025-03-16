@@ -9,7 +9,7 @@ var class_terminal_games_1_1_game =
     [ "operator=", "class_terminal_games_1_1_game.html#a1f6c10d764d07dcfa6ec5f78fc59cb81", null ],
     [ "SetupGame", "class_terminal_games_1_1_game.html#aef46c1c190894e520884adfb277d092b", null ],
     [ "GetUserOptions", "class_terminal_games_1_1_game.html#aaa3b2b0a53ec07f722cb6fd4b5274b20", null ],
-    [ "UpdateGameInfo", "class_terminal_games_1_1_game.html#abab7e396ade10790ca37554fbe9a6701", null ],
+    [ "UpdateGameInformation", "class_terminal_games_1_1_game.html#a7dccd5d9d5b1ade77c98f1ffc00c235b", null ],
     [ "IsGameOver", "class_terminal_games_1_1_game.html#a29cc2d91d7e440b2e84902cb172e064f", null ],
     [ "ToggleCurrentPlayer", "class_terminal_games_1_1_game.html#a17be4df83069e1b6fef77b0a8ad72494", null ],
     [ "IsCurrentTurnUsers", "class_terminal_games_1_1_game.html#ad5c2ed78021880f8cbeb6ff324dc112d", null ],
