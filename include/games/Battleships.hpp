@@ -9,6 +9,7 @@
 #include <vector>
 
 #include "games/Game.hpp"
+#include "helpers/GameInformation.hpp"
 #include "helpers/Globals.hpp"
 #include "helpers/PageBuilder.hpp"
 
@@ -37,7 +38,7 @@ namespace TerminalGames
 
         void GetUserOptions() override;
 
-        void UpdateGameInfo() override;
+        void UpdateGameInformation() override;
 
         bool IsGameOver() override;
 
@@ -151,7 +152,7 @@ namespace TerminalGames
         /**
          * @brief Used to package up the current state of the game so it can be used by `m_pageBuilder`.
          */
-        GameInfo m_gameInfo;
+        GameInformation m_gameInformation;
 
         /**
          * @brief Used to randomly select ships positions for the computer and randomly select board <row, column> values for

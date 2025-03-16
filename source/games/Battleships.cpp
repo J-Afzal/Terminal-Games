@@ -6,9 +6,11 @@
 #include <thread>
 #include <tuple>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 #include "games/Battleships.hpp"
+#include "helpers/GameInformation.hpp"
 #include "helpers/Globals.hpp"
 #include "helpers/PageBuilder.hpp"
 #include "helpers/Terminal.hpp"
@@ -80,9 +82,9 @@ namespace TerminalGames
         GetRandomShipPositions(m_boardPlayerTwo);
     }
 
-    void Battleships::UpdateGameInfo()
+    void Battleships::UpdateGameInformation()
     {
-        m_gameInfo.m_battleshipsGameInfo = {
+        m_gameInformation.m_battleshipsGameInformation = {
             .m_boardPlayerOne = m_boardPlayerOne,
             .m_boardPlayerTwo = m_boardPlayerTwo,
             .m_shipsRemainingPlayerOne = m_shipsRemainingPlayerOne,
@@ -119,7 +121,7 @@ namespace TerminalGames
 
         while (true)
         {
-            const std::tuple<uint32_t, uint32_t> SELECTED_COMMAND = Terminal::GetUserCommandFromGameGrid(m_previousCommand, m_pageBuilder, m_gameInfo, true);
+            const std::tuple<uint32_t, uint32_t> SELECTED_COMMAND = Terminal::GetUserCommandFromGameGrid(m_previousCommand, m_pageBuilder, m_gameInformation, true);
 
             if (ValidateCommand(m_commandsRemainingPlayerOne, SELECTED_COMMAND))
             {
@@ -132,7 +134,7 @@ namespace TerminalGames
 
     void Battleships::ExecuteComputerCommand()
     {
-        Terminal::PrintOutput(m_pageBuilder.GetComputerCommandPage(m_gameInfo));
+        Terminal::PrintOutput(m_pageBuilder.GetComputerCommandPage(m_gameInformation));
 
         std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::seconds(m_computerSpeed));
 
@@ -149,7 +151,7 @@ namespace TerminalGames
 
     void Battleships::GameOver()
     {
-        Terminal::GetUserChoiceFromGameOverMenu(m_pageBuilder.GetGameOverPage(m_gameInfo), m_pageBuilder.GetQuitOptionSelectionPage());
+        Terminal::GetUserChoiceFromGameOverMenu(m_pageBuilder.GetGameOverPage(m_gameInformation), m_pageBuilder.GetQuitOptionSelectionPage());
     }
 
     void Battleships::RestartGame()
@@ -165,18 +167,18 @@ namespace TerminalGames
 
     void Battleships::GetPlayerCount()
     {
-        UpdateGameInfo();
+        UpdateGameInformation();
 
-        const std::vector<std::string> MENUS = m_pageBuilder.GetPlayerCountOptionSelectionGamePages(m_gameInfo);
+        const std::vector<std::string> MENUS = m_pageBuilder.GetPlayerCountOptionSelectionGamePages(m_gameInformation);
         const std::vector<std::string> QUIT_MENUS = m_pageBuilder.GetQuitOptionSelectionPage();
         m_playerCount = Globals::G_GAME_MAX_ONE_PLAYER_OPTIONS[Terminal::GetUserChoiceFromGameMenus(MENUS, QUIT_MENUS)];
     }
 
     void Battleships::GetComputerSpeed()
     {
-        UpdateGameInfo();
+        UpdateGameInformation();
 
-        const std::vector<std::string> MENUS = m_pageBuilder.GetComputerSpeedOptionSelectionGamePages(m_gameInfo);
+        const std::vector<std::string> MENUS = m_pageBuilder.GetComputerSpeedOptionSelectionGamePages(m_gameInformation);
         const std::vector<std::string> QUIT_MENUS = m_pageBuilder.GetQuitOptionSelectionPage();
         m_computerSpeed = Terminal::GetUserChoiceFromGameMenus(MENUS, QUIT_MENUS);
         m_computerSpeedName = Globals::G_GAME_COMPUTER_SPEED_OPTIONS[m_computerSpeed];
@@ -187,7 +189,7 @@ namespace TerminalGames
         // This function is assumed to be only called during one player games where player one is the user and player two is the
         // computer. Therefore, user commands will be executed against player ones's board (m_boardPlayerOne).
 
-        UpdateGameInfo();
+        UpdateGameInformation();
 
         uint32_t startingRow = 0;
         uint32_t startingColumn = 0;
@@ -202,7 +204,7 @@ namespace TerminalGames
             std::vector<std::tuple<uint32_t, uint32_t>> currentShipPositions;
 
             // For each ship grid location (intentionally a signed int)
-            for (int32_t currentShipSize = 0; currentShipSize < Globals::G_BATTLESHIPS_SHIP_SIZES.at(currentShip); currentShipSize++)
+            for (int32_t currentShipSize = 0; std::cmp_less(currentShipSize, Globals::G_BATTLESHIPS_SHIP_SIZES.at(currentShip)); currentShipSize++)
             {
                 // Set cursor position to the last known valid user selected ship grid location for the currentShip
                 if (!currentShipPositions.empty())
@@ -230,9 +232,9 @@ namespace TerminalGames
                 {
                     try
                     {
-                        Terminal::PrintOutput(m_pageBuilder.GetPageWithMessage(m_gameInfo, Globals::G_BATTLESHIPS_SHIP_INSTRUCTIONS.at(currentShip)));
+                        Terminal::PrintOutput(m_pageBuilder.GetPageWithMessage(m_gameInformation, Globals::G_BATTLESHIPS_SHIP_INSTRUCTIONS.at(currentShip)));
 
-                        const std::tuple<uint32_t, uint32_t> SELECTED_SHIP_GRID_LOCATION = Terminal::GetUserCommandFromGameGrid({startingRow, startingColumn}, m_pageBuilder, m_gameInfo, false);
+                        const std::tuple<uint32_t, uint32_t> SELECTED_SHIP_GRID_LOCATION = Terminal::GetUserCommandFromGameGrid({startingRow, startingColumn}, m_pageBuilder, m_gameInformation, false);
 
                         if (ValidateUserShipPosition(currentShipPositions, SELECTED_SHIP_GRID_LOCATION, shipIsHorizontal, shipIsVertical))
                         {
@@ -241,7 +243,7 @@ namespace TerminalGames
                             // Place ship on selected grid location
                             m_boardPlayerOne.at(std::get<0>(SELECTED_SHIP_GRID_LOCATION)).at(std::get<1>(SELECTED_SHIP_GRID_LOCATION)) = Globals::G_BATTLESHIPS_SHIP_PLACED_NAMES.at(currentShip);
 
-                            UpdateGameInfo();
+                            UpdateGameInformation();
 
                             break;
                         }
@@ -254,8 +256,8 @@ namespace TerminalGames
                             // Undo previous ship placement and refresh display
                             m_boardPlayerOne.at(std::get<0>(currentShipPositions.back())).at(std::get<1>(currentShipPositions.back())) = Globals::G_BATTLESHIPS_EMPTY_GRID_VALUE;
                             currentShipPositions.pop_back();
-                            UpdateGameInfo();
-                            Terminal::PrintOutput(m_pageBuilder.GetPageWithMessage(m_gameInfo, Globals::G_BATTLESHIPS_SHIP_INSTRUCTIONS.at(currentShip)));
+                            UpdateGameInformation();
+                            Terminal::PrintOutput(m_pageBuilder.GetPageWithMessage(m_gameInformation, Globals::G_BATTLESHIPS_SHIP_INSTRUCTIONS.at(currentShip)));
 
                             // Go back one in for loop (and another -1 to account for increment)
                             currentShipSize -= 2;
@@ -308,8 +310,8 @@ namespace TerminalGames
             return false;
         }
 
-        const int32_t ROW_DIFFERENCE_TO_PREVIOUS_SELECTION = std::abs(static_cast<int>(SELECTED_SHIP_GRID_ROW) - static_cast<int>(PREVIOUS_SELECTED_SHIP_GRID_ROW));
-        const int32_t COLUMN_DIFFERENCE_TO_PREVIOUS_SELECTION = std::abs(static_cast<int>(SELECTED_SHIP_GRID_COLUMN) - static_cast<int>(PREVIOUS_SELECTED_SHIP_GRID_COLUMN));
+        const int32_t ROW_DIFFERENCE_TO_PREVIOUS_SELECTION = std::abs(static_cast<int32_t>(SELECTED_SHIP_GRID_ROW) - static_cast<int32_t>(PREVIOUS_SELECTED_SHIP_GRID_ROW));
+        const int32_t COLUMN_DIFFERENCE_TO_PREVIOUS_SELECTION = std::abs(static_cast<int32_t>(SELECTED_SHIP_GRID_COLUMN) - static_cast<int32_t>(PREVIOUS_SELECTED_SHIP_GRID_COLUMN));
 
         // Only allow adjacents grid locations relative to the previous selection
         if ((ROW_DIFFERENCE_TO_PREVIOUS_SELECTION > 1) || (COLUMN_DIFFERENCE_TO_PREVIOUS_SELECTION > 1))

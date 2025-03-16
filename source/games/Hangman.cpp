@@ -76,9 +76,9 @@ namespace TerminalGames
         m_currentGuessOfWord.insert(0, m_wordToBeGuessed.size(), Globals::G_HANGMAN_HIDDEN_LETTER);
     }
 
-    void Hangman::UpdateGameInfo()
+    void Hangman::UpdateGameInformation()
     {
-        m_gameInfo.m_hangmanGameInfo = {
+        m_gameInformation.m_hangmanGameInformation = {
             .m_incorrectGuesses = m_incorrectGuesses,
             .m_computerSpeedName = m_computerSpeedName,
             .m_currentGuessOfWord = m_currentGuessOfWord,
@@ -124,9 +124,9 @@ namespace TerminalGames
 
         while (true)
         {
-            m_gameInfo.m_hangmanGameInfo.m_currentLetterSelected = m_commandsRemaining[currentSelection];
+            m_gameInformation.m_hangmanGameInformation.m_currentLetterSelected = m_commandsRemaining[currentSelection];
 
-            Terminal::PrintOutput(m_pageBuilder.GetUserCommandPage(m_gameInfo));
+            Terminal::PrintOutput(m_pageBuilder.GetUserCommandPage(m_gameInformation));
 
             keyPress = Terminal::GetNextKeyPress();
 
@@ -163,7 +163,7 @@ namespace TerminalGames
 
     void Hangman::ExecuteComputerCommand()
     {
-        Terminal::PrintOutput(m_pageBuilder.GetComputerCommandPage(m_gameInfo));
+        Terminal::PrintOutput(m_pageBuilder.GetComputerCommandPage(m_gameInformation));
 
         std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::seconds(m_computerSpeed));
 
@@ -174,7 +174,7 @@ namespace TerminalGames
 
     void Hangman::GameOver()
     {
-        Terminal::GetUserChoiceFromGameOverMenu(m_pageBuilder.GetGameOverPage(m_gameInfo), m_pageBuilder.GetQuitOptionSelectionPage());
+        Terminal::GetUserChoiceFromGameOverMenu(m_pageBuilder.GetGameOverPage(m_gameInformation), m_pageBuilder.GetQuitOptionSelectionPage());
     }
 
     void Hangman::RestartGame()
@@ -190,27 +190,27 @@ namespace TerminalGames
 
     void Hangman::GetPlayerCount()
     {
-        UpdateGameInfo();
+        UpdateGameInformation();
 
-        const std::vector<std::string> MENUS = m_pageBuilder.GetPlayerCountOptionSelectionGamePages(m_gameInfo);
+        const std::vector<std::string> MENUS = m_pageBuilder.GetPlayerCountOptionSelectionGamePages(m_gameInformation);
         const std::vector<std::string> QUIT_MENUS = m_pageBuilder.GetQuitOptionSelectionPage();
         m_playerCount = Globals::G_GAME_MAX_TWO_PLAYERS_OPTIONS[Terminal::GetUserChoiceFromGameMenus(MENUS, QUIT_MENUS)];
     }
 
     void Hangman::GetUserPlayerChoice()
     {
-        UpdateGameInfo();
+        UpdateGameInformation();
 
-        const std::vector<std::string> MENUS = m_pageBuilder.GetUserPlayerChoiceOptionSelectionGamePages(m_gameInfo);
+        const std::vector<std::string> MENUS = m_pageBuilder.GetUserPlayerChoiceOptionSelectionGamePages(m_gameInformation);
         const std::vector<std::string> QUIT_MENUS = m_pageBuilder.GetQuitOptionSelectionPage();
         m_userPlayerChoice = Globals::G_HANGMAN_PLAYER_CHOICE_OPTIONS[Terminal::GetUserChoiceFromGameMenus(MENUS, QUIT_MENUS)];
     }
 
     void Hangman::GetComputerSpeed()
     {
-        UpdateGameInfo();
+        UpdateGameInformation();
 
-        const std::vector<std::string> MENUS = m_pageBuilder.GetComputerSpeedOptionSelectionGamePages(m_gameInfo);
+        const std::vector<std::string> MENUS = m_pageBuilder.GetComputerSpeedOptionSelectionGamePages(m_gameInformation);
         const std::vector<std::string> QUIT_MENUS = m_pageBuilder.GetQuitOptionSelectionPage();
         m_computerSpeed = Terminal::GetUserChoiceFromGameMenus(MENUS, QUIT_MENUS);
         m_computerSpeedName = Globals::G_GAME_COMPUTER_SPEED_OPTIONS[m_computerSpeed];
@@ -218,14 +218,14 @@ namespace TerminalGames
 
     void Hangman::GetWordFromUser()
     {
-        UpdateGameInfo();
+        UpdateGameInformation();
 
         std::string input;
         input.reserve(Globals::G_HANGMAN_MAXIMUM_WORD_SIZE + 1);
 
         while (true)
         {
-            Terminal::PrintOutput(m_pageBuilder.GetPageWithMessage(m_gameInfo, "Please enter the word to be guessed:"));
+            Terminal::PrintOutput(m_pageBuilder.GetPageWithMessage(m_gameInformation, "Please enter the word to be guessed:"));
 
             Terminal::SetCursorPosition(Globals::G_HANGMAN_GET_WORD_FROM_USER_COLUMN, Globals::G_HANGMAN_USER_INPUT_ROW);
 

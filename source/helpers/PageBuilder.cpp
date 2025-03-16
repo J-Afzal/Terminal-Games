@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 
+#include "helpers/GameInformation.hpp"
 #include "helpers/Globals.hpp"
 #include "helpers/PageBuilder.hpp"
 
@@ -137,124 +138,124 @@ namespace TerminalGames
         return GetGeneralOptionSelectionPages(p_gameNames, COMMON_TOP_STRING, COMMON_BOTTOM_STRING, true, true, true);
     }
 
-    std::vector<std::string> PageBuilder::GetPlayerCountOptionSelectionGamePages(const GameInfo& p_gameInfo)
+    std::vector<std::string> PageBuilder::GetPlayerCountOptionSelectionGamePages(const GameInformation& p_gameInformation)
     {
         switch (m_currentPage)
         {
         case Pages::TICTACTOE:
         case Pages::HANGMAN:
-            return GetGameOptionSelectionPages(p_gameInfo, "Please select the number of players:", Globals::G_GAME_MAX_TWO_PLAYERS_OPTIONS);
+            return GetGameOptionSelectionPages(p_gameInformation, "Please select the number of players:", Globals::G_GAME_MAX_TWO_PLAYERS_OPTIONS);
 
         case Pages::BATTLESHIPS:
-            return GetGameOptionSelectionPages(p_gameInfo, "Please select the number of players:", Globals::G_GAME_MAX_ONE_PLAYER_OPTIONS);
+            return GetGameOptionSelectionPages(p_gameInformation, "Please select the number of players:", Globals::G_GAME_MAX_ONE_PLAYER_OPTIONS);
 
         default:
             return {"The 'GetPlayerCountOptionSelectionGameDisplays' function does not support the current page type."};
         }
     }
 
-    std::vector<std::string> PageBuilder::GetUserPlayerChoiceOptionSelectionGamePages(const GameInfo& p_gameInfo)
+    std::vector<std::string> PageBuilder::GetUserPlayerChoiceOptionSelectionGamePages(const GameInformation& p_gameInformation)
     {
         switch (m_currentPage)
         {
         case Pages::TICTACTOE:
-            return GetGameOptionSelectionPages(p_gameInfo, "Please select the player you would like to be:", Globals::G_TICTACTOE_PLAYER_CHOICE_OPTIONS);
+            return GetGameOptionSelectionPages(p_gameInformation, "Please select the player you would like to be:", Globals::G_TICTACTOE_PLAYER_CHOICE_OPTIONS);
 
         case Pages::HANGMAN:
-            return GetGameOptionSelectionPages(p_gameInfo, "Please select the player you would like to be:", Globals::G_HANGMAN_PLAYER_CHOICE_OPTIONS);
+            return GetGameOptionSelectionPages(p_gameInformation, "Please select the player you would like to be:", Globals::G_HANGMAN_PLAYER_CHOICE_OPTIONS);
 
         default:
             return {"The 'GetUserPlayerChoiceOptionSelectionGameDisplays' function does not support the current page type."};
         }
     }
 
-    std::vector<std::string> PageBuilder::GetComputerSpeedOptionSelectionGamePages(const GameInfo& p_gameInfo)
+    std::vector<std::string> PageBuilder::GetComputerSpeedOptionSelectionGamePages(const GameInformation& p_gameInformation)
     {
         switch (m_currentPage)
         {
         case Pages::TICTACTOE:
         case Pages::HANGMAN:
         case Pages::BATTLESHIPS:
-            return GetGameOptionSelectionPages(p_gameInfo, "Please select the computer speed:", Globals::G_GAME_COMPUTER_SPEED_OPTIONS);
+            return GetGameOptionSelectionPages(p_gameInformation, "Please select the computer speed:", Globals::G_GAME_COMPUTER_SPEED_OPTIONS);
 
         default:
             return {"The 'GetComputerSpeedOptionSelectionGameDisplays' function does not support the current page type."};
         }
     }
 
-    std::string PageBuilder::GetPageWithMessage(const GameInfo& p_gameInfo, const std::string& p_message)
+    std::string PageBuilder::GetPageWithMessage(const GameInformation& p_gameInformation, const std::string& p_message)
     {
-        const std::string COMMON_TOP_STRING = GetTopBox() + GetTopLine() + GetGeneralGameSubPage(p_gameInfo) + GetEmptyLine() + GetNewLineLeftJustified(p_message);
+        const std::string COMMON_TOP_STRING = GetTopBox() + GetTopLine() + GetGeneralGameSubPage(p_gameInformation) + GetEmptyLine() + GetNewLineLeftJustified(p_message);
         const std::string COMMON_BOTTOM_STRING = GetBottomLine() + GetBottomBox();
 
         return COMMON_TOP_STRING + GetRemainingEmptyLines(COMMON_TOP_STRING, COMMON_BOTTOM_STRING) + COMMON_BOTTOM_STRING;
     }
 
-    std::string PageBuilder::GetUserCommandPage(const GameInfo& p_gameInfo)
+    std::string PageBuilder::GetUserCommandPage(const GameInformation& p_gameInformation)
     {
         switch (m_currentPage)
         {
         case Pages::TICTACTOE:
-            return GetPageWithMessage(p_gameInfo, p_gameInfo.m_ticTacToeGameInfo.m_currentPlayer + ", please enter your next command!");
+            return GetPageWithMessage(p_gameInformation, p_gameInformation.m_ticTacToeGameInformation.m_currentPlayer + ", please enter your next command!");
 
         case Pages::HANGMAN:
-            return GetPageWithMessage(p_gameInfo, "Guesser, please enter your next guess: " + AddColour(std::string(1, p_gameInfo.m_hangmanGameInfo.m_currentLetterSelected), Globals::Colours::BLUE));
+            return GetPageWithMessage(p_gameInformation, "Guesser, please enter your next guess: " + AddColour(std::string(1, p_gameInformation.m_hangmanGameInformation.m_currentLetterSelected), Globals::Colours::BLUE));
 
         case Pages::BATTLESHIPS:
-            return GetPageWithMessage(p_gameInfo, p_gameInfo.m_battleshipsGameInfo.m_currentPlayer + ", please enter your next command!");
+            return GetPageWithMessage(p_gameInformation, p_gameInformation.m_battleshipsGameInformation.m_currentPlayer + ", please enter your next command!");
 
         default:
             return "The 'GetUserCommandGameDisplay' function does not support the current page type.";
         }
     }
 
-    std::string PageBuilder::GetComputerCommandPage(const GameInfo& p_gameInfo)
+    std::string PageBuilder::GetComputerCommandPage(const GameInformation& p_gameInformation)
     {
         switch (m_currentPage)
         {
         case Pages::TICTACTOE:
         case Pages::HANGMAN:
         case Pages::BATTLESHIPS:
-            return GetPageWithMessage(p_gameInfo, "The computer is executing their next move!");
+            return GetPageWithMessage(p_gameInformation, "The computer is executing their next move!");
 
         default:
             return "The 'GetComputerSpeedOptionSelectionGameDisplays' function does not support the current page type.";
         }
     }
 
-    std::string PageBuilder::GetGameOverPage(const GameInfo& p_gameInfo)
+    std::string PageBuilder::GetGameOverPage(const GameInformation& p_gameInformation)
     {
-        std::string topString = GetTopBox() + GetTopLine() + GetGeneralGameSubPage(p_gameInfo) + GetEmptyLine() + GetNewLineCentred("GAME OVER") + GetEmptyLine();
+        std::string topString = GetTopBox() + GetTopLine() + GetGeneralGameSubPage(p_gameInformation) + GetEmptyLine() + GetNewLineCentred("GAME OVER") + GetEmptyLine();
         const std::string BOTTOM_STRING = GetEmptyLine() + GetNewLineCentred("Press 'r' to restart game OR any key to reset game...") + GetBottomLine() + GetBottomBox();
 
         switch (m_currentPage)
         {
         case Pages::TICTACTOE:
-            if (p_gameInfo.m_ticTacToeGameInfo.m_hasWinner) // This game can be drawn unlike the others.
+            if (p_gameInformation.m_ticTacToeGameInformation.m_hasWinner) // This game can be drawn unlike the others.
             {
-                topString += GetNewLineCentred(p_gameInfo.m_ticTacToeGameInfo.m_currentPlayer + " has won! The game lasted " + std::to_string(p_gameInfo.m_ticTacToeGameInfo.m_turnCount) + " turns.");
+                topString += GetNewLineCentred(p_gameInformation.m_ticTacToeGameInformation.m_currentPlayer + " has won! The game lasted " + std::to_string(p_gameInformation.m_ticTacToeGameInformation.m_turnCount) + " turns.");
             }
 
             else
             {
-                topString += GetNewLineCentred("The game is a draw! The game lasted " + std::to_string(p_gameInfo.m_ticTacToeGameInfo.m_turnCount) + " turns.");
+                topString += GetNewLineCentred("The game is a draw! The game lasted " + std::to_string(p_gameInformation.m_ticTacToeGameInformation.m_turnCount) + " turns.");
             }
             break;
 
         case Pages::HANGMAN:
-            if (p_gameInfo.m_hangmanGameInfo.m_incorrectGuesses.size() == Globals::G_HANGMAN_MAXIMUM_ERROR_COUNT)
+            if (p_gameInformation.m_hangmanGameInformation.m_incorrectGuesses.size() == Globals::G_HANGMAN_MAXIMUM_ERROR_COUNT)
             {
-                topString += GetNewLineCentred("The word setter has won! The game lasted " + std::to_string(p_gameInfo.m_hangmanGameInfo.m_turnCount) + " turns!");
+                topString += GetNewLineCentred("The word setter has won! The game lasted " + std::to_string(p_gameInformation.m_hangmanGameInformation.m_turnCount) + " turns!");
             }
 
             else
             {
-                topString += GetNewLineCentred("The guesser has won! The game lasted " + std::to_string(p_gameInfo.m_hangmanGameInfo.m_turnCount) + " turns.");
+                topString += GetNewLineCentred("The guesser has won! The game lasted " + std::to_string(p_gameInformation.m_hangmanGameInformation.m_turnCount) + " turns.");
             }
             break;
 
         case Pages::BATTLESHIPS:
-            topString += GetNewLineCentred(p_gameInfo.m_battleshipsGameInfo.m_currentPlayer + " has won! The game lasted " + std::to_string(p_gameInfo.m_battleshipsGameInfo.m_turnCount) + " turns.");
+            topString += GetNewLineCentred(p_gameInformation.m_battleshipsGameInformation.m_currentPlayer + " has won! The game lasted " + std::to_string(p_gameInformation.m_battleshipsGameInformation.m_turnCount) + " turns.");
             break;
 
         default:
@@ -512,33 +513,33 @@ namespace TerminalGames
         return output;
     }
 
-    std::vector<std::string> PageBuilder::GetGameOptionSelectionPages(const GameInfo& p_gameInfo, const std::string& p_message, const std::vector<std::string>& p_options)
+    std::vector<std::string> PageBuilder::GetGameOptionSelectionPages(const GameInformation& p_gameInformation, const std::string& p_message, const std::vector<std::string>& p_options)
     {
-        const std::string COMMON_TOP_STRING = GetTopBox() + GetTopLine() + GetGeneralGameSubPage(p_gameInfo) + GetEmptyLine() + GetNewLineLeftJustified(p_message);
+        const std::string COMMON_TOP_STRING = GetTopBox() + GetTopLine() + GetGeneralGameSubPage(p_gameInformation) + GetEmptyLine() + GetNewLineLeftJustified(p_message);
         const std::string COMMON_BOTTOM_STRING = GetBottomLine() + GetBottomBox();
 
         return GetGeneralOptionSelectionPages(p_options, COMMON_TOP_STRING, COMMON_BOTTOM_STRING, false, false, false);
     }
 
-    std::string PageBuilder::GetGeneralGameSubPage(const GameInfo& p_gameInfo)
+    std::string PageBuilder::GetGeneralGameSubPage(const GameInformation& p_gameInformation)
     {
         switch (m_currentPage)
         {
         case Pages::TICTACTOE:
-            return GetTicTacToeSubPage(p_gameInfo);
+            return GetTicTacToeSubPage(p_gameInformation);
 
         case Pages::HANGMAN:
-            return GetHangmanSubPage(p_gameInfo);
+            return GetHangmanSubPage(p_gameInformation);
 
         case Pages::BATTLESHIPS:
-            return GetBattleshipsSubPage(p_gameInfo);
+            return GetBattleshipsSubPage(p_gameInformation);
 
         default:
             return "The 'GetGeneralGameDisplay' function does not support the current page type.";
         }
     }
 
-    std::string PageBuilder::GetTicTacToeSubPage(const GameInfo& p_gameInfo)
+    std::string PageBuilder::GetTicTacToeSubPage(const GameInformation& p_gameInformation)
     {
         // leftGridLines and RIGHT_GRID_STRINGS vectors must equal GRID_HEIGHT in size.
         // Also LEFT_GRID_SIZE + RIGHT_GRID_SIZE must equal G_TICTACTOE_DISPLAY_WIDTH - (numberOfGrids * (Globals::G_PAGE_MINIMUM_LEFT_VERTICAL_LINE_SIZE - Globals::G_PAGE_MINIMUM_RIGHT_VERTICAL_LINE_SIZE))
@@ -557,7 +558,7 @@ namespace TerminalGames
 
             for (uint32_t column = 0; column < Globals::G_TICTACTOE_GRID_WIDTH; column++)
             {
-                currentRow += p_gameInfo.m_ticTacToeGameInfo.m_gameGrid.at(row).at(column);
+                currentRow += p_gameInformation.m_ticTacToeGameInformation.m_gameGrid.at(row).at(column);
                 currentRowDivider += Globals::G_TICTACTOE_GRID_ROW_VALUE_DIVIDER;
 
                 // Skip on last value
@@ -575,16 +576,16 @@ namespace TerminalGames
         // Game options section
         const std::vector<std::string> RIGHT_GRID_LINES = {
             "",
-            Globals::G_GAME_NUMBER_OF_PLAYERS + p_gameInfo.m_ticTacToeGameInfo.m_playerCount,
+            Globals::G_GAME_NUMBER_OF_PLAYERS + p_gameInformation.m_ticTacToeGameInformation.m_playerCount,
             "",
-            Globals::G_GAME_COMPUTER_SPEED + p_gameInfo.m_ticTacToeGameInfo.m_computerSpeedName,
+            Globals::G_GAME_COMPUTER_SPEED + p_gameInformation.m_ticTacToeGameInformation.m_computerSpeedName,
             "",
         };
 
         return GetGridLayout({LEFT_GRID_SIZE, RIGHT_GRID_SIZE}, {leftGridLines, RIGHT_GRID_LINES}, GRID_HEIGHT);
     }
 
-    std::string PageBuilder::GetHangmanSubPage(const GameInfo& p_gameInfo)
+    std::string PageBuilder::GetHangmanSubPage(const GameInformation& p_gameInformation)
     {
         // leftGridLines, MIDDLE_GRID_LINES and rightGridLines vectors must equal GRID_HEIGHT in size.
         // Also LEFT_GRID_SIZE + MIDDLE_GRID_SIZE + RIGHT_GRID_SIZE must equal G_HANGMAN_DISPLAY_WIDTH - (numberOfGrids * (Globals::G_PAGE_MINIMUM_LEFT_VERTICAL_LINE_SIZE - Globals::G_PAGE_MINIMUM_RIGHT_VERTICAL_LINE_SIZE))
@@ -594,15 +595,15 @@ namespace TerminalGames
         const uint32_t GRID_HEIGHT = 7;
 
         // Hangman state section
-        const std::vector<std::string>& leftGridLines = Globals::G_HANGMAN_STATES[p_gameInfo.m_hangmanGameInfo.m_incorrectGuesses.size()];
+        const std::vector<std::string>& leftGridLines = Globals::G_HANGMAN_STATES[p_gameInformation.m_hangmanGameInformation.m_incorrectGuesses.size()];
 
         // Game options section
         const std::vector<std::string> MIDDLE_GRID_LINES = {
             "",
             "",
-            Globals::G_GAME_NUMBER_OF_PLAYERS + p_gameInfo.m_hangmanGameInfo.m_playerCount,
+            Globals::G_GAME_NUMBER_OF_PLAYERS + p_gameInformation.m_hangmanGameInformation.m_playerCount,
             "",
-            Globals::G_GAME_COMPUTER_SPEED + p_gameInfo.m_hangmanGameInfo.m_computerSpeedName,
+            Globals::G_GAME_COMPUTER_SPEED + p_gameInformation.m_hangmanGameInformation.m_computerSpeedName,
             "",
             "",
         };
@@ -615,9 +616,9 @@ namespace TerminalGames
         rightGridLines.emplace_back("");
         rightGridLines.emplace_back(Globals::G_HANGMAN_INCORRECT_GUESSES_TITLE);
 
-        for (uint32_t letterIndex = 0; letterIndex < p_gameInfo.m_hangmanGameInfo.m_incorrectGuesses.size(); letterIndex++)
+        for (uint32_t letterIndex = 0; letterIndex < p_gameInformation.m_hangmanGameInformation.m_incorrectGuesses.size(); letterIndex++)
         {
-            currentLine += p_gameInfo.m_hangmanGameInfo.m_incorrectGuesses.at(letterIndex);
+            currentLine += p_gameInformation.m_hangmanGameInformation.m_incorrectGuesses.at(letterIndex);
 
             // Skip adding space on last value on each line
             if (letterIndex != Globals::G_HANGMAN_INCORRECT_GUESSES_FIRST_LINE_LAST_INDEX && letterIndex != Globals::G_HANGMAN_INCORRECT_GUESSES_SECOND_LINE_LAST_INDEX)
@@ -649,16 +650,16 @@ namespace TerminalGames
 
         // Current guess of word and word to be guessed section
         std::string currentGuessOfWord;
-        currentGuessOfWord.reserve(2 * p_gameInfo.m_hangmanGameInfo.m_currentGuessOfWord.size());
-        for (const char& letter : p_gameInfo.m_hangmanGameInfo.m_currentGuessOfWord)
+        currentGuessOfWord.reserve(2 * p_gameInformation.m_hangmanGameInformation.m_currentGuessOfWord.size());
+        for (const char& letter : p_gameInformation.m_hangmanGameInformation.m_currentGuessOfWord)
         {
             currentGuessOfWord += letter;
             currentGuessOfWord += ' ';
         }
 
-        if (p_gameInfo.m_hangmanGameInfo.m_isGameOver)
+        if (p_gameInformation.m_hangmanGameInformation.m_isGameOver)
         {
-            output += GetNewLineLeftJustified(currentGuessOfWord + Globals::G_HANGMAN_WORD_TO_BE_GUESSED_START + p_gameInfo.m_hangmanGameInfo.m_wordToBeGuessed + Globals::G_HANGMAN_WORD_TO_BE_GUESSED_END);
+            output += GetNewLineLeftJustified(currentGuessOfWord + Globals::G_HANGMAN_WORD_TO_BE_GUESSED_START + p_gameInformation.m_hangmanGameInformation.m_wordToBeGuessed + Globals::G_HANGMAN_WORD_TO_BE_GUESSED_END);
         }
 
         else
@@ -669,7 +670,7 @@ namespace TerminalGames
         return output;
     }
 
-    std::string PageBuilder::GetBattleshipsSubPage(const GameInfo& p_gameInfo) // NOLINT(readability-function-cognitive-complexity)
+    std::string PageBuilder::GetBattleshipsSubPage(const GameInformation& p_gameInformation) // NOLINT(readability-function-cognitive-complexity)
     {
         // leftGridLines, middleGridLines and rightGridLines vectors must equal GRID_HEIGHT in size.
         // Also LEFT_GRID_SIZE + MIDDLE_GRID_SIZE + RIGHT_GRID_SIZE must equal G_BATTLESHIPS_DISPLAY_WIDTH - (numberOfGrids * Globals::G_PAGE_MINIMUM_LEFT_VERTICAL_LINE_SIZE - Globals::G_PAGE_MINIMUM_RIGHT_VERTICAL_LINE_SIZE))
@@ -700,7 +701,7 @@ namespace TerminalGames
         std::vector<std::string> rightGridLines = {Globals::G_BATTLESHIPS_PLAYER_TWO, Globals::G_BATTLESHIPS_GRID_TOP_LINE, commonGridAlphabetAxis, Globals::G_BATTLESHIPS_GRID_MIDDLE_LINE};
 
         // Assuming both board are the same size
-        for (uint32_t row = 0; row < p_gameInfo.m_battleshipsGameInfo.m_boardPlayerOne.size(); row++)
+        for (uint32_t row = 0; row < p_gameInformation.m_battleshipsGameInformation.m_boardPlayerOne.size(); row++)
         {
             std::string currentLeftGridValueLine;
             currentLeftGridValueLine.reserve(LEFT_GRID_SIZE);
@@ -711,17 +712,17 @@ namespace TerminalGames
 
             std::string currentRightGridValueLine = currentLeftGridValueLine;
 
-            for (uint32_t column = 0; column < p_gameInfo.m_battleshipsGameInfo.m_boardPlayerOne.at(row).size(); column++)
+            for (uint32_t column = 0; column < p_gameInformation.m_battleshipsGameInformation.m_boardPlayerOne.at(row).size(); column++)
             {
                 // Don't include the ship name instead only its state
-                currentLeftGridValueLine += Globals::G_PAGE_GRID_VERTICAL_LINE + p_gameInfo.m_battleshipsGameInfo.m_boardPlayerOne.at(row).at(column).substr(0, Globals::G_BATTLESHIPS_GRID_ELEMENT_WIDTH);
+                currentLeftGridValueLine += Globals::G_PAGE_GRID_VERTICAL_LINE + p_gameInformation.m_battleshipsGameInformation.m_boardPlayerOne.at(row).at(column).substr(0, Globals::G_BATTLESHIPS_GRID_ELEMENT_WIDTH);
 
                 // Only show player two board if game is over, or if not game over then only if zero player game, or if not game
                 // over and not zero player game (i.e. one player game) then only if grid value is does not have a ship present
                 // (i.e. only if grid value is empty, missed attack or successful attack).
-                if (p_gameInfo.m_battleshipsGameInfo.m_isGameOver || p_gameInfo.m_battleshipsGameInfo.m_playerCount != "1" || p_gameInfo.m_battleshipsGameInfo.m_boardPlayerTwo.at(row).at(column).substr(0, Globals::G_BATTLESHIPS_GRID_ELEMENT_WIDTH) != Globals::G_BATTLESHIPS_SHIP_PRESENT)
+                if (p_gameInformation.m_battleshipsGameInformation.m_isGameOver || p_gameInformation.m_battleshipsGameInformation.m_playerCount != "1" || p_gameInformation.m_battleshipsGameInformation.m_boardPlayerTwo.at(row).at(column).substr(0, Globals::G_BATTLESHIPS_GRID_ELEMENT_WIDTH) != Globals::G_BATTLESHIPS_SHIP_PRESENT)
                 {
-                    currentRightGridValueLine += Globals::G_PAGE_GRID_VERTICAL_LINE + p_gameInfo.m_battleshipsGameInfo.m_boardPlayerTwo.at(row).at(column).substr(0, Globals::G_BATTLESHIPS_GRID_ELEMENT_WIDTH);
+                    currentRightGridValueLine += Globals::G_PAGE_GRID_VERTICAL_LINE + p_gameInformation.m_battleshipsGameInformation.m_boardPlayerTwo.at(row).at(column).substr(0, Globals::G_BATTLESHIPS_GRID_ELEMENT_WIDTH);
                 }
 
                 else
@@ -737,7 +738,7 @@ namespace TerminalGames
             rightGridLines.emplace_back(currentRightGridValueLine);
 
             // Skip on last row
-            if (row != p_gameInfo.m_battleshipsGameInfo.m_boardPlayerOne.size() - 1)
+            if (row != p_gameInformation.m_battleshipsGameInformation.m_boardPlayerOne.size() - 1)
             {
                 leftGridLines.emplace_back(Globals::G_BATTLESHIPS_GRID_MIDDLE_LINE);
                 rightGridLines.emplace_back(Globals::G_BATTLESHIPS_GRID_MIDDLE_LINE);
@@ -755,9 +756,9 @@ namespace TerminalGames
             "",
             "",
             "",
-            Globals::G_GAME_NUMBER_OF_PLAYERS + p_gameInfo.m_battleshipsGameInfo.m_playerCount,
+            Globals::G_GAME_NUMBER_OF_PLAYERS + p_gameInformation.m_battleshipsGameInformation.m_playerCount,
             "",
-            Globals::G_GAME_COMPUTER_SPEED + p_gameInfo.m_battleshipsGameInfo.m_computerSpeedName,
+            Globals::G_GAME_COMPUTER_SPEED + p_gameInformation.m_battleshipsGameInformation.m_computerSpeedName,
             "",
             "",
         };
@@ -770,7 +771,7 @@ namespace TerminalGames
             // Player one
             for (uint32_t currentShipHealthSquare = 0; currentShipHealthSquare < Globals::G_BATTLESHIPS_SHIP_SIZES.at(currentShip); currentShipHealthSquare++)
             {
-                if (currentShipHealthSquare < p_gameInfo.m_battleshipsGameInfo.m_shipsRemainingPlayerOne.at(Globals::G_BATTLESHIPS_SHIP_PLACED_NAMES.at(currentShip)))
+                if (currentShipHealthSquare < p_gameInformation.m_battleshipsGameInformation.m_shipsRemainingPlayerOne.at(Globals::G_BATTLESHIPS_SHIP_PLACED_NAMES.at(currentShip)))
                 {
                     currentShipHealthLine += Globals::G_BATTLESHIPS_SHIP_PRESENT;
                 }
@@ -790,7 +791,7 @@ namespace TerminalGames
             std::string currentShipHealthTitle;
             currentShipHealthTitle.reserve(MIDDLE_GRID_SIZE);
 
-            if (p_gameInfo.m_battleshipsGameInfo.m_isGameOver || p_gameInfo.m_battleshipsGameInfo.m_playerCount != "1")
+            if (p_gameInformation.m_battleshipsGameInformation.m_isGameOver || p_gameInformation.m_battleshipsGameInformation.m_playerCount != "1")
             {
                 currentShipHealthTitle = Globals::G_BATTLESHIPS_SHIP_NAMES.at(currentShip) + std::string(MIDDLE_GRID_SIZE - (2 * Globals::G_BATTLESHIPS_SHIP_NAMES.at(currentShip).size()), ' ') + Globals::G_BATTLESHIPS_SHIP_NAMES.at(currentShip);
 
@@ -799,7 +800,7 @@ namespace TerminalGames
                 // Player Two
                 for (uint32_t currentShipHealthSquare = 0; currentShipHealthSquare < Globals::G_BATTLESHIPS_SHIP_SIZES.at(currentShip); currentShipHealthSquare++)
                 {
-                    if (currentShipHealthSquare < (Globals::G_BATTLESHIPS_SHIP_SIZES.at(currentShip) - p_gameInfo.m_battleshipsGameInfo.m_shipsRemainingPlayerTwo.at(Globals::G_BATTLESHIPS_SHIP_PLACED_NAMES.at(currentShip))))
+                    if (currentShipHealthSquare < (Globals::G_BATTLESHIPS_SHIP_SIZES.at(currentShip) - p_gameInformation.m_battleshipsGameInformation.m_shipsRemainingPlayerTwo.at(Globals::G_BATTLESHIPS_SHIP_PLACED_NAMES.at(currentShip))))
                     {
                         currentShipHealthLine += Globals::G_BATTLESHIPS_SUCCESSFUL_ATTACK;
                     }

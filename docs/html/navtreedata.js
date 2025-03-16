@@ -37,7 +37,7 @@ var NAVTREE =
     ] ],
     [ "CI / CD", "index.html#autotoc_md10", null ],
     [ "Development Setup", "index.html#autotoc_md11", [
-      [ "Notes", "index.html#autotoc_md12", null ]
+      [ "IDE", "index.html#autotoc_md12", null ]
     ] ],
     [ "Bug List", "bug.html", null ],
     [ "Namespaces", "namespaces.html", [
@@ -68,8 +68,8 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "_battleships_8hpp_source.html",
-"class_terminal_games_1_1_page_builder.html#a07afd631e2f03fb4c9a3f88d7763ad7a",
-"namespace_terminal_games_1_1_globals.html#a21f21dc67bfce66a9c0ac88fe70105ea"
+"class_terminal_games_1_1_page_builder.html#a032bc0ea5cdf02ae032d90b9f2f04ab0",
+"namespace_terminal_games_1_1_globals.html#a284bbbd224ee5976a6838f1e16a5ff04"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['updategameinfo_0',['UpdateGameInfo',['../class_terminal_games_1_1_battleships.html#a57a18d545f71b574dfc557b700f2e3e1',1,'TerminalGames::Battleships::UpdateGameInfo()'],['../class_terminal_games_1_1_game.html#abab7e396ade10790ca37554fbe9a6701',1,'TerminalGames::Game::UpdateGameInfo()'],['../class_terminal_games_1_1_hangman.html#a75503954bd4df354240cec43c032ede2',1,'TerminalGames::Hangman::UpdateGameInfo()'],['../class_terminal_games_1_1_tic_tac_toe.html#aca447044aac32c5255a5186502b3dcca',1,'TerminalGames::TicTacToe::UpdateGameInfo()']]]
+  ['updategameinformation_0',['UpdateGameInformation',['../class_terminal_games_1_1_battleships.html#a2390a6fbb1c8b61d60ea7571727abd9d',1,'TerminalGames::Battleships::UpdateGameInformation()'],['../class_terminal_games_1_1_game.html#a7dccd5d9d5b1ade77c98f1ffc00c235b',1,'TerminalGames::Game::UpdateGameInformation()'],['../class_terminal_games_1_1_hangman.html#a2c0b29a6a2b88e3d6a376d190b99ff1a',1,'TerminalGames::Hangman::UpdateGameInformation()'],['../class_terminal_games_1_1_tic_tac_toe.html#aaf1d7140a98270dc918a3ba85b02de8f',1,'TerminalGames::TicTacToe::UpdateGameInformation()']]]
 ];

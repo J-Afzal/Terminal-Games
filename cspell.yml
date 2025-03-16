@@ -1,4 +1,4 @@
-version: "0.2"
+version: 0.2
 language: en-gb
 dictionaries:
     - cpp
@@ -8,6 +8,7 @@ ignorePaths:
     - .vscode/
     - build/
     - docs/html/
+    - node_modules/
     - package-lock.json
 words:
     - afzal
@@ -15,18 +16,24 @@ words:
     - doxyfile
     - linters
 ignoreWords:
+    - altera
     - choco
     - colorstyle
     - darkmode
     - defenses
     - doxygenversion
+    - hicpp
     - ilammy
+    - linuxkernel
+    - llvmlibc
     - logosize
     - mathjax
     - mdfile
     - memb
+    - nodiscard
     - nolint
     - noncommercially
+    - openmp
     - projectbrief
     - tictactoe
     - wasd

@@ -121,7 +121,8 @@ Getting Started</h1>
 <div class="line">Build-CppCodeUsingCMake -Platform windows-latest -BuildType Release -BuildDirectory build -Parallel 8 -Verbose</div>
 <div class="line"> </div>
 <div class="line">./build/terminal-games OR ./build/terminal-games.exe</div>
-</div><!-- fragment --><p>or manually:</p>
+</div><!-- fragment --><dl class="section warning"><dt>Warning</dt><dd>If on Windows make sure to run the above within a Visual Studio Developer Command Prompt otherwise you may see errors around <code>cl.exe</code> not being found.</dd></dl>
+<p>or manually:</p>
 <div class="fragment"><div class="line">git clone --recurse-submodules https://github.com/J-Afzal/Terminal-Games.git</div>
 <div class="line">cd Terminal-Games</div>
 <div class="line">cmake -S . -B ./build -D &quot;CMAKE_BUILD_TYPE=Release&quot;</div>
@@ -136,14 +137,14 @@ Getting Started</h1>
 <div class="line"> </div>
 <div class="line">Generic Options:</div>
 <div class="line"> </div>
-<div class="line">  --h --help        Display available options.</div>
+<div class="line">  -h --help         Display available options.</div>
 <div class="line"> </div>
-<div class="line">terminal-games options:</div>
+<div class="line">Optional Options:</div>
 <div class="line"> </div>
 <div class="line">  --a --ascii-only  Only use extended ASCII characters (this removes all colour).</div>
 </div><!-- fragment --><h1><a class="anchor" id="autotoc_md2"></a>
 Documentation</h1>
-<p>Checkout the GitHub pages-hosted <a href="https://J-Afzal.github.io/Terminal-Games">documentation page</a> built using doxygen.</p>
+<p>Checkout the <a href="https://J-Afzal.github.io/Terminal-Games">documentation page</a> built using Doxygen and hosted using Github pages.</p>
 <div class="image">
 <img src="DocumentationHomepage.png" alt=""/>
 <div class="caption">
@@ -210,7 +211,7 @@ CI / CD</h1>
 <p>The continuous deployment workflow runs against all commits to main, builds the code and deploys the executables as a release.</p>
 <h1><a class="anchor" id="autotoc_md11"></a>
 Development Setup</h1>
-<p>For development a few extra tools are needed to check for linting issues locally. For this clone the repo with the <a href="https://github.com/J-Afzal/Linters"><code>Linters</code></a> submodule:</p>
+<p>For development a few extra tools are needed to check for linting issues locally which include the <a href="https://github.com/J-Afzal/Linters"><code>Linters</code></a> submodule:</p>
 <div class="fragment"><div class="line">git clone --recurse-submodules https://github.com/J-Afzal/Terminal-Games.git</div>
 </div><!-- fragment --><p>The development dependencies are:</p>
 <ul>
@@ -222,11 +223,11 @@ Development Setup</h1>
 <li>Ninja &gt;= 1.12.1</li>
 </ul>
 <p>All linting helper functions can be found in the <a href="https://github.com/J-Afzal/Linters"><code>Linters</code></a> submodule.</p>
+<p>Any generator can be used to build the project but to prior to running <code>clang-tidy</code>/<code>clang-format</code> CMake must be configured using a generator that creates a <code>compile_commands.json</code> file in the build directory (e.g. <code>-G "Ninja"</code>, <code>-G "NMake Makefiles"</code>, etc)</p>
+<p>On windows, clang-tidy and clang-format can be installed using the <code>LLVM-x.x.x-win64.exe</code> binary from the <a href="https://github.com/llvm/llvm-project/releases/tag/llvmorg-19.1.6">LLVM release page</a> or from <a href="https://community.chocolatey.org/packages/llvm">chocolatey</a> using <code>choco install llvm -y</code>.</p>
 <h2><a class="anchor" id="autotoc_md12"></a>
-Notes</h2>
-<p>Any generator can be used to build the project but to run <code>clang-tidy</code>/<code>clang-format</code> CMake must be configured using a generator that creates a <code>compile_commands.json</code> file in the build directory before running <code>clang-tidy</code>/<code>clang-format</code> (e.g. <code>-G "Ninja"</code>, <code>-G "NMake Makefiles"</code>, etc)</p>
-<p>On Windows, Visual Studio 2022 can be used by opening the folder as a CMake project and Visual Studio Code can be used by opening the folder through the <code>Developer PowerShell for VS</code> (otherwise you may see errors around cl.exe not being found).</p>
-<p>On windows, clang-tidy and clang-format can be installed using the <code>LLVM-x.x.x-win64.exe</code> binary from the <a href="https://github.com/llvm/llvm-project/releases/tag/llvmorg-19.1.6">LLVM release page</a> or from <a href="https://community.chocolatey.org/packages/llvm">chocolatey</a> using <code>choco install llvm -y</code>. </p>
+IDE</h2>
+<p>On Windows, Visual Studio 2022 can be used by opening the folder as a CMake project and Visual Studio Code can be used by opening the folder through the <code>Developer PowerShell for VS</code> (otherwise you may see errors around cl.exe not being found). </p>
 </div></div><!-- PageDoc -->
 <a href="doxygen_crawl.html"></a>
 </div><!-- contents -->
@@ -234,7 +235,7 @@ Notes</h2>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Mon Feb 17 2025 for Terminal Games by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2 </li>
+    <li class="footer">Generated on Sun Mar 16 2025 for Terminal Games by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2 </li>
   </ul>
 </div>
 </body>

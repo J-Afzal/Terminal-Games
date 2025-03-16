@@ -116,7 +116,7 @@ $(function(){initNavTree('class_terminal_games_1_1_terminal.html',''); initResiz
 </div><!--header-->
 <div class="contents">
 
-<p>The <a class="el" href="class_terminal_games_1_1_terminal.html" title="The Terminal class handles all terminal related tasks such as getting user input, outputting to the t...">Terminal</a> class handles all terminal related tasks such as getting user input, outputting to the terminal, clearing the terminal, etc.  
+<p>Handles all terminal related tasks such as getting user input, outputting to the terminal, clearing the terminal, etc.  
  <a href="#details">More...</a></p>
 
 <p><code>#include &quot;<a class="el" href="_terminal_8hpp_source.html">Terminal.hpp</a>&quot;</code></p>
@@ -125,7 +125,7 @@ $(function(){initNavTree('class_terminal_games_1_1_terminal.html',''); initResiz
 Public Member Functions</h2></td></tr>
 <tr class="memitem:adc814788df05e2eb4fefe89a84483153" id="r_adc814788df05e2eb4fefe89a84483153"><td class="memItemLeft" align="right" valign="top"><a id="adc814788df05e2eb4fefe89a84483153" name="adc814788df05e2eb4fefe89a84483153"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Terminal</b> ()=delete</td></tr>
-<tr class="memdesc:adc814788df05e2eb4fefe89a84483153"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable constructing a <a class="el" href="class_terminal_games_1_1_terminal.html" title="The Terminal class handles all terminal related tasks such as getting user input, outputting to the t...">Terminal</a> object. <br /></td></tr>
+<tr class="memdesc:adc814788df05e2eb4fefe89a84483153"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable constructing a Terminal object. <br /></td></tr>
 <tr class="separator:adc814788df05e2eb4fefe89a84483153"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
@@ -139,15 +139,15 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a839bb4faa889c0f0bd2150a7fa444e12" id="r_a839bb4faa889c0f0bd2150a7fa444e12"><td class="memItemLeft" align="right" valign="top">static uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a839bb4faa889c0f0bd2150a7fa444e12">GetUserChoiceFromGameMenus</a> (const std::vector&lt; std::string &gt; &amp;p_menus, const std::vector&lt; std::string &gt; &amp;p_quitOptionMenus)</td></tr>
 <tr class="memdesc:a839bb4faa889c0f0bd2150a7fa444e12"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the user choice from a list of game menus screens that are printed to the terminal.  <br /></td></tr>
 <tr class="separator:a839bb4faa889c0f0bd2150a7fa444e12"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7073a097fa998beccfd138fd051d4462" id="r_a7073a097fa998beccfd138fd051d4462"><td class="memItemLeft" align="right" valign="top">static std::tuple&lt; uint32_t, uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7073a097fa998beccfd138fd051d4462">GetUserCommandFromGameGrid</a> (const std::tuple&lt; uint32_t, uint32_t &gt; &amp;p_startingGridLocation, const <a class="el" href="class_terminal_games_1_1_page_builder.html">PageBuilder</a> &amp;p_pageBuilder, const <a class="el" href="struct_terminal_games_1_1_game_info.html">GameInfo</a> &amp;p_gameInfo, const bool &amp;p_displayGetUserCommandPage)</td></tr>
-<tr class="memdesc:a7073a097fa998beccfd138fd051d4462"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a user command based on the currently displayed game grid (wrapper function around the platform-specific <code><a class="el" href="#a7073a097fa998beccfd138fd051d4462" title="Gets a user command based on the currently displayed game grid (wrapper function around the platform-...">GetUserCommandFromGameGrid()</a></code> functions as the Windows variant uses <code>Windows.h</code>).  <br /></td></tr>
-<tr class="separator:a7073a097fa998beccfd138fd051d4462"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a222885904c4b9312bda90b6b38b05066" id="r_a222885904c4b9312bda90b6b38b05066"><td class="memItemLeft" align="right" valign="top">static std::tuple&lt; uint32_t, uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a222885904c4b9312bda90b6b38b05066">GetUserCommandFromGameGridWindows</a> (const std::tuple&lt; uint32_t, uint32_t &gt; &amp;p_startingGridLocation, const <a class="el" href="class_terminal_games_1_1_page_builder.html">PageBuilder</a> &amp;p_pageBuilder, const <a class="el" href="struct_terminal_games_1_1_game_info.html">GameInfo</a> &amp;p_gameInfo, const bool &amp;p_displayGetUserCommandPage)</td></tr>
-<tr class="memdesc:a222885904c4b9312bda90b6b38b05066"><td class="mdescLeft">&#160;</td><td class="mdescRight">(Windows) Gets a user command based on the currently displayed game grid.  <br /></td></tr>
-<tr class="separator:a222885904c4b9312bda90b6b38b05066"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3110e8cf76b1175bbb8731a78b48063d" id="r_a3110e8cf76b1175bbb8731a78b48063d"><td class="memItemLeft" align="right" valign="top">static std::tuple&lt; uint32_t, uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3110e8cf76b1175bbb8731a78b48063d">GetUserCommandFromGameGridNonWindows</a> (const std::tuple&lt; uint32_t, uint32_t &gt; &amp;p_startingGridLocation, const <a class="el" href="class_terminal_games_1_1_page_builder.html">PageBuilder</a> &amp;p_pageBuilder, const <a class="el" href="struct_terminal_games_1_1_game_info.html">GameInfo</a> &amp;p_gameInfo, const bool &amp;p_displayGetUserCommandPage)</td></tr>
-<tr class="memdesc:a3110e8cf76b1175bbb8731a78b48063d"><td class="mdescLeft">&#160;</td><td class="mdescRight">(Non-window) Gets a user command based on the currently displayed game grid.  <br /></td></tr>
-<tr class="separator:a3110e8cf76b1175bbb8731a78b48063d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac75362f1b339fa1b50dc8e38afa8989" id="r_aac75362f1b339fa1b50dc8e38afa8989"><td class="memItemLeft" align="right" valign="top">static std::tuple&lt; uint32_t, uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aac75362f1b339fa1b50dc8e38afa8989">GetUserCommandFromGameGrid</a> (const std::tuple&lt; uint32_t, uint32_t &gt; &amp;p_startingGridLocation, const <a class="el" href="class_terminal_games_1_1_page_builder.html">PageBuilder</a> &amp;p_pageBuilder, const <a class="el" href="struct_terminal_games_1_1_game_information.html">GameInformation</a> &amp;p_gameInformation, const bool &amp;p_displayGetUserCommandPage)</td></tr>
+<tr class="memdesc:aac75362f1b339fa1b50dc8e38afa8989"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a user command based on the currently displayed game grid (wrapper function around the platform-specific <code><a class="el" href="#aac75362f1b339fa1b50dc8e38afa8989" title="Gets a user command based on the currently displayed game grid (wrapper function around the platform-...">GetUserCommandFromGameGrid()</a></code> functions as the Windows variant uses <code>Windows.h</code>).  <br /></td></tr>
+<tr class="separator:aac75362f1b339fa1b50dc8e38afa8989"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3db89c41e7a1c7053d6204153a043dbe" id="r_a3db89c41e7a1c7053d6204153a043dbe"><td class="memItemLeft" align="right" valign="top">static std::tuple&lt; uint32_t, uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3db89c41e7a1c7053d6204153a043dbe">GetUserCommandFromGameGridWindows</a> (const std::tuple&lt; uint32_t, uint32_t &gt; &amp;p_startingGridLocation, const <a class="el" href="class_terminal_games_1_1_page_builder.html">PageBuilder</a> &amp;p_pageBuilder, const <a class="el" href="struct_terminal_games_1_1_game_information.html">GameInformation</a> &amp;p_gameInformation, const bool &amp;p_displayGetUserCommandPage)</td></tr>
+<tr class="memdesc:a3db89c41e7a1c7053d6204153a043dbe"><td class="mdescLeft">&#160;</td><td class="mdescRight">(Windows) Gets a user command based on the currently displayed game grid.  <br /></td></tr>
+<tr class="separator:a3db89c41e7a1c7053d6204153a043dbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ffe0651e155177383d9bc1db502824c" id="r_a9ffe0651e155177383d9bc1db502824c"><td class="memItemLeft" align="right" valign="top">static std::tuple&lt; uint32_t, uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9ffe0651e155177383d9bc1db502824c">GetUserCommandFromGameGridNonWindows</a> (const std::tuple&lt; uint32_t, uint32_t &gt; &amp;p_startingGridLocation, const <a class="el" href="class_terminal_games_1_1_page_builder.html">PageBuilder</a> &amp;p_pageBuilder, const <a class="el" href="struct_terminal_games_1_1_game_information.html">GameInformation</a> &amp;p_gameInformation, const bool &amp;p_displayGetUserCommandPage)</td></tr>
+<tr class="memdesc:a9ffe0651e155177383d9bc1db502824c"><td class="mdescLeft">&#160;</td><td class="mdescRight">(Non-window) Gets a user command based on the currently displayed game grid.  <br /></td></tr>
+<tr class="separator:a9ffe0651e155177383d9bc1db502824c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0422281b1836844a3d464c1fb14bc8d1" id="r_a0422281b1836844a3d464c1fb14bc8d1"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0422281b1836844a3d464c1fb14bc8d1">GetUserChoiceFromGameOverMenu</a> (const std::string &amp;p_gameOverPage, const std::vector&lt; std::string &gt; &amp;p_quitOptionMenus)</td></tr>
 <tr class="memdesc:a0422281b1836844a3d464c1fb14bc8d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the user choice whether to restart the game, reset the game or a choice from the <a class="el" href="#af70d4df4da84ac882174e79865d7ad04" title="Gets the user choice from the quit menu. All user choices result in a different custom exception bein...">GetUserChoiceFromQuitMenus()</a> function.  <br /></td></tr>
 <tr class="separator:a0422281b1836844a3d464c1fb14bc8d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -180,7 +180,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>ResetTerminal<
 <tr class="separator:a87141c9ffb45a79969dfad31b325d077"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>The <a class="el" href="class_terminal_games_1_1_terminal.html" title="The Terminal class handles all terminal related tasks such as getting user input, outputting to the t...">Terminal</a> class handles all terminal related tasks such as getting user input, outputting to the terminal, clearing the terminal, etc. </p>
+<div class="textblock"><p>Handles all terminal related tasks such as getting user input, outputting to the terminal, clearing the terminal, etc. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="abbbc8ed6e6a8c5fdca89376aa28620fd" name="abbbc8ed6e6a8c5fdca89376aa28620fd"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abbbc8ed6e6a8c5fdca89376aa28620fd">&#9670;&#160;</a></span>GetUserChoiceFromHomepage()</h2>
@@ -318,8 +318,8 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>ResetTerminal<
 
 </div>
 </div>
-<a id="a7073a097fa998beccfd138fd051d4462" name="a7073a097fa998beccfd138fd051d4462"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7073a097fa998beccfd138fd051d4462">&#9670;&#160;</a></span>GetUserCommandFromGameGrid()</h2>
+<a id="aac75362f1b339fa1b50dc8e38afa8989" name="aac75362f1b339fa1b50dc8e38afa8989"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aac75362f1b339fa1b50dc8e38afa8989">&#9670;&#160;</a></span>GetUserCommandFromGameGrid()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -340,7 +340,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>ResetTerminal<
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="struct_terminal_games_1_1_game_info.html">GameInfo</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>p_gameInfo</em></span>, </td>
+          <td class="paramtype">const <a class="el" href="struct_terminal_games_1_1_game_information.html">GameInformation</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>p_gameInformation</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -355,12 +355,12 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>ResetTerminal<
 </table>
 </div><div class="memdoc">
 
-<p>Gets a user command based on the currently displayed game grid (wrapper function around the platform-specific <code><a class="el" href="#a7073a097fa998beccfd138fd051d4462" title="Gets a user command based on the currently displayed game grid (wrapper function around the platform-...">GetUserCommandFromGameGrid()</a></code> functions as the Windows variant uses <code>Windows.h</code>). </p>
+<p>Gets a user command based on the currently displayed game grid (wrapper function around the platform-specific <code><a class="el" href="#aac75362f1b339fa1b50dc8e38afa8989" title="Gets a user command based on the currently displayed game grid (wrapper function around the platform-...">GetUserCommandFromGameGrid()</a></code> functions as the Windows variant uses <code>Windows.h</code>). </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">p_startingGridLocation</td><td>The initial row and column to place the cursor. </td></tr>
     <tr><td class="paramname">p_pageBuilder</td><td>The <a class="el" href="class_terminal_games_1_1_page_builder.html" title="Builds pages (i.e. strings) to be printed to the terminal.">PageBuilder</a> object to allow for refreshing the terminal based on user input. </td></tr>
-    <tr><td class="paramname">p_gameInfo</td><td>The <a class="el" href="struct_terminal_games_1_1_game_info.html" title="Used by game objects to package themselves into a format that can be used by PageBuilder to construct...">GameInfo</a> object to pass to the <a class="el" href="class_terminal_games_1_1_page_builder.html" title="Builds pages (i.e. strings) to be printed to the terminal.">PageBuilder</a> object. </td></tr>
+    <tr><td class="paramname">p_gameInformation</td><td>The <a class="el" href="struct_terminal_games_1_1_game_information.html" title="Used by game objects to package themselves into a format that can be used by PageBuilder to construct...">GameInformation</a> object to pass to the <a class="el" href="class_terminal_games_1_1_page_builder.html" title="Builds pages (i.e. strings) to be printed to the terminal.">PageBuilder</a> object. </td></tr>
     <tr><td class="paramname">p_displayGetUserCommandPage</td><td>Whether to display the get user command page. </td></tr>
   </table>
   </dd>
@@ -381,8 +381,8 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>ResetTerminal<
 
 </div>
 </div>
-<a id="a222885904c4b9312bda90b6b38b05066" name="a222885904c4b9312bda90b6b38b05066"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a222885904c4b9312bda90b6b38b05066">&#9670;&#160;</a></span>GetUserCommandFromGameGridWindows()</h2>
+<a id="a3db89c41e7a1c7053d6204153a043dbe" name="a3db89c41e7a1c7053d6204153a043dbe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3db89c41e7a1c7053d6204153a043dbe">&#9670;&#160;</a></span>GetUserCommandFromGameGridWindows()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -403,7 +403,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>ResetTerminal<
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="struct_terminal_games_1_1_game_info.html">GameInfo</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>p_gameInfo</em></span>, </td>
+          <td class="paramtype">const <a class="el" href="struct_terminal_games_1_1_game_information.html">GameInformation</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>p_gameInformation</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -423,7 +423,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>ResetTerminal<
   <table class="params">
     <tr><td class="paramname">p_startingGridLocation</td><td>The initial row and column to place the cursor. </td></tr>
     <tr><td class="paramname">p_pageBuilder</td><td>The <a class="el" href="class_terminal_games_1_1_page_builder.html" title="Builds pages (i.e. strings) to be printed to the terminal.">PageBuilder</a> object to allow for refreshing the terminal based on user input. </td></tr>
-    <tr><td class="paramname">p_gameInfo</td><td>The <a class="el" href="struct_terminal_games_1_1_game_info.html" title="Used by game objects to package themselves into a format that can be used by PageBuilder to construct...">GameInfo</a> object to pass to the <a class="el" href="class_terminal_games_1_1_page_builder.html" title="Builds pages (i.e. strings) to be printed to the terminal.">PageBuilder</a> object. </td></tr>
+    <tr><td class="paramname">p_gameInformation</td><td>The <a class="el" href="struct_terminal_games_1_1_game_information.html" title="Used by game objects to package themselves into a format that can be used by PageBuilder to construct...">GameInformation</a> object to pass to the <a class="el" href="class_terminal_games_1_1_page_builder.html" title="Builds pages (i.e. strings) to be printed to the terminal.">PageBuilder</a> object. </td></tr>
     <tr><td class="paramname">p_displayGetUserCommandPage</td><td>Whether to display the get user command page. </td></tr>
   </table>
   </dd>
@@ -444,8 +444,8 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>ResetTerminal<
 
 </div>
 </div>
-<a id="a3110e8cf76b1175bbb8731a78b48063d" name="a3110e8cf76b1175bbb8731a78b48063d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3110e8cf76b1175bbb8731a78b48063d">&#9670;&#160;</a></span>GetUserCommandFromGameGridNonWindows()</h2>
+<a id="a9ffe0651e155177383d9bc1db502824c" name="a9ffe0651e155177383d9bc1db502824c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ffe0651e155177383d9bc1db502824c">&#9670;&#160;</a></span>GetUserCommandFromGameGridNonWindows()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -466,7 +466,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>ResetTerminal<
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="struct_terminal_games_1_1_game_info.html">GameInfo</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>p_gameInfo</em></span>, </td>
+          <td class="paramtype">const <a class="el" href="struct_terminal_games_1_1_game_information.html">GameInformation</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>p_gameInformation</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -486,7 +486,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>ResetTerminal<
   <table class="params">
     <tr><td class="paramname">p_startingGridLocation</td><td>The initial row and column to place the cursor. </td></tr>
     <tr><td class="paramname">p_pageBuilder</td><td>The <a class="el" href="class_terminal_games_1_1_page_builder.html" title="Builds pages (i.e. strings) to be printed to the terminal.">PageBuilder</a> object to allow for refreshing the terminal based on user input. </td></tr>
-    <tr><td class="paramname">p_gameInfo</td><td>The <a class="el" href="struct_terminal_games_1_1_game_info.html" title="Used by game objects to package themselves into a format that can be used by PageBuilder to construct...">GameInfo</a> object to pass to the <a class="el" href="class_terminal_games_1_1_page_builder.html" title="Builds pages (i.e. strings) to be printed to the terminal.">PageBuilder</a> object. </td></tr>
+    <tr><td class="paramname">p_gameInformation</td><td>The <a class="el" href="struct_terminal_games_1_1_game_information.html" title="Used by game objects to package themselves into a format that can be used by PageBuilder to construct...">GameInformation</a> object to pass to the <a class="el" href="class_terminal_games_1_1_page_builder.html" title="Builds pages (i.e. strings) to be printed to the terminal.">PageBuilder</a> object. </td></tr>
     <tr><td class="paramname">p_displayGetUserCommandPage</td><td>Whether to display the get user command page. </td></tr>
   </table>
   </dd>
@@ -537,7 +537,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>ResetTerminal<
 <p>Get the user choice whether to restart the game, reset the game or a choice from the <a class="el" href="#af70d4df4da84ac882174e79865d7ad04" title="Gets the user choice from the quit menu. All user choices result in a different custom exception bein...">GetUserChoiceFromQuitMenus()</a> function. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">p_gameOverPage</td><td>The game over page to display returned from <code><a class="el" href="class_terminal_games_1_1_page_builder.html#a78ed3346188382db4f064982c753f07f" title="Creates the game over page.">PageBuilder::GetGameOverPage()</a></code>. </td></tr>
+    <tr><td class="paramname">p_gameOverPage</td><td>The game over page to display returned from <code><a class="el" href="class_terminal_games_1_1_page_builder.html#aadb544a6ad40c2f2400ea77e636e0a4e" title="Creates the game over page.">PageBuilder::GetGameOverPage()</a></code>. </td></tr>
     <tr><td class="paramname">p_quitOptionMenus</td><td>The quit option selection pages returned from <code><a class="el" href="class_terminal_games_1_1_page_builder.html#ab9d71b91ab0112136aa348361f08f86b" title="Creates the quit option selection page.">PageBuilder::GetQuitOptionSelectionPage()</a></code>. </td></tr>
   </table>
   </dd>
@@ -740,7 +740,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>ResetTerminal<
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespace_terminal_games.html">TerminalGames</a></li><li class="navelem"><a class="el" href="class_terminal_games_1_1_terminal.html">Terminal</a></li>
-    <li class="footer">Generated on Mon Feb 17 2025 for Terminal Games by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2 </li>
+    <li class="footer">Generated on Sun Mar 16 2025 for Terminal Games by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2 </li>
   </ul>
 </div>
 </body>

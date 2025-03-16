@@ -20,21 +20,33 @@ namespace TerminalGames
     {
     public:
         /**
-         * @brief Constructs a new MainMenu object (for API use).
+         * @brief Constructs a new %MainMenu object (for API use).
          *
          * @param p_useAnsiEscapeCodes Whether to use use ANSI escapes codes (true) or only extended ASCII characters (false).
          */
         explicit MainMenu(const bool& p_useAnsiEscapeCodes);
 
         /**
-         * @brief Constructs a new MainMenu object (for CLI use).
+         * @brief Constructs a new %MainMenu object (for CLI use). Below is the help message:
+         *
+         * Usage: terminal-games [options]
+         *
+         * OPTIONS:
+         *
+         * Generic Options:
+         *
+         *   -h --help         Display available options.
+         *
+         * Optional Options:
+         *
+         *   --a --ascii-only  Only use extended ASCII characters (this removes all colour).
          *
          * @param p_commandLineArguments List of all command line arguments.
          */
         explicit MainMenu(const std::vector<std::string>& p_commandLineArguments);
 
         /**
-         * @brief Destructs a MainMenu object.
+         * @brief Destructs a %MainMenu object.
          */
         ~MainMenu();
 
@@ -49,30 +61,30 @@ namespace TerminalGames
         MainMenu() = delete;
 
         /**
-         * @brief Disable constructing a new MainMenu object using copy constructor.
+         * @brief Disable constructing a new %MainMenu object using copy constructor.
          *
-         * @param p_mainMenu The MainMenu to copy.
+         * @param p_mainMenu The %MainMenu to copy.
          */
         MainMenu(const MainMenu& p_mainMenu) = delete;
 
         /**
-         * @brief Disable constructing a new MainMenu object using move constructor.
+         * @brief Disable constructing a new %MainMenu object using move constructor.
          *
-         * @param p_mainMenu The MainMenu to copy.
+         * @param p_mainMenu The %MainMenu to copy.
          */
         MainMenu(const MainMenu&& p_mainMenu) = delete;
 
         /**
-         * @brief Disable constructing a new MainMenu object using copy assignment operator.
+         * @brief Disable constructing a new %MainMenu object using copy assignment operator.
          *
-         * @param p_mainMenu The MainMenu to copy.
+         * @param p_mainMenu The %MainMenu to copy.
          */
         MainMenu& operator=(const MainMenu& p_mainMenu) = delete;
 
         /**
-         * @brief Disable constructing a new MainMenu object using move assignment operator.
+         * @brief Disable constructing a new %MainMenu object using move assignment operator.
          *
-         * @param p_mainMenu The MainMenu to copy.
+         * @param p_mainMenu The %MainMenu to copy.
          */
         MainMenu& operator=(const MainMenu&& p_mainMenu) = delete;
 
@@ -86,27 +98,6 @@ namespace TerminalGames
          * @brief Create the main menu game selection pages and the game array.
          */
         void SetupMainMenuPagesAndGames();
-
-        /**
-         * @brief Parses the command line arguments. Below is the help message:
-         *
-         * Usage: terminal-games [options]
-         *
-         * OPTIONS:
-         *
-         * Generic Options:
-         *
-         *   --h --help        Display available options.
-         *
-         * terminal-games options:
-         *
-         *   --a --ascii-only  Only use extended ASCII characters (this removes all colour).
-         *
-         * @param p_commandLineArguments The command line arguments.
-         * @return true If to use use ANSI escapes codes
-         * @return false If to only use extended ASCII characters
-         */
-        static bool ParseCommandLineArguments(const std::vector<std::string>& p_commandLineArguments);
 
         /**
          * @brief Games that can be selected and played.

@@ -1,0 +1,7 @@
+{
+    "name": "terminal-games",
+    "version": "1.0",
+    "devDependencies": {
+        "linters": "file:submodules/Linters"
+    }
+}

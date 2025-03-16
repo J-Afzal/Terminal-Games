@@ -3,7 +3,7 @@ var namespace_terminal_games =
     [ "Globals", "namespace_terminal_games_1_1_globals.html", "namespace_terminal_games_1_1_globals" ],
     [ "Battleships", "class_terminal_games_1_1_battleships.html", "class_terminal_games_1_1_battleships" ],
     [ "Game", "class_terminal_games_1_1_game.html", "class_terminal_games_1_1_game" ],
-    [ "GameInfo", "struct_terminal_games_1_1_game_info.html", "struct_terminal_games_1_1_game_info" ],
+    [ "GameInformation", "struct_terminal_games_1_1_game_information.html", "struct_terminal_games_1_1_game_information" ],
     [ "Hangman", "class_terminal_games_1_1_hangman.html", "class_terminal_games_1_1_hangman" ],
     [ "MainMenu", "class_terminal_games_1_1_main_menu.html", "class_terminal_games_1_1_main_menu" ],
     [ "PageBuilder", "class_terminal_games_1_1_page_builder.html", "class_terminal_games_1_1_page_builder" ],

@@ -5,6 +5,7 @@
 #include <tuple>
 #include <vector>
 
+#include "helpers/GameInformation.hpp"
 #include "helpers/PageBuilder.hpp"
 
 /**
@@ -14,14 +15,14 @@
 namespace TerminalGames
 {
     /**
-     * @brief The Terminal class handles all terminal related tasks such as getting user input, outputting to the terminal,
-     * clearing the terminal, etc.
+     * @brief Handles all terminal related tasks such as getting user input, outputting to the terminal, clearing the terminal,
+     * etc.
      */
     class Terminal
     {
     public:
         /**
-         * @brief Disable constructing a Terminal object.
+         * @brief Disable constructing a %Terminal object.
          */
         Terminal() = delete;
 
@@ -68,7 +69,7 @@ namespace TerminalGames
          *
          * @param p_startingGridLocation The initial row and column to place the cursor.
          * @param p_pageBuilder The PageBuilder object to allow for refreshing the terminal based on user input.
-         * @param p_gameInfo The GameInfo object to pass to the PageBuilder object.
+         * @param p_gameInformation The GameInformation object to pass to the PageBuilder object.
          * @param p_displayGetUserCommandPage Whether to display the get user command page.
          * @return `std::tuple<uint32_t, uint32_t>` The user command from the user in the form `<row, column>`.
          * @exception Globals::Exceptions::NotImplementedError When the user passes a PageBuilder with a page type not supported
@@ -83,7 +84,7 @@ namespace TerminalGames
         static std::tuple<uint32_t, uint32_t> GetUserCommandFromGameGrid(
             const std::tuple<uint32_t, uint32_t>& p_startingGridLocation,
             const PageBuilder& p_pageBuilder,
-            const GameInfo& p_gameInfo,
+            const GameInformation& p_gameInformation,
             const bool& p_displayGetUserCommandPage);
 
         /**
@@ -91,7 +92,7 @@ namespace TerminalGames
          *
          * @param p_startingGridLocation The initial row and column to place the cursor.
          * @param p_pageBuilder The PageBuilder object to allow for refreshing the terminal based on user input.
-         * @param p_gameInfo The GameInfo object to pass to the PageBuilder object.
+         * @param p_gameInformation The GameInformation object to pass to the PageBuilder object.
          * @param p_displayGetUserCommandPage Whether to display the get user command page.
          * @return `std::tuple<uint32_t, uint32_t>` The user command from the user in the form `<row, column>`.
          * @exception Globals::Exceptions::NotImplementedError When the user passes a PageBuilder with a page type not supported
@@ -106,7 +107,7 @@ namespace TerminalGames
         static std::tuple<uint32_t, uint32_t> GetUserCommandFromGameGridWindows(
             const std::tuple<uint32_t, uint32_t>& p_startingGridLocation,
             const PageBuilder& p_pageBuilder,
-            const GameInfo& p_gameInfo,
+            const GameInformation& p_gameInformation,
             const bool& p_displayGetUserCommandPage);
 
         /**
@@ -114,7 +115,7 @@ namespace TerminalGames
          *
          * @param p_startingGridLocation The initial row and column to place the cursor.
          * @param p_pageBuilder The PageBuilder object to allow for refreshing the terminal based on user input.
-         * @param p_gameInfo The GameInfo object to pass to the PageBuilder object.
+         * @param p_gameInformation The GameInformation object to pass to the PageBuilder object.
          * @param p_displayGetUserCommandPage Whether to display the get user command page.
          * @return `std::tuple<uint32_t, uint32_t>` The user command from the user in the form `<row, column>`.
          * @exception Globals::Exceptions::NotImplementedError When the user passes a PageBuilder with a page type not supported
@@ -129,7 +130,7 @@ namespace TerminalGames
         static std::tuple<uint32_t, uint32_t> GetUserCommandFromGameGridNonWindows(
             const std::tuple<uint32_t, uint32_t>& p_startingGridLocation,
             const PageBuilder& p_pageBuilder,
-            const GameInfo& p_gameInfo,
+            const GameInformation& p_gameInformation,
             const bool& p_displayGetUserCommandPage);
 
         /**
