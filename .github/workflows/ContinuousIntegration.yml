@@ -77,8 +77,10 @@ jobs:
 
                     echo "##[section]All linting dependencies installed!"
 
+            - name: Check git status
+              if: (success() || failure()) && steps.dependencies.outcome == 'success'
+              run: |
                     git status
-
                     git diff --name-only | ForEach-Object { Write-Output "################$_################"; Get-Content $_ }
 
             - name: Run gitignore linter
