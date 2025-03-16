@@ -16,18 +16,24 @@ words:
     - doxyfile
     - linters
 ignoreWords:
+    - altera
     - choco
     - colorstyle
     - darkmode
     - defenses
     - doxygenversion
+    - hicpp
     - ilammy
+    - linuxkernel
+    - llvmlibc
     - logosize
     - mathjax
     - mdfile
     - memb
+    - nodiscard
     - nolint
     - noncommercially
+    - openmp
     - projectbrief
     - tictactoe
     - wasd
