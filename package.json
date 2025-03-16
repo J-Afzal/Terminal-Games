@@ -1,9 +1,7 @@
 {
-    "name": "linters",
+    "name": "terminal-games",
     "version": "1.0",
     "devDependencies": {
-        "cspell": "^8.17.1",
-        "markdownlint-cli": "^0.44.0",
-        "prettier": "^3.4.2"
+        "linters": "file:submodules/Linters"
     }
 }
