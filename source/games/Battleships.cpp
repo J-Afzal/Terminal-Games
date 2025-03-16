@@ -6,6 +6,7 @@
 #include <thread>
 #include <tuple>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 #include "games/Battleships.hpp"
@@ -203,7 +204,7 @@ namespace TerminalGames
             std::vector<std::tuple<uint32_t, uint32_t>> currentShipPositions;
 
             // For each ship grid location (intentionally a signed int)
-            for (int32_t currentShipSize = 0; currentShipSize < Globals::G_BATTLESHIPS_SHIP_SIZES.at(currentShip); currentShipSize++)
+            for (int32_t currentShipSize = 0; std::cmp_less(currentShipSize, Globals::G_BATTLESHIPS_SHIP_SIZES.at(currentShip)); currentShipSize++)
             {
                 // Set cursor position to the last known valid user selected ship grid location for the currentShip
                 if (!currentShipPositions.empty())
