@@ -17,6 +17,7 @@ words:
     - linters
 ignoreWords:
     - altera
+    - anyofallof
     - choco
     - colorstyle
     - darkmode

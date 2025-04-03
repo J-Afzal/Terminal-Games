@@ -1,5 +1,11 @@
 var NAVTREEINDEX1 =
 {
+"class_terminal_games_1_1_main_menu.html#ad596da9c5ab402d3568e474cb01e51d6":[7,0,0,5,11],
+"class_terminal_games_1_1_main_menu.html#af170b342c5923cf42b14e04899705f4c":[6,0,0,5,4],
+"class_terminal_games_1_1_main_menu.html#af170b342c5923cf42b14e04899705f4c":[7,0,0,5,4],
+"class_terminal_games_1_1_page_builder.html":[6,0,0,6],
+"class_terminal_games_1_1_page_builder.html":[7,0,0,6],
+"class_terminal_games_1_1_page_builder.html#a032bc0ea5cdf02ae032d90b9f2f04ab0":[6,0,0,6,27],
 "class_terminal_games_1_1_page_builder.html#a032bc0ea5cdf02ae032d90b9f2f04ab0":[7,0,0,6,27],
 "class_terminal_games_1_1_page_builder.html#a215141b7b9d90e1b8591db1170eba33f":[6,0,0,6,18],
 "class_terminal_games_1_1_page_builder.html#a215141b7b9d90e1b8591db1170eba33f":[7,0,0,6,18],
@@ -184,8 +190,11 @@ var NAVTREEINDEX1 =
 "class_terminal_games_1_1_tic_tac_toe.html#af2afe6345f28735dceacd26012092f88":[6,0,0,8,32],
 "class_terminal_games_1_1_tic_tac_toe.html#af2afe6345f28735dceacd26012092f88":[7,0,0,8,32],
 "classes.html":[7,1],
+"dir_3439fc06a8b704364104b39a0a62c33f.html":[8,0,1,0],
 "dir_46067384b2eb3ec16f46ec75fab7dc96.html":[8,0,0,0],
 "dir_9a465796e2609dc8c07bb30bab53fed6.html":[8,0,0,1],
+"dir_ac7426e64a8e6f06cc3e6ac020978cfe.html":[8,0,1,1],
+"dir_b2f33c71d4aa5e7af42a1ca61ff5af1b.html":[8,0,1],
 "dir_d44c64559bbebec7f509842c48db8b23.html":[8,0,0],
 "files.html":[8,0],
 "functions.html":[7,3,0],
@@ -221,6 +230,7 @@ var NAVTREEINDEX1 =
 "index.html#autotoc_md7":[2,3],
 "index.html#autotoc_md8":[2,4],
 "index.html#autotoc_md9":[2,5],
+"main_8cpp_source.html":[8,0,1,2],
 "namespace_terminal_games.html":[6,0,0],
 "namespace_terminal_games.html#a2a0516cd284d976abdb6dd7268a23a80":[6,0,0,9],
 "namespace_terminal_games.html#a2a0516cd284d976abdb6dd7268a23a80a3287971e79b4dca11067ed287847c1e6":[6,0,0,9,2],
@@ -239,15 +249,5 @@ var NAVTREEINDEX1 =
 "namespace_terminal_games_1_1_globals.html#a0e9ab5b44b562001d2c3d6aba0e31d61":[6,0,0,0,167],
 "namespace_terminal_games_1_1_globals.html#a0edcf2f95ea5b55b4179364d21ca3c11":[6,0,0,0,137],
 "namespace_terminal_games_1_1_globals.html#a104794fa454a39a2ffda5bc216b58cd0":[6,0,0,0,52],
-"namespace_terminal_games_1_1_globals.html#a109bce4a80b760b5832f751a5d2ae85d":[6,0,0,0,141],
-"namespace_terminal_games_1_1_globals.html#a111650df7f2585d4e3375f7f7f95837f":[6,0,0,0,82],
-"namespace_terminal_games_1_1_globals.html#a11282db21def6cfcc3478086d0d8a0b5":[6,0,0,0,60],
-"namespace_terminal_games_1_1_globals.html#a11a0bc48a20a8fc92233df76d72dc25e":[6,0,0,0,36],
-"namespace_terminal_games_1_1_globals.html#a16919b49182400b58fb0fea50ecc6f33":[6,0,0,0,102],
-"namespace_terminal_games_1_1_globals.html#a1791a76bb140b0b62f1c290afd1a5064":[6,0,0,0,103],
-"namespace_terminal_games_1_1_globals.html#a17aa57dcebe8ad6636dbe32cbbc3e90c":[6,0,0,0,83],
-"namespace_terminal_games_1_1_globals.html#a1beaafea0ca4fdac603af1751472bbba":[6,0,0,0,2],
-"namespace_terminal_games_1_1_globals.html#a1d053eed72d70f9f46541ab873119190":[6,0,0,0,51],
-"namespace_terminal_games_1_1_globals.html#a21ddede8a0c7f4a4da367e5728441a1c":[6,0,0,0,6],
-"namespace_terminal_games_1_1_globals.html#a21f21dc67bfce66a9c0ac88fe70105ea":[6,0,0,0,62]
+"namespace_terminal_games_1_1_globals.html#a109bce4a80b760b5832f751a5d2ae85d":[6,0,0,0,141]
 };
