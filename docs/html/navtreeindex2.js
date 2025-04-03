@@ -1,5 +1,15 @@
 var NAVTREEINDEX2 =
 {
+"namespace_terminal_games_1_1_globals.html#a111650df7f2585d4e3375f7f7f95837f":[6,0,0,0,82],
+"namespace_terminal_games_1_1_globals.html#a11282db21def6cfcc3478086d0d8a0b5":[6,0,0,0,60],
+"namespace_terminal_games_1_1_globals.html#a11a0bc48a20a8fc92233df76d72dc25e":[6,0,0,0,36],
+"namespace_terminal_games_1_1_globals.html#a16919b49182400b58fb0fea50ecc6f33":[6,0,0,0,102],
+"namespace_terminal_games_1_1_globals.html#a1791a76bb140b0b62f1c290afd1a5064":[6,0,0,0,103],
+"namespace_terminal_games_1_1_globals.html#a17aa57dcebe8ad6636dbe32cbbc3e90c":[6,0,0,0,83],
+"namespace_terminal_games_1_1_globals.html#a1beaafea0ca4fdac603af1751472bbba":[6,0,0,0,2],
+"namespace_terminal_games_1_1_globals.html#a1d053eed72d70f9f46541ab873119190":[6,0,0,0,51],
+"namespace_terminal_games_1_1_globals.html#a21ddede8a0c7f4a4da367e5728441a1c":[6,0,0,0,6],
+"namespace_terminal_games_1_1_globals.html#a21f21dc67bfce66a9c0ac88fe70105ea":[6,0,0,0,62],
 "namespace_terminal_games_1_1_globals.html#a284bbbd224ee5976a6838f1e16a5ff04":[6,0,0,0,66],
 "namespace_terminal_games_1_1_globals.html#a2accff9e109a46ee20f61e69e588966b":[6,0,0,0,68],
 "namespace_terminal_games_1_1_globals.html#a2b230ca843e4eea74204a2e21e8c3f8b":[6,0,0,0,122],

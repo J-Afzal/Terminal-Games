@@ -1,13 +1,19 @@
 var NAVTREEINDEX0 =
 {
+"_battleships_8cpp_source.html":[8,0,1,0,0],
 "_battleships_8hpp_source.html":[8,0,0,0,0],
 "_game_8hpp_source.html":[8,0,0,0,1],
 "_game_information_8hpp_source.html":[8,0,0,1,0],
 "_globals_8hpp_source.html":[8,0,0,1,1],
+"_hangman_8cpp_source.html":[8,0,1,0,1],
 "_hangman_8hpp_source.html":[8,0,0,0,2],
+"_main_menu_8cpp_source.html":[8,0,1,1,0],
 "_main_menu_8hpp_source.html":[8,0,0,1,2],
+"_page_builder_8cpp_source.html":[8,0,1,1,1],
 "_page_builder_8hpp_source.html":[8,0,0,1,3],
+"_terminal_8cpp_source.html":[8,0,1,1,2],
 "_terminal_8hpp_source.html":[8,0,0,1,4],
+"_tic_tac_toe_8cpp_source.html":[8,0,1,0,2],
 "_tic_tac_toe_8hpp_source.html":[8,0,0,0,3],
 "annotated.html":[7,0],
 "bug.html":[5],
@@ -243,11 +249,5 @@ var NAVTREEINDEX0 =
 "class_terminal_games_1_1_main_menu.html#aac429c710d3b2d55178725bcd3ed3b92":[7,0,0,5,1],
 "class_terminal_games_1_1_main_menu.html#ac8c9c30d4f73381e62bc785ac4fa4c26":[6,0,0,5,7],
 "class_terminal_games_1_1_main_menu.html#ac8c9c30d4f73381e62bc785ac4fa4c26":[7,0,0,5,7],
-"class_terminal_games_1_1_main_menu.html#ad596da9c5ab402d3568e474cb01e51d6":[6,0,0,5,11],
-"class_terminal_games_1_1_main_menu.html#ad596da9c5ab402d3568e474cb01e51d6":[7,0,0,5,11],
-"class_terminal_games_1_1_main_menu.html#af170b342c5923cf42b14e04899705f4c":[6,0,0,5,4],
-"class_terminal_games_1_1_main_menu.html#af170b342c5923cf42b14e04899705f4c":[7,0,0,5,4],
-"class_terminal_games_1_1_page_builder.html":[6,0,0,6],
-"class_terminal_games_1_1_page_builder.html":[7,0,0,6],
-"class_terminal_games_1_1_page_builder.html#a032bc0ea5cdf02ae032d90b9f2f04ab0":[6,0,0,6,27]
+"class_terminal_games_1_1_main_menu.html#ad596da9c5ab402d3568e474cb01e51d6":[6,0,0,5,11]
 };

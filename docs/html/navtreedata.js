@@ -67,9 +67,9 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"_battleships_8hpp_source.html",
-"class_terminal_games_1_1_page_builder.html#a032bc0ea5cdf02ae032d90b9f2f04ab0",
-"namespace_terminal_games_1_1_globals.html#a284bbbd224ee5976a6838f1e16a5ff04"
+"_battleships_8cpp_source.html",
+"class_terminal_games_1_1_main_menu.html#ad596da9c5ab402d3568e474cb01e51d6",
+"namespace_terminal_games_1_1_globals.html#a111650df7f2585d4e3375f7f7f95837f"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';
