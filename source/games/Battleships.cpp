@@ -9,11 +9,12 @@
 #include <utility>
 #include <vector>
 
-#include "games/Battleships.hpp"
 #include "helpers/GameInformation.hpp"
 #include "helpers/Globals.hpp"
 #include "helpers/PageBuilder.hpp"
 #include "helpers/Terminal.hpp"
+
+#include "games/Battleships.hpp"
 
 namespace TerminalGames
 {
