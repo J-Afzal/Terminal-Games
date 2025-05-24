@@ -5,10 +5,11 @@
 #include <tuple>
 #include <vector>
 
-#include "games/TicTacToe.hpp"
 #include "helpers/Globals.hpp"
 #include "helpers/PageBuilder.hpp"
 #include "helpers/Terminal.hpp"
+
+#include "games/TicTacToe.hpp"
 
 namespace TerminalGames
 {

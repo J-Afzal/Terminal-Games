@@ -9,10 +9,11 @@
 #include <thread>
 #include <vector>
 
-#include "games/Hangman.hpp"
 #include "helpers/Globals.hpp"
 #include "helpers/PageBuilder.hpp"
 #include "helpers/Terminal.hpp"
+
+#include "games/Hangman.hpp"
 
 namespace TerminalGames
 {

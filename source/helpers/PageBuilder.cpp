@@ -7,6 +7,7 @@
 
 #include "helpers/GameInformation.hpp"
 #include "helpers/Globals.hpp"
+
 #include "helpers/PageBuilder.hpp"
 
 namespace TerminalGames

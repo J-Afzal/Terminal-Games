@@ -9,9 +9,10 @@
 #include "games/Hangman.hpp"
 #include "games/TicTacToe.hpp"
 #include "helpers/Globals.hpp"
-#include "helpers/MainMenu.hpp"
 #include "helpers/PageBuilder.hpp"
 #include "helpers/Terminal.hpp"
+
+#include "helpers/MainMenu.hpp"
 
 namespace TerminalGames
 {

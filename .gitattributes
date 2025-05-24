@@ -12,6 +12,7 @@
 .gitattributes  text
 .gitignore      text
 .gitmodules     text
+.toml           text
 Doxyfile        text
 
 # Documents

@@ -13,6 +13,7 @@
 
 #include "helpers/Globals.hpp"
 #include "helpers/PageBuilder.hpp"
+
 #include "helpers/Terminal.hpp"
 
 namespace TerminalGames
