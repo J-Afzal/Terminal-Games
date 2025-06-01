@@ -115,21 +115,20 @@ $(function(){initNavTree('index.html',''); initResizable(true); });
 <p>Simple games that run in the terminal.</p>
 <h1><a class="anchor" id="autotoc_md1"></a>
 Getting Started</h1>
-<p>Binaries can be found in <a href="https://github.com/J-Afzal/Terminal-Games/releases">Releases</a> or, if preferred, CMake can be used to build the project from source either through the PowerShell helper function:</p>
+<p>Binaries can be found in <a href="https://github.com/J-Afzal/Terminal-Games/releases">Releases</a> or, if preferred, CMake can be used to build the project from source either through the PowerShell helper module:</p>
 <div class="fragment"><div class="line">Import-Module ./modules/Build.psd1</div>
 <div class="line"> </div>
 <div class="line">Build-CppCodeUsingCMake -Platform windows-latest -BuildType Release -BuildDirectory build -Parallel 8 -Verbose</div>
 <div class="line"> </div>
-<div class="line">./build/terminal-games OR ./build/terminal-games.exe</div>
-</div><!-- fragment --><dl class="section warning"><dt>Warning</dt><dd>If on Windows make sure to run the above within a Visual Studio Developer Command Prompt otherwise you may see errors around <code>cl.exe</code> not being found.</dd></dl>
-<p>or manually:</p>
+<div class="line">./build/terminal-games</div>
+</div><!-- fragment --><p>or manually:</p>
 <div class="fragment"><div class="line">git clone --recurse-submodules https://github.com/J-Afzal/Terminal-Games.git</div>
 <div class="line">cd Terminal-Games</div>
 <div class="line">cmake -S . -B ./build -D &quot;CMAKE_BUILD_TYPE=Release&quot;</div>
 <div class="line">cmake --build ./build --config Release</div>
 <div class="line"> </div>
 <div class="line">./build/terminal-games OR ./build/terminal-games.exe</div>
-</div><!-- fragment --><dl class="section warning"><dt>Warning</dt><dd>If on Windows make sure to add -G "NMake Makefiles" otherwise the executable may not be in the expected location.</dd></dl>
+</div><!-- fragment --><dl class="section warning"><dt>Warning</dt><dd>If on Windows make sure to run the above within a Visual Studio Developer Command Prompt otherwise you may see errors around <code>cl.exe</code> not being found. Also, if on Windows make sure to add -G "NMake Makefiles" otherwise the required dlls may not be in the expected locations for the above instructions.</dd></dl>
 <p>Here are the full list of options for Terminal Games:</p>
 <div class="fragment"><div class="line">Usage: terminal-games [options]</div>
 <div class="line"> </div>
@@ -211,7 +210,7 @@ CI / CD</h1>
 <p>The continuous deployment workflow runs against all commits to main, builds the code and deploys the executables as a release.</p>
 <h1><a class="anchor" id="autotoc_md11"></a>
 Development Setup</h1>
-<p>For development a few extra tools are needed to check for linting issues locally which include the <a href="https://github.com/J-Afzal/Linters"><code>Linters</code></a> submodule:</p>
+<p>For development a few extra tools are needed to check for linting issues locally which include the <a href="https://github.com/J-Afzal/Linters">Linters</a> submodule:</p>
 <div class="fragment"><div class="line">git clone --recurse-submodules https://github.com/J-Afzal/Terminal-Games.git</div>
 </div><!-- fragment --><p>The development dependencies are:</p>
 <ul>
@@ -222,7 +221,7 @@ Development Setup</h1>
 <li>CMake &gt;= 3.20</li>
 <li>Ninja &gt;= 1.12.1</li>
 </ul>
-<p>All linting helper functions can be found in the <a href="https://github.com/J-Afzal/Linters"><code>Linters</code></a> submodule.</p>
+<p>All linting helper functions can be found in the <a href="https://github.com/J-Afzal/Linters">Linters</a> submodule.</p>
 <p>Any generator can be used to build the project but to prior to running <code>clang-tidy</code>/<code>clang-format</code> CMake must be configured using a generator that creates a <code>compile_commands.json</code> file in the build directory (e.g. <code>-G "Ninja"</code>, <code>-G "NMake Makefiles"</code>, etc)</p>
 <p>On windows, clang-tidy and clang-format can be installed using the <code>LLVM-x.x.x-win64.exe</code> binary from the <a href="https://github.com/llvm/llvm-project/releases/tag/llvmorg-19.1.6">LLVM release page</a> or from <a href="https://community.chocolatey.org/packages/llvm">chocolatey</a> using <code>choco install llvm -y</code>.</p>
 <h2><a class="anchor" id="autotoc_md12"></a>
@@ -235,7 +234,7 @@ IDE</h2>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri May 23 2025 for Terminal Games by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2 </li>
+    <li class="footer">Generated on Sun Jun 1 2025 for Terminal Games by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2 </li>
   </ul>
 </div>
 </body>

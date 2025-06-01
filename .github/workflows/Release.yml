@@ -34,6 +34,8 @@ jobs:
                   $tagName = "terminal-games-$(Get-Date -Format 'yyyy-MM-dd-HH-mm-ss')"
                   $sharedName = "terminal-games"
 
+                  ls
+
                   # Create draft release if performing a CI check
                   if ($${{ inputs.ci_check }}) {
                     gh release create $tagName `
