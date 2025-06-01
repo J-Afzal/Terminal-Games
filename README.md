@@ -138,7 +138,7 @@ The development dependencies are:
 - Git
 - PowerShell version >= 5
 - npm dependencies via `npm install`
-- clang-tidy >= 19 and clang-format >= 19
+- clang-tidy = 19 and clang-format >= 19
 - CMake >= 3.20
 - Ninja >= 1.12.1
 
@@ -165,5 +165,5 @@ opening the folder through the `Developer PowerShell for VS` (otherwise you may 
 [cd-badge]: https://github.com/J-Afzal/Terminal-Games/actions/workflows/ContinuousDeployment.yml/badge.svg
 [cd-page]: https://github.com/J-Afzal/Terminal-Games/actions/workflows/ContinuousDeployment.yml
 [linters-repo]: https://github.com/J-Afzal/Linters
-[llvm-release-page]: https://github.com/llvm/llvm-project/releases/tag/llvmorg-19.1.6
+[llvm-release-page]: https://github.com/llvm/llvm-project/releases
 [llvm-chocolatey]: https://community.chocolatey.org/packages/llvm
