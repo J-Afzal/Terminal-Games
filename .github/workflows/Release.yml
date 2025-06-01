@@ -34,7 +34,9 @@ jobs:
                   $tagName = "terminal-games-$(Get-Date -Format 'yyyy-MM-dd-HH-mm-ss')"
                   $sharedName = "terminal-games"
 
-                  ls
+                  Rename-Item -LiteralPath ./$sharedName-macos-latest/$sharedName -NewName $sharedName-macos-latest
+                  Rename-Item -LiteralPath ./$sharedName-ubuntu-latest/$sharedName -NewName $sharedName-ubuntu-latest
+                  Rename-Item -LiteralPath ./$sharedName-windows-latest/$sharedName.exe -NewName $sharedName-windows-latest.exe
 
                   # Create draft release if performing a CI check
                   if ($${{ inputs.ci_check }}) {
