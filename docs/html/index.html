@@ -209,13 +209,13 @@ Development Setup</h1>
 <li>Git</li>
 <li>PowerShell version &gt;= 5</li>
 <li>npm dependencies via <span class="tt">npm install</span></li>
-<li>clang-tidy &gt;= 19 and clang-format &gt;= 19</li>
+<li>clang-tidy = 19 and clang-format &gt;= 19</li>
 <li>CMake &gt;= 3.20</li>
 <li>Ninja &gt;= 1.12.1</li>
 </ul>
 <p>All linting helper functions can be found in the <a href="https://github.com/J-Afzal/Linters">Linters</a> submodule.</p>
 <p>Any generator can be used to build the project but to prior to running <span class="tt">clang-tidy</span>/<span class="tt">clang-format</span> CMake must be configured using a generator that creates a <span class="tt">compile_commands.json</span> file in the build directory (e.g. <span class="tt">-G "Ninja"</span>, <span class="tt">-G "NMake Makefiles"</span>, etc)</p>
-<p>On windows, clang-tidy and clang-format can be installed using the <span class="tt">LLVM-x.x.x-win64.exe</span> binary from the <a href="https://github.com/llvm/llvm-project/releases/tag/llvmorg-19.1.6">LLVM release page</a> or from <a href="https://community.chocolatey.org/packages/llvm">chocolatey</a> using <span class="tt">choco install llvm -y</span>.</p>
+<p>On windows, clang-tidy and clang-format can be installed using the <span class="tt">LLVM-x.x.x-win64.exe</span> binary from the <a href="https://github.com/llvm/llvm-project/releases">LLVM release page</a> or from <a href="https://community.chocolatey.org/packages/llvm">chocolatey</a> using <span class="tt">choco install llvm -y</span>.</p>
 <h2 class="doxsection"><a class="anchor" id="autotoc_md12"></a>
 IDE</h2>
 <p>On Windows, Visual Studio 2022 can be used by opening the folder as a CMake project and Visual Studio Code can be used by opening the folder through the <span class="tt">Developer PowerShell for VS</span> (otherwise you may see errors around cl.exe not being found). </p>
