@@ -4,20 +4,16 @@ Simple games that run in the terminal.
 
 ## Getting Started
 
-Binaries can be found in [Releases](https://github.com/J-Afzal/Terminal-Games/releases) or, if preferred, CMake can be used to
-build the project from source either through the PowerShell helper function:
+Binaries can be found in [Releases][releases] or, if preferred, CMake can be used to build the project from source either
+through the PowerShell helper module:
 
 ```text
 Import-Module ./modules/Build.psd1
 
 Build-CppCodeUsingCMake -Platform windows-latest -BuildType Release -BuildDirectory build -Parallel 8 -Verbose
 
-./build/terminal-games OR ./build/terminal-games.exe
+./build/terminal-games
 ```
-
-> [!WARNING]
-> If on Windows make sure to run the above within a Visual Studio Developer Command Prompt otherwise you may see errors around
-> `cl.exe` not being found.
 
 or manually:
 
@@ -31,7 +27,9 @@ cmake --build ./build --config Release
 ```
 
 > [!WARNING]
-> If on Windows make sure to add -G "NMake Makefiles" otherwise the executable may not be in the expected location.
+> If on Windows make sure to run the above within a Visual Studio Developer Command Prompt otherwise you may see errors around
+> `cl.exe` not being found. Also, if on Windows make sure to add -G "NMake Makefiles" otherwise the required dlls may not be in
+> the expected locations for the above instructions.
 
 Here are the full list of options for Terminal Games:
 
@@ -51,7 +49,7 @@ Optional Options:
 
 ## Documentation
 
-Checkout the [documentation page](https://J-Afzal.github.io/Terminal-Games) built using Doxygen and hosted using Github pages.
+Checkout the [documentation page][docs] built using Doxygen and hosted using Github pages.
 
 ![Documentation Homepage](./resources/screenshots/DocumentationHomepage.png)
 
@@ -119,8 +117,7 @@ on the board.
 
 ## CI / CD
 
-[![Continuous Integration](https://github.com/J-Afzal/Terminal-Games/actions/workflows/ContinuousIntegration.yml/badge.svg)](https://github.com/J-Afzal/Terminal-Games/actions/workflows/ContinuousIntegration.yml)
-[![Continuous Deployment](https://github.com/J-Afzal/Terminal-Games/actions/workflows/ContinuousDeployment.yml/badge.svg)](https://github.com/J-Afzal/Terminal-Games/actions/workflows/ContinuousDeployment.yml)
+[![Continuous Integration][ci-badge]][ci-page] [![Continuous Deployment][cd-badge]][cd-page]
 
 The continuous integration workflow runs against all commits on pull requests, builds the code, runs unit tests and performs
 linting checks.
@@ -129,8 +126,8 @@ The continuous deployment workflow runs against all commits to main, builds the 
 
 ## Development Setup
 
-For development a few extra tools are needed to check for linting issues locally which include the
-[`Linters`](https://github.com/J-Afzal/Linters) submodule:
+For development a few extra tools are needed to check for linting issues locally which include the [Linters][linters-repo]
+submodule:
 
 ```text
 git clone --recurse-submodules https://github.com/J-Afzal/Terminal-Games.git
@@ -141,21 +138,32 @@ The development dependencies are:
 - Git
 - PowerShell version >= 5
 - npm dependencies via `npm install`
-- clang-tidy >= 19 and clang-format >= 19
+- clang-tidy = 19 and clang-format >= 19
 - CMake >= 3.20
 - Ninja >= 1.12.1
 
-All linting helper functions can be found in the [`Linters`](https://github.com/J-Afzal/Linters) submodule.
+All linting helper functions can be found in the [Linters][linters-repo] submodule.
 
 Any generator can be used to build the project but to prior to running `clang-tidy`/`clang-format` CMake must be configured
 using a generator that creates a `compile_commands.json` file in the build directory (e.g. `-G "Ninja"`, `-G "NMake Makefiles"`,
 etc)
 
 On windows, clang-tidy and clang-format can be installed using the `LLVM-x.x.x-win64.exe` binary from the
-[LLVM release page](https://github.com/llvm/llvm-project/releases/tag/llvmorg-19.1.6) or from
-[chocolatey](https://community.chocolatey.org/packages/llvm) using `choco install llvm -y`.
+[LLVM release page][llvm-release-page] or from [chocolatey][llvm-chocolatey] using `choco install llvm -y`.
 
 ### IDE
 
 On Windows, Visual Studio 2022 can be used by opening the folder as a CMake project and Visual Studio Code can be used by
 opening the folder through the `Developer PowerShell for VS` (otherwise you may see errors around cl.exe not being found).
+
+<!-- Link References -->
+
+[releases]: https://github.com/J-Afzal/Terminal-Games/releases
+[docs]: https://J-Afzal.github.io/Terminal-Games
+[ci-badge]: https://github.com/J-Afzal/Terminal-Games/actions/workflows/ContinuousIntegration.yml/badge.svg
+[ci-page]: https://github.com/J-Afzal/Terminal-Games/actions/workflows/ContinuousIntegration.yml
+[cd-badge]: https://github.com/J-Afzal/Terminal-Games/actions/workflows/ContinuousDeployment.yml/badge.svg
+[cd-page]: https://github.com/J-Afzal/Terminal-Games/actions/workflows/ContinuousDeployment.yml
+[linters-repo]: https://github.com/J-Afzal/Linters
+[llvm-release-page]: https://github.com/llvm/llvm-project/releases
+[llvm-chocolatey]: https://community.chocolatey.org/packages/llvm

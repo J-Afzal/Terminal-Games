@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['games_0',['Terminal Games',['../index.html',1,'']]]
+  ['cd_0',['CI / CD',['../index.html#autotoc_md10',1,'']]],
+  ['ci_20cd_1',['CI / CD',['../index.html#autotoc_md10',1,'']]]
 ];

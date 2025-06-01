@@ -1,6 +1,12 @@
 name: Release
 
-on: workflow_call
+on:
+    workflow_call:
+        inputs:
+            ci_check:
+                required: false
+                type: boolean
+                default: false
 
 jobs:
     release:
@@ -32,7 +38,23 @@ jobs:
                   Rename-Item -LiteralPath ./$sharedName-ubuntu-latest/$sharedName -NewName $sharedName-ubuntu-latest
                   Rename-Item -LiteralPath ./$sharedName-windows-latest/$sharedName.exe -NewName $sharedName-windows-latest.exe
 
-                  gh release create $tagName ./$sharedName-macos-latest/$sharedName-macos-latest ./$sharedName-ubuntu-latest/$sharedName-ubuntu-latest ./$sharedName-windows-latest/$sharedName-windows-latest.exe --generate-notes --latest --title $releaseTitle
+                  # Create draft release if performing a CI check
+                  if ($${{ inputs.ci_check }}) {
+                    gh release create $tagName `
+                        ./$sharedName-macos-latest/$sharedName-macos-latest `
+                        ./$sharedName-ubuntu-latest/$sharedName-ubuntu-latest `
+                        ./$sharedName-windows-latest/$sharedName-windows-latest.exe `
+                        --title $releaseTitle --generate-notes --latest --draft
+                  }
+
+                  else {
+                    gh release create $tagName `
+                        ./$sharedName-macos-latest/$sharedName-macos-latest `
+                        ./$sharedName-ubuntu-latest/$sharedName-ubuntu-latest `
+                        ./$sharedName-windows-latest/$sharedName-windows-latest.exe `
+                        --title $releaseTitle --generate-notes --latest
+                  }
+
               env:
                   GH_TOKEN: ${{ github.token }}
 
