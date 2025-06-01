@@ -11,7 +11,7 @@ jobs:
     build:
         uses: ./.github/workflows/Build.yml
 
-    release:
+    release_test:
         needs: build
         uses: ./.github/workflows/Release.yml
         with:
